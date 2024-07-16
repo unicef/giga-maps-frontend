@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BarChartWrapper Component renders BarChart with correct props 1`] = `
+<DocumentFragment>
+  .c0 {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.c2 {
+  flex-grow: 239.06;
+  background-color: #00d661;
+}
+
+.c2 .cds--tooltip-trigger__wrapper {
+  display: flex;
+}
+
+.c2 .cds--popover-content {
+  width: 8rem;
+}
+
+.c4 {
+  flex-grow: 95.45;
+  background-color: #ff5538;
+}
+
+.c4 .cds--tooltip-trigger__wrapper {
+  display: flex;
+}
+
+.c4 .cds--popover-content {
+  width: 8rem;
+}
+
+.c1 {
+  display: flex;
+  max-width: 100%;
+  margin-top: 0.5rem;
+  height: 0.25rem;
+}
+
+.c3 {
+  flex-grow: 1;
+  background-color: #00d661;
+  cursor: pointer;
+  border: none;
+  height: 0.25rem;
+}
+
+.c5 {
+  flex-grow: 1;
+  background-color: #ff5538;
+  cursor: pointer;
+  border: none;
+  height: 0.25rem;
+}
+
+<div
+    class="c0"
+  >
+    <div
+      class="c1"
+    >
+      <span
+        backgroundcolor="#00d661"
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top-left cds--tooltip c2"
+        flexgrow="239.06"
+      >
+        <div
+          class="cds--tooltip-trigger__wrapper"
+        >
+          <button
+            aria-labelledby="tooltip-:r0:"
+            backgroundcolor="#00d661"
+            class="c3 sb-tooltip-trigger"
+            type="button"
+          />
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-:r0:"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
+          >
+            239.1K schools with Connected connection this week
+          </span>
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
+      <span
+        backgroundcolor="#ff5538"
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top-left cds--tooltip c4"
+        flexgrow="95.45"
+      >
+        <div
+          class="cds--tooltip-trigger__wrapper"
+        >
+          <button
+            aria-labelledby="tooltip-:r1:"
+            backgroundcolor="#ff5538"
+            class="c5 sb-tooltip-trigger"
+            type="button"
+          />
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-:r1:"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
+          >
+            95.4K schools with Not connected connection this week
+          </span>
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

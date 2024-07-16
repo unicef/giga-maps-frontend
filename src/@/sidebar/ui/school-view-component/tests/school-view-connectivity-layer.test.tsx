@@ -6,11 +6,11 @@ import { router } from '~/core/routes';
 
 test('renders SchoolViewConnectivityLayer component correctly', () => {
   const { getAllByText } = render(testWrapper(<SchoolViewConnectivityLayer />));
-  expect(getAllByText('Real-time data', { exact: false })[0]).toBeInTheDocument();
+  expect(getAllByText('Real-time Connectivity', { exact: false })[0]).toBeInTheDocument();
 });
 
 test('check SchoolViewConnectivityLayer with multiple school ids', () => {
   router.navigate(`/map/schools?country=AI&school_ids=12,13`);
   const { getAllByText } = render(testWrapper(<SchoolViewConnectivityLayer />));
-  expect(getAllByText('Real-time data', { exact: false })[0]).toBeInTheDocument();
+  expect(getAllByText('Real-time Connectivity', { exact: false })[0]).toBeInTheDocument();
 });

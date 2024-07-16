@@ -1,18 +1,17 @@
 import { fireEvent, render, } from "@testing-library/react"
 import { createEvent } from "effector";
 
-import { apiKeyListMock } from "~/tests/data/admin-api-key-list";
-import { testWrapper } from '~/tests/jest-wrapper';
-
 import { $apiRequestListResponse } from "../../models/api-request-model";
 import AdminApiKey from "../admin-api-keys/admin-api-key.view";
+import { testWrapper } from "~/tests/jest-wrapper";
+import adminApiKeyListData from '~/tests/data/admin-api-key-list';
 
 const setApiRequestResonse = createEvent();
 $apiRequestListResponse.on(setApiRequestResonse, (_, payload) => payload)
 
 describe("AdminApiKey", () => {
   test("render AdminApiKey", () => {
-    setApiRequestResonse(apiKeyListMock)
+    setApiRequestResonse(adminApiKeyListData)
     const { asFragment } = render(
       testWrapper(<AdminApiKey />)
     );
@@ -26,8 +25,7 @@ describe("AdminApiKey", () => {
     expect(asFragment()).toMatchSnapshot();
   })
   test("click on refresh to refrash list", () => {
-    const handleClick = jest.fn();
-    const { getByTestId } = render(testWrapper(<AdminApiKey onClick={handleClick} />));
+    const { getByTestId } = render(testWrapper(<AdminApiKey />));
     const button = getByTestId('refresh-list');
     fireEvent.click(button);
   })

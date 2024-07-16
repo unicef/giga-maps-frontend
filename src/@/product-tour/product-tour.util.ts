@@ -68,7 +68,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
       {
         subStepId: 3,
         popupOptions: {
-          align: isMobile ? 'left' : 'left'
+          align: 'left'
         },
         popupProps: {
           content: [{

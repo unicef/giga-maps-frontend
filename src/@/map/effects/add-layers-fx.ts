@@ -55,7 +55,6 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   if (isLastSelectionChange) {
     deleteSourceAndLayers({ map })
   }
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   callDelay(timeout, createAndUpdateLayer, props);
 });
 

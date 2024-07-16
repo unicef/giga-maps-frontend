@@ -143,6 +143,11 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   fill: #fff!important;
 }
 
+.c10 {
+  display: flex;
+  align-items: center;
+}
+
 .c1 {
   width: 17rem;
   position: relative;
@@ -161,7 +166,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   flex-direction: row;
 }
 
-.c10 {
+.c11 {
   width: calc(100vw - 17rem);
   padding-bottom: 0.3rem;
 }
@@ -365,36 +370,41 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
         <div
           class="c9 hello"
         >
-          <p>
-            © 2024  
+          <div
+            class="c10"
+          >
+            <p>
+              © 2024  
+              <a
+                class="giga-logo"
+                href="https://www.unicef.org/innovation/giga"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Giga
+              </a>
+            </p>
             <a
-              class="giga-logo"
-              href="https://www.unicef.org/innovation/giga"
+              href="https://www.unicef.org/"
+              rel="noreferrer"
+              style="margin-top: 0.1rem;"
+              target="_blank"
+            >
+              SvgUrl
+            </a>
+            <a
+              href="https://www.itu.int/en/Pages/default.aspx"
               rel="noreferrer"
               target="_blank"
             >
-              giga
+              SvgUrl
             </a>
-          </p>
-          <a
-            href="https://www.unicef.org/"
-            rel="noreferrer"
-            target="_blank"
-          >
-            SvgUrl
-          </a>
-          <a
-            href="https://www.itu.int/en/Pages/default.aspx"
-            rel="noreferrer"
-            target="_blank"
-          >
-            SvgUrl
-          </a>
+          </div>
         </div>
       </div>
     </div>
     <div
-      class="scrollbar-container c10 ps"
+      class="scrollbar-container c11 ps"
     >
       <div
         class="ps__rail-x"
