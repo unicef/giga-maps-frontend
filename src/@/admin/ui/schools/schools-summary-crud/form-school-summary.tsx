@@ -298,9 +298,11 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, e.target.value])}
                 placeholder="Select Coverage Type">
                 <SelectItem value="unknown" text="Unknown" />
+                <SelectItem value="no" text="No" />
                 <SelectItem value="2g" text="2G" />
                 <SelectItem value="3g" text="3G" />
                 <SelectItem value="4g" text="4G" />
+                <SelectItem value="5g" text="5G" />
               </Select>
             </DailyCountryInput>
             <DailyCountryInput>

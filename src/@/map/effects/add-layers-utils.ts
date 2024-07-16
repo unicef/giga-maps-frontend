@@ -14,7 +14,7 @@ export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelect
   return { schoolLayerId, selectedLayerId, isLastSelectionChange };
 }
 
-export const createSourceForMapAndCountry = async ({ map, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data }: ChangeLayerOptions & { selectedLayerId: number | null; }) => {
+export const createSourceForMapAndCountry = async ({ map, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data }: ChangeLayerOptions & { selectedLayerId: number | null; }) => {
   if (!map) return;
   // cancel animation;
   cancelAnimationFrame(animateCircleHandler.requestId)
@@ -29,7 +29,7 @@ export const createSourceForMapAndCountry = async ({ map, connectivityBenchMark,
     layerId = lastSelectedLayer.layerId || coverageLayerId;
     // return;
   }
-  const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id: admin1Data?.id });
+  const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id: admin1Data?.id, countrySearch });
   const options = {} as VectorSource;
   if (mapRoute.country && country) {
     const removeBounds = ignoreCountriesForBounds.includes(country.code.toLocaleLowerCase());

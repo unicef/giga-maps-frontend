@@ -1,5 +1,5 @@
 import { Image, Search } from '@carbon/icons-react'
-import { Button, DatePicker, DatePickerInput, Form, Link, RadioButton, TextInput } from "@carbon/react"
+import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, TextInput } from "@carbon/react"
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
@@ -22,6 +22,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [selectedFile, setSelectedFile] = useState(null)
   const [layerDescriptions, setLayerDescriptions] = useState<Record<string, string>>({});
   const [layersBenchmark, setLayersBenchmark] = useState<Record<string, string>>({});
+  const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
   const [selectedActiveLayers, setActiveLayerList] = useState<{ id: number; name: string; }[]>([]);
   const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
@@ -30,6 +31,17 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   //   publishDataLayerListResponce.filter(item => item.applicable_countries.length === 0 || item.applicable_countries.includes(id))
   //   : publishDataLayerListResponce.filter(item => item.applicable_countries.length === 0);
 
+  const updateDefaultNationalBenchmark = (id: number, checked: boolean) => {
+    if (checked) {
+      setDefaultNationalBenchmark({
+        ...defaultNationalBenchmark,
+        [id]: checked
+      })
+    } else {
+      delete defaultNationalBenchmark[id];
+      setDefaultNationalBenchmark({ ...defaultNationalBenchmark });
+    }
+  }
   const layersNames = useMemo(() => {
     return publishDataLayerListResponce.reduce((acc, curr) => {
       acc[curr.id] = curr.name;
@@ -64,9 +76,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   }, [formDataCountry?.active_layers_list, layerListAvailablility])
 
   useEffect(() => {
-    const { live_layer = {}, layer_descriptions = {} } = formDataCountry?.benchmark_metadata || {};
+    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {} } = formDataCountry?.benchmark_metadata || {};
     setLayersBenchmark({ ...live_layer });
     setLayerDescriptions({ ...layer_descriptions });
+    setDefaultNationalBenchmark({ ...default_national_benchmark });
   }, [formDataCountry?.benchmark_metadata]);
 
   const handleFileChange = (event) => {
@@ -117,6 +130,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('benchmark_metadata', JSON.stringify({
         live_layer: layersBenchmark,
         layer_descriptions: layerDescriptions,
+        default_national_benchmark: defaultNationalBenchmark,
         static_layer: {}
       }));
 
@@ -363,6 +377,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                     {item.type === 'LIVE' && <InputContainer>
                       <InputLabel>
                         National benchmark ({item.global_benchmark?.unit})
+                        <Checkbox id={`default-national-benchmark-${item.id}`} disabled={!layersBenchmark[item?.id]} labelText="Is default benchmark" name={item.name} value={item.id} checked={defaultNationalBenchmark[item?.id]} onChange={(_, { checked }) => updateDefaultNationalBenchmark(item.id, checked)} />
                       </InputLabel>
                       <SchoolFieldsWrapper>
                         <TextInput
@@ -371,7 +386,13 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                           name={item?.name}
                           placeholder="Enter national benchmark"
                           value={layersBenchmark[item?.id] || ""}
-                          onChange={(e) => setLayersBenchmark({ ...layersBenchmark, [item?.id]: e.target.value })}
+                          onChange={(e) => {
+                            if (!e.target.value) {
+                              updateDefaultNationalBenchmark(item.id, false)
+                            }
+                            setLayersBenchmark({ ...layersBenchmark, [item?.id]: e.target.value })
+                          }
+                          }
                         />
                         <Div $margin="0.5rem 0">
                           <InputLabel>

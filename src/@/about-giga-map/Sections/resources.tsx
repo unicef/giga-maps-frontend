@@ -11,7 +11,7 @@ const Resources = ({ data }: { data: AboutType }) => {
             <FeatureCard
               link={resource?.cta?.link?.[0]}
               icon={resource?.icon}
-              key={index}
+              key={`${index}-${resource?.title}`}
               title={resource?.title}
               description={resource?.text?.[0]}
               style={resource.style}

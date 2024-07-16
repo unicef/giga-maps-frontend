@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronRight, ChevronUp, Close, RecentlyViewed } from '@carbon/icons-react';
 import { DesignResearch } from '@carbon/pictograms-react';
-import { Button, Checkbox, InlineLoading, Pagination, Search } from '@carbon/react';
+import { Button, Checkbox, InlineLoading, Search } from '@carbon/react';
 import styled, { css } from "styled-components";
 
 import { Scroll } from '~/@/scroll';
@@ -27,6 +27,7 @@ export const SearchResultWrapper = styled.div`
       position: fixed;
       top: 3.1rem;
       height: calc(100% - 3rem);
+      z-index: 11;
     }
 `
 
@@ -42,6 +43,7 @@ background: ${props => props.theme.main};
       position: fixed;
     top: 3.1rem;
     height: calc(100% - 3rem);
+    z-index: 11;
     }
 `
 export const SearchResultScroll = styled(Scroll)`

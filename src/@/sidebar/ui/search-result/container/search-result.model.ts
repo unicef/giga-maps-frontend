@@ -1,4 +1,4 @@
-import { attach, combine, createEvent, createStore, merge, restore, sample } from "effector";
+import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
 import { $countries } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
@@ -141,7 +141,7 @@ sample({
     query: $searchSchoolListMax
   }, ({ admin1, admin2, ...rest }) => {
     return {
-      admin1: admin1 ? admin1 : admin2,
+      admin1: !!admin1 ? admin1 : admin2,
       admin2: !admin1 ? '' : admin2,
       ...rest
     }

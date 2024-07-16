@@ -45,7 +45,7 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
       </SearchItem>
       {
         isExpanded &&
-        districtsList?.length &&
+        !!districtsList?.length &&
         districtsList?.map((district, index) => (
           <SearchDistrict
             key={index}

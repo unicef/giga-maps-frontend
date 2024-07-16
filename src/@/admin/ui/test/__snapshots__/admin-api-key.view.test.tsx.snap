@@ -915,7 +915,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-labelledby="tooltip-:re:"
+            aria-labelledby="tooltip-:ru:"
             class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--secondary"
             data-testid="refresh-list"
             title="Refresh"
@@ -943,7 +943,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-:re:"
+          id="tooltip-:ru:"
           role="tooltip"
         >
           <span
@@ -988,6 +988,15 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
                     class="cds--table-header-label"
                   >
                     User
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Country
                   </div>
                 </th>
                 <th
@@ -1071,8 +1080,8 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
       >
         <label
           class="cds--pagination__text"
-          for="cds-pagination-select-:rn:"
-          id="cds-pagination-select-:rn:-count-label"
+          for="cds-pagination-select-:r18:"
+          id="cds-pagination-select-:r18:-count-label"
         >
           Items per page
         </label>
@@ -1090,7 +1099,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               >
                 <select
                   class="cds--select-input"
-                  id="cds-pagination-select-:rn:"
+                  id="cds-pagination-select-:r18:"
                   title=""
                 >
                   <option
@@ -1160,7 +1169,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
           >
             <label
               class="cds--label cds--visually-hidden"
-              for="cds-pagination-select-:rn:-right"
+              for="cds-pagination-select-:r18:-right"
             >
               Page number, of 1 pages
             </label>
@@ -1172,7 +1181,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               >
                 <select
                   class="cds--select-input"
-                  id="cds-pagination-select-:rn:-right"
+                  id="cds-pagination-select-:r18:-right"
                   title=""
                 >
                   <option
@@ -1216,7 +1225,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:ro:"
+                aria-labelledby="tooltip-:r19:"
                 class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
                 disabled=""
                 type="button"
@@ -1240,7 +1249,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:ro:"
+              id="tooltip-:r19:"
               role="tooltip"
             >
               <span
@@ -1260,7 +1269,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:rq:"
+                aria-labelledby="tooltip-:r1b:"
                 class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
                 disabled=""
                 type="button"
@@ -1284,7 +1293,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:rq:"
+              id="tooltip-:r1b:"
               role="tooltip"
             >
               <span

@@ -64,7 +64,7 @@ const RoleForm = ({ formData, onSubmit, isEdit = false, updateFormData }: RoleFo
           </InputContainer>
         </RowContainer>
         <RowContainer>
-          {permissionDataList?.length && <InputContainer>
+          {!!permissionDataList?.length && <InputContainer>
             <SelectRoles
               required
               titleText="Select permission"

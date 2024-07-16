@@ -1,4 +1,4 @@
-import { $countries } from '~/@/country/country.model';
+import { $countries, $countryDefaultNational, $countrySearchString } from '~/@/country/country.model';
 import { $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus } from '~/@/map/map.model';
 import { debounce, getInverted } from '~/lib/effector-kit';
 import { combine, createEffect, merge, sample } from 'effector';
@@ -32,6 +32,9 @@ import {
   $isTimeplayer,
   $connectivityLayers,
   $currentDefaultLayerId,
+  changeConnectivityBenchmark,
+  $currentLayerTypeUtils,
+  $isNationalBenchmark,
 } from '~/@/sidebar/sidebar.model';
 import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
@@ -39,7 +42,7 @@ import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
-import { SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { ConnectivityBenchMarks, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { format } from 'date-fns';
 import { isLiveLayer } from './sidebar.util';
 
@@ -143,9 +146,10 @@ const sourceForInfo = combine({
   schoolParams: $getSchoolParams,
   lastSelectedLayers: $selectedGigaLayers,
   isCheckedLastDate: $isCheckedLastDate,
+  countrySearch: $countrySearchString
 })
 
-export const getCurrentQueryId = ({ interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id }: ReturnType<typeof sourceForInfo.getState>) => {
+export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id }: ReturnType<typeof sourceForInfo.getState>) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
   const selectedLayerId = layersUtils.selectedLayerId || lastSelectedLayers.layerId || layersUtils.coverageLayerId
   const isDownload = selectedLayerId === layersUtils?.downloadLayerId;
@@ -184,11 +188,15 @@ export const getCurrentQueryId = ({ interval, mapRoutes, schoolParams, lastSelec
       params.set('school_id__in', schoolKeys);
     }
   }
-  return { query: `?${params.toString()}`, id: selectedLayerId };
+  let query = `?${params.toString()}`;
+  if (mapRoutes.country && countrySearch) {
+    query += `&${countrySearch}`;
+  }
+  return { query, id: selectedLayerId };
 }
 // only for download layer;
 sample({
-  clock: merge([$country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -199,7 +207,7 @@ sample({
 
 // for all live layers;
 sample({
-  clock: merge([$country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -210,7 +218,7 @@ sample({
 
 // for mobile coverage layer;
 sample({
-  clock: merge([$country, $admin1Id, $selectedLayerId]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -221,7 +229,7 @@ sample({
 
 // for all coverage layers
 sample({
-  clock: merge([$country, $admin1Id, $selectedLayerId]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -276,7 +284,6 @@ sample({
     onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id)
   })
 })
-onSelectMainLayer.watch((id) => console.log('changed', id));
 // reset on country change - giga layer selection;
 // sample({
 //   clock: merge([$country, $selectedLayerId]),
@@ -362,3 +369,27 @@ sample({
   filter: Boolean,
   target: onRecenterView
 })
+
+// default national for a country and layer
+sample({
+  clock: merge([$country, $connectivityLayers]),
+  source: combine({ isNationalBenchmark: $isNationalBenchmark, connectivityBenchMark: $connectivityBenchMark, countryDefaultNational: $countryDefaultNational, country: $country, currentLayerTypeUtils: $currentLayerTypeUtils, selectedLayerId: $selectedLayerId }),
+  fn: ({ isNationalBenchmark, countryDefaultNational = {}, selectedLayerId, connectivityBenchMark }) => {
+    let currentBenchmark = connectivityBenchMark;
+    if (countryDefaultNational && countryDefaultNational[selectedLayerId || 0]) {
+      currentBenchmark = ConnectivityBenchMarks.national
+    } else {
+      currentBenchmark = ConnectivityBenchMarks.global
+    }
+    // if (!isNationalBenchmark) {
+    //   currentBenchmark = ConnectivityBenchMarks.global
+    // }
+    return currentBenchmark
+  },
+  filter: ({ country, currentLayerTypeUtils }) => !!country && currentLayerTypeUtils.isLive,
+  target: changeConnectivityBenchmark
+})
+
+// changeConnectivityBenchmark.watch((connectivityBenchmark) => {
+//   console.log('changed', connectivityBenchmark)
+// });

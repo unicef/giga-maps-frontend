@@ -1,6 +1,4 @@
 
-import Itu from '../../../assets/images/itu-logo-footer.svg';
-import Unicef from '../../../assets/images/unicef-logo-map-footer.svg';
 import { FooterLinksSection, FooterMediaSection, FooterSection, FooterTitleSection, NavBarGigaLogo } from '../styles/about-giga-map-styles'
 
 const currentYear = new Date().getFullYear();

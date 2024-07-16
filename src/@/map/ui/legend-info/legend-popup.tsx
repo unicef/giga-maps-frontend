@@ -282,18 +282,18 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
                 {connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchMarkDescription ? <Tooltip label={nationalBenchMarkDescription} align='top'>
                   <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
                     <LiveLayerBenchmark>
-                      National Benchmark - {nationalBenchmarkValue + unitLabel}
+                      National Benchmark - {nationalBenchmarkValue}{unitLabel}
                     </LiveLayerBenchmark>
                   </button>
                 </Tooltip> : <LiveLayerBenchmark>
-                  National Benchmark - {nationalBenchmarkValue + unitLabel}
+                  National Benchmark - {nationalBenchmarkValue}{unitLabel}
                 </LiveLayerBenchmark> : <LiveLayerBenchmark>
-                  Global Benchmark - {globalBenchmarkValue + unitLabel}
+                  Global Benchmark - {globalBenchmarkValue}{unitLabel}
                 </LiveLayerBenchmark>}
 
                 {
                   legends.values.map(({ key, label }) => (
-                    <div>
+                    <div key={key}>
                       <Tooltip leaveDelayMs={50} label={`${benchmarkLogic && key != "unknown" ? benchmarkLogic[key] : `Doesn't match any criteria`}`} align='left'>
                         <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
                           <div className='legend-container'>

@@ -1,3 +1,5 @@
+import { $countrySearchParams, $countrySearchString } from '~/@/country/country.model';
+import { $countryCode } from '~/@/country/country.model';
 import { Expression, LngLatBoundsLike, Map, MapboxGeoJSONFeature, MapLayerMouseEvent } from "mapbox-gl";
 
 import { mapCountry } from "~/core/routes";
@@ -12,6 +14,12 @@ export const getAdminCountrySource = (level: CountryAdminLevel) => `${AdminSourc
 export const getAdminCountryLayerFill = (level: CountryAdminLevel) => `${AdminLayerFillPrefix}${level}`;
 export const getAdminCountryLayerLine = (level: CountryAdminLevel) => `${AdminLayerLinePrefix}${level}`;
 
+export const getCurrentCountrySearchPath = (countryCode: string) => {
+  const currentCountryCode = $countryCode.getState();
+  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase()) {
+    return window.location.search;
+  }
+}
 export const getCountryLevels = (level: CountryAdminLevel, selectedLevel: CountryAdminLevel) => {
   const isGreater = selectedLevel > level;
   const isLessThan = selectedLevel < level;
@@ -143,13 +151,14 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
         if (!isMobile) {
           setCountryBound(map, admin1, feature.state.bbox)
         }
-        mapCountry.navigate({ code: admin0, path: `/${admin1}` });
+        let path = `/${admin1}${getCurrentCountrySearchPath(admin0) || ''}`;
+        mapCountry.navigate({ code: admin0, path });
       }
     } else {
       if (!isMobile) {
         setCountryBound(map, admin0, feature.state.bbox)
       }
-      mapCountry.navigate({ code: admin0 });
+      mapCountry.navigate({ code: admin0, path: getCurrentCountrySearchPath(admin0) });
     }
   });
 

@@ -1,8 +1,4 @@
-import { LngLatLike } from "mapbox-gl";
-
 import { GeoJSONGeometry, GeoJSONPoint } from "~/core/global-types";
-
-import { isLiveLayer } from "../@/sidebar/sidebar.util";
 
 export type ConnectionStatus = 'no' | 'moderate' | 'good' | 'unknown';
 
@@ -166,6 +162,7 @@ export type Country = {
   geometry: GeoJSONGeometry;
   benchmark_metadata: {
     live_layer: Record<string, string>
+    default_national_benchmark: Record<string, boolean>
   }
   data_status: {
     week: {
@@ -269,4 +266,38 @@ export type APIListType<ResultType> = {
   next: string | null;
   previous: string | null;
   results: ResultType[];
+}
+
+
+export interface AdvanceFilterType {
+  name: string
+  type: string
+  description: string
+  choices?: Choice[]
+  parameter: Parameter
+  active_countries_list: number[] | null
+  upcast_aggr_str?: string
+  downcast_aggr_str?: string
+  include_none_filter?: boolean
+  place_holder?: string;
+  min_place_holder?: string;
+  max_place_holder?: string;
+  active_countries_range?: Record<string, {
+    min_place_holder?: string;
+    max_place_holder?: string;
+    max_value?: number;
+    min_value?: number;
+  }>
+}
+
+export interface Choice {
+  label: string
+  value: string
+}
+
+export interface Parameter {
+  label: string
+  table: string
+  field: string
+  filter: string
 }

@@ -394,7 +394,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 defaultValue="4"
               >
                 <SelectItem value="4" text="Default Country Status" />
-                <SelectItem value="0" text="Country Joined Project Connect" />
+                <SelectItem value="0" text="Country Joined GigaMaps" />
                 <SelectItem value="5" text="School OSM locations mapped" />
                 <SelectItem value="1" text="School locations mapped" />
                 <SelectItem value="2" text="Static connectivity mapped" />

@@ -14,7 +14,7 @@ import { LayerType } from "~/@/sidebar/types";
 import { $country } from "~/@/country/country.model";
 
 
-export default forwardRef(function LiveConnectivityType(_props, ref) {
+export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { setCurrentLayer: (id: null | number) => void }, ref) {
   const selectedIndicatorId = useStore($selectedLayerId);
   const [selectedId, setConnectivityTypeValue] = useState(selectedIndicatorId);
   const connectivityLayers = useStore($connectivityLayers);
@@ -34,7 +34,10 @@ export default forwardRef(function LiveConnectivityType(_props, ref) {
         name="radio-button-group-connectivity-type"
         value={selectedId as number}
         defaultSelected={selectedId as number}
-        onChange={(id) => setConnectivityTypeValue(id as number)}
+        onChange={(id) => {
+          setCurrentLayer(id as number)
+          setConnectivityTypeValue(id as number)
+        }}
       >
         {connectivityLayers.map((layer: LayerType) => {
           if (layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <></>;

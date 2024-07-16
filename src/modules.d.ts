@@ -1,4 +1,6 @@
 // Support imports
+import '@carbon/react';
+
 declare module '*.jpg' {
   const url: string;
   // noinspection all
@@ -61,3 +63,37 @@ declare module 'webfontloader' {
 
   export default WebFont;
 }
+
+declare module '@carbon/react' {
+  export interface PaginationNavProps {
+    // Define the props you expect PaginationNav to have
+    page?: number;
+    totalItems?: number;
+    itemsPerPage?: number;
+    onChange?: (page: number) => void;
+    // Add any other props you need
+  }
+
+  export const PaginationNav: React.FC<PaginationNavProps>;
+
+  export interface IconButtonProps {
+    children: React.ReactNode;
+    iconDescription?: string;
+    align?: string;
+    disabled?: boolean;
+    className?: string;
+    label: string;
+    renderIcon?: (props: IconButtonProps) => React.ReactNode;
+    onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    kind?: 'primary' | 'secondary' | 'tertiary' | "ghost";
+    size?: 'sm' | 'md' | 'lg';
+    tooltipPosition?: 'top' | 'right' | 'bottom' | 'left';
+    tooltipAlignment?: 'start' | 'center' | 'end';
+    tooltipText?: string;
+  }
+
+  export const IconButton: React.FC<IconButtonProps>;
+
+  export const InlineLoading = React.FC<any>
+}
+

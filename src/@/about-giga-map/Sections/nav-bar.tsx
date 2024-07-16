@@ -34,7 +34,7 @@ const NavBar = ({ data }: { data?: AboutType | null }) => {
   };
 
   useEffect(() => {
-    const items = navData.map(item => item?.target?.split(',')?.map(item => `#${item}`)?.join(',') || '').join(', ');
+    const items = navData.map(item => item?.target?.split(',')?.map(item => `#${item}`)?.join(',') ?? '').join(', ');
     if (!navData || !items) return;
     const sections = document.querySelectorAll(items);
     function checkFocus() {
@@ -55,7 +55,7 @@ const NavBar = ({ data }: { data?: AboutType | null }) => {
   }, [navData]);
 
   if (!data) return null;
-  const { cta, image, content } = data;
+  const { cta, content } = data;
   console.log(isMobile, 'isMobile==')
   return (
     <AboutGigaMapNavBarStyle>
@@ -81,8 +81,8 @@ const NavBar = ({ data }: { data?: AboutType | null }) => {
       <NavBarButtonWrapper>
         {
           !isMobile && navData?.map((navItem, index) => (
-            <NavBarButton $active={navItem?.targetList?.includes(activeNav)} key={index}>
-              <RouterLink to={aboutus} onClick={() => setActiveNav(navItem?.target)} hash={navItem?.target} key={index} >
+            <NavBarButton $active={navItem?.targetList?.includes(activeNav)} key={`${index}-${navItem?.name}`}>
+              <RouterLink to={aboutus} onClick={() => setActiveNav(navItem?.target)} hash={navItem?.target} >
                 {navItem?.name}
               </RouterLink>
             </NavBarButton>

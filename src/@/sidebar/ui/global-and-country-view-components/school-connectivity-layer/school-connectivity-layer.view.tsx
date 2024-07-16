@@ -8,7 +8,6 @@ import { useRoute } from '~/lib/router';
 import { formatNumber } from '~/lib/utils';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
-import LayerSchoolsConnectivityStatus from '../layer-schools-connectivity-accordion';
 import { SchoolInfoSection } from '../styles/layer-view-common.style';
 import styled, { useTheme } from 'styled-components';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';

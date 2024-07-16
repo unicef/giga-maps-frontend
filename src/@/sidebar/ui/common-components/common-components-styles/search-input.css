@@ -31,7 +31,7 @@
 .search-country-name {
   color: rgb(82, 82, 82);
   font-size: 14px;
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif, Arial, Verdana, Tahoma;
 }
 
 .list-districts-wrap {

@@ -2,7 +2,7 @@
 
 exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 <DocumentFragment>
-  .c43 {
+  .c46 {
   position: fixed;
   z-index: 1;
   background: #181818;
@@ -71,11 +71,11 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   fill: #fff!important;
 }
 
-.c44 .theme-layer-popover-content {
+.c47 .cds--popover-content {
   background: #181818;
 }
 
-.c44 .cds--popover-caret {
+.c47 .cds--popover-caret {
   background-color: #181818;
 }
 
@@ -96,7 +96,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   bottom: 5rem;
 }
 
-.c36 {
+.c39 {
   background: #181818;
   margin-top: 0.5rem;
   border-radius: 50%;
@@ -136,107 +136,107 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   background: #fff!important;
 }
 
-.c45 .cds--btn--icon-only {
+.c48 .cds--btn--icon-only {
   border-radius: 50%;
   border: 1px solid #181818;
   background: #181818;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAoBAMAAABzztUZAAAALVBMVEUkPRZwiitmeyhtbylccCZeZiViXCVSZCNwVCNWWSJKWiBHTyA+Uh07Rx0tQxkYQLqkAAADMUlEQVR42k2Qz2/aZhzG3+u0YSlts52XQKOiXYqTVm13KYWhsF3AGAY7bV7fiUW7IFuvcLLTuqpJTqW1kXF32Ebm5IVJnbYWwYt3mJK5MxDtMmXCNvJpPwr4b6hTUNtH73v5fF99nvd9AQCBh2CWx7smQrH4nR0cioIXocBXaklYStJ3tpv758DLBG5t8xrf3P9MEcPVV/nnmmgWDPZiDoWNOfMcf9sa7jfbqdVMWGDn3HFG1EMD4cO3yteXpHj67KzRl7je6K+CeLhQTjAXMuzyKX/D9WceFcA4YcXEA2aJXmNmGtdf7r9JhPmFsiLw9Nr1GdddClC2saLx0WIZ/7JMvz3j1p9uoDt4uqKVQjXh/mI6MvdMR2Cyg79bqcfWa/HcmcpSasYpd9JHRkzT0HqxdK2SYUtzTj3VNg4TQo6/cKVV5j6Jzns9z3sCH2hsVewVB6Vs5Vxi9qqpPRrKtaiwePyPon1Pp6PRucbSjMIfOeFSjrTqCsfFUvNvGCJx8/cCkiIf6Y/y3M115lROUZ65ZSbqyZgZ2XUO5NtFXDk97vOf3x2KKBHdo3c7ArxdqGV97me6d/UI4USQX4mq9xUpnLznY9d1J0dXDU1g+dL7PVWpyzk24+v99I0vzcNQsCnpYxXKcoYJnva6ni2KWyaK4f1fx/A9matm47P790UcniDhxyfe/5egLFXXQ881ExPj2OZBZzAdncDzytkqnwc+nRgDAxvxauPYdk7aCvw6y+WB6w9sG5kl/sxa09oaqoK8/eZqGlBefyj2kh2eX812HWJ1yxJzK86BY+qkHiLYzCEW9weWbpA6e3fxY+BNWjeUGl+KC/SnxCF6nygyd14GVKDDFOR8MIOYnbZOCLGIcJH+EFBTiV5TJVRo/pY82SCqPxFSkANgoixEpEzlHc+/rUUaDXIUTBXvAmp88wYtX65/4Fkj02o3iNhSvr2SAu50WWaZy5rqOY5fS+wEIT/lFQDGEGp7eYbojuXo1rjbbW3egxC44x82ujhd03Vdc/T//taNVlKCEQBeU9Qv7HRDf25xHn/Ta3QqsAjc1x352qOFB73RVAkTu79F2gcQwmc/QqX7OnX1VwAAAABJRU5ErkJggg==);
 }
 
-.c45 .cds--btn--primary:focus {
+.c48 .cds--btn--primary:focus {
   box-shadow: 0 0 0 1px #181818;
 }
 
-.c45 svg {
+.c48 svg {
   fill: #fff;
 }
 
-.c45 .cds--popover {
+.c48 .cds--popover {
   position: relative;
   z-index: 6001;
   top: -1rem;
 }
 
-.c45 .cds--tooltip-content {
+.c48 .cds--tooltip-content {
   background: #fff!important;
   color: #181818!important;
 }
 
-.c45 .cds--popover-caret {
+.c48 .cds--popover-caret {
   background: #fff!important;
 }
 
-.c37 .legend-info-popover-content {
+.c40 .legend-info-popover-content {
   background: #181818;
   max-inline-size: fit-content;
 }
 
-.c37 .cds--popover-caret {
+.c40 .cds--popover-caret {
   background: #181818;
 }
 
-.c38 {
+.c41 {
   display: flex;
   align-items: center;
   justify-content: end;
   background: #181818;
 }
 
-.c38 svg {
+.c41 svg {
   fill: #fff!important;
 }
 
-.c39 {
+.c42 {
   display: flex;
   background: #181818;
   padding: 1.2rem;
 }
 
-.c39 .school-status {
+.c42 .school-status {
   min-width: 175px;
 }
 
-.c39 .legend-value {
+.c42 .legend-value {
   margin-top: 1.1rem;
   margin-left: 0.6rem;
   color: grey;
   font-size: 0.7rem;
 }
 
-.c39 .legend-container {
+.c42 .legend-container {
   display: flex;
   align-items: center;
 }
 
-.c39 .checkbox-with-label {
+.c42 .checkbox-with-label {
   display: flex;
   align-items: center;
 }
 
-.c39 h3 {
+.c42 h3 {
   color: #fff;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.25rem;
 }
 
-.c39 .conneted-info,
-.c39 .real-time-connetivity-info {
+.c42 .conneted-info,
+.c42 .real-time-connetivity-info {
   position: relative;
   display: flex;
   margin-top: 1rem;
   align-items: center;
 }
 
-.c39 .conneted-info p,
-.c39 .real-time-connetivity-info p {
+.c42 .conneted-info p,
+.c42 .real-time-connetivity-info p {
   color: #fff;
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
 }
 
-.c40 {
+.c43 {
   width: 0.4rem;
   height: 0.4rem;
   background: #00d661;
@@ -246,7 +246,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   z-index: 2;
 }
 
-.c41 {
+.c44 {
   width: 0.4rem;
   height: 0.4rem;
   background: #ED5B4C;
@@ -256,7 +256,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   z-index: 2;
 }
 
-.c42 {
+.c45 {
   width: 0.4rem;
   height: 0.4rem;
   background: #1D8Cf0;
@@ -774,7 +774,9 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 }
 
 .c29 {
+  position: relative;
   transition: all .5s;
+  z-index: 10;
 }
 
 .c28 {
@@ -915,8 +917,61 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   height: 0.25rem;
 }
 
+.c37 .cds--popover-content {
+  background: #181818;
+}
+
+.c37 .cds--popover-caret {
+  background-color: #181818;
+}
+
+.c36 {
+  z-index: 99;
+  background: #181818;
+  right: .5rem;
+  border-radius: 62.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.c38 {
+  position: relative;
+}
+
+.c38 .cds--btn--icon-only {
+  transform: rotate(90deg);
+  border-radius: 50%;
+  border: 1px solid #181818;
+}
+
+.c38 .cds--btn--primary:focus {
+  box-shadow: 0 0 0 1px #181818;
+}
+
+.c38 svg {
+  fill: #fff;
+}
+
+.c38 .cds--popover {
+  position: relative;
+  z-index: 6001;
+  top: -1rem;
+}
+
+.c38 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c38 .cds--popover-caret {
+  background: #fff!important;
+}
+
 @media (max-width:768px) {
-  .c43 {
+  .c46 {
     bottom: calc(40vh + 0.5rem);
   }
 }
@@ -934,7 +989,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 }
 
 @media (max-width:768px) {
-  .c37 .legend-info-popover-content {
+  .c40 .legend-info-popover-content {
     overflow: auto;
     width: calc(100vw - 3rem);
   }
@@ -1092,6 +1147,19 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 @media (max-width:768px) {
   .c18 {
     max-height: calc(100%);
+  }
+}
+
+@media (max-width:768px) {
+  .c37 .filter-popover-content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-inline-size: none;
+    height: 100%;
+    display: block;
+    transform: none;
   }
 }
 
@@ -2352,10 +2420,66 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
             </span>
           </div>
           <div
-            class="c36 lengend-container"
+            class="c36 filter-wrapper-popup"
           >
             <span
-              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--open cds--popover--left-bottom c37 legend-info-popover-link"
+              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c37 filter-popover-link"
+            >
+              <div
+                class="c38"
+              >
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+                >
+                  <div
+                    class="cds--tooltip-trigger__wrapper"
+                  >
+                    <button
+                      aria-labelledby="tooltip-:rp:"
+                      class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary cds--btn--disabled"
+                      disabled=""
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="#fff"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24 30v-4.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0v14.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v4.1s2 0 2 0zm-4-9c0-1.7 1.3-3 3-3s3 1.3 3 3c0 1.7-1.3 3-3 3s-3-1.3-3-3zM8 2v4.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v14.1s2 0 2 0v-14.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0zm4 9c0 1.7-1.3 3-3 3s-3-1.3-3-3 1.3-3 3-3 3 1.3 3 3z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="cds--popover"
+                    id="tooltip-:rp:"
+                    role="tooltip"
+                  >
+                    <span
+                      class="cds--popover-content cds--tooltip-content"
+                    >
+                      Filter
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </div>
+            </span>
+          </div>
+          <div
+            class="c39 lengend-container"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--open cds--popover--left-bottom c40 legend-info-popover-link"
             >
               <div
                 class="c35 contras legend-open-button"
@@ -2367,7 +2491,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     class="cds--tooltip-trigger__wrapper"
                   >
                     <button
-                      aria-labelledby="tooltip-:rp:"
+                      aria-labelledby="tooltip-:rr:"
                       class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
                       type="button"
                     >
@@ -2393,7 +2517,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   <span
                     aria-hidden="true"
                     class="cds--popover"
-                    id="tooltip-:rp:"
+                    id="tooltip-:rr:"
                     role="tooltip"
                   >
                     <span
@@ -2414,10 +2538,10 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   class="cds--popover-content legend-info-popover-content"
                 >
                   <div
-                    class="c38"
+                    class="c41"
                   />
                   <div
-                    class="c39"
+                    class="c42"
                   >
                     <div
                       class="school-status"
@@ -2435,7 +2559,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                             class="conneted-info"
                           >
                             <div
-                              class="c40"
+                              class="c43"
                             />
                             <span>
                               <p>
@@ -2455,7 +2579,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                             class="conneted-info"
                           >
                             <div
-                              class="c41"
+                              class="c44"
                             />
                             <span>
                               <p>
@@ -2475,7 +2599,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                             class="conneted-info"
                           >
                             <div
-                              class="c42"
+                              class="c45"
                             />
                             <span>
                               <p>
@@ -2495,13 +2619,13 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
             </span>
           </div>
           <div
-            class="c43 theme-wrapper-popup"
+            class="c46 theme-wrapper-popup"
           >
             <span
-              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c44 theme-layer-popover-link"
+              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c47 theme-layer-popover-link"
             >
               <div
-                class="c45"
+                class="c48"
               >
                 <span
                   class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
@@ -2510,7 +2634,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     class="cds--tooltip-trigger__wrapper"
                   >
                     <button
-                      aria-labelledby="tooltip-:rr:"
+                      aria-labelledby="tooltip-:rt:"
                       class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
                       type="button"
                     >
@@ -2536,7 +2660,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   <span
                     aria-hidden="true"
                     class="cds--popover"
-                    id="tooltip-:rr:"
+                    id="tooltip-:rt:"
                     role="tooltip"
                   >
                     <span

@@ -1,0 +1,572 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterPopupContent test should render valid mode 1`] = `
+<DocumentFragment>
+  .c0 .cds--popover-content {
+  background: #181818;
+}
+
+.c0 .cds--popover-caret {
+  background-color: #181818;
+}
+
+@media (max-width:768px) {
+  .c0 .filter-popover-content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-inline-size: none;
+    height: 100%;
+    display: block;
+    transform: none;
+  }
+}
+
+<span
+    class="cds--popover-container cds--popover--left c0 filter-popover-link"
+  />
+</DocumentFragment>
+`;
+
+exports[`FilterPopupContent test should render valid mode 2`] = `
+<DocumentFragment>
+  .c0 .cds--popover-content {
+  background: #181818;
+}
+
+.c0 .cds--popover-caret {
+  background-color: #181818;
+}
+
+.c1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.c1 >h3 {
+  color: #f5f5f5;
+  font-family: Open Sans;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem;
+}
+
+.c1 button svg {
+  fill: #fff!important;
+}
+
+.c3 {
+  width: 100%;
+}
+
+.c3 Button {
+  width: 50%;
+}
+
+.c2 {
+  max-height: calc(100vh - 20.5rem);
+}
+
+.c4 {
+  padding: 1rem;
+}
+
+.c4 .cds--label {
+  color: #c0c0c0;
+}
+
+.c4 .cds--list-box__field {
+  background: #333333;
+}
+
+.c4 .cds--list-box__label {
+  color: #f5f5f5;
+}
+
+.c4 .cds--list-box__menu-icon svg {
+  fill: #fff;
+}
+
+.c4 Button {
+  width: 100%;
+}
+
+@media (max-width:768px) {
+  .c0 .filter-popover-content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-inline-size: none;
+    height: 100%;
+    display: block;
+    transform: none;
+  }
+}
+
+@media (max-width:768px) {
+  .c2 {
+    max-height: calc(100vh - 13rem);
+  }
+}
+
+<span
+    class="cds--popover-container cds--popover--open cds--popover--left c0 filter-popover-link"
+  >
+    <span
+      class="cds--popover"
+    >
+      <span
+        class="cds--popover-content filter-popover-content"
+      >
+        <div
+          class="c1"
+        >
+          <h3>
+            Filter by
+          </h3>
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:r3:"
+                class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+                data-testid="filter-close"
+                title="Close filter"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="18"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="18"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:r3:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Close
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+        </div>
+        <form
+          aria-label="filter-form"
+          class="cds--form"
+        >
+          <div
+            class="scrollbar-container c2 ps"
+          >
+            <div
+              class="ps__rail-x"
+              style="left: 0px; top: 0px;"
+            >
+              <div
+                class="ps__thumb-x"
+                style="left: 0px; width: 0px;"
+                tabindex="0"
+              />
+            </div>
+            <div
+              class="ps__rail-y"
+              style="top: 0px; left: 0px;"
+            >
+              <div
+                class="ps__thumb-y"
+                style="top: 0px; height: 0px;"
+                tabindex="0"
+              />
+            </div>
+          </div>
+          <div
+            class="c3"
+          >
+            <div
+              class="cds--dropdown__wrapper cds--list-box__wrapper c4"
+            >
+              <label
+                class="cds--label"
+                for="downshift-:r5:-toggle-button"
+                id="downshift-:r5:-label"
+              >
+                Apply filters to
+              </label>
+              <div
+                class="cds--dropdown cds--dropdown--sm cds--list-box cds--list-box--sm"
+                id="default"
+              >
+                <button
+                  aria-activedescendant=""
+                  aria-controls="downshift-:r5:-menu"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-:r5:-label"
+                  class="cds--list-box__field"
+                  id="downshift-:r5:-toggle-button"
+                  role="combobox"
+                  tabindex="0"
+                  title="All data layers"
+                  type="button"
+                >
+                  <span
+                    class="cds--list-box__label"
+                  >
+                    All data layers
+                  </span>
+                  <div
+                    class="cds--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+                <ul
+                  aria-labelledby="downshift-:r5:-label"
+                  class="cds--list-box__menu"
+                  id="downshift-:r5:-menu"
+                  role="listbox"
+                />
+              </div>
+            </div>
+            <button
+              class="cds--btn cds--btn--secondary"
+              type="reset"
+            >
+              Reset Filters
+            </button>
+            <button
+              class="cds--btn cds--btn--primary"
+              type="submit"
+            >
+              Apply
+            </button>
+          </div>
+        </form>
+      </span>
+      <span
+        class="cds--popover-caret"
+      />
+    </span>
+  </span>
+</DocumentFragment>
+`;
+
+exports[`MultiSelectDropdown Component MultiSelectDropdown Component 1`] = `
+.c0 {
+  margin-top: 1.5rem;
+}
+
+.c0 .cds--list-box__field--wrapper {
+  border-bottom: 1px solid var(--cds-border-strong);
+}
+
+<div>
+  <div
+    class="cds--multi-select__wrapper cds--list-box__wrapper c0"
+  >
+    <label
+      class="cds--label"
+      for="downshift-:r1:-toggle-button"
+      id="downshift-:r1:-label"
+    >
+      Coverage Type
+      <span
+        class="cds--visually-hidden"
+      >
+        Total items selected: 
+         
+        1
+        ,
+        To clear selection, press Delete or Backspace,
+      </span>
+    </label>
+    <div
+      class="cds--multi-select cds--multi-select--selected cds--list-box cds--list-box--lg"
+      id="mutli-select-dropdown-Coverage Type"
+    >
+      <div
+        class="cds--list-box__field--wrapper"
+      >
+        <div
+          class="cds--tag cds--tag--filter cds--tag--high-contrast"
+        >
+          <span
+            class="cds--tag__label"
+            title="1"
+          >
+            1
+          </span>
+          <div
+            aria-label="Clear all selected items"
+            class="cds--tag__close-icon"
+            role="button"
+            tabindex="-1"
+            title="Clear all selected items"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+              />
+            </svg>
+          </div>
+        </div>
+        <button
+          aria-activedescendant=""
+          aria-controls="downshift-:r1:-menu"
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          aria-labelledby="downshift-:r1:-label"
+          class="cds--list-box__field"
+          id="downshift-:r1:-toggle-button"
+          role="combobox"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="cds--list-box__label"
+            id="multiselect-field-label-1"
+          >
+            Select Coverage Type
+          </span>
+          <div
+            class="cds--list-box__menu-icon"
+          >
+            <svg
+              aria-label="Open menu"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              name="chevron--down"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+              />
+              <title>
+                Open menu
+              </title>
+            </svg>
+          </div>
+        </button>
+      </div>
+      <ul
+        aria-labelledby="downshift-:r1:-label"
+        class="cds--list-box__menu"
+        id="downshift-:r1:-menu"
+        role="listbox"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RangeTextInput Component RangeTextInput input 1`] = `
+.c0 .group-input {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.c0 .cds--label {
+  margin-top: 1rem;
+}
+
+.c1 {
+  padding: 0rem 1rem;
+}
+
+.c1 .cds--label {
+  padding-top: 1rem;
+}
+
+<div>
+  <div
+    class="c0"
+  >
+    <label
+      class="cds--label cds--label--no-margin"
+      style="padding: 0rem 1rem;"
+    >
+      No of Computers
+    </label>
+    <div
+      class="group-input"
+    >
+      <div
+        class="cds--form-item c1 cds--text-input-wrapper"
+      >
+        <div
+          class="cds--text-input__label-wrapper"
+        />
+        <div
+          class="cds--text-input__field-outer-wrapper"
+        >
+          <div
+            class="cds--text-input__field-wrapper"
+          >
+            <input
+              class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+              id="num_computers-min-input"
+              placeholder="Min"
+              title="Min"
+              type="text"
+              value="10"
+            />
+            <span
+              class="cds--text-input__counter-alert"
+              role="alert"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="cds--form-item c1 cds--text-input-wrapper"
+      >
+        <div
+          class="cds--text-input__label-wrapper"
+        />
+        <div
+          class="cds--text-input__field-outer-wrapper"
+        >
+          <div
+            class="cds--text-input__field-wrapper"
+          >
+            <input
+              class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+              id="num_computers-max-input"
+              placeholder="Max"
+              title="Max"
+              type="text"
+              value="20"
+            />
+            <span
+              class="cds--text-input__counter-alert"
+              role="alert"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ToggleButton ToggleButton 1`] = `
+.c0 {
+  margin-top: 1rem;
+}
+
+.c0 .cds--toggle__label-text {
+  padding-left: 1rem;
+  margin-block-end: 0rem;
+}
+
+.c0 .cds--toggle__appearance {
+  padding: 0rem 1rem;
+}
+
+<div>
+  <div
+    class="cds--toggle c0"
+  >
+    <button
+      aria-checked="false"
+      aria-labelledby="computer_lab__on"
+      class="cds--toggle__button"
+      id="computer_lab__on"
+      role="switch"
+      type="button"
+    />
+    <label
+      class="cds--toggle__label"
+      for="computer_lab__on"
+    >
+      <span
+        class="cds--toggle__label-text"
+      >
+        Has Computer Lab
+      </span>
+      <div
+        class="cds--toggle__appearance cds--toggle__appearance--sm"
+      >
+        <div
+          class="cds--toggle__switch"
+        >
+          <svg
+            class="cds--toggle__check"
+            height="5px"
+            viewBox="0 0 6 5"
+            width="6px"
+          >
+            <path
+              d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+            />
+          </svg>
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--toggle__text"
+        >
+          Off
+        </span>
+      </div>
+    </label>
+  </div>
+</div>
+`;

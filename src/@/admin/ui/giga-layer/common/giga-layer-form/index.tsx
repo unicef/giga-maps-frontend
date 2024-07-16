@@ -27,6 +27,7 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
   const updateOrCreateLayer = async () => {
     try {
       const body = {
+        code: formData.code,
         name: formData.name,
         icon: formData.icon,
         description: formData.description,

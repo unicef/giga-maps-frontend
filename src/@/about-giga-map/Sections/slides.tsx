@@ -1,13 +1,13 @@
 
-import { ArrowRight, ChevronLeft, ChevronRight } from '@carbon/icons-react'
-import { Button, Link } from '@carbon/react';
-import { combine, createEvent, createStore, restore } from "effector";
+import { ChevronLeft, ChevronRight } from '@carbon/icons-react'
+import { Button } from '@carbon/react';
+import { combine, createEvent, restore } from "effector";
 import { useStore } from "effector-react";
 import { useEffect } from 'react';
 
 import { AboutType } from '../about.type';
 import CaseStudyCard from "../common/case-study-card"
-import { CaseStudiesCardsContainer, CaseStudiesWrapper, GigaBlogWrapper, RightAndLeftWrapper, SliderWrapper } from "../styles/about-giga-map-styles"
+import { CaseStudiesCardsContainer, CaseStudiesWrapper, RightAndLeftWrapper, SliderWrapper } from "../styles/about-giga-map-styles"
 import { $isMobile, $isTablet } from '~/core/media-query';
 
 const onChange = createEvent<number>()
@@ -37,9 +37,10 @@ const Sliders = ({ data }: { data: AboutType }) => {
   };
 
   useEffect(() => {
-    if (data && data?.content) {
+    if (data?.content) {
+      const column = isTablet ? 2 : 3;
       updateTotalItems(data?.content.length);
-      updateColumn(isMobile ? 1 : isTablet ? 2 : 3);
+      updateColumn(isMobile ? 1 : column);
     }
   }, [data, isMobile, isTablet]);
 
@@ -55,11 +56,11 @@ const Sliders = ({ data }: { data: AboutType }) => {
           <CaseStudiesCardsContainer pos={current * 100}>
             {data?.content.map((resouce, index) => (
               <CaseStudyCard
-                key={index}
+                key={`${index}${resouce?.title}`}
                 column={maxColumns}
                 cardPoster={resouce?.image}
                 title={resouce?.title}
-                description={resouce?.text[0]}
+                description={resouce?.text?.[0]}
               />
             ))
             }

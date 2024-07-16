@@ -12,8 +12,8 @@ const SchoolLocation = ({ data }: { data: AboutType }) => {
         <h3>{data?.title}</h3>
         <h2>{data?.text[1]}</h2>
         <p>{data?.text[0]}</p>
-        <Link href={data?.cta?.link[0]} target="_blank">
-          <Button kind='ghost' renderIcon={ArrowRight}>{data?.cta?.text[0]}</Button>
+        <Link href={data?.cta?.link?.[0]} target="_blank">
+          <Button kind='ghost' renderIcon={ArrowRight}>{data?.cta?.text?.[0]}</Button>
         </Link>
       </ResourceSectionInfo>
       <ResourceSectionImage>

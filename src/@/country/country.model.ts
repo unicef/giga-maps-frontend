@@ -37,6 +37,7 @@ $country.on(fetchCountryFx.doneData, setPayload);
 export const $dataSource = $country.map((country) => country?.data_source || null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer || {});
+export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark || {});
 
 export const $admin1Data = sample({
   source: combine($country, $admin1Code, (country, admin1Code) => {
@@ -59,6 +60,30 @@ export const setZoomCountryCode = createEvent<string>();
 export const $zoomedCountryCode = restore(setZoomCountryCode, '');
 $zoomedCountryCode.on(zoomToCountryFx.doneData, setPayload);
 
+export const $countrySearchParams = mapCountry.router.search.map(search => {
+  const searchParams = new URLSearchParams(search);
+  // iterate over all params and try to parse them to numbers
+  const filterSearchParams = new URLSearchParams();
+  const urlFieldList: Record<string, { field: string; filter: string; value: string }> = {};
+  for (const [key, value] of searchParams.entries()) {
+    try {
+      const [start, field, filter] = key.split('__');
+      if (start === 'filter' && field && filter) {
+        filterSearchParams.set(`${field}__${filter}`, value);
+        urlFieldList[field] = { field, filter, value };
+      }
+    } catch (e) { }
+  }
+  return {
+    searchParams: filterSearchParams.toString(),
+    urlFieldList,
+    selectedCount: Object.keys(urlFieldList).length
+  };
+});
+
+export const $countrySearchString = $countrySearchParams.map(params => params.searchParams);
+
+// $countrySearchParams.watch(params => console.log('country params', params));
 const $mapContext = combine({
   map: $map,
   paintData: $stylePaintData,

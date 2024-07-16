@@ -112,6 +112,13 @@ const ListCountry = () => {
     setSearchvalue(event?.target.value)
   }
 
+  const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault()
+      serachFn()
+    }
+  }
+
   return (
     <>
       {deleteId &&
@@ -167,6 +174,7 @@ const ListCountry = () => {
               </TableBatchActions>
               <ToolbarContent >
                 <TableToolbarSearch
+                  onKeyPress={onEnterKeyPress}
                   onClear={() => {
                     setSearchvalue('')
                     serachFn()

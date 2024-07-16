@@ -1,8 +1,6 @@
 import { ArrowRight } from '@carbon/icons-react'
 import { Button, Link } from "@carbon/react"
 
-import { router } from '~/core/routes';
-
 import { AboutImageSection, AboutInfoSection, AboutSection, ExploreGigaMapButton } from "../styles/about-giga-map-styles"
 import { AboutType } from '../about.type';
 

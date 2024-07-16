@@ -20,7 +20,7 @@ const gigaLengendValues = [
   },
   {
     name: 'Moderate',
-    example: 'Ex. 5G,4G',
+    example: 'Ex. 3G,2G',
     defaultDisplayValue: 'Moderate',
     value: 'moderate',
     required: true

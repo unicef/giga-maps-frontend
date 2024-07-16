@@ -42,6 +42,24 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { isEditMode:
   return <>
     <DataLayerFieldContainer>
       <InputLabel>
+        Unique Code
+      </InputLabel>
+      <DataLayerNameField>
+        <TextInput
+          type="text"
+          labelText=""
+          name='code'
+          id="layer-code"
+          disabled={isEditMode}
+          value={formData?.code}
+          onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
+          required
+          placeholder="Enter layer unique code"
+        />
+      </DataLayerNameField>
+    </DataLayerFieldContainer>
+    <DataLayerFieldContainer>
+      <InputLabel>
         Layer Name
       </InputLabel>
       <DataLayerNameField>

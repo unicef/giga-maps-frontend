@@ -107,6 +107,7 @@ sample({
   fn: (layer) => {
     if (!layer) return defaultGigaLayerForm;
     return ({
+      code: layer?.code,
       name: layer?.name,
       icon: layer?.icon,
       description: layer.description,

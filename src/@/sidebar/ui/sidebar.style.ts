@@ -209,8 +209,10 @@ height:calc(100% - 6rem);
 `
 
 export const MapButtonWrapper = styled.div<{ $hide?: boolean }>`
+  position: relative;
   transition: all .5s;
   ${props => props.$hide && css`
     transform: translateX(-100%);
   `};
+  z-index: 10;
 `

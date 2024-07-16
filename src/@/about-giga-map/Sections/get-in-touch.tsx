@@ -1,7 +1,7 @@
 import { ArrowRight } from '@carbon/icons-react'
-import { Button, Link } from '@carbon/react'
+import { Button } from '@carbon/react'
 
-import { AboutImageSection, AboutInfoButtonWrapper, AboutInfoSection, AboutSection, GetInTouchSection } from '../styles/about-giga-map-styles'
+import { GetInTouchSection } from '../styles/about-giga-map-styles'
 import { AboutType } from '../about.type'
 import { GetInTouchForm } from './get-in-touch-form'
 import { useState } from 'react'

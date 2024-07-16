@@ -1,10 +1,10 @@
 import { createEvent, createStore, restore } from 'effector';
 
-import { fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
-import { GlobalStats, SchoolStatsType } from '~/api/types';
+import { fetchAdvanceFilterFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map, router } from '~/core/routes';
-import { setPayload } from '~/lib/effector-kit';
+import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import {
   defaultGigaLayers,
@@ -79,6 +79,8 @@ export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id || 0);
 export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
 $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 
+export const $advanceFilterList = createStore<AdvanceFilterType[]>([]);
+$advanceFilterList.on(fetchAdvanceFilterFx.doneData, setPayloadResults);
+
 $map.reset(map.visible);
-// $globalStats.reset(router.historyUpdated)
 $schoolConnectedOpenStatus.reset(resetSchoolConnectedOpenStatus);

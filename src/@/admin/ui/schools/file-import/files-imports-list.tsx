@@ -59,6 +59,13 @@ const FilesImportsList = () => {
     setSearchvalue(event?.target.value)
   }
 
+  const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault()
+      serachFn()
+    }
+  }
+
   return (
     <>
       <DataTable rows={rows} headers={headers} >
@@ -77,6 +84,7 @@ const FilesImportsList = () => {
             <TableToolbar {...getToolbarProps()}>
               <ToolbarContent aria-hidden={batchActionProps.shouldShowBatchActions}>
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
+                  onKeyPress={onEnterKeyPress}
                   onClear={() => {
                     setSearchvalue('')
                     serachFn()

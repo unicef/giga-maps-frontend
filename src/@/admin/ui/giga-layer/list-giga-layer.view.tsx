@@ -57,7 +57,10 @@ const ListGigaLayer = () => {
             <TableDataHead >
               <TableRow>
                 <TableHeader>
-                  Giga layer
+                  Unique Code
+                </TableHeader>
+                <TableHeader>
+                  Giga Layer Label
                 </TableHeader>
                 <TableHeader>
                   Source API
@@ -83,6 +86,9 @@ const ListGigaLayer = () => {
               {
                 dataLayerList?.map((item) => (
                   <TableRow key={item.id}>
+                    <TableDataCell>
+                      <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
+                    </TableDataCell>
                     <TableDataCell>
                       <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
                     </TableDataCell>

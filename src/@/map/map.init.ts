@@ -3,9 +3,10 @@ import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-gra
 import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countryCode, $admin1Code } from '~/@/country/country.model';
+import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countryCode, $admin1Code, $countrySearchString } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolStats, $staticLegendsSelected, $selectedLayerId, $timePlayerData, $connectivityYears, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer } from '~/@/sidebar/sidebar.model';
 import {
+  fetchAdvanceFilterFx,
   fetchCountriesFx,
   fetchCountryFx,
   fetchGlobalStatsFx,
@@ -67,6 +68,7 @@ sample({
     if (routes.map || routes.country || routes.schools) {
       void fetchLayerListFx();
       void fetchCountriesFx();
+      void fetchAdvanceFilterFx();
     }
   })
 })
@@ -74,12 +76,12 @@ sample({
 
 // load global stats
 sample({
-  clock: merge([mapOverview.visible, mapCountry.visible, fetchCountryFx.doneData, $admin1Id]),
-  source: combine({ routes: $mapRoutes, country: $country, admin1Id: $admin1Id }),
-  fn: ({ routes, country, admin1Id }) => {
+  clock: merge([mapOverview.visible, mapCountry.visible, fetchCountryFx.doneData, $admin1Id, $countrySearchString]),
+  source: combine({ routes: $mapRoutes, country: $country, admin1Id: $admin1Id, countrySearchString: $countrySearchString }),
+  fn: ({ routes, country, admin1Id, countrySearchString }) => {
     let query = ''
     if (routes.country) {
-      query = `?country_id=${country?.id}${admin1Id ? `&admin1_id=${admin1Id}` : ''}`
+      query = `?country_id=${country?.id}${admin1Id ? `&admin1_id=${admin1Id}` : ''}${countrySearchString ? `&${countrySearchString}` : ''}`
     }
     return { query }
   },
@@ -166,7 +168,8 @@ export const gigaLayerSource = combine({
   country: $country,
   admin1Data: $admin1Data,
   schoolStats: $schoolStatsMap,
-  isMobile: $isMobile
+  isMobile: $isMobile,
+  countrySearch: $countrySearchString
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
@@ -198,6 +201,7 @@ sample({
     schoolConnectivityLength,
     $schoolStatsMap,
     $connectivityBenchMark,
+    $countrySearchString,
     sample({
       clock: $isTimeplayer,
       filter: isActive => !isActive
@@ -373,4 +377,12 @@ sample({
   clock: $isPauseTimeplayer,
   target: onPausePlayTimeplayerFx
 })
+
+// sample({
+//   clock: merge([mapCountry.visible, mapCountry.router.historyUpdated]),
+//   source: combine({
+//     mapRoutes: $mapRoutes,
+//     params: 
+//   }),
+// })
 onLoadPage();

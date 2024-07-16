@@ -9,6 +9,7 @@ import TourInstructionPopover from "../components/modal/tour-instruction-popover
 import { CenterPointer, CustomPopover, HighlightBox, TourStartOverlay } from "../styles/product-tour-styles"
 import { ObjectType } from "~/core/global-types"
 import { $isMobile } from "~/core/media-query"
+import { tour } from "~/core/routes"
 
 const ProductTourMainView = () => {
   const isMobile = useStore($isMobile);
@@ -17,7 +18,13 @@ const ProductTourMainView = () => {
   const tourData = useMemo(() => {
     return getTourData({ isMobile })
   }, [isMobile])
-  const { highlightBox, popupProps, popupOptions } = tourData[currentMainStep - 1]?.substeps[currentSubStep - 1]
+  const { highlightBox, popupProps, popupOptions } = useMemo(() => {
+    try {
+      return tourData[currentMainStep - 1]?.substeps[currentSubStep - 1];
+    } catch (e) {
+      return { highlightBox: null, popupProps: null, popupOptions: null }
+    }
+  }, [tourData, currentMainStep, currentSubStep]);
 
   const isHighlightBox = !!highlightBox;
   const subStepsLength = tourData[currentMainStep - 1]?.substeps?.length;

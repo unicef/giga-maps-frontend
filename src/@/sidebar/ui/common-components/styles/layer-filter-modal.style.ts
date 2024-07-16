@@ -121,13 +121,16 @@ export const PopoverFilterContentConnectivitytype = styled.div`
   justify-content: flex-start;
   margin-bottom: 5px;
 }
-
+.cds--radio-button:disabled + .cds--radio-button__label {
+    opacity: 0.25;
+  }
 .cds--form-item>.cds--radio-button-group.cds--radio-button-group--label-right>.cds--radio-button-wrapper>.cds--radio-button__label {
   width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   font-size: 0.75rem;
+  color: ${props => props.theme.text};
 
   >.cds--radio-button__appearance {
     width: 1.25rem;
@@ -137,15 +140,6 @@ export const PopoverFilterContentConnectivitytype = styled.div`
 
   .cds--radio-button__appearance::before {
     background-color:  ${props => props.theme.text};
-  }
-
-  >span:last-child {
-    color: ${props => props.theme.text};
-    font-family: "Open Sans";
-    font-size: 0.75rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1rem;
   }
 }
 `

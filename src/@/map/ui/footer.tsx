@@ -1,14 +1,10 @@
-import { Link, Popover } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 import { $country } from '~/@/country/country.model';
-import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
-import { mapCountry, mapOverview, mapSchools } from '~/core/routes';
+import { mapCountry } from '~/core/routes';
 
 import FooterCommonLogo from './footer-common-logo';
-import FooterDataSourcePopUp from './footer-data-source-pop-up';
 import { $globalStats } from '../map.model';
 import { MAP_SAMPLING } from '../map.constant';
 import { formatNumber } from '~/lib/utils';
@@ -27,7 +23,7 @@ export const FooterWrapper = styled.footer`
     flex-direction: row;
     align-items: center;
     background: ${props => props.theme.schoolListBack};
-    margin-right: 17rem;
+    width: calc(100vw - 17rem);
     @media (max-width:786px){
       display:none;
     }
@@ -77,7 +73,6 @@ export const FooterWrapper = styled.footer`
 
  svg {
   fill: ${props => props.theme.text};
-  /* margin-left: 0.7rem; */
 }
 `
 
@@ -95,7 +90,6 @@ const Footer = () => {
         )}
       </p>
       <div className="footer-content">
-        {/* <FooterDataSourcePopUp size={20} /> */}
         <FooterCommonLogo />
       </div>
     </FooterWrapper>

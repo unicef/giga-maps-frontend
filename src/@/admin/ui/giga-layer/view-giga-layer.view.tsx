@@ -91,6 +91,10 @@ const AdminViewLayer = () => {
             }
           </LayerHeadingWrapper>}
           <LayerContentWrapper>
+            <LayerLabel>Unique Code</LayerLabel>
+            <LayerDetail>{layerItem.code}</LayerDetail>
+          </LayerContentWrapper>
+          <LayerContentWrapper>
             <LayerLabel>Layer Type</LayerLabel>
             <LayerDetail>{layerItem.type?.toLowerCase()} Layer</LayerDetail>
           </LayerContentWrapper>

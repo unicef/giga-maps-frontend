@@ -41,7 +41,8 @@ export const defaultCountryForm = {
   'iso3_format': '',
   benchmark_metadata: {
     live_layer: {},
-    layer_descriptions: {}
+    layer_descriptions: {},
+    default_national_benchmark: {},
   },
   active_layers_list: []
 }

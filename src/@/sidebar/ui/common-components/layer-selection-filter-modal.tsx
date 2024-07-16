@@ -32,7 +32,6 @@ const LayerSelectionFilterModal = ({
           setOpen(false);
         }}
         onRequestClose={() => {
-          resetFilterModal();
           setOpen(false)
         }}
         primaryButtonText="Apply"

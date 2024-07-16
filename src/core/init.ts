@@ -1,5 +1,4 @@
 import '~/@/map/map.init';
-// import '~/@/country/country.init';
 import '@/sidebar/init';
 
 // import '@/project/init';

@@ -14,30 +14,35 @@ export const getCountryListFx = createEffect(({ page, pageSize, search }: { page
 })
 
 export const getCountrySummaryListFx = createEffect(({ page, pageSize, search, filter }: { page?: number; pageSize?: number; search?: string, filter?: number[] }) => {
+  const searchParam = search ? `&search=${search}` : '';
   return createRequestAuthFx({
-    url: `/statistics/countryweeklystatus/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id__in=${filter}` : ''}${search ? `&search=${search}` : ''}`
+    url: `/statistics/countryweeklystatus/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id__in=${filter}` : ''}${searchParam}`
   }) as Promise<APIListType<CountrySummaryType>>
 })
 
 export const getCountryDailySummaryListFx = createEffect(({ page, pageSize, search, filter }: { page?: number; pageSize?: number; search?: string, filter?: number[] }) => {
+  const searchType = search ? `&search=${search}` : '';
+  const countryIds = (filter && filter.length > 0) ? `&country_id__in=${filter}` : '';
   return createRequestAuthFx({
-    url: `/statistics/countrydailystatus/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id__in=${filter}` : ''}${search ? `&search=${search}` : ''}`
+    url: `/statistics/countrydailystatus/?page=${page}&page_size=${pageSize}${countryIds}${searchType}`
   }) as Promise<APIListType<CountryDailySummaryType>>
 })
 
 export const createOrUpdateCountryFx = createEffect(({ formData, isEdit, countryItemId }: any) => {
+  const countryId = countryItemId ? countryItemId + '/' : '';
   return createRequestAuthFx({
     method: isEdit ? 'PUT' : 'POST',
-    url: `locations/country/${countryItemId ? countryItemId + '/' : ''}`,
+    url: `locations/country/${countryId}`,
     body: formData
   }) as Promise<CountryType>
 })
 
 
 export const createCountrySummaryFx = createEffect(({ body, isEditMode, params }: any) => {
+  const countryId = params?.id ? params?.id + '/' : '';
   return createRequestAuthFx({
     method: isEditMode ? 'PUT' : 'POST',
-    url: `statistics/countryweeklystatus/${params?.id ? params?.id + '/' : ''}`,
+    url: `statistics/countryweeklystatus/${countryId}`,
     data: body
   }) as Promise<CountrySummaryType>
 })

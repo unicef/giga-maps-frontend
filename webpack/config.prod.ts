@@ -4,13 +4,10 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import webpack from 'webpack';
 import { merge } from 'webpack-merge';
-// import WorkboxPlugin from 'workbox-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyPlugin from 'copy-webpack-plugin';
 import { commonConfig } from './config.common';
 import * as paths from './paths';
 import { createRules } from './rules';
-import dotenv from 'dotenv';
 import TerserPlugin from 'terser-webpack-plugin';
 /* Production plugins */
 const productionPlugins = [
@@ -38,22 +35,6 @@ const productionPlugins = [
     favicon: paths.favicon,
     matomoSiteId: process.env?.MATOMO_SITE_ID ?? 0,
   }),
-  new CopyPlugin({
-    patterns: [
-      { from: './src/manifest/manifest.json', to: '' },
-      // { from: './src/manifest/icon-192x192.png', to: 'assets/' },
-      // { from: './src/manifest/icon-256x256.png', to: 'assets/' },
-      // { from: './src/manifest/icon-384x384.png', to: 'assets/' },
-      // { from: './src/manifest/icon-512x512.png', to: 'assets/' },
-    ],
-    options: {
-      concurrency: 100,
-    },
-  }),
-  // new WorkboxPlugin.InjectManifest({
-  //   swSrc: './src/src-sw.js',
-  //   swDest: 'sw.js',
-  // }),
 ];
 
 const testModules = (names: string[]) => (chunk: Record<string, any>) =>

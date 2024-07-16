@@ -121,7 +121,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
           style: {}
         },
         highlightBox: {
-          search: isMobile ? '.top-search-bar' : '.top-search-bar',//---here update class
+          search: '.top-search-bar',//---here update class
           trigger: () => {
             // hide themes & layers
             if (!isMobile) {

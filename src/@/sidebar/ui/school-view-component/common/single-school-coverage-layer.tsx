@@ -13,7 +13,7 @@ import { getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
 
 const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
   const schoolStats = useStore($schoolStats);
-  const schoolDetails = schoolStats?.find((info) => info.id === schoolId) || null;
+  const schoolDetails = schoolStats?.find((info) => info.id === schoolId) ?? null;
   const stylePaintData = useStore($stylePaintData);
   const { color, value } = getStaticSchoolDetails({ schoolDetails, stylePaintData })
   return (

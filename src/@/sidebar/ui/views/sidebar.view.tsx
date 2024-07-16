@@ -33,6 +33,7 @@ import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
 import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContainer, VerticalSliderButton, VerticalSliderButtonWrapper } from '../sidebar.style';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
+import FilterButton from '~/@/map/ui/advanced-filter/filter';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -100,6 +101,7 @@ export default function Sidebar() {
                 <MagicWandFilled />
               </IconButton>
             </ActiveButtonWrapper>}
+            {!sidebarHeight && <FilterButton />}
             <LegendButton />
             {!sidebarHeight && <ThemeButtons />}
           </TakeTourWrapper>

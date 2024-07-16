@@ -107,7 +107,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
   const { isSchoolStatus } = useStore($currentLayerTypeUtils)
   const currentDataSource = useStore($currentLayerCountryDataSource);
   const dataSourceName = useMemo(() => {
-    let data = currentDataSource?.name?.split(';') ?? [];
+    let data = currentDataSource?.name ? currentDataSource.name.split(';') : [];
     if (data && isSchoolStatus) {
       dataSource?.split(',').forEach((item) => {
         if (!data?.includes(item)) {

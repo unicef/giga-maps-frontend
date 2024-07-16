@@ -1,17 +1,12 @@
-import { Information } from '@carbon/icons-react'
-import { Link, Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useState } from 'react';
 
-import { DataSourceTableWrapper } from '~/@/admin/ui/styles/admin-styles';
 import { Div } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { getLiveSchoolDetails } from '~/@/sidebar/school-view.utils';
-import { $isLoadingCountryAdminView, $isLoadingSchoolView, $schoolStats, $selectedLayerData } from '~/@/sidebar/sidebar.model';
-import { $isMobile } from '~/core/media-query';
+import { $isLoadingSchoolView, $schoolStats, $selectedLayerData } from '~/@/sidebar/sidebar.model';
 
-import ClickAnywhere from '../../common-components/click-anywhere';
 import { HistoryGraphAccordian } from '../../common-components/history-graph';
 import WeekSlider from '../../global-and-country-view-components/common/week-slider/week-slider.view';
 import { DateWeekWrapper } from '../../global-and-country-view-components/connectivity-layer/connectivity-layer.style';
@@ -26,8 +21,7 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   const schoolDetails = SchoolStatsTypes?.find((info) => info.id === schoolId);
   const stylePaintData = useStore($stylePaintData);
   const { value, color } = getLiveSchoolDetails({ schoolDetails, stylePaintData })
-  const [openDataSourcePopup, setDataSourcePopup] = useState(false)
-  return (<>
+  return (
     <div>
       <Div $margin='0 1rem 0rem 1rem'>
         <DateWeekWrapper>
@@ -42,7 +36,6 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
       </SchoolInformationWrapper>
       <FooterDataSourcePopUp size={25} isFooter={false} />
     </div>
-  </>
   );
 }
 

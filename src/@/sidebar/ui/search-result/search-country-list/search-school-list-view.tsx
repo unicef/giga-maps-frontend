@@ -1,11 +1,10 @@
-import { combine, createEvent, restore, sample } from 'effector';
 import { useStore } from "effector-react";
 
 import { EmptyList } from '~/@/common/style/styled-component-style';
 
 import { fetchSchoolListFx } from '../container/search-result.fx';
 import { $searchSchoolList, $searchSchoolListValue, setSearchExpandLevel2, setSearchSchoolListValue } from '../container/search-result.model';
-import { CloseSchoolList, CloseSchoolListIcon, Loading, SchoolCheckbox, SchoolHeader, SchoolListContainer, SchoolSearch } from '../styles/search-result-style';
+import { CloseSchoolList, CloseSchoolListIcon, Loading, SchoolHeader, SchoolListContainer, SchoolSearch } from '../styles/search-result-style';
 import { SearchSchool } from "./search-school-item-view";
 
 

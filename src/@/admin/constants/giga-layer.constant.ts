@@ -28,6 +28,7 @@ export const LayerDataSource = {
 }
 
 export const defaultGigaLayerForm = {
+  code: '',
   name: '',
   icon: '',
   description: '',

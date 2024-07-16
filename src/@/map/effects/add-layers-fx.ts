@@ -56,7 +56,7 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
     deleteSourceAndLayers({ map })
   }
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  void callDelay(timeout, createAndUpdateLayer, props);
+  callDelay(timeout, createAndUpdateLayer, props);
 });
 
 export const updateCoverageFilter = createEffect(({ map, layerUtils, coverageFilter, lastSelectedLayer }: UpdateCoverageFilterOptions) => {

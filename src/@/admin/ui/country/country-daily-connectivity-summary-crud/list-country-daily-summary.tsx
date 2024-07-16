@@ -92,6 +92,13 @@ const ListCountryDailySummary = () => {
     setSearchvalue(event?.target.value)
   }
 
+  const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault()
+      serachFn()
+    }
+  }
+
   return (
     <>
       {deleteId &&
@@ -135,6 +142,7 @@ const ListCountryDailySummary = () => {
               </TableBatchActions>
               <ToolbarContent aria-hidden={batchActionProps.shouldShowBatchActions}>
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
+                  onKeyPress={onEnterKeyPress}
                   onClear={() => {
                     setSearchvalue('')
                     serachFn()

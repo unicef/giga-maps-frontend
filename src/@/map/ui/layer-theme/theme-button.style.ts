@@ -77,10 +77,7 @@ export const ButtonWrapperUp = styled(IconButton)`
 `
 
 export const CustomePopover = styled(Popover)`
-    /* position: absolute; */
-    /* right: 20.5rem; */
-    /* bottom: 33.5rem; */
-    .theme-layer-popover-content{
+    .cds--popover-content{
         background:${props => props.theme.main};
     }
     .cds--popover-caret{
@@ -213,13 +210,6 @@ z-index: 1;
 position:fixed;
 right:.5rem;
 bottom:5rem;
-  /* .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  } */
 
  @media (max-width:768px){
      bottom:${props => props.$bottom ? "calc(60vh + 01rem)" : "calc(40vh + 3rem)"};

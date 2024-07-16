@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { setSearchInMobile } from '../../common-components/top-search-bar/top-search-bar.model';
 import { SCHOOL_LIST_PAGE_SIZE } from '../container/search-result.constant';
 import { fetchSchoolListFx } from '../container/search-result.fx';
-import { $schoolListCurrentPage, $searchAdminLevel2, $searchSchoolIds, $searchSchoolList, onSchoolListCurrentPage, resetSchoolSelection, setSchoolSelection, triggerSearchApply } from '../container/search-result.model';
+import { $schoolListCurrentPage, $searchAdminLevel2, $searchSchoolIds, $searchSchoolList, onSchoolListCurrentPage, resetSchoolSelection, triggerSearchApply } from '../container/search-result.model';
 import { ApplyButton, ButtonGroup, CloseButton, FooterWrapper, SchoolCount, SchoolListPagination, SelectedColumn, SeletedText } from "../styles/search-result-style";
 
 const CloseIcon = styled(Close)`

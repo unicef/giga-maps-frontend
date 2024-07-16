@@ -3,6 +3,7 @@ export type PublishedAtType = {
 }
 export interface DataLayer {
   id: number
+  code: string
   name: string
   icon: string
   description: string
@@ -177,6 +178,7 @@ export type GigaLayerFormType = {
   legendConfigs: LegendConfigsType;
   isReverse: boolean;
   sourceType: DataSourceTypeChoices[];
+  code: DataLayer['code'],
   name: DataLayer['name'],
   icon: string,
   description: DataLayer['description'],

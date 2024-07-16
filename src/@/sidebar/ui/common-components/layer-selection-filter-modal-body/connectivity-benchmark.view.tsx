@@ -1,6 +1,6 @@
 import { RadioButton, RadioButtonGroup, Tooltip } from "@carbon/react";
 import { useStore } from 'effector-react';
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { Information } from '@carbon/icons-react'
 
 import { ConnectivityBenchMarks, Layers } from "~/@/sidebar/sidebar.constant";
@@ -13,16 +13,37 @@ import {
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.style";
+import { $countryBenchmark, $countryDefaultNational } from "~/@/country/country.model";
 
-export default forwardRef(function ConnectivityBenchmark(_props, ref) {
+export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
   const connectivityBenchMark = useStore($connectivityBenchMark);
+  const countryBenchmark = useStore($countryBenchmark)
   const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] = useState<ConnectivityBenchMarks>(connectivityBenchMark);
-  const isNationalBenchmark = useStore($isNationalBenchmark);
+  const defaultNationalBenchmark = useStore($countryDefaultNational);
+  const currentIsNationalBenchmark = useStore($isNationalBenchmark);
+  const [isNationalBenchmark, setIsNationalBenchmark] = useState(currentIsNationalBenchmark);
   const handleBenchmarkChange = () => {
     changeConnectivityBenchmark(connectivityBenchmarkValue)
   };
 
   imperativeHandle(ref, handleBenchmarkChange);
+
+  useEffect(() => {
+    if (layerId) {
+      let currentBenchmarkValue = connectivityBenchmarkValue;
+      const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? 0];
+      const hasDefaultNationalBenchmark = !!defaultNationalBenchmark[layerId];
+      if (currentBenchmarkValue === ConnectivityBenchMarks.national && (!isCountryNationalBenchmark || !hasDefaultNationalBenchmark)) {
+        currentBenchmarkValue = ConnectivityBenchMarks.global;
+      }
+      if (currentBenchmarkValue === ConnectivityBenchMarks.global && hasDefaultNationalBenchmark) {
+        currentBenchmarkValue = ConnectivityBenchMarks.national;
+      }
+
+      setIsNationalBenchmark(isCountryNationalBenchmark);
+      setConnectivityBenchmarkValue(currentBenchmarkValue)
+    }
+  }, [layerId, defaultNationalBenchmark, setConnectivityBenchmarkValue])
 
   return (
     <PopoverFilterContentBenchmark>
@@ -43,6 +64,7 @@ export default forwardRef(function ConnectivityBenchmark(_props, ref) {
       <RadioButtonGroup
         name="radio-button-group"
         defaultSelected={connectivityBenchmarkValue}
+        valueSelected={connectivityBenchmarkValue}
         onChange={(selection) => setConnectivityBenchmarkValue(selection as ConnectivityBenchMarks)}
       >
         <RadioButton

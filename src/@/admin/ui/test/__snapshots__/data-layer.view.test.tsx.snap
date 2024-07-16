@@ -107,7 +107,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
 }
 
 .c1 {
-  min-height: calc(100vh - 13.5rem);
+  min-height: calc(100vh - 10.5rem);
 }
 
 .c1 .cds--data-table thead {
@@ -136,11 +136,6 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
   outline: none!important;
 }
 
-.c6 .cds--popover-content {
-  border: #222 1px solid;
-  background: #ffff;
-}
-
 .c6 .cds--popover-content .cds--toggletip-content {
   padding-top: 0.5rem;
 }
@@ -151,7 +146,6 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
 
 .c8 .list-content {
   margin-top: 0.5rem;
-  color: #222;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
@@ -201,7 +195,16 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                 <div
                   class="cds--table-header-label"
                 >
-                  Giga layer
+                  Unique Code
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Giga Layer Label
                 </div>
               </th>
               <th
@@ -270,6 +273,13 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
               >
                 <a
                   href="/admin/giga-layer/view/8"
+                />
+              </td>
+              <td
+                class="c4"
+              >
+                <a
+                  href="/admin/giga-layer/view/8"
                 >
                   School 
                 </a>
@@ -316,7 +326,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
                 >
                   <button
-                    aria-controls="id-:r11:"
+                    aria-controls="id-:r13:"
                     aria-expanded="false"
                     aria-label="Show information"
                     class="cds--toggletip-button"
@@ -330,7 +340,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   </button>
                   <span
                     class="cds--popover"
-                    id="id-:r11:"
+                    id="id-:r13:"
                   >
                     <span
                       class="cds--popover-content c8"
@@ -358,6 +368,13 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
               </td>
             </tr>
             <tr>
+              <td
+                class="c4"
+              >
+                <a
+                  href="/admin/giga-layer/view/5"
+                />
+              </td>
               <td
                 class="c4"
               >
@@ -409,7 +426,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
                 >
                   <button
-                    aria-controls="id-:r12:"
+                    aria-controls="id-:r14:"
                     aria-expanded="false"
                     aria-label="Show information"
                     class="cds--toggletip-button"
@@ -423,7 +440,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   </button>
                   <span
                     class="cds--popover"
-                    id="id-:r12:"
+                    id="id-:r14:"
                   >
                     <span
                       class="cds--popover-content c8"
@@ -487,8 +504,8 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:r13:"
-        id="cds-pagination-select-:r13:-count-label"
+        for="cds-pagination-select-:r15:"
+        id="cds-pagination-select-:r15:-count-label"
       >
         Items per page
       </label>
@@ -506,7 +523,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r13:"
+                id="cds-pagination-select-:r15:"
                 title=""
               >
                 <option
@@ -576,7 +593,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:r13:-right"
+            for="cds-pagination-select-:r15:-right"
           >
             Page number, of 1 pages
           </label>
@@ -588,7 +605,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r13:-right"
+                id="cds-pagination-select-:r15:-right"
                 title=""
               >
                 <option
@@ -632,7 +649,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r14:"
+              aria-labelledby="tooltip-:r16:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -656,7 +673,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r14:"
+            id="tooltip-:r16:"
             role="tooltip"
           >
             <span
@@ -676,7 +693,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r16:"
+              aria-labelledby="tooltip-:r18:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -700,7 +717,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r16:"
+            id="tooltip-:r18:"
             role="tooltip"
           >
             <span

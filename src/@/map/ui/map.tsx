@@ -1,7 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { createEvent, guard, sample } from 'effector';
-import { CSSProperties } from 'react';
 
 import { $style } from '~/@/map/map.model';
 
@@ -47,7 +46,7 @@ const MapStyle = styled.div<{ $isMobile: boolean }>`
   
 `
 
-const Map = () => {
+const MapComponent = () => {
   const isMobile = useStore($isMobile);
 
   return <>
@@ -57,4 +56,4 @@ const Map = () => {
   </>;
 }
 
-export default Map;
+export default MapComponent;

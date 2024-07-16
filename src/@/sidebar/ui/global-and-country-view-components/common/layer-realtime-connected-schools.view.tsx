@@ -31,10 +31,7 @@ const LayerRealtimeConnectedSchools = ({ isLoading }: { isLoading: boolean }) =>
     changeRealtimeSchoolConnectedOpenStatus(!realtimeSchoolConnectedOpenStatus);
   }, [realtimeSchoolConnectedOpenStatus]);
 
-  // let legends;
-  // if (connectivityBenchMark === ConnectivityBenchMarks.global) {
   let legends = connectivityStats?.real_time_connected_schools;
-  // } 
 
   const label = `${isWeek ? 'Weekly' : 'Monthly'} distribution`;
   return (

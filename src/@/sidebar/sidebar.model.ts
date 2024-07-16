@@ -1,7 +1,7 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchParams, $countrySearchString, $admin1Code } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx, fetchTimePlayerDataFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
@@ -172,9 +172,9 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
   const { convert_unit: unit, value } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
-  const baseBenchmarkValue = evaluateExpression(formula, baseBenchmark ?? 0);
+  const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
-  const nationalBenchmarkValue = evaluateExpression(formula, countryBenchmark[selectedLayerData.id] ?? 0);
+  const nationalBenchmarkValue = Number(evaluateExpression(formula, countryBenchmark[selectedLayerData.id] ?? 0)) || 0;
   const currentBenchmarkValue = connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchmarkValue : globalBenchmarkValue;
   const benchmarkLogic = getConnectivityLogicalValues(String(currentBenchmarkValue), unit, baseBenchmarkValue, isReverse);
   return ({
@@ -331,6 +331,9 @@ export const $showLegend = restore(onShowLegend, true);
 export const onShowThemeLayer = createEvent<boolean>();
 export const $showThemeLayer = restore(onShowThemeLayer, false);
 
+export const onShowAdvancedFilter = createEvent<boolean>();
+export const $showAdvancedFilter = restore(onShowAdvancedFilter, false);
+
 export const $isProductTour = sample({
   source: combine(mapOverview.router.search, mapOverview.visible),
   fn: ([searchParams, isVisible]) => {
@@ -364,7 +367,7 @@ export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
 // all reset model
-$connectivityBenchMark.reset(resetFilterModal, $country);
+$connectivityBenchMark.reset(resetFilterModal);
 $connectivitySpeedGood.reset([resetFilterModal, router.historyUpdated]);
 $connectivitySpeedModerate.reset([resetFilterModal, router.historyUpdated]);
 $connectivitySpeednoInternet.reset([resetFilterModal, router.historyUpdated]);
@@ -385,3 +388,5 @@ $timePlayerCurrentYear.reset($isTimeplayer)
 $isLoadedTimePlayer.reset($isTimeplayer)
 $isLoadingTimeplayer.reset($isTimeplayer)
 $sidebarHeight.reset([router.historyUpdated, $showLegend])
+
+$showAdvancedFilter.reset([$countryCode, $admin1Code, $countrySearchString])
