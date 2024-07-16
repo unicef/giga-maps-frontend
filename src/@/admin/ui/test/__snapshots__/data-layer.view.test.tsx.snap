@@ -1,0 +1,720 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataLayerMainView render DataLayerMainView and take snapshot 1`] = `<DocumentFragment />`;
+
+exports[`DataLayerMainView render ListGigaLayer  1`] = `
+<DocumentFragment>
+  .c1 >h3 {
+  color: #FFF;
+  font-family: Open Sans;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.c1 >p {
+  color: #F5F5F5;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c0 {
+  padding: 3.75rem 2rem 1rem 1rem;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+<div
+    class="c0"
+  >
+    <div
+      class="c1"
+    >
+      <h3>
+        Giga layer
+      </h3>
+      <p>
+        List of giga layer
+      </p>
+    </div>
+  </div>
+  .c0 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.c0 .cds--search-magnifier svg {
+  fill: #222;
+}
+
+<div
+    class="c0"
+  >
+    <a
+      href="/admin/giga-layer/create"
+    >
+      <button
+        class="cds--btn cds--btn--primary cds--btn--disabled"
+        disabled=""
+        type="button"
+      >
+        Add new layer
+        <svg
+          aria-hidden="true"
+          class="cds--btn__icon"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+          />
+        </svg>
+      </button>
+    </a>
+  </div>
+  .c4 {
+  padding: 1rem 1rem 1.5rem 1rem;
+}
+
+.c3 >tr >td {
+  background: #FFFFFF;
+  color: #474747;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
+}
+
+.c2 >tr >th {
+  border-top: #E0E0E0;
+  border-bottom: #E0E0E0;
+  background: #F2F2F2;
+}
+
+.c1 {
+  min-height: calc(100vh - 13.5rem);
+}
+
+.c1 .cds--data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.c1 .cds--data-table-content {
+  overflow-x: initial;
+}
+
+.c7 {
+  margin-left: 0.5rem;
+  color: #277AFF;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.02rem;
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+
+.c6 :focus {
+  outline: none!important;
+}
+
+.c6 .cds--popover-content {
+  border: #222 1px solid;
+  background: #ffff;
+}
+
+.c6 .cds--popover-content .cds--toggletip-content {
+  padding-top: 0.5rem;
+}
+
+.c6 .cds--popover-caret {
+  display: none!important;
+}
+
+.c8 .list-content {
+  margin-top: 0.5rem;
+  color: #222;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.c0 {
+  max-height: calc(100vh - 13.2rem);
+}
+
+.c5 {
+  color: #474747;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem;
+  background: #B9EFCB;
+  border-radius: 62rem;
+  width: max-content;
+  height: 1.5rem;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+<div
+    class="scrollbar-container c0 ps"
+  >
+    <div
+      class="c1"
+    >
+      <div
+        class="cds--data-table-content"
+      >
+        <table
+          aria-label="data-layer-list-data-table"
+          class="cds--data-table cds--data-table--lg"
+        >
+          <thead
+            class="c2"
+          >
+            <tr>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Giga layer
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Source API
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Parameter
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Source Ver
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Status
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Active Countries
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Publisher
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            aria-live="polite"
+            class="c3"
+          >
+            <tr>
+              <td
+                class="c4"
+              >
+                <a
+                  href="/admin/giga-layer/view/8"
+                >
+                  School 
+                </a>
+              </td>
+              <td
+                class="c4"
+              >
+                <span>
+                  Daily Check APP and MLab,
+                </span>
+                <span>
+                  QoS
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                <span>
+                  Upload Speed
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                <span>
+                  V1.0
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                <div
+                  class="c5"
+                  color="#B9EFCB"
+                >
+                  Published
+                </div>
+              </td>
+              <td
+                class="c4"
+              >
+                3
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
+                >
+                  <button
+                    aria-controls="id-:r11:"
+                    aria-expanded="false"
+                    aria-label="Show information"
+                    class="cds--toggletip-button"
+                    type="button"
+                  >
+                    <span
+                      class="c7"
+                    >
+                      View list
+                    </span>
+                  </button>
+                  <span
+                    class="cds--popover"
+                    id="id-:r11:"
+                  >
+                    <span
+                      class="cds--popover-content c8"
+                    >
+                      <div
+                        class="cds--toggletip-content"
+                      >
+                        <p
+                          class="list-content"
+                        >
+                          Afghanistan, Åland Islands
+                        </p>
+                      </div>
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                Test Admin
+              </td>
+            </tr>
+            <tr>
+              <td
+                class="c4"
+              >
+                <a
+                  href="/admin/giga-layer/view/5"
+                >
+                  Download (default)
+                </a>
+              </td>
+              <td
+                class="c4"
+              >
+                <span>
+                  Daily Check APP and MLab,
+                </span>
+                <span>
+                  QoS
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                <span>
+                  Download Speed
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                <span>
+                  V1.0
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                <div
+                  class="c5"
+                  color="#B9EFCB"
+                >
+                  Published
+                </div>
+              </td>
+              <td
+                class="c4"
+              >
+                3
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
+                >
+                  <button
+                    aria-controls="id-:r12:"
+                    aria-expanded="false"
+                    aria-label="Show information"
+                    class="cds--toggletip-button"
+                    type="button"
+                  >
+                    <span
+                      class="c7"
+                    >
+                      View list
+                    </span>
+                  </button>
+                  <span
+                    class="cds--popover"
+                    id="id-:r12:"
+                  >
+                    <span
+                      class="cds--popover-content c8"
+                    >
+                      <div
+                        class="cds--toggletip-content"
+                      >
+                        <p
+                          class="list-content"
+                        >
+                          All countries
+                        </p>
+                      </div>
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </td>
+              <td
+                class="c4"
+              >
+                --
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      class="ps__rail-x"
+      style="left: 0px; top: 0px;"
+    >
+      <div
+        class="ps__thumb-x"
+        style="left: 0px; width: 0px;"
+        tabindex="0"
+      />
+    </div>
+    <div
+      class="ps__rail-y"
+      style="top: 0px; left: 0px;"
+    >
+      <div
+        class="ps__thumb-y"
+        style="top: 0px; height: 0px;"
+        tabindex="0"
+      />
+    </div>
+  </div>
+  .c0 .cds--popover {
+  display: none;
+}
+
+<div
+    class="cds--pagination cds--pagination--md c0"
+  >
+    <div
+      class="cds--pagination__left"
+    >
+      <label
+        class="cds--pagination__text"
+        for="cds-pagination-select-:r13:"
+        id="cds-pagination-select-:r13:-count-label"
+      >
+        Items per page
+      </label>
+      <div
+        class="cds--form-item cds--select__item-count"
+      >
+        <div
+          class="cds--select cds--select--inline"
+        >
+          <div
+            class="cds--select-input--inline__wrapper"
+          >
+            <div
+              class="cds--select-input__wrapper"
+            >
+              <select
+                class="cds--select-input"
+                id="cds-pagination-select-:r13:"
+                title=""
+              >
+                <option
+                  class="cds--select-option"
+                  value="10"
+                >
+                  10
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="20"
+                >
+                  20
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="50"
+                >
+                  50
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="100"
+                >
+                  100
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="500"
+                >
+                  500
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="cds--select__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span
+        class="cds--pagination__text cds--pagination__items-count"
+      >
+        1–2 of 2 items
+      </span>
+    </div>
+    <div
+      class="cds--pagination__right"
+    >
+      <div
+        class="cds--form-item cds--select__page-number"
+      >
+        <div
+          class="cds--select cds--select--inline"
+        >
+          <label
+            class="cds--label cds--visually-hidden"
+            for="cds-pagination-select-:r13:-right"
+          >
+            Page number, of 1 pages
+          </label>
+          <div
+            class="cds--select-input--inline__wrapper"
+          >
+            <div
+              class="cds--select-input__wrapper"
+            >
+              <select
+                class="cds--select-input"
+                id="cds-pagination-select-:r13:-right"
+                title=""
+              >
+                <option
+                  class="cds--select-option"
+                  value="1"
+                >
+                  1
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="cds--select__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span
+        class="cds--pagination__text"
+      >
+        of 1 page
+      </span>
+      <div
+        class="cds--pagination__control-buttons"
+      >
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:r14:"
+              class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+              disabled=""
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 24L10 16 20 8z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:r14:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Previous page
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top-right cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:r16:"
+              class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+              disabled=""
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8L22 16 12 24z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:r16:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Next page
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

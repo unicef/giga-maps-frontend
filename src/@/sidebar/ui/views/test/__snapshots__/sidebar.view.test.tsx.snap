@@ -1,0 +1,2560 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
+<DocumentFragment>
+  .c43 {
+  position: fixed;
+  z-index: 1;
+  background: #181818;
+  right: .5rem;
+  bottom: 2.5rem;
+  border-radius: 62.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c31 {
+  background: #474747;
+  margin-top: .5rem;
+  width: 1.5rem;
+  border-radius: 62.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c31 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c31 .cds--popover-caret {
+  background: #fff;
+}
+
+.c33 {
+  width: 100%;
+  min-height: 2rem;
+  max-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  padding: 0;
+  border-bottom-right-radius: 62.5rem;
+  border-bottom-left-radius: 62.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+}
+
+.c33 svg {
+  fill: #fff!important;
+}
+
+.c32 {
+  width: 100%;
+  min-height: 2rem;
+  max-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  padding: 0;
+  border-top-right-radius: 62.5rem;
+  border-top-left-radius: 62.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+}
+
+.c32 svg {
+  fill: #fff!important;
+}
+
+.c44 .theme-layer-popover-content {
+  background: #181818;
+}
+
+.c44 .cds--popover-caret {
+  background-color: #181818;
+}
+
+.c30 {
+  position: fixed;
+  z-index: 1;
+  top: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  right: 0.5rem;
+}
+
+.c34 {
+  z-index: 1;
+  position: fixed;
+  right: .5rem;
+  bottom: 5rem;
+}
+
+.c36 {
+  background: #181818;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  width: 2rem;
+}
+
+.c35 .cds--btn--icon-only {
+  border-radius: 50%;
+  border: 1px solid #181818;
+  background: #181818;
+}
+
+.c35 .cds--btn--primary:focus {
+  box-shadow: 0 0 0 1px #181818;
+}
+
+.c35 svg {
+  fill: #fff;
+}
+
+.c35 .cds--popover {
+  position: relative;
+  z-index: 6001;
+  top: -1rem;
+}
+
+.c35 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c35 .cds--popover-caret {
+  background: #fff!important;
+}
+
+.c45 .cds--btn--icon-only {
+  border-radius: 50%;
+  border: 1px solid #181818;
+  background: #181818;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAoBAMAAABzztUZAAAALVBMVEUkPRZwiitmeyhtbylccCZeZiViXCVSZCNwVCNWWSJKWiBHTyA+Uh07Rx0tQxkYQLqkAAADMUlEQVR42k2Qz2/aZhzG3+u0YSlts52XQKOiXYqTVm13KYWhsF3AGAY7bV7fiUW7IFuvcLLTuqpJTqW1kXF32Ebm5IVJnbYWwYt3mJK5MxDtMmXCNvJpPwr4b6hTUNtH73v5fF99nvd9AQCBh2CWx7smQrH4nR0cioIXocBXaklYStJ3tpv758DLBG5t8xrf3P9MEcPVV/nnmmgWDPZiDoWNOfMcf9sa7jfbqdVMWGDn3HFG1EMD4cO3yteXpHj67KzRl7je6K+CeLhQTjAXMuzyKX/D9WceFcA4YcXEA2aJXmNmGtdf7r9JhPmFsiLw9Nr1GdddClC2saLx0WIZ/7JMvz3j1p9uoDt4uqKVQjXh/mI6MvdMR2Cyg79bqcfWa/HcmcpSasYpd9JHRkzT0HqxdK2SYUtzTj3VNg4TQo6/cKVV5j6Jzns9z3sCH2hsVewVB6Vs5Vxi9qqpPRrKtaiwePyPon1Pp6PRucbSjMIfOeFSjrTqCsfFUvNvGCJx8/cCkiIf6Y/y3M115lROUZ65ZSbqyZgZ2XUO5NtFXDk97vOf3x2KKBHdo3c7ArxdqGV97me6d/UI4USQX4mq9xUpnLznY9d1J0dXDU1g+dL7PVWpyzk24+v99I0vzcNQsCnpYxXKcoYJnva6ni2KWyaK4f1fx/A9matm47P790UcniDhxyfe/5egLFXXQ881ExPj2OZBZzAdncDzytkqnwc+nRgDAxvxauPYdk7aCvw6y+WB6w9sG5kl/sxa09oaqoK8/eZqGlBefyj2kh2eX812HWJ1yxJzK86BY+qkHiLYzCEW9weWbpA6e3fxY+BNWjeUGl+KC/SnxCF6nygyd14GVKDDFOR8MIOYnbZOCLGIcJH+EFBTiV5TJVRo/pY82SCqPxFSkANgoixEpEzlHc+/rUUaDXIUTBXvAmp88wYtX65/4Fkj02o3iNhSvr2SAu50WWaZy5rqOY5fS+wEIT/lFQDGEGp7eYbojuXo1rjbbW3egxC44x82ujhd03Vdc/T//taNVlKCEQBeU9Qv7HRDf25xHn/Ta3QqsAjc1x352qOFB73RVAkTu79F2gcQwmc/QqX7OnX1VwAAAABJRU5ErkJggg==);
+}
+
+.c45 .cds--btn--primary:focus {
+  box-shadow: 0 0 0 1px #181818;
+}
+
+.c45 svg {
+  fill: #fff;
+}
+
+.c45 .cds--popover {
+  position: relative;
+  z-index: 6001;
+  top: -1rem;
+}
+
+.c45 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c45 .cds--popover-caret {
+  background: #fff!important;
+}
+
+.c37 .legend-info-popover-content {
+  background: #181818;
+  max-inline-size: fit-content;
+}
+
+.c37 .cds--popover-caret {
+  background: #181818;
+}
+
+.c38 {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: #181818;
+}
+
+.c38 svg {
+  fill: #fff!important;
+}
+
+.c39 {
+  display: flex;
+  background: #181818;
+  padding: 1.2rem;
+}
+
+.c39 .school-status {
+  min-width: 175px;
+}
+
+.c39 .legend-value {
+  margin-top: 1.1rem;
+  margin-left: 0.6rem;
+  color: grey;
+  font-size: 0.7rem;
+}
+
+.c39 .legend-container {
+  display: flex;
+  align-items: center;
+}
+
+.c39 .checkbox-with-label {
+  display: flex;
+  align-items: center;
+}
+
+.c39 h3 {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+
+.c39 .conneted-info,
+.c39 .real-time-connetivity-info {
+  position: relative;
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.c39 .conneted-info p,
+.c39 .real-time-connetivity-info p {
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c40 {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: #00d661;
+  border-radius: 50%;
+  margin: 0 0.5rem 0 0;
+  position: relative;
+  z-index: 2;
+}
+
+.c41 {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: #ED5B4C;
+  border-radius: 50%;
+  margin: 0 0.5rem 0 0;
+  position: relative;
+  z-index: 2;
+}
+
+.c42 {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: #1D8Cf0;
+  border-radius: 50%;
+  margin: 0 0.5rem 0 0;
+  position: relative;
+  z-index: 2;
+}
+
+.c12 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.88rem 1rem;
+  height: 3rem;
+  width: 100%;
+  background-color: #181818;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #383838;
+}
+
+.c12 .sidebar-worldview-global-indication {
+  display: flex;
+  justify-content: flex-start;
+  width: 86%;
+}
+
+.c12 .sidebar-worldview-global-indication .sidebar-worldview-global-indication-country-breadcrumb {
+  width: 100%;
+}
+
+.c12 .sidebar-worldview-global-indication .sidebar-worldview-global-indication-country-breadcrumb nav ol {
+  display: flex;
+}
+
+.c12 .sidebar-worldview-global-indication>svg {
+  width: 1rem;
+  height: 1rem;
+  color: black;
+  margin-top: 3px;
+}
+
+.c12 .sidebar-worldview-globalText {
+  margin-left: 0.3rem;
+  font-family: "Open Sans";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.16px;
+  color: #fff;
+}
+
+.c12 .side-info-panel-infomartion-of-worldwideview {
+  margin-left: 3px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.c12 .side-info-panel-infomartion-of-worldwideview button {
+  border: none;
+  background: transparent;
+}
+
+.c12 .side-info-panel-worldwideview-infoIcon {
+  display: flex;
+  align-items: center;
+  width: 0.8rem;
+  height: 0.8rem;
+  color: #fff;
+}
+
+.c12 .sidebar-worldview-contriesText {
+  margin-left: 0.5rem;
+  font-family: "Open Sans";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
+  color: #fff;
+}
+
+.c12 .sidebar-worldview-global-indication-text-and-contries {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.c12 .sidebar-worldview-global-indication-text-and-contries button {
+  border: none;
+  background: transparent;
+}
+
+.c12 .sidebar-worldview-filterIcon {
+  height: 5rem;
+  width: 6rem;
+}
+
+.c12 .sidebar-worldview-filterIcon.cds--btn.cds--btn--primary.cds--btn--icon-only.cds--btn.cds--btn--primary {
+  background-color: transparent;
+  width: 4rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.c12 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb .cds--breadcrumb-item:first-child svg {
+  color: #fff;
+  width: 1rem;
+  height: 1rem;
+}
+
+.c12 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb .cds--breadcrumb-item:last-child>a,
+.c12 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb .cds--breadcrumb-item:last-child>span {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.c12 .cds--breadcrumb-item:last-child:after {
+  content: '';
+}
+
+.c12 .cds--breadcrumb-item:last-child,
+.c12 .cds--breadcrumb-item:last-child::after {
+  overflow: hidden;
+}
+
+.c12 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb-item::after {
+  color: var(--cds-text-primary,#fff);
+}
+
+.c12 .filter-and-share-icon {
+  display: flex;
+  align-items: center;
+}
+
+.c14 {
+  fill: #fff!important;
+}
+
+.c13 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c13 .cds--popover-caret {
+  background: #fff;
+}
+
+.c15 >.cds--modal-container {
+  background: #383838;
+  background: #181818;
+  overflow: unset;
+}
+
+.c16 >h3 {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.c16 button svg {
+  fill: #fff;
+}
+
+.c16 .giga-text {
+  display: flex;
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: bolder;
+}
+
+.c16 .giga-text span:first-child {
+  font-weight: 100;
+}
+
+.c16 .cds--modal-close:hover {
+  background-color: #181818;
+}
+
+.c17 {
+  overflow: unset;
+}
+
+.c17 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c17 .cds--popover-caret {
+  background: #fff;
+}
+
+.c17 .subheading {
+  color: var(--text-text-primary,#161616);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.c17 .field-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  width: 100%;
+  margin-bottom: 1rem;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c17 .field-wrapper .text-input-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.625rem;
+  align-self: stretch;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.c17 .field-wrapper .text-input-container .copy-button {
+  background: #fff;
+}
+
+.c17 .field-wrapper .text-input-container .copy-button svg {
+  fill: #181818;
+}
+
+.c17 .field-wrapper .text-input-container .side-panel-shareURL-text-and-textInput {
+  width: inherit;
+  height: 2.5rem;
+  border-bottom: 1px solid var(--border-border-strong-01,#8D8D8D);
+  background: #fff;
+}
+
+.c17 .social-share-icons {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.c17 .social-share-icons button {
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.c17 .social-share-icons .twitter-icon {
+  fill: #277AFF;
+}
+
+.c17 .field-wrapper span {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+
+.c17 .field-wrapper input {
+  background: #474747;
+  color: #fff;
+  border: none;
+}
+
+.c17 .share-icons-container span {
+  color: #fff;
+}
+
+.c17 .share-icons-container .social-share-icons svg {
+  fill: #fff;
+}
+
+.c3 {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.c3 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c3 .cds--popover-caret {
+  background: #fff;
+}
+
+.c4 {
+  display: flex;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bolder;
+}
+
+.c4 img {
+  height: 1rem;
+  width: 4.75rem;
+  margin-top: 0.3125rem;
+}
+
+.c2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.c2 svg {
+  fill: #fff!important;
+}
+
+.c6 {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem 0.8rem 1rem!important;
+  cursor: pointer;
+  color: #181818;
+}
+
+.c6:hover {
+  background: #fff!important;
+}
+
+.c6:hover .cds--side-nav__link-text {
+  color: #181818!important;
+  font-weight: normal;
+}
+
+.c6 >span.cds--side-nav__link-text {
+  color: #fff;
+  font-weight: normal;
+}
+
+.c6 >.cds--side-nav__icon {
+  margin-right: 0.7rem;
+}
+
+.c6 .cds--side-nav__icon svg {
+  fill: #fff;
+}
+
+.c6:hover .cds--side-nav__icon svg {
+  fill: #181818;
+}
+
+.c7 .cds--contained-list-item__content:not(:disabled):hover {
+  color: #181818;
+  background: #fff;
+}
+
+.c7 .cds--contained-list-item__content {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem 0.8rem 1rem!important;
+  cursor: pointer;
+}
+
+.c7 >.cds--contained-list-item__icon,
+.c7 >.cds--side-nav__icon {
+  margin-right: 0.7rem;
+}
+
+.c7 >.cds--contained-list-item__content,
+.c7 >.cds--side-nav__link {
+  color: #fff;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c5 {
+  background: #181818;
+  height: calc(100% - 3rem);
+  top: 3rem;
+  width: 100%;
+  position: absolute;
+  z-index: 6;
+}
+
+.c5 .cds--contained-list-item:not(:last-of-type)::before {
+  background-color: #181818!important;
+}
+
+.c10 input {
+  border-bottom: 1px solid #181818;
+  background: #181818;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c10 input::placeholder {
+  color: #6F6F6F;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c10 .cds--search-magnifier svg {
+  fill: #fff;
+}
+
+.c10 .cds--search-close svg {
+  fill: #fff;
+}
+
+.c10 .cds--search-close :hover {
+  background: transparent;
+  border-block-end: 1px solid transparent;
+}
+
+.c10 .cds--search-close::before {
+  background-color: transparent;
+  block-size: 0;
+}
+
+.c10 .cds--search-close:hover,
+.c10 .cds--search-button:hover {
+  background-color: transparent;
+}
+
+.c10 .cds--search-close button :hover {
+  background: transparent;
+}
+
+.c8 {
+  display: flex;
+  align-items: center;
+  height: 3.1rem;
+}
+
+.c8 .cds--btn--primary:hover {
+  background-color: #181818!important;
+}
+
+.c8 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c8 .cds--popover-caret {
+  background: #fff;
+}
+
+.c8 .search-icon {
+  margin-right: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+  fill: #fff;
+}
+
+.c8 svg {
+  fill: #fff!important;
+}
+
+.c9 {
+  background: #181818;
+}
+
+.c9 .cds--btn--primary:hover {
+  background-color: #181818!important;
+}
+
+.c9 .cds--btn--primary:active {
+  background-color: #181818!important;
+}
+
+.c9 svg {
+  margin-right: 0.20rem;
+  fill: #fff;
+}
+
+.c1 {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  width: inherit;
+}
+
+.c1 .cds--tooltip-content {
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.c0 {
+  transition: all 0.3s;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.c0 .sidebar__expander>svg {
+  color: #fff;
+}
+
+.c11 {
+  height: calc(100% - 6rem);
+}
+
+.c29 {
+  transition: all .5s;
+}
+
+.c28 {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.c28 button {
+  width: 100%;
+  max-width: 100%;
+}
+
+.c19 {
+  background: #181818;
+  width: 100%;
+  padding: 1.5rem 1rem 2rem 1rem;
+}
+
+.c20 {
+  display: flex;
+}
+
+.c21 {
+  color: #fff;
+  font-family: Open Sans;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2rem;
+  margin-right: 0.5rem;
+}
+
+.c22 {
+  margin-top: 1rem;
+}
+
+.c22 p {
+  color: #9E9E9E;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
+}
+
+.c23 {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.c23 svg {
+  fill: #9E9E9E;
+  margin-right: 0.5rem;
+}
+
+.c23 a {
+  cursor: pointer;
+}
+
+.c24 {
+  padding-top: 1.5rem;
+}
+
+.c24 svg {
+  fill: #fff;
+  height: 1rem;
+  width: 1rem;
+}
+
+.c25 {
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c25 p {
+  color: #9E9E9E;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 0.75rem;
+  margin: 0;
+}
+
+.c25 p span {
+  color: #9E9E9E;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.c25 .information-icon button {
+  border: none;
+  background: inherit;
+}
+
+.c25 .information-icon button svg {
+  height: 0.75rem;
+  width: 0.75rem;
+  fill: #7E7E7E;
+}
+
+.c25 .cds--tooltip-content {
+  width: 10rem;
+  max-height: 10rem;
+}
+
+.c26 {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+  justify-content: space-between;
+}
+
+.c26 p {
+  color: #6F6F6F;
+  font-size: 0.625rem;
+  font-weight: 400;
+  line-height: 0.75rem;
+}
+
+.c26 span {
+  color: #6F6F6F;
+  font-size: 0.625rem;
+  font-weight: 400;
+  line-height: 0.75rem;
+}
+
+.c18 {
+  max-height: calc(100% - 6.5rem);
+  background: #181818;
+}
+
+.c27 {
+  display: flex;
+  max-width: 100%;
+  margin-top: 0.5rem;
+  height: 0.25rem;
+}
+
+@media (max-width:768px) {
+  .c43 {
+    bottom: calc(40vh + 0.5rem);
+  }
+}
+
+@media (max-width:768px) {
+  .c30 {
+    top: 6.5rem;
+  }
+}
+
+@media (max-width:768px) {
+  .c34 {
+    bottom: calc(40vh + 3rem);
+  }
+}
+
+@media (max-width:768px) {
+  .c37 .legend-info-popover-content {
+    overflow: auto;
+    width: calc(100vw - 3rem);
+  }
+}
+
+@media (max-width:768px) {
+  .c12 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.88rem 1rem;
+    height: 3rem;
+    width: 100%;
+    background-color: #22222280;
+    margin-top: 0.5rem;
+    position: fixed;
+    top: 2.5rem;
+    z-index: 3;
+  }
+}
+
+@media (max-width:768px) {
+  .c2 {
+    position: fixed;
+    top: 0;
+    background: #181818;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width:768px) {
+  .c5 {
+    position: fixed;
+  }
+}
+
+@media (max-width:768px) {
+  .c8 {
+    position: fixed;
+    width: auto;
+    top: 0rem;
+    z-index: 2;
+    right: 0;
+    flex-direction: row-reverse;
+  }
+}
+
+@media (max-width:768px) {
+  .c9 {
+    background: #181818;
+  }
+
+  .c9 .cds--btn--primary:hover {
+    background-color: #181818!important;
+  }
+
+  .c9 .cds--btn--primary:active {
+    background-color: #181818!important;
+  }
+}
+
+@media (max-width:768px) {
+  .c0 {
+    z-index: 1;
+    width: 100%;
+    height: 40vh;
+    top: unset;
+    bottom: 0;
+    position: fixed;
+  }
+
+  .c0 .sidebar__expander {
+    display: none;
+    cursor: pointer;
+  }
+}
+
+@media (min-width:769px) and (max-width:1584px) {
+  .c0 {
+    transition: all 0.3s;
+    position: fixed;
+    top: 0rem;
+    bottom: 5.3rem;
+    left: 0.5rem;
+    width: 288px;
+    height: 96vh;
+  }
+
+  .c0 .sidebar__expander {
+    cursor: pointer;
+    position: absolute;
+    top: 9.5rem;
+    left: 100%;
+    display: flex;
+    width: 16px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    background-color: #7E7E7E;
+    border: none;
+    outline: none;
+    padding: 0;
+  }
+
+  .c0 .sidebar__expander >svg {
+    fill: #fff;
+    transition: all .5s;
+    transform: rotate(180deg);
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media only screen and (min-width:1584px) {
+  .c0 {
+    transition: all 0.3s;
+    position: fixed;
+    top: 0rem;
+    bottom: 5.3rem;
+    left: 0.5rem;
+    width: 296px;
+    height: 96vh;
+  }
+
+  .c0 .sidebar__expander {
+    cursor: pointer;
+    position: absolute;
+    top: 9.5rem;
+    left: 100%;
+    display: flex;
+    width: 16px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    background-color: #7E7E7E;
+    border: none;
+    outline: none;
+    padding: 0;
+  }
+
+  .c0 .sidebar__expander >svg {
+    transition: all .5s;
+    transform: rotate(180deg);
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (max-width:768px) {
+  .c11 {
+    height: calc(100%);
+  }
+}
+
+@media (max-width:768px) {
+  .c18 {
+    max-height: calc(100%);
+  }
+}
+
+<div
+    class="c0"
+  >
+    <div
+      class="c1 sidebar"
+    >
+      <div
+        class="c2"
+      >
+        <div
+          class="c3"
+        >
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:r0:"
+                class="cds--btn--icon-only sidebar-menuIcon cds--btn cds--layout--size-lg cds--btn--ghost"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:r0:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Close
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+          <a
+            class="c4"
+            href="/map"
+          >
+            <img
+              alt="Giga logo"
+              src=""
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="c5"
+      >
+        <ul
+          class="cds--side-nav__items"
+        >
+          <li
+            class="cds--side-nav__item"
+          >
+            <a
+              class="cds--side-nav__link c6"
+              href="/docs/explore-api"
+              tabindex="0"
+              target="_blank"
+            >
+              <div
+                class="cds--side-nav__icon cds--side-nav__icon--small"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M26,22a3.86,3.86,0,0,0-2,.57l-3.09-3.1a6,6,0,0,0,0-6.94L24,9.43A3.86,3.86,0,0,0,26,10a4,4,0,1,0-4-4,3.86,3.86,0,0,0,.57,2l-3.1,3.09a6,6,0,0,0-6.94,0L9.43,8A3.86,3.86,0,0,0,10,6a4,4,0,1,0-4,4,3.86,3.86,0,0,0,2-.57l3.09,3.1a6,6,0,0,0,0,6.94L8,22.57A3.86,3.86,0,0,0,6,22a4,4,0,1,0,4,4,3.86,3.86,0,0,0-.57-2l3.1-3.09a6,6,0,0,0,6.94,0L22.57,24A3.86,3.86,0,0,0,22,26a4,4,0,1,0,4-4ZM26,4a2,2,0,1,1-2,2A2,2,0,0,1,26,4ZM4,6A2,2,0,1,1,6,8,2,2,0,0,1,4,6ZM6,28a2,2,0,1,1,2-2A2,2,0,0,1,6,28Zm10-8a4,4,0,1,1,4-4A4,4,0,0,1,16,20Zm10,8a2,2,0,1,1,2-2A2,2,0,0,1,26,28Z"
+                  />
+                </svg>
+              </div>
+              <span
+                class="cds--side-nav__link-text"
+              >
+                API’s and Download
+              </span>
+            </a>
+          </li>
+          <li
+            class="cds--side-nav__item"
+          >
+            <a
+              class="cds--side-nav__link c6"
+              href="/about"
+              tabindex="0"
+              target="_blank"
+            >
+              <div
+                class="cds--side-nav__icon cds--side-nav__icon--small"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                  />
+                  <path
+                    d="M26,28H6a2.0023,2.0023,0,0,1-2-2V6A2.0023,2.0023,0,0,1,6,4H26a2.0023,2.0023,0,0,1,2,2V26A2.0023,2.0023,0,0,1,26,28ZM6,6V26H26V6Z"
+                  />
+                </svg>
+              </div>
+              <span
+                class="cds--side-nav__link-text"
+              >
+                About Giga maps
+              </span>
+            </a>
+          </li>
+          <li
+            class="cds--contained-list-item c7 cds--contained-list-item--clickable cds--contained-list-item--with-icon"
+          >
+            <button
+              class="cds--contained-list-item__content"
+              type="button"
+            >
+              <div
+                class="cds--contained-list-item__icon"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M28,12H4a2.0023,2.0023,0,0,0-2,2V28a2.002,2.002,0,0,0,2,2H28a2.0023,2.0023,0,0,0,2-2V14A2.0027,2.0027,0,0,0,28,12ZM20,28H12V27a1.0009,1.0009,0,0,1,1-1h6a1.0009,1.0009,0,0,1,1,1Zm8,0H22V27a3.0033,3.0033,0,0,0-3-3H13a3.0033,3.0033,0,0,0-3,3v1H4V14H28.002Z"
+                  />
+                  <path
+                    d="M16 23a4 4 0 114-4A4.0042 4.0042 0 0116 23zm0-6a2 2 0 102 2A2.0023 2.0023 0 0016 17zM30 4V8a2.0027 2.0027 0 01-2 2H24a2.0027 2.0027 0 01-2-2V4a2.0027 2.0027 0 012-2h4A2.0027 2.0027 0 0130 4zM28 8l.002-4H24V8zM20 4V8a2.0027 2.0027 0 01-2 2H14a2.0023 2.0023 0 01-2-2V4a2.0023 2.0023 0 012-2h4A2.0027 2.0027 0 0120 4zM18 8l.002-4H14V8zM10 4V8a2.0023 2.0023 0 01-2 2H4A2.0023 2.0023 0 012 8V4A2.0023 2.0023 0 014 2H8A2.0023 2.0023 0 0110 4zM8 8l.0015-4H4V8z"
+                  />
+                </svg>
+              </div>
+              <div>
+                Tour
+              </div>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="c8 top-search-bar"
+      >
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip cds--icon-tooltip"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:r2:"
+              class="cds--btn--icon-only c9 main-search-list cds--btn cds--layout--size-lg cds--btn--primary"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2Zm5,3.1055a12.0136,12.0136,0,0,1,2.9158,1.8994L23.5034,8H21ZM13.3784,27.7026A11.9761,11.9761,0,0,1,8.1157,6.9761L9.4648,9h3.3423l-1.5,4H7.2793L5.8967,17.1475,8.4648,21h5l1.4319,2.1475ZM16,28c-.2034,0-.4016-.02-.6025-.03l1.3967-4.19a1.9876,1.9876,0,0,0-.2334-1.7412l-1.4319-2.1475A1.9962,1.9962,0,0,0,13.4648,19h-3.93L8.1033,16.8525,8.7207,15H11v2h2V14.1812l2.9363-7.83-1.8726-.7022L13.5571,7H10.5352L9.728,5.7891A11.7941,11.7941,0,0,1,19,4.395V8a2.0025,2.0025,0,0,0,2,2h2.5857A1.9865,1.9865,0,0,0,25,9.4141l.1406-.1407.2818-.68A11.9813,11.9813,0,0,1,27.3,12H22.5986a1.9927,1.9927,0,0,0-1.9719,1.665L20.03,17.1064a1.99,1.99,0,0,0,.991,2.086l2.1647,1.4638,1.4585,3.646A11.9577,11.9577,0,0,1,16,28Zm8.8145-8.6563L22.1,17.5088l-.1-.06L22.5986,14h5.2207a11.743,11.743,0,0,1-1.7441,8.4951Z"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:r2:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Country List
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+        <div
+          aria-label="Search country, region, school, id"
+          class="cds--search cds--search--lg c10 sidebar-searchbox"
+          role="search"
+        >
+          <div
+            class="cds--search-magnifier"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--search-magnifier-icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5 C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+              />
+            </svg>
+          </div>
+          <label
+            class="cds--label"
+            for="main-search-bar"
+            id="main-search-bar-search"
+          >
+            Search
+          </label>
+          <input
+            autocomplete="off"
+            class="cds--search-input"
+            id="main-search-bar"
+            placeholder="Search country, region, school, id"
+            role="searchbox"
+            type="text"
+            value=""
+          />
+          <button
+            aria-label="Clear search input"
+            class="cds--search-close cds--search-close--hidden"
+            title="Clear search input"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="c11"
+      >
+        <div
+          class="c12"
+        >
+          <div
+            class="sidebar-worldview-global-indication"
+          >
+            <div
+              class="sidebar-worldview-global-indication-text-and-contries"
+            >
+              <span
+                class="sidebar-worldview-globalText"
+              >
+                Worldwide
+              </span>
+              <span
+                class="sidebar-worldview-contriesText"
+              >
+                0 countries
+              </span>
+            </div>
+          </div>
+          <div
+            class="c13"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
+            >
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-labelledby="tooltip-:r5:"
+                  class="cds--btn--icon-only sidebar-worldview-shareIcon cds--btn cds--btn--sm cds--layout--size-sm cds--btn--ghost"
+                  type="button"
+                >
+                  <svg
+                    aria-label="share"
+                    class="c14"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M23,20a5,5,0,0,0-3.89,1.89L11.8,17.32a4.46,4.46,0,0,0,0-2.64l7.31-4.57A5,5,0,1,0,18,7a4.79,4.79,0,0,0,.2,1.32l-7.31,4.57a5,5,0,1,0,0,6.22l7.31,4.57A4.79,4.79,0,0,0,18,25a5,5,0,1,0,5-5ZM23,4a3,3,0,1,1-3,3A3,3,0,0,1,23,4ZM7,19a3,3,0,1,1,3-3A3,3,0,0,1,7,19Zm16,9a3,3,0,1,1,3-3A3,3,0,0,1,23,28Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-:r5:"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Share content
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="cds--modal c15"
+            role="presentation"
+          >
+            <div
+              aria-modal="true"
+              class="cds--modal-container"
+              role="dialog"
+            >
+              <button
+                class="cds--visually-hidden"
+                type="button"
+              >
+                Focus sentinel
+              </button>
+              <div
+                class="cds--modal-container-body"
+              >
+                <div
+                  class="cds--modal-header c16"
+                >
+                  <h3
+                    class="cds--modal-header__heading cds--type-beta"
+                  >
+                    Share
+                  </h3>
+                  <button
+                    aria-label="Close"
+                    class="cds--modal-close"
+                    title="Close"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="cds--modal-close__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="20"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div
+                  class="scrollbar-container ps"
+                >
+                  <div
+                    class="cds--modal-content c17"
+                  >
+                    <div
+                      class="field-wrapper"
+                    >
+                      <span>
+                        Copy URL
+                      </span>
+                      <div
+                        class="text-input-container"
+                      >
+                        <div
+                          class="cds--form-item cds--text-input-wrapper cds--text-input-wrapper--readonly"
+                        >
+                          <div
+                            class="cds--text-input__label-wrapper"
+                          />
+                          <div
+                            class="cds--text-input__field-outer-wrapper"
+                          >
+                            <div
+                              class="cds--text-input__field-wrapper"
+                            >
+                              <input
+                                class="cds--text-input"
+                                id="text-input-1"
+                                readonly=""
+                                type="text"
+                                value="http://localhost/map"
+                              />
+                              <span
+                                class="cds--text-input__counter-alert"
+                                role="alert"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="cds--layout-constraint--size__default-md cds--layout-constraint--size__max-lg"
+                        >
+                          <span
+                            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                          >
+                            <div
+                              class="cds--tooltip-trigger__wrapper"
+                            >
+                              <button
+                                aria-labelledby="tooltip-:r7:"
+                                class="cds--btn--icon-only copy-button cds--copy-btn cds--copy cds--btn cds--btn--primary"
+                                type="button"
+                              >
+                                <svg
+                                  aria-hidden="true"
+                                  class="cds--snippet__icon"
+                                  fill="currentColor"
+                                  focusable="false"
+                                  height="16"
+                                  preserveAspectRatio="xMidYMid meet"
+                                  viewBox="0 0 32 32"
+                                  width="16"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
+                                  />
+                                  <path
+                                    d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <span
+                              aria-hidden="true"
+                              class="cds--popover"
+                              id="tooltip-:r7:"
+                              role="tooltip"
+                            >
+                              <span
+                                class="cds--popover-content cds--tooltip-content"
+                              >
+                                Copy
+                              </span>
+                              <span
+                                class="cds--popover-caret"
+                              />
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="share-icons-container"
+                    >
+                      <span>
+                        Or share using
+                      </span>
+                      <div
+                        class="social-share-icons"
+                      >
+                        <a
+                          class="cds--link"
+                          href="https://twitter.com/intent/tweet?text=Giga Maps&url=https://twitter.com/intent/tweet?text=giga-maps&url=http%3A%2F%2Flocalhost%2Fmap"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          <span
+                            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                          >
+                            <div
+                              class="cds--tooltip-trigger__wrapper"
+                            >
+                              <button
+                                aria-labelledby="tooltip-:r9:"
+                                class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
+                                type="button"
+                              >
+                                SvgUrl
+                              </button>
+                            </div>
+                            <span
+                              aria-hidden="true"
+                              class="cds--popover"
+                              id="tooltip-:r9:"
+                              role="tooltip"
+                            >
+                              <span
+                                class="cds--popover-content cds--tooltip-content"
+                              >
+                                Twitter
+                              </span>
+                              <span
+                                class="cds--popover-caret"
+                              />
+                            </span>
+                          </span>
+                        </a>
+                        <a
+                          class="cds--link"
+                          href="mailto:?subject=Giga Maps – Navigation Link&body=Dear%20User%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20I%20hope%20this%20email%20finds%20you%20well.%20I'd%20like%20to%20share%20the%20GIGA%20Maps%20URL%20with%20you%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Application%20URL%20-%20http%3A%2F%2Flocalhost%2Fmap%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20This%20link%20will%20take%20you%20to%20the%20GIGA%20Maps%20application%2C%20allowing%20you%20to%20navigate%20through%20it.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Regards%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gigamaps%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Support%20Mail%20Id%3A%20giga%40mail.unicef.org%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%C2%A92023-2024%20All%20rights%20reserved"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          <span
+                            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                          >
+                            <div
+                              class="cds--tooltip-trigger__wrapper"
+                            >
+                              <button
+                                aria-labelledby="tooltip-:rb:"
+                                class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
+                                type="button"
+                              >
+                                <svg
+                                  aria-hidden="true"
+                                  fill="currentColor"
+                                  focusable="false"
+                                  height="32"
+                                  preserveAspectRatio="xMidYMid meet"
+                                  viewBox="0 0 32 32"
+                                  width="32"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M28,6H4A2,2,0,0,0,2,8V24a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V8A2,2,0,0,0,28,6ZM25.8,8,16,14.78,6.2,8ZM4,24V8.91l11.43,7.91a1,1,0,0,0,1.14,0L28,8.91V24Z"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <span
+                              aria-hidden="true"
+                              class="cds--popover"
+                              id="tooltip-:rb:"
+                              role="tooltip"
+                            >
+                              <span
+                                class="cds--popover-content cds--tooltip-content"
+                              >
+                                Email
+                              </span>
+                              <span
+                                class="cds--popover-caret"
+                              />
+                            </span>
+                          </span>
+                        </a>
+                        <a
+                          class="cds--link"
+                          href="https://api.whatsapp.com/send?text=Giga%20Maps%20http%3A%2F%2Flocalhost%2Fmap"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          <span
+                            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                          >
+                            <div
+                              class="cds--tooltip-trigger__wrapper"
+                            >
+                              <button
+                                aria-labelledby="tooltip-:rd:"
+                                class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
+                                type="button"
+                              >
+                                SvgUrl
+                              </button>
+                            </div>
+                            <span
+                              aria-hidden="true"
+                              class="cds--popover"
+                              id="tooltip-:rd:"
+                              role="tooltip"
+                            >
+                              <span
+                                class="cds--popover-content cds--tooltip-content"
+                              >
+                                WhatsApp
+                              </span>
+                              <span
+                                class="cds--popover-caret"
+                              />
+                            </span>
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="ps__rail-x"
+                    style="left: 0px; top: 0px;"
+                  >
+                    <div
+                      class="ps__thumb-x"
+                      style="left: 0px; width: 0px;"
+                      tabindex="0"
+                    />
+                  </div>
+                  <div
+                    class="ps__rail-y"
+                    style="top: 0px; left: 0px;"
+                  >
+                    <div
+                      class="ps__thumb-y"
+                      style="top: 0px; height: 0px;"
+                      tabindex="0"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="cds--visually-hidden"
+                type="button"
+              >
+                Focus sentinel
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="scrollbar-container c18 ps"
+        >
+          <div
+            class="c19"
+          >
+            <div
+              class=""
+            >
+              <div
+                class="c20"
+              >
+                <p
+                  class="c21"
+                >
+                  Global
+                </p>
+                <p
+                  class="c21"
+                >
+                  School
+                </p>
+              </div>
+              <div
+                class="c20"
+              >
+                <p
+                  class="c21"
+                >
+                  connectivity
+                </p>
+                <p
+                  class="c21"
+                >
+                  map
+                </p>
+              </div>
+              <div
+                class="c22"
+              >
+                <p>
+                  An open & live global map of schools and their connectivity
+                </p>
+              </div>
+              <div
+                class="c23"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M29.4141,24,12,6.5859a2.0476,2.0476,0,0,0-2.8281,0l-2.586,2.586a2.0021,2.0021,0,0,0,0,2.8281L23.999,29.4141a2.0024,2.0024,0,0,0,2.8281,0l2.587-2.5865a1.9993,1.9993,0,0,0,0-2.8281ZM8,10.5859,10.5859,8l5,5-2.5866,2.5869-5-5Z"
+                  />
+                  <path
+                    d="M2.586 14.586H5.414V17.414H2.586z"
+                    transform="rotate(-45 4 16)"
+                  />
+                  <path
+                    d="M14.586 2.586H17.414V5.414H14.586z"
+                    transform="rotate(-45 16 4)"
+                  />
+                  <path
+                    d="M2.586 2.586H5.414V5.414H2.586z"
+                    transform="rotate(-45 4 4)"
+                  />
+                </svg>
+                <a
+                  class="cds--link"
+                >
+                  Take the tour
+                </a>
+              </div>
+            </div>
+            <div
+              class="c24"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16,18a5,5,0,1,1,5-5A5.0057,5.0057,0,0,1,16,18Zm0-8a3,3,0,1,0,3,3A3.0033,3.0033,0,0,0,16,10Z"
+                />
+                <path
+                  d="M16,30,7.5645,20.0513c-.0479-.0571-.3482-.4515-.3482-.4515A10.8888,10.8888,0,0,1,5,13a11,11,0,0,1,22,0,10.8844,10.8844,0,0,1-2.2148,6.5973l-.0015.0025s-.3.3944-.3447.4474ZM8.8125,18.395c.001.0007.2334.3082.2866.3744L16,26.9079l6.91-8.15c.0439-.0552.2783-.3649.2788-.3657A8.901,8.901,0,0,0,25,13,9,9,0,1,0,7,13a8.9054,8.9054,0,0,0,1.8125,5.395Z"
+                />
+              </svg>
+              <div
+                class="c25"
+              >
+                <p>
+                  0 /6M 
+                  <span>
+                    schools location mapped
+                  </span>
+                </p>
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip information-icon"
+                >
+                  <div
+                    class="cds--tooltip-trigger__wrapper"
+                  >
+                    <button
+                      aria-labelledby="tooltip-:rf:"
+                      class="sb-tooltip-trigger"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                        />
+                        <path
+                          d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="cds--popover"
+                    id="tooltip-:rf:"
+                    role="tooltip"
+                  >
+                    <span
+                      class="cds--popover-content cds--tooltip-content"
+                    >
+                      School geolocations mapped using government, Giga’s AI model and supplemental open data.
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </div>
+              <div
+                class="c26"
+              >
+                <p>
+                  across 0 countries
+                </p>
+              </div>
+            </div>
+            <div
+              class="c24"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 12H17V30H15zM11.33 18.22a7 7 0 010-10.44l1.34 1.49a5 5 0 000 7.46zM20.67 18.22l-1.34-1.49a5 5 0 000-7.46l1.34-1.49a7 7 0 010 10.44z"
+                />
+                <path
+                  d="M8.4 21.8a11 11 0 010-17.6L9.6 5.8a9 9 0 000 14.4zM23.6 21.8l-1.2-1.6a9 9 0 000-14.4l1.2-1.6a11 11 0 010 17.6z"
+                />
+              </svg>
+              <div
+                class="c25"
+              >
+                <p>
+                  0 
+                  <span>
+                    schools connectivity status mapped
+                  </span>
+                </p>
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip information-icon"
+                >
+                  <div
+                    class="cds--tooltip-trigger__wrapper"
+                  >
+                    <button
+                      aria-labelledby="tooltip-:rg:"
+                      class="sb-tooltip-trigger"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                        />
+                        <path
+                          d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="cds--popover"
+                    id="tooltip-:rg:"
+                    role="tooltip"
+                  >
+                    <span
+                      class="cds--popover-content cds--tooltip-content"
+                    >
+                      School connectivity status mapped using government data or a real-time measurement source.
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </div>
+              <div
+                class="c26"
+              >
+                <p>
+                  across 0 countries
+                </p>
+                <span>
+                  0
+                </span>
+              </div>
+              <div
+                class="2 c27"
+              />
+            </div>
+            <div
+              class="c24"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="16"
+                  cy="25"
+                  r="2"
+                />
+                <path
+                  d="M10.47,19.2334l1.4136,1.4131a5.9688,5.9688,0,0,1,8.2229-.0093L21.52,19.2236a7.9629,7.9629,0,0,0-11.05.01Z"
+                />
+                <path
+                  d="M6.229,14.9927l1.4136,1.4135a11.955,11.955,0,0,1,16.7041-.01L25.76,14.9829a13.9514,13.9514,0,0,0-19.5313.01Z"
+                />
+                <path
+                  d="M30,10.7412a19.94,19.94,0,0,0-28,0v.0225L3.4043,12.168a17.9336,17.9336,0,0,1,25.1811-.01L30,10.7432Z"
+                />
+              </svg>
+              <div
+                class="c25"
+              >
+                <p>
+                  0 
+                  <span>
+                    schools with real-time data mapped
+                  </span>
+                </p>
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left-bottom cds--tooltip information-icon"
+                >
+                  <div
+                    class="cds--tooltip-trigger__wrapper"
+                  >
+                    <button
+                      aria-labelledby="tooltip-:rh:"
+                      class="sb-tooltip-trigger"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                        />
+                        <path
+                          d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="cds--popover"
+                    id="tooltip-:rh:"
+                    role="tooltip"
+                  >
+                    <span
+                      class="cds--popover-content cds--tooltip-content"
+                    >
+                      Schools with periodical in-school internet measurements from software and hardware-based solutions.
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </div>
+              <div
+                class="c26"
+              >
+                <p>
+                  across 0 countries
+                </p>
+                <span>
+                  0
+                </span>
+              </div>
+              <div
+                class="2 c27"
+              />
+            </div>
+          </div>
+          <div
+            class="ps__rail-x"
+            style="left: 0px; top: 0px;"
+          >
+            <div
+              class="ps__thumb-x"
+              style="left: 0px; width: 0px;"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="ps__rail-y"
+            style="top: 0px; left: 0px;"
+          >
+            <div
+              class="ps__thumb-y"
+              style="top: 0px; height: 0px;"
+              tabindex="0"
+            />
+          </div>
+        </div>
+        <div
+          class="c28 explore-countries-button"
+        >
+          <button
+            class="cds--btn cds--btn--primary"
+            type="button"
+          >
+            Explore countries
+            <svg
+              aria-hidden="true"
+              class="cds--btn__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 8L14.57 9.393 20.15 15 8 15 8 17 20.15 17 14.57 22.573 16 24 24 16 16 8z"
+              />
+              <path
+                d="M16,30A14,14,0,1,1,30,16,14.0158,14.0158,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12.0137,12.0137,0,0,0,16,4Z"
+              />
+            </svg>
+          </button>
+        </div>
+        <button
+          class="sidebar__expander"
+          type="button"
+        >
+          SvgUrl
+        </button>
+      </div>
+      <div
+        class="c29"
+      >
+        <div
+          class="c30 broadcast-button"
+        >
+          <div
+            class="c31"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
+            >
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-labelledby="tooltip-:rj:"
+                  class="cds--btn--icon-only c32 cds--btn cds--btn--ghost"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-:rj:"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Zoom in
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
+            >
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-labelledby="tooltip-:rl:"
+                  class="cds--btn--icon-only c33 cds--btn cds--btn--ghost"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 15H24V17H8z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-:rl:"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Zoom out
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </div>
+        </div>
+        <div
+          class="2 c34"
+        >
+          <div
+            class="c35"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
+            >
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-labelledby="tooltip-:rn:"
+                  class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
+                  data-testid="tour-button"
+                  id="tour-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M29.4141,24,12,6.5859a2.0476,2.0476,0,0,0-2.8281,0l-2.586,2.586a2.0021,2.0021,0,0,0,0,2.8281L23.999,29.4141a2.0024,2.0024,0,0,0,2.8281,0l2.587-2.5865a1.9993,1.9993,0,0,0,0-2.8281ZM8,10.5859,10.5859,8l5,5-2.5866,2.5869-5-5Z"
+                    />
+                    <path
+                      d="M2.586 14.586H5.414V17.414H2.586z"
+                      transform="rotate(-45 4 16)"
+                    />
+                    <path
+                      d="M14.586 2.586H17.414V5.414H14.586z"
+                      transform="rotate(-45 16 4)"
+                    />
+                    <path
+                      d="M2.586 2.586H5.414V5.414H2.586z"
+                      transform="rotate(-45 4 4)"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-:rn:"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Tour
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </div>
+          <div
+            class="c36 lengend-container"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--open cds--popover--left-bottom c37 legend-info-popover-link"
+            >
+              <div
+                class="c35 contras legend-open-button"
+              >
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
+                >
+                  <div
+                    class="cds--tooltip-trigger__wrapper"
+                  >
+                    <button
+                      aria-labelledby="tooltip-:rp:"
+                      class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                        />
+                        <path
+                          d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="cds--popover"
+                    id="tooltip-:rp:"
+                    role="tooltip"
+                  >
+                    <span
+                      class="cds--popover-content cds--tooltip-content"
+                    >
+                      Legend
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </div>
+              <span
+                class="cds--popover"
+              >
+                <span
+                  class="cds--popover-content legend-info-popover-content"
+                >
+                  <div
+                    class="c38"
+                  />
+                  <div
+                    class="c39"
+                  >
+                    <div
+                      class="school-status"
+                    >
+                      <h3>
+                        School status
+                      </h3>
+                      <div
+                        class="legend-container"
+                      >
+                        <div
+                          class="checkbox-with-label"
+                        >
+                          <div
+                            class="conneted-info"
+                          >
+                            <div
+                              class="c40"
+                            />
+                            <span>
+                              <p>
+                                Connected
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="legend-container"
+                      >
+                        <div
+                          class="checkbox-with-label"
+                        >
+                          <div
+                            class="conneted-info"
+                          >
+                            <div
+                              class="c41"
+                            />
+                            <span>
+                              <p>
+                                Not connected
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="legend-container"
+                      >
+                        <div
+                          class="checkbox-with-label"
+                        >
+                          <div
+                            class="conneted-info"
+                          >
+                            <div
+                              class="c42"
+                            />
+                            <span>
+                              <p>
+                                Unknown
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </div>
+          <div
+            class="c43 theme-wrapper-popup"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c44 theme-layer-popover-link"
+            >
+              <div
+                class="c45"
+              >
+                <span
+                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
+                >
+                  <div
+                    class="cds--tooltip-trigger__wrapper"
+                  >
+                    <button
+                      aria-labelledby="tooltip-:rr:"
+                      class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="#fff"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M16,24a.9967.9967,0,0,1-.4741-.12l-13-7L3.4741,15.12,16,21.8643,28.5259,15.12l.9482,1.7607-13,7A.9967.9967,0,0,1,16,24Z"
+                        />
+                        <path
+                          d="M16 30a.9967.9967 0 01-.4741-.12l-13-7L3.4741 21.12 16 27.8643 28.5259 21.12l.9482 1.7607-13 7A.9967.9967 0 0116 30zM16 18a.9967.9967 0 01-.4741-.12l-13-7a1 1 0 010-1.7607l13-7a.9982.9982 0 01.9482 0l13 7a1 1 0 010 1.7607l-13 7A.9967.9967 0 0116 18zM5.1094 10L16 15.8643 26.8906 10 16 4.1358z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="cds--popover"
+                    id="tooltip-:rr:"
+                    role="tooltip"
+                  >
+                    <span
+                      class="cds--popover-content cds--tooltip-content"
+                    >
+                      Theme & Layers
+                    </span>
+                    <span
+                      class="cds--popover-caret"
+                    />
+                  </span>
+                </span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

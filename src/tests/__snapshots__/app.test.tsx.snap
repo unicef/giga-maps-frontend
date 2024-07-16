@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App App snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="cds--loading-overlay"
+  >
+    <div
+      aria-atomic="true"
+      aria-live="assertive"
+      class="cds--loading"
+    >
+      <svg
+        class="cds--loading__svg"
+        viewBox="0 0 100 100"
+      >
+        <title>
+          loading
+        </title>
+        <circle
+          class="cds--loading__stroke"
+          cx="50%"
+          cy="50%"
+          r="44"
+        />
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;

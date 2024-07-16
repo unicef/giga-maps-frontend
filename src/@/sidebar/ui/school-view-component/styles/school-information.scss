@@ -1,0 +1,622 @@
+// .sidepanel-schoolview-schoolInfo {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr;
+//   margin: 0 auto;
+//   // padding: 0rem 0rem 0.88rem 0rem;
+//   width: inherit;
+//   // max-height: 11.2rem;
+//   overflow-y: auto;
+//   width: 100%;
+// }
+
+// .sidepanel-schoolview-schoolInfo-item {
+//   padding: 0.75rem 0.5rem;
+//   overflow: hidden;
+//   word-wrap: break-word;
+//   padding-left: 0;
+// }
+
+// .sidepanel-schoolview-schoolInfo-item p {
+//   color: var(--text-text-tertiary, #6f6f6f);
+//   font-family: Open Sans;
+//   font-size: 0.75rem;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 1rem;
+//   margin-bottom: 0.25rem;
+//   /* 133.333% */
+// }
+
+// .sidepanel-schoolview-schoolInfo-item span {
+//   color: var(--text-text-primary, #222);
+//   font-family: Open Sans;
+//   font-size: 0.875rem;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 1.125rem;
+//   /* 128.571% */
+// }
+
+// .sidepanel-schoolview-schoolInfo-for-scroll {
+//   // flex: 1;
+//   // overflow-y: auto;
+//   // width: inherit;
+//   max-height: calc(100% - 16rem);
+//   // overflow-x: hidden;
+
+//   .side-info-panel-schoolconnectivity-only-selection-layer-container {
+//     margin-top: 0.5rem;
+//     margin-left: 1rem;
+//     margin-bottom: 1.15rem;
+//     margin-right: 1rem;
+//   }
+// }
+
+// .school-connectivity-status-layer.schoolview-single-accordion {
+//   position: inherit;
+//   margin-top: 0rem;
+//   padding: 1rem;
+//   background-color: #FAFAFA;
+
+//   >ul {
+//     background: var(--layer-layer-01, #FAFAFA) !important;
+//     margin-left: 0px;
+//     padding-left: 0px;
+
+//     .cds--accordion__item--active.sidepanel-schoolview-schoolInfo-accordionItem,
+//     .cds--accordion__item.sidepanel-schoolview-schoolInfo-accordionItem {
+//       border-top: none;
+//       border-bottom: none;
+//     }
+
+//     .cds--accordion__title {
+//       // margin: 0.88rem 0rem 0rem 1rem;
+//       padding-right: 0;
+//     }
+
+//   }
+// }
+
+// .school-connectivity-status-layer.multischoolview-single-accordion {
+//   position: relative;
+//   bottom: 3rem;
+
+//   >.cds--accordion.cds--accordion--end {
+//     background: #fff;
+
+//     >.cds--accordion__item.cds--accordion__item--active {
+//       >.cds--accordion__content {
+//         padding: 0;
+//         margin-left: 0;
+
+//         .sidebar-connectivity-status-heading-text {
+//           display: flex;
+//           justify-content: space-between;
+//           align-items: center;
+//           height: 1rem;
+//           width: 95%;
+//           margin-left: 1rem;
+//           margin-top: 0.88rem;
+//           // margin-bottom: 0.88rem;
+//         }
+
+//         .side-info-panel-schoolconnectivity-only-selection-layer-container {
+//           margin-left: 1rem;
+//         }
+
+//       }
+//     }
+
+//     >.cds--accordion__item {
+//       margin-top: 0;
+//       border: none;
+
+//       >.cds--accordion__heading:hover::before {
+//         background-color: #fff
+//       }
+
+
+//       >.cds--accordion__heading {
+//         // width: 21rem;
+
+//         svg {
+//           position: relative;
+//           top: -1rem;
+//         }
+
+//         .cds--accordion__title {
+//           padding-bottom: 0.5rem;
+//           width: 23rem;
+//           white-space: nowrap;
+//           margin: 0;
+//           direction: ltr;
+//           padding-left: 0.125rem;
+
+//           .side-info-panel-multischoolview-single-accordion-title {
+//             position: relative;
+//             left: 2.5rem;
+//             width: 17rem;
+//             overflow: hidden;
+//             text-overflow: ellipsis;
+//             display: block;
+//             top: -0.35rem;
+//           }
+
+//           .side-info-panel-multischoolview-single-accordion-bottom-info {
+//             span {
+//               position: relative;
+//               left: 0rem;
+//             }
+
+//             svg {
+//               position: relative;
+//               top: 0rem;
+//             }
+//           }
+//         }
+
+//       }
+
+//       >.cds--accordion__heading::before {
+//         border: none;
+//       }
+//     }
+
+//     >.cds--accordion__item.cds--accordion__item--active {
+//       margin-top: 0;
+
+//       >.cds--accordion__heading> {
+//         svg {
+//           position: relative;
+//           top: -1rem;
+//         }
+
+//         .cds--accordion__title {
+//           padding-bottom: 0.5rem;
+//           width: 23rem;
+//           white-space: nowrap;
+
+//           .side-info-panel-multischoolview-single-accordion-title {
+//             position: relative;
+//             left: 2.5rem;
+//             width: 17rem;
+//             overflow: hidden;
+//             text-overflow: ellipsis;
+//             display: block;
+//             top: -7px
+//           }
+
+//           .side-info-panel-multischoolview-single-accordion-bottom-info {
+//             span {
+//               position: relative;
+//               left: 0rem;
+//             }
+//           }
+//         }
+//       }
+
+//       >.cds--accordion__heading::before {
+//         border: none;
+//       }
+//     }
+//   }
+
+//   .sidebar-worldview-layer-connectivityIndicator-container {
+//     margin-top: 0.8rem;
+//     margin-left: 0;
+//     width: 99%;
+
+//     .sidebar-worldview-filterIcon-container {
+//       margin-right: 0;
+//     }
+//   }
+
+//   .side-info-panel-multischoolview-single-accordion-bottom-info {
+//     display: flex;
+//     padding: 0.5rem 0 0 0;
+//     position: relative;
+//     left: 0.8rem;
+//   }
+
+//   .side-info-panel-multischoolview-single-accordion-bottom-info-first {
+//     display: flex;
+//     align-items: center;
+//     width: 10rem;
+//   }
+
+//   .side-info-panel-multischoolview-single-accordion-bottom-info-second {
+//     display: flex;
+//     align-items: center;
+//     margin-left: 0.1rem;
+//   }
+
+// }
+
+// .side-info-panel-connectivityIndicator-layer-multischool-selection-container {
+//   width: 100%;
+//   margin: 0;
+//   // padding: 0 1rem;
+//   position: relative;
+
+//   .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-and-accordion-container {
+
+//     >.cds--form-item.cds--checkbox-wrapper {
+//       position: relative;
+//       top: 0.8rem;
+//       max-width: 10%;
+//       margin-left: 0.5rem;
+
+//       >.cds--checkbox-label {
+//         width: 22rem;
+
+//         >.cds--checkbox-label-text {
+//           position: relative;
+//           top: 2rem;
+//           left: -2.5em;
+//           width: 22rem;
+//         }
+//       }
+//     }
+
+//     .school-connectivity-status-layer.multischoolview-single-accordion {
+//       // width: 21rem;
+//       position: unset;
+
+//       .sidepanel-schoolview-schoolInfo-for-scroll {
+//         .side-info-panel-connectivityIndicator-layer-container {
+//           margin: 0;
+//         }
+
+//         .school-connectivity-status-layer.schoolview-single-accordion {
+//           position: inherit;
+//           margin-top: 0.88rem;
+
+//           >ul {
+//             background: var(--layer-layer-01, #FAFAFA) !important;
+//             margin-left: 0px;
+//             padding-left: 0px;
+
+//             .cds--accordion__item--active.sidepanel-schoolview-schoolInfo-accordionItem,
+//             .cds--accordion__item.sidepanel-schoolview-schoolInfo-accordionItem {
+//               margin-top: 1.53rem !important;
+//               border-top: none;
+//               border-bottom: none;
+
+//               .cds--accordion__title {
+//                 margin-left: 0;
+//               }
+
+//               .cds--accordion__content {
+//                 position: relative;
+//                 left: -0.9rem;
+//               }
+//             }
+
+//           }
+//         }
+
+//         .side-info-panel-schoolconnectivity-only-selection-layer-container {
+//           margin-left: 1rem;
+//         }
+//       }
+//     }
+//   }
+
+//   >.side-info-panel-multischoolview-single-accordion-bottom-line {
+//     width: 100%;
+//     height: 1px;
+//     background: #dadada;
+//     position: relative;
+//     // left: -10px;
+//   }
+// }
+
+// .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-and-accordion-container {
+//   display: flex;
+//   justify-content: flex-start;
+// }
+
+
+// .side-info-panel-connectivityIndicator-layer-multischool {
+//   // height: 72vh;
+//   max-height: calc(100% - 16rem);
+
+// }
+
+// @media (max-width: 376px) and (min-width: 281px) {
+//   .side-info-panel-connectivityIndicator-layer-multischool-selection-container {
+//     width: 100%;
+//     margin-left: 0.5rem;
+
+//     .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-and-accordion-container {
+//       width: inherit;
+
+//       >.cds--form-item.cds--checkbox-wrapper {
+//         position: relative;
+//         top: 0.8rem;
+//         max-width: 10%;
+//         margin-left: 0.5rem;
+
+//         >.cds--checkbox-label {
+//           width: inherit;
+
+//           >.cds--checkbox-label-text {
+//             position: relative;
+//             top: 2rem;
+//             left: -2.5em;
+//             width: 100vw;
+
+//             >.school-connectivity-status-layer.multischoolview-single-accordion {
+//               width: inherit;
+
+//               >.cds--accordion.cds--accordion--end {
+//                 >.cds--accordion__item {
+
+//                   .cds--accordion__heading {
+//                     width: inherit;
+
+//                     >.cds--accordion__title {
+//                       padding-bottom: 0.5rem;
+//                       width: 16rem;
+
+
+//                       >.side-info-panel-multischoolview-single-accordion-title {
+//                         display: block;
+//                         width: 14rem;
+//                         overflow: hidden;
+//                         white-space: nowrap;
+//                         text-overflow: ellipsis;
+//                       }
+
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+
+
+//     }
+
+//     >.side-info-panel-multischoolview-single-accordion-bottom-line {
+//       width: inherit;
+//       height: 1px;
+//       background: #dadada;
+//       position: relative;
+//     }
+//   }
+
+// }
+
+// @media (max-width: 394px) and (min-width: 376px) {
+//   .side-info-panel-connectivityIndicator-layer-multischool-selection-container {
+//     width: 100%;
+//     margin-left: 0.5rem;
+
+//     .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-and-accordion-container {
+//       width: inherit;
+
+//       >.cds--form-item.cds--checkbox-wrapper {
+//         position: relative;
+//         top: 0.8rem;
+//         max-width: 10%;
+//         margin-left: 0.5rem;
+
+//         >.cds--checkbox-label {
+//           width: inherit;
+
+//           >.cds--checkbox-label-text {
+//             position: relative;
+//             top: 2rem;
+//             left: -2.5em;
+//             width: 100vw;
+
+//             >.school-connectivity-status-layer.multischoolview-single-accordion {
+//               width: inherit;
+
+//               >.cds--accordion.cds--accordion--end {
+//                 >.cds--accordion__item {
+
+//                   .cds--accordion__heading {
+//                     width: inherit;
+
+//                     >.cds--accordion__title {
+//                       padding-bottom: 0.5rem;
+//                       width: 21rem;
+
+
+//                       >.side-info-panel-multischoolview-single-accordion-title {
+//                         display: block;
+//                         width: 19rem;
+//                         overflow: hidden;
+//                         white-space: nowrap;
+//                         text-overflow: ellipsis;
+//                       }
+
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+
+
+//     }
+
+//     >.side-info-panel-multischoolview-single-accordion-bottom-line {
+//       width: inherit;
+//       height: 1px;
+//       background: #dadada;
+//       position: relative;
+//     }
+//   }
+
+// }
+
+// @media (max-width: 415px) and (min-width: 394px) {
+//   .side-info-panel-connectivityIndicator-layer-multischool-selection-container {
+//     width: 100%;
+//     margin-left: 0.5rem;
+
+//     .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-and-accordion-container {
+//       width: inherit;
+
+//       >.cds--form-item.cds--checkbox-wrapper {
+//         position: relative;
+//         top: 0.8rem;
+//         max-width: 10%;
+//         margin-left: 0.5rem;
+
+//         >.cds--checkbox-label {
+//           width: inherit;
+
+//           >.cds--checkbox-label-text {
+//             position: relative;
+//             top: 2rem;
+//             left: -2.5em;
+//             width: 100vw;
+
+//             >.school-connectivity-status-layer.multischoolview-single-accordion {
+//               width: inherit;
+
+//               >.cds--accordion.cds--accordion--end {
+//                 >.cds--accordion__item {
+
+//                   .cds--accordion__heading {
+//                     width: inherit;
+
+//                     >.cds--accordion__title {
+//                       padding-bottom: 0.5rem;
+//                       width: 22rem;
+
+
+//                       >.side-info-panel-multischoolview-single-accordion-title {
+//                         display: block;
+//                         width: 20rem;
+//                         overflow: hidden;
+//                         white-space: nowrap;
+//                         text-overflow: ellipsis;
+//                       }
+
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+
+
+//     }
+
+//     >.side-info-panel-multischoolview-single-accordion-bottom-line {
+//       width: inherit;
+//       height: 1px;
+//       background: #dadada;
+//       position: relative;
+//     }
+//   }
+
+// }
+
+// @media (max-width: 541px) and (min-width: 415px) {
+//   .side-info-panel-connectivityIndicator-layer-multischool-selection-container {
+//     width: 100%;
+//     margin-left: 0.5rem;
+
+//     .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-and-accordion-container {
+//       width: inherit;
+
+//       >.cds--form-item.cds--checkbox-wrapper {
+//         position: relative;
+//         top: 0.8rem;
+//         max-width: 10%;
+//         margin-left: 0.5rem;
+
+//         >.cds--checkbox-label {
+//           width: inherit;
+
+//           >.cds--checkbox-label-text {
+//             position: relative;
+//             top: 2rem;
+//             left: -2.5em;
+//             width: 100vw;
+
+//             >.school-connectivity-status-layer.multischoolview-single-accordion {
+//               width: inherit;
+
+//               >.cds--accordion.cds--accordion--end {
+//                 >.cds--accordion__item {
+
+//                   .cds--accordion__heading {
+//                     width: inherit;
+
+//                     >.cds--accordion__title {
+//                       padding-bottom: 0.5rem;
+//                       width: 28rem;
+
+
+//                       >.side-info-panel-multischoolview-single-accordion-title {
+//                         display: block;
+//                         width: 26rem;
+//                         overflow: hidden;
+//                         white-space: nowrap;
+//                         text-overflow: ellipsis;
+//                       }
+
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+
+
+//     }
+
+//     >.side-info-panel-multischoolview-single-accordion-bottom-line {
+//       width: inherit;
+//       height: 1px;
+//       background: #dadada;
+//       position: relative;
+//     }
+//   }
+
+// }
+
+// .side-info-panel-connectivityIndicator-layer-multischool-selection-checkbox-container {
+//   position: absolute;
+//   top: 0.6rem;
+//   left: 0.8rem;
+//   z-index: 999;
+//   margin-right: 0.5rem;
+// }
+
+// .side-info-panel-school-container {
+//   margin: 0rem 1rem 0rem 1rem;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   margin-bottom: 1.53rem;
+// }
+
+// .sidepanel-schoolview-schoolInfo-title {
+//   width: 100%;
+
+//   >h1 {
+//     color: var(--primary-black-100-giga-black, #222);
+//     font-family: Open Sans;
+//     font-size: 0.875rem;
+//     font-style: normal;
+//     font-weight: 500;
+//     line-height: 1.25rem;
+//     letter-spacing: 0.01rem;
+//   }
+// }

@@ -1,0 +1,908 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Country Crud Tab render MainCountryView 1`] = `
+<DocumentFragment>
+  .c1 >h3 {
+  color: #FFF;
+  font-family: Open Sans;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.c1 >p {
+  color: #F5F5F5;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c0 {
+  padding: 3.75rem 2rem 1rem 1rem;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+<div
+    class="c0"
+  >
+    <div
+      class="c1"
+    >
+      <h3>
+        Country(s)
+      </h3>
+      <p>
+        Details of country(s)
+      </p>
+    </div>
+  </div>
+  .c0 {
+  margin-top: 0.1rem;
+}
+
+<div
+    class="c0"
+  >
+    <div
+      class="cds--tabs"
+    >
+      <button
+        aria-hidden="true"
+        aria-label="Scroll left"
+        class="cds--tab--overflow-nav-button cds--tab--overflow-nav-button--previous cds--tab--overflow-nav-button--hidden"
+        tabindex="-1"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+          />
+        </svg>
+      </button>
+      <div
+        aria-label="List of admin country tabs"
+        class="cds--tab--list"
+        role="tablist"
+      >
+        <button
+          aria-controls="ccs-:r0:-tabpanel-0"
+          aria-selected="true"
+          class="cds--tabs__nav-item cds--tabs__nav-link cds--tabs__nav-item--selected"
+          data-testid="admin-Country-tab"
+          id="ccs-:r0:-tab-0"
+          role="tab"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="cds--tabs__nav-item-label-wrapper"
+          >
+            <span
+              class="cds--tabs__nav-item-label"
+              title="Country"
+            >
+              Country
+            </span>
+            <div
+              class="cds--tabs__nav-item--icon cds--visually-hidden"
+            >
+              <div
+                aria-hidden="true"
+                class="cds--tabs__nav-item--close-icon cds--visually-hidden"
+                tabindex="-1"
+                title="Close tab"
+              >
+                <svg
+                  aria-hidden="true"
+                  aria-label="Press delete to close tab"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button
+          aria-controls="ccs-:r0:-tabpanel-1"
+          aria-selected="false"
+          class="cds--tabs__nav-item cds--tabs__nav-link"
+          data-testid="admin-Country Summary-tab"
+          id="ccs-:r0:-tab-1"
+          role="tab"
+          tabindex="-1"
+          type="button"
+        >
+          <div
+            class="cds--tabs__nav-item-label-wrapper"
+          >
+            <span
+              class="cds--tabs__nav-item-label"
+              title="Country Summary"
+            >
+              Country Summary
+            </span>
+            <div
+              class="cds--tabs__nav-item--icon cds--visually-hidden"
+            >
+              <div
+                aria-hidden="true"
+                class="cds--tabs__nav-item--close-icon cds--visually-hidden"
+                tabindex="-1"
+                title="Close tab"
+              >
+                <svg
+                  aria-hidden="true"
+                  aria-label="Press delete to close tab"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button
+          aria-controls="ccs-:r0:-tabpanel-2"
+          aria-selected="false"
+          class="cds--tabs__nav-item cds--tabs__nav-link"
+          data-testid="admin-Country Daily Connectivity Summary-tab"
+          id="ccs-:r0:-tab-2"
+          role="tab"
+          tabindex="-1"
+          type="button"
+        >
+          <div
+            class="cds--tabs__nav-item-label-wrapper"
+          >
+            <span
+              class="cds--tabs__nav-item-label"
+              title="Country Daily Connectivity Summary"
+            >
+              Country Daily Connectivity Summary
+            </span>
+            <div
+              class="cds--tabs__nav-item--icon cds--visually-hidden"
+            >
+              <div
+                aria-hidden="true"
+                class="cds--tabs__nav-item--close-icon cds--visually-hidden"
+                tabindex="-1"
+                title="Close tab"
+              >
+                <svg
+                  aria-hidden="true"
+                  aria-label="Press delete to close tab"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+      <button
+        aria-hidden="true"
+        aria-label="Scroll right"
+        class="cds--tab--overflow-nav-button cds--tab--overflow-nav-button--next cds--tab--overflow-nav-button--hidden"
+        tabindex="-1"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+  .c4 >tr >th {
+  border-top: #E0E0E0;
+  border-bottom: #E0E0E0;
+  background: #F2F2F2;
+}
+
+.c3 {
+  min-height: calc(100vh - 13.5rem);
+}
+
+.c3 .cds--data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.c3 .cds--data-table-content {
+  overflow-x: initial;
+}
+
+.c1 {
+  background-color: #ffffff;
+}
+
+.c0 {
+  padding: 0;
+}
+
+.c0 .cds--search-magnifier-icon {
+  fill: #222;
+}
+
+.c0 .import-csv-button {
+  margin-right: 0.2rem;
+}
+
+.c2 {
+  max-height: calc(100vh - 16rem);
+}
+
+<div
+    class="c0 cds--data-table-container"
+  >
+    <section
+      aria-label="data table toolbar"
+      class="cds--table-toolbar"
+    >
+      <div
+        aria-hidden="true"
+        class="cds--batch-actions"
+      >
+        <div
+          class="cds--batch-summary"
+        >
+          <p
+            class="cds--batch-summary__para"
+          >
+            <span>
+              0 items selected
+            </span>
+          </p>
+        </div>
+        <div
+          class="cds--action-list"
+        >
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:r2:"
+                class="cds--btn cds--btn--primary"
+                data-testid="verify-selected-country"
+                type="button"
+              >
+                Verify
+                <svg
+                  aria-hidden="true"
+                  aria-label="Add"
+                  class="cds--btn__icon"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 27.18L19.41 24.59 18 26 22 30 30 22 28.59 20.59 22 27.18z"
+                  />
+                  <path
+                    d="M25,5H22V4a2.0058,2.0058,0,0,0-2-2H12a2.0058,2.0058,0,0,0-2,2V5H7A2.0058,2.0058,0,0,0,5,7V28a2.0058,2.0058,0,0,0,2,2h9V28H7V7h3v3H22V7h3V18h2V7A2.0058,2.0058,0,0,0,25,5ZM20,8H12V4h8Z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:r2:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Mark country data source as verified (non-OSM)
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+          <button
+            class="cds--btn cds--btn--primary"
+            data-testid="delete-selected-country"
+            type="button"
+          >
+            Delete
+            <svg
+              aria-hidden="true"
+              aria-label="Add"
+              class="cds--btn__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 12H14V24H12zM18 12H20V24H18z"
+              />
+              <path
+                d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z"
+              />
+            </svg>
+          </button>
+          <button
+            class="cds--batch-summary__cancel cds--btn cds--btn--primary"
+            tabindex="-1"
+            type="button"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div
+        class="cds--toolbar-content c1"
+      >
+        <div
+          aria-label="Filter table"
+          class="cds--search cds--search--lg cds--toolbar-search-container-expandable"
+          role="search"
+        >
+          <div
+            class="cds--search-magnifier"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--search-magnifier-icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5 C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+              />
+            </svg>
+          </div>
+          <label
+            class="cds--label"
+            for="1"
+            id="1-search"
+          >
+            Filter table
+          </label>
+          <input
+            autocomplete="off"
+            class="cds--search-input"
+            id="1"
+            placeholder="Filter table"
+            role="searchbox"
+            tabindex="0"
+            type="text"
+            value=""
+          />
+          <button
+            aria-label="Clear search input"
+            class="cds--search-close cds--search-close--hidden"
+            title="Clear search input"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+              />
+            </svg>
+          </button>
+        </div>
+        <button
+          class="cds--btn cds--btn--secondary"
+          type="button"
+        >
+          Search
+        </button>
+        <a
+          href="/admin/country/country/add"
+        >
+          <button
+            class="cds--btn cds--btn--primary"
+            tabindex="0"
+            type="button"
+          >
+            Add New
+            <svg
+              aria-hidden="true"
+              class="cds--btn__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+              />
+            </svg>
+          </button>
+        </a>
+      </div>
+    </section>
+    <div
+      class="scrollbar-container 0 c2 ps"
+    >
+      <div
+        class="c3"
+      >
+        <div
+          class="cds--data-table-content"
+        >
+          <table
+            aria-label="sample table"
+            class="cds--data-table cds--data-table--lg"
+          >
+            <thead
+              class="c4"
+            >
+              <tr>
+                <th
+                  class="cds--table-column-checkbox"
+                  scope="col"
+                >
+                  <div
+                    class="cds--checkbox--inline"
+                  >
+                    <input
+                      class="cds--checkbox"
+                      id="data-table-1__select-all"
+                      name="select-all"
+                      type="checkbox"
+                    />
+                    <label
+                      class="cds--checkbox-label"
+                      for="data-table-1__select-all"
+                    >
+                      <span
+                        class="cds--visually-hidden"
+                      >
+                        Select all rows
+                      </span>
+                    </label>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Flag
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Code
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Name
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Data Source
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Date of join
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Total schools
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Action
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+                <td
+                  style="background: rgb(255, 255, 255); min-width: 11rem;"
+                >
+                  no data available
+                </td>
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+                <td
+                  style="background: rgb(255, 255, 255);"
+                />
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="ps__rail-x"
+        style="left: 0px; top: 0px;"
+      >
+        <div
+          class="ps__thumb-x"
+          style="left: 0px; width: 0px;"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="ps__rail-y"
+        style="top: 0px; left: 0px;"
+      >
+        <div
+          class="ps__thumb-y"
+          style="top: 0px; height: 0px;"
+          tabindex="0"
+        />
+      </div>
+    </div>
+  </div>
+  .c0 .cds--popover {
+  display: none;
+}
+
+<div
+    class="cds--pagination cds--pagination--md c0"
+  >
+    <div
+      class="cds--pagination__left"
+    >
+      <label
+        class="cds--pagination__text"
+        for="cds-pagination-select-:rg:"
+        id="cds-pagination-select-:rg:-count-label"
+      >
+        Items per page
+      </label>
+      <div
+        class="cds--form-item cds--select__item-count"
+      >
+        <div
+          class="cds--select cds--select--inline"
+        >
+          <div
+            class="cds--select-input--inline__wrapper"
+          >
+            <div
+              class="cds--select-input__wrapper"
+            >
+              <select
+                class="cds--select-input"
+                id="cds-pagination-select-:rg:"
+                title=""
+              >
+                <option
+                  class="cds--select-option"
+                  value="10"
+                >
+                  10
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="20"
+                >
+                  20
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="50"
+                >
+                  50
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="100"
+                >
+                  100
+                </option>
+                <option
+                  class="cds--select-option"
+                  value="500"
+                >
+                  500
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="cds--select__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span
+        class="cds--pagination__text cds--pagination__items-count"
+      >
+        0–0 of 0 items
+      </span>
+    </div>
+    <div
+      class="cds--pagination__right"
+    >
+      <div
+        class="cds--form-item cds--select__page-number"
+      >
+        <div
+          class="cds--select cds--select--inline"
+        >
+          <label
+            class="cds--label cds--visually-hidden"
+            for="cds-pagination-select-:rg:-right"
+          >
+            Page number, of 1 pages
+          </label>
+          <div
+            class="cds--select-input--inline__wrapper"
+          >
+            <div
+              class="cds--select-input__wrapper"
+            >
+              <select
+                class="cds--select-input"
+                id="cds-pagination-select-:rg:-right"
+                title=""
+              >
+                <option
+                  class="cds--select-option"
+                  value="1"
+                >
+                  1
+                </option>
+              </select>
+              <svg
+                aria-hidden="true"
+                class="cds--select__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span
+        class="cds--pagination__text"
+      >
+        of 1 page
+      </span>
+      <div
+        class="cds--pagination__control-buttons"
+      >
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:rh:"
+              class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+              disabled=""
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 24L10 16 20 8z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:rh:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Previous page
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top-right cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:rj:"
+              class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+              disabled=""
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8L22 16 12 24z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:rj:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Next page
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

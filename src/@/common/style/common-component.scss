@@ -1,0 +1,53 @@
+.side-info-download-api-signup {
+  padding: 1.5rem 1rem 1rem 1rem;
+
+  >button {
+    width: 100%;
+  }
+}
+
+.side-info-download-api-avatar-username {
+  display: flex;
+  align-items: center;
+}
+
+.side-info-download-api-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.375rem;
+  height: 2.375rem;
+  border-radius: 50%;
+  background: #277AFF;
+  color: #fff;
+}
+
+.side-info-download-api-username {
+  margin-left: 0.5rem;
+
+  >span {
+    color: var(--text-text-primary, #222);
+    font-family: Open Sans;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.375rem;
+  }
+
+  >p {
+    color: var(--text-text-tertiary, #6F6F6F);
+    font-family: Open Sans;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem;
+    letter-spacing: 0.02rem;
+  }
+}
+
+.side-info-download-api-bottom-line {
+  width: 100%;
+  height: 0.0625rem;
+  background: #E6E6E6;
+  margin-top: 0.8rem
+}

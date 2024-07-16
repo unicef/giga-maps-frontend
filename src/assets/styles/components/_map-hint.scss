@@ -1,0 +1,23 @@
+.map-hint {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: 3rem;
+  }
+}
+
+.map-hint__image {
+  flex: 0 0 auto;
+  width: 6.6rem;
+  height: 8rem;
+  margin-right: 2.6rem;
+}
+
+.map-hint__text {
+  color: $text-color-light;
+  font-size: 1.3rem;
+  font-family: $font-family-secondary;
+  line-height: 2rem;
+}

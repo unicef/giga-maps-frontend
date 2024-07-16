@@ -1,0 +1,1827 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchCountryList renders SearchCountryList and take a snapshop 1`] = `
+<DocumentFragment>
+  .c0 {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  padding: 1rem 1rem;
+  font-size: 0.75rem;
+}
+
+.c1 {
+  text-align: left;
+  padding: 0!important;
+}
+
+<span
+    class="c0"
+  >
+    <p
+      class="cds--skeleton__text c1"
+      style="width: 80%;"
+    />
+  </span>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: calc(100% - 1rem);
+  margin-left: .5rem;
+  border-bottom: 0.0625rem solid;
+}
+
+.c0 .type-name {
+  display: block;
+}
+
+.c0 .highlight {
+  color: var(--primary-blue);
+}
+
+.c0 .light {
+  color: var(--text-text-tertiary);
+}
+
+.c0 .sidebar-history-remove >svg {
+  fill: !important;
+}
+
+.c1 {
+  font-size: 0.875rem;
+  position: relative;
+  max-width: 8rem;
+}
+
+.c1 a:hover {
+  text-decoration: underline;
+}
+
+.c3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.c4 {
+  pointer-events: none;
+}
+
+.c2 {
+  text-align: left;
+  margin-block-end: 0rem;
+  padding: 0!important;
+}
+
+<div
+    class="c0"
+  >
+    <h4
+      class="c1"
+      style="width: 40%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+    </h4>
+    <div
+      class="c3"
+      style="width: 30%;"
+    >
+      <p
+        class="cds--skeleton__text c2"
+        style="width: 100%;"
+      />
+      <svg
+        aria-hidden="true"
+        class="c4"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+        />
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,53 @@
+{
+    "telemetry.enableTelemetry": false,
+    "workbench.fontAliasing": "default",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "explicit"
+    },
+    "eslint.format_on_save": true,
+    "eslint.alwaysShowStatus": true,
+    "eslint.format.enable": true,
+    "cSpell.words": [
+        "woff",
+        "babelrc",
+        "browserlist",
+        "entrypoints",
+        "pathinfo",
+        "prettierrc"
+    ],
+    "editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?",
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "px-to-rem.px-per-rem": 16,
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+"typescript.tsdk": "node_modules/typescript/lib",
+"[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+},
+"workbench.colorCustomizations": {
+    "statusBar.background": "#3399FF",
+    "statusBar.debuggingBackground": "#3399FF",
+    "statusBar.noFolderBackground": "#3399FF",
+    "statussBar.prominentBackground": "#3399FF"
+}
+}

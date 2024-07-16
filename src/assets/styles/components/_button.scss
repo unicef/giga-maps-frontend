@@ -1,0 +1,70 @@
+.button {
+  @include transition;
+  display: inline-block;
+  padding: 1rem 2rem;
+  color: $text-color-light;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.1rem;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: 0.4rem;
+  outline: none;
+  cursor: pointer;
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--large {
+    padding-top: 1.8rem;
+    padding-bottom: 1.8rem;
+  }
+
+  &--pull-bottom {
+    margin-top: auto;
+  }
+
+  &--primary {
+    background-color: $color-primary;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+
+    &:active,
+    &-active {
+      background-color: $color-primary-active;
+    }
+
+    &-pending {
+      background-color: $color-primary-hover;
+      cursor: not-allowed;
+    }
+
+    &:disabled {
+      background-color: $color-primary-disabled;
+      cursor: not-allowed;
+    }
+  }
+
+  &--secondary {
+    background-color: #b6bbc6;
+  }
+
+  &--tertiary {
+    background-color: $color-deep-blue;
+
+    &:hover {
+      background-color: $color-primary-hover;
+    }
+
+    &:active,
+    &--active {
+      background-color: $color-primary-active;
+    }
+  }
+}

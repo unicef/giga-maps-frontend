@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeatureCardWrapper renders FeatureCardWrapper and take a snapshop 1`] = `
+<DocumentFragment>
+  .c0 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: calc(100% / 3);
+  max-width: calc(100% / 3);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.c0:hover {
+  background: #383838;
+}
+
+.c0 h3 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.c0 p {
+  color: #fff;
+  margin-top: 0.75rem;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.c0 .bottom-icons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.c0 .arrow-right {
+  margin-top: auto;
+  align-self: flex-end;
+}
+
+.c0 .arrow-right svg {
+  fill: #fff;
+}
+
+.c1 svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (max-width:768px) {
+  .c0 {
+    min-width: 100%;
+  }
+
+  .c0 h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    padding-bottom: 1rem;
+  }
+
+  .c0 p {
+    margin-top: 0;
+    font-size: .875rem;
+    line-height: 1.25rem;
+  }
+}
+
+<a
+    class="c0"
+    target="_blank"
+  >
+    <h3 />
+    <p />
+    <div
+      class="bottom-icons"
+    >
+      <span
+        class="c1"
+      />
+    </div>
+    <div
+      class="arrow-right"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        focusable="false"
+        height="24"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M14 4L12.9 5.1 18.9 11.2 2 11.2 2 12.8 18.9 12.8 12.9 18.9 14 20 22 12z"
+        />
+      </svg>
+    </div>
+  </a>
+</DocumentFragment>
+`;

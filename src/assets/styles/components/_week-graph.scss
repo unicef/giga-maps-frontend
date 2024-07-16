@@ -1,0 +1,127 @@
+.week-graph {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.week-graph__days-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.week-graph__button {
+  @include transition;
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
+  margin-bottom: 2.5rem;
+  padding: 0;
+  color: #808080;
+  font-size: 2rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  &--prev {
+    margin-right: 1.3rem;
+    margin-left: -0.5rem;
+  }
+
+  &--next {
+    margin-right: -0.5rem;
+    margin-left: 1.3rem;
+  }
+
+  &:hover,
+  &:focus {
+    color: $color-primary;
+    background-color: #373c46;
+  }
+}
+
+.week-graph__tooltip {
+  @include tooltip;
+  @include tooltip-theme(light);
+  z-index: 1;
+  display: none;
+  flex-direction: column;
+  padding: 0.7rem 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.7rem;
+  white-space: nowrap;
+}
+
+.week-graph__item {
+  display: flex;
+  flex-direction: column;
+
+  &:first-child {
+    .week-graph__tooltip {
+      @include tooltip-position(
+        $pos-y: top,
+        $pos-x: left,
+        $offset: 1.2rem,
+        $has-arrow: true,
+        $theme: light
+      );
+    }
+  }
+
+  &:last-child {
+    .week-graph__tooltip {
+      @include tooltip-position(
+        $pos-y: top,
+        $pos-x: right,
+        $offset: 1.2rem,
+        $has-arrow: true,
+        $theme: light
+      );
+    }
+  }
+
+  &:not(:last-child) {
+    margin-right: 2.8rem;
+  }
+
+  &:not(:first-child):not(:last-child) {
+    .week-graph__tooltip {
+      @include tooltip-position(
+        $pos-y: top,
+        $pos-x: center,
+        $offset: 1.2rem,
+        $has-arrow: true,
+        $theme: light
+      );
+    }
+  }
+}
+
+.week-graph__pillar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 0.7rem;
+  height: 7.8rem;
+
+  &:empty {
+    margin-bottom: 0.01rem;
+  }
+}
+
+.week-graph__day {
+  display: flex;
+  justify-content: center;
+  width: 0.7rem;
+  margin-top: 0.5rem;
+  color: #9f9f9f;
+  font-size: 1.3rem;
+  font-family: $font-family-secondary;
+  line-height: 2rem;
+}
+
+.week-graph-link {
+  align-self: flex-start;
+  margin-top: 1rem;
+  outline: none;
+}

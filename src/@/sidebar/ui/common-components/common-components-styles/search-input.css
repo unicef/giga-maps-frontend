@@ -1,0 +1,44 @@
+.sidebar-searchIcon-withText {
+  color: black;
+  position: absolute;
+  top: 1.5rem;
+  right: 2.9rem;
+  /* z-index: 1; */
+}
+
+.sidebar-searchIcon-withoutText {
+  color: black;
+  position: absolute;
+  top: 1.5rem;
+  right: 2.2rem;
+  /* z-index: 1; */
+}
+
+.sidebar-searchbox>.cds--search-input {
+  width: 100%;
+}
+
+.search-list-item {
+  padding: 15px 16px;
+  background: white;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  display: inline-flex;
+  width: 100%;
+}
+
+.search-country-name {
+  color: rgb(82, 82, 82);
+  font-size: 14px;
+  font-family: "Open Sans";
+}
+
+.list-districts-wrap {
+  display: flex;
+}
+
+.districts-link {
+  color: #277AFF;
+  font-size: 12px;
+}

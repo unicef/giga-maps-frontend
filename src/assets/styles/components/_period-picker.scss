@@ -1,0 +1,78 @@
+.period-picker {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 4rem;
+}
+
+.period-picker__button {
+  @include transition;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 100%;
+  color: $color-primary;
+  font-size: 2rem;
+  background-color: #373c46;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &:first-child {
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+
+  &:last-child {
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+
+  &:hover {
+    background-color: #494f5d;
+  }
+
+  &:active {
+    color: $color-primary-active;
+    background-color: $color-deep-blue;
+  }
+
+  &:disabled {
+    color: #808080;
+    cursor: not-allowed;
+  }
+}
+
+.period-picker__period {
+  display: inline-flex;
+  flex: 0 1 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: $font-family-primary;
+  line-height: 1.5rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  background-color: #FFFFFF;
+  color: var(--primary-blue-giga-blue, #277AFF);
+  font-size: 12px;
+}
+
+.period-picker-sidebar__period {
+  display: inline-flex;
+  flex: 0 1 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  font-family: $font-family-primary;
+  line-height: normal;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background-color: #373c46;
+}

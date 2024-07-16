@@ -1,0 +1,84 @@
+.select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  padding-right: 50px;
+  padding-left: ($grid-gutter-width-lg * 0.5);
+  color: $text-color-light;
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: $font-family-primary;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  background-color: $color-primary;
+  border: none;
+
+  //&::before {
+  //  position: absolute;
+  //  top: 0;
+  //  right: ($grid-gutter-width-lg / 2);
+  //  left: ($grid-gutter-width-lg / 2);
+  //  display: inline-flex;
+  //  height: 0.1rem;
+  //  background-color: #fff;
+  //  content: '';
+  //}
+
+  &:hover,
+  &:focus {
+    background-color: $color-primary-hover;
+  }
+
+  &:active {
+    background-color: $color-primary-active;
+  }
+}
+
+.select-white-line {
+  &::before {
+    position: absolute;
+    top: 0;
+    right: ($grid-gutter-width-lg * 0.5);
+    left: ($grid-gutter-width-lg * 0.5);
+    display: inline-flex;
+    height: 0.1rem;
+    background-color: #fff;
+    content: '';
+  }
+}
+
+.select__option {
+  color: $text-color-dark;
+  font-weight: normal;
+  text-transform: none;
+  background-color: $text-color-light;
+}
+
+.select-wrapper {
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}
+
+.select-dashboard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 26rem;
+  height: 4rem;
+  padding-right: 2rem;
+  color: $text-color-light;
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: $font-family-primary;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  background-color: $color-deep-blue;
+  border: none;
+
+  @include media-breakpoint-up(xl) {
+    width: 28rem;
+  }
+}

@@ -1,0 +1,1305 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdminApiKey render AdminApiKey 1`] = `
+<DocumentFragment>
+  .c4 {
+  margin-top: 0;
+  min-height: calc(100vh - 10.5rem);
+}
+
+.c4 td {
+  background: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-over-flow-menu .cds--popover {
+  display: none;
+}
+
+.c4 .api-keys-data-table-over-flow-menu .cds--popover-content.cds--tooltip-content {
+  display: none;
+}
+
+.c4 .cds--data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.c4 .cds--data-table-content {
+  overflow-x: initial;
+}
+
+.c4 .api-keys-data-table-key-name {
+  width: 15%;
+  padding: 1.5rem 1rem;
+}
+
+.c4 .api-keys-data-table-key {
+  width: 40%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-key-country {
+  width: 15%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-validity {
+  width: 15%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-validity span {
+  display: flex;
+  width: 5rem;
+}
+
+.c4 .api-keys-data-table-over-flow-menu {
+  width: 5%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-row {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: #F6F6F6;
+  width: 27rem;
+}
+
+.c4 .api-keys-data-table-row >p {
+  font-size: 0.875rem;
+  width: 23.5rem;
+  overflow-wrap: break-word;
+  height: 2.5rem;
+  overflow: hidden;
+  line-height: 1.25rem;
+}
+
+.c4 .api-keys-data-table-row >.api-keys-replicate-icon {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+.c6 {
+  color: #474747;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem;
+  background: #B9EFCB;
+  border-radius: 62rem;
+  width: max-content;
+  height: 1.5rem;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c7 {
+  color: #474747;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1rem;
+  background: #FFE3C9;
+  border-radius: 62rem;
+  width: max-content;
+  height: 1.5rem;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c5 {
+  display: flex;
+  width: 5rem;
+}
+
+.c1 >h3 {
+  color: #FFF;
+  font-family: Open Sans;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.c1 >p {
+  color: #F5F5F5;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c0 {
+  padding: 3.75rem 2rem 1rem 1rem;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c8 .cds--popover {
+  display: none;
+}
+
+.c2 {
+  fill: #fff;
+}
+
+.c3 {
+  max-height: calc(100vh - 10.5rem);
+}
+
+<div>
+    <div
+      class="c0"
+    >
+      <div
+        class="c1"
+      >
+        <h3>
+          Api Keys Requests
+        </h3>
+        <p>
+          List of Api Keys
+        </p>
+      </div>
+      <span
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+      >
+        <div
+          class="cds--tooltip-trigger__wrapper"
+        >
+          <button
+            aria-labelledby="tooltip-:r0:"
+            class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--secondary"
+            data-testid="refresh-list"
+            title="Refresh"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="c2"
+              color="white"
+              fill="currentColor"
+              focusable="false"
+              height="14"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 10H6.78A11 11 0 0127 16h2A13 13 0 006 7.68V4H4v8h8zM20 22h5.22A11 11 0 015 16H3a13 13 0 0023 8.32V28h2V20H20z"
+              />
+            </svg>
+             
+          </button>
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-:r0:"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
+          >
+            Refresh
+          </span>
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
+    </div>
+    <div
+      class="scrollbar-container c3 ps"
+    >
+      <div
+        class="c4"
+      >
+        <div
+          class="cds--data-table-content"
+        >
+          <table
+            aria-label="api-keys-data-table"
+            class="cds--data-table cds--data-table--lg"
+          >
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    API Name
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    User
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Valid till
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Status
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Extension Status
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Action
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                />
+              </tr>
+            </thead>
+            <tbody
+              aria-live="polite"
+            >
+              <tr>
+                <td
+                  class="api-keys-data-table-key-name"
+                >
+                  School location
+                  <span>
+                     (public)
+                  </span>
+                </td>
+                <td>
+                  Rrushikesh
+                  <br />
+                  hrushipawar122@gmail.com
+                </td>
+                <td>
+                  <span
+                    class="c5"
+                  >
+                    28-05-2024
+                  </span>
+                </td>
+                <td>
+                  <div
+                    class="c6"
+                    color="#B9EFCB"
+                  >
+                    Active
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    31-05-2024
+                  </b>
+                  <div
+                    class="c7"
+                    color="#FFE3C9"
+                  >
+                    In Progress
+                  </div>
+                </td>
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+              </tr>
+              <tr>
+                <td
+                  class="api-keys-data-table-key-name"
+                >
+                  School location
+                  <span>
+                     (public)
+                  </span>
+                </td>
+                <td>
+                  Rushikesh
+                  <br />
+                  rushikesh.pawar@nagarro.com
+                </td>
+                <td>
+                  <span
+                    class="c5"
+                  >
+                    31-05-2024
+                  </span>
+                </td>
+                <td>
+                  <div
+                    class="c6"
+                    color="#B9EFCB"
+                  >
+                    Active
+                  </div>
+                </td>
+                <td />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+              </tr>
+              <tr>
+                <td
+                  class="api-keys-data-table-key-name"
+                >
+                  Country
+                  <span>
+                     (public)
+                  </span>
+                </td>
+                <td>
+                  Rushikesh
+                  <br />
+                  rushikesh.pawar@nagarro.com
+                </td>
+                <td>
+                  <span
+                    class="c5"
+                  >
+                    02-06-2024
+                  </span>
+                </td>
+                <td>
+                  <div
+                    class="c6"
+                    color="#B9EFCB"
+                  >
+                    Active
+                  </div>
+                </td>
+                <td />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+              </tr>
+              <tr>
+                <td
+                  class="api-keys-data-table-key-name"
+                >
+                  Giga Meter
+                  <span>
+                     (private)
+                  </span>
+                </td>
+                <td>
+                  Rushikesh
+                  <br />
+                  rushikesh.pawar@nagarro.com
+                </td>
+                <td>
+                  <span
+                    class="c5"
+                  >
+                    29-05-2024
+                  </span>
+                </td>
+                <td>
+                  <div
+                    class="c6"
+                    color="#B9EFCB"
+                  >
+                    Active
+                  </div>
+                </td>
+                <td />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+              </tr>
+              <tr>
+                <td
+                  class="api-keys-data-table-key-name"
+                >
+                  School real-time internet quality
+                  <span>
+                     (private)
+                  </span>
+                </td>
+                <td>
+                  Rushikesh
+                  <br />
+                  rushikesh.pawar@nagarro.com
+                </td>
+                <td>
+                  <span
+                    class="c5"
+                  >
+                    29-05-2024
+                  </span>
+                </td>
+                <td>
+                  <div
+                    class="c6"
+                    color="#B9EFCB"
+                  >
+                    Active
+                  </div>
+                </td>
+                <td />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+                <td
+                  class="api-keys-data-table-over-flow-menu"
+                />
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="ps__rail-x"
+        style="left: 0px; top: 0px;"
+      >
+        <div
+          class="ps__thumb-x"
+          style="left: 0px; width: 0px;"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="ps__rail-y"
+        style="top: 0px; left: 0px;"
+      >
+        <div
+          class="ps__thumb-y"
+          style="top: 0px; height: 0px;"
+          tabindex="0"
+        />
+      </div>
+    </div>
+    <div
+      class="cds--pagination cds--pagination--md c8"
+    >
+      <div
+        class="cds--pagination__left"
+      >
+        <label
+          class="cds--pagination__text"
+          for="cds-pagination-select-:r9:"
+          id="cds-pagination-select-:r9:-count-label"
+        >
+          Items per page
+        </label>
+        <div
+          class="cds--form-item cds--select__item-count"
+        >
+          <div
+            class="cds--select cds--select--inline"
+          >
+            <div
+              class="cds--select-input--inline__wrapper"
+            >
+              <div
+                class="cds--select-input__wrapper"
+              >
+                <select
+                  class="cds--select-input"
+                  id="cds-pagination-select-:r9:"
+                  title=""
+                >
+                  <option
+                    class="cds--select-option"
+                    value="10"
+                  >
+                    10
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="20"
+                  >
+                    20
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="50"
+                  >
+                    50
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="100"
+                  >
+                    100
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="500"
+                  >
+                    500
+                  </option>
+                </select>
+                <svg
+                  aria-hidden="true"
+                  class="cds--select__arrow"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span
+          class="cds--pagination__text cds--pagination__items-count"
+        >
+          1–5 of 5 items
+        </span>
+      </div>
+      <div
+        class="cds--pagination__right"
+      >
+        <div
+          class="cds--form-item cds--select__page-number"
+        >
+          <div
+            class="cds--select cds--select--inline"
+          >
+            <label
+              class="cds--label cds--visually-hidden"
+              for="cds-pagination-select-:r9:-right"
+            >
+              Page number, of 1 pages
+            </label>
+            <div
+              class="cds--select-input--inline__wrapper"
+            >
+              <div
+                class="cds--select-input__wrapper"
+              >
+                <select
+                  class="cds--select-input"
+                  id="cds-pagination-select-:r9:-right"
+                  title=""
+                >
+                  <option
+                    class="cds--select-option"
+                    value="1"
+                  >
+                    1
+                  </option>
+                </select>
+                <svg
+                  aria-hidden="true"
+                  class="cds--select__arrow"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span
+          class="cds--pagination__text"
+        >
+          of 1 page
+        </span>
+        <div
+          class="cds--pagination__control-buttons"
+        >
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:ra:"
+                class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+                disabled=""
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 24L10 16 20 8z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:ra:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Previous page
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top-right cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:rc:"
+                class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+                disabled=""
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 8L22 16 12 24z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:rc:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Next page
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AdminApiKey render with empty AdminApiKey 1`] = `
+<DocumentFragment>
+  .c4 {
+  margin-top: 0;
+  min-height: calc(100vh - 10.5rem);
+}
+
+.c4 td {
+  background: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-over-flow-menu .cds--popover {
+  display: none;
+}
+
+.c4 .api-keys-data-table-over-flow-menu .cds--popover-content.cds--tooltip-content {
+  display: none;
+}
+
+.c4 .cds--data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.c4 .cds--data-table-content {
+  overflow-x: initial;
+}
+
+.c4 .api-keys-data-table-key-name {
+  width: 15%;
+  padding: 1.5rem 1rem;
+}
+
+.c4 .api-keys-data-table-key {
+  width: 40%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-key-country {
+  width: 15%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-validity {
+  width: 15%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-validity span {
+  display: flex;
+  width: 5rem;
+}
+
+.c4 .api-keys-data-table-over-flow-menu {
+  width: 5%;
+  padding: 1.5rem 1rem;
+  background-color: #FFFFFF;
+}
+
+.c4 .api-keys-data-table-row {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background: #F6F6F6;
+  width: 27rem;
+}
+
+.c4 .api-keys-data-table-row >p {
+  font-size: 0.875rem;
+  width: 23.5rem;
+  overflow-wrap: break-word;
+  height: 2.5rem;
+  overflow: hidden;
+  line-height: 1.25rem;
+}
+
+.c4 .api-keys-data-table-row >.api-keys-replicate-icon {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+.c5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.c1 >h3 {
+  color: #FFF;
+  font-family: Open Sans;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.c1 >p {
+  color: #F5F5F5;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+}
+
+.c0 {
+  padding: 3.75rem 2rem 1rem 1rem;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c6 .cds--popover {
+  display: none;
+}
+
+.c2 {
+  fill: #fff;
+}
+
+.c3 {
+  max-height: calc(100vh - 10.5rem);
+}
+
+<div>
+    <div
+      class="c0"
+    >
+      <div
+        class="c1"
+      >
+        <h3>
+          Api Keys Requests
+        </h3>
+        <p>
+          List of Api Keys
+        </p>
+      </div>
+      <span
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+      >
+        <div
+          class="cds--tooltip-trigger__wrapper"
+        >
+          <button
+            aria-labelledby="tooltip-:re:"
+            class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--secondary"
+            data-testid="refresh-list"
+            title="Refresh"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="c2"
+              color="white"
+              fill="currentColor"
+              focusable="false"
+              height="14"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 10H6.78A11 11 0 0127 16h2A13 13 0 006 7.68V4H4v8h8zM20 22h5.22A11 11 0 015 16H3a13 13 0 0023 8.32V28h2V20H20z"
+              />
+            </svg>
+             
+          </button>
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-:re:"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
+          >
+            Refresh
+          </span>
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
+    </div>
+    <div
+      class="scrollbar-container c3 ps"
+    >
+      <div
+        class="c4"
+      >
+        <div
+          class="cds--data-table-content"
+        >
+          <table
+            aria-label="api-keys-data-table"
+            class="cds--data-table cds--data-table--lg"
+          >
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    API Name
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    User
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Valid till
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Status
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Extension Status
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Action
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                />
+              </tr>
+            </thead>
+            <tbody
+              aria-live="polite"
+            />
+          </table>
+        </div>
+      </div>
+      <div
+        class="c5"
+      >
+        No data found
+      </div>
+      <div
+        class="ps__rail-x"
+        style="left: 0px; top: 0px;"
+      >
+        <div
+          class="ps__thumb-x"
+          style="left: 0px; width: 0px;"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="ps__rail-y"
+        style="top: 0px; left: 0px;"
+      >
+        <div
+          class="ps__thumb-y"
+          style="top: 0px; height: 0px;"
+          tabindex="0"
+        />
+      </div>
+    </div>
+    <div
+      class="cds--pagination cds--pagination--md c6"
+    >
+      <div
+        class="cds--pagination__left"
+      >
+        <label
+          class="cds--pagination__text"
+          for="cds-pagination-select-:rn:"
+          id="cds-pagination-select-:rn:-count-label"
+        >
+          Items per page
+        </label>
+        <div
+          class="cds--form-item cds--select__item-count"
+        >
+          <div
+            class="cds--select cds--select--inline"
+          >
+            <div
+              class="cds--select-input--inline__wrapper"
+            >
+              <div
+                class="cds--select-input__wrapper"
+              >
+                <select
+                  class="cds--select-input"
+                  id="cds-pagination-select-:rn:"
+                  title=""
+                >
+                  <option
+                    class="cds--select-option"
+                    value="10"
+                  >
+                    10
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="20"
+                  >
+                    20
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="50"
+                  >
+                    50
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="100"
+                  >
+                    100
+                  </option>
+                  <option
+                    class="cds--select-option"
+                    value="500"
+                  >
+                    500
+                  </option>
+                </select>
+                <svg
+                  aria-hidden="true"
+                  class="cds--select__arrow"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span
+          class="cds--pagination__text cds--pagination__items-count"
+        >
+          1–1 of 1 items
+        </span>
+      </div>
+      <div
+        class="cds--pagination__right"
+      >
+        <div
+          class="cds--form-item cds--select__page-number"
+        >
+          <div
+            class="cds--select cds--select--inline"
+          >
+            <label
+              class="cds--label cds--visually-hidden"
+              for="cds-pagination-select-:rn:-right"
+            >
+              Page number, of 1 pages
+            </label>
+            <div
+              class="cds--select-input--inline__wrapper"
+            >
+              <div
+                class="cds--select-input__wrapper"
+              >
+                <select
+                  class="cds--select-input"
+                  id="cds-pagination-select-:rn:-right"
+                  title=""
+                >
+                  <option
+                    class="cds--select-option"
+                    value="1"
+                  >
+                    1
+                  </option>
+                </select>
+                <svg
+                  aria-hidden="true"
+                  class="cds--select__arrow"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span
+          class="cds--pagination__text"
+        >
+          of 1 page
+        </span>
+        <div
+          class="cds--pagination__control-buttons"
+        >
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:ro:"
+                class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+                disabled=""
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 24L10 16 20 8z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:ro:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Previous page
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+          <span
+            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top-right cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
+          >
+            <div
+              class="cds--tooltip-trigger__wrapper"
+            >
+              <button
+                aria-labelledby="tooltip-:rq:"
+                class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
+                disabled=""
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 8L22 16 12 24z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <span
+              aria-hidden="true"
+              class="cds--popover"
+              id="tooltip-:rq:"
+              role="tooltip"
+            >
+              <span
+                class="cds--popover-content cds--tooltip-content"
+              >
+                Next page
+              </span>
+              <span
+                class="cds--popover-caret"
+              />
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

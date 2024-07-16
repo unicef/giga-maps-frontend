@@ -1,0 +1,201 @@
+.mapping__media {
+  margin-bottom: 3rem;
+
+  @include media-breakpoint-down(md) {
+    flex: 1 1 auto;
+    margin-right: -9px;
+    margin-left: -9px;
+  }
+
+  @include media-breakpoint-up(md) {
+    @include make-col-ready-no-breakpoints;
+    @include make-col(4);
+    margin-right: 2rem;
+    margin-bottom: 5rem;
+    margin-left: -($grid-gutter-width-lg * 0.5);
+  }
+
+  @include media-breakpoint-up(lg) {
+    margin-right: 5rem;
+  }
+
+  @include media-breakpoint-up(xl) {
+    flex: 0 0 auto;
+    width: 53.8rem;
+    max-width: 53.8rem;
+    margin-right: 8.3rem;
+  }
+}
+
+.mapping__image-wrapper {
+  display: flex;
+  flex: 1 1 auto;
+  width: auto;
+}
+
+.mapping__image {
+  width: 100%;
+  max-width: 100%;
+}
+
+.mapping__info {
+  @include make-col-ready;
+  display: flex;
+  flex-direction: column;
+
+  @include media-breakpoint-down(sm) {
+    @include make-col(12);
+  }
+
+  @include media-breakpoint-up(xl) {
+    flex: 0 1 100%;
+    width: auto;
+  }
+}
+
+.mapping__title {
+  margin-top: 0;
+  margin-bottom: 7.5rem;
+  font-size: 2.6rem;
+  font-family: $font-family-primary;
+  line-height: 3.3rem;
+
+  @include media-breakpoint-up(md) {
+    font-size: 3rem;
+    line-height: 3.8rem;
+  }
+
+  &:not(:first-child) {
+    margin-top: 4.5rem;
+
+    @include media-breakpoint-up(md) {
+      margin-top: 8.5rem;
+    }
+  }
+}
+
+.mapping__text {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-family: $font-family-secondary;
+  line-height: 2.6rem;
+
+  @include media-breakpoint-up(md) {
+    margin-bottom: 2.5rem;
+    font-size: 2.3rem;
+    line-height: 3rem;
+  }
+}
+
+.mapping__list {
+  margin-top: 3rem;
+
+  @include media-breakpoint-up(md) {
+    margin-top: 0;
+  }
+}
+
+.mapping__row {
+  @include make-row;
+
+  @include media-breakpoint-up(md) {
+    flex-wrap: nowrap;
+  }
+
+  &--inverted {
+    @include media-breakpoint-up(md) {
+      flex-direction: row-reverse;
+    }
+
+    > .mapping__media {
+      @include media-breakpoint-up(md) {
+        margin-right: -($grid-gutter-width-lg * 0.5);
+        margin-left: 2rem;
+      }
+
+      @include media-breakpoint-up(lg) {
+        margin-right: -($grid-gutter-width-lg * 0.5);
+        margin-left: 5rem;
+      }
+
+      @include media-breakpoint-up(xl) {
+        margin-right: -($grid-gutter-width-lg * 0.5);
+        margin-left: 8.3rem;
+      }
+    }
+  }
+}
+
+.faq ul {
+  list-style: none;
+  perspective: 900;
+  padding: 0;
+  margin: 0;
+}
+.faq ul li {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  padding-bottom: 4px;
+  padding-top: 18px;
+  border-top: 1px dotted #dce7eb;
+}
+.faq ul li h4 {
+  padding-right: 50px;
+}
+.faq ul li p {
+  padding: 20px 30px 0px 0px;
+}
+.faq ul li:nth-of-type(1) {
+  animation-delay: 0.5s;
+}
+.faq ul li:nth-of-type(2) {
+  animation-delay: 0.75s;
+}
+.faq ul li:nth-of-type(3) {
+  animation-delay: 1s;
+}
+.faq ul li:last-of-type {
+  padding-bottom: 0;
+}
+.faq ul li i {
+  position: absolute;
+  transform: translate(-6px, 0);
+  margin-top: 16px;
+  right: 0;
+}
+.faq ul li i:before,
+.faq ul li i:after {
+  content: '';
+  position: absolute;
+  background-color: #000;
+  width: 3px;
+  height: 9px;
+}
+.faq ul li i:before {
+  transform: translate(-2px, 0) rotate(45deg);
+}
+.faq ul li i:after {
+  transform: translate(2px, 0) rotate(-45deg);
+}
+.faq ul li input[type='checkbox'] {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+}
+.faq ul li input[type='checkbox']:checked ~ p {
+  margin-top: 0;
+  max-height: 0;
+  opacity: 0;
+  transform: translate(0, 50%);
+}
+.faq ul li input[type='checkbox']:checked ~ i:before {
+  transform: translate(2px, 0) rotate(45deg);
+}
+.faq ul li input[type='checkbox']:checked ~ i:after {
+  transform: translate(-2px, 0) rotate(-45deg);
+}

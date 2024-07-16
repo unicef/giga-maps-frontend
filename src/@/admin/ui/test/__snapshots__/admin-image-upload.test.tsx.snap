@@ -1,0 +1,397 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`About Us image upload Render MainAboutUsView 1`] = `
+<DocumentFragment>
+  .c0 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.c0 .cds--search-magnifier svg {
+  fill: #222;
+}
+
+<div
+    class="c0"
+  >
+    <button
+      class="cds--btn cds--btn--primary"
+      type="button"
+    >
+      Upload New Image
+      <svg
+        aria-hidden="true"
+        class="cds--btn__icon"
+        fill="currentColor"
+        focusable="false"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M3 9L3.7 9.7 7.5 5.9 7.5 15 8.5 15 8.5 5.9 12.3 9.7 13 9 8 4zM3 4V2h10v2h1V2c0-.6-.4-1-1-1H3C2.4 1 2 1.4 2 2v2H3z"
+        />
+      </svg>
+    </button>
+  </div>
+  .c4 {
+  padding: 1rem 1rem 1.5rem 1rem;
+}
+
+.c3 >tr >td {
+  background: #FFFFFF;
+  color: #474747;
+  font-family: Open Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
+}
+
+.c5 {
+  cursor: pointer;
+}
+
+.c2 >tr >th {
+  border-top: #E0E0E0;
+  border-bottom: #E0E0E0;
+  background: #F2F2F2;
+}
+
+.c0 {
+  max-height: calc(100vh - 13rem);
+}
+
+.c1 {
+  min-height: calc(100vh - 7rem);
+}
+
+.c1 .cds--data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.c1 .cds--data-table-content {
+  overflow-x: initial;
+}
+
+<div
+    class="scrollbar-container c0 ps"
+  >
+    <div
+      class="c1"
+    >
+      <div
+        class="cds--data-table-content"
+      >
+        <table
+          aria-label="user-roles-data-table"
+          class="cds--data-table cds--data-table--lg"
+        >
+          <thead
+            class="c2"
+          >
+            <tr>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Name
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Image Link
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Action
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            aria-live="polite"
+            class="c3"
+          >
+            <tr>
+              <td
+                class="c4"
+              >
+                Banner Connectivity first section
+              </td>
+              <td
+                class="c4"
+              >
+                <a
+                  class="cds--link"
+                  href="http://localhost:8000/media/images/f01448bb-9777-4ab8-9fdd-0a5b22887d45.png"
+                  rel="noopener"
+                  target="_blank"
+                >
+                  http://localhost:8000/media/images/f01448bb-9777-4ab8-9fdd-0a5b22887d45.png
+                </a>
+              </td>
+              <td
+                class="c4"
+              >
+                <span
+                  data-testid="delete-about-us-image19"
+                  style="margin-left: 10px;"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="c5"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 12H14V24H12zM18 12H20V24H18z"
+                    />
+                    <path
+                      d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z"
+                    />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td
+                class="c4"
+              >
+                First Resource
+              </td>
+              <td
+                class="c4"
+              >
+                <a
+                  class="cds--link"
+                  href="http://localhost:8000/media/images/3cf1fa04-c3d5-469e-953d-af013ac99148.png"
+                  rel="noopener"
+                  target="_blank"
+                >
+                  http://localhost:8000/media/images/3cf1fa04-c3d5-469e-953d-af013ac99148.png
+                </a>
+              </td>
+              <td
+                class="c4"
+              >
+                <span
+                  data-testid="delete-about-us-image20"
+                  style="margin-left: 10px;"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="c5"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 12H14V24H12zM18 12H20V24H18z"
+                    />
+                    <path
+                      d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z"
+                    />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td
+                class="c4"
+              >
+                Second Resource
+              </td>
+              <td
+                class="c4"
+              >
+                <a
+                  class="cds--link"
+                  href="http://localhost:8000/media/images/173e890f-b942-4e32-8c57-a2eac8a4fb93.png"
+                  rel="noopener"
+                  target="_blank"
+                >
+                  http://localhost:8000/media/images/173e890f-b942-4e32-8c57-a2eac8a4fb93.png
+                </a>
+              </td>
+              <td
+                class="c4"
+              >
+                <span
+                  data-testid="delete-about-us-image21"
+                  style="margin-left: 10px;"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="c5"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 12H14V24H12zM18 12H20V24H18z"
+                    />
+                    <path
+                      d="M4 6V8H6V28a2 2 0 002 2H24a2 2 0 002-2V8h2V6zM8 28V8H24V28zM12 2H20V4H12z"
+                    />
+                  </svg>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      class="ps__rail-x"
+      style="left: 0px; top: 0px;"
+    >
+      <div
+        class="ps__thumb-x"
+        style="left: 0px; width: 0px;"
+        tabindex="0"
+      />
+    </div>
+    <div
+      class="ps__rail-y"
+      style="top: 0px; left: 0px;"
+    >
+      <div
+        class="ps__thumb-y"
+        style="top: 0px; height: 0px;"
+        tabindex="0"
+      />
+    </div>
+  </div>
+  .c0 >.cds--modal-container {
+  background: #383838;
+  width: 38rem;
+  height: auto;
+  background: #fff;
+}
+
+.c0 >.cds--modal-container button svg {
+  fill: #222!important;
+}
+
+.c0 >.cds--modal-container .cds--modal-close:hover {
+  background-color: transparent!important;
+}
+
+.c1 >h3 {
+  color: #161616;
+  font-weight: 500;
+}
+
+.c1 button svg {
+  fill: #fff;
+}
+
+.c1 .giga-text {
+  display: flex;
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: bolder;
+}
+
+.c1 .giga-text span:first-child {
+  font-weight: 100;
+}
+
+.c1 .cds--modal-close:hover {
+  background-color: #181818;
+}
+
+<div
+    aria-hidden="true"
+    class="cds--modal c0"
+    id="import-csv-filter-modal"
+    role="presentation"
+  >
+    <div
+      aria-modal="true"
+      class="cds--modal-container"
+      role="dialog"
+    >
+      <button
+        class="cds--visually-hidden"
+        type="button"
+      >
+        Focus sentinel
+      </button>
+      <div
+        class="cds--modal-container-body"
+      >
+        <div
+          class="cds--modal-header c1"
+        >
+          <h3
+            class="cds--modal-header__heading cds--type-beta"
+          >
+            Image Upload
+          </h3>
+          <button
+            aria-label="Close"
+            class="cds--modal-close"
+            title="Close"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--modal-close__icon"
+              fill="currentColor"
+              focusable="false"
+              height="20"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button
+        class="cds--visually-hidden"
+        type="button"
+      >
+        Focus sentinel
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
