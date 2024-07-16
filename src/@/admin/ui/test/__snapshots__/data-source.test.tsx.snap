@@ -240,6 +240,12 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
                   </b>
                   : When details of any school are updated by the publisher. 
                 </li>
+                <li>
+                  <b>
+                    Deleted
+                  </b>
+                  : When school details are deleted.
+                </li>
               </ul>
             </div>
           </span>
@@ -1208,78 +1214,6 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
             <legend
               class="cds--label"
             />
-            <div
-              class="cds--form-item cds--checkbox-wrapper"
-            >
-              <input
-                class="cds--checkbox"
-                data-testid="checkbox-country-24"
-                id="country-daily-summary-checkbox-24"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="country-daily-summary-checkbox-24"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Afghanistan
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper"
-            >
-              <input
-                class="cds--checkbox"
-                data-testid="checkbox-country-223"
-                id="country-daily-summary-checkbox-223"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="country-daily-summary-checkbox-223"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Åland Islands
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper"
-            >
-              <input
-                class="cds--checkbox"
-                data-testid="checkbox-country-178"
-                id="country-daily-summary-checkbox-178"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="country-daily-summary-checkbox-178"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Albania
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
             <div
               class="cds--checkbox-group__validation-msg"
             />

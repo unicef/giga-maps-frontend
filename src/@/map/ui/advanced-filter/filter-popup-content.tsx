@@ -84,7 +84,6 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     setOpen(false);
   }
   // const items = ['All data layers']
-
   if (!isReady) return null;
   return (
     <PopoverContent className="filter-popover-content">

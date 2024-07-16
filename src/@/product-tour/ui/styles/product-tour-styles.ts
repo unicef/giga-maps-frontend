@@ -174,7 +174,7 @@ export const InnerCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     width: 0.6rem;
     height: 0.6rem;
     border-radius: 50%;
-    ${(props) => (props.$style && props.$style)};
+    ${(props) => (!!props.$style ? props.$style : "")};
     position: absolute;
     top: 50%;  
     left: 50%; 

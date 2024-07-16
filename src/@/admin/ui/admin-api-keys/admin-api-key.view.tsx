@@ -1,12 +1,11 @@
 import { ActionableNotification, Table, TableBody, TableHead, TableHeader, TableRow } from '@carbon/react';
-import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 
 import { ApiKeysDataWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
 import { EmptyList } from '~/@/common/style/styled-component-style';
 
-import { deleteApiKeyRequestFx, getAllApiKeyRequest } from '../../effects/api-request-fx';
+import { deleteApiKeyRequestFx } from '../../effects/api-request-fx';
 import { $apiRequestListResponse, $apiRequestPageNo, onChangeApiKeyPage, reloadApiRequest } from '../../models/api-request-model';
 import PageTitleComponent from '../common-components/page-title-component';
 import Pagination from '../common-components/Pagination';

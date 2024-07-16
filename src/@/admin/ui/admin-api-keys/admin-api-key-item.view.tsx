@@ -53,9 +53,9 @@ const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength }: { item: Api
         </TableCell>
         <TableCell className='api-keys-data-table-key-name'>
           <Div $flex="center">
-            {item?.active_countries_list.length === 0 && '-'}
+            {item?.active_countries_list?.length === 0 && '-'}
             {hasOneCountry && item?.active_countries_list[0].name}
-            {item?.active_countries_list.length > 1 && item?.active_countries_list.length}
+            {item?.active_countries_list?.length > 1 && item?.active_countries_list?.length}
             {item?.active_countries_list?.length >= 1 && <CountryListToggletip
               align="bottom">
               <ToggletipButton>

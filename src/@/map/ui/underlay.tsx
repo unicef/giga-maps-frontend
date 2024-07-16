@@ -21,11 +21,8 @@ const MapPlaceHolder = styled.div`
   }
   
   .mapboxgl-ctrl .mapboxgl-ctrl-logo {
-    width: 77px;
-  }
-
-  .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl {
-    margin: 0 0 5px 15px;
+    margin-bottom: 1.5rem;
+    display: none;
   }
   
   .mapboxgl-canvas {

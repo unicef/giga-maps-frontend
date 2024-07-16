@@ -6,7 +6,7 @@ import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx, fetchTimePlayerDataFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
 import { mapOverview, mapSchools, router } from '~/core/routes';
-import { setPayload } from '~/lib/effector-kit';
+import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, defaultGigaLayerList, getDefaultFormula, Layers, multiSchoolSelection, SCHOOL_STATUS_LAYER } from './sidebar.constant';
@@ -61,9 +61,7 @@ $connectivitySpeedUnknown.on(changeConnectivitySpeedUnknown, setPayload);
 
 // layer model 
 export const $layersList = createStore<LayerType[]>([]);
-$layersList.on(fetchLayerListFx.doneData, (_, payload) => {
-  return payload.results
-})
+$layersList.on(fetchLayerListFx.doneData, setPayloadResults)
 
 export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
 export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
