@@ -69,7 +69,7 @@ const DownloadDataModal = () => {
               schoolList={schoolList}
             />
           }
-          {isIndicator &&
+          {/* {isIndicator &&
             <SelectContainer labelText="Indicator"
               id={`indicator-select`}
               placeholder="Select Indicator">
@@ -83,7 +83,7 @@ const DownloadDataModal = () => {
               <DatePickerInput id="date-picker-input-id-start" placeholder="From" labelText="Date range" size="md" />
               <DatePickerInput id="date-picker-input-id-finish" placeholder="To" labelText=" " size="md" />
             </DatePickerContainer>
-          }
+          } */}
           <NumberPickerContainer>
             <div>
               <NumberInput required name="pageNo" id="carbon-number" min={1} max={100000} value={formData.pageNo} label="Page no" invalidText="Number is not valid" onChange={(_event, { value }) => setPageNo(value as number)} />
