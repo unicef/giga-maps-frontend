@@ -264,11 +264,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
         class="cds--accordion cds--accordion--end"
       >
         <li
-          class="cds--accordion__item cds--accordion__item--active"
+          class="cds--accordion__item"
         >
           <button
             aria-controls="accordion-item-:r1:"
-            aria-expanded="true"
+            aria-expanded="false"
             class="cds--accordion__heading"
             type="button"
           >
@@ -626,11 +626,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:r4:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -924,11 +924,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:r5:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -1295,11 +1295,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:r7:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -1633,11 +1633,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:r8:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -1971,11 +1971,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:r9:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -2309,11 +2309,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:ra:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -2631,11 +2631,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:rc:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -3030,11 +3030,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:re:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -3324,11 +3324,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:rg:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -3581,11 +3581,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:ri:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -3860,11 +3860,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:rk:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -4139,11 +4139,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:rm:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >
@@ -4292,11 +4292,11 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </div>
         </li>
         <li
-          class="cds--accordion__item"
+          class="cds--accordion__item cds--accordion__item--active"
         >
           <button
             aria-controls="accordion-item-:rn:"
-            aria-expanded="false"
+            aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
           >

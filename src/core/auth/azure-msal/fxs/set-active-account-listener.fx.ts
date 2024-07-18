@@ -36,7 +36,7 @@ const acquireAuthToken = async (msalInstance: PublicClientApplication) => {
   let authToken = null;
   try {
     const accessTokenResponse = await msalInstance
-      .acquireTokenSilent(accessTokenRequest(account))
+      ?.acquireTokenSilent(accessTokenRequest(account))
     authToken = accessTokenResponse.accessToken;
 
   } catch (e) {

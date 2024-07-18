@@ -391,9 +391,9 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     <input
                       class="cds--text-input cds--text-input--sm cds--layout--size-sm"
                       id="num_students-min-input"
-                      placeholder="Min(0)"
-                      title="Min(0)"
-                      type="text"
+                      placeholder="Min (0)"
+                      title="Min (0)"
+                      type="number"
                       value=""
                     />
                     <span
@@ -418,9 +418,9 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     <input
                       class="cds--text-input cds--text-input--sm cds--layout--size-sm"
                       id="num_students-max-input"
-                      placeholder="Max"
-                      title="Max"
-                      type="text"
+                      placeholder="Max (1 Lac)"
+                      title="Max (1 Lac)"
+                      type="number"
                       value=""
                     />
                     <span
@@ -482,9 +482,9 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     <input
                       class="cds--text-input cds--text-input--sm cds--layout--size-sm"
                       id="connectivity_speed-min-input"
-                      placeholder="Min(0)"
-                      title="Min(0)"
-                      type="text"
+                      placeholder="Min (MBs)"
+                      title="Min (MBs)"
+                      type="number"
                       value=""
                     />
                     <span
@@ -509,9 +509,9 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     <input
                       class="cds--text-input cds--text-input--sm cds--layout--size-sm"
                       id="connectivity_speed-max-input"
-                      placeholder="Max"
-                      title="Max"
-                      type="text"
+                      placeholder="Max (MBs)"
+                      title="Max (MBs)"
+                      type="number"
                       value=""
                     />
                     <span
@@ -780,9 +780,9 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
               id="num_computers-min-input"
-              placeholder="Min (0)"
-              title="Min (0)"
-              type="text"
+              placeholder="Min(0)"
+              title="Min(0)"
+              type="number"
               value="15"
             />
             <span
@@ -807,9 +807,9 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
               id="num_computers-max-input"
-              placeholder="Max (10K)"
-              title="Max (10K)"
-              type="text"
+              placeholder="Max"
+              title="Max"
+              type="number"
               value="20"
             />
             <span

@@ -120,7 +120,7 @@ const RolesList = () => {
                       </Link>
                       }
                       {permissions.CAN_DELETE_ROLE_CONFIGURATIONS && role?.category !== 'system' &&
-                        <span style={{ marginLeft: 10 }} onClick={() => setDeleteId(role.id)} onKeyDown={this.handleKeyDown} data-testid="admin-role-delete">
+                        <span style={{ marginLeft: 10 }} onClick={() => setDeleteId(role.id)} data-testid="admin-role-delete">
                           <DeleteIcon size={16} />
                         </span>
                       }

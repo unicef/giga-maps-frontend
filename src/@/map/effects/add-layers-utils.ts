@@ -10,7 +10,7 @@ const ignoreCountriesForBounds = ['fj']
 export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelectedLayer }: Pick<ChangeLayerOptions, "selectedLayerIds" | "refresh" | "lastSelectedLayer">) => {
   const { schoolId: schoolLayerId, selectedId: selectedLayerId } = selectedLayerIds;
   const checkSelectionChange = selectedLayerId && selectedLayerId !== lastSelectedLayer.layerId;
-  const isLastSelectionChange = refresh ?? !!checkSelectionChange;
+  const isLastSelectionChange = refresh ? refresh : !!checkSelectionChange;
   return { schoolLayerId, selectedLayerId, isLastSelectionChange };
 }
 

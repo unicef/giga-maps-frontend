@@ -114,6 +114,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
     position: fixed;
     top: 3.1rem;
     height: calc(100% - 3rem);
+    z-index: 11;
   }
 }
 
