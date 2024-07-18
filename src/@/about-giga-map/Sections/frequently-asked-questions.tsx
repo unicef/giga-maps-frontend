@@ -22,7 +22,7 @@ const FrequentlyAskedQuestions = ({ data }: { data: AboutType }) => {
         <Accordion>
           {
             content.map((faq, index) => (
-              <AccordionItem key={index} title={faq?.title}>
+              <AccordionItem key={`${faq.title}-${index}`} title={faq?.title}>
                 <p dangerouslySetInnerHTML={{ __html: faq?.text?.[0] ?? '' }} />
               </AccordionItem>
             ))

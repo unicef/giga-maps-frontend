@@ -1,4 +1,4 @@
-import { combine, createEvent, createStore, forward, guard, merge, restore, sample } from 'effector';
+import { combine, createEvent, createStore, guard, merge, restore, sample } from 'effector';
 
 import { fetchCountriesFx, fetchCountryFx } from '~/api/project-connect';
 import {
@@ -9,7 +9,7 @@ import { $isMobile } from '~/core/media-query';
 import { mapCountry, mapOverview, mapSchools } from '~/core/routes';
 import { setPayload } from '~/lib/effector-kit';
 
-import { GeoJSONFeatureCollection as FeatureCollection, PointCoordinates } from "../../core/global-types";
+import { PointCoordinates } from "../../core/global-types";
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
 import { getCountryAdminCode } from './country.utils';
@@ -34,9 +34,9 @@ export const $countryIdToCode = $countries.map((countries) => countries?.reduce(
 
 export const $country = createStore<Country | null>(null);
 $country.on(fetchCountryFx.doneData, setPayload);
-export const $dataSource = $country.map((country) => country?.data_source || null);
+export const $dataSource = $country.map((country) => country?.data_source ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
-export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer || {});
+export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
 export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark || {});
 
 export const $admin1Data = sample({
@@ -47,8 +47,8 @@ export const $admin1Data = sample({
     return null;
   })
 });
-export const $admin1Id = $admin1Data.map((data) => data?.id || null);
-export const $admin1Name = $admin1Data.map((data) => (data?.name || data?.name_en) || null);
+export const $admin1Id = $admin1Data.map((data) => data?.id ?? null);
+export const $admin1Name = $admin1Data.map((data) => (data?.name ?? data?.name_en) ?? null);
 
 export const setSchoolFocusLatLng = createEvent<PointCoordinates>();
 export const $schoolFocusLatLng = restore<PointCoordinates>(setSchoolFocusLatLng, null);
@@ -83,7 +83,6 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
 
 export const $countrySearchString = $countrySearchParams.map(params => params.searchParams);
 
-// $countrySearchParams.watch(params => console.log('country params', params));
 const $mapContext = combine({
   map: $map,
   paintData: $stylePaintData,
@@ -105,10 +104,10 @@ sample({
   fn: ({ schoolParams, isCountryView, isSchoolView, countryParams }) => {
     let countryCode = '';
     if (isCountryView) {
-      countryCode = countryParams?.code || ''
+      countryCode = countryParams?.code ?? ''
     } else if (isSchoolView) {
       const params = new URLSearchParams(schoolParams);
-      countryCode = params.get('country')?.toLowerCase() || '';
+      countryCode = params.get('country')?.toLowerCase() ?? '';
     }
     return countryCode;
   },

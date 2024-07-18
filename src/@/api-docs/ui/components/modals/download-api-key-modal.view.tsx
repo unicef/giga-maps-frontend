@@ -1,5 +1,5 @@
 import { Button, Form, TextInput } from '@carbon/react';
-import { combine, createEvent, merge, restore, sample } from 'effector';
+import { createEvent, restore } from 'effector';
 import { useStore } from 'effector-react';
 import { FormEvent, useEffect, useState } from 'react';
 
@@ -53,60 +53,58 @@ const DownloadApiKeyModal = () => {
   }
 
   return (
-    <>
-      <Modal
-        open={showDownload || showDocument}
-        preventCloseOnClickOutside
-        $containerStyle={$dowloadApiModalContainerStyle}
-      >
-        <Form onSubmit={onSubmit}>
-          <ModalHeader closeModal={() => {
-            onDownloadAPIPopup(false);
-            onDocumentAPIPopup(false);
-          }} $headingStyle={$modalHeadingStyle} title="Enter API Key" />
-          <ModalBody $style={$modalBodyStyle}>
-            <ModalDescription>Enter API key to {showDownload ? 'download' : 'view documentation for'} {exploreApiData?.name} {showDownload ? 'data' : 'API'}</ModalDescription>
-            <TextInputWrapper>
-              <div className='explore-api-text'>api_key</div>
-              <div className='explore-text-input'>
-                <TextInput value={apiInput} required onChange={(e) => setApiInput(e.target.value)} id="text-input-explore-api" type="text" labelText="" placeholder='Enter the api_key value' invalid={invalidKey} invalidText={'Please enter valid api key'} />
-              </div>
-            </TextInputWrapper>
-            <DontHaveAccountContainer>
-              <p>Don’t have one? </p>
-              <Button
-                onClick={() => {
-                  if (isPublic) {
-                    onRequestApiKey(exploreApiData?.id as number)
-                  } else {
-                    onRequestAPIPopup(true);
-                    onDownloadAPIPopup(false)
-                    onDocumentAPIPopup(false);
-                  }
-                }}
-                kind="ghost">
-                Request API Key
-              </Button>
-            </DontHaveAccountContainer>
-          </ModalBody>
-          <ModalFooter $style={$modalFooterStyle}>
+    <Modal
+      open={showDownload || showDocument}
+      preventCloseOnClickOutside
+      $containerStyle={$dowloadApiModalContainerStyle}
+    >
+      <Form onSubmit={onSubmit}>
+        <ModalHeader closeModal={() => {
+          onDownloadAPIPopup(false);
+          onDocumentAPIPopup(false);
+        }} $headingStyle={$modalHeadingStyle} title="Enter API Key" />
+        <ModalBody $style={$modalBodyStyle}>
+          <ModalDescription>Enter API key to {showDownload ? 'download' : 'view documentation for'} {exploreApiData?.name} {showDownload ? 'data' : 'API'}</ModalDescription>
+          <TextInputWrapper>
+            <div className='explore-api-text'>api_key</div>
+            <div className='explore-text-input'>
+              <TextInput value={apiInput} required onChange={(e) => setApiInput(e.target.value)} id="text-input-explore-api" type="text" labelText="" placeholder='Enter the api_key value' invalid={invalidKey} invalidText={'Please enter valid api key'} />
+            </div>
+          </TextInputWrapper>
+          <DontHaveAccountContainer>
+            <p>Don’t have one? </p>
             <Button
-              kind="secondary"
               onClick={() => {
-                onDownloadAPIPopup(false)
-                onDocumentAPIPopup(false);
-              }}>
-              Cancel
+                if (isPublic) {
+                  onRequestApiKey(exploreApiData?.id)
+                } else {
+                  onRequestAPIPopup(true);
+                  onDownloadAPIPopup(false)
+                  onDocumentAPIPopup(false);
+                }
+              }}
+              kind="ghost">
+              Request API Key
             </Button>
-            <Button
-              kind="primary"
-              type="submit">
-              Submit
-            </Button>
-          </ModalFooter>
-        </Form>
-      </Modal >
-    </>
+          </DontHaveAccountContainer>
+        </ModalBody>
+        <ModalFooter $style={$modalFooterStyle}>
+          <Button
+            kind="secondary"
+            onClick={() => {
+              onDownloadAPIPopup(false)
+              onDocumentAPIPopup(false);
+            }}>
+            Cancel
+          </Button>
+          <Button
+            kind="primary"
+            type="submit">
+            Submit
+          </Button>
+        </ModalFooter>
+      </Form>
+    </Modal >
   )
 }
 

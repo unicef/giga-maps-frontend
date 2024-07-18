@@ -1,4 +1,3 @@
-import { combine } from 'effector';
 import { useStore } from 'effector-react';
 import { useEffect, useRef } from 'react';
 

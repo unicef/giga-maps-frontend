@@ -450,7 +450,6 @@ describe('addAdminCountryLayerEvents', () => {
 
   it('should handle click event: case2 - find layer', () => {
     const level = 0;
-    const result = addAdminCountryLayerEvents({ map, level } as any);
 
     const handler = map.on.mock.calls[0][1];
     map.queryRenderedFeatures.mockReturnValueOnce([{
@@ -472,7 +471,6 @@ describe('addAdminCountryLayerEvents', () => {
 
   it('should handle click event: case3 - admni1', () => {
     const level = 1;
-    const result = addAdminCountryLayerEvents({ map, level } as any);
 
     const handler = map.on.mock.calls[0][1];
     map.queryRenderedFeatures.mockReturnValueOnce([{

@@ -13,7 +13,7 @@ import { ExploreApiType } from "../types/explore-api-type";
 
 export const onLoadApiList = createEvent();
 export const $exploreApiListResp = createStore<APIListType<ExploreApiType> | null>(null);
-export const $exploreApiData = $exploreApiListResp.map((resp) => resp?.results || []);
+export const $exploreApiData = $exploreApiListResp.map((resp) => resp?.results ?? []);
 $exploreApiListResp.on(getExploreApiListFx.doneData, setPayload);
 
 export const setExploreApiCategory = createEvent<string>();
@@ -38,7 +38,7 @@ export const $currentApiKey = restore(setCurrentApiKey, "");
 export const $currentSelectedApiData = sample({
   source: combine({ exploreData: $exploreApiData, selectedId: $currentSelectedApi }),
   fn: ({ exploreData, selectedId }) => {
-    return exploreData?.find((item: ExploreApiType) => item.id === selectedId) || null;
+    return exploreData?.find((item: ExploreApiType) => item.id === selectedId) ?? null;
   }
 })
 

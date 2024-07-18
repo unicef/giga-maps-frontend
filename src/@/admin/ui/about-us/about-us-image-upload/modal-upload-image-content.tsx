@@ -82,79 +82,76 @@ const ModalUploadImageContent = ({ setOpen }: { setOpen: (value: boolean) => voi
   };
 
   return (
-    <>
-      <Form id="formElemImportCsv"
-        data-testid='form-image-uplaod'
-        onSubmit={handleFormSubmit}
-        autoComplete="off"
-      >
-        <Scroll style={{ maxHeight: 'calc(100vh - 260px)' }}>
-          <ModalBody $style={$modalBodyStyle}>
-            {!(showMessage === '') &&
-              <InlineToast
-                role='alert'
-                kind='warning-alt'
-                onCloseButtonClick={() => setToasterWarning('')}
-                title={showMessage}
-                lowContrast
-                hideCloseButton
-              />}
-            <AboutUsUploadImgesWrapper>
-              {selectedFiles?.map((file, index) => (
-                <div key={index} className="custom-file-container">
-                  <InputLabel>Name</InputLabel>
-                  <TextInput
-                    required
-                    data-testid={`image-upload-name-${index}`}
-                    type="text"
-                    labelText=""
-                    id={`name-${index}`}
-                    value={names[index]}
-                    onChange={(e) => handleNameChange(index, e.target.value)}
-                    placeholder="Enter Name"
-                    name={`name-${index}`}
-                  />
-                  <span className="file-name">{file.name}</span>
-                </div>
-              ))}
-              <FileUploader
-                className="file-uploader"
-                labelTitle=""
-                labelDescription="Only .png, .jpg and .gif file is supported."
-                buttonLabel="Upload"
-                data-testid='image-uploader'
-                buttonKind="primary"
-                size="md"
-                filenameStatus="edit"
-                accept={['.png', '.jpg', '.gif']}
-                multiple
-                iconDescription="Delete file"
-                onChange={handleFileChange}
-                onDelete={handleDeleteImage}
-                name=""
-              />
-            </AboutUsUploadImgesWrapper>
-          </ModalBody>
-        </Scroll>
-        <ModalFooter>
-          <Button
-            kind="secondary"
-            onClick={() => {
-              setOpen(false)
-            }}>
-            Cancel
-          </Button>
-          <Button
-            type='submit'
-            kind="primary"
-            data-testid='submit-about-us-image'
-          >
-            Submit
-          </Button>
-        </ModalFooter>
-      </Form>
-
-    </>
+    <Form id="formElemImportCsv"
+      data-testid='form-image-uplaod'
+      onSubmit={handleFormSubmit}
+      autoComplete="off"
+    >
+      <Scroll style={{ maxHeight: 'calc(100vh - 260px)' }}>
+        <ModalBody $style={$modalBodyStyle}>
+          { showMessage !== '' &&
+            <InlineToast
+              role='alert'
+              kind='warning-alt'
+              onCloseButtonClick={() => setToasterWarning('')}
+              title={showMessage}
+              lowContrast
+              hideCloseButton
+            />}
+          <AboutUsUploadImgesWrapper>
+            {selectedFiles?.map((file, index) => (
+              <div key={`${file.type}-${index}`} className="custom-file-container">
+                <InputLabel>Name</InputLabel>
+                <TextInput
+                  required
+                  data-testid={`image-upload-name-${index}`}
+                  type="text"
+                  labelText=""
+                  id={`name-${index}`}
+                  value={names[index]}
+                  onChange={(e) => handleNameChange(index, e.target.value)}
+                  placeholder="Enter Name"
+                  name={`name-${index}`}
+                />
+                <span className="file-name">{file.name}</span>
+              </div>
+            ))}
+            <FileUploader
+              className="file-uploader"
+              labelTitle=""
+              labelDescription="Only .png, .jpg and .gif file is supported."
+              buttonLabel="Upload"
+              data-testid='image-uploader'
+              buttonKind="primary"
+              size="md"
+              filenameStatus="edit"
+              accept={['.png', '.jpg', '.gif']}
+              multiple
+              iconDescription="Delete file"
+              onChange={handleFileChange}
+              onDelete={handleDeleteImage}
+              name=""
+            />
+          </AboutUsUploadImgesWrapper>
+        </ModalBody>
+      </Scroll>
+      <ModalFooter>
+        <Button
+          kind="secondary"
+          onClick={() => {
+            setOpen(false)
+          }}>
+          Cancel
+        </Button>
+        <Button
+          type='submit'
+          kind="primary"
+          data-testid='submit-about-us-image'
+        >
+          Submit
+        </Button>
+      </ModalFooter>
+    </Form>
   )
 }
 

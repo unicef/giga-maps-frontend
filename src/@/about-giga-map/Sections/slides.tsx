@@ -56,7 +56,7 @@ const Sliders = ({ data }: { data: AboutType }) => {
           <CaseStudiesCardsContainer pos={current * 100}>
             {data?.content.map((resouce, index) => (
               <CaseStudyCard
-                key={`${index}${resouce?.title}`}
+                key={`${index}-${resouce?.title}`}
                 column={maxColumns}
                 cardPoster={resouce?.image}
                 title={resouce?.title}

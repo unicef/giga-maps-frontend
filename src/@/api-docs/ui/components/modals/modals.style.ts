@@ -1,4 +1,4 @@
-import { ComboBox, DatePicker, MultiSelect, FilterableMultiSelect } from "@carbon/react";
+import { ComboBox, DatePicker, FilterableMultiSelect } from "@carbon/react";
 import { css, styled } from "styled-components";
 
 export const $dowloadApiModalContainerStyle = css`

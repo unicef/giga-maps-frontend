@@ -1,13 +1,13 @@
 import { useStore } from "effector-react";
 import { useEffect } from "react"
 
-import { Div, FloatButton } from "~/@/common/style/styled-component-style"
+import { Div } from "~/@/common/style/styled-component-style"
 
 import { clearDataSourcePreview, onPreviewDataSource } from "../../models/data-source-model";
 import { $adminMap } from "~/@/common/admin-map-preview/admin-map.model";
 import AdminMap from "~/@/common/admin-map-preview/admin-map";
 
-export default function DataSourcePreview({ selectedRowsData }: { selectedRowsData: any }) {
+export default function DataSourcePreview({ selectedRowsData }: { readonly selectedRowsData: any }) {
   const map = useStore($adminMap);
 
   useEffect(() => {

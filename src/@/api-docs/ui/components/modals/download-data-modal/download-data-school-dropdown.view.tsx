@@ -1,17 +1,17 @@
 import { useStore } from "effector-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import { SchoolListType } from "~/@/api-docs/types/explore-api-type";
 
 import { SelectContainer } from "../modals.style";
 import { $selectedSchools, setSearchSchool, setSelectedSchool } from "./download-data.model";
 
-export default function DownloadSchoolDropDown({ schoolList }: { schoolList: SchoolListType[] }) {
+export default function DownloadSchoolDropDown({ schoolList }: { readonly schoolList: SchoolListType[] }) {
   const inputTimeout = useRef<ReturnType<typeof setTimeout>>();
   const selectedSchools = useStore($selectedSchools)
   const selectedSchoolLength = selectedSchools.length > 0;
   const placeholder = selectedSchoolLength ? "Search School" : "All School"
-  return (<>
+  return (
     <SelectContainer
       required
       titleText="Select Schools (type minimum 2 letters to get results)"
@@ -37,6 +37,5 @@ export default function DownloadSchoolDropDown({ schoolList }: { schoolList: Sch
         setSelectedSchool(selectedItems)
       }}
       placeholder={placeholder} />
-
-  </>)
+  )
 }

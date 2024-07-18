@@ -1,4 +1,4 @@
-import { Close, Menu, Search } from '@carbon/icons-react';
+import { Close, Menu } from '@carbon/icons-react';
 import { IconButton } from '@carbon/react';
 
 import { mapOverview } from '~/core/routes';

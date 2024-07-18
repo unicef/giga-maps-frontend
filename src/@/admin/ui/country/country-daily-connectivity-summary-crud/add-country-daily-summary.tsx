@@ -4,7 +4,6 @@ import { createCountryDailySummaryFx } from '~/@/admin/effects/api-country-fx'
 import { $formDataCountryDailySummary, onChangeAdminCountryTab, onUdpateCountryDailySummaryForm } from '~/@/admin/models/country-model'
 import { adminCountry } from '~/core/routes'
 
-import PageTitleComponent from '../../common-components/page-title-component'
 import FormCountryDailySummary from './form-country-daily-summary'
 
 const AddCountryDailySummary = () => {
@@ -29,13 +28,11 @@ const AddCountryDailySummary = () => {
   }
 
   return (
-    <>
-      <FormCountryDailySummary
-        onSubmit={onSubmit}
-        onUdpateForm={onUdpateCountryDailySummaryForm}
-        formData={formDataCountryDailySummary}
-        isEdit={false} />
-    </>
+    <FormCountryDailySummary
+      onSubmit={onSubmit}
+      onUdpateForm={onUdpateCountryDailySummaryForm}
+      formData={formDataCountryDailySummary}
+      isEdit={false} />
   )
 }
 

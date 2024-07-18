@@ -4,7 +4,6 @@ import { styled } from 'styled-components';
 
 import { ConnectivityStatusCircle } from '~/@/sidebar/ui/school-view-component/styles/school-view-style';
 
-import SchoolIcon from '../../../../assets/images/School Icon.svg'
 import { InnerCircle, InnerCircleConnectivity } from '../../ui/legend-info/legend-button.style';
 import { $country } from '~/@/country/country.model';
 import { useStore } from 'effector-react';
@@ -106,7 +105,6 @@ const ConnectivityCircleWrapper = styled.div`
 `
 export const Popup = () => {
   const countryCode = useStore($country)?.code;
-  const isKenya = countryCode === 'KE';
 
   return (
     <div className="school-popup-data">
@@ -122,10 +120,6 @@ export const Popup = () => {
               <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" />
             </ConnectivityCircleWrapper>
           </SchoolNameWrapper>
-          {/* {!isKenya && (<SchoolInfoWrapper>
-            <Hashtag />
-            <Label className="label map-school-id"></Label>
-          </SchoolInfoWrapper>)} */}
           <SchoolInfoWrapper>
             <LocationFilledIcon />
             <GeoLabel className="label map-school-geo"></GeoLabel>

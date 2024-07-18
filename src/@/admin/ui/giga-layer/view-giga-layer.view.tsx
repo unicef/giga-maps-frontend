@@ -6,7 +6,6 @@ import { $countryList } from '~/@/api-docs/models/explore-api.model'
 import { LinkGhost } from '~/@/common/style/styled-component-style'
 import { onCreateNotification } from '~/@/common/Toast/toast.model'
 import { stylePaintData } from '~/@/map/map.constant'
-import { Scroll } from '~/@/scroll'
 import { ConnectivityDistributionNames, getConnectivityLogicalValues } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant'
 import { $isSuperAdmin, $loggedInUser, $userPermissions } from '~/core/auth/models'
 import { adminGigaLayer, editGigaLayer } from '~/core/routes'
@@ -122,7 +121,7 @@ const AdminViewLayer = () => {
             {!legendLength && <LegendCategotyContainer>
               <LayerLabel>Legends</LayerLabel>
               {
-                Object.entries(labels)?.map(([name, value]) => <ColorPickerWrapper>
+                Object.entries(labels)?.map(([name, value]) => <ColorPickerWrapper key={name}>
                   <ColorPicker disabled type="color" value={connectivityColors[name]} />
                   <DataLayerNameField>
                     <span key={name}>{ConnectivityDistributionNames[name]}  {value}</span>
@@ -140,9 +139,8 @@ const AdminViewLayer = () => {
                   <div>
                     <span><b>{data?.labels} - </b></span>
                     {isLive && <span>{labels[name.toLowerCase()]} </span>}
-                    {data && data?.labels && <>
-                      <span style={{ textTransform: 'none' }}><b>{data?.values?.join(', ')}</b></span>
-                    </>
+                    {data?.labels && (
+                      <span style={{ textTransform: 'none' }}><b>{data?.values?.join(', ')}</b></span>)
                     }
                   </div>
                 </ColorPickerWrapper>)}</LayerDetail>
@@ -160,12 +158,12 @@ const AdminViewLayer = () => {
           }
           {isDisabled && isPublisher && !isDefaultLayer && <LayerContentWrapper top={1}>
             <LinkGhost onClick={() => {
-              void setActiveDeactiveId(LayerStatusType.PUBLISHED);
+              setActiveDeactiveId(LayerStatusType.PUBLISHED);
             }}>Activate</LinkGhost>
           </LayerContentWrapper>}
           {isPublished && isPublisher && !isDefaultLayer && <LayerContentWrapper top={1}>
             <LinkGhost type="danger" onClick={() => {
-              void setActiveDeactiveId(LayerStatusType.DISABLED);
+              setActiveDeactiveId(LayerStatusType.DISABLED);
             }}>Deactive</LinkGhost>
           </LayerContentWrapper>}
         </ViewLayerWrapper>

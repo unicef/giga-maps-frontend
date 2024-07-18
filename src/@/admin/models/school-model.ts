@@ -1,13 +1,13 @@
-import { combine, createEvent, createStore, merge, sample } from "effector";
+import { createEvent, createStore, sample } from "effector";
 import { createGate } from "effector-react";
 
 import { $notification } from "~/@/common/Toast/toast.model";
 import { APIListType } from "~/api/types";
-import { addAdminSchools, addSchoolDailySummary, addSchoolSummary, editAdminSchools } from "~/core/routes";
+import { addAdminSchools, addSchoolDailySummary, addSchoolSummary } from "~/core/routes";
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";
 
 import { defaultSchoolDailyForm, defaultSchoolForm, defaultSchoolSummaryForm } from "../constants/school.constant";
-import { deleteSchoolDailyFx, deleteSchoolFx, deleteSchoolSummaryFx, getAdmin1ListFx, getAdmin2ListFx, getAdminListFx, getCsvImportListFx, getSchoolDailyIdFx, getSchoolDailyListFx, getSchoolIdFx, getSchoolListFx, getSchoolSummaryIdFx, getSchoolSummaryListFx, importCsvFx } from "../effects/api-school-fx";
+import { deleteSchoolDailyFx, deleteSchoolFx, deleteSchoolSummaryFx, getAdmin1ListFx, getAdmin2ListFx, getCsvImportListFx, getSchoolDailyIdFx, getSchoolDailyListFx, getSchoolIdFx, getSchoolListFx, getSchoolSummaryIdFx, getSchoolSummaryListFx, importCsvFx } from "../effects/api-school-fx";
 import { AdminType, CsvImport, SchoolDailyType, SchoolSummaryType, SchoolType } from "../types/school.type";
 
 export const onChangeAdminSchoolTab = createEvent<number>();
@@ -134,9 +134,6 @@ sample({
 
 
 $formSchool.on(getSchoolIdFx.doneData, setPayload)
-// getSchoolIdFx.fail.watch((error) => {
-//   $formSchool.setState(defaultSchoolForm);
-// });
 $formSchoolSummary.on(getSchoolSummaryIdFx.doneData, setPayload)
 $formSchoolDaily.on(getSchoolDailyIdFx.doneData, setPayload)
 

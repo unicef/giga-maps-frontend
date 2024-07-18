@@ -15,7 +15,7 @@ const FooterLinks = ({ data }: { data: any }) => {
         </p>
       </FooterTitleSection>
       <FooterLinksSection>
-        {data?.content?.footerLinks?.map((item: { text: any; }, index: number) => (<div className="link-list-item" dangerouslySetInnerHTML={{ __html: item.text }} key={index} />))}
+        {data?.content?.footerLinks?.map((item: { text: any; }, index: number) => (<div className="link-list-item" dangerouslySetInnerHTML={{ __html: item.text }} key={`${item.text}-${index}`} />))}
       </FooterLinksSection>
       <FooterMediaSection>
         <div className='right-section'>
@@ -26,7 +26,7 @@ const FooterLinks = ({ data }: { data: any }) => {
           {data?.content?.footerLogo?.map((item: { text: any; }, index: number) => <p key={index} dangerouslySetInnerHTML={{ __html: item.text }} />)}
         </div>
         <div className='left-section'>
-          {data?.content?.socialLinks.map((item: { text: any; }, index: number) => <div key={index} dangerouslySetInnerHTML={{ __html: item.text }} />)}
+          {data?.content?.socialLinks.map((item: { text: any; }, index: number) => <div key={`${item.text}-{index}`} dangerouslySetInnerHTML={{ __html: item.text }} />)}
         </div>
       </FooterMediaSection>
     </FooterSection>

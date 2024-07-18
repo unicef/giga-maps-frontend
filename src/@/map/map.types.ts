@@ -4,7 +4,6 @@ import { gigaLayerSource } from './map.init';
 
 export type Style = 'dark' | 'light' | 'satellite' | 'accessible' | 'street';
 export type Center = mapboxGl.LngLatLike;
-export type Zoom = number;
 export type Map = mapboxGl.Map;
 export type Marker = mapboxGl.Marker;
 
@@ -27,7 +26,7 @@ export type InitMapOptions = {
   style: Style;
   container: HTMLElement;
   center?: Center;
-  zoom?: Zoom;
+  zoom?: number;
 };
 
 export type MapType = 'connectivity' | 'coverage';

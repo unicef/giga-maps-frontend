@@ -15,7 +15,7 @@ import { $recentActionList } from '../../models/recent-action.model';
 import { RecentAction } from '../../types/recent-action.type';
 import PageTitleComponent from '../common-components/page-title-component';
 import {
-  DataTableContainer, RecentActionLink, RecentLogScroll, TableDataBody, TableDataCell, TableDataHead, TableWrapper, ToolbarContent,
+  DataTableContainer, RecentActionLink, RecentLogScroll, TableDataBody, TableDataCell, TableDataHead, TableWrapper,
 } from '../styles/admin-styles'
 import Pagination from '../common-components/Pagination';
 
@@ -30,7 +30,7 @@ const headers = [
 
 const AdminRecentActions = () => {
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
-  const { results: recentActionList, count } = useStore($recentActionList) || {};
+  const { results: recentActionList, count } = useStore($recentActionList) ?? {};
   const rows = recentActionList ? recentActionList?.map((recentAction: RecentAction) => ({
     ...recentAction,
     object_repr: recentAction?.action_flag === 'Changed' ?
@@ -66,20 +66,19 @@ const AdminRecentActions = () => {
           getTableProps,
           getTableContainerProps
         }) => {
-          const batchActionProps = getBatchActionProps();
           return <DataTableContainer {...getTableContainerProps()} >
             <RecentLogScroll >
               <TableWrapper>
                 <Table {...getTableProps()} aria-label="sample table">
                   <TableDataHead>
                     <TableRow>
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {headers.map((header, i) => <TableHeader key={`${header.key}-${i}`} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
                   </TableDataHead>
                   <TableDataBody>
-                    {rows.map((row, i) => <TableRow key={i} {...getRowProps({
+                    {rows.map((row, i) => <TableRow key={`${row.id}-${i}`} {...getRowProps({
                       row
                     })}>
                       {row.cells.map(cell =>
