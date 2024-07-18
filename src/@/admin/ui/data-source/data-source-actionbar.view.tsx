@@ -7,29 +7,29 @@ import { $userPermissions } from "~/core/auth/models";
 
 import { deleteSchoolMasterFx, publishAllSchoolMasterFx, publishSchoolMasterFx, updateSchoolMasterFx } from "../../effects/data-source.fx";
 import { DataSourceType } from '../../types/data-source.type';
-import { ActionButtonWrapper, SearchContainer, StatusWrapperDataSource } from "../styles/admin-styles";
+import { ActionButtonWrapper, StatusWrapperDataSource } from "../styles/admin-styles";
 import { Chip, Div, Text } from '~/@/common/style/styled-component-style';
-import { FormEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AlertModalWithButton } from '../common/alert-modal.view';
 
 interface ActionBarType {
-  setSelectedRows: React.Dispatch<React.SetStateAction<number[]>>;
-  isEditing: boolean;
-  showPreview: React.Dispatch<React.SetStateAction<boolean>>,
-  setEditedData: React.Dispatch<React.SetStateAction<Record<string, any>>>,
-  setIsEditing: (a: boolean) => void,
-  selectedRows: number[],
-  isPreview: boolean,
-  selectedRowsData: DataSourceType[],
-  editedData: Record<string, DataSourceType>
-  dataSource: DataSourceType[]
-  showCountryFilter: () => void;
-  countryFilterValues: number[];
-  reloadSchoolMaster: () => void;
-  searchValue: string;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>
-  statusFilter: string;
-  setStatusFilter: React.Dispatch<React.SetStateAction<string>>
+  readonly setSelectedRows: React.Dispatch<React.SetStateAction<number[]>>;
+  readonly isEditing: boolean;
+  readonly showPreview: React.Dispatch<React.SetStateAction<boolean>>,
+  readonly setEditedData: React.Dispatch<React.SetStateAction<Record<string, any>>>,
+  readonly setIsEditing: (a: boolean) => void,
+  readonly selectedRows: number[],
+  readonly isPreview: boolean,
+  readonly selectedRowsData: DataSourceType[],
+  readonly editedData: Record<string, DataSourceType>
+  readonly dataSource: DataSourceType[]
+  readonly showCountryFilter: () => void;
+  readonly countryFilterValues: number[];
+  readonly reloadSchoolMaster: () => void;
+  readonly searchValue: string;
+  readonly setSearchValue: React.Dispatch<React.SetStateAction<string>>
+  readonly statusFilter: string;
+  readonly setStatusFilter: React.Dispatch<React.SetStateAction<string>>
 }
 
 const statusList = [{

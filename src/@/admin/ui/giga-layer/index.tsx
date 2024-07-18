@@ -1,4 +1,3 @@
-import Map from "~/@/map/ui/map";
 import { addGigaLayer, adminGigaLayer, editGigaLayer, viewGigaLayer } from "~/core/routes";
 import { useRoute } from "~/lib/router";
 

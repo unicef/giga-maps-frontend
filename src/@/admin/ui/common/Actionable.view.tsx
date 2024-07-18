@@ -1,6 +1,6 @@
 import { ActionableNotification } from "@carbon/react";
 
-export default function Actionable({ onClose, onAction, title }: { onClose: () => void, onAction: () => void, title: string }) {
+export default function Actionable({ onClose, onAction, title }: { readonly onClose: () => void, readonly onAction: () => void, readonly title: string }) {
 
   return <ActionableNotification
     lowContrast

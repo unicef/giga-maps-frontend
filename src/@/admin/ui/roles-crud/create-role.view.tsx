@@ -1,5 +1,4 @@
-import { Button, Form, Select, SelectItem, TextInput } from '@carbon/react'
-import { combine, createEvent, createStore, restore, sample } from 'effector';
+import { createEvent, createStore, restore } from 'effector';
 import { useStore } from 'effector-react';
 import { FormEvent } from 'react';
 

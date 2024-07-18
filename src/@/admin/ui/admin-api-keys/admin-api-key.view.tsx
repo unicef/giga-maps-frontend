@@ -14,9 +14,9 @@ import AdminApiKeyItem from './admin-api-key-item.view';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
 
 const AdminApiKey = () => {
-  const { results: apiRequestList, count } = useStore($apiRequestListResponse) || {};
+  const { results: apiRequestList, count } = useStore($apiRequestListResponse) ?? {};
   const { page, pageSize } = useStore($apiRequestPageNo);
-  const [deleteId, setApiKeyDeleteId] = useState<null | number>(null);
+  const [apiKeyDeleteId, setApiKeyDeleteId] = useState<null | number>(null);
   const countryList = useStore($countryList)
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const AdminApiKey = () => {
         recentlyView={true}
         onRefresh={() => reloadApiRequest()}
       />
-      {deleteId &&
+      {apiKeyDeleteId &&
         <DeleteConfirmation>
           <ActionableNotification
             style={{ maxWidth: "100%" }}
@@ -47,7 +47,7 @@ const AdminApiKey = () => {
             subtitle="Are you sure?"
             closeOnEscape
             actionButtonLabel="Yes"
-            onActionButtonClick={() => void onDeleteApiKey(deleteId)}
+            onActionButtonClick={() => void onDeleteApiKey(apiKeyDeleteId)}
             onClose={() => setApiKeyDeleteId(null)}
           />
         </DeleteConfirmation>
@@ -88,7 +88,7 @@ const AdminApiKey = () => {
             </TableBody>
           </Table>
         </ApiKeysDataWrapper>
-        {(!apiRequestList || !apiRequestList?.length) &&
+        {!(apiRequestList?.length) &&
           <EmptyList>
             No data found
           </EmptyList>}

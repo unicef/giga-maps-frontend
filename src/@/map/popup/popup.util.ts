@@ -43,7 +43,7 @@ const setContentHTML = (el: HTMLElement, className = '', content = '') => {
 export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintData, layerUtils, isGotoSchool, countryCode }: { popupElement: HTMLElement, isGotoSchool?: boolean; countryCode?: string; unit?: string; } & SchoolPopupDataType) => {
   const { selectedLayerData, currentLayerTypeUtils } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
-  const { global_benchmark, icon } = selectedLayerData || {};
+  const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit;
   const connecitivityStatusColor = stylePaintData[feature?.connectivityStatus ?? UNKNOWN]
   const popupTemplate = popupElement.cloneNode(true) as HTMLElement;
@@ -59,7 +59,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
     })
   }
 
-  const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates || [])));
+  const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
@@ -77,9 +77,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
     showElement(popupTemplate, '.static-container');
     const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', `${feature?.staticValue ?? UNKNOWN}`);
     const iconElm = findElement(popupTemplate, '.static-icon');
-    if (iconElm) {
-      // iconElm.innerHTML = icon;
-    }
+    
     staticElm.style.color = stylePaintData[feature?.staticType ?? UNKNOWN];
     outerCircle.style.display = 'none';
     innerCircle.style.backgroundColor = stylePaintData[feature?.staticType ?? UNKNOWN];

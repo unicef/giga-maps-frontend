@@ -7,7 +7,7 @@ import { CountryMultiSelect } from "../modals.style";
 import { useEffect, useState } from "react";
 import { Button } from "@carbon/react";
 
-export default function CountryMultiDropdown({ countryHasSchool, onSelectCountry, ...others }: { countryHasSchool?: boolean, onSelectCountry: (country: CountryListType[] & Record<string, any>) => void }) {
+export default function CountryMultiDropdown({ countryHasSchool, onSelectCountry, ...others }: { readonly countryHasSchool?: boolean, readonly onSelectCountry: (country: CountryListType[] & Record<string, any>) => void }) {
   const countryList = useStore($countryList)
   const [selectedItems, setSelectedItems] = useState<CountryListType[]>([]);
   const isSelectedAll = selectedItems.length === countryList.length;

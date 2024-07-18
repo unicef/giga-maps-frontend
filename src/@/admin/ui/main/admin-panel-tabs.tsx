@@ -7,10 +7,8 @@ import MenuItemLink from '~/@/common/menu-item-link';
 import { LogoutButtonWrapper } from '~/core/auth/auth.style';
 import { onLogout } from '~/core/auth/azure-msal/model';
 import { $isAdminUser, $userPermissions } from '~/core/auth/models';
-import { adminAboutUs, adminApiKeys, adminCountry, adminGigaLayer, adminSchools, backgroundTask, contactMessage, dataSource, docsExporeApi, recentActions, userList, userPermissions, userRoles } from '~/core/routes';
-import { isDevelopment } from '~/env';
+import { adminAboutUs, adminApiKeys, adminCountry, adminGigaLayer, adminSchools, backgroundTask, contactMessage, dataSource, docsExporeApi, recentActions, userList, userRoles } from '~/core/routes';
 import { Link } from '~/lib/router';
-import { isProd } from '~/lib/utils';
 
 import { getInvalidateCacheFx } from '../../effects/admin-main-fx';
 import { AdminSideNavMenu, AdminSubSingleTab, InvalidateCacheWrapper, SideBarScrollContainer, SideBarTabsContainer } from '../styles/admin-styles'
@@ -19,7 +17,7 @@ import InvalidatCacheModal from './Invalidate-cache-modal';
 const AdminPanelTabs = () => {
   const permissions = useStore($userPermissions);
   const isAdminUser = useStore($isAdminUser);
-  const [invaliteCache, setInvalidateCache] = useState(false)
+  const [invalidateCache, setInvalidateCache] = useState(false)
 
   const callInvalidateCache = async () => {
     try {
@@ -112,7 +110,7 @@ const AdminPanelTabs = () => {
                 }}
               >Invalidate Cache</Button>
             </InvalidateCacheWrapper>
-            <InvalidatCacheModal open={invaliteCache} setOpen={setInvalidateCache} />
+            <InvalidatCacheModal open={invalidateCache} setOpen={setInvalidateCache} />
           </>}
         </SideBarTabsContainer>
       </SideBarScrollContainer>
@@ -122,7 +120,7 @@ const AdminPanelTabs = () => {
           kind="ghost"
           onClick={() => {
             docsExporeApi.navigate()
-            void onLogout()
+            onLogout()
           }}
         >
           Logout

@@ -11,7 +11,7 @@ import { LogoutButtonWrapper } from '~/core/auth/auth.style';
 import { onLoginSignup, onLogout } from '~/core/auth/azure-msal/model';
 import { $isAdmin, $isLoggedIn, $loggedInUser, $userFullName } from '~/core/auth/models';
 import { AuthCheckWrapper } from '~/core/auth/utils';
-import { admin, docsApiKeys, docsExporeApi, mapOverview, router } from '~/core/routes';
+import { admin, docsApiKeys, docsExporeApi } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import UserAvatar from '../../../../common/user-avatar';
@@ -23,7 +23,7 @@ const SideMenuPanel = () => {
   const isAdmin = useStore($isAdmin);
   const isLoggedIn = useStore($isLoggedIn);
   const loggedInUser = useStore($loggedInUser);
-  const rolesLength = loggedInUser?.role?.permission_slugs?.length || 0;
+  const rolesLength = loggedInUser?.role?.permission_slugs?.length ?? 0;
   const exploreApiRoute = useRoute(docsExporeApi);
   const apiKeysRoute = useRoute(docsApiKeys);
   const isMenuOpen = useStore($isMenuOpen);
@@ -45,7 +45,7 @@ const SideMenuPanel = () => {
                   renderIcon={ArrowRight}
                   kind="tertiary"
                   onClick={() => {
-                    void onLoginSignup();
+                    onLoginSignup();
                   }}
                 >
                   Login/Signup
@@ -78,7 +78,7 @@ const SideMenuPanel = () => {
                   kind="ghost"
                   onClick={() => {
                     docsExporeApi.navigate()
-                    void onLogout()
+                    onLogout()
                   }}
                 >
                   Logout

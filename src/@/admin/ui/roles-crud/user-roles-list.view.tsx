@@ -1,6 +1,6 @@
 import { Add } from '@carbon/icons-react';
-import { ActionableNotification, Button, ExpandableSearch, Table, TableHeader, TableRow } from '@carbon/react'
-import { combine, createEvent, merge, sample } from 'effector';
+import { ActionableNotification, Button, Table, TableHeader, TableRow } from '@carbon/react'
+import { createEvent, sample } from 'effector';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 
@@ -8,13 +8,11 @@ import { $userPermissions } from '~/core/auth/models';
 import { editRoles, roleCreateRoute } from '~/core/routes';
 import { Link } from '~/lib/router';
 
-import { Scroll } from '@/scroll';
-
 import { deleteRoleFx, getRolesListFx } from '../../effects/user-management-fx';
-import { $roleListResponse, getRoleList, reloadRolesList } from '../../models/user-management.model';
+import { $roleListResponse } from '../../models/user-management.model';
 import PageTitleComponent from '../common-components/page-title-component'
 import Pagination from '../common-components/Pagination';
-import { DeleteIcon, EditIcon, InactiveStatusWrapper, RolesListScroll, SearchContainer, TableCellRoles, TableDataBody, TableDataCell, TableDataHead, TableWrapper, UserActiveStatus, UserInactiveStatus } from '../styles/admin-styles'
+import { DeleteIcon, EditIcon, RolesListScroll, SearchContainer, TableCellRoles, TableDataBody, TableDataCell, TableDataHead, TableWrapper } from '../styles/admin-styles'
 import { setRoleDescription, setRoleName } from './create-role.view';
 
 
@@ -34,7 +32,7 @@ sample({
 })
 
 const RolesList = () => {
-  const { results: roleList, count } = useStore($roleListResponse) || {};
+  const { results: roleList, count } = useStore($roleListResponse) ?? {};
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const [deleteId, setDeleteId] = useState<null | number>(null);
   const permissions = useStore($userPermissions);
@@ -122,7 +120,7 @@ const RolesList = () => {
                       </Link>
                       }
                       {permissions.CAN_DELETE_ROLE_CONFIGURATIONS && role?.category !== 'system' &&
-                        <span style={{ marginLeft: 10 }} onClick={() => setDeleteId(role.id)} data-testid="admin-role-delete">
+                        <span style={{ marginLeft: 10 }} onClick={() => setDeleteId(role.id)} onKeyDown={this.handleKeyDown} data-testid="admin-role-delete">
                           <DeleteIcon size={16} />
                         </span>
                       }

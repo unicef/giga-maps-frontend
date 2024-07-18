@@ -1,7 +1,5 @@
 import '../style/common-component.scss'
 
-import { ArrowRight, } from '@carbon/icons-react';
-import { Button } from '@carbon/react';
 import React from 'react'
 
 const SignUpAvatarComponent = ({ UserLastname, designation }: { UserLastname: string, designation: string }) => {

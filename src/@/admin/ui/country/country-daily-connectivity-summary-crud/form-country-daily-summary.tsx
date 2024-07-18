@@ -2,7 +2,6 @@ import { Button, DatePicker, DatePickerInput, Form, Select, SelectItem, TextInpu
 import { format } from 'date-fns'
 import { useStore } from 'effector-react'
 
-import { $currentCountryDailySummaryItem, $formDataCountryDailySummary } from '~/@/admin/models/country-model'
 import { CountryDailySummaryType } from '~/@/admin/types/country.type'
 import { $countryList } from '~/@/api-docs/models/explore-api.model'
 import { router } from '~/core/routes'

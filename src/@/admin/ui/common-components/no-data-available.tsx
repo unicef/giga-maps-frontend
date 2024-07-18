@@ -1,4 +1,4 @@
-function NoDataAvailable({ columns }: { columns: number }) {
+function NoDataAvailable({ columns }: { readonly columns: number }) {
   const elementsArray = Array.from({ length: columns }, (_, index) => index);
   return (<tr>
     {elementsArray.map((item) => {

@@ -1,4 +1,3 @@
-import { $style } from '~/@/map/map.model';
 import { ContainedListItem, SideNavLink } from '@carbon/react';
 import styled, { css } from 'styled-components';
 

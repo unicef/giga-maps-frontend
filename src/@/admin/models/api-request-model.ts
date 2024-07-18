@@ -1,5 +1,4 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
-import { createGate } from "effector-react";
 
 import { APIListType } from "~/api/types";
 import { setPayload } from "~/lib/effector-kit";

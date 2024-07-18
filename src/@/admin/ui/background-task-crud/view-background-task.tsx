@@ -17,17 +17,15 @@ const BackgroundTaskView = () => {
   }, [id]);
 
   return (
-    <>
-      <SchoolAddEditWrapper>
-        <PageTitleComponent
-          title={"View Background Task"}
-          recentlyView={false} />
-        <FormWrapper>
-          <BackgroundTaskForm
-          />
-        </FormWrapper>
-      </SchoolAddEditWrapper>
-    </>
+    <SchoolAddEditWrapper>
+      <PageTitleComponent
+        title={"View Background Task"}
+        recentlyView={false} />
+      <FormWrapper>
+        <BackgroundTaskForm
+        />
+      </FormWrapper>
+    </SchoolAddEditWrapper>
   )
 }
 

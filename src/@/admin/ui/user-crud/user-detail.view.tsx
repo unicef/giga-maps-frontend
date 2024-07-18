@@ -1,10 +1,9 @@
 import { Button, Form, Select, SelectItem, TextInput } from '@carbon/react'
-import { combine, createEvent, createStore, sample } from 'effector';
+import { createEvent, createStore, sample } from 'effector';
 import { useStore } from 'effector-react';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect } from 'react';
 
 import { router, userDetails, userList } from '~/core/routes'
-import { setPayload } from '~/lib/effector-kit';
 
 import { getRolesListFx, getUserByIdFx, updateUserFx } from '../../effects/user-management-fx';
 import { $roleListResponse, $userByIdResponse, reloadUserList } from '../../models/user-management.model';
@@ -44,7 +43,7 @@ const UserDetailsComponent = () => {
   const oldFormData = useStore($userByIdResponse);
   const formData = useStore($userEditForm);
   const { userId: id } = useStore(userDetails.params) as { userId: number };
-  const { results: roleList } = useStore($roleListResponse) || {};
+  const { results: roleList } = useStore($roleListResponse) ?? {};
 
   useEffect(() => {
     getUserDetailData({ userId: id });
@@ -117,7 +116,7 @@ const UserDetailsComponent = () => {
               id={`Status-select`}
               placeholder="Select Status"
               value={formData.is_active ? 'active' : 'inactive'}
-              onChange={(e) => updateUserForm(['is_active', e.target.value === 'active' ? true : false])}
+              onChange={(e) => updateUserForm(['is_active', e.target.value === 'active'])}
             >
               <SelectItem value="active" text="Active" />
               <SelectItem value="inactive" text="Inactive" />

@@ -1,12 +1,12 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@carbon/react"
+import { Tab, TabList, TabPanels, Tabs } from "@carbon/react"
 import { useStore } from "effector-react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { adminSchools } from "~/core/routes"
 
 import { $adminSchoolTab, onChangeAdminSchoolTab } from "../../models/school-model"
 import PageTitleComponent from "../common-components/page-title-component"
-import { AdminSchoolTabPanel, SchoolTabsWrapper } from "../styles/admin-styles"
+import { SchoolTabsWrapper } from "../styles/admin-styles"
 import FilesImportsList from "./file-import/files-imports-list"
 import ListSchoolDailyConnectivitySummary from "./school-daily-connectivity-summary-crud/list-school-daily-summary"
 import ListSchools from "./schools-crude/list-schools"

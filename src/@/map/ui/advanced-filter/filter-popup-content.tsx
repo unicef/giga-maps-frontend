@@ -1,8 +1,8 @@
-import { Button, Form, PopoverContent, TextInput, IconButton } from "@carbon/react";
+import { Button, Form, PopoverContent, IconButton } from "@carbon/react";
 import { Close } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
 import { MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer, StyledApplyFilterDropdown, StyledTextInputContainer } from "./filter-button.style";
+import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
 import SingleDropdown from "./single-dropdown";
 import MultiSelectDropdown from "./multi-select-dropdown";
 import TextField from "./text-input";
@@ -32,7 +32,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const country = useStore($country);
   const filterList = useMemo(() => {
     return advanceFilterList.filter(item => {
-      return !item.active_countries_list?.length || item.active_countries_list?.includes(country?.id || 0);
+      return !item.active_countries_list?.length || item.active_countries_list?.includes(country?.id ?? 0);
     })
   }, [advanceFilterList, country?.id])
 

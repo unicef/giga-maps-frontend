@@ -2,8 +2,6 @@ import { useStore } from 'effector-react'
 import React, { useEffect } from 'react'
 
 import { getSchoolIdFx } from '~/@/admin/effects/api-school-fx'
-import { SchoolGate } from '~/@/admin/models/school-model'
-import { Scroll } from '~/@/scroll'
 import { editAdminSchools } from '~/core/routes'
 
 import PageTitleComponent from '../../common-components/page-title-component'

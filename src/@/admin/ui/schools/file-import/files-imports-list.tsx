@@ -33,7 +33,7 @@ const headers = [
 ];
 
 const FilesImportsList = () => {
-  const { results: importList, count } = useStore($importCsvList) || {};
+  const { results: importList, count } = useStore($importCsvList) ?? {};
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
 
   const rows = useMemo(() => importList ? importList?.map((importListItem) => ({
@@ -41,10 +41,10 @@ const FilesImportsList = () => {
     uploaded_file: <Link href={importListItem?.uploaded_file}  >{importListItem?.uploaded_file}</Link>
   })) : [], [importList])
 
-  const [searchValue, setSearchvalue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
 
-  const [openCsvModal, setCsvModal] = useState(false)
+  const [openCsvModal, setOpenCsvModal] = useState(false)
 
   useEffect(() => {
     void getCsvImportListFx({ page, pageSize, search: searchValue })
@@ -56,7 +56,7 @@ const FilesImportsList = () => {
   }
 
   const onChangeAction = (event: FormEvent) => {
-    setSearchvalue(event?.target.value)
+    setSearchValue(event?.target.value)
   }
 
   const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -86,7 +86,7 @@ const FilesImportsList = () => {
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
                   onKeyPress={onEnterKeyPress}
                   onClear={() => {
-                    setSearchvalue('')
+                    setSearchValue('')
                     serachFn()
                   }}
                   onChange={(evt) => {
@@ -103,7 +103,7 @@ const FilesImportsList = () => {
                   id='admin-import-csv'
                   tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
                   kind="primary"
-                  onClick={() => setCsvModal(true)}
+                  onClick={() => setOpenCsvModal(true)}
                   renderIcon={Upload}>
                   Import CSV
                 </Button>
@@ -114,13 +114,13 @@ const FilesImportsList = () => {
                 <Table {...getTableProps()} aria-label="sample table">
                   <TableDataHead>
                     <TableRow>
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {headers.map((header, i) => <TableHeader key={`${header.key}-${i}`} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
                   </TableDataHead>
                   {(rows && rows.length > 0) ? <TableDataBody>
-                    {rows.map((row, i) => <TableRow key={i} {...getRowProps({
+                    {rows.map((row, i) => <TableRow key={`${row.id}-${i}`} {...getRowProps({
                       row
                     })}>
                       {row.cells.map(cell =>
@@ -136,7 +136,7 @@ const FilesImportsList = () => {
       <Pagination page={page} count={count} setPage={setPageAndSize} pageSize={pageSize} />
       <ModalImportCsv
         open={openCsvModal}
-        setOpen={setCsvModal} />
+        setOpen={setOpenCsvModal} />
     </>
   )
 }

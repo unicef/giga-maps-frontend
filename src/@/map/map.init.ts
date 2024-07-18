@@ -1,10 +1,9 @@
-import { $isLoadingTimeplayer } from '~/@/sidebar/sidebar.model';
 import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countryCode, $admin1Code, $countrySearchString } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolStats, $staticLegendsSelected, $selectedLayerId, $timePlayerData, $connectivityYears, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer } from '~/@/sidebar/sidebar.model';
+import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString } from '~/@/country/country.model';
+import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolStats, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -14,7 +13,7 @@ import {
   fetchSchoolPopupDataFx,
   getBaseUrl,
 } from '~/api/project-connect';
-import { $mapRoutes, map, mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
+import { $mapRoutes, map, mapCountry, mapOverview, router } from '~/core/routes';
 
 import {
   changeLayersFx, changeStyleFx,
@@ -22,7 +21,7 @@ import {
 } from '@/map/effects';
 import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
-import { clearMapDataFx, updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
+import { updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
 import { addSchoolMarkers } from './effects/add-marker-fx';
 import { stylePaintData } from './map.constant';
 import {
@@ -81,7 +80,14 @@ sample({
   fn: ({ routes, country, admin1Id, countrySearchString }) => {
     let query = ''
     if (routes.country) {
-      query = `?country_id=${country?.id}${admin1Id ? `&admin1_id=${admin1Id}` : ''}${countrySearchString ? `&${countrySearchString}` : ''}`
+      const queryParts = [`country_id=${country?.id}`];
+      if (admin1Id) {
+        queryParts.push(`admin1_id=${admin1Id}`);
+      }
+      if (countrySearchString) {
+        queryParts.push(countrySearchString);
+      }
+      query = `?${queryParts.join('&')}`;
     }
     return { query }
   },
@@ -138,8 +144,8 @@ const schoolStatsMap = (school: SchoolStatsType) => ({
   name: school.name,
   geopoint: school?.geopoint,
   liveAvg: school?.connectivity_speed || school?.live_avg || 0,
-  staticValue: school?.field_value || school?.coverage_type || school?.statistics?.coverage_type,
-  staticType: school?.field_status || school?.coverage_status,
+  staticValue: school?.field_value ?? school?.coverage_type ?? school?.statistics?.coverage_type,
+  staticType: school?.field_status ?? school?.coverage_status,
   connectivityStatus: school.connectivity_status || school.statistics.connectivity_status,
   isRealTime: school.is_rt_connected,
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,

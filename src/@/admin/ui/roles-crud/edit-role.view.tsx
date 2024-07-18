@@ -1,15 +1,14 @@
-import { combine, createEvent, sample } from 'effector';
-import { createGate, useStore } from 'effector-react';
+import { createEvent } from 'effector';
+import { useStore } from 'effector-react';
 import { FormEvent, useEffect } from 'react';
 
 import { InlineToast } from '~/@/common/style/styled-component-style';
 import { editRoles, userRoles } from '~/core/routes'
 import { setPayload, timeoutStore } from '~/lib/effector-kit';
 
-import { createRoleFx, getRoleByIdFx, updateRoleFx } from '../../effects/user-management-fx';
+import { getRoleByIdFx, updateRoleFx } from '../../effects/user-management-fx';
 import { $duplicateRecordWarning, setShowduplicateRecordWarning } from '../../models/roles-management.model';
 import { $roleByIdResponse, reloadRolesList } from '../../models/user-management.model';
-import { Role } from '../../types/user-management-type';
 import PageTitleComponent from '../common-components/page-title-component'
 import { InlineToastWrapper } from '../styles/admin-styles';
 import RoleForm from './role.form.view';
@@ -23,9 +22,9 @@ timeoutStore({
 
 const updateFormData = createEvent();
 const $formData = $roleByIdResponse.map(data => ({
-  name: data?.name || "",
-  description: data?.description || "",
-  permission_slugs: data?.permission_slugs || []
+  name: data?.name ?? "",
+  description: data?.description ?? "",
+  permission_slugs: data?.permission_slugs ?? []
 }))
 $formData.on(updateFormData, setPayload);
 

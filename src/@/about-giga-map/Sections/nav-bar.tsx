@@ -81,7 +81,7 @@ const NavBar = ({ data }: { data?: AboutType | null }) => {
       <NavBarButtonWrapper>
         {
           !isMobile && navData?.map((navItem, index) => (
-            <NavBarButton $active={navItem?.targetList?.includes(activeNav)} key={`${index}-${navItem?.name}`}>
+            <NavBarButton $active={navItem?.targetList?.includes(activeNav)} key={`${index}-${navItem?.title}`}>
               <RouterLink to={aboutus} onClick={() => setActiveNav(navItem?.target)} hash={navItem?.target} >
                 {navItem?.name}
               </RouterLink>

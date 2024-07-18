@@ -4,7 +4,7 @@ import { APIListType } from "~/api/types";
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx";
 
 import { CountryListType } from "../types/country-list.type";
-import { DownloadDataType, ExploreApiType, SchoolListType } from "../types/explore-api-type";
+import { ExploreApiType, SchoolListType } from "../types/explore-api-type";
 import { $downloadFormData } from "../ui/components/modals/download-data-modal/download-data.model";
 
 export const getExploreApiListFx = createEffect(() => {

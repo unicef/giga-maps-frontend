@@ -8,7 +8,7 @@ import styled from "styled-components";
 const Loading = styled(InlineLoading)`
   min-block-size: 1.1rem;
 `
-export function ModalFooterButtons({ onCancel, isLoading = false, loadingText = "Downloading..." }: { onCancel: () => void, isLoading?: boolean; loadingText?: string }) {
+export function ModalFooterButtons({ onCancel, isLoading = false, loadingText = "Downloading..." }: { readonly onCancel: () => void, readonly isLoading?: boolean; readonly loadingText?: string }) {
   return (<ModalFooter $style={$modalFooterStyle} primaryButtonText="" secondaryButtonText="" >
     <Button
       kind="secondary"

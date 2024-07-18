@@ -216,7 +216,7 @@ export const SelectDropDownSection = ({ field }: { field: AboutFormFieldType }) 
   });
 
   const selectedItem = useMemo(() => {
-    const content = (formItem?.[field.path] || "")?.split(',')
+    const content = (formItem?.[field.path] ?? "")?.split(',')
     return content && sectionList?.filter((item: { label: string; value: string }) => content.includes(item.value)) || []
   }, [sectionList, formItem?.[field.path]])
   if (!formItem) return null;

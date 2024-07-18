@@ -28,7 +28,6 @@ export const $userByIdResponse = createStore<User | null>(null);
 export const setSearchUserValue = createEvent<string>();
 export const $searchUser = restore(setSearchUserValue, '');
 const $searchUserMax = $searchUser.map((value) => value.length > 0 ? value : '')
-// export const $userListLength = $userList.map(({ results }) => items?.length || 0);
 
 $userListResponse.on(getAllUserListFx.doneData, setPayload);
 

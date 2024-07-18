@@ -876,7 +876,7 @@ align-items:center;
 }
 `
 export const AdminTableScroll = styled(Scroll) <{ $contentHeight?: string }>`
-    max-height:calc(100vh - ${props => props.$contentHeight || '16rem'});
+    max-height:calc(100vh - ${props => props.$contentHeight ?? '16rem'});
 `
 
 export const SchoolListScroll = styled(Scroll)`

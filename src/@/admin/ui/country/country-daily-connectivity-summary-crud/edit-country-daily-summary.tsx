@@ -2,7 +2,7 @@ import { useStore } from 'effector-react'
 import React, { FormEvent, useEffect } from 'react'
 
 import { getCountryDailySummaryIdFx, updateCountryDailySummaryIdFx } from '~/@/admin/effects/api-country-fx'
-import { $formDataCountryDailySummary, CountryDailySummaryGate, onChangeAdminCountryTab, onUdpateCountryDailySummaryForm } from '~/@/admin/models/country-model'
+import { $formDataCountryDailySummary, onChangeAdminCountryTab, onUdpateCountryDailySummaryForm } from '~/@/admin/models/country-model'
 import { adminCountry, editCountryDailySummary } from '~/core/routes'
 
 import FormCountryDailySummary from './form-country-daily-summary'
