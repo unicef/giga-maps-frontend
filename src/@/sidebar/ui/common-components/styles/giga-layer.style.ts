@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { Scroll } from "~/@/scroll";
 
-export const SingleGigaLayerItem = styled.div<{ $isActive: boolean; $disabled?: boolean }>`
+export const SingleGigaLayerItem = styled.div<{ $isActive?: boolean; $disabled?: boolean }>`
 background: ${(prop) => prop.$isActive ? prop.theme.titleBlue : prop.theme.gigaButtonBack};
 padding:0.25rem;
 cursor: pointer;
@@ -72,6 +72,7 @@ display: flex;
     left: 0;
     top: 0;
     cursor: not-allowed;
+    z-index: 1;
   }
   @media only screen and (min-width: 1584px) {
     width: 5.05rem;
