@@ -3,7 +3,7 @@ import { createGate } from "effector-react";
 
 import { $notification } from "~/@/common/Toast/toast.model";
 import { APIListType } from "~/api/types";
-import { addAdminSchools, addSchoolDailySummary, addSchoolSummary } from "~/core/routes";
+import { addAdminSchools, addSchoolDailySummary, addSchoolSummary, editAdminSchools } from "~/core/routes";
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";
 
 import { defaultSchoolDailyForm, defaultSchoolForm, defaultSchoolSummaryForm } from "../constants/school.constant";
@@ -137,7 +137,7 @@ $formSchool.on(getSchoolIdFx.doneData, setPayload)
 $formSchoolSummary.on(getSchoolSummaryIdFx.doneData, setPayload)
 $formSchoolDaily.on(getSchoolDailyIdFx.doneData, setPayload)
 
-$formSchool.reset(addAdminSchools.visible)
+$formSchool.reset([addAdminSchools.visible, editAdminSchools.visible])
 $admin1Values.reset(addAdminSchools.visible)
 $admin2Values.reset(addAdminSchools.visible)
 // $admin1Values.reset(editAdminSchools.visible)
