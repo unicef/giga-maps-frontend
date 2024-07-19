@@ -1,4 +1,4 @@
-import { css, styled } from "styled-components";
+import { styled } from "styled-components";
 
 export const TimeplayerWrapper = styled.div`
     background: ${props => props.theme.main};

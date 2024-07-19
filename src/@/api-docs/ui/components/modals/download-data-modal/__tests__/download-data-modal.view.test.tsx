@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import DownloadDataModalView from '../download-data-modal.view'
 import { getExploreApiListFx } from '~/@/api-docs/effects/explore-api-fx';
 import { apiList } from '~/tests/data/explore-apis-list';

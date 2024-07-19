@@ -144,7 +144,7 @@ export const CenterPointer = styled.div`
     transform: translate(-50%, -50%);
 `
 export const CustomPopover = styled(Popover) <{ $style?: ObjectType }>`
-  ${(props) => (!!props.$style ? props.$style : '')};
+  ${(props) => props.$style ?? ''};
   .cds--popover-caret{
     background: ${props => props.theme.main};
   }
@@ -155,7 +155,7 @@ export const CircleWrapper = styled.div<{ $style?: ReturnType<typeof css> }>`
       align-items: center;
       justify-content: center;
       position: relative;
-      ${(props) => (!!props.$style ? props.$style : '')};
+      ${(props) => props.$style ?? ''};
 `
 export const OuterCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     width: 1.375rem;
@@ -167,14 +167,14 @@ export const OuterCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     justify-content: center;
     cursor:pointer;
     z-index: 1;
-    ${(props) => (!!props.$style ? props.$style : '')};
+    ${(props) => props.$style ?? ''};
 `
 
 export const InnerCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     width: 0.6rem;
     height: 0.6rem;
     border-radius: 50%;
-    ${(props) => (!!props.$style ? props.$style : "")};
+    ${(props) => props.$style ?? ""};
     position: absolute;
     top: 50%;  
     left: 50%; 

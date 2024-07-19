@@ -1,7 +1,6 @@
 import '~/@/map/map.init';
 import '@/sidebar/init';
 
-// import '@/project/init';
 import { createEvent, guard, restore } from 'effector';
 
 import { getInverted, getVoid } from '~/lib/effector-kit';

@@ -1,9 +1,5 @@
 import React from 'react';
 
-import { about } from '~/core/routes';
-import { Link } from '~/lib/router';
-import { Logo } from '~/ui';
-
 import SideInfoPanelHeaderLogoAndMenuButton from '../../sidebar/ui/common-components/side-info-panel-header-menubutton-and-logo';
 
 const Header = () => (

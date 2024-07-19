@@ -1,5 +1,4 @@
 import { ObjectType } from "~/core/global-types";
-import { waitFor } from "~/lib/utils";
 import { onShowLegend, onShowThemeLayer } from "../sidebar/sidebar.model";
 
 export const clickElement = (target: string) => {

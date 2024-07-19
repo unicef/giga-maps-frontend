@@ -11,7 +11,7 @@ import ModalUploadImage from './modal-upload-image';
 
 function ListImage() {
 
-  const { results: imageList } = useStore($imageList) || {};
+  const { results: imageList } = useStore($imageList) ?? {};
   const [deleteId, setDeleteId] = useState<null | number>(null);
   const [modalOpen, setModalOpen] = useState(false)
 

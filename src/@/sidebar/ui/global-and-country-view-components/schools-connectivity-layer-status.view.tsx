@@ -14,45 +14,43 @@ const LayerSchoolsConnectivityStatus = () => {
     changeSchoolConnectedOpenStatus(!schoolConnectedOpenStatus)
   }, [schoolConnectedOpenStatus]);
   return (
-    <>
-      <AccordionItem
-        title="Connectivity Status Distribution"
-        open={schoolConnectedOpenStatus}
-        onHeadingClick={handleAccordionChange} >
-        <>
-          <p>{`For ${formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0)} schools mapped`}</p>
-          <ProgressBar
-            value={globalstats?.connected_schools?.connected}
-            maxValue={globalstats?.schools_connected}
-            classname='progress-bar-fill-connected '
-            label='Connected'
-            containerClassName='static_schools_connected'
-            togglePresent
-            toggleID='connected'
-          />
-          <ProgressBar
-            value={globalstats?.connected_schools?.not_connected}
-            maxValue={globalstats?.schools_connected}
-            classname='progress-bar-fill-not_connected'
-            label='Not Connected'
-            containerClassName='static_schools_connected'
-            togglePresent
-            toggleID='not_connected'
+    <AccordionItem
+      title="Connectivity Status Distribution"
+      open={schoolConnectedOpenStatus}
+      onHeadingClick={handleAccordionChange} >
+      <>
+        <p>{`For ${formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0)} schools mapped`}</p>
+        <ProgressBar
+          value={globalstats?.connected_schools?.connected}
+          maxValue={globalstats?.schools_connected}
+          classname='progress-bar-fill-connected '
+          label='Connected'
+          containerClassName='static_schools_connected'
+          togglePresent
+          toggleID='connected'
+        />
+        <ProgressBar
+          value={globalstats?.connected_schools?.not_connected}
+          maxValue={globalstats?.schools_connected}
+          classname='progress-bar-fill-not_connected'
+          label='Not Connected'
+          containerClassName='static_schools_connected'
+          togglePresent
+          toggleID='not_connected'
 
-          />
-          <ProgressBar
-            value={globalstats?.connected_schools?.unknown}
-            maxValue={globalstats?.schools_connected}
-            classname='progress-bar-fill-unknownConnected '
-            label='Unknown'
-            containerClassName='static_schools_connected'
-            togglePresent
-            toggleID='unknown'
+        />
+        <ProgressBar
+          value={globalstats?.connected_schools?.unknown}
+          maxValue={globalstats?.schools_connected}
+          classname='progress-bar-fill-unknownConnected '
+          label='Unknown'
+          containerClassName='static_schools_connected'
+          togglePresent
+          toggleID='unknown'
 
-          />
-        </>
-      </AccordionItem>
-    </>
+        />
+      </>
+    </AccordionItem>
   )
 }
 

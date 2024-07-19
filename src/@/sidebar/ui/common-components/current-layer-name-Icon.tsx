@@ -1,4 +1,4 @@
-import { ConnectionSignal, Information, TransmissionLte, Wifi } from '@carbon/icons-react'
+import { ConnectionSignal, Information, Wifi } from '@carbon/icons-react'
 import { Tooltip } from "@carbon/react";
 
 import { CustomIcon, Div } from '~/@/common/style/styled-component-style';

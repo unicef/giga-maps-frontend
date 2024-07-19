@@ -3,10 +3,9 @@ import { useStore } from 'effector-react';
 import { forwardRef, useEffect, useState } from 'react'
 import { Information } from '@carbon/icons-react'
 
-import { ConnectivityBenchMarks, Layers } from "~/@/sidebar/sidebar.constant";
+import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
 import {
   $connectivityBenchMark,
-  $indicatorBenchmark,
   $isNationalBenchmark,
   changeConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';

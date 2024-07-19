@@ -48,7 +48,7 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
         !!districtsList?.length &&
         districtsList?.map((district, index) => (
           <SearchDistrict
-            key={index}
+            key={`${district.school_count}-${index}`}
             districtData={district}
             countryId={countryId}
             code={code}

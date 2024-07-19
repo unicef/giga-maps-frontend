@@ -37,12 +37,12 @@ $country.on(fetchCountryFx.doneData, setPayload);
 export const $dataSource = $country.map((country) => country?.data_source ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
-export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark || {});
+export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark ?? {});
 
 export const $admin1Data = sample({
   source: combine($country, $admin1Code, (country, admin1Code) => {
     if (country && admin1Code) {
-      return country.admin1_metadata.find((admin) => admin.giga_id_admin === admin1Code) || null;
+      return country.admin1_metadata.find((admin) => admin.giga_id_admin === admin1Code) ?? null;
     }
     return null;
   })

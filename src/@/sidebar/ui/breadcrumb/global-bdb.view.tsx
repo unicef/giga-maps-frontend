@@ -1,5 +1,3 @@
-import { Information } from '@carbon/icons-react';
-import { SkeletonText, Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 
 import { LoadingText } from '~/@/common/style/styled-component-style';

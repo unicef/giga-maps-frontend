@@ -1,7 +1,7 @@
-import { Hashtag, Location, TransmissionLte, Wifi } from '@carbon/icons-react';
+import { Hashtag, Location, Wifi } from '@carbon/icons-react';
 import { AccordionItem } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { createContext, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import { CustomIcon } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
@@ -19,7 +19,7 @@ import SingleSchoolCoverageLayer from './single-school-coverage-layer';
 
 const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWithChildren<{ schoolDetails: SchoolStatsType; isOpen: boolean; onToggle: () => void }>) => {
   const { currentLayerTypeUtils, selectedLayerData } = useStore($layerUtils);
-  const { global_benchmark, icon } = selectedLayerData || {};
+  const { global_benchmark, icon } = selectedLayerData ?? {};
   const { isLive, isStatic } = currentLayerTypeUtils;
   const unit = global_benchmark?.convert_unit;
   const stylePaintData = useStore($stylePaintData);
@@ -77,9 +77,6 @@ const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWit
                         <StatisticsStatus $color={color}>
                           {isLive ? `${value ? `${value} ${unit}` : getNullValueText(connectivityStatus)}` : String(value)}
                         </StatisticsStatus>
-                        {/* {!value && <StatisticsStatus $color={color}>
-                          Unknown
-                        </StatisticsStatus>} */}
                       </MultischoolBottomInfoItem>}
                     </div>
                   </MultischoolBottomInfo>}

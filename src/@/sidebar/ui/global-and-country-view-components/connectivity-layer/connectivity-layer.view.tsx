@@ -2,16 +2,15 @@ import { useStore } from 'effector-react';
 import { useTheme } from 'styled-components';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
-import { $selectedGigaLayers, $stylePaintData } from '~/@/map/map.model';
+import { $stylePaintData, $globalStats } from '~/@/map/map.model';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { $connectivityStats, $isLoadingCountryAdminView, $selectedLayerData, onSelectMainLayer, onSelectSchoolStatusLayer } from '~/@/sidebar/sidebar.model';
+import { $connectivityStats, $isLoadingCountryAdminView, $selectedLayerData } from '~/@/sidebar/sidebar.model';
 import { formatNumber } from '~/lib/utils';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import { HistoryGraphAccordian } from '../../common-components/history-graph';
 import WeekSlider from '../common/week-slider/week-slider.view';
 import { DateWeekWrapper } from './connectivity-layer.style';
-import { $globalStats } from '~/@/map/map.model';
 import LiveAverage from './live-average.view';
 import { UNKNOWN } from '~/@/map/map.types';
 

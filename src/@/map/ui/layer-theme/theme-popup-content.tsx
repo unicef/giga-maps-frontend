@@ -20,7 +20,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
   const [gigaTheme, setGigaTheme] = useState(theme)
   const [currentStyle, setCurrentStyle] = useState(style)
   const [currentAdminBoundaries, setCurrentAdminBoundaries] = useState(isAdminBoundaries)
-  const [currentTitlesAndLabels, setCurrentTilesAndLabels] = useState(isTilesAndLables)
+  const [currentTitlesAndLabels, setCurrentTitlesAndLabels] = useState(isTilesAndLables)
   const defaultMapStyle = gigaThemeList.includes(currentStyle as ThemeType) ? 'default' : currentStyle;
 
   const onApply = async (e: MouseEvent) => {
@@ -72,7 +72,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
         </RadioButtonGroupWrapper>
         <CheckboxGroupWrapper legendText="Layers">
           <CustomCheckbox checked={currentAdminBoundaries} onChange={() => setCurrentAdminBoundaries(prev => !prev)} labelText={`Administrative boundaries`} id="admin-boundary" />
-          <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTilesAndLabels(prev => !prev)} labelText={`Titles and Labels`} id="titles-label" />
+          <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTitlesAndLabels(prev => !prev)} labelText={`Titles and Labels`} id="titles-label" />
         </CheckboxGroupWrapper>
         <ThemeActionButtonWrapper>
           <Button type="reset" kind="secondary" onClick={() => setOpen(false)}>

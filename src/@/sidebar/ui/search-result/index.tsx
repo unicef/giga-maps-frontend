@@ -1,7 +1,7 @@
 
 import { useStore } from 'effector-react';
 import FooterTourContact from '../common-components/footer-tour-contact.view';
-import { $hasSearchInput, $isSearchFocused, $showCountries, changeIsSearchFocused, onShowCountriesAdminList } from '../common-components/top-search-bar/top-search-bar.model';
+import { $hasSearchInput, $isSearchFocused, $showCountries } from '../common-components/top-search-bar/top-search-bar.model';
 import { SearchCountryList } from './search-country-list';
 import SearchSchoolPanel from './search-country-list/search-school-panel-view';
 import { SearchListWrapper, SearchResultScroll, SearchResultWrapper } from './styles/search-result-style';

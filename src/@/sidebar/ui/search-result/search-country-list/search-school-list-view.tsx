@@ -9,7 +9,7 @@ import { SearchSchool } from "./search-school-item-view";
 
 
 const SearchSchoolListPanel = () => {
-  const { results: data } = useStore($searchSchoolList) || {};
+  const { results: data } = useStore($searchSchoolList) ?? {};
   const isLoading = useStore(fetchSchoolListFx.pending);
   const searchValue = useStore($searchSchoolListValue);
   const isDone = useStore(fetchSchoolListFx.inFlight);
