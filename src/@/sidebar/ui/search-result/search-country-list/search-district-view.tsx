@@ -1,7 +1,6 @@
 import { useStore } from 'effector-react';
 
-import { ADMIN_BLACK_TYPE } from '../container/search-result.constant';
-import { $searchAdminLevel1, $searchAdminLevel2, $searchSchoolAdmin1, $searchSchoolAdmin2, getSchoolByDistricts, onSchoolListCurrentPage, setSearchExpandLevel1, setSearchExpandLevel2 } from '../container/search-result.model';
+import { $searchAdminLevel1, $searchAdminLevel2, $searchSchoolAdmin1, $searchSchoolAdmin2, setSearchExpandLevel1, setSearchExpandLevel2 } from '../container/search-result.model';
 import { DistrictWithSchoolCount } from '../container/search-result.type';
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, DistictWrapper, Dot, LeftItem, LinkItem, RightItem, SearchItem } from '../styles/search-result-style';
 import { mapCountry } from '~/core/routes';
@@ -23,8 +22,8 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
   const searchSchoolAdmin2 = useStore($searchSchoolAdmin2)
   const { admin1_code, admin1_name: admin1, admin1_id: admin1Id, admin2_id: admin2Id, admin2_name: admin2, admin2_count: admin2Count, school_count: schoolCount, data } = districtData;
   const nestedDistrictData = useMemo(() => Object.values(data || {}), [data]);
-  const name = admin1 || admin2 as string;
-  const adminId = admin1Id || admin2Id;
+  const name = admin1 ?? admin2 as string;
+  const adminId = admin1Id ?? admin2Id;
   const isSchool = Boolean(schoolCount && schoolCount > 0);
   const isAdminLevel2 = Boolean(admin2);
   const isAdminLevel1 = Boolean(admin1);
@@ -32,8 +31,7 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
   const isExpanded2 = selectedAdmin2 === adminId;
   const showAdmin2Button = isAdminLevel1 && !!admin2Count && admin2Count > 0;
   const showSchoolButton = (isAdminLevel1 && !nestedDistrictData.length) || (isAdminLevel2 && isSchool);
-  const isBlankAdmin = Boolean(isAdminLevel1 && showAdmin2Button && isSchool)
-  const showDot = searchSchoolAdmin1.has(admin1 as string) || searchSchoolAdmin2.has(`${prevAdmin1}-${admin2 ? admin2 : '_Blank'}`);
+  const showDot = searchSchoolAdmin1.has(admin1 as string) || searchSchoolAdmin2.has(`${prevAdmin1}-${admin2 ?? '_Blank'}`);
   const districtName = showAdmin2Button ? nestedDistrictData[0].admin2_description : ""
   return <>
     <DistictWrapper>
@@ -43,12 +41,12 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
             name}
           {showDot && <Dot />}
         </LeftItem>
-        {showSchoolButton && <RightItem onClick={() => expandDistrict2({ districtCode: adminId || name, isExpanded: isExpanded2 })}>
+        {showSchoolButton && <RightItem onClick={() => expandDistrict2({ districtCode: adminId ?? name, isExpanded: isExpanded2 })}>
           <LinkItem $highlight={isExpanded2}>{schoolCount} Schools</LinkItem>
           <ChevronRightIcon $highlight={isExpanded2} $secondary />
         </RightItem>}
         {showAdmin2Button &&
-          <RightItem onClick={() => expandDistrict({ districtCode: adminId || name, isExpanded })}>
+          <RightItem onClick={() => expandDistrict({ districtCode: adminId ?? name, isExpanded })}>
             <LinkItem $underline={isExpanded}>{admin2Count} {districtName}</LinkItem>
             {isExpanded ? <ChevronUpIcon $secondary={isExpanded} /> : <ChevronDownIcon $secondary />}
           </RightItem>
@@ -56,20 +54,9 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
       </SearchItem >
     </DistictWrapper>
     {isExpanded && (nestedDistrictData?.length > 0) && <>
-      {/* {isBlankAdmin && (
-        <SearchDistrict
-          districtData={{
-            admin2_name: ADMIN_BLACK_TYPE,
-            school_count: schoolCount
-          }}
-          prevAdmin1={admin1}
-          countryId={countryId}
-          code={countryCode}
-        />
-      )} */}
       {nestedDistrictData?.map((nestedDistrict, index) => (
         <SearchDistrict
-          key={index}
+          key={`${nestedDistrict.school_count}-${index}`}
           districtData={nestedDistrict}
           prevAdmin1={admin1}
           countryId={countryId}

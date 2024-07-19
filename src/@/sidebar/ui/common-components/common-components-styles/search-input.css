@@ -3,7 +3,6 @@
   position: absolute;
   top: 1.5rem;
   right: 2.9rem;
-  /* z-index: 1; */
 }
 
 .sidebar-searchIcon-withoutText {
@@ -11,7 +10,6 @@
   position: absolute;
   top: 1.5rem;
   right: 2.2rem;
-  /* z-index: 1; */
 }
 
 .sidebar-searchbox>.cds--search-input {

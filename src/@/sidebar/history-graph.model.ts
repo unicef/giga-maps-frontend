@@ -80,8 +80,8 @@ sample({
   fn: (_, availableDates) => {
     if (availableDates) {
       return {
-        [IntervalUnit.week]: createHistoryIntervalFormat(availableDates?.week) || defaultInterval(),
-        [IntervalUnit.month]: createHistoryIntervalFormat(availableDates?.month) || defaultIntervalMonth(),
+        [IntervalUnit.week]: createHistoryIntervalFormat(availableDates?.week) ?? defaultInterval(),
+        [IntervalUnit.month]: createHistoryIntervalFormat(availableDates?.month) ?? defaultIntervalMonth(),
       }
     }
     return null;

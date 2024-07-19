@@ -104,8 +104,6 @@ const ConnectivityCircleWrapper = styled.div`
   position: relative;
 `
 export const Popup = () => {
-  const countryCode = useStore($country)?.code;
-
   return (
     <div className="school-popup-data">
       <SchoolMarkerWrapper className="shool-marker-wrapper">

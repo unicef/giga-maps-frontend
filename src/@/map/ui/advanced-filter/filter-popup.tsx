@@ -3,7 +3,6 @@ import { PropsWithChildren } from 'react';
 
 import { $isMobile } from '~/core/media-query';
 
-import { CustomePopover } from '../layer-theme/theme-button.style';
 import FilterPopupContent from './filter-popup-content';
 import { FilterPopover } from './filter-button.style';
 

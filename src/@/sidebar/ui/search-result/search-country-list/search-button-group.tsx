@@ -14,7 +14,7 @@ const CloseIcon = styled(Close)`
 
 export const SearchButtonGroup = () => {
   const isExpanded = useStore($searchAdminLevel2);
-  const { count = 0 } = useStore($searchSchoolList) || {};
+  const { count = 0 } = useStore($searchSchoolList) ?? {};
   const currentPage = useStore($schoolListCurrentPage);
   const isLoading = useStore(fetchSchoolListFx.pending);
   const { size } = useStore<Set<string>>($searchSchoolIds);

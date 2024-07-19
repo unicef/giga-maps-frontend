@@ -11,16 +11,16 @@ import { LabelProgress, LineBar, ProgressBarWrapper, ToggleWrapper } from './pro
 const ProgressBar = ({ value = 0, maxValue = 0, label = "", colorType = "", toggleProps, backColor = "", isLoading = false }: { value?: number, maxValue?: number, label?: string, toggleProps?: ToggleProps; colorType?: string; backColor?: string; isLoading?: boolean }) => {
   const progress = (value / maxValue) * 100; // Calculate the progress percentage
   const togglePresent = !!toggleProps;
-  return (<>
+  return (
     <ProgressBarWrapper $height={togglePresent ? 1.5 : 1.2}>
       {
-        togglePresent && <>
+        togglePresent && (
           <ToggleWrapper $color={colorType} $backcolor={backColor} >
             {isLoading ? <LoadingToggle /> :
               <Toggle labelText="" hideLabel {...toggleProps} />
             }
           </ToggleWrapper>
-        </>
+        )
       }
       <LabelProgress $width={togglePresent ? 9.5 : 3.7} title={label}>
         {isLoading ? <LoadingText $blockSize='0.7' $marginEnd='0' /> : label}
@@ -45,7 +45,7 @@ const ProgressBar = ({ value = 0, maxValue = 0, label = "", colorType = "", togg
         {isLoading ? <LoadingText $blockSize='0.7' $marginEnd='0' /> : formatNumber(value)}
       </p>
     </ProgressBarWrapper>
-  </>);
+  );
 };
 
 export default ProgressBar;

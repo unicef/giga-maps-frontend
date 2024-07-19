@@ -1,6 +1,3 @@
-import { SchoolInfoStats } from "~/api/types";
-import { GeoJSONPoint } from "~/core/global-types";
-
 export type SortType =
   | 'number'
   | 'date'

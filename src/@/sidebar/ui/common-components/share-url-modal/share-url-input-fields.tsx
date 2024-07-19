@@ -7,7 +7,7 @@ const ShareUrlInputFields = ({ showFields, textFields, handleTextChange, setText
     <>
       {
         textFields.map((text, index) => (
-          <div key={index}
+          <div key={`${text}-${index}`}
             className='side-panel-shareURL-input-fields'>
             <TextInput
               id={`Text Field ${index + 1}`}

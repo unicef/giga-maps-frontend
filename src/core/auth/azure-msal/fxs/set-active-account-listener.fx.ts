@@ -60,16 +60,7 @@ const setAccountListener = async (msalInstance: PublicClientApplication) => {
         clearLoginProcessing(false);
       }
     }
-    void sessionExpireHandling(event, msalInstance);
-    //   if (event.eventType === EventType.LOGIN_FAILURE) {
-    //     if (event.error && event.error.errorMessage.includes('AADB2C90118')) {
-    //       const resetPasswordRequest = {
-    //         authority: b2cPolicies.authorities.forgotPassword.authority,
-    //         scopes: [],
-    //       }
-    //       msalInstance.loginRedirect(resetPasswordRequest)
-    //     }
-    //   }
+    sessionExpireHandling(event, msalInstance);
   })
 }
 

@@ -5,7 +5,6 @@ import { FormEvent } from 'react';
 
 import { createOrUpdateSchoolSummaryFx } from '~/@/admin/effects/api-school-fx';
 import { $formSchoolSummary, onChangeAdminSchoolTab, onUdpateSchoolSummaryForm } from '~/@/admin/models/school-model';
-import { $countryList } from "~/@/api-docs/models/explore-api.model";
 import { adminSchools, router } from '~/core/routes';
 
 import { AmenitiesContainer, BottomButtonWrapper, DailyCountryInput, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, RowContainer, SchoolFormScroll } from '../../styles/admin-styles'

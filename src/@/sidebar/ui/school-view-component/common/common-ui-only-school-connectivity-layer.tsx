@@ -15,7 +15,7 @@ import { SchoolInformation } from './school-information.view';
 const CommonUIOnlySchoolConnectivityLayer = ({ schoolId }: { schoolId: number }) => {
   const SchoolStatsTypes = useStore($schoolStats);
   const schoolData = SchoolStatsTypes?.find((info) => info.id === schoolId);
-  const connectivityStatus = schoolData?.connectivity_status || schoolData?.statistics?.connectivity_status || UNKNOWN
+  const connectivityStatus = schoolData?.connectivity_status ?? schoolData?.statistics?.connectivity_status ?? UNKNOWN
   const connectivityStatusColors = useStore($stylePaintData);
   const color = connectivityStatusColors[connectivityStatus];
   const isLoading = useStore($isLoadingSchoolView);
