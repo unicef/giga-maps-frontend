@@ -40,8 +40,8 @@ export const $searchSchoolIds = $searchSchoolSelectedList.map((items) => new Set
 export const $searchSchoolAdmin1 = $searchSchoolSelectedList.map((items) => new Set(items?.map((item) => item.admin1_name)) || undefined)
 export const $searchSchoolAdmin2 = $searchSchoolSelectedList.map((items) => new Set(items?.map((item) => {
   const admin1 = item.admin1_name;
-  const admin2 = item.admin2_name ?? '_Blank';
-  return `${admin1}-${admin2}`;
+  const admin2 = item.admin2_name;;
+  return `${admin1}-${admin2 ? admin2 : '_Blank'}`
 })) || undefined)
 
 $searchSchoolSelectedList.on(setSchoolSelection, (state, payload) => {
@@ -141,7 +141,7 @@ sample({
     query: $searchSchoolListMax
   }, ({ admin1, admin2, ...rest }) => {
     return {
-      admin1: admin1 ?? admin2,
+      admin1: !!admin1 ? admin1 : admin2,
       admin2: !admin1 ? '' : admin2,
       ...rest
     }

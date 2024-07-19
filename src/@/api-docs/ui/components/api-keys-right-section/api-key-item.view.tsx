@@ -29,7 +29,7 @@ const ApiKeyItem = ({ item: apiItem, countryLength, setApiKeyDeleteId }: { item:
   const statusName = ApiStatusName[currentStatusType];
   const extensionName = ApiStatusName[extensionStatusType]
   const extensionColor = ApiStatusColors[extensionStatusType]
-  const isExtension = extensionInProgress ?? extensionDeclined;
+  const isExtension = extensionInProgress || extensionDeclined;
   const isAllCountries = apiItem?.active_countries_list?.length === countryLength;
   const userPermission = useStore($userPermissions);
 
