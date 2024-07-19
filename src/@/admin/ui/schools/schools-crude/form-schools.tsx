@@ -47,7 +47,7 @@ const FormSchools = ({ isEditMode, schoolId }: { isEditMode: boolean, schoolId?:
   }
   useEffect(() => {
     const allTimezones = Intl.supportedValuesOf('timeZone')
-    setTimezones([allTimezones]);
+    setTimezones([...allTimezones]);
   }, [])
 
   useEffect(() => {
@@ -241,7 +241,7 @@ const FormSchools = ({ isEditMode, schoolId }: { isEditMode: boolean, schoolId?:
             >
               <SelectItem value="" text="Choose timezone" />
               {
-                timezones[0]?.map((zone, index) => (
+                timezones?.map((zone, index) => (
                   <SelectItem key={`${zone}-${index}`} value={zone} text={zone} />
                 ))
               }
