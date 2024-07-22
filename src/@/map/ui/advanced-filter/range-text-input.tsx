@@ -1,9 +1,8 @@
 import { AdvanceFilterType } from "~/api/types";
-import { StyledCheckbox, StyledTextInput, StyledTextInputContainer, StyledTextInputWrapper } from "./filter-button.style";
-import { Checkbox, FormLabel, TextInput } from "@carbon/react";
+import { StyledCheckbox, StyledTextInputContainer, StyledTextInputWrapper } from "./filter-button.style";
+import { FormLabel, TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
 import { evaluateExpression } from "~/lib/utils";
-import { TextInputWrapper } from "~/@/api-docs/ui/components/modals/modals.style";
 import { $country } from "~/@/country/country.model";
 import { useStore } from "effector-react";
 
@@ -14,7 +13,7 @@ const RangeTextInput = ({ name, active_countries_range = {}, value: rangeValue, 
   }) => void
 }) => {
   const country = useStore($country);
-  const placeholders = active_countries_range[country?.id || 'default'] || {};
+  const placeholders = active_countries_range[country?.id ?? 'default'] || {};
   const { min_place_holder: minPlaceholder, max_place_holder: maxPlaceholder, max_value = Infinity, min_value = 0 } = placeholders;
   const [minValue, setMinValue] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState<number | null>(null);
@@ -35,9 +34,7 @@ const RangeTextInput = ({ name, active_countries_range = {}, value: rangeValue, 
           id={`${parameter.field}-min-input`}
           labelText=""
           placeholder={minPlaceholder ?? "Min(0)"}
-          value={minValue ? minValue : ''}
-          // min={min_value}
-          // max={max_value}
+          value={minValue ?? ''}
           onChange={(e) => {
             const value = Number(e.target.value);
             if (isNaN(value)) {
@@ -62,9 +59,7 @@ const RangeTextInput = ({ name, active_countries_range = {}, value: rangeValue, 
           type="number"
           labelText=""
           placeholder={maxPlaceholder ?? "Max"}
-          value={maxValue ? maxValue : ''}
-          // min={min_value}
-          // max={max_value}
+          value={maxValue ?? ''}
           onChange={(e) => {
             const value = Number(e.target.value);
             if (isNaN(value)) {

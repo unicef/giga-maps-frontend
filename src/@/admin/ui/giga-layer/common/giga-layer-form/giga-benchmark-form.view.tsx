@@ -2,24 +2,20 @@ import { Checkbox, SelectItem, TextInput } from "@carbon/react";
 import { useStore } from "effector-react";
 
 import { $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model";
-import { stylePaintData } from "~/@/map/map.constant";
 import { LayerTypeChoices } from "~/@/sidebar/types";
-import { getConnectivityLogicalValues } from "~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant";
 
-import { DataLayerFieldContainer, DataLayerNameField, InputLabel, LegendCategotyContainer, SelectLayerConfig } from "../../../styles/admin-styles";
+import { DataLayerFieldContainer, DataLayerNameField, InputLabel, SelectLayerConfig } from "../../../styles/admin-styles";
 import { Div } from "~/@/common/style/styled-component-style";
 import { speedConverterUtil } from "~/lib/utils";
 
 const benchmarkUnitValues = ['bps', 'ms', 'mbps'];
-export default function GigaBenchmarkForm({ isDefaultLayer }: { isDefaultLayer: boolean }) {
+export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefaultLayer: boolean }) {
   const formData = useStore($formData);
 
   if (!formData.dataSourceColumn || String(formData.type) === String(LayerTypeChoices.STATIC)) return null;
   const unit = formData?.dataSourceColumn?.unit as string;
   const baseValue = formData?.dataSourceColumn?.base_benchmark as number;
-  const labels = getConnectivityLogicalValues(formData?.globalBenchmark?.value, unit, baseValue, formData.isReverse);
   const benchmarkValue = formData?.globalBenchmark?.value;
-  const connectivityColors = stylePaintData.dark;
   return <>
     <DataLayerFieldContainer>
       <Checkbox disabled={isDefaultLayer} id="checkbox" labelText="Is reverse" checked={formData?.isReverse} onChange={(_, { checked }) => onUdpateGigaLayerForm(['isReverse', checked])} />
@@ -54,7 +50,7 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { isDefaultLayer: 
       </DataLayerNameField>
       <Div $margin="0.5rem 0">
         <InputLabel>
-          {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(benchmarkValue || 0))}
+          {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(benchmarkValue ?? 0))}
           {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
         </InputLabel>
       </Div>
@@ -79,16 +75,6 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { isDefaultLayer: 
           </InputLabel>
         </Div>
       </DataLayerNameField>
-      {/* {benchmarkValue && <LegendCategotyContainer>
-        {
-          Object.entries(labels)?.map(([name, value]) => <ColorPickerWrapper key={name}>
-            <ColorPicker disabled type="color" value={connectivityColors[name]} />
-            <DataLayerNameField>
-              <span key={name}>{ConnectivityDistributionNames[name]}  {value}</span>
-            </DataLayerNameField>
-          </ColorPickerWrapper>)
-        }
-      </LegendCategotyContainer>} */}
     </DataLayerFieldContainer>
   </>
 }

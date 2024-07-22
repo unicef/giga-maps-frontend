@@ -36,7 +36,7 @@ const acquireAuthToken = async (msalInstance: PublicClientApplication) => {
   let authToken = null;
   try {
     const accessTokenResponse = await msalInstance
-      .acquireTokenSilent(accessTokenRequest(account))
+      ?.acquireTokenSilent(accessTokenRequest(account))
     authToken = accessTokenResponse.accessToken;
 
   } catch (e) {
@@ -60,16 +60,7 @@ const setAccountListener = async (msalInstance: PublicClientApplication) => {
         clearLoginProcessing(false);
       }
     }
-    void sessionExpireHandling(event, msalInstance);
-    //   if (event.eventType === EventType.LOGIN_FAILURE) {
-    //     if (event.error && event.error.errorMessage.includes('AADB2C90118')) {
-    //       const resetPasswordRequest = {
-    //         authority: b2cPolicies.authorities.forgotPassword.authority,
-    //         scopes: [],
-    //       }
-    //       msalInstance.loginRedirect(resetPasswordRequest)
-    //     }
-    //   }
+    sessionExpireHandling(event, msalInstance);
   })
 }
 

@@ -941,6 +941,13 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   position: relative;
 }
 
+.c38 .cds--btn--primary,
+.c38 .cds--btn--primary:hover,
+.c38 .cds--btn--primary:active,
+.c38 .cds--btn--primary:focus {
+  background: #181818;
+}
+
 .c38 .cds--btn--icon-only {
   transform: rotate(90deg);
   border-radius: 50%;

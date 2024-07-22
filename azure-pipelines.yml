@@ -1,0 +1,155 @@
+trigger:
+  - develop
+  - staging
+  - release/*
+
+name: $(SourceBranchName).$(Build.BuildId).$(Date:yyyyMMdd).$(Rev:r)
+  
+pool:
+  vmImage: 'ubuntu-22.04'
+variables:
+  dockerRegistryServiceConnection: $(DOCKER_SERVICE_CONNECTION)
+  dockerfilePath: './Dockerfile'
+  app: $(DOCKER_REPOSITORY)
+  imageRepositoryDev: 'dev/$(app)'
+  imageRepositoryStg: 'stg/$(app)'
+  imageRepositoryProd: 'prod/$(app)'
+  tag: '$(Build.BuildId)'
+
+steps:
+# Unit Tests
+- task: Bash@3
+  displayName: Unit Tests
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  continueOnError: true
+  inputs:
+    targetType: 'inline'
+    script: |
+      sudo yarn install
+      sudo yarn test-coverage
+
+# Sonar Scan
+- task: Bash@3
+  displayName: Sonar Scan
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  inputs:
+    targetType: 'inline'
+    script: |
+      export SONAR_SCANNER_VERSION=5.0.1.3006
+      export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+      curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+      unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+      export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+      export SONAR_SCANNER_OPTS="-server"
+      export SONAR_TOKEN=$(SONAR_TOKEN)
+      sonar-scanner \
+        -Dsonar.projectKey=${{ lower(variables['Build.DefinitionName']) }} \
+        -Dsonar.sources=src \
+        -Dsonar.host.url=$(SONAR_HOST) \
+        -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info \
+        -Dsonar.exclusions=**/tests/**,**/test/**,**/lib/**
+
+# Docker build and push
+- task: Docker@2
+  displayName: Dev - Build image
+  inputs:
+    command: build
+    repository: $(imageRepositoryDev)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    dockerfile: $(dockerfilePath)
+    arguments:
+      --build-arg=API_BASE_URL=$(API_BASE_URL_DEV)
+      --build-arg=API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_DEV)
+      --build-arg=RECAPTCHA_KEY=$(RECAPTCHA_KEY_DEV)
+      --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_DEV)
+      --build-arg=ENV=$(ENV_DEV)
+      --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
+    tags: |
+      $(tag)
+      
+- task: Docker@2
+  displayName: Dev - Push image
+  inputs:
+    command: push
+    repository: $(imageRepositoryDev)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    tags: |
+      $(tag)
+
+- task: Docker@2
+  displayName: Stg - Build image
+  inputs:
+    command: build
+    repository: $(imageRepositoryStg)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    dockerfile: $(dockerfilePath)
+    arguments:
+      --build-arg=API_BASE_URL=$(API_BASE_URL_STG)
+      --build-arg=API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_STG)
+      --build-arg=RECAPTCHA_KEY=$(RECAPTCHA_KEY_STG)
+      --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_STG)
+      --build-arg=ENV=$(ENV_STG)
+      --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
+    tags: |
+      $(tag)
+  condition:
+    and(
+      succeeded(),
+      or(
+        eq(variables['Build.SourceBranch'], 'refs/heads/staging'),
+        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+      )
+    )
+      
+- task: Docker@2
+  displayName: Stg - Push image
+  inputs:
+    command: push
+    repository: $(imageRepositoryStg)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    tags: |
+      $(tag)
+  condition:
+    and(
+      succeeded(),
+      or(
+        eq(variables['Build.SourceBranch'], 'refs/heads/staging'),
+        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+      )
+    )
+
+- task: Docker@2
+  displayName: Prod - Build image
+  inputs:
+    command: build
+    repository: $(imageRepositoryProd)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    dockerfile: $(dockerfilePath)
+    arguments:
+      --build-arg=API_BASE_URL=$(API_BASE_URL_PROD)
+      --build-arg=API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_PROD)
+      --build-arg=RECAPTCHA_KEY=$(RECAPTCHA_KEY_PROD)
+      --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_PROD)
+      --build-arg=ENV=$(ENV_PROD)
+      --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
+    tags: |
+      $(tag)
+  condition:
+    and(
+      succeeded(),
+      startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+    )
+      
+- task: Docker@2
+  displayName: Prod - Push image
+  inputs:
+    command: push
+    repository: $(imageRepositoryProd)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    tags: |
+      $(tag)
+  condition:
+    and(
+      succeeded(),
+      startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+    )

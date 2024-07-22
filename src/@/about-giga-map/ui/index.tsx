@@ -78,7 +78,7 @@ const AboutGigaMapModal = () => {
               return null
             }
             if (SectionComponent) {
-              return <div id={singleSection.type} key={`${index}${singleSection.type}`}>
+              return <div id={singleSection.type} key={`${index}-${singleSection.title}`}>
                 <SectionComponent data={singleSection} />;
               </div>
             }

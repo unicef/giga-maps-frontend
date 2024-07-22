@@ -81,8 +81,7 @@ export default function LiveAverage({
   value,
   color,
   isLoading
-}: { value: number, color: string, unit: string, isLoading: boolean; icon: string }) {
-  const intervalUnit = useStore($historyIntervalUnit);
+}: { readonly value: number, readonly color: string, readonly isLoading: boolean }) {
   const currentLayer = useStore($selectedLayerData);
   const heading = currentLayer?.name;
   const theme = useTheme();
@@ -93,7 +92,6 @@ export default function LiveAverage({
       <LoadingText $blockSize="0.9" width="10rem" $marginEnd='1.2' $marginStart="0.6" />
       <LoadingText $blockSize='2.5' width="11rem" $marginEnd='0.5' />
     </> :
-      <>
         <LiverAverageWrapper>
           {value ? <div className="layer-speed">
             <div>
@@ -118,6 +116,6 @@ export default function LiveAverage({
             No Data available.
           </Text></Div>}
         </LiverAverageWrapper>
-      </>}
+      }
   </>)
 }

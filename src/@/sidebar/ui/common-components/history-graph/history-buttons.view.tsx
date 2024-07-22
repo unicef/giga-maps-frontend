@@ -3,7 +3,7 @@ import { changeHistoryIntervalUnit } from "~/@/sidebar/history-graph.model";
 import { IntervalUnit } from "~/lib/date-fns-kit/types";
 
 
-export default function HistoryButtons({ isWeek }: { isWeek: boolean }) {
+export default function HistoryButtons({ isWeek }: { readonly isWeek: boolean }) {
   return <div className="history-modal__period-unit-picker">
     <button
       type="button"

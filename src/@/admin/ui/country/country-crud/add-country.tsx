@@ -2,7 +2,6 @@ import { useStore } from 'effector-react'
 import React from 'react'
 
 import { $showMessage, setToasterWarning } from '~/@/admin/models/country-model'
-import { $duplicateRecordWarning, setShowduplicateRecordWarning } from '~/@/admin/models/roles-management.model'
 import { InlineToast } from '~/@/common/style/styled-component-style'
 import { timeoutStore } from '~/lib/effector-kit'
 

@@ -6,12 +6,12 @@ import { useEffect, useState } from 'react';
 import { deleteImageFx, getImagesListFx } from '~/@/admin/effects/about-us-fx';
 import { $imageList } from '~/@/admin/models/about-us-model';
 
-import { AboutUsImagesListWrapper, AdminTableScroll, DeleteIcon, SearchContainer, TableCellRoles, TableDataBody, TableDataCell, TableDataHead } from '../../styles/admin-styles'
+import { AboutUsImagesListWrapper, AdminTableScroll, DeleteIcon, SearchContainer, TableDataBody, TableDataCell, TableDataHead } from '../../styles/admin-styles'
 import ModalUploadImage from './modal-upload-image';
 
 function ListImage() {
 
-  const { results: imageList } = useStore($imageList) || {};
+  const { results: imageList } = useStore($imageList) ?? {};
   const [deleteId, setDeleteId] = useState<null | number>(null);
   const [modalOpen, setModalOpen] = useState(false)
 

@@ -3,7 +3,6 @@ import { useStore } from 'effector-react';
 import { useEffect, useMemo, useState } from 'react'
 import { css, styled } from 'styled-components';
 
-import { $countryList } from '~/@/api-docs/models/explore-api.model';
 
 import { dataSourceFields } from '../../constants/data-source.constant';
 import { getCountryDataSourceFx, getSchoolMasterListFx } from '../../effects/data-source.fx';
@@ -18,7 +17,6 @@ import EditableField from './editable-field.view';
 import { EmptyList } from '~/@/common/style/styled-component-style';
 import { $userPermissions } from '~/core/auth/models';
 import { DataSourceType } from '../../types/data-source.type';
-import { $countryBenchmark } from '~/@/country/country.model';
 
 const TableRowItem = styled(TableRow) <{ $isNew: boolean; $isDeleted: boolean }>`
   ${props => props.$isNew && css`
@@ -142,12 +140,10 @@ const EditDataSource = () => {
                     field.ordering ? <Link href="#" visited={!!orderingFields[field.ordering]} onClick={() => {
                       if (!orderingFields[field.ordering]) {
                         orderingFields[field.ordering] = `${field.ordering}`;
+                      } else if (orderingFields[field.ordering].startsWith('-')){
+                        orderingFields[field.ordering] = '';
                       } else {
-                        if (orderingFields[field.ordering].startsWith('-')) {
-                          orderingFields[field.ordering] = '';
-                        } else {
-                          orderingFields[field.ordering] = `-${field.ordering}`;
-                        }
+                        orderingFields[field.ordering] = `-${field.ordering}`;
                       }
                       setOrderingFields({ ...orderingFields });
                     }}>{field.name}</Link> : field.name

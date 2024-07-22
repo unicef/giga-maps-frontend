@@ -3,7 +3,7 @@ import { IconButton } from '@carbon/react'
 import { useStore } from 'effector-react';
 import { TimeplayerWrapper } from './timeplayer-button.style';
 import { ActiveButtonWrapper } from '../legend-info/legend-button.style';
-import { $connectivityYears, $currentLayerTypeUtils, $isTimeplayer, $timePlayerCurrentYear, onToggleTimeplayer } from '~/@/sidebar/sidebar.model';
+import { $connectivityYears, $currentLayerTypeUtils, $isTimeplayer, onToggleTimeplayer } from '~/@/sidebar/sidebar.model';
 import { useRoute } from '~/lib/router';
 import { mapCountry } from '~/core/routes';
 import { $admin1Code } from '~/@/country/country.model';

@@ -41,12 +41,12 @@ const headers = [
 ];
 
 const ListCountryDailySummary = () => {
-  const { results: countryDailySummaryList, count } = useStore($countryDailySummaryList) || {};
+  const { results: countryDailySummaryList, count } = useStore($countryDailySummaryList) ?? {};
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const [countryFilterValues, setCountryFilterValues] = useState<number[]>([]);
   const [open, setOpen] = useState(false)
   const countryList = useStore($countryList)
-  const [searchValue, setSearchvalue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
   const rows = countryDailySummaryList ? countryDailySummaryList?.map((countrySummary) => ({
@@ -67,7 +67,7 @@ const ListCountryDailySummary = () => {
       await deleteCountryDailySummaryFx({
         body,
       })
-      void getCountrySummaryDailyList();
+      getCountrySummaryDailyList();
     }
     catch (e) {
       console.log(e)
@@ -80,7 +80,7 @@ const ListCountryDailySummary = () => {
   };
 
   useEffect(() => {
-    void getCountrySummaryDailyList();
+    getCountrySummaryDailyList();
   }, [page, countryFilterValues, pageSize, searchApiCall])
 
   const serachFn = () => {
@@ -89,7 +89,7 @@ const ListCountryDailySummary = () => {
   }
 
   const onChangeAction = (event: FormEvent) => {
-    setSearchvalue(event?.target.value)
+    setSearchValue(event?.target.value)
   }
 
   const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -144,7 +144,7 @@ const ListCountryDailySummary = () => {
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
                   onKeyPress={onEnterKeyPress}
                   onClear={() => {
-                    setSearchvalue('')
+                    setSearchValue('')
                     serachFn()
                   }}
                   onChange={(evt) => {
@@ -180,7 +180,7 @@ const ListCountryDailySummary = () => {
                     </TableRow>
                   </TableDataHead>
                   {(rows && rows.length > 0) ? <TableDataBody>
-                    {rows.map((row, i) => <TableRow key={i} {...getRowProps({
+                    {rows.map((row, i) => <TableRow key={`${row.id}-${i}`} {...getRowProps({
                       row
                     })}>
                       <TableSelectRow

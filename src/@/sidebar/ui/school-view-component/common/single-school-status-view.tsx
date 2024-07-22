@@ -60,7 +60,7 @@ const AccordionTitleWrapper = () => (
 const SingleSchoolStatus = ({ open, setShow, schoolData }: { open: boolean; setShow: React.Dispatch<React.SetStateAction<boolean>>; schoolData: SchoolStatsType }) => {
   const connectivityStatusColors = useStore($stylePaintData);
 
-  return (<>
+  return (
     <SchoolConntectivtyWrapper className="connectivity-status-container">
       <AccordionDistribution>
         <AccordionItem
@@ -86,7 +86,6 @@ const SingleSchoolStatus = ({ open, setShow, schoolData }: { open: boolean; setS
         </AccordionItem>
       </AccordionDistribution>
     </SchoolConntectivtyWrapper>
-  </>
   )
 }
 

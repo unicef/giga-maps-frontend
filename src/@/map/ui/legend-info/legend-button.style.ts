@@ -1,7 +1,6 @@
 import { Popover, } from "@carbon/react";
 import { css, styled } from "styled-components";
 
-import { themeLayerBg } from "../layer-theme/theme-layer-bg";
 
 export const LegendWrapper = styled.div`
     

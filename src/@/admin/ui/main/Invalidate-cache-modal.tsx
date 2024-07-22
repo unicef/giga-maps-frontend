@@ -7,7 +7,7 @@ import { Modal, ModalBody, ModalHeader } from "~/@/common/modal/modal.style";
 import { $inValidateCacheResponse } from '../../models/admin-model';
 
 
-function InvalidatCacheModal({ open, setOpen }: { open: boolean; setOpen: any }) {
+function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readonly setOpen: any }) {
 
   const inValidateCacheResponse = useStore($inValidateCacheResponse)
   return (
@@ -27,9 +27,7 @@ function InvalidatCacheModal({ open, setOpen }: { open: boolean; setOpen: any })
           </span>
         </TopLogoContainer>
         <SucccessMessageContainer>
-          <>
-            <p>{inValidateCacheResponse?.message}</p>
-          </>
+          <p>{inValidateCacheResponse?.message}</p>
         </SucccessMessageContainer>
       </ModalBody>
     </Modal>

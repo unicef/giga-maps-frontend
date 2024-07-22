@@ -4,7 +4,7 @@ import { createGate } from "effector-react";
 import { $notification } from "~/@/common/Toast/toast.model";
 import { APIListType } from "~/api/types";
 import { addAdminCountry, addCountryDailySummary, addCountrySummary } from "~/core/routes";
-import { setPayload, setPayloadFirst, setPayloadResults } from "~/lib/effector-kit";
+import { setPayload, setPayloadResults } from "~/lib/effector-kit";
 
 import { defaultCountryDailySummaryForm, defaultCountryForm, defaultCountrySummaryForm } from "../constants/country-summary.constant";
 import { deleteCountryDailySummaryFx, deleteCountryFx, deleteCountrySummaryFx, getCountryDailySummaryIdFx, getCountryDailySummaryListFx, getCountryIdFx, getCountryListFx, getCountrySummaryIdFx, getCountrySummaryListFx, getPublishDataLayerListFx } from "../effects/api-country-fx";

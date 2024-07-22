@@ -1,5 +1,4 @@
 import { Add, Subtract } from '@carbon/icons-react'
-import { Tooltip } from '@carbon/react';
 
 import { zoomIn, zoomOut } from '../../map.model';
 import { ButtonWrapper, ButtonWrapperUp, ZoomButtonWrapper } from "./theme-button.style"

@@ -9,7 +9,7 @@ interface DropdownType {
 }
 
 const MultiSelectDropdown = ({ name, parameter, place_holder: placeholder, choices, itemKey, value, onChange }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
-  const items = useMemo(() => [...(choices || [])], [choices])
+  const items = useMemo(() => [...(choices ?? [])], [choices])
   const selectedItem = useMemo(() => {
     const values = value?.split(',') || [];
     return items?.filter((item) => values.includes(item.value)) ?? []

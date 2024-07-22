@@ -1,4 +1,4 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@carbon/react"
+import { Tab, TabList, TabPanels, Tabs } from "@carbon/react"
 import { useStore } from "effector-react"
 import { useEffect } from "react"
 

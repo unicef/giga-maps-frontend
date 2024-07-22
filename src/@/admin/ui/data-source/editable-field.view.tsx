@@ -5,20 +5,18 @@ import { DataSourceTableCell } from "../styles/admin-styles";
 
 
 type EditableFieldProps = {
-  item: DataSourceType;
-  fieldName: string;
-  updatedData: Record<string, Partial<DataSourceType>>,
-  handleInputChange: (_a: string, _b: string, _c: string, _d: string) => void,
-  isEditable: boolean
-  readOnly: boolean;
+  readonly item: DataSourceType;
+  readonly fieldName: string;
+  readonly updatedData: Record<string, Partial<DataSourceType>>,
+  readonly handleInputChange: (_a: string, _b: string, _c: string, _d: string) => void,
+  readonly isEditable: boolean
+  readonly readOnly: boolean;
 }
 
 const Information = ({ oldData, newData }: { oldData: string, newData: string }) => {
   if (!oldData && !newData) return null;
   return (
-    <>
-      <p> <strong>Changed from </strong>{oldData}<strong> to </strong>{newData}</p>
-    </>
+    <p> <strong>Changed from </strong>{oldData}<strong> to </strong>{newData}</p>
   )
 }
 
@@ -54,7 +52,7 @@ export default function EditableField({ item, fieldName, updatedData, handleInpu
         </Tooltip> : <input
           type='text'
           title={(readOnly || !isEditable) ? 'Read only' : 'Editable'}
-          readOnly={readOnly ? readOnly : !isEditable}
+          readOnly={readOnly ?? !isEditable}
           value={editedData ?? newData ?? ''}
           onChange={(e) => handleInputChange(item.id, fieldName, e.target.value, newData)} />
     }

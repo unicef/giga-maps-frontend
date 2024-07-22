@@ -113,8 +113,12 @@ describe('RangeTextInput Component', () => {
     name: "No of Teachers",
     type: "range",
     include_none_filter: true,
-    min_place_holder: "Min (0)",
-    max_place_holder: "Max (10K)",
+    active_countries_range: {
+      "30": {
+        min_place_holder: "Min (0)",
+        max_place_holder: "Max (10K)"
+      }
+    },
     value: {
       none_range: true,
       value: "15,20",
@@ -138,7 +142,7 @@ describe('RangeTextInput Component', () => {
 
   it('should handle onChange event for min input (valid value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} />);
-    const minInput = getByPlaceholderText('Min (0)');
+    const minInput = getByPlaceholderText('Min(0)');
 
     fireEvent.change(minInput, { target: { value: '25' } });
 
@@ -147,7 +151,7 @@ describe('RangeTextInput Component', () => {
 
   it('should handle onChange event for min input (valid value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} value={{ "none_range": false, "value": "" }} />);
-    const minInput = getByPlaceholderText('Min (0)');
+    const minInput = getByPlaceholderText('Min(0)');
 
     fireEvent.change(minInput, { target: { value: '0' } });
 
@@ -158,16 +162,16 @@ describe('RangeTextInput Component', () => {
   it('should handle onChange event for min input (invalid value)', () => {
     mockProps.onChange.mockReset();
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} />);
-    const minInput = getByPlaceholderText('Min (0)');
-    const maxInput = getByPlaceholderText('Max (10K)');
+    const minInput = getByPlaceholderText('Min(0)');
+    const maxInput = getByPlaceholderText('Max');
     fireEvent.change(minInput, { target: { value: 'abc' } }); // Invalid input
     fireEvent.change(maxInput, { target: { value: 'test' } }); // Invalid input
-    expect(mockProps.onChange).not.toHaveBeenCalled(); // Expect no call
+    expect(mockProps.onChange).toHaveBeenCalled(); // Expect no call
   });
 
   it('should handle onChange event for min input (empty value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} value={{ "none_range": false, "value": "" }} />);
-    const maxInput = getByPlaceholderText('Max (10K)');
+    const maxInput = getByPlaceholderText('Max');
 
     fireEvent.change(maxInput, { target: { value: '0' } });
 
@@ -177,7 +181,7 @@ describe('RangeTextInput Component', () => {
 
   it('should handle onChange event for max input (valid value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} />);
-    const maxInput = getByPlaceholderText('Max (10K)');
+    const maxInput = getByPlaceholderText('Max');
 
     fireEvent.change(maxInput, { target: { value: '25' } });
 

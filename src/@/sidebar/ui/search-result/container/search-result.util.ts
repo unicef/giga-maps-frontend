@@ -8,7 +8,7 @@ const collectSearchAdminData = ({ data, country, admin1, admin2, level }: { data
     const districtData = {
       ...country,
       countryName: country.name,
-      name: adminOneName || adminTwoName as string,
+      name: adminOneName ?? adminTwoName as string,
       level,
       adminCode
     }

@@ -5,7 +5,7 @@ import { Tooltip } from "@carbon/react"
 
 import { SidePanelLayerGirdColumns, SingleGigaLayerItem } from "./styles/giga-layer.style"
 
-export default function GigaLayerButton({ label, popup, isActive, onClick, icon, disabled }: { disabled?: boolean; label: string, popup?: boolean, isActive?: boolean, onClick: () => void, icon?: any }) {
+export default function GigaLayerButton({ label, popup, isActive, onClick, icon, disabled }: { readonly disabled?: boolean; readonly label: string, readonly popup?: boolean, readonly isActive?: boolean, readonly onClick: () => void, readonly icon?: any }) {
   return (<SidePanelLayerGirdColumns margin={popup ? "1rem 0.5rem 0 0" : "0 0.25rem 0 0"}>
     {disabled && <span className="disabled-box" />}
     <SingleGigaLayerItem

@@ -34,58 +34,56 @@ const CountryFilterModal = ({ open, setOpen, list, filterValues, setFilterValues
     }
   }
   return (
-    <>
-      <Modal open={open} $containerStyle={$countryFilterModalStyle}
-        preventCloseOnClickOutside id={`${name}-filter-modal`}
-      >
-        <ModalHeader title="Filter By Country"
-          $headingStyle={$countrymodalHeadingStyle}
-          closeModal={() => {
-            setOpen(false)
-          }}
-        />
-        <Scroll style={{ maxHeight: "calc(100vh - 6rem)" }}>
-          <CountryCheckboxWrapper legendText="">
-            {
-              list?.map((country) => (
-                <Checkbox
-                  data-testid={`checkbox-country-${country.id}`}
-                  key={country?.id}
-                  labelText={country?.name}
-                  id={`${name}-checkbox-${country?.id}`}
-                  checked={setFilterValues ? filterValues.includes(country?.id) : checkedValues.includes(country?.id)}
-                  onChange={() => handleCheckboxChange(country?.id)}
-                />
-              ))
+    <Modal open={open} $containerStyle={$countryFilterModalStyle}
+      preventCloseOnClickOutside id={`${name}-filter-modal`}
+    >
+      <ModalHeader title="Filter By Country"
+        $headingStyle={$countrymodalHeadingStyle}
+        closeModal={() => {
+          setOpen(false)
+        }}
+      />
+      <Scroll style={{ maxHeight: "calc(100vh - 6rem)" }}>
+        <CountryCheckboxWrapper legendText="">
+          {
+            list?.map((country) => (
+              <Checkbox
+                data-testid={`checkbox-country-${country.id}`}
+                key={country?.id}
+                labelText={country?.name}
+                id={`${name}-checkbox-${country?.id}`}
+                checked={setFilterValues ? filterValues.includes(country?.id) : checkedValues.includes(country?.id)}
+                onChange={() => handleCheckboxChange(country?.id)}
+              />
+            ))
+          }
+        </CountryCheckboxWrapper>
+      </Scroll >
+      <ModalFooter $style={$layerFilterFooterStyle}>
+        <Button
+          kind="secondary"
+          data-testid='reset-country-filter'
+          onClick={() => {
+            if (setFilterValues) {
+              setFilterValues([]);
+            } else {
+              setCheckedValues([]);
             }
-          </CountryCheckboxWrapper>
-        </Scroll >
-        <ModalFooter $style={$layerFilterFooterStyle}>
-          <Button
-            kind="secondary"
-            data-testid='reset-country-filter'
-            onClick={() => {
-              if (setFilterValues) {
-                setFilterValues([]);
-              } else {
-                setCheckedValues([]);
-              }
-              updateList([])
-              setOpen(false);
-            }}>
-            Reset
-          </Button>
-          <Button
-            kind="primary"
-            onClick={() => {
-              updateList(checkedValues)
-              setOpen(false);
-            }}>
-            Apply
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </>
+            updateList([])
+            setOpen(false);
+          }}>
+          Reset
+        </Button>
+        <Button
+          kind="primary"
+          onClick={() => {
+            updateList(checkedValues)
+            setOpen(false);
+          }}>
+          Apply
+        </Button>
+      </ModalFooter>
+    </Modal>
   )
 }
 

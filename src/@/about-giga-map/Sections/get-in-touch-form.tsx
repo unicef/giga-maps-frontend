@@ -46,11 +46,14 @@ export const GetInTouchForm = ({ open, setOpen }: { open: boolean, setOpen: Reac
       console.log(e);
     }
   }
+  const onSubmit = () => {
+    handleSubmit(handleFormSubmit)
+  }
   // reset form
   useEffect(reset, [open]);
 
   return (
-    <Form onSubmit={handleSubmit(handleFormSubmit)}>
+    <Form onSubmit={onSubmit}>
       <Modal open={open} preventCloseOnClickOutside onClose={() => setOpen(false)} $containerStyle={getInTouchStyle}>
         <ModalHeader closeModal={() => setOpen(false)}>
           <h4>Get in touch</h4>

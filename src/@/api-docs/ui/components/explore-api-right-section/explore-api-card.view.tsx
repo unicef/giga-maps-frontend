@@ -1,4 +1,4 @@
-import { Locked, Unlocked } from '@carbon/icons-react';
+import { Locked } from '@carbon/icons-react';
 import { Button } from '@carbon/react';
 
 import { setCurrentExploreApi } from '~/@/api-docs/models/explore-api.model';

@@ -51,25 +51,12 @@ export const $filterSchoolList = sample({
   }
 })
 
-// export const $filterSchoolList = sample({
-//   source: combine({
-//     schools: $searchSchoolList,
-//     selectedSchools: $selectedSchools
-//   }),
-//   fn: ({ schools, selectedSchools }) => {
-//     return [
-//       ...selectedSchools,
-//       ...schools
-//     ]
-//   }
-// })
-
 export const $formFields = sample({
   source: combine({
     exploreApiData: $currentSelectedApiData
   }),
   fn: ({ exploreApiData }) => {
-    const { isCountry, isIndicator, isDate, isSchool } = getCardAllProps(exploreApiData);
+    const { isCountry, isIndicator, isSchool } = getCardAllProps(exploreApiData);
     return {
       ...defaultFormPick,
       ...(isCountry && { countryId: '' }),

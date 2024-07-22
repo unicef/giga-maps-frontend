@@ -9,7 +9,7 @@ const GigaPartners = ({ data }: { data: AboutType }) => {
       <PartnersCardContainer>
         {
           data?.content.map((partner: Content, index: number) => (
-            <SingleItemWrapper key={`${index}-${partner?.image?.length}`} className='single-item-wrapper'>
+            <SingleItemWrapper key={`${partner.title}-${index}-${partner?.image?.length}`} className='single-item-wrapper'>
               <img src={partner?.image} />
             </SingleItemWrapper>
           ))

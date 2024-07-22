@@ -45,7 +45,7 @@ describe("RoleList", () => {
     setAdmin1('AF')
     setRoleListResponse(mockedRoleListResponse)
     const handleClick = jest.fn();
-    const { getByTestId } = render(testWrapper(<RolesList onClick={handleClick} />));
+    const { getByTestId } = render(testWrapper(<RolesList />));
     const button = getByTestId('admin-role-edit');
     fireEvent.click(button);
     const { asFragment } = render(

@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxGroup, SelectItem, TextInput } from "@carbon/react";
+import { SelectItem, TextInput } from "@carbon/react";
 import { useStore } from "effector-react";
 import { useMemo } from "react";
 
@@ -11,7 +11,7 @@ import { CountryListType } from "~/@/api-docs/types/country-list.type";
 
 import { DataLayerFieldContainer, DataLayerNameField, InputLabel, MultiSelectLayerConfig, SelectLayerConfig } from "../../../styles/admin-styles";
 
-export default function GigaFields({ isEditMode, isDefaultLayer }: { isEditMode: boolean, isDefaultLayer: boolean }) {
+export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly isEditMode: boolean, readonly isDefaultLayer: boolean }) {
   const formData = useStore($formData);
   const appConfigValues = useStore($appConfigValues)
   const countryList = useStore($countryList);

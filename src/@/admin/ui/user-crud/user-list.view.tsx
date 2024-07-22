@@ -13,7 +13,7 @@ import Pagination from '../common-components/Pagination';
 import { ActiveStatusWrapper, EditIcon, InactiveStatusWrapper, SearchContainer, TableDataBody, TableDataCell, TableDataHead, TableWrapper, UserListScroll } from '../styles/admin-styles'
 
 const UserListComponent = () => {
-  const { results: userList, count } = useStore($userListResponse) || {};
+  const { results: userList, count } = useStore($userListResponse) ?? {};
   const { page, pageSize } = useStore($userListPageNo);
   const permissions = useStore($userPermissions);
 

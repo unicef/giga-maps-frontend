@@ -96,7 +96,7 @@ const LayerSchoolsConnectivityStatus = () => {
     }
   }, [])
 
-  return (<>
+  return (
     <SchoolConntectivtyWrapper className="connectivity-status-container">
       <AccordionDistribution>
         <AccordionItem
@@ -153,7 +153,6 @@ const LayerSchoolsConnectivityStatus = () => {
         </AccordionItem>
       </AccordionDistribution>
     </SchoolConntectivtyWrapper>
-  </>
   )
 }
 

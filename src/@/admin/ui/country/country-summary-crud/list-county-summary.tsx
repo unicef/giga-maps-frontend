@@ -50,13 +50,13 @@ const headers = [
 ];
 
 const ListCountySummary = () => {
-  const { results: countrySummaryList, count } = useStore($countrySummaryList) || {};
+  const { results: countrySummaryList, count } = useStore($countrySummaryList) ?? {};
   const [open, setOpen] = useState(false)
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const [countryFilterValues, setCountryFilterValues] = useState<number[]>([]);
   const countryList = useStore($countryList);
 
-  const [searchValue, setSearchvalue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
 
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
@@ -101,7 +101,7 @@ const ListCountySummary = () => {
   }
 
   const onChangeAction = (event: FormEvent) => {
-    setSearchvalue(event?.target.value)
+    setSearchValue(event?.target.value)
   }
 
   const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -155,7 +155,7 @@ const ListCountySummary = () => {
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
                   onKeyPress={onEnterKeyPress}
                   onClear={() => {
-                    setSearchvalue('')
+                    setSearchValue('')
                     serachFn()
                   }}
                   onChange={(evt) => {
@@ -187,13 +187,13 @@ const ListCountySummary = () => {
                   <TableDataHead>
                     <TableRow>
                       <TableSelectAll {...getSelectionProps()} />
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {headers.map((header, i) => <TableHeader key={`${header.key}-${i}`} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
                   </TableDataHead>
                   {(rows && rows.length > 0) ? <TableDataBody>
-                    {rows.map((row, i) => <TableRow key={i} {...getRowProps({
+                    {rows.map((row, i) => <TableRow key={`${row.id}-${i}`} {...getRowProps({
                       row
                     })}>
                       <TableSelectRow

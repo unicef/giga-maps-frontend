@@ -29,5 +29,5 @@ export const errorToasterHandler = (errorResponse: unknown) => {
 
 export const errorToastFilter = (errorResponse: unknown) => {
   const error = errorResponse as ServerErrorType;
-  return error && error.response;
+  return error?.response;
 }

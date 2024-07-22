@@ -3,7 +3,7 @@ import type mapboxGl from 'mapbox-gl';
 import { Map, MapType, StylePaintData } from '~/@/map/map.types';
 import { Country, CountryGeometry } from '~/api/types';
 
-import { GeoJSONFeatureCollection as FeatureCollection, GeoJSONGeometry } from "../../core/global-types";
+import { GeoJSONFeatureCollection as FeatureCollection } from "../../core/global-types";
 import { CountryAdminLevel } from './country.constant';
 
 export type UpdateCountry = {

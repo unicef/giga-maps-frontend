@@ -59,7 +59,7 @@ const TopSearchBar = () => {
         className={"sidebar-searchbox"}
         $isMobile={isMobile}
         onClear={() => {
-          void onClear();
+          onClear();
           isMobile && setMobileSearch(false);
           changeIsSearchFocused(false);
         }}

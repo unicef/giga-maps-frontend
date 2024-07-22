@@ -1,11 +1,10 @@
-import { $countries, $countryDefaultNational, $countrySearchString } from '~/@/country/country.model';
 import { $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus } from '~/@/map/map.model';
 import { debounce, getInverted } from '~/lib/effector-kit';
 import { combine, createEffect, merge, sample } from 'effector';
 
 import {
   $admin1Id,
-  $country, $countryCode, countryReceived, onRecenterView,
+  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString
 } from '~/@/country/country.model';
 import {
   $connectivityBenchMark,
@@ -123,8 +122,8 @@ sample({
   source: $getSchoolParams,
   fn: (schoolParams, uncheckId) => {
     const newParams = new URLSearchParams({
-      country: schoolParams.country || '',
-      school_ids: schoolParams?.schoolIds?.filter((id) => String(id) !== String(uncheckId)) || ''
+      country: schoolParams.country ?? '',
+      school_ids: schoolParams?.schoolIds?.filter((id) => String(id) !== String(uncheckId)) ?? ''
     } as Record<string, string>).toString()
     const url = '/map/schools?' + newParams;
     router.history.replace(url);
@@ -151,7 +150,7 @@ const sourceForInfo = combine({
 
 export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id }: ReturnType<typeof sourceForInfo.getState>) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
-  const selectedLayerId = layersUtils.selectedLayerId || lastSelectedLayers.layerId || layersUtils.coverageLayerId
+  const selectedLayerId = layersUtils.selectedLayerId ?? lastSelectedLayers.layerId ?? layersUtils.coverageLayerId
   const isDownload = selectedLayerId === layersUtils?.downloadLayerId;
   const isCoverage = selectedLayerId === layersUtils?.coverageLayerId;
   const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === selectedLayerId)?.type);
@@ -381,15 +380,8 @@ sample({
     } else {
       currentBenchmark = ConnectivityBenchMarks.global
     }
-    // if (!isNationalBenchmark) {
-    //   currentBenchmark = ConnectivityBenchMarks.global
-    // }
     return currentBenchmark
   },
   filter: ({ country, currentLayerTypeUtils }) => !!country && currentLayerTypeUtils.isLive,
   target: changeConnectivityBenchmark
 })
-
-// changeConnectivityBenchmark.watch((connectivityBenchmark) => {
-//   console.log('changed', connectivityBenchmark)
-// });

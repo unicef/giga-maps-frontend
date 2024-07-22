@@ -5,13 +5,11 @@ import { useStore } from 'effector-react';
 import { Div, LoadingText, TooltipStyle } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
 import { getSchoolStatus } from '~/@/sidebar/school-view.utils';
-import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { SchoolStatsType } from '~/api/types';
 
 import { ConnectivityStatusNames } from '../../global-and-country-view-components/container/layer-view.constant';
 import { StatisticsStatus } from '../styles/school-information.style';
 import { SchoolDetailInfo, SchoolDetailItem, SchoolDetailTitle, SingleInfoContainer } from '../styles/school-view-style';
-import { $country } from '~/@/country/country.model';
 import { $isLoadingSchoolView } from '~/@/sidebar/sidebar.model';
 
 

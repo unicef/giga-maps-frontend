@@ -13,7 +13,6 @@ import SchoolConnectivityLayer from './school-connectivity-layer/school-connecti
 const GlobalAndCountryView = () => {
   const selectedLayerId = useStore($selectedLayerId);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
-  const isSchoolStatusOpen = useStore($schoolConnectedOpenStatus);
   const { isLive, isStatic } = useStore($currentLayerTypeUtils);
   const defaultUIEnable = !selectedLayerId && schoolStatusSelectedLayer;
 

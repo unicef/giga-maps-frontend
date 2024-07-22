@@ -36,7 +36,7 @@ const BarChart = ({
         <CustomTooltip
           align="top-left"
           autoAlign={category?.length - 1 === index}
-          key={index}
+          key={`${category.length}-${index}`}
           flexgrow={calculateFlexGrow(categoryValues[index])}
           backgroundcolor={categoryColors[index]}
           label={

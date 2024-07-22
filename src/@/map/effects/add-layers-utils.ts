@@ -3,7 +3,7 @@ import { VectorSource } from "mapbox-gl";
 import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, isConnectivity, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList } from "../utils";
+import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList } from "../utils";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
@@ -26,7 +26,7 @@ export const createSourceForMapAndCountry = async ({ map, countrySearch, connect
   removePreviewsMapClickHandlers(map);
   const { coverageLayerId } = layerUtils;
   if (!layerId) {
-    layerId = lastSelectedLayer.layerId || coverageLayerId;
+    layerId = lastSelectedLayer.layerId ?? coverageLayerId;
     // return;
   }
   const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id: admin1Data?.id, countrySearch });

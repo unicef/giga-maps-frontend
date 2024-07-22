@@ -18,7 +18,6 @@ describe('updateSchoolPopupFx', () => {
 
   it('should set popup content using createAndSetPopupTemplate', async () => {
     const setDOMContent = jest.fn();
-    const popupElement = document.createElement('div');
     document.body.innerHTML = '<div class="map-popup-template"></div>';
     const result = await updateSchoolPopupFx({
       country: { code: 'US' },

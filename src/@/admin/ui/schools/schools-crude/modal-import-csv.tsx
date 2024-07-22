@@ -1,5 +1,5 @@
 
-import { Button, Checkbox, Form, TextInput } from "@carbon/react";
+import { Button, Checkbox, Form } from "@carbon/react";
 import { useStore } from "effector-react";
 import { FormEvent, useRef, useState } from "react";
 
@@ -71,71 +71,69 @@ const ModalImportCsv = ({ open, setOpen, }: { open: boolean, setOpen: React.Disp
   }
 
   return (
-    <>
-      <Modal open={open} $containerStyle={$dowloadApiModalContainerStyle}
-        preventCloseOnClickOutside id={'import-csv-filter-modal'}
+    <Modal open={open} $containerStyle={$dowloadApiModalContainerStyle}
+      preventCloseOnClickOutside id={'import-csv-filter-modal'}
+    >
+      <ModalHeader title="CSV import"
+        $headingStyle={$countrymodalHeadingStyle}
+        closeModal={() => {
+          setOpen(false)
+        }}
+      />
+      <Form id="formElemImportCsv"
+        onSubmit={handleFormSubmit} autoComplete="off"
       >
-        <ModalHeader title="CSV import"
-          $headingStyle={$countrymodalHeadingStyle}
-          closeModal={() => {
-            setOpen(false)
-          }}
-        />
-        <Form id="formElemImportCsv"
-          onSubmit={handleFormSubmit} autoComplete="off"
-        >
-          <ModalBody $style={$modalBodyStyle}>
-            {!(showMessage === '') && <InlineToast
-              role='alert'
-              kind='warning-alt'
-              onCloseButtonClick={() => setToasterWarning('')}
-              title={showMessage}
-              lowContrast
-              hideCloseButton
-            />}
-            <InputLabel>
-              CSV file
-            </InputLabel>
-            <input
-              required
-              type="file"
-              id="fileInput"
-              onChange={handleFileChange}
-              ref={fileInputRef}
-              style={{ marginTop: '1rem', border: "none", paddingLeft: 0 }}
-            />
-            <CheckboxCleanData>
-              <div className='amenities-checkbox'>
-                <Checkbox
-                  name="force"
-                  checked={check}
-                  onChange={(_e, { checked }) => setCheck(checked)}
-                  labelText={'Skip rows with bad data'}
-                  id="checkbox-label-1"
-                />
-              </div>
-            </CheckboxCleanData>
-          </ModalBody>
-          <ModalFooter $style={$layerFilterFooterStyle}>
-            <Button
-              kind="secondary"
-              onClick={() => {
-                resetFileInput()
-                setCheck(false)
-                setOpen(false)
-              }}>
-              Cancel
-            </Button>
-            <Button
-              type='submit'
-              kind="primary"
-            >
-              Submit
-            </Button>
-          </ModalFooter>
-        </Form >
-      </Modal>
-    </>
+        <ModalBody $style={$modalBodyStyle}>
+          {(showMessage !== '') && <InlineToast
+            role='alert'
+            kind='warning-alt'
+            onCloseButtonClick={() => setToasterWarning('')}
+            title={showMessage}
+            lowContrast
+            hideCloseButton
+          />}
+          <InputLabel>
+            CSV file
+          </InputLabel>
+          <input
+            required
+            type="file"
+            id="fileInput"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            style={{ marginTop: '1rem', border: "none", paddingLeft: 0 }}
+          />
+          <CheckboxCleanData>
+            <div className='amenities-checkbox'>
+              <Checkbox
+                name="force"
+                checked={check}
+                onChange={(_e, { checked }) => setCheck(checked)}
+                labelText={'Skip rows with bad data'}
+                id="checkbox-label-1"
+              />
+            </div>
+          </CheckboxCleanData>
+        </ModalBody>
+        <ModalFooter $style={$layerFilterFooterStyle}>
+          <Button
+            kind="secondary"
+            onClick={() => {
+              resetFileInput()
+              setCheck(false)
+              setOpen(false)
+            }}>
+            Cancel
+          </Button>
+          <Button
+            type='submit'
+            kind="primary"
+          >
+            Submit
+          </Button>
+        </ModalFooter>
+      </Form >
+    </Modal>
   )
 }
 

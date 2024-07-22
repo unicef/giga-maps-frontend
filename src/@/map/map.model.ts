@@ -3,7 +3,7 @@ import { createEvent, createStore, restore } from 'effector';
 import { fetchAdvanceFilterFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
-import { map, router } from '~/core/routes';
+import { map } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import {
@@ -75,7 +75,7 @@ export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
 export const $popup = createStore<mapboxgl.Popup | null>(null);
 $popup.on(onCreateSchoolPopup, setPayload);
 
-export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id || 0);
+export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
 export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
 $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 

@@ -17,22 +17,20 @@ const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
   const stylePaintData = useStore($stylePaintData);
   const { color, value } = getStaticSchoolDetails({ schoolDetails, stylePaintData })
   return (
-    <>
-      <div>
-        <Div $margin='1.5rem 1rem 1.5rem 1rem'>
-          {
-            !!value && <DateWeekWrapper>
-              <StatisticsStatusLg $color={color}>
-                {value.toLowerCase()}
-              </StatisticsStatusLg>
-            </DateWeekWrapper>
-          }
-        </Div>
-        <SchoolInformationWrapper>
-          <SchoolInformation schoolData={schoolDetails} />
-        </SchoolInformationWrapper>
-      </div>
-    </>
+    <div>
+      <Div $margin='1.5rem 1rem 1.5rem 1rem'>
+        {
+          !!value && <DateWeekWrapper>
+            <StatisticsStatusLg $color={color}>
+              {value.toLowerCase()}
+            </StatisticsStatusLg>
+          </DateWeekWrapper>
+        }
+      </Div>
+      <SchoolInformationWrapper>
+        <SchoolInformation schoolData={schoolDetails} />
+      </SchoolInformationWrapper>
+    </div>
   );
 }
 

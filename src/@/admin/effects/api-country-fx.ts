@@ -8,15 +8,29 @@ import { DataLayer } from "../types/giga-layer.type";
 
 
 export const getCountryListFx = createEffect(({ page, pageSize, search }: { page?: number; pageSize?: number; search?: string }) => {
+  let url = `locations/country/?ordering=name&page=${page}&page_size=${pageSize}`
+
+  if (search) {
+    url += `&search=${search}`;
+  }
+
   return createRequestAuthFx({
-    url: `locations/country/?ordering=name&page=${page}&page_size=${pageSize}${search ? `&search=${search}` : ''}`
+    url: url
   }) as Promise<APIListType<CountryType>>
 })
 
 export const getCountrySummaryListFx = createEffect(({ page, pageSize, search, filter }: { page?: number; pageSize?: number; search?: string, filter?: number[] }) => {
+  let url = `/statistics/countryweeklystatus/?page=${page}&page_size=${pageSize}`
+
+  if (filter && filter.length > 0) {
+    url += `&country_id__in=${filter.join(',')}`;
+  }
+
   const searchParam = search ? `&search=${search}` : '';
+  url += searchParam;
+  
   return createRequestAuthFx({
-    url: `/statistics/countryweeklystatus/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id__in=${filter}` : ''}${searchParam}`
+    url: url
   }) as Promise<APIListType<CountrySummaryType>>
 })
 

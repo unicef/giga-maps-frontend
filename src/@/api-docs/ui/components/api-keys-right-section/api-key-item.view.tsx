@@ -1,5 +1,4 @@
-import { Replicate, } from '@carbon/icons-react';
-import { CopyButton, IconButton, OverflowMenu, OverflowMenuItem, TableCell, TableRow, ToggletipButton } from '@carbon/react';
+import { CopyButton, OverflowMenu, OverflowMenuItem, TableCell, TableRow, ToggletipButton } from '@carbon/react';
 
 import { ApiStatusColors, ApiStatusName } from '~/@/api-docs/api-docs.constant';
 import { onRequestExtensionPopup } from '~/@/api-docs/models';
@@ -25,7 +24,7 @@ const OverflowMenuCustomItem = styled(OverflowMenuItem)`
 const ApiKeyItem = ({ item: apiItem, countryLength, setApiKeyDeleteId }: { item: ApiKeysType, countryLength: number, setApiKeyDeleteId: (any) }) => {
   const { isApproved, inProgress, isExpired, extensionInProgress, extensionDeclined, hasExtensionRequest } = getApiKeysProps(apiItem);
   const currentStatusType = (isExpired ? ApiStatusName.expired : apiItem.status).toLocaleLowerCase();
-  const extensionStatusType = (isExpired ? ApiStatusName.expired : apiItem.extension_status || "").toLocaleLowerCase();
+  const extensionStatusType = (isExpired ? ApiStatusName.expired : apiItem.extension_status ?? "").toLocaleLowerCase();
   const statusColor = ApiStatusColors[currentStatusType];
   const statusName = ApiStatusName[currentStatusType];
   const extensionName = ApiStatusName[extensionStatusType]

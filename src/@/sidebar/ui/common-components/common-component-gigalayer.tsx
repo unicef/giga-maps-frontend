@@ -23,41 +23,39 @@ const CommonComponentGigaLayer = () => {
   const isMobile = useStore($isMobile)
 
   return (
-    <>
-      <SidebarFooterGigalayerContainer className="sidebar-footer-gigalayer-container">
-        <div className="sidebar-footer-gigalayer-icons-container">
-          <GigaLayerButtonIcons />
-          <Popover open={modalOpen}
-            align={isMobile ? "top-right" : "right-bottom"}
-            onKeyDown={(event: KeyboardEvent<HTMLSpanElement>) => {
-              if (event.key === 'Escape') {
-                setModalOpen(false);
-              }
-            }}
-            onRequestClose={() => setModalOpen(false)}
-            className='sidebar-footer-gigalayer-icons-popover' >
-            <div>
-              <div className="popover-trigger">
-                <Tooltip label="Show more" leaveDelayMs={0} align='top-right'>
-                  <Button
-                    renderIcon={Grid}
-                    iconDescription='More layers'
-                    kind="ghost"
-                    className="sidebar-worldview-gigaIcon"
-                    onClick={moreLayerHandler}
-                  />
-                </Tooltip>
-              </div>
+    <SidebarFooterGigalayerContainer className="sidebar-footer-gigalayer-container">
+      <div className="sidebar-footer-gigalayer-icons-container">
+        <GigaLayerButtonIcons />
+        <Popover open={modalOpen}
+          align={isMobile ? "top-right" : "right-bottom"}
+          onKeyDown={(event: KeyboardEvent<HTMLSpanElement>) => {
+            if (event.key === 'Escape') {
+              setModalOpen(false);
+            }
+          }}
+          onRequestClose={() => setModalOpen(false)}
+          className='sidebar-footer-gigalayer-icons-popover' >
+          <div>
+            <div className="popover-trigger">
+              <Tooltip label="Show more" leaveDelayMs={0} align='top-right'>
+                <Button
+                  renderIcon={Grid}
+                  iconDescription='More layers'
+                  kind="ghost"
+                  className="sidebar-worldview-gigaIcon"
+                  onClick={moreLayerHandler}
+                />
+              </Tooltip>
             </div>
-            <MoreLayerPopOver>
-              <GigaPopUpScroll>
-                <GigaLayerButtonIcons popup={true} />
-              </GigaPopUpScroll>
-            </MoreLayerPopOver>
-          </Popover>
-        </div>
-      </SidebarFooterGigalayerContainer >
-    </>
+          </div>
+          <MoreLayerPopOver>
+            <GigaPopUpScroll>
+              <GigaLayerButtonIcons popup={true} />
+            </GigaPopUpScroll>
+          </MoreLayerPopOver>
+        </Popover>
+      </div>
+    </SidebarFooterGigalayerContainer >
   );
 };
 

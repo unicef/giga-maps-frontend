@@ -7,8 +7,15 @@ import { BackgroundTask } from "../types/background-task.type";
 
 
 export const getBackgroundTaskListFx = createEffect(({ page, pageSize, search }: { page?: number; pageSize?: number; search?: string }) => {
+  let url = `background/backgroundtask/?`
+  url += `page=${page}&page_size=${pageSize}`;
+
+  if (search) {
+    url += `&search=${search}`;
+  }
+
   return createRequestAuthFx({
-    url: `background/backgroundtask/?page=${page}&page_size=${pageSize}${search ? `&search=${search}` : ''}`
+    url: url
   }) as Promise<APIListType<BackgroundTask>>
 })
 

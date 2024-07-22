@@ -2,11 +2,10 @@ import { RowCollapse } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 
-import { Box, Center, Div, EmptyList } from '~/@/common/style/styled-component-style';
+import { Box, Center } from '~/@/common/style/styled-component-style';
 import UserAvatar from '~/@/common/user-avatar';
 import { $userFullName } from '~/core/auth/models/auth.model';
-import PageNotFound from '~/core/page-no-found';
-import { addAdminCountry, addAdminSchools, addCountryDailySummary, addCountrySummary, addSchoolDailySummary, addSchoolSummary, admin, adminAboutUs, adminAlerts, adminApiKeys, adminCountry, adminGigaLayer, adminRoute, adminSchools, backgroundTask, backgroundTaskCreate, backgroundTaskView, contactMessage, contactMessageView, dataSource, dataSourceEdit, editAdminCountry, editAdminSchools, editCountryDailySummary, editCountrySummary, editGigaLayer, editRoles, editSchoolDailySummary, editSchoolSummary, gigaLayerRoute, recentActions, roleCreateRoute, router, userDetails, userList, userPermissions, userRoles, viewGigaLayer } from '~/core/routes';
+import { addAdminCountry, addAdminSchools, addCountryDailySummary, addCountrySummary, addSchoolDailySummary, addSchoolSummary, adminAboutUs, adminAlerts, adminApiKeys, adminCountry, adminRoute, adminSchools, backgroundTask, backgroundTaskView, contactMessage, contactMessageView, dataSource, editAdminCountry, editAdminSchools, editCountryDailySummary, editCountrySummary, editRoles, editSchoolDailySummary, editSchoolSummary, gigaLayerRoute, recentActions, roleCreateRoute, router, userDetails, userList, userPermissions, userRoles } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { getAppConfigValues } from '../../models/admin-model';
@@ -48,7 +47,7 @@ const AdminPanelMainComponent = () => {
   const userName = useStore($userFullName);
 
   useEffect(() => {
-    void getAppConfigValues();
+    getAppConfigValues();
   }, [])
   return (
     <AdminMainComponent>
