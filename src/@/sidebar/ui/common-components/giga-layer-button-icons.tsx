@@ -36,7 +36,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
       selectAllStaticLegendsSelection([]);
     }
   }, [selectedLayerId, schoolStatusSelectedLayer]);
-
+  console.log('activeLayerByCountryCode', activeLayerByCountryCode)
   return (
     <>
       {popup && <GigaLayerText>Giga Layers</GigaLayerText>}
@@ -52,7 +52,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
         />
         <GigaLayerButton
           label="Real-time Connectivity"
-          disabled={!activeLayerByCountryCode[String(downloadLayerId)]}
+          disabled={!(activeLayerByCountryCode[String(currentDefaultLayerId)])}
           popup={popup}
           isActive={isLive}
           icon={<Wifi className='layer-icon' />}
