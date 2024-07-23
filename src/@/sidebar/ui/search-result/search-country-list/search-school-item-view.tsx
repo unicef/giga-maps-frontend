@@ -1,4 +1,4 @@
-import { createEvent, restore, sample } from 'effector';
+import { createEvent, restore } from 'effector';
 import { useStore } from 'effector-react'
 
 import { InlineToast } from '~/@/common/style/styled-component-style';

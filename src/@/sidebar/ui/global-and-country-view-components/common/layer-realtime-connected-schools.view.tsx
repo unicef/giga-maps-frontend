@@ -35,25 +35,23 @@ const LayerRealtimeConnectedSchools = ({ isLoading }: { isLoading: boolean }) =>
 
   const label = `${isWeek ? 'Weekly' : 'Monthly'} distribution`;
   return (
-    <>
-      <AccordionItem title={<AccordionItemTitle tooltipLabel={label} label={<>{label}</>} />} open={realtimeSchoolConnectedOpenStatus} onHeadingClick={handleAccordionChange}>        <>
-        {isLoading ? Array(4).fill(0).map((_, index) => <ProgressBar key={index} isLoading />)
-          :
-          Object.entries(legends || {}).map(([key, value]) => {
-            if (!(connectivityShow[key] && value > 0)) return null;
-            const label = ConnectivityDistributionNames[key];
-            const colorType = connectivityColors[key] as string;
-            return <ProgressBar key={key}
-              isLoading={isLoading}
-              value={value}
-              maxValue={connectivityStats?.school_with_realtime_data}
-              label={label}
-              colorType={colorType}
-            />
-          })}
-      </>
-      </AccordionItem>
+    <AccordionItem title={<AccordionItemTitle tooltipLabel={label} label={<>{label}</>} />} open={realtimeSchoolConnectedOpenStatus} onHeadingClick={handleAccordionChange}>        <>
+      {isLoading ? Array(4).fill(0).map((_, index) => <ProgressBar key={index} isLoading />)
+        :
+        Object.entries(legends ?? {}).map(([key, value]) => {
+          if (!(connectivityShow[key] && value > 0)) return null;
+          const label = ConnectivityDistributionNames[key];
+          const colorType = connectivityColors[key];
+          return <ProgressBar key={key}
+            isLoading={isLoading}
+            value={value}
+            maxValue={connectivityStats?.school_with_realtime_data}
+            label={label}
+            colorType={colorType}
+          />
+        })}
     </>
+    </AccordionItem>
   )
 }
 

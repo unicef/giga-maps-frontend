@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Home } from '@carbon/icons-react';
-import { BreadcrumbItem, Breadcrumb, BreadcrumbSkeleton, OverflowMenu, OverflowMenuItem } from "@carbon/react"
+import { BreadcrumbItem, OverflowMenu, OverflowMenuItem } from "@carbon/react"
 import { useStore } from 'effector-react';
 import { css, styled } from 'styled-components';
 
-import { $country, $isLoadinCountry } from '~/@/country/country.model';
-import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
+import { $country } from '~/@/country/country.model';
+import { mapCountry, mapOverview, router } from '~/core/routes';
 import { Link } from '~/lib/router';
 
 import { $allLoadings, $isLoadingSchoolView, $schoolStats } from '../../sidebar.model';
@@ -44,7 +44,7 @@ export const GoToMap = () => {
 export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPage?: boolean; admin1Name?: string | null }) => {
   const countryData = useStore($country);
   const isLoading = useStore($allLoadings).country;
-  const { name: countryName = '...', code = ' ' } = countryData || {};
+  const { name: countryName = '...', code = ' ' } = countryData ?? {};
   return (<>
     {isLoading ? <LoadingText width='5rem' $marginEnd='0' /> :
       <BreadcrumbEllipsis title={countryName} $maxWidth={isCurrentPage ? 10 : 5} href="#" isCurrentPage={isCurrentPage}>
@@ -56,14 +56,14 @@ export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPa
 }
 
 export const GoToSchool = () => {
-  const schools = useStore($schoolStats) || [];
+  const schools = useStore($schoolStats) ?? [];
   const country = useStore($country);
   const isSchoolGreaterThanOne = schools?.length > 1;
   const schoolName = isSchoolGreaterThanOne ? 'Custom School' : schools[0]?.name || '';
   const school = schools[0];
-  const admin1 = school?.admin1_name || "Unknown";
-  const admin2Unknown = school?.admin1_name || "Unknown";
-  const admin2 = school?.admin2_name || admin2Unknown;
+  const admin1 = school?.admin1_name ?? "Unknown";
+  const admin2Unknown = school?.admin1_name ?? "Unknown";
+  const admin2 = school?.admin2_name ?? admin2Unknown;
   const isLoading = useStore($isLoadingSchoolView);
   const admin1Text = isSchoolGreaterThanOne ? "Admin 1..." : admin1;
   const admin2Text = isSchoolGreaterThanOne ? "Admin 2..." : admin2;

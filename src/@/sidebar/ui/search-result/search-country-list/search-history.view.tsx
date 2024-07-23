@@ -9,7 +9,7 @@ import { LeftItem, RecentlyViewedIcon, RightItem, SearchHistoryStyle, SearchHist
 export default function SearchHistory() {
   const searchHistoryData = useStore($searchHistoryData);
 
-  if (!searchHistoryData || !searchHistoryData.length) return null;
+  if (!searchHistoryData?.length) return null;
   const itemLength = searchHistoryData?.length - 1;
   return (<>
     <SearchTopHead>Recent</SearchTopHead >

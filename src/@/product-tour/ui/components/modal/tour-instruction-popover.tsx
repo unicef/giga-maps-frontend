@@ -23,9 +23,9 @@ const CloneItem = ({ target }: { target: string }) => {
 
 
   if (!findElement) return null;
-  return <>
+  return (
     <ClonedContainer dangerouslySetInnerHTML={{ __html: findElement?.outerHTML ?? '' }} />
-  </>
+  )
 }
 
 const TourInstructionPopover = (
@@ -33,7 +33,7 @@ const TourInstructionPopover = (
     lastSubStep, firstSubStep, content = [] }:
     {
       totalSubStep: number; title: string;
-      lastSubStep: boolean; lastMainStep: boolean, firstSubStep: boolean;
+      lastSubStep: boolean; firstSubStep: boolean;
       content: { type: string, value: string }[]
     }) => {
   const theme = useTheme();
@@ -48,12 +48,12 @@ const TourInstructionPopover = (
       </CurrentStepNumber>
       {content.map((item, index) => {
         if (item.type === 'text') {
-          return <PopoverDescription key={index}>
+          return <PopoverDescription key={`${item.type}-${index}`}>
             {item.value}
           </PopoverDescription>
         }
         if (item.type === 'clone') {
-          return <CloneItem target={item.value} />
+          return <CloneItem key={`${item.type}-${index}`} target={item.value} />
         }
         return null;
       }

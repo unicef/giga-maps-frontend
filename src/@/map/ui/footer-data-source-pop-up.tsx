@@ -1,6 +1,6 @@
-import { Link, Popover, PopoverContent, Tooltip } from "@carbon/react"
+import { Tooltip } from "@carbon/react"
 import { useStore } from "effector-react"
-import { PropsWithChildren, useMemo, useState } from "react"
+import { PropsWithChildren, useMemo } from "react"
 import styled from "styled-components"
 import { Information } from '@carbon/icons-react'
 
@@ -118,8 +118,6 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
     return data;
   }, [currentDataSource?.name, dataSource, isSchoolStatus])
   const dataSourceDescription = useMemo(() => currentDataSource?.description?.split(';'), [currentDataSource?.description]);
-  // const [open, setOpen] = useState(false)
-  // const isLengthGreater = (dataSource?.length ?? 0) > size;
   if (showOldDataSource) {
     return (<FooterContainer>
       <div>
@@ -169,24 +167,6 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
             </Tooltip>)
           })}
         </div>
-        {/* {isLengthGreater && <div className="data-source-pop-up-container">
-          <Link className="link" onClick={() => { setOpen(prev => !prev) }}>Read more</Link>
-          <Popover
-            open={open}
-            align={"top-right"}
-            className="data-source-popover-link"
-          >
-            <PopoverContent className="data-source-popover-content">
-              <h3>Data Source</h3>
-              <p>{dataSource}</p>
-            </PopoverContent>
-          </Popover>
-          {open && <ClickAnywhere
-            classList={['data-source-pop-up-container']}
-            trigger={open}
-            outsideClick={() => setOpen(false)}
-          />}
-        </div>} */}
       </DataSourceContainer>
     </div>
   </FooterContainer>)

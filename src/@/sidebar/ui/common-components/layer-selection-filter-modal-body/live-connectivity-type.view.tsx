@@ -2,7 +2,6 @@ import { RadioButton, RadioButtonGroup } from "@carbon/react";
 import { useStore } from 'effector-react';
 import { forwardRef, useState } from 'react'
 
-import { Layers } from "~/@/sidebar/sidebar.constant";
 import {
   $activeLayerByCountryCode,
   $connectivityLayers, $selectedLayerId, onSelectMainLayer,
@@ -16,7 +15,7 @@ import { $country } from "~/@/country/country.model";
 
 export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { setCurrentLayer: (id: null | number) => void }, ref) {
   const selectedIndicatorId = useStore($selectedLayerId);
-  const [selectedId, setConnectivityTypeValue] = useState(selectedIndicatorId);
+  const [selectedId, setSelectedId] = useState(selectedIndicatorId);
   const connectivityLayers = useStore($connectivityLayers);
   const activeLayersByCountry = useStore($activeLayerByCountryCode);
   const country = useStore($country) ?? { id: 0 }
@@ -36,7 +35,7 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
         defaultSelected={selectedId as number}
         onChange={(id) => {
           setCurrentLayer(id as number)
-          setConnectivityTypeValue(id as number)
+          setSelectedId(id as number)
         }}
       >
         {connectivityLayers.map((layer: LayerType) => {

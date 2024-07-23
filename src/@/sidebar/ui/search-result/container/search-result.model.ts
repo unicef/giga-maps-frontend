@@ -40,7 +40,7 @@ export const $searchSchoolIds = $searchSchoolSelectedList.map((items) => new Set
 export const $searchSchoolAdmin1 = $searchSchoolSelectedList.map((items) => new Set(items?.map((item) => item.admin1_name)) || undefined)
 export const $searchSchoolAdmin2 = $searchSchoolSelectedList.map((items) => new Set(items?.map((item) => {
   const admin1 = item.admin1_name;
-  const admin2 = item.admin2_name;
+  const admin2 = item.admin2_name;;
   return `${admin1}-${admin2 ? admin2 : '_Blank'}`
 })) || undefined)
 
@@ -111,7 +111,7 @@ export const $searchResultCollection = sample({
 const searchExpandCountry = sample({
   source: combine($countries, $currentExpandCountry),
   fn: ([countries, expandCountry]) => {
-    return countries?.find(country => country?.id.toString() === expandCountry)?.code.toLocaleLowerCase() || null;
+    return countries?.find(country => country?.id.toString() === expandCountry)?.code.toLocaleLowerCase() ?? null;
   }
 })
 

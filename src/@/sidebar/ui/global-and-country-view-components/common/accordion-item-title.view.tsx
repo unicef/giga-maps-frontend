@@ -1,4 +1,4 @@
-import { ChartColumn, Information } from "@carbon/icons-react";
+import { Information } from "@carbon/icons-react";
 import { Tooltip } from "@carbon/react";
 import { ReactElement } from "react";
 import styled from "styled-components";

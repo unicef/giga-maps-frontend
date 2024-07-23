@@ -1,12 +1,8 @@
-import { ChartColumn, } from "@carbon/icons-react";
-import { AccordionItem } from "@carbon/react";
 import { useState } from "react";
 import styled from "styled-components";
 
 import { SchoolStatsType } from "~/api/types";
 
-import { AccordionItemTitle } from "../../global-and-country-view-components/common/accordion-item-title.view";
-import { AccordionDistribution } from "../../sidebar.style";
 import HistoryGraph from "./history-graph.view";
 
 const ProgressGraphWrapper = styled.div`
@@ -14,8 +10,7 @@ const ProgressGraphWrapper = styled.div`
 
 `
 
-export function HistoryGraphAccordian({ schoolData, isLoading }: { schoolData?: SchoolStatsType; isLoading?: boolean }) {
-  const [show, setShow] = useState(true);
+export function HistoryGraphAccordian({ schoolData, isLoading }: { readonly schoolData?: SchoolStatsType; readonly isLoading?: boolean }) {
   return (
     // <ProgressGraphWrapper>
     //   <AccordionDistribution>

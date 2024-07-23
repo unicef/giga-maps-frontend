@@ -49,11 +49,11 @@ const MapStyle = styled.div<{ $isMobile: boolean }>`
 const MapComponent = () => {
   const isMobile = useStore($isMobile);
 
-  return <>
+  return (
     <MapStyle $isMobile={isMobile}>
       <div key={isMobile ? 'desktop_view' : 'mobile: view'} id="map" ref={onMapRef} style={{ width: '100%', height: '100%' }} />
     </MapStyle>
-  </>;
+  )
 }
 
 export default MapComponent;

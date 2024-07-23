@@ -14,12 +14,12 @@ $loggedInUser.reset(onLogoutSuccess);
 $loggedInUser.on(getUserDetailFx.doneData, setPayload);
 
 export const $isLoggedIn = $loggedInUser.map((user) => !!user);
-export const $userFullName = $loggedInUser.map((user) => `${user?.first_name || ''} ${user?.last_name || ''}`.trim())
+export const $userFullName = $loggedInUser.map((user) => `${user?.first_name ?? ''} ${user?.last_name ?? ''}`.trim())
 export const $userShortName = $userFullName.map((userName = '') => userName?.split(' ').map((name) => name[0]).join(''))
 export const $isAdmin = $loggedInUser.map((user) => user && user?.role.name !== "Read Only");
 export const $isAdminUser = $loggedInUser.map((user) => user && ((user?.role.name === "Admin" && user?.role.category === 'system') || user?.is_superuser));
 export const $isSuperAdmin = $loggedInUser.map(user => user?.is_superuser);
-export const $userPermissions = $loggedInUser.map((user) => createPermission(user?.role?.permission_slugs || []))
+export const $userPermissions = $loggedInUser.map((user) => createPermission(user?.role?.permission_slugs ?? []))
 
 export const $isCheckingAuthentication = sample({
   source: combine([

@@ -2,9 +2,7 @@ import { Checkbox, SelectItem, TextInput } from "@carbon/react";
 import { useStore } from "effector-react";
 
 import { $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model";
-import { stylePaintData } from "~/@/map/map.constant";
 import { LayerTypeChoices } from "~/@/sidebar/types";
-import { getConnectivityLogicalValues } from "~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant";
 
 import { DataLayerFieldContainer, DataLayerNameField, InputLabel, SelectLayerConfig } from "../../../styles/admin-styles";
 import { Div } from "~/@/common/style/styled-component-style";
