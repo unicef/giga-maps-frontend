@@ -82,7 +82,9 @@ export const FilterHeaderWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-
+  @media (min-width: 769px) {
+    min-width: 23rem;
+  }
   >h3{
     color: ${props => props.theme.filterText};
     font-family: Open Sans;
