@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { testWrapper } from '~/tests/jest-wrapper';
 import ConnectivityLayer from '../connectivity-layer/connectivity-layer.view';
 jest.mock('@carbon/charts-react', () => ({
