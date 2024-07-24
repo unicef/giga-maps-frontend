@@ -140,7 +140,7 @@ export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, 
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const countryParams = getCountryParams(mapRoute.country, country?.id, admin1Id);
   const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
-  if (downloadLayerId === layerId) {
+  if (downloadLayerId === layerId || !layerId) {
     url = connectivityUrl;
   } else if (layerId === coverageLayerId) {
     url = coverageUrl

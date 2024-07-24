@@ -5,8 +5,8 @@ import { useStore } from 'effector-react';
 import { css, styled } from 'styled-components';
 
 import { $country } from '~/@/country/country.model';
-import { mapCountry, mapOverview, router } from '~/core/routes';
-import { Link } from '~/lib/router';
+import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
+import { Link, useRoute } from '~/lib/router';
 
 import { $allLoadings, $isLoadingSchoolView, $schoolStats } from '../../sidebar.model';
 import { LoadingText } from '~/@/common/style/styled-component-style';
@@ -45,10 +45,11 @@ export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPa
   const countryData = useStore($country);
   const isLoading = useStore($allLoadings).country;
   const { name: countryName = '...', code = ' ' } = countryData ?? {};
+  const isSchoolView = useRoute(mapSchools)
   return (<>
     {isLoading ? <LoadingText width='5rem' $marginEnd='0' /> :
       <BreadcrumbEllipsis title={countryName} $maxWidth={isCurrentPage ? 10 : 5} href="#" isCurrentPage={isCurrentPage}>
-        <Link to={mapCountry} params={{ code: code.toLocaleLowerCase() }} query={getCurrentCountrySearchPath(code)}>{countryName}</Link>
+        <Link to={mapCountry} params={{ code: code.toLocaleLowerCase() }} query={!isSchoolView ? getCurrentCountrySearchPath(code) : ''}>{countryName}</Link>
       </BreadcrumbEllipsis>
     }
     {admin1Name && <BreadcrumbEllipsis $maxWidth={5} title={admin1Name} isCurrentPage>{admin1Name}</BreadcrumbEllipsis>}

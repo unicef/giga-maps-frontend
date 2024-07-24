@@ -49,7 +49,7 @@ export const Tag = styled.div`
 `
 export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   position: relative;
-  .cds--btn--primary, .cds--btn--primary:hover, .cds--btn--primary:active, .cds--btn--primary:focus {
+  .cds--btn:not(.cds--btn--disabled) {
     background: ${props => props.theme.main};
   }
   .cds--btn--icon-only{ 

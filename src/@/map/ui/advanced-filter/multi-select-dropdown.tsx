@@ -1,14 +1,10 @@
 import { AdvanceFilterType } from "~/api/types";
 import { StyledMultiSelectFilterConfig } from "./filter-button.style"
 import { useMemo } from "react";
+import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { Information } from '@carbon/icons-react'
 
-interface DropdownType {
-  label: string;
-  titleText: string;
-  items: string[];
-}
-
-const MultiSelectDropdown = ({ name, parameter, place_holder: placeholder, choices, itemKey, value, onChange }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
+const MultiSelectDropdown = ({ name, description, parameter, place_holder: placeholder, choices, itemKey, value, onChange }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
   const items = useMemo(() => [...(choices ?? [])], [choices])
   const selectedItem = useMemo(() => {
     const values = value?.split(',') || [];
@@ -18,10 +14,17 @@ const MultiSelectDropdown = ({ name, parameter, place_holder: placeholder, choic
     <StyledMultiSelectFilterConfig
       size="lg"
       direction='bottom'
-      titleText={name}
+      titleText={<>
+        {name}
+        {!!description && <TooltipStyle align="bottom" label={description}>
+          <button type="button">
+            <Information />
+          </button>
+        </TooltipStyle>}
+      </>}
       id={`mutli-select-dropdown-${parameter.field}`}
       items={items}
-      label={placeholder ?? `Select ${name}`}
+      label={<>{placeholder ?? `Select ${name}`}1</>}
       initialSelectedItems={selectedItem}
       selectedItem={selectedItem}
       onChange={({ selectedItems }: { selectedItems: { value: string }[] }) => {

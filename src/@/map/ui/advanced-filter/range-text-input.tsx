@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { evaluateExpression } from "~/lib/utils";
 import { $country } from "~/@/country/country.model";
 import { useStore } from "effector-react";
+import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { Information } from '@carbon/icons-react'
 
-const RangeTextInput = ({ name, active_countries_range = {}, value: rangeValue, parameter, include_none_filter: noneFilter, itemKey, downcast_aggr_str, upcast_aggr_str, onChange }: AdvanceFilterType & {
+const RangeTextInput = ({ name, description, active_countries_range = {}, value: rangeValue, parameter, include_none_filter: noneFilter, itemKey, downcast_aggr_str, upcast_aggr_str, onChange }: AdvanceFilterType & {
   value: { none_range: boolean; value: string }; itemKey: string; onChange: (key: string, value: {
     none_range: boolean;
     value: string;
@@ -26,7 +28,16 @@ const RangeTextInput = ({ name, active_countries_range = {}, value: rangeValue, 
 
   return (
     <StyledTextInputContainer>
-      <FormLabel>{name}</FormLabel>
+      <FormLabel>
+        <>
+          {name}
+          {!!description && <TooltipStyle align="bottom" label={description}>
+            <button type="button">
+              <Information />
+            </button>
+          </TooltipStyle>}
+        </>
+      </FormLabel>
       <StyledTextInputWrapper className="group-input">
         <TextInput
           type="number"

@@ -170,8 +170,15 @@ export const TooltipStyle = styled(Tooltip)`
   button {
     border: none;
     background: inherit;
+    cursor: pointer;
+  }
+  .cds--popover-content {
+    background: #181818 !important;
+    color: ${props => props.theme.white};
   }
   svg {
-    fill: ${props => props.theme.text};
+    width: 0.75rem;
+    height: 0.75rem;
+    fill: ${props => props.theme.grey60};
   }
 `
