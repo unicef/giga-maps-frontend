@@ -47,7 +47,9 @@ COPY ngx.conf /etc/nginx/nginx.conf
 # Add Prometheus Exporter for nginx
 RUN curl -L https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v1.2.0/nginx-prometheus-exporter_1.2.0_linux_amd64.tar.gz -o nginx-exporter.tar.gz \
       && tar -zxf nginx-exporter.tar.gz \
-      && ./nginx-prometheus-exporter --version \
-      && nohup ./nginx-prometheus-exporter --nginx.scrape-uri=http://127.0.0.1/nginx_status &
+      && ./nginx-prometheus-exporter --version 
+
+CMD ["./nginx-prometheus-exporter", "--nginx.scrape-uri=http://127.0.0.1/nginx_status"]
+CMD ["service", "nginx start"]
 
 EXPOSE 80 2222
