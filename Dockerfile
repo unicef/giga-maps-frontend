@@ -48,8 +48,7 @@ RUN chmod 777 /start.sh
 
 # Add Prometheus Exporter for nginx
 RUN curl -L https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v1.2.0/nginx-prometheus-exporter_1.2.0_linux_amd64.tar.gz -o nginx-exporter.tar.gz \
-      && tar -zxf nginx-exporter.tar.gz \
-      && ./nginx-prometheus-exporter --version 
+      && tar -zxf nginx-exporter.tar.gz
 
 ENTRYPOINT ["/bin/bash", "/start.sh"]
 
