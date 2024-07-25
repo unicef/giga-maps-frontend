@@ -13,7 +13,7 @@ const SingleDropdown = ({ name, parameter, choices, itemKey, value, onChange, de
       label={name}
       id={`dropdown-${parameter.field}`}
       titleText={<>{name}
-        {!!description && <TooltipStyle autoAlign={true} align="bottom" label={description}>
+        {!!description && <TooltipStyle $maxWidth="12rem" autoAlign={true} align="bottom-left" label={description}>
           <button type="button">
             <Information />
           </button>

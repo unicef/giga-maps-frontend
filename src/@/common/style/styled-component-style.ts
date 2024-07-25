@@ -166,7 +166,7 @@ export const CustomIcon = styled.span<{ $size?: number }>`
   }
 `
 
-export const TooltipStyle = styled(Tooltip)`
+export const TooltipStyle = styled(Tooltip) <{ $maxWidth?: string }>`
   button {
     border: none;
     background: inherit;
@@ -180,5 +180,8 @@ export const TooltipStyle = styled(Tooltip)`
     width: 0.75rem;
     height: 0.75rem;
     fill: ${props => props.theme.grey60};
+  }
+  .cds--popover-content {
+    max-inline-size: ${props => props.$maxWidth ?? "18rem"};
   }
 `
