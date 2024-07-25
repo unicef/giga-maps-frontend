@@ -37,6 +37,7 @@ RUN apt-get update \
 	&& echo "$SSH_PASSWD" | chpasswd
 
 COPY sshd_config /etc/ssh/
+COPY start.sh /
 
 # add built frontend
 RUN rm -rf /usr/share/nginx/html/*
@@ -49,6 +50,6 @@ RUN curl -L https://github.com/nginxinc/nginx-prometheus-exporter/releases/downl
       && tar -zxf nginx-exporter.tar.gz \
       && ./nginx-prometheus-exporter --version 
 
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["/start.sh"]
 
 EXPOSE 80 2222
