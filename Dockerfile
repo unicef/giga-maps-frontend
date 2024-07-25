@@ -50,6 +50,5 @@ RUN curl -L https://github.com/nginxinc/nginx-prometheus-exporter/releases/downl
       && ./nginx-prometheus-exporter --version 
 
 CMD ["./nginx-prometheus-exporter", "--nginx.scrape-uri=http://127.0.0.1/nginx_status"]
-CMD ["service", "nginx", "start"]
 
 EXPOSE 80 2222
