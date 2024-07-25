@@ -51,6 +51,6 @@ RUN curl -L https://github.com/nginxinc/nginx-prometheus-exporter/releases/downl
       && tar -zxf nginx-exporter.tar.gz \
       && ./nginx-prometheus-exporter --version 
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/bin/bash", "/start.sh"]
 
 EXPOSE 80 2222
