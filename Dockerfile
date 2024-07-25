@@ -37,13 +37,14 @@ RUN apt-get update \
 	&& echo "$SSH_PASSWD" | chpasswd
 
 COPY sshd_config /etc/ssh/
-COPY start.sh /
 
 # add built frontend
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=s1 /proco/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY ngx.conf /etc/nginx/nginx.conf
+COPY start.sh /
+RUN chmod 777 /start.sh
 
 # Add Prometheus Exporter for nginx
 RUN curl -L https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v1.2.0/nginx-prometheus-exporter_1.2.0_linux_amd64.tar.gz -o nginx-exporter.tar.gz \
