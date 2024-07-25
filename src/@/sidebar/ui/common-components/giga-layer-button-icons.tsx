@@ -6,17 +6,15 @@ import { useStore } from 'effector-react';
 import { useCallback } from 'react'
 
 import { CustomIcon } from '~/@/common/style/styled-component-style';
-import { $selectedGigaLayers } from '~/@/map/map.model';
 import { $layerUtils, $schoolStatusSelectedLayer, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection } from '~/@/sidebar/sidebar.model';
 
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
 import GigaLayerButton from './giga-layer-button';
 import { GigaLayerText, SidePanelLayerWrapper } from './styles/giga-layer.style';
-import { $countryCode } from '~/@/country/country.model';
 
 
 const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
-  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, downloadLayerId, coverageLayerData, activeLayerByCountryCode } = useStore($layerUtils);
+  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, activeLayerByCountryCode } = useStore($layerUtils);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
   const { isLive, isSchoolStatus } = currentLayerTypeUtils;
   const updateLayer = useCallback((prevSelectedId: number | null) => {
@@ -34,7 +32,6 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
       selectAllStaticLegendsSelection([]);
     }
   }, [selectedLayerId, schoolStatusSelectedLayer]);
-
   return (
     <>
       {popup && <GigaLayerText>Giga Layers</GigaLayerText>}
@@ -50,7 +47,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
         />
         <GigaLayerButton
           label="Real-time Connectivity"
-          disabled={!activeLayerByCountryCode[String(downloadLayerId)]}
+          disabled={!(activeLayerByCountryCode[String(currentDefaultLayerId)])}
           popup={popup}
           isActive={isLive}
           icon={<Wifi className='layer-icon' />}

@@ -93,13 +93,13 @@ export const speedConverterUtil = (current: string, convertTo: string, value = 0
   return value;;
 }
 
-export function evaluateExpression(expression?: string, val?: string | null) {
+export function evaluateExpression(expression?: string, val?: string | number | null) {
   // Define a regular expression to match {val}
   if (!expression || !val) return val;
   const regex = /\{val\}/g;
 
   // Replace {val} with the actual number
-  const modifiedExpression = expression.replace(regex, val);
+  const modifiedExpression = expression.replace(regex, String(val));
 
   // Use Function constructor to create a function
   // and pass val as a parameter

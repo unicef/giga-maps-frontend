@@ -49,7 +49,7 @@ export const Tag = styled.div`
 `
 export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   position: relative;
-  .cds--btn--primary, .cds--btn--primary:hover, .cds--btn--primary:active, .cds--btn--primary:focus {
+  .cds--btn:not(.cds--btn--disabled) {
     background: ${props => props.theme.main};
   }
   .cds--btn--icon-only{ 
@@ -82,7 +82,9 @@ export const FilterHeaderWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-
+  @media (min-width: 769px) {
+    min-width: 23rem;
+  }
   >h3{
     color: ${props => props.theme.filterText};
     font-family: Open Sans;
