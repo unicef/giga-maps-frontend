@@ -94,6 +94,12 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
   font-size: 0.75rem;
 }
 
+@media (min-width:769px) {
+  .c0 {
+    min-width: 23rem;
+  }
+}
+
 @media (max-width:768px) {
   .c7 {
     position: fixed;
@@ -644,7 +650,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     class="cds--list-box__label"
                     id="multiselect-field-label-1"
                   >
-                    Select Coverage Type
+                    Select Coverage Type1
                   </span>
                   <div
                     class="cds--list-box__menu-icon"
@@ -741,16 +747,31 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
   margin-bottom: 0.5rem;
 }
 
-.c1 {
+.c2 {
   padding: 0.5rem 1rem;
 }
 
-.c2 {
+.c3 {
   margin: 0.5rem 0;
 }
 
-.c2 .cds--checkbox-label-text {
+.c3 .cds--checkbox-label-text {
   font-size: 0.75rem;
+}
+
+.c1 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c1 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c1 svg {
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
 <div>
@@ -761,9 +782,54 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
       class="cds--label cds--label--no-margin"
     >
       No of Teachers
+      <span
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c1"
+      >
+        <div
+          class="cds--tooltip-trigger__wrapper"
+        >
+          <button
+            aria-labelledby="tooltip-:r9:"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+              />
+              <path
+                d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+              />
+            </svg>
+          </button>
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-:r9:"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
+          >
+            test range input
+          </span>
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
     </label>
     <div
-      class="c1 group-input"
+      class="c2 group-input"
     >
       <div
         class="cds--form-item cds--text-input-wrapper"
@@ -821,7 +887,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
       </div>
     </div>
     <div
-      class="cds--form-item cds--checkbox-wrapper c2"
+      class="cds--form-item cds--checkbox-wrapper c3"
     >
       <input
         checked=""

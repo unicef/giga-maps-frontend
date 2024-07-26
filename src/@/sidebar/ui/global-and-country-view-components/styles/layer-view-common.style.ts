@@ -49,7 +49,6 @@ display:flex;
 align-items:center;
 justify-content: space-between;
 padding: 0.55rem 1rem;
-// border: 1px solid ${props => props.theme.schoolListBack};
 .cds--tooltip-content{
   font-size: 0.8rem;
   max-width: 10rem;

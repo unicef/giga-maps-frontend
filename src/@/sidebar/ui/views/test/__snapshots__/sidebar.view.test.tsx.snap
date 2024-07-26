@@ -941,10 +941,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   position: relative;
 }
 
-.c38 .cds--btn--primary,
-.c38 .cds--btn--primary:hover,
-.c38 .cds--btn--primary:active,
-.c38 .cds--btn--primary:focus {
+.c38 .cds--btn:not(.cds--btn--disabled) {
   background: #181818;
 }
 
