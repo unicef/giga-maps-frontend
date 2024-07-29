@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 import { testWrapper } from '~/tests/jest-wrapper';
-import { MonthSlider } from '../month-slider';
+import RolesList from '../user-roles-list.view';
 
-describe('Month slider', () => {
+describe('User role', () => {
   it('should render component', () => {
-    const { asFragment } = render(testWrapper(<MonthSlider />));
+    const { asFragment } = render(testWrapper(<RolesList />));
     expect(asFragment).toMatchSnapshot();
   });
 });
