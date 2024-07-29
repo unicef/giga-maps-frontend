@@ -86,10 +86,10 @@ export default function Sidebar() {
         <MapButtonWrapper $hide={isTimeplayer}>
           <BroadcastButton className="broadcast-button">
             <FilterButton />
-            {!isMobile && <ZoomButtons />}
           </BroadcastButton >
           <TakeTourWrapper $bottom={sidebarHeight} >
-            <TimeplayerButton />
+            {!isMobile && <ZoomButtons />}
+            {!sidebarHeight && <TimeplayerButton />}
             {!sidebarHeight && <ActiveButtonWrapper>
               <IconButton
                 data-testid="tour-button"
