@@ -6,23 +6,27 @@ export const FilterPopover = styled(Popover)`
     /* position: absolute; */
     /* right: 20.5rem; */
     /* bottom: 33.5rem; */
-    .cds--popover-content{
+    .cds--popover  > .filter-popover-content {
         background:${props => props.theme.main};
+        height: calc(100vh - 2.3rem);
+        transform: none;
+        top: -1rem;
+        position: fixed;
+        right: 0;
+        width: 18rem;
     }
-    .cds--popover-caret{
-        background-color: ${props => props.theme.main}
+    .cds--popover .cds--popover-caret{
+      display:none;
       }
 
       @media (max-width: 768px) {
-        .filter-popover-content { 
+      .cds--popover > .filter-popover-content { 
           position: fixed;
           left: 0;
           top: 0;
           width: 100%;
           max-inline-size: none;
           height: 100%;
-          display: block;
-          transform: none;
         }
       }
 `
@@ -88,7 +92,7 @@ export const FilterHeaderWrapper = styled.div`
   justify-content: space-between;
   padding: 1rem;
   @media (min-width: 769px) {
-    min-width: 23rem;
+    min-width: 18rem;
   }
   >h3{
     color: ${props => props.theme.filterText};
@@ -159,7 +163,7 @@ export const StyledDropdownSingleSelect = styled(Dropdown)`
 `
 
 export const ScrollableContainer = styled(Scroll)`
-  max-height: calc(100vh - 20.5rem);
+  height: calc(100vh - 9.9rem);
   padding-bottom: 2rem;
   @media (max-width: 768px) {
     max-height: calc(100vh - 13rem);

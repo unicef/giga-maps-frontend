@@ -51,7 +51,7 @@ const FilterButton = () => {
         </FilterTag>
       </FilterTagContainer>}
       <FilterWrapper className="filter-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
-        <FilterPopup open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left-top"}>
+        <FilterPopup caret={false} open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left"}>
           <FilterButtonWrapper $iconColor={theme.white}>
             <Button
               align="left"
