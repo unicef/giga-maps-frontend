@@ -925,3 +925,5 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`SearchResultList should render component 1`] = `[Function]`;

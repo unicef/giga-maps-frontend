@@ -60,6 +60,7 @@ export const TimeplayerContainer = () => {
         title="Close timeplayer"
         data-testid="time-player-close"
         label='Close'
+        align="left"
         kind="secondry"
         onClick={() => {
           onToggleTimeplayer(false);

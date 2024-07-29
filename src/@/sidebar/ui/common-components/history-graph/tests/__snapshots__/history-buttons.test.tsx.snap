@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layer schools connectivity status calls changeHistoryIntervalUnit with IntervalUnit.month when "Monthly" button is clicked 1`] = `
+<button
+  class="history-modal__period-unit history-modal__period-unit--active"
+  type="button"
+>
+  Monthly
+</button>
+`;
+
+exports[`Layer schools connectivity status calls changeHistoryIntervalUnit with IntervalUnit.week when "Weekly" button is clicked 1`] = `
+<button
+  class="history-modal__period-unit history-modal__period-unit--active"
+  type="button"
+>
+  Weekly
+</button>
+`;
+
+exports[`Layer schools connectivity status renders "Weekly" and "Monthly" buttons correctly 1`] = `
+<button
+  class="history-modal__period-unit history-modal__period-unit--active"
+  type="button"
+>
+  Weekly
+</button>
+`;
+
+exports[`Layer schools connectivity status renders "Weekly" and "Monthly" buttons correctly 2`] = `
+<button
+  class="history-modal__period-unit"
+  type="button"
+>
+  Monthly
+</button>
+`;

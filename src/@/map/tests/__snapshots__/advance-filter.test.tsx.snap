@@ -774,6 +774,10 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
   height: 0.75rem;
 }
 
+.c1 .cds--popover-content {
+  max-inline-size: 18rem;
+}
+
 <div>
   <div
     class="c0"

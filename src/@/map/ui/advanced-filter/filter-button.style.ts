@@ -50,12 +50,14 @@ export const Tag = styled.div`
 export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   position: relative;
   .cds--btn:not(.cds--btn--disabled) {
-    background: ${props => props.theme.main};
+    background: ${props => props.theme.graphWeekMonthBorder};
+    border-radius: 1.875rem;
+    padding: 0.3rem 0.8rem;
   }
-  .cds--btn--icon-only{ 
+  .cds--btn svg { 
     transform: rotate(90deg);
-    border-radius: 50%;
-    border: 1px solid ${props => props.theme.main};
+    margin-right: 0.325rem;
+    margin-top: 0.0625rem;
   }
   .cds--btn--primary:focus {
     box-shadow: 0 0 0 1px ${props => props.theme.main};
@@ -63,7 +65,7 @@ export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   svg{
     fill: ${props => props.theme.text};
   }
-  .cds--popover{
+  .cds--popover {
     position:relative;
     z-index:6001;
     top:-1rem;
@@ -74,6 +76,9 @@ export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   }
   .cds--popover-caret{
     background: ${props => props.theme.text} !important;
+  }
+  .cds--btn--primary:focus {
+    border-color: ${props => props.theme.main};
   }
 `
 
