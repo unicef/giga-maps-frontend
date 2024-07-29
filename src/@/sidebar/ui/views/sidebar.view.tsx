@@ -84,10 +84,10 @@ export default function Sidebar() {
           </button>
         </SubContainer>
         <MapButtonWrapper $hide={isTimeplayer}>
-          {!isMobile &&
-            <BroadcastButton className="broadcast-button">
-              <ZoomButtons />
-            </BroadcastButton >}
+          <BroadcastButton className="broadcast-button">
+            <FilterButton />
+            {!isMobile && <ZoomButtons />}
+          </BroadcastButton >
           <TakeTourWrapper $bottom={sidebarHeight} >
             <TimeplayerButton />
             {!sidebarHeight && <ActiveButtonWrapper>
@@ -101,9 +101,8 @@ export default function Sidebar() {
                 <MagicWandFilled />
               </IconButton>
             </ActiveButtonWrapper>}
-            {!sidebarHeight && <FilterButton />}
-            <LegendButton />
             {!sidebarHeight && <ThemeButtons />}
+            <LegendButton />
           </TakeTourWrapper>
 
         </MapButtonWrapper>

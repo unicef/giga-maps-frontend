@@ -12,13 +12,14 @@ import FilterPopup from './filter-popup';
 import { $mapRoutes, router } from '~/core/routes';
 import { $country, $countrySearchParams, $countrySearchString } from '~/@/country/country.model';
 import { $advanceFilterList } from '../../map.model';
+import { $isMobile } from '~/core/media-query';
 
 const FilterButton = () => {
   const theme = useTheme();
   const isOpen = useStore($showAdvancedFilter)
   const country = useStore($country);
   const routes = useStore($mapRoutes);
-
+  const isMobile = useStore($isMobile);
   const countrySearchString = useStore($countrySearchString);
   const { selectedCount } = useStore($countrySearchParams);
   const advanceFilterList = useStore($advanceFilterList);
@@ -49,7 +50,7 @@ const FilterButton = () => {
         </FilterTag>
       </FilterTagContainer>}
       <FilterWrapper className="filter-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
-        <FilterPopup open={isOpen} setOpen={onShowAdvancedFilter}>
+        <FilterPopup open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left-top"}>
           <FilterButtonWrapper $iconColor={theme.white}>
             <IconButton
               align="left"

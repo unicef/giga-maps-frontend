@@ -2,22 +2,10 @@ import { Checkbox, CheckboxGroup, IconButton, Popover, RadioButton, RadioButtonG
 import { styled } from "styled-components";
 
 export const ThemeWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
-    position: fixed;
     z-index: ${(props) => (props.$zIndex)};
     background: ${props => props.theme.main};
-    right: .5rem;
-    bottom: 2.5rem;
     border-radius: 62.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-      /* .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  } */
+    margin-top:0.5rem;
     @media (max-width:768px){
         bottom:${(props) => props.$bottom ? "calc(60vh + 0.5rem)" : "calc(40vh + 0.5rem)"}
     }
@@ -194,7 +182,7 @@ export const CheckboxGroupWrapper = styled(CheckboxGroup)`
 
 export const BroadcastButton = styled.div`
 position:fixed;
-z-index:1;
+z-index:10;
 top:1rem;
 display: flex;
 align-items: center;
@@ -209,10 +197,10 @@ export const TakeTourWrapper = styled.div<{ $bottom: boolean }>`
 z-index: 1;
 position:fixed;
 right:.5rem;
-bottom:5rem;
+bottom:2.5rem;
 
  @media (max-width:768px){
-     bottom:${props => props.$bottom ? "calc(60vh + 01rem)" : "calc(40vh + 3rem)"};
+     bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(40vh + 0.5rem)"};
  }
 `
 

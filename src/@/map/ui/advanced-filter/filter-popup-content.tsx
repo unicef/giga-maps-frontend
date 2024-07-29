@@ -89,7 +89,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          Filter by
+          Filter Schools by
         </h3>
         {isMobile &&
           <IconButton
@@ -130,7 +130,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
               router.navigate(`${window.location.pathname}`);
               setOpen(false)
             }}>
-            Reset Filters
+            Reset
           </Button>
           <Button
             type="submit"

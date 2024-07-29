@@ -124,7 +124,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
         class="c0"
       >
         <h3>
-          Filter by
+          Filter Schools by
         </h3>
         <span
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
@@ -713,7 +713,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
             class="cds--btn cds--btn--secondary"
             type="reset"
           >
-            Reset Filters
+            Reset
           </button>
           <button
             class="cds--btn cds--btn--primary"
