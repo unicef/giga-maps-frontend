@@ -91,18 +91,16 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
         <h3>
           Filter Schools by
         </h3>
-        {isMobile &&
-          <IconButton
-            size="md"
-            title="Close filter"
-            data-testid="filter-close"
-            label='Close'
-            kind="ghost"
-            onClick={() => {
-              setOpen(false);
-            }}><Close size={18} />
-          </IconButton>
-        }
+        <IconButton
+          size="md"
+          data-testid="filter-close"
+          align="bottom-right"
+          label='Close'
+          kind="ghost"
+          onClick={() => {
+            setOpen(false);
+          }}><Close size={18} />
+        </IconButton>
       </FilterHeaderWrapper>
       <Form aria-label="filter-form">
         <ScrollableContainer>
