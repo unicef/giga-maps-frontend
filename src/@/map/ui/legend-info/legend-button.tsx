@@ -1,9 +1,9 @@
 import { Information } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react'
-import { merge, sample } from 'effector';
+import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
 
-import { $isProductTour, $selectedLayerId, $showLegend, onShowLegend } from '~/@/sidebar/sidebar.model';
+import { $isProductTour, $selectedLayerId, $showAdvancedFilter, $showLegend, $showThemeLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
 import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
 import { $isMobile } from '~/core/media-query';
 import { debounce } from '~/lib/effector-kit';
@@ -14,10 +14,13 @@ import { $country } from '~/@/country/country.model';
 import { useEffect } from 'react';
 
 sample({
-  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country]),
-  source: $isMobile,
+  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country, $showThemeLayer, $showAdvancedFilter]),
+  source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
   fn: (_, selectedLayerId) => true,
-  filter: (isMobile) => !isMobile,
+  filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
+    if (showAdvancedFilter || showThemeLayer) return false;
+    return !isMobile
+  },
   target: onShowLegend,
 })
 const LegendButton = () => {
