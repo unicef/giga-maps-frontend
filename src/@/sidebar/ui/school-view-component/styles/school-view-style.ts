@@ -106,14 +106,6 @@ export const SchoolMultiAccordion = styled(Accordion)`
       padding-left: 0.125rem;
       padding-top: 1rem;
     }
-    // .cds--accordion__heading:hover{
-    //   ${AccordionTitle}{
-    //     color:${props => props.theme.main};
-    //   }
-    //   svg{
-    //     fill:${props => props.theme.main};
-    //   }
-    // }
   .cds--accordion__item--active,
   .cds--accordion__item {
     border-top: none;

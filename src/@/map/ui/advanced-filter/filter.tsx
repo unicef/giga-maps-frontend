@@ -1,5 +1,5 @@
 import { Tuning } from '@carbon/icons-react'
-import { IconButton, Tag as FilterTag } from '@carbon/react';
+import { IconButton, Tag as FilterTag, Button } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useTheme } from 'styled-components';
 
@@ -40,6 +40,7 @@ const FilterButton = () => {
     })
   }, [advanceFilterList, country?.id, routes.schools]);
   const sidebarHeight = useStore($sidebarHeight)
+  if (isDisabled) return null;
   return (
     <>
       {selectedCount > 0 && <FilterTagContainer className="filter-tag-container">
@@ -50,16 +51,19 @@ const FilterButton = () => {
         </FilterTag>
       </FilterTagContainer>}
       <FilterWrapper className="filter-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
-        <FilterPopup open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left-top"}>
+        <FilterPopup caret={false} open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left"}>
           <FilterButtonWrapper $iconColor={theme.white}>
-            <IconButton
+            <Button
               align="left"
               onClick={showFilter}
               disabled={isDisabled}
               size="sm"
-              label="Filter">
+              label="Filter"
+              tooltipText='Filters'
+            >
               <Tuning fill={theme.white} />
-            </IconButton>
+              <span>Filters</span>
+            </Button>
             {!!countrySearchString && <Tag />}
           </FilterButtonWrapper>
         </FilterPopup>

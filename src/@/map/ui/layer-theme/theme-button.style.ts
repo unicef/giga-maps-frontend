@@ -11,57 +11,50 @@ export const ThemeWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
     }
 `
 export const ZoomButtonWrapper = styled.div`
-
-  .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  }
-
-    background: ${props => props.theme.graphWeekMonthBorder};
-   margin-top:.5rem;
-   width:1.5rem;
-    border-radius: 62.5rem;
+    z-index: 1;
+    margin-bottom:.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    .cds--popover{
+    position:relative;
+    z-index:6001;
+    top:-1rem;
+  }
+  .cds--tooltip-content {
+      background: ${props => props.theme.text} !important;
+      color: ${props => props.theme.main}!important;
+    }
+    .cds--btn:not(.cds--btn--disabled) {
+    background: ${props => props.theme.main};
+  }
 `
 
 export const ButtonWrapper = styled(IconButton)`
     width: 100%;
-    min-height: 2rem;
-    max-height: 2rem;
+    background: ${props => props.theme.main};
+    min-height: 1.3rem;
+    max-height: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.3rem;
-    padding: 0;
-    border-bottom-right-radius: 62.5rem;
-    border-bottom-left-radius: 62.5rem;
+    padding: 0.7rem;
     width: 1.5rem;
     cursor:pointer;
     svg{
         fill:${props => props.theme.text} !important;
+    }
+    .cds--popover-caret{
+        background: ${props => props.theme.text};
     }
 `
-export const ButtonWrapperUp = styled(IconButton)`
-    width: 100%;
-    min-height: 2rem;
-    max-height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.3rem;
-    padding: 0;
+export const ButtonWrapperUp = styled(ButtonWrapper)`
     border-top-right-radius: 62.5rem;
     border-top-left-radius: 62.5rem;
-    width: 1.5rem;
-    cursor:pointer;
-    svg{
-        fill:${props => props.theme.text} !important;
-    }
+`
+export const ButtonWrapperDown = styled(ButtonWrapper)`
+    border-bottom-right-radius: 62.5rem;
+    border-bottom-left-radius: 62.5rem;
 `
 
 export const CustomePopover = styled(Popover)`
@@ -99,7 +92,6 @@ export const CustomRadioButton = styled(RadioButton)`
     padding: 0.5rem 0rem 0rem 0rem ;
 
     label{
-       
         font-size: 0.75rem;
     } 
     .capitalize {

@@ -6,23 +6,27 @@ export const FilterPopover = styled(Popover)`
     /* position: absolute; */
     /* right: 20.5rem; */
     /* bottom: 33.5rem; */
-    .cds--popover-content{
+    .cds--popover  > .filter-popover-content {
         background:${props => props.theme.main};
+        height: calc(100vh - 2.3rem);
+        transform: none;
+        top: -1rem;
+        position: fixed;
+        right: 0;
+        width: 18rem;
     }
-    .cds--popover-caret{
-        background-color: ${props => props.theme.main}
+    .cds--popover .cds--popover-caret{
+      display:none;
       }
 
       @media (max-width: 768px) {
-        .filter-popover-content { 
+      .cds--popover > .filter-popover-content { 
           position: fixed;
           left: 0;
           top: 0;
           width: 100%;
           max-inline-size: none;
           height: 100%;
-          display: block;
-          transform: none;
         }
       }
 `
@@ -50,12 +54,14 @@ export const Tag = styled.div`
 export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   position: relative;
   .cds--btn:not(.cds--btn--disabled) {
-    background: ${props => props.theme.main};
+    background: ${props => props.theme.graphWeekMonthBorder};
+    border-radius: 1.875rem;
+    padding: 0.3rem 0.8rem;
   }
-  .cds--btn--icon-only{ 
+  .cds--btn svg { 
     transform: rotate(90deg);
-    border-radius: 50%;
-    border: 1px solid ${props => props.theme.main};
+    margin-right: 0.325rem;
+    margin-top: 0.0625rem;
   }
   .cds--btn--primary:focus {
     box-shadow: 0 0 0 1px ${props => props.theme.main};
@@ -63,7 +69,7 @@ export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   svg{
     fill: ${props => props.theme.text};
   }
-  .cds--popover{
+  .cds--popover {
     position:relative;
     z-index:6001;
     top:-1rem;
@@ -75,6 +81,9 @@ export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   .cds--popover-caret{
     background: ${props => props.theme.text} !important;
   }
+  .cds--btn--primary:focus {
+    border-color: ${props => props.theme.main};
+  }
 `
 
 export const FilterHeaderWrapper = styled.div`
@@ -83,7 +92,7 @@ export const FilterHeaderWrapper = styled.div`
   justify-content: space-between;
   padding: 1rem;
   @media (min-width: 769px) {
-    min-width: 23rem;
+    min-width: 18rem;
   }
   >h3{
     color: ${props => props.theme.filterText};
@@ -154,7 +163,7 @@ export const StyledDropdownSingleSelect = styled(Dropdown)`
 `
 
 export const ScrollableContainer = styled(Scroll)`
-  max-height: calc(100vh - 20.5rem);
+  height: calc(100vh - 9.9rem);
   padding-bottom: 2rem;
   @media (max-width: 768px) {
     max-height: calc(100vh - 13rem);
