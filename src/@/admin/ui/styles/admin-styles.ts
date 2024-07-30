@@ -998,16 +998,13 @@ export const DeleteConfirmation = styled.div`
     z-index: 5;
     width: calc(100% - 17rem);
 `
-export const AddFilterWrapper = styled.div`
-    position: relative;
-`
-
 export const AddFilterContainer = styled.div`
     height: 100vh;
-    width: 30%;
+    width: 18rem;
     z-index: 999;
-    position: absolute;
+    position: fixed;
     right: 0;
+    top: 0;
     background: #222;
 `
 

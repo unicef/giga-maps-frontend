@@ -1,28 +1,26 @@
 import {
   Button,
   DataTable,
+  IconButton,
   Table,
   TableCell,
   TableHeader,
   TableRow,
   TableToolbar,
-  OverflowMenu,
 } from '@carbon/react';
 import PageTitleComponent from '../common-components/page-title-component';
 import {
   DataTableContainer, DeleteConfirmation, RecentLogScroll, TableDataBody, TableDataHead, TableWrapper, ToolbarContent,
 } from '../styles/admin-styles'
-import { Add, Edit } from '@carbon/icons-react';
-import { Link } from '~/lib/router';
+import { Add, Edit, Delete } from '@carbon/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from 'effector-react';
 import { $filterListResponse } from '../../models/filter-list.model';
 import { deleteFilterApiKeyRequestFx, getFilterListFx } from '../../effects/filter-fx';
-import { editAdminFilter } from '~/core/routes';
-import { $showFilterSidebar, onShowFilterSidebar } from '~/@/sidebar/sidebar.model';
-import AddFilterList from './add.view';
-import { OverflowMenuItem } from '@carbon/react';
+import { addAdminFilter, editAdminFilter } from '~/core/routes';
 import { ActionableNotification } from '@carbon/react';
+import { Link } from '~/lib/router';
+import { Div } from '~/@/common/style/styled-component-style';
 
 const headers = [
   { key: 'filter_name', header: 'Filter name' },
@@ -37,11 +35,6 @@ const headers = [
 const ListFilterView = () => {
   const [apiKeyDeleteId, setApiKeyDeleteId] = useState<null | number>(null);
   const filterList = useStore($filterListResponse) || { results: [] };
-  const isOpen = useStore($showFilterSidebar)
-
-  const openFilterSidebar = () => {
-    onShowFilterSidebar(!isOpen);
-  };
 
   const deleteFilterData = async (id: number) => {
     setApiKeyDeleteId(null)
@@ -52,15 +45,25 @@ const ListFilterView = () => {
 
   const rows = useMemo(() => filterList?.map((item) => ({
     ...item,
-    action:
-      <OverflowMenu aria-label="overflow-menu" flipped={true}>
-        <OverflowMenuItem itemText="Edit" onClick={(e) => {
-          e.preventDefault();
-          editAdminFilter.navigate({ id: item.id })
-        }}>
-        </OverflowMenuItem>
-        <OverflowMenuItem itemText="Delete" onClick={() => { setApiKeyDeleteId(item.id) }}></OverflowMenuItem>
-      </OverflowMenu>
+    action: <Div style={{ display: "flex", marginLeft: "-16px" }}>
+      <Link to={editAdminFilter} params={{ id: item.id ?? 0 }}>
+        <IconButton
+          kind='ghost'
+          size='md'
+          label='Edit'
+          tooltipText='Edit'
+          onClick={() => { }}
+        ><Edit /></IconButton>
+      </Link>
+      <IconButton
+        kind='ghost'
+        size='md'
+        label='Delete'
+        tooltipText='Delete'
+        renderIcon={Delete}
+        onClick={() => setApiKeyDeleteId(item.id ?? 0)}
+      ></IconButton>
+    </Div>
   })), [filterList]);
 
   useEffect(() => {
@@ -71,12 +74,11 @@ const ListFilterView = () => {
 
   return (
     <>
-      {isOpen && <AddFilterList openFilterSidebar={openFilterSidebar} />}
       <PageTitleComponent
         title={"Filters"}
         subTitle={"Lorem Ipsum"}
         recentlyView={false} />
-      {apiKeyDeleteId &&
+      {!!apiKeyDeleteId &&
         <DeleteConfirmation>
           <ActionableNotification
             style={{ maxWidth: "100%" }}
@@ -104,13 +106,14 @@ const ListFilterView = () => {
           return <DataTableContainer>
             <TableToolbar {...getToolbarProps()}>
               <ToolbarContent>
-                <Button
-                  onClick={openFilterSidebar}
-                  tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
-                  kind="primary"
-                  renderIcon={Add}>
-                  Add new filter
-                </Button>
+                <Link to={addAdminFilter}>
+                  <Button
+                    renderIcon={Add}
+                    onClick={() => { }}
+                  >
+                    Add new filter
+                  </Button>
+                </Link>
               </ToolbarContent>
             </TableToolbar>
             <RecentLogScroll >

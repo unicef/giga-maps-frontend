@@ -1,5 +1,5 @@
 import { editAdminFilter } from '~/core/routes';
-import { AddFilterContainer, AddFilterWrapper } from '../styles/admin-styles';
+import { AddFilterContainer } from '../styles/admin-styles';
 import AddEditFilterListForm from './form-filter';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
@@ -15,11 +15,9 @@ const EditFilterList = ({ openFilterSidebar }: { openFilterSidebar?: () => void 
   }, [id])
 
   return (
-    <AddFilterWrapper>
-      <AddFilterContainer>
-        <AddEditFilterListForm openFilterSidebar={openFilterSidebar} filterItemId={id} isEditMode={true} />
-      </AddFilterContainer>
-    </AddFilterWrapper>
+    <AddFilterContainer>
+      <AddEditFilterListForm id={id} isEditMode={true} />
+    </AddFilterContainer>
   )
 }
 
