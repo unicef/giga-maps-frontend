@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Box, Center } from '~/@/common/style/styled-component-style';
 import UserAvatar from '~/@/common/user-avatar';
 import { $userFullName } from '~/core/auth/models/auth.model';
-import { addAdminCountry, addAdminSchools, addCountryDailySummary, addCountrySummary, addSchoolDailySummary, addSchoolSummary, adminAboutUs, adminAlerts, adminApiKeys, adminCountry, adminRoute, adminSchools, backgroundTask, backgroundTaskView, contactMessage, contactMessageView, dataSource, editAdminCountry, editAdminSchools, editCountryDailySummary, editCountrySummary, editRoles, editSchoolDailySummary, editSchoolSummary, gigaLayerRoute, recentActions, roleCreateRoute, router, userDetails, userList, userPermissions, userRoles } from '~/core/routes';
+import { addAdminCountry, addAdminFilter, addAdminSchools, addCountryDailySummary, addCountrySummary, addSchoolDailySummary, addSchoolSummary, adminAboutUs, adminAlerts, adminApiKeys, adminCountry, adminFilterRoute, adminRoute, adminSchools, backgroundTask, backgroundTaskView, contactMessage, contactMessageView, dataSource, editAdminCountry, editAdminFilter, editAdminSchools, editCountryDailySummary, editCountrySummary, editRoles, editSchoolDailySummary, editSchoolSummary, gigaLayerRoute, recentActions, roleCreateRoute, router, userDetails, userList, userPermissions, userRoles } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { getAppConfigValues } from '../../models/admin-model';
@@ -42,6 +42,9 @@ import UserListComponent from '../user-crud/user-list.view';
 import UserPermissionComponent from '../user-permission/list-user-permission';
 import AdminPanelTabs from './admin-panel-tabs';
 import AdminLoaderView from './AdminLoader.view';
+import ListFilterView from '../filter-list/list-filter.view';
+import AddFilterList from '../filter-list/add.view';
+import EditFilterList from '../filter-list/edit.view';
 
 const AdminPanelMainComponent = () => {
   const userName = useStore($userFullName);
@@ -75,6 +78,10 @@ const AdminPanelMainComponent = () => {
         {useRoute(adminApiKeys) && <AdminApiKey />}
 
         {useRoute(gigaLayerRoute) && <DataLayerMainView />}
+
+        {useRoute(adminFilterRoute) && <ListFilterView />}
+        {useRoute(addAdminFilter) && <AddFilterList />}
+        {useRoute(editAdminFilter) && <EditFilterList />}
 
         {useRoute(backgroundTask) && <AdminBackgroundTask />}
         {useRoute(contactMessage) && <AdminContactMessage />}

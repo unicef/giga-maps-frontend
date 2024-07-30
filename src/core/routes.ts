@@ -57,6 +57,10 @@ export const addGigaLayer = router.add('/admin/giga-layer/create')
 export const viewGigaLayer = router.add<{ id: number }>('/admin/giga-layer/view/:id:path(/.*)?')
 export const editGigaLayer = router.add<{ id: number }>('/admin/giga-layer/edit/:id:path(/.*)?')
 
+export const adminFilterRoute = router.add('/admin/filter')
+export const addAdminFilter = router.add('/admin/filter/create')
+export const editAdminFilter = router.add<{ id: number }>('/admin/filter/edit/:id:path(/.*)?')
+
 export const backgroundTask = router.add('/admin/background-task')
 export const backgroundTaskView = router.add('/admin/background-task/view/:id:path(/.*)?')
 

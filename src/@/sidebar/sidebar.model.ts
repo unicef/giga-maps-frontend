@@ -329,6 +329,9 @@ export const $showLegend = restore(onShowLegend, true);
 export const onShowThemeLayer = createEvent<boolean>();
 export const $showThemeLayer = restore(onShowThemeLayer, false);
 
+export const onShowFilterSidebar = createEvent<boolean>();
+export const $showFilterSidebar = restore(onShowFilterSidebar, false);
+
 export const onShowAdvancedFilter = createEvent<boolean>();
 export const $showAdvancedFilter = restore(onShowAdvancedFilter, false);
 

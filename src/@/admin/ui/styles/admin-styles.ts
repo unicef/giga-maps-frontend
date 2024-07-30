@@ -994,7 +994,24 @@ min-height: calc(100vh - 7rem);
 `
 
 export const DeleteConfirmation = styled.div`
-position: fixed;
-z-index: 5;
-width: calc(100% - 17rem);
+    position: fixed;
+    z-index: 5;
+    width: calc(100% - 17rem);
+`
+export const AddFilterWrapper = styled.div`
+    position: relative;
+`
+
+export const AddFilterContainer = styled.div`
+    height: 100vh;
+    width: 30%;
+    z-index: 999;
+    position: absolute;
+    right: 0;
+    background: #222;
+`
+
+export const AddEditForm = styled.div`
+    display: flex;
+    padding: 1rem 0rem;
 `
