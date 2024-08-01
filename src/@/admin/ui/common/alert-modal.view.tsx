@@ -1,4 +1,4 @@
-import { Button, ButtonProps, ComposedModalProps, ModalHeader } from "@carbon/react";
+import { Button, ButtonProps, ModalHeader } from "@carbon/react";
 import { useState } from "react";
 import { Modal, ModalBody, ModalFooter } from "~/@/common/modal";
 

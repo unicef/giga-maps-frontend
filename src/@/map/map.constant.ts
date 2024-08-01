@@ -1,6 +1,6 @@
 import { Expression } from 'mapbox-gl';
 
-import { ConnectivityStat, GlobalStats, SchoolStatsType } from '~/api/types';
+import { GlobalStats, SchoolStatsType } from '~/api/types';
 import { getLocalStorage } from '~/lib/utils';
 
 import { Center, Style, StylePaintData, Zoom } from './map.types';

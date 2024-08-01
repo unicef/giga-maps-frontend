@@ -16,20 +16,16 @@ const EditSchoolSummary = () => {
     }
   }, [id]);
   return (
-    <>
-      <SchoolAddEditWrapper>
-        <PageTitleComponent
-          title={"School Summary Edit"}
-          recentlyView={false} />
-        <FormWrapper>
-          <FormSchoolSummary
-            schoolSummaryId={id}
-            isEditMode={true} />
-        </FormWrapper>
-      </SchoolAddEditWrapper>
-
-
-    </>
+    <SchoolAddEditWrapper>
+      <PageTitleComponent
+        title={"School Summary Edit"}
+        recentlyView={false} />
+      <FormWrapper>
+        <FormSchoolSummary
+          schoolSummaryId={id}
+          isEditMode={true} />
+      </FormWrapper>
+    </SchoolAddEditWrapper>
   )
 }
 

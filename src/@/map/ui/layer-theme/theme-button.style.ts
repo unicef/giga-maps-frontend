@@ -2,85 +2,63 @@ import { Checkbox, CheckboxGroup, IconButton, Popover, RadioButton, RadioButtonG
 import { styled } from "styled-components";
 
 export const ThemeWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
-    position: fixed;
     z-index: ${(props) => (props.$zIndex)};
     background: ${props => props.theme.main};
-    right: .5rem;
-    bottom: 2.5rem;
     border-radius: 62.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-      /* .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  } */
+    margin-top:0.5rem;
     @media (max-width:768px){
         bottom:${(props) => props.$bottom ? "calc(60vh + 0.5rem)" : "calc(40vh + 0.5rem)"}
     }
 `
 export const ZoomButtonWrapper = styled.div`
-
-  .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  }
-
-    background: ${props => props.theme.graphWeekMonthBorder};
-   margin-top:.5rem;
-   width:1.5rem;
-    border-radius: 62.5rem;
+    z-index: 1;
+    margin-bottom:.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    .cds--popover{
+    position:relative;
+    z-index:6001;
+    top:-1rem;
+  }
+  .cds--tooltip-content {
+      background: ${props => props.theme.text} !important;
+      color: ${props => props.theme.main}!important;
+    }
+    .cds--btn:not(.cds--btn--disabled) {
+    background: ${props => props.theme.main};
+  }
 `
 
 export const ButtonWrapper = styled(IconButton)`
     width: 100%;
-    min-height: 2rem;
-    max-height: 2rem;
+    background: ${props => props.theme.main};
+    min-height: 1.3rem;
+    max-height: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.3rem;
-    padding: 0;
-    border-bottom-right-radius: 62.5rem;
-    border-bottom-left-radius: 62.5rem;
+    padding: 0.7rem;
     width: 1.5rem;
     cursor:pointer;
     svg{
         fill:${props => props.theme.text} !important;
+    }
+    .cds--popover-caret{
+        background: ${props => props.theme.text};
     }
 `
-export const ButtonWrapperUp = styled(IconButton)`
-    width: 100%;
-    min-height: 2rem;
-    max-height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.3rem;
-    padding: 0;
+export const ButtonWrapperUp = styled(ButtonWrapper)`
     border-top-right-radius: 62.5rem;
     border-top-left-radius: 62.5rem;
-    width: 1.5rem;
-    cursor:pointer;
-    svg{
-        fill:${props => props.theme.text} !important;
-    }
+`
+export const ButtonWrapperDown = styled(ButtonWrapper)`
+    border-bottom-right-radius: 62.5rem;
+    border-bottom-left-radius: 62.5rem;
 `
 
 export const CustomePopover = styled(Popover)`
-    /* position: absolute; */
-    /* right: 20.5rem; */
-    /* bottom: 33.5rem; */
-    .theme-layer-popover-content{
+    .cds--popover-content{
         background:${props => props.theme.main};
     }
     .cds--popover-caret{
@@ -114,7 +92,6 @@ export const CustomRadioButton = styled(RadioButton)`
     padding: 0.5rem 0rem 0rem 0rem ;
 
     label{
-       
         font-size: 0.75rem;
     } 
     .capitalize {
@@ -197,7 +174,7 @@ export const CheckboxGroupWrapper = styled(CheckboxGroup)`
 
 export const BroadcastButton = styled.div`
 position:fixed;
-z-index:1;
+z-index:10;
 top:1rem;
 display: flex;
 align-items: center;
@@ -212,17 +189,10 @@ export const TakeTourWrapper = styled.div<{ $bottom: boolean }>`
 z-index: 1;
 position:fixed;
 right:.5rem;
-bottom:5rem;
-  /* .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  } */
+bottom:2.5rem;
 
  @media (max-width:768px){
-     bottom:${props => props.$bottom ? "calc(60vh + 01rem)" : "calc(40vh + 3rem)"};
+     bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(40vh + 0.5rem)"};
  }
 `
 

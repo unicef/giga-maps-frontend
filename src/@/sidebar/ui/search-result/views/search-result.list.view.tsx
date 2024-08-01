@@ -40,7 +40,7 @@ export default function SearchResultList() {
         <SearchItem onClick={() => {
           onSearchItemClick(item)
           setSearchInMobile(false)
-        }} key={`${item?.id}_${name}`} $border={itemLength !== index}>
+        }} key={`${item?.id}`} $border={itemLength !== index}>
           <LeftItem $fullWidth>
             <HighlightedText query={searchInput}>{item?.name}</HighlightedText>
             {item.type === SEARCH_DATA_TYPE.COUNTRY && <span className="type-name">Country</span>}

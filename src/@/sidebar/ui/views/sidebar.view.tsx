@@ -33,6 +33,7 @@ import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
 import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContainer, VerticalSliderButton, VerticalSliderButtonWrapper } from '../sidebar.style';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
+import FilterButton from '~/@/map/ui/advanced-filter/filter';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -83,12 +84,12 @@ export default function Sidebar() {
           </button>
         </SubContainer>
         <MapButtonWrapper $hide={isTimeplayer}>
-          {!isMobile &&
-            <BroadcastButton className="broadcast-button">
-              <ZoomButtons />
-            </BroadcastButton >}
+          <BroadcastButton className="broadcast-button">
+            <FilterButton />
+          </BroadcastButton >
           <TakeTourWrapper $bottom={sidebarHeight} >
-            <TimeplayerButton />
+            {!isMobile && <ZoomButtons />}
+            {!sidebarHeight && <TimeplayerButton />}
             {!sidebarHeight && <ActiveButtonWrapper>
               <IconButton
                 data-testid="tour-button"
@@ -100,8 +101,8 @@ export default function Sidebar() {
                 <MagicWandFilled />
               </IconButton>
             </ActiveButtonWrapper>}
-            <LegendButton />
             {!sidebarHeight && <ThemeButtons />}
+            <LegendButton />
           </TakeTourWrapper>
 
         </MapButtonWrapper>

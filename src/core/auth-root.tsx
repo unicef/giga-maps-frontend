@@ -4,7 +4,7 @@ import { useStore } from 'effector-react';
 import { lazy, PropsWithChildren, Suspense, useEffect } from 'react';
 
 import Toast from '~/@/common/Toast/Toast.view';
-import { admin, apiDocs, docsExporeApi, map } from '~/core/routes';
+import { admin, apiDocs, docsExporeApi } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { $msalInstance } from './auth/azure-msal/model';

@@ -1,6 +1,5 @@
 import { useStore } from 'effector-react'
 
-import { Scroll } from '~/@/scroll'
 import { editGigaLayer } from '~/core/routes'
 
 import { $currentGigaLayerItem } from '../../models/giga-layer.model'

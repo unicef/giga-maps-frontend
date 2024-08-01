@@ -1,12 +1,10 @@
-import { combine, createEvent, createStore, merge, restore, sample } from "effector";
+import { combine, createEvent, createStore, merge, sample } from "effector";
 
 import { getCountryList } from "~/@/api-docs/models/explore-api.model";
-import { cancelAnimation } from "~/@/map/effects/add-layers-utils";
-import { deleteSourceAndLayers } from "~/@/map/utils";
 import { addGigaLayer, editGigaLayer, viewGigaLayer } from "~/core/routes";
 import { setPayload, setPayloadFirst, setPayloadResults } from "~/lib/effector-kit";
 
-import { DataSourceName, DataSourceType, defaultGigaLayerForm, LayerDataSource, LayerType } from "../constants/giga-layer.constant";
+import { DataSourceName, defaultGigaLayerForm } from "../constants/giga-layer.constant";
 import { createDataLayerFx, getApiSourceValuesFx, getDataLayerByIdFx, getDataLayerListFx, getDataPreviewFx } from "../effects/giga-layer-fx";
 import { clearAdminMapData, previewDataLayerFx } from "../effects/preview-giga-layer-fx";
 import { DataLayer, DataSource, GigaLayerAllValueType, PreviewDataType } from "../types/giga-layer.type";
@@ -90,7 +88,7 @@ sample({
 
 sample({
   clock: merge([editGigaLayer.visible, viewGigaLayer.visible, onLoadPage]),
-  source: combine([editGigaLayer.params, viewGigaLayer.params, editGigaLayer.visible, viewGigaLayer.visible], ([editParams, viewParams, editVisibility, viewVisiblility]) => (editVisibility || viewVisiblility) ? editParams?.id || viewParams?.id || null : null),
+  source: combine([editGigaLayer.params, viewGigaLayer.params, editGigaLayer.visible, viewGigaLayer.visible], ([editParams, viewParams, editVisibility, viewVisiblility]) => (editVisibility || viewVisiblility) ? editParams?.id ?? viewParams?.id ?? null : null),
   fn: (id = 0) => {
     return {
       id
@@ -107,13 +105,14 @@ sample({
   fn: (layer) => {
     if (!layer) return defaultGigaLayerForm;
     return ({
+      code: layer?.code,
       name: layer?.name,
       icon: layer?.icon,
       description: layer.description,
       type: layer?.type,
       sourceType: layer?.data_sources_list?.map((source) => ({
         type: source.data_source_type,
-        name: DataSourceName[source.data_source_type as string]
+        name: DataSourceName[source.data_source_type]
       })),
       isReverse: layer?.is_reverse,
       dataSource: layer?.data_sources_list?.map(source => source.id),

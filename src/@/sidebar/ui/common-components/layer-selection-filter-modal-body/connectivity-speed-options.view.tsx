@@ -6,14 +6,11 @@ import { forwardRef, useState } from 'react'
 import { ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
 import {
   $benchmarkmarkUtils,
-  $benchmarkMarkValues,
-  $connectivityBenchMark,
   $connectivitySpeedGood,
   $connectivitySpeedModerate,
   $connectivitySpeednoInternet,
   $connectivitySpeedUnknown,
   $connectivityStats,
-  $selectedLayerData,
   changeConnectivitySpeedGood,
   changeConnectivitySpeedModerate,
   changeConnectivitySpeednoInternet,
@@ -54,7 +51,7 @@ export default forwardRef(function ConnectivitySpeedOptions(_props, ref) {
         <h2 className="filter-popover-title">Download Speed</h2>
         <p className="filter-popover-explanation">Explanation about what are the speeds and the logic behind them</p>
         <fieldset className="cds--fieldset">
-          {Object.entries(legends || {}).map(([key, value]) => {
+          {Object.entries(legends ?? {}).map(([key, value]) => {
             return value > 0 &&
               <Checkbox
                 key={key}

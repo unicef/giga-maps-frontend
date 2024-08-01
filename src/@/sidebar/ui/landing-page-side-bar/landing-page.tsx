@@ -12,7 +12,7 @@ import { $isMobile } from '~/core/media-query';
 import { router } from '~/core/routes';
 import { formatNumber } from '~/lib/utils';
 
-import { defaultInterval, Layers } from '../../sidebar.constant';
+import { defaultInterval } from '../../sidebar.constant';
 import { $allLoadings, $connectivityStats } from '../../sidebar.model';
 import { onShowCountriesAdminList } from '../common-components/top-search-bar/top-search-bar.model';
 import { ConnectivityDistributionNames, ConnectivityStatusNames } from '../global-and-country-view-components/container/layer-view.constant';

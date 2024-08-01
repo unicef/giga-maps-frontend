@@ -1,5 +1,5 @@
 import { Add } from '@carbon/icons-react';
-import { Button, Table, TableHeader, TableRow, ToggletipButton, ToggletipContent } from '@carbon/react'
+import { Button, Table, TableHeader, TableRow, ToggletipButton } from '@carbon/react'
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react'
 
@@ -7,11 +7,7 @@ import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import { StatusWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
 import { $userPermissions } from '~/core/auth/models';
 import { addGigaLayer, viewGigaLayer } from '~/core/routes';
-import { isDevelopment } from '~/env';
 import { Link } from '~/lib/router';
-
-import { Scroll } from '@/scroll';
-
 import { DataSourceStatusChoices, DataSourceStatusNames } from '../../constants/giga-layer.constant';
 import { $dataLayerListResponce, $dataListLayerCount, onGetDataLayerList } from '../../models/giga-layer.model';
 import PageTitleComponent from '../common-components/page-title-component'
@@ -57,7 +53,10 @@ const ListGigaLayer = () => {
             <TableDataHead >
               <TableRow>
                 <TableHeader>
-                  Giga layer
+                  Unique Code
+                </TableHeader>
+                <TableHeader>
+                  Giga Layer Label
                 </TableHeader>
                 <TableHeader>
                   Source API
@@ -83,6 +82,9 @@ const ListGigaLayer = () => {
               {
                 dataLayerList?.map((item) => (
                   <TableRow key={item.id}>
+                    <TableDataCell>
+                      <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
+                    </TableDataCell>
                     <TableDataCell>
                       <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
                     </TableDataCell>

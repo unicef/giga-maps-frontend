@@ -26,7 +26,7 @@ const $carousel = combine(
 
 
 
-function GigaMapEnbled({ data }: { data: AboutType }) {
+function GigaMapEnbled({ data }: { data: Readonly<AboutType> }) {
 
   const { current, maxColumns, isNext, isPrev } = useStore($carousel);
 
@@ -39,7 +39,7 @@ function GigaMapEnbled({ data }: { data: AboutType }) {
   };
 
   useEffect(() => {
-    if (data && data?.content) {
+    if (data?.content) {
       updateTotalItems(data?.content.length);
     }
   }, [data]);
@@ -51,7 +51,7 @@ function GigaMapEnbled({ data }: { data: AboutType }) {
         <CaseStudiesOneCardsContainer pos={current * 100}>
           {
             data?.content.map((singleSlide: Content, index: number) => (
-              <CaseStudySliderSection key={index} column={maxColumns} $style={singleSlide.style}>
+              <CaseStudySliderSection key={`${index}-${singleSlide?.title}`} column={maxColumns} $style={singleSlide.style}>
                 <CaseStudyImageSection>
                   <img src={singleSlide?.image} />
                 </CaseStudyImageSection>

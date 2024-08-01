@@ -1,15 +1,15 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
-import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx, fetchTimePlayerDataFx } from '~/api/project-connect';
+import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
 import { mapOverview, mapSchools, router } from '~/core/routes';
-import { setPayload } from '~/lib/effector-kit';
+import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
-import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, defaultGigaLayerList, getDefaultFormula, Layers, multiSchoolSelection, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { evaluateExpression } from '~/lib/utils';
@@ -61,9 +61,7 @@ $connectivitySpeedUnknown.on(changeConnectivitySpeedUnknown, setPayload);
 
 // layer model 
 export const $layersList = createStore<LayerType[]>([]);
-$layersList.on(fetchLayerListFx.doneData, (_, payload) => {
-  return payload.results
-})
+$layersList.on(fetchLayerListFx.doneData, setPayloadResults)
 
 export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
 export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
@@ -73,10 +71,10 @@ export const $schoolStatusSelectedLayer = restore(onSelectSchoolStatusLayer, SCH
 
 export const onSelectMainLayer = createEvent<number | null>();
 export const $selectedLayerId = restore(onSelectMainLayer, null);
-export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) || null);
-export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id || null);
-export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && !layer.created_by) || null);
-export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id || null);
+export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) ?? null);
+export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
+export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && !layer.created_by) ?? null);
+export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id ?? null);
 export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (layers, countryIdToCode) => {
   const list = {} as Record<string, { activeCountries: string[] }>
   const countryDefaultLayerList = {} as Record<string, number>;
@@ -114,7 +112,7 @@ export const $activeLayerByCountryCode = combine($layersList, $activeLayerByCoun
 });
 
 export const $selectedLayerData = combine($layersList, $selectedLayerId, (layers, selectedId) => {
-  return layers?.find(item => item.id === selectedId) || null;
+  return layers?.find(item => item.id === selectedId) ?? null;
 });
 
 export const $currentLayerCountryDataSource = combine($selectedLayerData, $country, (selectedData, country) => {
@@ -154,7 +152,7 @@ export const $currentLayerLegends = combine({
     }));
   } else {
     const reverseMapping = {} as Record<string, string>
-    legends.values = Object.entries(selectedLayerData?.legend_configs || {}).map(([key, item]: [string, any]) => {
+    legends.values = Object.entries(selectedLayerData?.legend_configs ?? {}).map(([key, item]: [string, any]) => {
       reverseMapping[item.labels] = key;
       return ({
         key,
@@ -172,9 +170,9 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
   const { convert_unit: unit, value } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
-  const baseBenchmarkValue = evaluateExpression(formula, baseBenchmark ?? 0);
+  const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
-  const nationalBenchmarkValue = evaluateExpression(formula, countryBenchmark[selectedLayerData.id] ?? 0);
+  const nationalBenchmarkValue = Number(evaluateExpression(formula, countryBenchmark[selectedLayerData.id] ?? 0)) || 0;
   const currentBenchmarkValue = connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchmarkValue : globalBenchmarkValue;
   const benchmarkLogic = getConnectivityLogicalValues(String(currentBenchmarkValue), unit, baseBenchmarkValue, isReverse);
   return ({
@@ -331,6 +329,9 @@ export const $showLegend = restore(onShowLegend, true);
 export const onShowThemeLayer = createEvent<boolean>();
 export const $showThemeLayer = restore(onShowThemeLayer, false);
 
+export const onShowAdvancedFilter = createEvent<boolean>();
+export const $showAdvancedFilter = restore(onShowAdvancedFilter, false);
+
 export const $isProductTour = sample({
   source: combine(mapOverview.router.search, mapOverview.visible),
   fn: ([searchParams, isVisible]) => {
@@ -364,7 +365,7 @@ export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
 // all reset model
-$connectivityBenchMark.reset(resetFilterModal, $country);
+$connectivityBenchMark.reset(resetFilterModal);
 $connectivitySpeedGood.reset([resetFilterModal, router.historyUpdated]);
 $connectivitySpeedModerate.reset([resetFilterModal, router.historyUpdated]);
 $connectivitySpeednoInternet.reset([resetFilterModal, router.historyUpdated]);
@@ -385,3 +386,5 @@ $timePlayerCurrentYear.reset($isTimeplayer)
 $isLoadedTimePlayer.reset($isTimeplayer)
 $isLoadingTimeplayer.reset($isTimeplayer)
 $sidebarHeight.reset([router.historyUpdated, $showLegend])
+
+$showAdvancedFilter.reset([$countryCode, $admin1Code, $countrySearchString])

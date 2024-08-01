@@ -64,7 +64,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
 }
 
 .c3 {
-  min-height: calc(100vh - 13.5rem);
+  min-height: calc(100vh - 10.5rem);
 }
 
 .c3 .cds--data-table thead {
@@ -290,6 +290,15 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
                   <div
                     class="cds--table-header-label"
                   >
+                    Description
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
                     Status
                   </div>
                 </th>
@@ -356,6 +365,9 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
                 >
                   f9dd80096-84e8
                 </td>
+                <td
+                  class="c6"
+                />
                 <td
                   class="c6"
                 >
@@ -429,6 +441,9 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
                 >
                   98ca9888-6b49-aff7-f7e32533e580
                 </td>
+                <td
+                  class="c6"
+                />
                 <td
                   class="c6"
                 >
@@ -510,8 +525,8 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:ra:"
-        id="cds-pagination-select-:ra:-count-label"
+        for="cds-pagination-select-:rb:"
+        id="cds-pagination-select-:rb:-count-label"
       >
         Items per page
       </label>
@@ -529,7 +544,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:ra:"
+                id="cds-pagination-select-:rb:"
                 title=""
               >
                 <option
@@ -599,7 +614,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:ra:-right"
+            for="cds-pagination-select-:rb:-right"
           >
             Page number, of 1 pages
           </label>
@@ -611,7 +626,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:ra:-right"
+                id="cds-pagination-select-:rb:-right"
                 title=""
               >
                 <option
@@ -655,7 +670,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:rb:"
+              aria-labelledby="tooltip-:rc:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -679,7 +694,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:rb:"
+            id="tooltip-:rc:"
             role="tooltip"
           >
             <span
@@ -699,7 +714,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:rd:"
+              aria-labelledby="tooltip-:re:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -723,7 +738,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:rd:"
+            id="tooltip-:re:"
             role="tooltip"
           >
             <span

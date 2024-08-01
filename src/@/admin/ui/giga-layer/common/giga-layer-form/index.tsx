@@ -1,12 +1,11 @@
 
 import { Button, Form } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { FormEvent, useEffect } from 'react'
+import { FormEvent } from 'react'
 
 import { $currentGigaLayerItem, $formData } from '~/@/admin/models/giga-layer.model';
 import { LayerStatusType, LayerTypeChoices } from '~/@/admin/types/giga-layer.type';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
-import { Scroll } from '~/@/scroll';
 import { adminGigaLayer, router } from '~/core/routes';
 
 import { createDataLayerFx } from '../../../../effects/giga-layer-fx';
@@ -27,6 +26,7 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
   const updateOrCreateLayer = async () => {
     try {
       const body = {
+        code: formData.code,
         name: formData.name,
         icon: formData.icon,
         description: formData.description,
@@ -56,33 +56,31 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
   }
 
   return (
-    <>
-      <Form aria-label="layer-config-form" onSubmit={onSubmit} autoComplete="off">
-        <GigaLayerScroll>
-          <ViewLayerWrapper>
-            <LayerHeadingWrapper>
-              <h6>Layer Config</h6>
-            </LayerHeadingWrapper>
-            <GigaUploadIcon />
-            <GigaFields isEditMode={isEditMode} isDefaultLayer={isDefaultLayer} />
-            <GigaBenchmarkForm isDefaultLayer={isDefaultLayer} />
-            <GigaLegendForm isDefaultLayer={isDefaultLayer} />
-          </ViewLayerWrapper>
-        </GigaLayerScroll>
-        <LayerConfigButtonWrapper>
-          <Button kind="secondary" onClick={() => {
-            router.back();
-          }}>
-            Cancel
-          </Button>
-          <Button
-            data-testid='submit-giga-layer-form'
-            type="submit">
-            {isEditMode ? 'Update' : 'Submit'}
-          </Button>
-        </LayerConfigButtonWrapper>
-      </Form >
-    </>
+    <Form aria-label="layer-config-form" onSubmit={onSubmit} autoComplete="off">
+      <GigaLayerScroll>
+        <ViewLayerWrapper>
+          <LayerHeadingWrapper>
+            <h6>Layer Config</h6>
+          </LayerHeadingWrapper>
+          <GigaUploadIcon />
+          <GigaFields isEditMode={isEditMode} isDefaultLayer={isDefaultLayer} />
+          <GigaBenchmarkForm isDefaultLayer={isDefaultLayer} />
+          <GigaLegendForm isDefaultLayer={isDefaultLayer} />
+        </ViewLayerWrapper>
+      </GigaLayerScroll>
+      <LayerConfigButtonWrapper>
+        <Button kind="secondary" onClick={() => {
+          router.back();
+        }}>
+          Cancel
+        </Button>
+        <Button
+          data-testid='submit-giga-layer-form'
+          type="submit">
+          {isEditMode ? 'Update' : 'Submit'}
+        </Button>
+      </LayerConfigButtonWrapper>
+    </Form >
   )
 }
 

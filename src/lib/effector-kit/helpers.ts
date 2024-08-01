@@ -20,7 +20,7 @@ export const setPayloadResults = <Payload = {
 }>(
   state: unknown,
   payload: { results: Payload }
-): Payload => payload.results;
+): Payload => payload?.results;
 
 export const setPayloadFirst = <T>(
   state: T,

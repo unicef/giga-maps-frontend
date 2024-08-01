@@ -1,9 +1,7 @@
 import { useStore } from 'effector-react';
-import { useEffect, useState } from 'react';
 
 import { Div } from '~/@/common/style/styled-component-style';
 import { $schoolConnectedOpenStatus } from '~/@/map/map.model';
-import { Layers } from '~/@/sidebar/sidebar.constant';
 import { $selectedLayerId, $schoolStatusSelectedLayer, $currentLayerTypeUtils } from '~/@/sidebar/sidebar.model';
 
 import CoverageLayer from '@/sidebar/ui/global-and-country-view-components/coverage-layer/coverage-layer';
@@ -15,7 +13,6 @@ import SchoolConnectivityLayer from './school-connectivity-layer/school-connecti
 const GlobalAndCountryView = () => {
   const selectedLayerId = useStore($selectedLayerId);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
-  const isSchoolStatusOpen = useStore($schoolConnectedOpenStatus);
   const { isLive, isStatic } = useStore($currentLayerTypeUtils);
   const defaultUIEnable = !selectedLayerId && schoolStatusSelectedLayer;
 
@@ -24,8 +21,7 @@ const GlobalAndCountryView = () => {
       {defaultUIEnable && <SchoolConnectivityLayer />}
       {isStatic && <CoverageLayer />}
       {isLive && <ConnectivityLayer />}
-      {/* extra spacing when school status is open */}
-      <Div $margin={isSchoolStatusOpen ? '0.8rem 0' : '0.8rem 0'} />
+      <Div $margin={'0.8rem 0'} />
     </SidebarScroll>
   )
 }

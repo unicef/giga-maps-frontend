@@ -7,6 +7,7 @@ export interface AboutType {
   }
   content: Content[]
   title?: string
+  icon?: string
   image?: string
   type: string
   status: boolean
@@ -19,6 +20,8 @@ export interface Content {
   title?: string
   image?: string
   style?: string
+  target?: string
+  icon?: string
   cta?: {
     text?: string[]
     link?: string[]

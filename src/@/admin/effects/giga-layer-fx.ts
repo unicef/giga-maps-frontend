@@ -3,7 +3,7 @@ import { createEffect } from "effector"
 import { APIListType } from "~/api/types"
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 
-import { ApiConfig, DataLayer, DataSource, LayerStatusType, PreviewDataType } from "../types/giga-layer.type"
+import { DataLayer, DataSource, LayerStatusType, PreviewDataType } from "../types/giga-layer.type"
 
 
 export const getDataLayerListFx = createEffect(({ page, pageSize }: { page: number, pageSize: number }) => {

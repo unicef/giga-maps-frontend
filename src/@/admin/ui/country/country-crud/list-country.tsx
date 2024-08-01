@@ -20,7 +20,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { deleteCountryFx, getCountryListFx, makeDataSourceValidFx } from '~/@/admin/effects/api-country-fx';
 import { $countryListAdmin, CountryListGate } from '~/@/admin/models/country-model';
 import { Country } from '~/api/types';
-import { addAdminCountry, adminCountry, editAdminCountry, router } from '~/core/routes';
+import { addAdminCountry, editAdminCountry } from '~/core/routes';
 import { Link } from '~/lib/router';
 
 import NoDataAvailable from '../../common-components/no-data-available';
@@ -42,7 +42,7 @@ const headers = [
 ];
 
 const ListCountry = () => {
-  const { results: countryList, count } = useStore($countryListAdmin) || { results: [], count: 0 };
+  const { results: countryList, count } = useStore($countryListAdmin) ?? { results: [], count: 0 };
   const rows = useMemo(() => countryList?.map((country: Country) => ({
     ...country,
     flag: <CountryListWrapper>
@@ -52,7 +52,7 @@ const ListCountry = () => {
   })), [countryList]);
 
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
-  const [searchValue, setSearchvalue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
   const [refreshKey, setRefreshKey] = useState(false);
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
@@ -109,7 +109,14 @@ const ListCountry = () => {
   }, [page, pageSize, searchApiCall])
 
   const onChangeAction = (event: FormEvent) => {
-    setSearchvalue(event?.target.value)
+    setSearchValue(event?.target.value)
+  }
+
+  const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault()
+      serachFn()
+    }
   }
 
   return (
@@ -167,8 +174,9 @@ const ListCountry = () => {
               </TableBatchActions>
               <ToolbarContent >
                 <TableToolbarSearch
+                  onKeyPress={onEnterKeyPress}
                   onClear={() => {
-                    setSearchvalue('')
+                    setSearchValue('')
                     serachFn()
                   }}
                   onChange={(evt) => {
@@ -196,13 +204,13 @@ const ListCountry = () => {
                   <TableDataHead>
                     <TableRow>
                       <TableSelectAll {...getSelectionProps()} />
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {headers.map((header, i) => <TableHeader key={`${header.key}-${i}`} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
                   </TableDataHead>
-                  {(rows && rows.length) ? <TableDataBody>
-                    {rows.map((row, i) => <TableRow key={i} {...getRowProps({
+                  {(rows?.length) ? <TableDataBody>
+                    {rows.map((row, i) => <TableRow key={`${row.id}-${i}`} {...getRowProps({
                       row
                     })}>
                       <TableSelectRow

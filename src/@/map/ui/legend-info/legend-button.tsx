@@ -1,24 +1,26 @@
 import { Information } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react'
-import { createEvent, merge, restore, sample } from 'effector';
+import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
 
-import { $isProductTour, $selectedLayerId, $showLegend, onShowLegend } from '~/@/sidebar/sidebar.model';
+import { $isProductTour, $selectedLayerId, $showAdvancedFilter, $showLegend, $showThemeLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
 import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
 import { $isMobile } from '~/core/media-query';
 import { debounce } from '~/lib/effector-kit';
 
-import { themeLayerBg } from '../layer-theme/theme-layer-bg';
-import { ActiveButtonWrapper, ActiveLegendWrapper, LegendWrapper } from "./legend-button.style";
+import { ActiveButtonWrapper, LegendWrapper } from "./legend-button.style";
 import LegendPopup from "./legend-popup";
 import { $country } from '~/@/country/country.model';
 import { useEffect } from 'react';
 
 sample({
-  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country]),
-  source: $isMobile,
+  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country, $showThemeLayer, $showAdvancedFilter]),
+  source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
   fn: (_, selectedLayerId) => true,
-  filter: (isMobile) => !isMobile,
+  filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
+    if (showAdvancedFilter || showThemeLayer) return false;
+    return !isMobile
+  },
   target: onShowLegend,
 })
 const LegendButton = () => {

@@ -144,8 +144,7 @@ export const CenterPointer = styled.div`
     transform: translate(-50%, -50%);
 `
 export const CustomPopover = styled(Popover) <{ $style?: ObjectType }>`
-  ${(props) => (props.$style && props.$style)};
-
+  ${(props) => props.$style ?? ''};
   .cds--popover-caret{
     background: ${props => props.theme.main};
   }
@@ -156,7 +155,7 @@ export const CircleWrapper = styled.div<{ $style?: ReturnType<typeof css> }>`
       align-items: center;
       justify-content: center;
       position: relative;
-      ${(props) => (props.$style && props.$style)};
+      ${(props) => props.$style ?? ''};
 `
 export const OuterCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     width: 1.375rem;
@@ -168,14 +167,14 @@ export const OuterCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     justify-content: center;
     cursor:pointer;
     z-index: 1;
-    ${(props) => (props.$style && props.$style)};
+    ${(props) => props.$style ?? ''};
 `
 
 export const InnerCircleDot = styled.div<{ $style?: ReturnType<typeof css> }>`
     width: 0.6rem;
     height: 0.6rem;
     border-radius: 50%;
-    ${(props) => (props.$style && props.$style)};
+    ${(props) => props.$style ?? ""};
     position: absolute;
     top: 50%;  
     left: 50%; 
@@ -256,7 +255,7 @@ height: 1.65rem !important;
 
 export const HighlightBox = styled.div<{ $style?: ObjectType }>`
   box-shadow: rgba(20, 20, 21, 0.84) 0px 0px 1px 2px, rgba(20, 20, 21, 0.84) 0px 0px 0px 1000vh;
-  ${(props) => (props.$style && props.$style)};
+  ${(props) => (!!props.$style ? props.$style : '')};
 `
 
 export const ClonedContainer = styled.div`

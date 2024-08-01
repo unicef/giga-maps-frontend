@@ -16,31 +16,29 @@ const FrequentlyAskedQuestions = ({ data }: { data: AboutType }) => {
   }, [startIndex, endIndex, data])
 
   return (
-    <>
-      <FaqSection id={data?.type} $style={data.style}>
-        <p className='faq-title'>{data?.title}</p>
-        <FaqQuestions>
-          <Accordion>
-            {
-              content.map((faq, index) => (
-                <AccordionItem key={index} title={faq?.title}>
-                  <p dangerouslySetInnerHTML={{ __html: faq?.text?.[0] ?? '' }} />
-                </AccordionItem>
-              ))
-            }
-          </Accordion>
-        </FaqQuestions>
-        <FaqPaginationWrapper>
-          <PaginationNav
-            page={page}
-            onChange={(page: number) => {
-              setPage(page)
-            }}
-            totalItems={Math.ceil(data?.content.length / itemsPerPage)}
-          />
-        </FaqPaginationWrapper>
-      </FaqSection>
-    </>
+    <FaqSection id={data?.type} $style={data.style}>
+      <p className='faq-title'>{data?.title}</p>
+      <FaqQuestions>
+        <Accordion>
+          {
+            content.map((faq, index) => (
+              <AccordionItem key={`${faq.title}-${index}`} title={faq?.title}>
+                <p dangerouslySetInnerHTML={{ __html: faq?.text?.[0] ?? '' }} />
+              </AccordionItem>
+            ))
+          }
+        </Accordion>
+      </FaqQuestions>
+      <FaqPaginationWrapper>
+        <PaginationNav
+          page={page}
+          onChange={(page: number) => {
+            setPage(page)
+          }}
+          totalItems={Math.ceil(data?.content.length / itemsPerPage)}
+        />
+      </FaqPaginationWrapper>
+    </FaqSection>
   )
 }
 export default FrequentlyAskedQuestions

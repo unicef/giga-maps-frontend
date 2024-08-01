@@ -32,7 +32,7 @@ export const zoomPaddingMobile = {
   left: 5,
   right: 5,
   top: 80,
-  bottom: (window?.innerHeight / 3) ?? 0,
+  bottom: window?.innerHeight / 3,
 };
 
 export const zoomPaddingDesktop = {

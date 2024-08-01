@@ -5,13 +5,12 @@ import { createEvent } from 'effector';
 import { onChangeMenu } from '~/@/sidebar/sidebar.model';
 import { $loggedInUser } from '~/core/auth/models';
 import { loggedInUser } from '~/tests/data/admin-main-data';
-import { apiList, filterApiList } from '~/tests/data/explore-apis-list';
+import { apiList } from '~/tests/data/explore-apis-list';
 import { testWrapper } from '~/tests/jest-wrapper';
 
-import { $exploreApiData, onChangeExploreApiList, setExploreApiCategory, setSearchExploreApi } from '../../models/explore-api.model';
+import { $exploreApiData } from '../../models/explore-api.model';
 import ApiInfo from '../components/api-info/api-info.view';
 import ExploreApiRightSection from '../components/explore-api-right-section';
-import ExploreApiList from '../components/explore-api-right-section/explore-api-list.view';
 import ApiDocsMain from '../page/api-docs-main.view';
 
 
@@ -33,8 +32,7 @@ describe('ApiDocs', () => {
 
   test('Render ExploreApiRightSection by click on side panel', () => {
     onChangeMenu(false)
-    const handleClick = jest.fn()
-    const { container } = render(testWrapper(<ApiDocsMain onClick={handleClick} />))
+    const { container } = render(testWrapper(<ApiDocsMain />))
     const exploreApiButton = container.querySelector('#explore-api')
     fireEvent.click(exploreApiButton)
     setApiList(apiList)
@@ -43,8 +41,7 @@ describe('ApiDocs', () => {
 
   test('Render ExploreApiRightSection by click on side panel', () => {
     onChangeMenu(false)
-    const handleClick = jest.fn()
-    const { container } = render(testWrapper(<ApiDocsMain onClick={handleClick} />))
+    const { container } = render(testWrapper(<ApiDocsMain />))
     const apiKeyButton = container.querySelector('#api-keys')
     fireEvent.click(apiKeyButton)
   })

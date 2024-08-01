@@ -1,6 +1,5 @@
 import { PropsWithChildren } from 'react';
 
-import { setTheme } from '~/core/theme.model';
 import { Link } from '~/lib/router';
 import { Route } from '~/lib/router/types';
 

@@ -18,7 +18,7 @@ import { CoverageBenchmarkNames, CoverageColorNames } from "../global-and-countr
 const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilterBody(_props, ref) {
   const coverageStats = useStore($coverageStats);
   const defaultStatus = useStore($coverageStatusAll);
-  const [currentStatus, setCurrentConnectivitySpeed] = useState<Record<string, boolean>>(defaultStatus);
+  const [currentStatus, setCurrentStatus] = useState<Record<string, boolean>>(defaultStatus);
   const legends = coverageStats?.connected_schools;
   const { selectedLayerId, coverageLayerId, currentLayerLegends, selectedLayerData } = useStore($layerUtils);
   const isCoverage = selectedLayerId === coverageLayerId;
@@ -43,7 +43,7 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilter
         <p className="filter-popover-explanation">Explanation about what are the speeds and
           the logic behind them</p>
         <fieldset className="cds--fieldset">
-          {Object.entries(legends || {}).map(([key, value]) => {
+          {Object.entries(legends ?? {}).map(([key, value]) => {
             const label = isCoverage ? CoverageBenchmarkNames[key] : key;
             const keyName = isCoverage ? CoverageColorNames[key] : currentLayerLegends.reverseMapping[key];
             return value > 0 &&
@@ -52,7 +52,7 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilter
                 labelText={label}
                 id={`${label}Id`}
                 checked={currentStatus[keyName]}
-                onChange={(_e, { checked }) => setCurrentConnectivitySpeed({
+                onChange={(_e, { checked }) => setCurrentStatus({
                   ...currentStatus,
                   [keyName]: checked
                 })}

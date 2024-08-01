@@ -223,9 +223,7 @@ exports[`RoleList render CreateRole by click 1`] = `
     </div>
     <div
       class="c0"
-    >
-      0
-    </div>
+    />
     <div
       class="c4"
     >
@@ -402,7 +400,7 @@ exports[`RoleList render RolesList and take snapshot 1`] = `
 }
 
 .c1 {
-  min-height: calc(100vh - 13.5rem);
+  min-height: calc(100vh - 10.5rem);
 }
 
 .c1 .cds--data-table thead {

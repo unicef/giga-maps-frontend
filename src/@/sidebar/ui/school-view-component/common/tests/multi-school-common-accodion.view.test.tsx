@@ -18,7 +18,7 @@ const mockSchoolDetails = {
 
 describe('MultiSchoolCommonAccodion', () => {
   test('renders school name and external ID', () => {
-    render(<MultiSchoolCommonAccodion schoolDetails={mockSchoolDetails} isOpen={false} onToggle={() => { }} />);
+    render(<MultiSchoolCommonAccodion schoolDetails={mockSchoolDetails} isOpen={false} onToggle={jest.fn()} />);
 
     expect(screen.getByText('Test School')).toBeInTheDocument();
     expect(screen.getByText('ABC123')).toBeInTheDocument();

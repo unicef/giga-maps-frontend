@@ -1,4 +1,4 @@
-import { attach, combine, createEvent, createStore, merge, restore, sample } from "effector";
+import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
 import { $countries } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
@@ -40,7 +40,7 @@ export const $searchSchoolIds = $searchSchoolSelectedList.map((items) => new Set
 export const $searchSchoolAdmin1 = $searchSchoolSelectedList.map((items) => new Set(items?.map((item) => item.admin1_name)) || undefined)
 export const $searchSchoolAdmin2 = $searchSchoolSelectedList.map((items) => new Set(items?.map((item) => {
   const admin1 = item.admin1_name;
-  const admin2 = item.admin2_name;
+  const admin2 = item.admin2_name;;
   return `${admin1}-${admin2 ? admin2 : '_Blank'}`
 })) || undefined)
 
@@ -111,7 +111,7 @@ export const $searchResultCollection = sample({
 const searchExpandCountry = sample({
   source: combine($countries, $currentExpandCountry),
   fn: ([countries, expandCountry]) => {
-    return countries?.find(country => country?.id.toString() === expandCountry)?.code.toLocaleLowerCase() || null;
+    return countries?.find(country => country?.id.toString() === expandCountry)?.code.toLocaleLowerCase() ?? null;
   }
 })
 
@@ -141,7 +141,7 @@ sample({
     query: $searchSchoolListMax
   }, ({ admin1, admin2, ...rest }) => {
     return {
-      admin1: admin1 ? admin1 : admin2,
+      admin1: !!admin1 ? admin1 : admin2,
       admin2: !admin1 ? '' : admin2,
       ...rest
     }

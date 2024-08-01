@@ -143,6 +143,11 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   fill: #fff!important;
 }
 
+.c10 {
+  display: flex;
+  align-items: center;
+}
+
 .c1 {
   width: 17rem;
   position: relative;
@@ -161,9 +166,9 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   flex-direction: row;
 }
 
-.c10 {
+.c11 {
   width: calc(100vw - 17rem);
-  padding-bottom: 1rem;
+  padding-bottom: 0.3rem;
 }
 
 @media (max-width:768px) {
@@ -365,36 +370,41 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
         <div
           class="c9 hello"
         >
-          <p>
-            © 2024  
+          <div
+            class="c10"
+          >
+            <p>
+              © 2024  
+              <a
+                class="giga-logo"
+                href="https://www.unicef.org/innovation/giga"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Giga
+              </a>
+            </p>
             <a
-              class="giga-logo"
-              href="https://www.unicef.org/innovation/giga"
+              href="https://www.unicef.org/"
+              rel="noreferrer"
+              style="margin-top: 0.1rem;"
+              target="_blank"
+            >
+              SvgUrl
+            </a>
+            <a
+              href="https://www.itu.int/en/Pages/default.aspx"
               rel="noreferrer"
               target="_blank"
             >
-              giga
+              SvgUrl
             </a>
-          </p>
-          <a
-            href="https://www.unicef.org/"
-            rel="noreferrer"
-            target="_blank"
-          >
-            SvgUrl
-          </a>
-          <a
-            href="https://www.itu.int/en/Pages/default.aspx"
-            rel="noreferrer"
-            target="_blank"
-          >
-            SvgUrl
-          </a>
+          </div>
         </div>
       </div>
     </div>
     <div
-      class="scrollbar-container c10 ps"
+      class="scrollbar-container c11 ps"
     >
       <div
         class="ps__rail-x"
@@ -1304,6 +1314,242 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
               type="submit"
             >
               Request For Extension
+            </button>
+          </div>
+        </form>
+      </div>
+      <button
+        class="cds--visually-hidden"
+        type="button"
+      >
+        Focus sentinel
+      </button>
+    </div>
+  </div>
+  .c0 >.cds--modal-container {
+  background: #383838;
+  width: 38rem;
+  height: auto;
+  background: #fff;
+}
+
+.c0 >.cds--modal-container button svg {
+  fill: #222!important;
+}
+
+.c0 >.cds--modal-container .cds--modal-close:hover {
+  background-color: transparent!important;
+}
+
+.c1 >h3 {
+  color: var(--text-text-primary, #161616);
+  font-family: Open Sans;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.c1 button svg {
+  fill: #fff;
+}
+
+.c1 .giga-text {
+  display: flex;
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: bolder;
+}
+
+.c1 .giga-text span:first-child {
+  font-weight: 100;
+}
+
+.c1 .cds--modal-close:hover {
+  background-color: #181818;
+}
+
+.c2 {
+  margin-bottom: 1.5rem;
+}
+
+.c2 .field-wrapper span {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+
+.c2 .field-wrapper input {
+  background: #474747;
+  color: #fff;
+  border: none;
+}
+
+.c2 .share-icons-container span {
+  color: #fff;
+}
+
+.c2 .share-icons-container .social-share-icons svg {
+  fill: #fff;
+}
+
+.c5 {
+  height: 3rem;
+}
+
+.c5 button {
+  height: 2.75rem!important;
+  flex: 1!important;
+  box-shadow: none!important;
+}
+
+.c3 {
+  color: var(--primary-black-80-giga-dark-grey);
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
+}
+
+.c4 {
+  margin-top: 1.5rem;
+}
+
+.c4 >.explore-api-text {
+  color: var(--text-text-secondary,#525252);
+  font-size: 0.75rem;
+  font-style: normLorem ipsum dolor sit lorem a amet,consectetur adipiscing elital;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.02rem;
+}
+
+.c4 >.explore-text-input {
+  margin-top: 0.5rem;
+}
+
+@media (max-width:768px) {
+
+}
+
+@media (max-width:768px) {
+
+}
+
+<div
+    aria-hidden="true"
+    class="cds--modal c0"
+    role="presentation"
+  >
+    <div
+      aria-modal="true"
+      class="cds--modal-container"
+      role="dialog"
+    >
+      <button
+        class="cds--visually-hidden"
+        type="button"
+      >
+        Focus sentinel
+      </button>
+      <div
+        class="cds--modal-container-body"
+      >
+        <form
+          class="cds--form"
+        >
+          <div
+            class="cds--modal-header c1"
+          >
+            <h3
+              class="cds--modal-header__heading cds--type-beta"
+            >
+              Request API Key
+            </h3>
+            <button
+              aria-label="Close"
+              class="cds--modal-close"
+              title="Close"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="cds--modal-close__icon"
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="cds--modal-content c2"
+          >
+            <p
+              class="c3"
+            >
+               Please select the countries for which you need data access. Please explain how you plan to utilise the data for each country.  
+            </p>
+            <div
+              class="c4"
+            >
+              <div
+                class="cds--form-item"
+              >
+                <div
+                  class="cds--text-area__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="message"
+                  >
+                    Description
+                  </label>
+                </div>
+                <div
+                  class="cds--text-area__wrapper"
+                >
+                  <textarea
+                    aria-invalid="false"
+                    class="cds--text-area"
+                    id="message"
+                    name="description"
+                    placeholder="Please provide a brief description of how you plan to utilize the data."
+                    rows="3"
+                    style="width: 100%;"
+                  />
+                  <span
+                    class="cds--text-area__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="cds--modal-footer c5 cds--btn-set"
+          >
+            <button
+              class="cds--btn cds--btn--secondary"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              class="cds--btn cds--btn--primary cds--btn--disabled"
+              disabled=""
+              type="submit"
+            >
+              Submit
             </button>
           </div>
         </form>

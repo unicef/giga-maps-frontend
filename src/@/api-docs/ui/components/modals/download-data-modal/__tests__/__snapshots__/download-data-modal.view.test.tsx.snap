@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DownloadDataModalView renders Modal component 1`] = `[Function]`;
+
+exports[`DownloadDataModalView renders Modal component with show popup 1`] = `[Function]`;

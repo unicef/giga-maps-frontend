@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronRight, ChevronUp, Close, RecentlyViewed } from '@carbon/icons-react';
 import { DesignResearch } from '@carbon/pictograms-react';
-import { Button, Checkbox, InlineLoading, Pagination, Search } from '@carbon/react';
+import { Button, Checkbox, InlineLoading, Search } from '@carbon/react';
 import styled, { css } from "styled-components";
 
 import { Scroll } from '~/@/scroll';
@@ -27,6 +27,7 @@ export const SearchResultWrapper = styled.div`
       position: fixed;
       top: 3.1rem;
       height: calc(100% - 3rem);
+      z-index: 11;
     }
 `
 
@@ -42,6 +43,7 @@ background: ${props => props.theme.main};
       position: fixed;
     top: 3.1rem;
     height: calc(100% - 3rem);
+    z-index: 11;
     }
 `
 export const SearchResultScroll = styled(Scroll)`
@@ -139,7 +141,15 @@ export const RightItem = styled.div`
 `
 
 export const LinkItem = styled.span<{ $underline?: boolean; $bold?: boolean; $highlight?: boolean; $secondary?: boolean; }>`
-color:  ${({ $secondary, $highlight }) => $highlight ? props => props.theme.titleBlue : $secondary ? props => props.theme.titleDesc : props => props.theme.text}; 
+color:  ${({ $secondary, $highlight }) => {
+  if ($highlight) {
+    return props => props.theme.titleBlue;
+  } else if ($secondary) {
+    return props => props.theme.titleDesc;
+  } else {
+    return props => props.theme.text;
+  }
+}}; 
 font-size: 0.75rem;
 text-transform: capitalize;
   margin-right: 0.25rem;
@@ -284,7 +294,7 @@ padding: 0.5rem 1rem 0.5rem 1rem;
   overflow: hidden;
 color: ${props => props.theme.text};
 text-overflow: ellipsis;
-whitespace: nowrap;
+white-space: nowrap;
 font-family: Open Sans;
 font-size: 0.875rem;
 font-style: normal;
@@ -436,7 +446,9 @@ export const SchoolSearch = styled(Search)`
       }
     }
 `
-export const ChevronUpIcon = styled(ChevronUp) <{ $highlight?: boolean; $scondary?: boolean; }>`
+export const ChevronUpIcon = styled(ChevronUp) <{ 
+  $highlight?: boolean; 
+  $scondary?: boolean; }>`
   fill:  ${({ $secondary, $highlight }) => $highlight ? props => props.theme.titleBlue : $secondary ? props => props.theme.titleDesc : props => props.theme.text}; 
    pointer-events: none;
 `

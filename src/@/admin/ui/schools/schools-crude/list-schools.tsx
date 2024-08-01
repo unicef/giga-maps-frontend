@@ -44,7 +44,7 @@ const headers = [
 ];
 
 const ListSchools = () => {
-  const { results: schoolList, count } = useStore($schoolListAdmin) || {};
+  const { results: schoolList, count } = useStore($schoolListAdmin) ?? {};
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const [countryFilterValues, setCountryFilterValues] = useState<number[]>([]);
   const permissions = useStore($userPermissions);
@@ -54,9 +54,9 @@ const ListSchools = () => {
   })) : [], [schoolList])
 
   const [open, setOpen] = useState(false)
-  const [openCsvModal, setCsvModal] = useState(false)
+  const [openCsvModal, setOpenCsvModal] = useState(false)
   const countryList = useStore($countryList)
-  const [searchValue, setSearchvalue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
 
@@ -73,7 +73,7 @@ const ListSchools = () => {
       await deleteSchoolFx({
         body,
       })
-      void getSchoolList();
+      getSchoolList();
     }
     catch (e) {
       console.log(e)
@@ -86,7 +86,7 @@ const ListSchools = () => {
   }
 
   useEffect(() => {
-    void getSchoolList();
+    getSchoolList();
   }, [page, pageSize, countryFilterValues, searchApiCall])
 
   const serachFn = () => {
@@ -95,7 +95,14 @@ const ListSchools = () => {
   }
 
   const onChangeAction = (event: FormEvent) => {
-    setSearchvalue(event?.target.value)
+    setSearchValue(event?.target.value)
+  }
+
+  const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault()
+      serachFn()
+    }
   }
 
   return (
@@ -142,8 +149,9 @@ const ListSchools = () => {
               </TableBatchActions>
               <ToolbarContent aria-hidden={batchActionProps.shouldShowBatchActions}>
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
+                  onKeyPress={onEnterKeyPress}
                   onClear={() => {
-                    setSearchvalue('')
+                    setSearchValue('')
                     serachFn()
                   }}
                   onChange={(evt) => {
@@ -164,7 +172,7 @@ const ListSchools = () => {
                   id='admin-import-csv'
                   tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
                   kind="primary"
-                  onClick={() => setCsvModal(true)}
+                  onClick={() => setOpenCsvModal(true)}
                   renderIcon={Upload}>
                   Import CSV
                 </Button>
@@ -186,7 +194,7 @@ const ListSchools = () => {
                   <TableDataHead>
                     <TableRow>
                       <TableSelectAll {...getSelectionProps()} />
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {headers.map((header, i) => <TableHeader key={`${header.key}-${i}`} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
@@ -194,7 +202,7 @@ const ListSchools = () => {
                   {(rows && rows.length > 0) ? <TableDataBody>
                     {rows.map((row, i) =>
 
-                      <TableRow key={i} {...getRowProps({
+                      <TableRow key={`${row.id}-${i}`} {...getRowProps({
                         row
                       })}>
                         <TableSelectRow {...getSelectionProps({ row })} />
@@ -211,7 +219,7 @@ const ListSchools = () => {
       <Pagination page={page} count={count} pageSize={pageSize} setPage={setPageAndSize} />
       <ModalImportCsv
         open={openCsvModal}
-        setOpen={setCsvModal} />
+        setOpen={setOpenCsvModal} />
       <CountryFilterModal
         name='school-list'
         open={open}

@@ -3,12 +3,11 @@ import { useStore } from "effector-react";
 
 import AdminMap from "~/@/common/admin-map-preview/admin-map";
 import { Center, Div, FloatButton, Text } from "~/@/common/style/styled-component-style";
-import Map from "~/@/map/ui/map";
 
 import { getDataPreviewFx } from "../../effects/giga-layer-fx";
 import { $currentGigaLayerItem, $previewData, resetPreviewData } from "../../models/giga-layer.model";
 
-export default function PreviewGigaLayer({ isPreviewAvailable }: { isPreviewAvailable: boolean }) {
+export default function PreviewGigaLayer({ isPreviewAvailable }: { readonly isPreviewAvailable: boolean }) {
   const layerItem = useStore($currentGigaLayerItem)
   const isPending = useStore(getDataPreviewFx.pending);
   const previewData = useStore($previewData);

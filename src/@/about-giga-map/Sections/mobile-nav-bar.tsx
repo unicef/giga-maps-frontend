@@ -1,7 +1,6 @@
 import { SideNavItems } from "@carbon/react"
 import { css } from "styled-components"
 import { SideBarMenuList, MenuItem } from "~/@/common/menu-item-link/menu-item-link.style"
-import { onChangeMenu } from "~/@/sidebar/sidebar.model"
 import { setActiveNav } from "../about.model"
 import { Link as RouterLink } from '~/lib/router'
 import { aboutus } from "~/core/routes"
@@ -12,7 +11,7 @@ const SideBarMenuStyle = css`
   
 `
 
-export default function MobileNavBar({ navData, setIsMenu }: { navData: any; setIsMenu: (isOpen: boolean) => void }) {
+export default function MobileNavBar({ navData, setIsMenu }: Readonly<{ navData: any[]; setIsMenu: (isOpen: boolean) => void }>) {
 
   return <SideBarMenuList $style={SideBarMenuStyle}>
     <SideNavItems>
@@ -20,7 +19,7 @@ export default function MobileNavBar({ navData, setIsMenu }: { navData: any; set
         <RouterLink to={aboutus} onClick={() => {
           setIsMenu(false)
           setActiveNav(navItem?.target)
-        }} hash={navItem?.target} key={index}>
+        }} hash={navItem?.target} key={`${index}-${navItem?.name}`}>
           <MenuItem>
             {navItem?.name}
           </MenuItem>

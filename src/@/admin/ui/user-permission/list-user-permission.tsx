@@ -1,11 +1,11 @@
-import { CheckmarkFilled, CheckmarkOutline } from '@carbon/icons-react';
-import { Button, Table, TableCell, TableHeader, TableRow } from '@carbon/react';
+import { CheckmarkOutline } from '@carbon/icons-react';
+import { Table, TableCell, TableHeader, TableRow } from '@carbon/react';
 import React from 'react'
 
 import { Scroll } from '@/scroll';
 
 import PageTitleComponent from '../common-components/page-title-component';
-import { BottomButtonWrapper, PermissionsTableWrapper, TableDataBody, TableDataHead, TableTopHead, TableWrapper } from '../styles/admin-styles';
+import { PermissionsTableWrapper, TableDataBody, TableDataHead, TableTopHead } from '../styles/admin-styles';
 
 const UserPermissionComponent = () => {
 
@@ -96,7 +96,7 @@ const UserPermissionComponent = () => {
             {
               tableData.map((mainObject, index) => (
                 <>
-                  <TableDataHead key={index + "i"}>
+                  <TableDataHead key={`${mainObject.id}-${index}`}>
                     <TableRow>
                       <TableHeader>
                         {mainObject.title}
@@ -114,7 +114,7 @@ const UserPermissionComponent = () => {
                   <TableDataBody >
                     {
                       mainObject.permissions.map((object, i) => (
-                        <TableRow key={i}>
+                        <TableRow key={`${object.permissionsName}-${i}`}>
                           <TableCell >
                             {object.permissionsName}
                           </TableCell>

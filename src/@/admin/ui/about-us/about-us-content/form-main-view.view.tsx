@@ -3,7 +3,7 @@ import { useStore } from "effector-react";
 import { createContext, FormEvent, useEffect } from "react";
 
 import { getAboutusContentFx, getImagesListFx, updateAboutusContentFx } from "~/@/admin/effects/about-us-fx";
-import { $aboutusDataAvailable, $formItemList, $imageList, $saveFormList, onSubmitUpdateFormList } from "~/@/admin/models/about-us-model";
+import { $aboutusDataAvailable, $formItemList, $imageList, $saveFormList } from "~/@/admin/models/about-us-model";
 import { MappingItem, convertMappingToJson } from "~/@/admin/utils/aboutus.util";
 
 import { AdminTableScroll, BottomButtonWrapper } from "../../styles/admin-styles";
@@ -13,7 +13,7 @@ import { FormFieldList } from "./form-field-list.view"
 export const ItemContext = createContext("");
 function FormMainView() {
   const isEditMode = useStore($aboutusDataAvailable);
-  const { results: imageList, count } = useStore($imageList) || {};
+  const { results: imageList } = useStore($imageList) ?? {};
   const aboutusFormList = useStore($formItemList);
   const savedFormList = useStore($saveFormList);
   const handleFormSubmit = async (e: FormEvent) => {
@@ -57,7 +57,7 @@ function FormMainView() {
       <Accordion>
         {aboutusFormList.map((item, index) => {
           return (<ItemContext.Provider key={item.type} value={item.type}>
-            <AccordionItem title={item.sectionName} open={!index ? true : false} key={index}>
+            <AccordionItem title={item.sectionName} open={!!index} key={`${index}-${item.type}`}>
               {item.fields?.length > 0 && <FormFieldList fields={item.fields} />}
               {item.content && <FormContentList field={item.content} />}
             </AccordionItem>

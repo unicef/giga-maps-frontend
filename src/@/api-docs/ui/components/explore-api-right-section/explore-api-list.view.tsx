@@ -1,4 +1,3 @@
-import { combine, sample } from 'effector';
 import { useStore } from 'effector-react';
 
 import ExploreApiCards from './explore-api-card.view';

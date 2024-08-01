@@ -8,7 +8,7 @@ const Acknowledgement = ({ data }: { data: AboutType }) => {
       <PartnersCardContainer>
         {
           data?.content.map((partner: Content, index: number) => (
-            <SingleItemWrapper key={index} className='single-item-wrapper'>
+            <SingleItemWrapper key={`${index}-${partner.title}`} className='single-item-wrapper'>
               <img src={partner?.image} />
             </SingleItemWrapper>
           ))

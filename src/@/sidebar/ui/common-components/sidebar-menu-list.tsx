@@ -1,4 +1,4 @@
-import { Api, InformationSquare, ProgressBar, WatsonHealthThumbnailPreview } from '@carbon/icons-react';
+import { Api, InformationSquare, WatsonHealthThumbnailPreview } from '@carbon/icons-react';
 import { SideNavItems } from '@carbon/react';
 import { useStore } from 'effector-react';
 
@@ -28,9 +28,6 @@ const SidebarMenuList = () => {
         }} renderIcon={WatsonHealthThumbnailPreview} >
           Tour
         </MenuItem>
-        {/* <MenuItemBlank onClick={() => onChangeMenu(false)} renderIcon={ProgressBar} href={'https://projectconnect.unicef.org/country-progress'} target="_blank">
-          Country progress dashboard
-        </MenuItemBlank> */}
       </SideNavItems>
       {
         isMobile &&

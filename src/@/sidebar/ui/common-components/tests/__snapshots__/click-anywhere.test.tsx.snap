@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Click anywhere should not call insideClick when clicking on an element without the specified class 1`] = `[Function]`;

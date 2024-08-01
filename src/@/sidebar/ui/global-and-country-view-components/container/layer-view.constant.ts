@@ -75,9 +75,7 @@ export const getConnectivityLogicalValues = (value = '', unit: string, baseValue
     [ConnectivityDistribution.good]: `(${greaterSign} ${mainValue} ${unit})`,
     [ConnectivityDistribution.moderate]: `(${isReverse ? mainValue : baseValue} - ${isReverse ? baseValue : mainValue} ${unit})`,
     [ConnectivityDistribution.bad]: `(${lessSign}${baseValue} ${unit})`,
-    // [ConnectivityDistribution.noInternet]: `(${lessSign}${isReverse ? mainValue : baseValue} ${unit})`,
     [ConnectivityDistribution.unknown]: '',
-
   }
 
 }

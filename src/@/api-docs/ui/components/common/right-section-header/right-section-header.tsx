@@ -6,7 +6,7 @@ import { setSearchExploreApi } from "~/@/api-docs/models/explore-api.model";
 import ApiBreadcrumb from "../api-breadcrumb/api-breadcrumb.view";
 import { HeaderContainer, HeaderTitleBar, TitleWrapper } from "./right-section.header.style";
 
-export default function RightSectonHeader({ title, description, showSearch = false }: { title: string; description: string; showSearch?: boolean; }) {
+export default function RightSectonHeader({ title, description, showSearch = false }: { readonly title: string; readonly description: string; readonly showSearch?: boolean; }) {
 
   useEffect(() => {
     setSearchExploreApi('')

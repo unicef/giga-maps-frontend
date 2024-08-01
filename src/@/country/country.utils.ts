@@ -1,10 +1,11 @@
-import { Expression, LngLatBoundsLike, Map, MapboxGeoJSONFeature, MapLayerMouseEvent } from "mapbox-gl";
+import { $countryCode } from '~/@/country/country.model';
+import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl";
 
 import { mapCountry } from "~/core/routes";
 
 import { Colors, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
 import { checkSourceAvailable, filterCountry, findLayer, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, showLayer, wvFilter } from "../map/utils";
-import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingDesktop, zoomPaddingMobile } from "./country.constant";
+import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
 
@@ -12,6 +13,12 @@ export const getAdminCountrySource = (level: CountryAdminLevel) => `${AdminSourc
 export const getAdminCountryLayerFill = (level: CountryAdminLevel) => `${AdminLayerFillPrefix}${level}`;
 export const getAdminCountryLayerLine = (level: CountryAdminLevel) => `${AdminLayerLinePrefix}${level}`;
 
+export const getCurrentCountrySearchPath = (countryCode: string) => {
+  const currentCountryCode = $countryCode.getState();
+  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase()) {
+    return window.location.search;
+  }
+}
 export const getCountryLevels = (level: CountryAdminLevel, selectedLevel: CountryAdminLevel) => {
   const isGreater = selectedLevel > level;
   const isLessThan = selectedLevel < level;
@@ -50,7 +57,7 @@ export const createSourceForAdminCountry = ({ map, level }: { map: Map, level: C
 
 export const createFillLayerForCountry = ({ style, map, paintData, level, selectedLevel, levelsCode, worldView }: Pick<AddCountries, "map" | "paintData" | "selectedLevel" | "levelsCode" | "worldView" | "style"> & { level: CountryAdminLevel }) => {
   let isLayerCreated = false;
-  const { isGreater, isLessThan, isSame } = getCountryLevels(level, selectedLevel);
+  const { isGreater, isLessThan } = getCountryLevels(level, selectedLevel);
   const layerId = getAdminCountryLayerFill(level);
   const filter = getFilterForFillLayer({ levelsCode, level, worldView });
   const fillColor = (isDefaultStyle(style) ? getFillColorForLayer({ levelsCode, paintData, isGreater }) : Colors.TRANSPARENT) as Expression
@@ -81,7 +88,7 @@ export const createFillLayerForCountry = ({ style, map, paintData, level, select
 }
 
 export const createLineLayerForCountry = ({ map, paintData, level, selectedLevel, countryCode, worldView }: AddCountries & { level: CountryAdminLevel }) => {
-  const { isGreater, isLessThan, isSame } = getCountryLevels(level, selectedLevel);
+  const { isLessThan } = getCountryLevels(level, selectedLevel);
   const layerId = getAdminCountryLayerLine(level);
   const isLevel0 = level === CountryAdminLevel.level0;
   if (!map.getLayer(layerId) && !isLessThan) {
@@ -143,13 +150,14 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
         if (!isMobile) {
           setCountryBound(map, admin1, feature.state.bbox)
         }
-        mapCountry.navigate({ code: admin0, path: `/${admin1}` });
+        let path = `/${admin1}${getCurrentCountrySearchPath(admin0) ?? ''}`;
+        mapCountry.navigate({ code: admin0, path });
       }
     } else {
       if (!isMobile) {
         setCountryBound(map, admin0, feature.state.bbox)
       }
-      mapCountry.navigate({ code: admin0 });
+      mapCountry.navigate({ code: admin0, path: getCurrentCountrySearchPath(admin0) });
     }
   });
 
@@ -190,7 +198,7 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
 }
 
 export const getCountryAdminCode = (path?: string) => {
-  const [admin1, admin2] = path?.split("/")?.filter(Boolean) || [];
+  const [admin1, admin2] = path?.split("/")?.filter(Boolean) ?? [];
   return {
     admin1, admin2
   }

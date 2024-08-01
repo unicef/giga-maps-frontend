@@ -3,7 +3,7 @@ import { VectorSource } from "mapbox-gl";
 import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, isConnectivity, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList } from "../utils";
+import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList } from "../utils";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
@@ -14,7 +14,7 @@ export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelect
   return { schoolLayerId, selectedLayerId, isLastSelectionChange };
 }
 
-export const createSourceForMapAndCountry = async ({ map, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data }: ChangeLayerOptions & { selectedLayerId: number | null; }) => {
+export const createSourceForMapAndCountry = async ({ map, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data }: ChangeLayerOptions & { selectedLayerId: number | null; }) => {
   if (!map) return;
   // cancel animation;
   cancelAnimationFrame(animateCircleHandler.requestId)
@@ -26,10 +26,10 @@ export const createSourceForMapAndCountry = async ({ map, connectivityBenchMark,
   removePreviewsMapClickHandlers(map);
   const { coverageLayerId } = layerUtils;
   if (!layerId) {
-    layerId = lastSelectedLayer.layerId || coverageLayerId;
+    layerId = lastSelectedLayer.layerId ?? coverageLayerId;
     // return;
   }
-  const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id: admin1Data?.id });
+  const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id: admin1Data?.id, countrySearch });
   const options = {} as VectorSource;
   if (mapRoute.country && country) {
     const removeBounds = ignoreCountriesForBounds.includes(country.code.toLocaleLowerCase());

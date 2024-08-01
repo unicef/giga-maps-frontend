@@ -1,4 +1,3 @@
-import { PAGE_SIZE } from '../../admin-constants';
 import { CustomPagination } from '../styles/admin-styles'
 
 const defaultPageSizes = [10, 20, 50, 100, 500];

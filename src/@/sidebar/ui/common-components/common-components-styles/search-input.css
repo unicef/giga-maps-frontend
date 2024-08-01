@@ -3,7 +3,6 @@
   position: absolute;
   top: 1.5rem;
   right: 2.9rem;
-  /* z-index: 1; */
 }
 
 .sidebar-searchIcon-withoutText {
@@ -11,7 +10,6 @@
   position: absolute;
   top: 1.5rem;
   right: 2.2rem;
-  /* z-index: 1; */
 }
 
 .sidebar-searchbox>.cds--search-input {
@@ -31,7 +29,7 @@
 .search-country-name {
   color: rgb(82, 82, 82);
   font-size: 14px;
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif, Arial, Verdana, Tahoma;
 }
 
 .list-districts-wrap {

@@ -4,7 +4,7 @@ const OFFSET_Y = 50;
 
 const getElementYPosition = (element: Element): number => {
   const elementTop = element.getBoundingClientRect().top;
-  return elementTop + window.pageYOffset - OFFSET_Y;
+  return elementTop + window.scrollY - OFFSET_Y;
 };
 
 const nextTick = async () => new Promise((resolve) => setTimeout(resolve, 200));

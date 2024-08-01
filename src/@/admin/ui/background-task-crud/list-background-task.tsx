@@ -41,7 +41,7 @@ const headers = [
 
 const AdminBackgroundTask = () => {
 
-  const { results: backgroundTaskList, count } = useStore($backgroundTaskList) || {};
+  const { results: backgroundTaskList, count } = useStore($backgroundTaskList) ?? {};
   const rows = backgroundTaskList ? backgroundTaskList?.map((backgroundTask) => ({
     ...backgroundTask,
     viewDetails: <Link to={backgroundTaskView} params={{ id: backgroundTask.task_id }} data-testid={`background-task-view${backgroundTask.task_id}`} > <View /></Link >,
@@ -49,7 +49,7 @@ const AdminBackgroundTask = () => {
   })) : []
 
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
-  const [searchValue, setSearchvalue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
 
@@ -84,10 +84,15 @@ const AdminBackgroundTask = () => {
   }
 
   const onChangeAction = (event: FormEvent) => {
-    setSearchvalue(event?.target.value)
+    setSearchValue(event?.target.value)
   }
 
-
+  const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      event.preventDefault()
+      serachFn()
+    }
+  }
 
   return (
     <>
@@ -136,8 +141,9 @@ const AdminBackgroundTask = () => {
               </TableBatchActions>
               <ToolbarContent aria-hidden={batchActionProps.shouldShowBatchActions}>
                 <TableToolbarSearch tabIndex={batchActionProps.shouldShowBatchActions ? -1 : 0}
+                  onKeyPress={onEnterKeyPress}
                   onClear={() => {
-                    setSearchvalue('')
+                    setSearchValue('')
                     serachFn()
                   }}
                   onChange={(evt) => {
@@ -157,13 +163,13 @@ const AdminBackgroundTask = () => {
                   <TableDataHead>
                     <TableRow>
                       <TableSelectAll {...getSelectionProps()} />
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {headers.map((header, i) => <TableHeader key={`${header.key}-${i}`} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
                   </TableDataHead>
                   {(rows && rows.length > 0) ? <TableDataBody>
-                    {rows.map((row, i) => <TableRow key={i} {...getRowProps({
+                    {rows.map((row, i) => <TableRow key={`${row.id}-${i}`} {...getRowProps({
                       row
                     })}>
                       <TableSelectRow

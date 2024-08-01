@@ -1,8 +1,5 @@
 import { useStore } from 'effector-react';
-import { useEffect, useMemo, useRef } from 'react';
-import styled from 'styled-components';
-
-import { Scroll } from '@/scroll';
+import { useEffect, useMemo } from 'react';
 
 import Acknowledgement from '../Sections/acknowledgement';
 import FooterLinks from '../Sections/footer-links';
@@ -72,7 +69,6 @@ const AboutGigaMapModal = () => {
   return (
     <div>
       <NavBar data={header} />
-      {/* <AboutusScroll ref={scrollRef}> */}
       <AboutGigaMapModalStyle>
         {
           aboutUsContent?.map((singleSection, index) => {
@@ -82,8 +78,8 @@ const AboutGigaMapModal = () => {
               return null
             }
             if (SectionComponent) {
-              return <div id={singleSection.type}>
-                <SectionComponent key={index} data={singleSection} />;
+              return <div id={singleSection.type} key={`${index}-${singleSection.title}`}>
+                <SectionComponent data={singleSection} />;
               </div>
             }
             return null;
@@ -91,10 +87,8 @@ const AboutGigaMapModal = () => {
         }
         <FooterLinks data={footer} />
       </AboutGigaMapModalStyle>
-      {/* </AboutusScroll> */}
       <Toast timeout={7000} />
     </div>
-
   )
 }
 

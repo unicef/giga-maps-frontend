@@ -1,4 +1,4 @@
-import { CaseStudiesCard, CaseStudiesCardsContainer, CaseStudyInfoBox, CaseStudyPosterWrapper } from "../styles/about-giga-map-styles"
+import { CaseStudiesCard, CaseStudyInfoBox, CaseStudyPosterWrapper } from "../styles/about-giga-map-styles"
 
 
 const CaseStudyCard = ({ cardPoster, title, description, column, style }:

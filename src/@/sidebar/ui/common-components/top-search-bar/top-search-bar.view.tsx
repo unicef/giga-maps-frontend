@@ -1,4 +1,4 @@
-import { ChevronDown, Earth, Search, Clear } from '@carbon/icons-react'
+import { ChevronDown, Earth, Search } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
 import { useState } from 'react';
 
@@ -6,7 +6,7 @@ import { $isMobile } from '~/core/media-query';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
 
-import { $isSearchFocused, $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, } from './top-search-bar.model';
+import { $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, } from './top-search-bar.model';
 import { CountrySearchIcon, SearchContainer, SearchWrapper } from './top-search-bar.style';
 
 
@@ -15,7 +15,6 @@ const onClear = clearSearchText.prepend(getVoid);
 
 const TopSearchBar = () => {
   const searchText = useStore($searchInput);
-  const isSearchFocused = useStore($isSearchFocused)
   const showCountries = useStore($showCountries)
   const isMobile = useStore($isMobile)
   const [mobileSearch, setMobileSearch] = useState(false)
@@ -60,7 +59,7 @@ const TopSearchBar = () => {
         className={"sidebar-searchbox"}
         $isMobile={isMobile}
         onClear={() => {
-          void onClear();
+          onClear();
           isMobile && setMobileSearch(false);
           changeIsSearchFocused(false);
         }}

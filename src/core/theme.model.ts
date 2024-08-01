@@ -18,6 +18,9 @@ declare module 'styled-components' {
     skeleton: string;
     skeletonHighlight: string;
     gigaButtonBack: string;
+    grey80: string;
+    filterText: string,
+    filterGrey: string,
   }
 }
 
@@ -52,6 +55,9 @@ export const themeData = {
     graphWeekMonthBorder: "#474747",
     skeleton: "#353535",
     skeletonHighlight: "#494949",
+    grey80: "#333333",
+    filterText: "#f5f5f5",
+    filterGrey: "#c0c0c0",
   },
   [ThemeType.light]: {
     main: '#fff',
@@ -72,6 +78,9 @@ export const themeData = {
     graphWeekMonthBorder: "#b3abab",
     skeleton: "#ededed",
     skeletonHighlight: "#c1c1c1",
+    grey80: '#f4f4f4',
+    filterText: "#222222",
+    filterGrey: "#222222",
   },
   [ThemeType.accessible]: {
     main: '#181818',
@@ -92,6 +101,9 @@ export const themeData = {
     graphWeekMonthBorder: "#474747",
     skeleton: "#353535",
     skeletonHighlight: "#494949",
+    grey80: "#333333",
+    filterText: "#f5f5f5",
+    filterGrey: "#c0c0c0",
   }
 }
 

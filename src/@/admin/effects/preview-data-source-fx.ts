@@ -75,10 +75,7 @@ export const plotMapData = (map: Map, mapData: PreviewDataType['map']) => {
   })
     .on('click', 'places', (e) => createPopup(e))
 
-  map.on('mouseleave', 'places', () => {
-    //map.getCanvas().style.cursor = '';
-    //popup.remove();
-  });
+  map.on('mouseleave', 'places', () => {});
 }
 
 export const previewDataSourceFx = createEffect(({ map, mapData }: { map: Map, mapData: PreviewDataType['map'] }) => {

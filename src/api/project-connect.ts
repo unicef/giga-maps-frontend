@@ -1,9 +1,9 @@
-import { attach } from 'effector';
 import { createEffect } from 'effector';
 
 import { CoverageStat, LayerType } from '~/@/sidebar/types';
 import {
   APIListType,
+  AdvanceFilterType,
   ConnectivityStat,
   Country,
   CountryBasic,
@@ -55,6 +55,13 @@ export const fetchSchoolPopupDataFx = createRequestFx(
 export const fetchGlobalStatsFx = createRequestFx(
   async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
     url: `api/statistics/global-stat/${query ?? ''}`,
+    signal: controller?.getSignal()
+  })
+);
+
+export const fetchAdvanceFilterFx = createRequestFx(
+  async (_, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
+    url: `api/accounts/advanced_filters/`,
     signal: controller?.getSignal()
   })
 );

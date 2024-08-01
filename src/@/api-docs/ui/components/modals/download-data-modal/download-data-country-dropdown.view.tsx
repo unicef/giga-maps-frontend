@@ -8,7 +8,7 @@ import { SelectCountry } from "../modals.style";
 import { $selectedCountry, setCountryItem } from "./download-data.model";
 
 export default function DownloadCountryDropDown(
-  { countryList }: { countryList: CountryListType[] }) {
+  { countryList }: { readonly countryList: CountryListType[] }) {
 
   const selectedCountry = useStore($selectedCountry);
   const placeholder = !selectedCountry ? "All Country" : "Select Country"

@@ -1,9 +1,6 @@
 import { useRef } from "react";
 
 import { Modal, ModalFooter, ModalHeader } from "~/@/common/modal";
-import {
-  resetFilterModal,
-} from '~/@/sidebar/sidebar.model';
 
 import { Scroll } from '@/scroll';
 
@@ -32,7 +29,6 @@ const LayerSelectionFilterModal = ({
           setOpen(false);
         }}
         onRequestClose={() => {
-          resetFilterModal();
           setOpen(false)
         }}
         primaryButtonText="Apply"

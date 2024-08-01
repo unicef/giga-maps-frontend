@@ -1,6 +1,6 @@
 import { UserAvatarIcon, UserAvatarWrapper, UserNameWrapper } from "./user-avatar.style";
 
-export default function UserAvatar({ userName }: { userName: string; }) {
+export default function UserAvatar({ userName }: { readonly userName: string; }) {
   const shortName = userName?.split(' ').map((name) => name[0]).join('');
 
   return (

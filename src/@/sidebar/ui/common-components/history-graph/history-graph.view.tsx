@@ -10,7 +10,7 @@ import { useTheme } from "styled-components";
 
 import { $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
-import { $benchmarkmarkUtils, $connectivityBenchMark, $connectivityStats, $isLoadingCountryAdminView, $selectedLayerData } from "~/@/sidebar/sidebar.model";
+import { $benchmarkmarkUtils, $connectivityBenchMark, $connectivityStats, $selectedLayerData } from "~/@/sidebar/sidebar.model";
 import { GraphData, SchoolStatsType } from "~/api/types";
 import { mapSchools } from "~/core/routes";
 import { $theme, ThemeType } from "~/core/theme.model";
@@ -21,7 +21,7 @@ import { BarChartScrollable, HistoryGraphWrapper, PanExpander } from "./history-
 import HistoryButtons from "./history-buttons.view";
 import { LoadingText } from "~/@/common/style/styled-component-style";
 
-const HistoryGraph = ({ schoolData, isLoading }: { isChartOpen: boolean, schoolData?: SchoolStatsType; isLoading?: boolean }) => {
+const HistoryGraph = ({ schoolData, isLoading }: { schoolData?: SchoolStatsType; isLoading?: boolean }) => {
   const intervalUnit = useStore($historyIntervalUnit);
   const connectivityStats = useStore($connectivityStats);
   const schoolView = useRoute(mapSchools);
@@ -44,7 +44,7 @@ const HistoryGraph = ({ schoolData, isLoading }: { isChartOpen: boolean, schoolD
 
   const newData = data?.map(item => ({
     ...item,
-    value: item.value === null ? 0 : item.value,
+    value: item.value ?? 0
   }));
 
   const firstDataPoint = data?.[0];

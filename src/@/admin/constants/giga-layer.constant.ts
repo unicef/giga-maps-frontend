@@ -1,4 +1,3 @@
-import { DailyCheckApp } from "../../project/ui/daily-check-app";
 import { GigaLayerFormType, LayerTypeChoices } from "../types/giga-layer.type";
 
 export enum DataSourceType {
@@ -28,6 +27,7 @@ export const LayerDataSource = {
 }
 
 export const defaultGigaLayerForm = {
+  code: '',
   name: '',
   icon: '',
   description: '',

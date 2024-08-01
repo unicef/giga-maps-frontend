@@ -1,12 +1,11 @@
-import { Download, Information } from '@carbon/icons-react';
+import { Information } from '@carbon/icons-react';
 import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 import styled, { useTheme } from 'styled-components';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
 import { $historyIntervalUnit } from '~/@/sidebar/history-graph.model';
-import { $connectivityColorsWithBenchmark, $selectedLayerData } from '~/@/sidebar/sidebar.model';
-import { IntervalUnit } from '~/lib/date-fns-kit/types';
+import { $selectedLayerData } from '~/@/sidebar/sidebar.model';
 
 const LiverAverageWrapper = styled.div`
   display: flex;
@@ -54,7 +53,6 @@ const LiverAverageWrapper = styled.div`
 
     .layer-text {
       align-self: flex-end;
-      // margin: 0.25rem;
       line-height: 0 0 0.6rem 0.25rem;
       font-size: 0.875rem;
       color: ${props => props.theme.text};
@@ -82,12 +80,8 @@ const LayerNameWrapper = styled.div`
 export default function LiveAverage({
   value,
   color,
-  unit,
-  icon,
   isLoading
-}: { value: number, color: string, unit: string, isLoading: boolean; icon: string }) {
-  const intervalUnit = useStore($historyIntervalUnit);
-  const isWeekly = intervalUnit === IntervalUnit.week;
+}: { readonly value: number, readonly color: string, readonly isLoading: boolean }) {
   const currentLayer = useStore($selectedLayerData);
   const heading = currentLayer?.name;
   const theme = useTheme();
@@ -98,20 +92,8 @@ export default function LiveAverage({
       <LoadingText $blockSize="0.9" width="10rem" $marginEnd='1.2' $marginStart="0.6" />
       <LoadingText $blockSize='2.5' width="11rem" $marginEnd='0.5' />
     </> :
-      <>
         <LiverAverageWrapper>
           {value ? <div className="layer-speed">
-            {/* <div className='download-wrapper'>
-              <Download className="download-icon" size={16} />
-              <span className="download-icon" dangerouslySetInnerHTML={{ __html: icon }} />
-              <Text className="layer-text" $color="#9E9E9E">{heading}</Text>
-              <Tooltip align="top" label={`${ isWeekly ?"Weekly": "Monthly"} average ${ heading }`}>
-                <button className="sb-tooltip-trigger">
-                  <Information className='tooltip-icon' />
-                </button>
-              </Tooltip>
-            </div> */}
-
             <div>
               <LayerNameWrapper>
                 <div className='download-wrapper'>
@@ -126,7 +108,6 @@ export default function LiveAverage({
               <div className='speed-text-container'>
                 <Text style={{ margin: 0 }} $size={2} $color={color}>
                   {value}
-                  {/* <Text as="span" $size={1.25} $color="inherit"></Text> */}
                 </Text>
                 <Text style={{ margin: 0 }} $size={1} $color={'#9E9E9E'}>&nbsp;<span>{unitLabel}</span></Text>
               </div>
@@ -135,6 +116,6 @@ export default function LiveAverage({
             No Data available.
           </Text></Div>}
         </LiverAverageWrapper>
-      </>}
+      }
   </>)
 }

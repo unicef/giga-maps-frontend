@@ -1,12 +1,12 @@
 import { Button, Form, TextArea } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { $currentSelectedApiData, setCurrentApiKey } from '~/@/api-docs/models/explore-api.model';
-import { $requestAPIPopup, onDocumentAPIPopup, onDownloadAPIPopup, onDownloadDataPopup, onRequestAPIPopup, onRequestApiPopup } from '~/@/api-docs/models/popup.model';
+import { $currentSelectedApiData } from '~/@/api-docs/models/explore-api.model';
+import { $requestAPIPopup } from '~/@/api-docs/models/popup.model';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '~/@/common/modal';
 
-import { $dowloadApiModalContainerStyle, $modalBodyStyle, $modalFooterStyle, $modalHeadingStyle, DontHaveAccountContainer, ModalDescription, TextInputWrapper } from './modals.style';
+import { $dowloadApiModalContainerStyle, $modalBodyStyle, $modalFooterStyle, $modalHeadingStyle, ModalDescription, TextInputWrapper } from './modals.style';
 import CountryMultiDropdown from './download-data-modal/country-multi-select';
 import { requestForApiKeyFx } from '~/@/api-docs/effects/api-keys-fx';
 import useForm from '~/lib/hooks/useForm';
@@ -52,13 +52,17 @@ const ReuestApiKeyPopup = () => {
     } catch (e) { }
   }
 
+  const onFormSubmit = () => {
+    handleSubmit(onSubmit)
+  }
+
   return (
     <Modal
       open={requestApiPopup}
       preventCloseOnClickOutside
       $containerStyle={$dowloadApiModalContainerStyle}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={onFormSubmit}>
         <ModalHeader closeModal={() => {
           onRequestAPIPopup(false);
         }} $headingStyle={$modalHeadingStyle} title="Request API Key" />

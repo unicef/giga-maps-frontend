@@ -1,8 +1,7 @@
 import { Link as CarbonLink } from '@carbon/react';
 import { styled } from "styled-components"
 
-import { about, router } from "~/core/routes"
-import { Link as RLink } from "~/lib/router"
+import { router } from "~/core/routes"
 
 const RootWrapper = styled.div`
   padding: 1rem 0;
@@ -34,7 +33,7 @@ font-weight: 400;
 cursor: pointer;
 `
 
-export default function FooterTourContact({ message }: { message?: string; }) {
+export default function FooterTourContact({ message }: { readonly message?: string; }) {
   return (<RootWrapper>
     {message && <Message>{message}</Message>}
     <LinkButtons>

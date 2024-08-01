@@ -65,13 +65,6 @@ sample({
       if (item.type !== type) {
         return item;
       }
-      // let paths;
-      // if (path === 'content') {
-      //   paths = formItem?.content?.items?.[index].fields.map(field => field.path);
-      // } else if (path.startsWith('content')) {
-      //   paths = formItem?.fields?.find((field) => field.path === path)?.items?.[index].fields.map(field => field.path);
-      // }
-      // paths?.forEach((path: string) => delete item[path])
       Object.keys(item).forEach((key) => {
         const currentItem = `${path}.${index}`;
         if (key.startsWith(currentItem)) {
@@ -88,7 +81,7 @@ sample({
 
 const getContentByPath = (item: Record<string, any>, path: string) => {
   const keys = path.split(".");
-  return keys.reduce((obj, key) => obj && obj[key], item);
+  return keys.reduce((obj, key) => obj?.[key], item);
 }
 // add new item on new data;
 sample({
@@ -99,7 +92,7 @@ sample({
       const newState = formItemList.map((matchedItem) => {
         const currentItem = aboutusContentResponse.find(item => item.type === matchedItem.type);
         const currentContentLength = currentItem?.content?.length || 0;
-        const matchContentLength = matchedItem?.content?.items.length || 0;
+        const matchContentLength = matchedItem?.content?.items.length ?? 0;
         let newItemContent = matchedItem.content;
         if (currentItem && matchedItem.content && currentContentLength > matchContentLength) {
           const newCount = currentContentLength - matchContentLength;

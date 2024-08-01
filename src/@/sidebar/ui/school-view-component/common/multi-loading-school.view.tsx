@@ -4,7 +4,7 @@ import { Hashtag, Location } from '@carbon/icons-react';
 
 export default function MultiLoadingSchool({ count }: { count: number; }) {
   return Array(count).fill(0).map((_, index) => (
-    <Div $margin='0.8rem 0' key={index}>
+    <Div $margin='0.8rem 0' key={`${index}-loading`}>
       <MultischoolBottomInfo>
         <LoadingText width="92%" />
       </MultischoolBottomInfo>

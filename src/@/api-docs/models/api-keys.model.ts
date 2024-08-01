@@ -1,7 +1,6 @@
 import { combine, createEvent, createStore, sample } from "effector";
 
 import { getApiKeyListFx, requestForApiKeyFx, requestForExtensionFx } from '~/@/api-docs/effects/api-keys-fx';
-import { $notification } from '~/@/common/Toast/toast.model';
 import { APIListType } from "~/api/types";
 import { $loggedInUser } from "~/core/auth/models";
 import { setPayload } from "~/lib/effector-kit";
@@ -12,7 +11,7 @@ export const $apiKeysListResponse = createStore<null | APIListType<ApiKeysType>>
 
 $apiKeysListResponse.on(getApiKeyListFx.doneData, setPayload);
 
-export const $apiKeysData = $apiKeysListResponse.map((resp) => resp?.results || []);
+export const $apiKeysData = $apiKeysListResponse.map((resp) => resp?.results ?? []);
 export const onRequestApiKey = createEvent<number>()
 sample({
   clock: onRequestApiKey,

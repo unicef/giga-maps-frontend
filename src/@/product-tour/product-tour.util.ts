@@ -1,5 +1,4 @@
 import { ObjectType } from "~/core/global-types";
-import { waitFor } from "~/lib/utils";
 import { onShowLegend, onShowThemeLayer } from "../sidebar/sidebar.model";
 
 export const clickElement = (target: string) => {
@@ -68,7 +67,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
       {
         subStepId: 3,
         popupOptions: {
-          align: isMobile ? 'left' : 'left'
+          align: 'left'
         },
         popupProps: {
           content: [{
@@ -121,7 +120,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
           style: {}
         },
         highlightBox: {
-          search: isMobile ? '.top-search-bar' : '.top-search-bar',//---here update class
+          search: '.top-search-bar',//---here update class
           trigger: () => {
             // hide themes & layers
             if (!isMobile) {

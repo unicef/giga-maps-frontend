@@ -3,7 +3,6 @@ import { createEffect } from "effector";
 import { APIListType } from "~/api/types";
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx";
 
-import { PAGE_SIZE } from "../admin-constants";
 import { ApiKeysAdminRequestType } from "../types/api-request.type";
 
 export const getAllApiKeyRequest = createEffect(({ page, pageSize }: { page: number; pageSize: number }) => {

@@ -1,4 +1,4 @@
-import { Email, LogoTwitter, LogoWechat } from '@carbon/icons-react';
+import { Email } from '@carbon/icons-react';
 import { CopyButton, IconButton, Link, TextInput } from '@carbon/react';
 
 import { Modal, ModalBody, ModalHeader } from '~/@/common/modal';

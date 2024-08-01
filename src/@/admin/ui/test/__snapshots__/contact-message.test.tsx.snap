@@ -49,7 +49,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
 }
 
 .c3 {
-  min-height: calc(100vh - 13.5rem);
+  min-height: calc(100vh - 10.5rem);
 }
 
 .c3 .cds--data-table thead {

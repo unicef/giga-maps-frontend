@@ -19,7 +19,7 @@ const ShareButtonWrapper = styled.div`
 `
 
 const ShareButton = ({ shareButtonRef, handleShareClicked }: { shareButtonRef: Ref<HTMLElement>, handleShareClicked: () => void }) => {
-  return (<>
+  return (
     <ShareButtonWrapper>
       <IconButton
         align={'bottom-right'}
@@ -33,7 +33,7 @@ const ShareButton = ({ shareButtonRef, handleShareClicked }: { shareButtonRef: R
         <ShareIcon size="16" aria-label="share" />
       </IconButton>
     </ShareButtonWrapper >
-  </>);
+  );
 }
 
 export default ShareButton;

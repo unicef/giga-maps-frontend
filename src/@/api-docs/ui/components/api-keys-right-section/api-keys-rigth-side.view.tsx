@@ -1,4 +1,4 @@
-import { ActionableNotification, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@carbon/react';
+import { ActionableNotification, Table, TableBody, TableHead, TableHeader, TableRow } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 
@@ -18,11 +18,11 @@ import { DeleteConfirmation } from '~/@/admin/ui/styles/admin-styles';
 
 const ApiKeysRigthSide = () => {
   const isLoggedIn = useStore($isLoggedIn);
-  const { results: apiKeyList, count } = useStore($apiKeysListResponse) || {};
+  const { results: apiKeyList, count } = useStore($apiKeysListResponse) ?? {};
   const user = useStore($loggedInUser);
   const countryList = useStore($countryList)
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
-  const [deleteId, setApiKeyDeleteId] = useState<null | number>(null);
+  const [apiKeyDeleteId, setApiKeyDeleteId] = useState<null | number>(null);
 
   useEffect(() => {
     if (isLoggedIn && user) {
@@ -44,7 +44,7 @@ const ApiKeysRigthSide = () => {
         title="API Keys"
         description="These Keys will allow to authenticate API request"
       />
-      {deleteId &&
+      {apiKeyDeleteId &&
         <DeleteConfirmation>
           <ActionableNotification
             style={{ maxWidth: "100%" }}
@@ -53,7 +53,7 @@ const ApiKeysRigthSide = () => {
             subtitle="Are you sure?"
             closeOnEscape
             actionButtonLabel="Yes"
-            onActionButtonClick={() => void onDeleteApiKey(deleteId)}
+            onActionButtonClick={() => void onDeleteApiKey(apiKeyDeleteId)}
             onClose={() => setApiKeyDeleteId(null)}
           />
         </DeleteConfirmation>
@@ -91,7 +91,7 @@ const ApiKeysRigthSide = () => {
               }
             </TableBody>
           </Table>
-          {(!apiKeyList || !apiKeyList?.length) &&
+          {(!apiKeyList?.length) &&
             <EmptyList>
               No data found
             </EmptyList>}

@@ -1,4 +1,4 @@
-import { $notification, onCreateNotification } from '~/@/common/Toast/toast.model';
+import { onCreateNotification } from '~/@/common/Toast/toast.model';
 import { combine, createEvent, createStore, merge, sample } from "effector";
 
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";

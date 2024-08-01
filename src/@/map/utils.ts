@@ -112,13 +112,16 @@ export const coverageUrl = 'api/locations/schools/tiles';
 export const connectivityUrl = 'api/locations/schools/tiles/connectivity';
 export const getDynamicUrl = (layerId: string) => `api/accounts/layers/${layerId}/map`
 
-export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive }: Pick<ChangeLayerOptions, "connectivityFilter" | "mapRoute" | "connectivityBenchMark"> & { isLive?: boolean }): string => {
+export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark"> & { isLive?: boolean }): string => {
   const { isWeek, range } = connectivityFilter;
   const startDate = format(range.start, 'dd-MM-yyyy');
   const endDate = format(range.end, 'dd-MM-yyyy');
   let params = `${mapRoute.map ? 'limit=14000' : ''}`
   if (isLive) {
     params += `&indicator=${'download'}&benchmark=${connectivityBenchMark}&start_date=${startDate}&end_date=${endDate}&is_weekly=${isWeek.toString()}`;
+  }
+  if (mapRoute.country && countrySearch) {
+    params += `&${countrySearch}`
   }
   return params;
 }
@@ -131,13 +134,13 @@ export const getCountryParams = (country: boolean, countryId?: number, admin1Id?
   return params;
 }
 
-export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter }: Pick<ChangeLayerOptions, "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number }) => {
+export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number }) => {
   let url = ''
   const { downloadLayerId, coverageLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const countryParams = getCountryParams(mapRoute.country, country?.id, admin1Id);
-  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark });
-  if (downloadLayerId === layerId) {
+  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
+  if (downloadLayerId === layerId || !layerId) {
     url = connectivityUrl;
   } else if (layerId === coverageLayerId) {
     url = coverageUrl

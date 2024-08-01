@@ -1,13 +1,9 @@
-import { Close } from '@carbon/icons-react'
 import { Checkbox, PopoverContent, Tooltip } from "@carbon/react";
 import { useStore } from 'effector-react';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
-import { $layerUtils, $selectedLayerId, $staticLegendsSelected } from '~/@/sidebar/sidebar.model';
 import { $mapRoutes } from '~/core/routes';
-import { CoverageBenchmarkNames, CoverageKeyMapping } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
-import { ConnectivityDistributionNames } from "~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant";
+import { CoverageKeyMapping, ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 
 import {
   $connectivitySpeedGood,
@@ -15,29 +11,24 @@ import {
   $connectivitySpeednoInternet,
   $connectivitySpeedUnknown,
   $connectivityStats,
-  $selectedLayerData,
-  $schoolStats,
   changeConnectivitySpeedGood,
   changeConnectivitySpeedModerate,
   changeConnectivitySpeednoInternet,
   changeConnectivitySpeedUnknown,
-  onSelectSchoolStatusLayer,
   staticLegendsSelection,
   changeCoverage3g2g,
   changeCoverage5g4g,
   changeCoverageNoCoverage,
   changeCoverageUnknown,
   $coverageStats,
-  $coverageStatusAll,
   $connectivityBenchMark,
   $benchmarkmarkUtils,
-
+  $layerUtils, 
+  $staticLegendsSelected
 } from '~/@/sidebar/sidebar.model';
 import { $country } from '~/@/country/country.model';
-import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
+import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $globalStats } from '~/@/map/map.model';
-import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
-
 import { $stylePaintData } from '../../map.model';
 import { CustomeLegendPopover, InnerCircle, InnerCircleConnectivity, LegendContentWrapper, LegendHeaderWrapper } from './legend-button.style';
 import styled from 'styled-components';
@@ -87,7 +78,7 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
   const isCoverage = selectedLayerId === coverageLayerId;
   const { isLive, isStatic, isSchoolStatus } = currentLayerTypeUtils;
 
-  const { benchmarkLogic, globalBenchmarkValue, nationalBenchmarkValue, isNational } = useStore($benchmarkmarkUtils)
+  const { benchmarkLogic, globalBenchmarkValue, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
   const speedGood = useStore($connectivitySpeedGood);
   const speedModerate = useStore($connectivitySpeedModerate);
   const speedNoInternet = useStore($connectivitySpeednoInternet);
@@ -101,8 +92,6 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
 
 
   const coverageStats: any = useStore($coverageStats);
-  const coverageDistribution = coverageStats?.connected_schools;
-
 
   const [realtimeCheckedStatus, setRealtimeCheckedStatus] = useState<CheckedStatus>({});
   const [schoolStatusCheckedStatus, setSchoolStatusCheckedStatus] = useState<CheckedStatus>({});
@@ -116,7 +105,7 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
   const staticLegends = useStore($staticLegendsSelected);
 
 
-  const realtimeStats: any = realtimeStatsFromStore?.real_time_connected_schools || {};
+  const realtimeStats: any = realtimeStatsFromStore?.real_time_connected_schools ?? {};
   const schoolStatusStats: any = globalStatsFromStore?.connected_schools;
 
   const dataSourceId = selectedLayerData?.data_sources_list?.length ? selectedLayerData.data_sources_list[0].id : undefined;
@@ -241,123 +230,121 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
   }, []);
 
   return (
-    <>
-      <CustomeLegendPopover
-        open={open}
-        align={"left-bottom"}
-        className="legend-info-popover-link"
-      >
-        {children}
-        <PopoverContent className="legend-info-popover-content">
-          <LegendHeaderWrapper>
-          </LegendHeaderWrapper>
-          <LegendContentWrapper>
-            {isSchoolStatus && <div className='school-status'>
-              <h3>School status</h3>
-              {
-                Object.values(ConnectivityStatusDistribution).map((key, index) => (
-                  <div className='legend-container'>
-                    <div className='checkbox-with-label'>
-                      {shouldShowControls && <CheckBoxContainer><Checkbox id={`school-status-${key}`}
-                        labelText={''}
-                        checked={schoolStatusCheckedStatus[key]}
-                        onChange={() => handleSchoolStatusLayerChange(key)} >
+    <CustomeLegendPopover
+      open={open}
+      align={"left-bottom"}
+      className="legend-info-popover-link"
+    >
+      {children}
+      <PopoverContent className="legend-info-popover-content">
+        <LegendHeaderWrapper>
+        </LegendHeaderWrapper>
+        <LegendContentWrapper>
+          {isSchoolStatus && <div className='school-status'>
+            <h3>School status</h3>
+            {
+              Object.values(ConnectivityStatusDistribution).map((key, index) => (
+                <div className='legend-container' key={`${key}`}>
+                  <div className='checkbox-with-label'>
+                    {shouldShowControls && <CheckBoxContainer><Checkbox id={`school-status-${key}`}
+                      labelText={''}
+                      checked={schoolStatusCheckedStatus[key]}
+                      onChange={() => handleSchoolStatusLayerChange(key)} >
 
-                      </Checkbox></CheckBoxContainer>}
-                      <div key={index} className='conneted-info'>
-                        <InnerCircle $backColor={paintData[key]} />
-                        <span><p>{ConnectivityStatusNames[key]}</p></span>
-                      </div>
+                    </Checkbox></CheckBoxContainer>}
+                    <div key={`${key}${index}`} className='conneted-info'>
+                      <InnerCircle $backColor={paintData[key]} />
+                      <span><p>{ConnectivityStatusNames[key]}</p></span>
                     </div>
-                    {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key])}</div>}
                   </div>
+                  {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key])}</div>}
+                </div>
 
+              )
+              )}
+          </div>}
+          {isLive &&
+            <div className='school-status'>
+              <h3>{selectedLayerData?.name}</h3>
+
+              {connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchMarkDescription ? <Tooltip label={nationalBenchMarkDescription} align='top'>
+                <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
+                  <LiveLayerBenchmark>
+                    National Benchmark - {nationalBenchmarkValue}{unitLabel}
+                  </LiveLayerBenchmark>
+                </button>
+              </Tooltip> : <LiveLayerBenchmark>
+                National Benchmark - {nationalBenchmarkValue}{unitLabel}
+              </LiveLayerBenchmark> : <LiveLayerBenchmark>
+                Global Benchmark - {globalBenchmarkValue}{unitLabel}
+              </LiveLayerBenchmark>}
+
+              {
+                legends.values.map(({ key, label }) => (
+                  <div key={key}>
+                    <Tooltip leaveDelayMs={50} label={`${benchmarkLogic && key != "unknown" ? benchmarkLogic[key] : `Doesn't match any criteria`}`} align='left'>
+                      <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
+                        <div className='legend-container'>
+                          <div className='checkbox-with-label'>
+                            {shouldShowControls && <CheckBoxContainer><Checkbox id={key}
+                              labelText={''}
+                              checked={realtimeCheckedStatus[key]}
+                              onChange={() => handleRealtimeLayerChange(key)} >
+                            </Checkbox></CheckBoxContainer>}
+
+                            <div key={key} className='real-time-connetivity-info'>
+                              <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
+                              <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
+                              <span><p>{label}</p></span>
+                            </div>
+                          </div>
+
+                          {shouldShowControls && key === 'bad' ? <div className='legend-value'>{formatNumber(realtimeStats['no_internet'])}</div> : shouldShowControls && <div className='legend-value'>{formatNumber(realtimeStats[key])}</div>}
+                        </div>
+                      </button>
+                    </Tooltip>
+                  </div>
                 )
                 )}
             </div>}
-            {isLive &&
-              <div className='school-status'>
-                <h3>{selectedLayerData?.name}</h3>
 
-                {connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchMarkDescription ? <Tooltip label={nationalBenchMarkDescription} align='top'>
-                  <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-                    <LiveLayerBenchmark>
-                      National Benchmark - {nationalBenchmarkValue + unitLabel}
-                    </LiveLayerBenchmark>
-                  </button>
-                </Tooltip> : <LiveLayerBenchmark>
-                  National Benchmark - {nationalBenchmarkValue + unitLabel}
-                </LiveLayerBenchmark> : <LiveLayerBenchmark>
-                  Global Benchmark - {globalBenchmarkValue + unitLabel}
-                </LiveLayerBenchmark>}
-
-                {
-                  legends.values.map(({ key, label }) => (
-                    <div>
-                      <Tooltip leaveDelayMs={50} label={`${benchmarkLogic && key != "unknown" ? benchmarkLogic[key] : `Doesn't match any criteria`}`} align='left'>
-                        <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-                          <div className='legend-container'>
-                            <div className='checkbox-with-label'>
-                              {shouldShowControls && <CheckBoxContainer><Checkbox id={key}
-                                labelText={''}
-                                checked={realtimeCheckedStatus[key]}
-                                onChange={() => handleRealtimeLayerChange(key)} >
-                              </Checkbox></CheckBoxContainer>}
-
-                              <div key={key} className='real-time-connetivity-info'>
-                                <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
-                                <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
-                                <span><p>{label}</p></span>
-                              </div>
-                            </div>
-
-                            {shouldShowControls && key === 'bad' ? <div className='legend-value'>{formatNumber(realtimeStats['no_internet'])}</div> : shouldShowControls && <div className='legend-value'>{formatNumber(realtimeStats[key])}</div>}
-                          </div>
-                        </button>
-                      </Tooltip>
-                    </div>
-                  )
-                  )}
-              </div>}
-
-            {isStatic && <div className='school-status'>
-              <h3>{selectedLayerData?.name}</h3>
-              {
-                legends.values.map(({ key, label }) => {
-                  return (
-                    <div className='legend-container'>
-                      <div className='checkbox-with-label'>
-                        {shouldShowControls && (
-                          <CheckBoxContainer>
-                            <Checkbox
-                              id={key}
-                              labelText={''}
-                              checked={staticLayerCheckedStatus[key]}
-                              onChange={() => handleStaticLayerToggle(key)}
-                            />
-                          </CheckBoxContainer>
-                        )}
-                        <div key={key} className='real-time-connetivity-info'>
-                          <InnerCircle $backColor={legends.colors[key]} $large />
-                          <span><p>{label}{" "}</p></span>
-
-                        </div>
-                      </div>
-                      {shouldShowControls && coverageStats?.connected_schools && (
-                        <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
+          {isStatic && <div className='school-status'>
+            <h3>{selectedLayerData?.name}</h3>
+            {
+              legends.values.map(({ key, label }) => {
+                return (
+                  <div className='legend-container' key={`${key}`}>
+                    <div className='checkbox-with-label'>
+                      {shouldShowControls && (
+                        <CheckBoxContainer>
+                          <Checkbox
+                            id={key}
+                            labelText={''}
+                            checked={staticLayerCheckedStatus[key]}
+                            onChange={() => handleStaticLayerToggle(key)}
+                          />
+                        </CheckBoxContainer>
                       )}
+                      <div key={key} className='real-time-connetivity-info'>
+                        <InnerCircle $backColor={legends.colors[key]} $large />
+                        <span><p>{label}{" "}</p></span>
 
+                      </div>
                     </div>
+                    {shouldShowControls && coverageStats?.connected_schools && (
+                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
+                    )}
+
+                  </div>
 
 
-                  )
-                }
-                )}
-            </div>}
-          </LegendContentWrapper>
-        </PopoverContent >
-      </CustomeLegendPopover >
-    </>
+                )
+              }
+              )}
+          </div>}
+        </LegendContentWrapper>
+      </PopoverContent >
+    </CustomeLegendPopover >
   )
 }
 

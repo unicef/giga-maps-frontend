@@ -34,14 +34,12 @@ describe('setUpActiveAccountFx', () => {
 
 
   it('should initialize msal instance', async () => {
-    // await setUpActiveAccountFx(msalInstance);
     await onMsalInstance(msalInstance);
 
     expect(msalInstance.initialize).toHaveBeenCalled();
   });
 
   it('should not initialize msal instance', async () => {
-    // await setUpActiveAccountFx(msalInstance);
     await onMsalInstance(null);
 
     expect(msalInstance.initialize).not.toHaveBeenCalled();
@@ -152,6 +150,6 @@ describe('setUpActiveAccountFx', () => {
     onMsalInstance({ ...msalInstance, logoutPopup: null });
     onResetLogin();
 
-    await expect(msalInstance.logoutPopup).not.toHaveBeenCalled();
+    expect(msalInstance.logoutPopup).not.toHaveBeenCalled();
   });
 });

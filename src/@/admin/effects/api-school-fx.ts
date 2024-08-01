@@ -8,8 +8,19 @@ import { AdminType, CsvImport, SchoolDailyType, SchoolSummaryType, SchoolType } 
 
 
 export const getSchoolListFx = createEffect(({ page, pageSize, search, filter }: { page?: number; pageSize?: number; search?: string, filter?: number[] }) => {
+  let url = `locations/schools/school/?`
+  url += `page=${page}&page_size=${pageSize}`;
+
+  if (filter && filter.length > 0) {
+    url += `&country_id__in=${filter.join(',')}`;
+  }
+
+  if (search) {
+    url += `&search=${search}`;
+  }
+
   return createRequestAuthFx({
-    url: `locations/schools/school/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id__in=${filter}` : ''}${search ? `&search=${search}` : ''}`
+    url: url
   }) as Promise<APIListType<SchoolType>>
 })
 
