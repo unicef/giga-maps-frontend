@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Scroll } from "~/@/scroll";
-import { MultiSelect, TextInput } from '@carbon/react';
+import { MultiSelect, Select, TextInput } from '@carbon/react';
 
 export const FilterScroll = styled(Scroll)`
-  max-height: calc(100vh - 11rem);
+  max-height: calc(100vh - 13.1rem);
 `
 
 export const ViewFilterWrapper = styled.div`
@@ -27,6 +27,22 @@ export const FilterInputLabel = styled.div`
   font-size: 0.75rem;
 `
 
+export const SelectDropdown = styled(Select)`
+  margin-top: 0.5rem;
+  .cds--label{
+    color: #c0c0c0
+  }
+  .cds--select-input {
+    background: #333333;
+    color: #f5f5f5;
+  }
+  .cds--list-box__label{
+    color: #f5f5f5;
+  }
+  svg{
+    fill: #f5f5f5;
+  }
+`
 export const MultiSelectConfig = styled(MultiSelect)`
   margin-top: 0.5rem;
   .cds--label{

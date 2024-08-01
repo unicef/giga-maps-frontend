@@ -39,7 +39,7 @@ const AdminPanelTabs = () => {
               </MenuItemLink>
             }
             <MenuItemLink to={adminFilterRoute} icon={Filter}>
-              Filter
+              Filters
             </MenuItemLink>
             {(permissions.CAN_VIEW_ALL_ROLES || permissions.CAN_VIEW_USER) &&
               <AdminSideNavMenu

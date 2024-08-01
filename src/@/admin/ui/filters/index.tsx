@@ -1,6 +1,6 @@
 import { addAdminFilter, editAdminFilter } from "~/core/routes";
-import AddFilterList from "./add.view";
-import EditFilterList from "./edit.view";
+import AddFilterList from "./add-filter.view";
+import EditFilterList from "./edit-filter.view";
 import { useRoute } from "~/lib/router";
 import ListFilterView from "./list-filter.view";
 

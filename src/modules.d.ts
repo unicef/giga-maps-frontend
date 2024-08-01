@@ -77,7 +77,6 @@ declare module '@carbon/react' {
   export const PaginationNav: React.FC<PaginationNavProps>;
 
   export interface IconButtonProps {
-    children: React.ReactNode;
     iconDescription?: string;
     align?: string;
     disabled?: boolean;

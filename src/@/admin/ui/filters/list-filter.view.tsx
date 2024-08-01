@@ -7,26 +7,33 @@ import {
   TableHeader,
   TableRow,
   TableToolbar,
+  ToggletipButton,
 } from '@carbon/react';
 import PageTitleComponent from '../common-components/page-title-component';
 import {
-  DataTableContainer, DeleteConfirmation, RecentLogScroll, TableDataBody, TableDataHead, TableWrapper, ToolbarContent,
+  CountryListToggletip,
+  CountryListToggletipContent,
+  DataLayerActiveCountries,
+  DataTableContainer, DeleteConfirmation, TableDataBody, TableDataHead, TableWrapper, ToolbarContent,
 } from '../styles/admin-styles'
 import { Add, Edit, Delete } from '@carbon/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from 'effector-react';
-import { $filterListResponse } from '../../models/filter-list.model';
+import { $filterListCount, $filterListResponse } from '../../models/filter-list.model';
 import { deleteFilterApiKeyRequestFx, getFilterListFx } from '../../effects/filter-fx';
 import { addAdminFilter, editAdminFilter } from '~/core/routes';
 import { ActionableNotification } from '@carbon/react';
 import { Link } from '~/lib/router';
 import { Div } from '~/@/common/style/styled-component-style';
+import { FilterScroll } from './filter-list.styles';
+import Pagination from '../common-components/Pagination';
+import { $countryList } from '~/@/api-docs/models/explore-api.model';
 
 const headers = [
-  { key: 'filter_name', header: 'Filter name' },
+  { key: 'name', header: 'Filter name' },
   { key: 'parameter', header: 'Parameter' },
-  { key: 'filter_type', header: 'Filter type' },
-  { key: 'filter_options', header: 'Filter options' },
+  { key: 'type', header: 'Filter type' },
+  { key: 'options', header: 'Filter options' },
   { key: 'countries', header: 'Countries' },
   { key: 'publisher', header: 'Publisher' },
   { key: 'action', header: 'Action' },
@@ -35,7 +42,9 @@ const headers = [
 const ListFilterView = () => {
   const [apiKeyDeleteId, setApiKeyDeleteId] = useState<null | number>(null);
   const filterList = useStore($filterListResponse) || { results: [] };
-
+  const count = useStore($filterListCount);
+  const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
+  const countryList = useStore($countryList);
   const deleteFilterData = async (id: number) => {
     setApiKeyDeleteId(null)
     try {
@@ -43,8 +52,33 @@ const ListFilterView = () => {
     } catch (e) { console.error(e) }
   }
 
+  const getCountryName = (activeCountriesIds: number[]) => {
+    const activeCountries = countryList?.filter(item => activeCountriesIds.includes(item.id));
+    let countries = activeCountries?.map(item => item.name).join(", ") ?? 'All countries';
+    return <>
+      {activeCountriesIds?.length > 0 ? activeCountriesIds.length : countryList?.length}
+      <CountryListToggletip
+        align="bottom">
+        <ToggletipButton>
+          <DataLayerActiveCountries>
+            View list
+          </DataLayerActiveCountries>
+        </ToggletipButton>
+        <CountryListToggletipContent>
+          <p className="list-content">
+            {countries}
+          </p>
+        </CountryListToggletipContent>
+      </CountryListToggletip>
+    </>
+  }
+
   const rows = useMemo(() => filterList?.map((item) => ({
     ...item,
+    options: "-",
+    parameter: item?.column_configuration?.name,
+    countries: getCountryName(item?.active_countries_list),
+    publisher: item?.published_by?.name,
     action: <Div style={{ display: "flex", marginLeft: "-16px" }}>
       <Link to={editAdminFilter} params={{ id: item.id ?? 0 }}>
         <IconButton
@@ -52,8 +86,8 @@ const ListFilterView = () => {
           size='md'
           label='Edit'
           tooltipText='Edit'
-          onClick={() => { }}
-        ><Edit /></IconButton>
+          renderIcon={Edit}
+        />
       </Link>
       <IconButton
         kind='ghost'
@@ -97,12 +131,10 @@ const ListFilterView = () => {
           rows,
           headers,
           getTableProps,
-          getHeaderProps,
           getRowProps,
           getBatchActionProps,
           getToolbarProps
         }) => {
-          const batchActionProps = getBatchActionProps();
           return <DataTableContainer>
             <TableToolbar {...getToolbarProps()}>
               <ToolbarContent>
@@ -116,8 +148,8 @@ const ListFilterView = () => {
                 </Link>
               </ToolbarContent>
             </TableToolbar>
-            <RecentLogScroll >
-              <TableWrapper>
+            <FilterScroll>
+              <TableWrapper $minHeight='13.1rem'>
                 <Table {...getTableProps()} aria-label="sample table">
                   <TableDataHead>
                     <TableRow>
@@ -128,7 +160,7 @@ const ListFilterView = () => {
                   </TableDataHead>
                   <TableDataBody>
                     {rows.map((row) =>
-                      <TableRow key={row.id} {...getRowProps({ row })}>
+                      <TableRow {...getRowProps({ row })} key={row.id}>
                         {row.cells.map((cell) =>
                           <TableCell key={cell.id}>{cell.value}</TableCell>
                         )}
@@ -137,10 +169,16 @@ const ListFilterView = () => {
                   </TableDataBody>
                 </Table>
               </TableWrapper>
-            </RecentLogScroll>
+            </FilterScroll>
           </DataTableContainer>;
         }}
       </DataTable>
+      <Pagination
+        page={page}
+        pageSize={pageSize}
+        count={count}
+        setPage={setPageAndSize}
+      />
     </>
   )
 }

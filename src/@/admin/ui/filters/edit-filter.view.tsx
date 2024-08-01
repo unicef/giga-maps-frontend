@@ -1,6 +1,6 @@
 import { editAdminFilter } from '~/core/routes';
 import { AddFilterContainer } from '../styles/admin-styles';
-import AddEditFilterListForm from './form-filter';
+import AddEditFilterListForm from './common/form-filter';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 import { getFilterListIdFx } from '../../effects/filter-fx';

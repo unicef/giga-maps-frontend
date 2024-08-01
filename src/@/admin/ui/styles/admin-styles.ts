@@ -261,8 +261,8 @@ export const TableTopHead = styled(TableHead)`
 }
 `
 
-export const TableWrapper = styled.div`
-    min-height: calc(100vh - 10.5rem);
+export const TableWrapper = styled.div<{ $minHeight?: string }>`
+    min-height: calc(100vh - ${props => props.$minHeight ?? '10.5rem'});
     .cds--data-table thead {
         position: sticky;
         top: 0;

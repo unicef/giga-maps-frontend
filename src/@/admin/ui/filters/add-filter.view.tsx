@@ -1,6 +1,6 @@
 import { AddFilterContainer } from '../styles/admin-styles'
 
-import AddEditFilterListForm from './form-filter'
+import AddEditFilterListForm from './common/form-filter'
 
 const AddFilterList = () => {
   return (
