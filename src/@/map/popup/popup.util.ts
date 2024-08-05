@@ -60,7 +60,8 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
   }
 
   const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
-  const connectivityValue = feature?.liveAvg ? `${feature.liveAvg} ${unit}` : UNKNOWN;
+  const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
+  const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : UNKNOWN;
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
@@ -77,7 +78,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
   } else if (isStatic) {
     showElement(popupTemplate, '.static-container');
     const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', `${feature?.staticValue ?? UNKNOWN}`);
-    
+
     staticElm.style.color = stylePaintData[feature?.staticType ?? UNKNOWN];
     outerCircle.style.display = 'none';
     innerCircle.style.backgroundColor = stylePaintData[feature?.staticType ?? UNKNOWN];
