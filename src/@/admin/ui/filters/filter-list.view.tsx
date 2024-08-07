@@ -89,7 +89,7 @@ const ListFilterView = () => {
     if (isDropdown) {
       return item.options?.live_choices ? 'Live choices' : 'Static choices'
     } else if (isRange) {
-      return item.options?.auto_compute ? 'Auto compute' : 'Manual compute'
+      return item.options?.range_auto_compute ? 'Auto compute' : 'Manual compute'
     }
     return '-'
   }

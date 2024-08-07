@@ -16,7 +16,7 @@ export interface FilterOptionsField {
   live_choices?: boolean
   choices?: { label: string; value: string }[]
   placeholder?: string
-  auto_compute?: boolean
+  range_auto_compute?: boolean
   minPlaceholder?: string
   maxPlaceholder?: string
 }

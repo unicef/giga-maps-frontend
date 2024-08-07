@@ -12,8 +12,8 @@ const FilterRangeFields = () => {
     <Checkbox
       labelText="Auto compute"
       name="options.auto_compute"
-      checked={formData?.options?.auto_compute}
-      onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, auto_compute: e.target.checked }])}
+      checked={formData?.options?.range_auto_compute}
+      onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, range_auto_compute: e.target.checked }])}
       id="auto-compute"
     />
   </FilterInputLabel>

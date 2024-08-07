@@ -9,7 +9,7 @@ export type FilterAllValueType = {
   options: {
     placeholder?: string
     live_choices?: boolean
-    auto_compute?: boolean
+    range_auto_compute?: boolean
     choices?: { label: string, value: string }[],
     minPlaceholder?: string
     maxPlaceholder?: string

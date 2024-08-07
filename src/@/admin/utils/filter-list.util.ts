@@ -23,7 +23,7 @@ export const FilterStatusColors = {
 
 export const cleanOptionFields = (options: FilterOptionsField, type: string) => {
   if (type === 'DROPDOWN' || type === 'DROPDOWN_MULTISELECT') {
-    delete options.auto_compute
+    delete options.range_auto_compute
     delete options.minPlaceholder
     delete options.maxPlaceholder
   } else if (type === 'RANGE') {
@@ -33,7 +33,7 @@ export const cleanOptionFields = (options: FilterOptionsField, type: string) => 
   } else if (type === 'INPUT' || type === 'BOOLEAN') {
     delete options.choices;
     delete options.live_choices;
-    delete options.auto_compute
+    delete options.range_auto_compute
     delete options.minPlaceholder
     delete options.maxPlaceholder
   }

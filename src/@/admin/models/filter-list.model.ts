@@ -17,7 +17,7 @@ const defaultFilterData = {
   placeholder: '',
   options: {
     live_choices: true,
-    auto_compute: true,
+    range_auto_compute: true,
   }
 }
 
