@@ -291,7 +291,7 @@ export const RenewIcon = styled(Renew)`
 
 export const InputContainer = styled.div`
     width: 48%;
-    margin-top:2rem;
+    margin-top:1rem;
     select{
         background:#ffffff;
     }
@@ -384,7 +384,7 @@ export const DatePickerBoxWrapper = styled.div`
 `
 export const RowContainer = styled.div`
     flex-wrap:wrap;
-    padding: 0rem 3.3rem 1rem 3rem;
+    padding: 0rem 3rem 1rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -434,7 +434,7 @@ margin-top: 1.5rem;
 
 `
 export const MultiSelectLayerConfig = styled(MultiSelect)`
-margin-top: 1.5rem;
+/* margin-top: 1.5rem; */
 #aggregate-on-select,#apiSource-select,#parameter-select,#country-select{
     background-color: #FAFAFA;
 }
@@ -1000,7 +1000,7 @@ export const DeleteConfirmation = styled.div`
 `
 export const AddFilterContainer = styled.div`
     height: 100vh;
-    width: 18rem;
+    width: 18.5rem;
     z-index: 999;
     position: fixed;
     right: 0;

@@ -8,12 +8,6 @@ import { getFilterListIdFx } from '../../effects/filter-fx';
 const EditFilterList = ({ openFilterSidebar }: { openFilterSidebar?: () => void }) => {
   const { id } = useStore(editAdminFilter.params) as { id: number };
 
-  useEffect(() => {
-    if (id) {
-      void getFilterListIdFx({ id });
-    }
-  }, [id])
-
   return (
     <AddFilterContainer>
       <AddEditFilterListForm id={id} isEditMode={true} />

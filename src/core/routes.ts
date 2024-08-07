@@ -58,6 +58,7 @@ export const viewGigaLayer = router.add<{ id: number }>('/admin/giga-layer/view/
 export const editGigaLayer = router.add<{ id: number }>('/admin/giga-layer/edit/:id:path(/.*)?')
 
 export const adminFilterRoute = router.add('/admin/filter(/.*)?')
+export const adminFilterListRoute = router.add('/admin/filter')
 export const addAdminFilter = router.add('/admin/filter/create')
 export const editAdminFilter = router.add<{ id: number }>('/admin/filter/edit/:id:path(/.*)?')
 

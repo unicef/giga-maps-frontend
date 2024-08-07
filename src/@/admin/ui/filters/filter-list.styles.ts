@@ -6,6 +6,10 @@ export const FilterScroll = styled(Scroll)`
   max-height: calc(100vh - 13.1rem);
 `
 
+export const FilterFormScroll = styled(Scroll)`
+  max-height: calc(100vh - 3.1rem);
+`
+
 export const ViewFilterWrapper = styled.div`
   padding: 0rem 1rem;
 `
@@ -25,6 +29,25 @@ export const FilterInputLabel = styled.div`
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-size: 0.75rem;
+
+  &.center-items {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cds--radio-button:checked + .cds--radio-button__label .cds--radio-button__appearance::before {
+    background-color: #c0c0c0;
+  }
+  .cds--checkbox-label::before, .cds--radio-button__appearance, .cds--radio-button:checked + .cds--radio-button__label .cds--radio-button__appearance {
+    border-color: #c0c0c0;
+  }
+  .cds--label {
+    color: #c0c0c0;
+  }
+  .cds--btn--ghost.cds--btn--icon-only .cds--btn__icon path:not([data-icon-path]):not([fill=none]), .cds--btn--ghost.cds--btn--icon-only .cds--btn__icon {
+    fill: #c0c0c0;
+  }
 `
 
 export const SelectDropdown = styled(Select)`

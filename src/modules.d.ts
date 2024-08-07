@@ -82,6 +82,7 @@ declare module '@carbon/react' {
     disabled?: boolean;
     className?: string;
     label: string;
+    type: string;
     renderIcon?: (props: IconButtonProps) => React.ReactNode;
     onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     kind?: 'primary' | 'secondary' | 'tertiary' | "ghost";
@@ -94,5 +95,7 @@ declare module '@carbon/react' {
   export const IconButton: React.FC<IconButtonProps>;
 
   export const InlineLoading = React.FC<any>
+
+  export const OverflowMenu = React.FC<any>
 }
 

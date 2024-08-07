@@ -8,7 +8,7 @@ export interface FilterListType {
   query_param_filter: string
   column_configuration: ColumnConfiguration
   status: string
-  published_by: null | { id: number; name: string }
+  published_by: null | { id: number; first_name: string }
   active_countries_list: number[]
 }
 
@@ -42,4 +42,11 @@ export interface FilterConfiguration {
   last_modified_by: any
   created: string
   created_by: any
+}
+
+
+export enum FilterStatusType {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+  DISABLED = 'DISABLED'
 }
