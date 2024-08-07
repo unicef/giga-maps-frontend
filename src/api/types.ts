@@ -277,13 +277,14 @@ export interface AdvanceFilterType {
   options?: {
     choices?: Choice[]
     placeholder?: string;
-    min_place_holder?: string;
-    max_place_holder?: string;
+    minPlaceholder?: string;
+    maxPlaceholder?: string;
     active_range?: {
       min_value: number
       max_value: number
       min_place_holder: string
       max_place_holder: string
+      include_none_filter?: boolean
     }
   }
   query_param_filter: string
@@ -301,4 +302,6 @@ export interface ColumnConfiguration {
   table_name: string
   table_alias: string
   table_label: string
+  downcast_aggr_str?: string;
+  upcast_aggr_str?: string;
 }
