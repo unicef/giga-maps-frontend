@@ -77,12 +77,13 @@ declare module '@carbon/react' {
   export const PaginationNav: React.FC<PaginationNavProps>;
 
   export interface IconButtonProps {
+    children?: React.ReactNode;
     iconDescription?: string;
     align?: string;
     disabled?: boolean;
     className?: string;
     label: string;
-    type: string;
+    type?: string;
     renderIcon?: (props: IconButtonProps) => React.ReactNode;
     onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     kind?: 'primary' | 'secondary' | 'tertiary' | "ghost";

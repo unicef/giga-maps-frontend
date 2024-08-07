@@ -60,8 +60,8 @@ export const fetchGlobalStatsFx = createRequestFx(
 );
 
 export const fetchAdvanceFilterFx = createRequestFx(
-  async (_, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
-    url: `api/accounts/advanced_filters/`,
+  async (countryId: number, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
+    url: `api/accounts/adv_filters/PUBLISHED/${countryId}/?cache=false&expand=column_configuration&ordering=name`,
     signal: controller?.getSignal()
   })
 );

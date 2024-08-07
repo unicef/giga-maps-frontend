@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
 
-const MultiSelectDropdown = ({ name, description, parameter, place_holder: placeholder, choices, itemKey, value, onChange }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
+const MultiSelectDropdown = ({ name, description, column_configuration: parameter, options: { placeholder, choices } = {}, itemKey, value, onChange }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
   const items = useMemo(() => [...(choices ?? [])], [choices])
   const selectedItem = useMemo(() => {
     const values = value?.split(',') || [];
@@ -22,7 +22,7 @@ const MultiSelectDropdown = ({ name, description, parameter, place_holder: place
           </button>
         </TooltipStyle>}
       </>}
-      id={`mutli-select-dropdown-${parameter.field}`}
+      id={`mutli-select-dropdown-${parameter.name}`}
       items={items}
       label={<>{placeholder ?? `Select ${name}`}1</>}
       initialSelectedItems={selectedItem}

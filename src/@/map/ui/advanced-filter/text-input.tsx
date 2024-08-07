@@ -5,7 +5,7 @@ import { TooltipButton } from "~/@/sidebar/ui/landing-page-side-bar/styles/landi
 import { Information } from '@carbon/icons-react'
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 
-const TextField = ({ value, itemKey, place_holder: placeholder, name, onChange, description }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
+const TextField = ({ value, itemKey, options, name, onChange, description }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
   return (
     <StyledTextInputWrapper>
       <TextInput
@@ -20,7 +20,7 @@ const TextField = ({ value, itemKey, place_holder: placeholder, name, onChange, 
             </button>
           </TooltipStyle>}
         </>}
-        placeholder={placeholder ?? `Enter ${name}`}
+        placeholder={options?.placeholder ?? `Enter ${name}`}
         onChange={(e) => {
           onChange(itemKey, e.target.value);
         }}

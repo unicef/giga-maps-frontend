@@ -4,7 +4,7 @@ export interface FilterListType {
   name: string
   description: any
   type: string
-  options: Options
+  options: FilterOptionsField
   query_param_filter: string
   column_configuration: ColumnConfiguration
   status: string
@@ -12,8 +12,13 @@ export interface FilterListType {
   active_countries_list: number[]
 }
 
-export interface Options {
-  live_choices: boolean
+export interface FilterOptionsField {
+  live_choices?: boolean
+  choices?: { label: string; value: string }[]
+  placeholder?: string
+  auto_compute?: boolean
+  minPlaceholder?: string
+  maxPlaceholder?: string
 }
 
 export interface ColumnConfiguration {

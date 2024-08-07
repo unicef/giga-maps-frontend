@@ -9,6 +9,7 @@ import FilterPlaceholderForm from './filter-placeholder';
 import FilterRangeFields from './filter-range-fields';
 import FilterDropdownFields from './filter-dropdown-filter';
 import FilterCommonFields from './filter-common-fields';
+import { cleanOptionFields } from '~/@/admin/utils/filter-list.util';
 
 const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: number }) => {
   const formData = useStore($formFilterData);
@@ -16,6 +17,7 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const { name, code, type, query_param_filter, column_configuration, options, description } = formData;
+
     try {
       const body = {
         name,
@@ -23,7 +25,7 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
         type,
         query_param_filter,
         column_configuration,
-        options,
+        options: cleanOptionFields(options, type),
         description
       }
       if (isEditMode) {

@@ -24,7 +24,7 @@ export const getFilterPublishedListFx = createEffect(() => {
 
 export const filterColumnListFx = createEffect(() => {
   return createRequestAuthFx({
-    url: `accounts/column_configurations/?cache=false&is_filter_applicable=true`
+    url: `accounts/column_configurations/?is_filter_applicable=true`
   }) as Promise<APIListType<FilterConfiguration>>
 })
 

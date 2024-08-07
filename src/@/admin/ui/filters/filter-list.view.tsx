@@ -84,9 +84,11 @@ const ListFilterView = () => {
   }
 
   const showOptions = (item: FilterListType) => {
-    const { isDropdown } = getFilterType(item.type);
+    const { isDropdown, isRange } = getFilterType(item.type);
     if (isDropdown) {
       return item.options?.live_choices ? 'Live choices' : 'Static choices'
+    } else if (isRange) {
+      return item.options?.auto_compute ? 'Auto compute' : 'Manual compute'
     }
     return '-'
   }
@@ -129,6 +131,7 @@ const ListFilterView = () => {
       action: <Div style={{ display: "flex", marginLeft: "-16px" }}>
         <Link to={editAdminFilter} params={{ id: item.id ?? 0 }}>
           <IconButton
+            type="button"
             kind='ghost'
             size='md'
             label='Edit'

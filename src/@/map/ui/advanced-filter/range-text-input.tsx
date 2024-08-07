@@ -8,14 +8,14 @@ import { useStore } from "effector-react";
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
 
-const RangeTextInput = ({ name, description, active_countries_range = {}, value: rangeValue, parameter, include_none_filter: noneFilter, itemKey, downcast_aggr_str, upcast_aggr_str, onChange }: AdvanceFilterType & {
+const RangeTextInput = ({ name, description, options, value: rangeValue, column_configuration: parameter, include_none_filter: noneFilter, itemKey, downcast_aggr_str, upcast_aggr_str, onChange }: AdvanceFilterType & {
   value: { none_range: boolean; value: string }; itemKey: string; onChange: (key: string, value: {
     none_range: boolean;
     value: string;
   }) => void
 }) => {
   const country = useStore($country);
-  const placeholders = active_countries_range[country?.id ?? 'default'] || {};
+  const placeholders = options?.active_range || {};
   const { min_place_holder: minPlaceholder, max_place_holder: maxPlaceholder, max_value = Infinity, min_value = 0 } = placeholders;
   const [minValue, setMinValue] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState<number | null>(null);
@@ -42,7 +42,7 @@ const RangeTextInput = ({ name, description, active_countries_range = {}, value:
         <TextInput
           type="number"
           size="sm"
-          id={`${parameter.field}-min-input`}
+          id={`${parameter.name}-min-input`}
           labelText=""
           placeholder={minPlaceholder ?? "Min(0)"}
           value={minValue ?? ''}
@@ -66,7 +66,7 @@ const RangeTextInput = ({ name, description, active_countries_range = {}, value:
         />
         <TextInput
           size="sm"
-          id={`${parameter.field}-max-input`}
+          id={`${parameter.name}-max-input`}
           type="number"
           labelText=""
           placeholder={maxPlaceholder ?? "Max"}
