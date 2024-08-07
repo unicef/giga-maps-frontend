@@ -3,7 +3,7 @@ import { FormEvent, useEffect } from 'react'
 import { useStore } from 'effector-react';
 import { ButtonWrapper, FilterFormScroll, FilterHeadingWrapper, FormFieldsContainer, FormFieldsWrapper, ViewFilterWrapper } from '../filter-list.styles';
 import { adminFilterRoute } from '~/core/routes';
-import { $formFilterData } from '~/@/admin/models/filter-list.model';
+import { $formFilterData, onReloadFilterList } from '~/@/admin/models/filter-list.model';
 import { addFilterFx, editFilterFx, filterColumnListFx } from '~/@/admin/effects/filter-fx';
 import FilterPlaceholderForm from './filter-placeholder';
 import FilterRangeFields from './filter-range-fields';
@@ -33,6 +33,7 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
       } else {
         await addFilterFx({ body })
       }
+      onReloadFilterList({});
       adminFilterRoute.navigate();
     } catch (e) { console.error(e) }
   }
@@ -51,7 +52,7 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
         </ViewFilterWrapper>
         <FormFieldsWrapper>
           <FormFieldsContainer>
-            <FilterCommonFields />
+            <FilterCommonFields isEditMode={isEditMode} />
             <FilterRangeFields />
             <FilterPlaceholderForm />
             <FilterDropdownFields />

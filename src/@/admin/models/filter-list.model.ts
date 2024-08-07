@@ -1,6 +1,6 @@
 import { $notification } from '~/@/common/Toast/toast.model';
 import { $appConfigValues } from '~/@/admin/models/admin-model';
-import { createEvent, createStore, merge, sample } from "effector";
+import { createEvent, createStore, merge, restore, sample } from "effector";
 import { addFilterFx, editFilterFx, filterColumnListFx, getFilterListFx, getFilterListIdFx, getFilterPublishedListFx } from "../effects/filter-fx";
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { FilterConfiguration, FilterListType } from "../types/filter-list.type";
@@ -15,11 +15,18 @@ const defaultFilterData = {
   description: '',
   query_param_filter: '',
   placeholder: '',
-  options: {}
+  options: {
+    live_choices: true,
+    auto_compute: true,
+  }
 }
 
 export const $filterListResponse = createStore<FilterListType[]>([]);
 export const $filterListCount = createStore(0);
+
+export const onReloadFilterList = createEvent<object>();
+export const $reloadFiler = restore(onReloadFilterList, null);
+
 $filterListResponse.on(getFilterListFx.doneData, setPayloadResults);
 $filterListCount.on(getFilterListFx.doneData, (_, response) => response?.count || 0);
 
@@ -76,12 +83,12 @@ sample({
   target: onSetFilterForm
 })
 
-sample({
-  clock: editAdminFilter.params,
-  filter: (params) => !!params?.id,
-  fn: (params) => ({ id: params?.id ?? 0 }),
-  target: getFilterListIdFx
-})
+// sample({
+//   clock: editAdminFilter.params,
+//   filter: (params) => !!params?.id,
+//   fn: (params) => ({ id: params?.id ?? 0 }),
+//   target: getFilterListIdFx
+// })
 
 sample({
   clock: getFilterListIdFx.doneData,

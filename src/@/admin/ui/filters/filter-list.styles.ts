@@ -93,6 +93,15 @@ export const FilterTextInput = styled(TextInput)`
   .cds--text-input::placeholder{
     color: #f5f5f5
   }
+  .cds--text-input:disabled { 
+    color: #f5f5f5; // disable color
+    -webkit-text-fill-color: #f5f5f5;
+    opacity: 0.4;
+  }
+  input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus {
+    box-shadow: 0 0 0 1000px #333333 inset;
+    -webkit-text-fill-color: #f5f5f5
+  }
 `
 
 export const FilterForm = styled.div`

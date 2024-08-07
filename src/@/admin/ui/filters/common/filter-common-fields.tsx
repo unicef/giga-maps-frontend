@@ -4,7 +4,7 @@ import { useStore } from 'effector-react';
 import { FilterInputLabel, FilterTextInput, SelectDropdown } from '../filter-list.styles';
 import { $filterColumnList, $filterQueryParamsChoices, $filterTypeChoices, $formFilterData, onUdpateFilterForm } from '~/@/admin/models/filter-list.model';
 
-const FilterCommonFields = () => {
+const FilterCommonFields = ({ isEditMode }: { isEditMode: boolean }) => {
   const filterColumnList = useStore($filterColumnList);
   const { typeChoicesList } = useStore($filterTypeChoices);
   const { queryParamsList } = useStore($filterQueryParamsChoices);
@@ -19,6 +19,7 @@ const FilterCommonFields = () => {
       labelText=""
       name='code'
       id="layer-code"
+      disabled={isEditMode}
       value={formData?.code}
       onChange={(e) => onUdpateFilterForm([e.target.name, e.target.value])}
       required

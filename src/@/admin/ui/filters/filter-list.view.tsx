@@ -19,12 +19,11 @@ import {
   DataTableContainer, TableDataBody, TableDataHead, TableWrapper, ToolbarContent,
 } from '../styles/admin-styles'
 import { Add, Edit } from '@carbon/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from 'effector-react';
-import { $filterListCount, $filterListResponse, $filterStatusChoices, $filterTypeChoices } from '../../models/filter-list.model';
+import { $filterListCount, $filterListResponse, $filterStatusChoices, $filterTypeChoices, $reloadFiler } from '../../models/filter-list.model';
 import { deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from '../../effects/filter-fx';
-import { addAdminFilter, adminFilterListRoute, editAdminFilter } from '~/core/routes';
-import { ActionableNotification } from '@carbon/react';
+import { addAdminFilter, adminFilterRoute, editAdminFilter } from '~/core/routes';
 import { Link } from '~/lib/router';
 import { Div } from '~/@/common/style/styled-component-style';
 import { FilterScroll } from './filter-list.styles';
@@ -57,10 +56,12 @@ const ListFilterView = () => {
   const { statusChoices } = useStore($filterStatusChoices)
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const countryList = useStore($countryList);
-  const onViewPage = useStore(adminFilterListRoute.visible);
+  const reloadFilter = useStore($reloadFiler);
+  const onViewPage = useStore(adminFilterRoute.visible);
   const reloadApiCall = async () => {
     void getFilterListFx({ page, pageSize, search });
   }
+
   const deleteFilterData = async (id: number) => {
     try {
       await deleteFilterFx({ id });
@@ -171,7 +172,7 @@ const ListFilterView = () => {
     if (onViewPage) {
       reloadApiCall();
     }
-  }, [onViewPage, page, pageSize, search]);
+  }, [onViewPage, reloadFilter, page, pageSize, search]);
 
   return (
     <>

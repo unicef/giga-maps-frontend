@@ -14,7 +14,7 @@ import { $isMobile } from "~/core/media-query";
 
 const components = {
   'DROPDOWN': SingleDropdown,
-  'DROPDOWN-MULTI': MultiSelectDropdown,
+  'DROPDOWN_MULTISELECT': MultiSelectDropdown,
   'RANGE': RangeTextInput,
   'INPUT': TextField,
   'BOOLEAN': SingleDropdown

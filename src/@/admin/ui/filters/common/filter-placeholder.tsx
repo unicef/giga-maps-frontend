@@ -7,7 +7,7 @@ const FilterPlaceholderForm = () => {
   const formData = useStore($formFilterData);
 
   const { isRange } = getFilterType(formData.type);
-  const isAutoCompute = formData?.options?.autoCompute;
+  const isAutoCompute = formData?.options?.auto_compute;
   return (<>
     {!isRange && <>
       <FilterInputLabel>
