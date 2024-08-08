@@ -3,8 +3,6 @@ import { StyledCheckbox, StyledTextInputContainer, StyledTextInputWrapper } from
 import { FormLabel, TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
 import { evaluateExpression } from "~/lib/utils";
-import { $country } from "~/@/country/country.model";
-import { useStore } from "effector-react";
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
 

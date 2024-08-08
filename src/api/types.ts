@@ -285,6 +285,7 @@ export interface AdvanceFilterType {
       max_value: number
       min_place_holder: string
       max_place_holder: string
+      include_none_filter?: boolean
     }
   }
   query_param_filter: string
