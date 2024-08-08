@@ -34,6 +34,7 @@ import { StatusWrapper } from '~/@/api-docs/ui/components/api-keys-right-section
 import { FilterStatusColors, getFilterStatus, getFilterType } from '../../utils/filter-list.util';
 import PromptActionable, { PromptActionableType } from '../common-components/prompt-actionable';
 import SearchToolbar from '../common-components/search-toolbar';
+import { $userPermissions } from '~/core/auth/models';
 
 const headers = [
   { key: 'code', header: 'Code' },
@@ -48,6 +49,7 @@ const headers = [
 ]
 
 const ListFilterView = () => {
+  const permissions = useStore($userPermissions);
   const [promptData, setPromptData] = useState<null | PromptActionableType>(null);
   const [search, setSearchValue] = useState('');
   const filterList = useStore($filterListResponse) || { results: [] };
@@ -143,21 +145,21 @@ const ListFilterView = () => {
         </Link>
 
         <OverflowMenu flipped aria-label="overflow-menu" size="md">
-          {(inDraft || isDisabled) && <OverflowMenuItem itemText="Activate" onClick={() => {
+          {(inDraft || isDisabled) && <OverflowMenuItem disabled={!permissions.CAN_UPDATE_ADVANCE_FILTER} itemText="Activate" onClick={() => {
             setPromptData({
               kind: "warning",
               title: "Are you sure you want to activate this filter?",
               onActionButtonClick: () => publishFilter(item.id ?? 0)
             })
           }} />}
-          {isActivated && <OverflowMenuItem itemText="Deactivate" onClick={() => {
+          {isActivated && <OverflowMenuItem disabled={!permissions.CAN_VIEW_ADVANCE_FILTER} itemText="Deactivate" onClick={() => {
             setPromptData({
               kind: "warning",
               title: "Are you sure you want to deactivate this filter?",
               onActionButtonClick: () => updateFilter(item.id ?? 0, { status: FilterStatusType.DISABLED })
             })
           }} />}
-          {(inDraft || isDisabled) && <OverflowMenuItem hasDivider isDelete itemText="Delete" onClick={() => {
+          {(inDraft || isDisabled) && <OverflowMenuItem disabled={!permissions.CAN_VIEW_ADVANCE_FILTER} hasDivider isDelete itemText="Delete" onClick={() => {
             setPromptData({
               kind: "error",
               title: "Are you sure you want to delete this filter?",
@@ -204,6 +206,7 @@ const ListFilterView = () => {
                   <Button
                     renderIcon={Add}
                     onClick={() => { }}
+                    disabled={!permissions.CAN_ADD_ADVANCE_FILTER}
                   >
                     Add new filter
                   </Button>

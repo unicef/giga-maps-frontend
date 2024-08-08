@@ -38,9 +38,9 @@ const AdminPanelTabs = () => {
                 Giga layers
               </MenuItemLink>
             }
-            <MenuItemLink to={adminFilterRoute} icon={Filter}>
+            {permissions.CAN_VIEW_ADVANCE_FILTER && <MenuItemLink to={adminFilterRoute} icon={Filter}>
               Filters
-            </MenuItemLink>
+            </MenuItemLink>}
             {(permissions.CAN_VIEW_ALL_ROLES || permissions.CAN_VIEW_USER) &&
               <AdminSideNavMenu
                 title="User Management"
