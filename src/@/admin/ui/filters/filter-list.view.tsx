@@ -97,6 +97,7 @@ const ListFilterView = () => {
   const getCountryName = (activeCountriesIds: number[]) => {
     const activeCountries = countryList?.filter(item => activeCountriesIds.includes(item.id));
     let countries = activeCountries?.map(item => item.name).join(", ") ?? 'All countries';
+    if (!activeCountriesIds?.length) return '-';
     return <>
       {activeCountriesIds?.length > 0 ? activeCountriesIds.length : countryList?.length}
       <CountryListToggletip

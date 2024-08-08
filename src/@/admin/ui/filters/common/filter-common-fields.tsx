@@ -73,7 +73,7 @@ const FilterCommonFields = ({ isEditMode }: { isEditMode: boolean }) => {
     </FilterInputLabel>
     <FilterTextInput
       type="text"
-      placeholder="Description will show in info box"
+      placeholder="Enter description"
       labelText=""
       name='description'
       id="filter-description"
