@@ -25,7 +25,7 @@ import { $filterListCount, $filterListResponse, $filterStatusChoices, $filterTyp
 import { deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from '../../effects/filter-fx';
 import { addAdminFilter, adminFilterRoute, editAdminFilter } from '~/core/routes';
 import { Link } from '~/lib/router';
-import { Div } from '~/@/common/style/styled-component-style';
+import { Div, EmptyList } from '~/@/common/style/styled-component-style';
 import { FilterScroll } from './filter-list.styles';
 import Pagination from '../common-components/Pagination';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
@@ -233,6 +233,7 @@ const ListFilterView = () => {
                     )}
                   </TableDataBody>
                 </Table>
+                <EmptyList $color="#000">No data found</EmptyList>
               </TableWrapper>
             </FilterScroll>
           </DataTableContainer>;

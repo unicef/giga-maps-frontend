@@ -3,12 +3,31 @@ import { SelectItem } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { FilterInputLabel, FilterTextInput, SelectDropdown } from '../filter-list.styles';
 import { $filterColumnList, $filterQueryParamsChoices, $filterTypeChoices, $formFilterData, onUdpateFilterForm } from '~/@/admin/models/filter-list.model';
+import { useMemo } from 'react';
 
 const FilterCommonFields = ({ isEditMode }: { isEditMode: boolean }) => {
   const filterColumnList = useStore($filterColumnList);
   const { typeChoicesList } = useStore($filterTypeChoices);
   const { queryParamsList } = useStore($filterQueryParamsChoices);
   const formData = useStore($formFilterData);
+  const applicableFilterType = useMemo(() => {
+    const configuration = filterColumnList?.find((item) => item.id === Number(formData.column_configuration));
+    if (configuration && typeChoicesList.length) {
+      const filterTypes = Object.keys(configuration?.options?.applicable_filter_types ?? {});
+      return typeChoicesList.filter((item) => filterTypes.includes(item.value));
+    }
+    return [];
+  }, [filterColumnList, formData.column_configuration, typeChoicesList])
+
+  const applicableQueryParams = useMemo(() => {
+    const configuration = filterColumnList?.find((item) => item.id === Number(formData.column_configuration));
+    if (queryParamsList?.length && configuration && typeChoicesList.length && formData.type) {
+      const filterTypes = configuration?.options?.applicable_filter_types[formData.type] ?? [];
+      return queryParamsList.filter((item) => filterTypes.includes(item.value));
+    }
+    return [];
+  }, [filterColumnList, formData.type, typeChoicesList, queryParamsList])
+
 
   return (<>
     <FilterInputLabel>
@@ -50,7 +69,7 @@ const FilterCommonFields = ({ isEditMode }: { isEditMode: boolean }) => {
       placeholder="Choose filter type"
     >
       <SelectItem value="" text="Choose filter type" />
-      {typeChoicesList.map((item) => (
+      {applicableFilterType.map((item) => (
         <SelectItem key={item.value} value={item.value} text={item.label}></SelectItem>
       ))
       }
@@ -90,7 +109,7 @@ const FilterCommonFields = ({ isEditMode }: { isEditMode: boolean }) => {
       placeholder="Choose query param filter"
     >
       <SelectItem value="" text="Choose query param" />
-      {queryParamsList.map((item) => (
+      {applicableQueryParams.map((item) => (
         <SelectItem key={item.value} value={item.value} text={item.label}></SelectItem>
       ))
       }

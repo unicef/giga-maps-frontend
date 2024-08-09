@@ -64,6 +64,12 @@ export const onUdpateFilterForm = createEvent<[string, FilterValueType]>();
 export const $formFilterData = createStore<FilterAllValueType>(defaultFilterData);
 $formFilterData.on(onUdpateFilterForm, (state, payload: [string, FilterValueType]) => {
   const [name, value] = payload;
+  if (name === 'column_configuration') {
+    state.type = ''
+    state.query_param_filter = ''
+  } else if (name === 'type') {
+    state.query_param_filter = ''
+  }
   return {
     ...state,
     [name]: value

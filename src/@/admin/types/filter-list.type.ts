@@ -42,6 +42,7 @@ export interface FilterConfiguration {
   is_filter_applicable: boolean
   options?: {
     active_countries_filter: string
+    applicable_filter_types: Record<string, string[]>
   }
   last_modified_at: string
   last_modified_by: any
