@@ -1,7 +1,7 @@
 import { Button, Form, Select, SelectItem, TextArea, TextInput, Theme } from "@carbon/react"
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "~/@/common/modal"
 import { NextOutline } from "@carbon/icons-react"
-import { useEffect } from "react"
+import { FormEvent, useEffect } from "react"
 import { getInTouchStyle } from "../styles/about-giga-map-styles"
 import useForm from "~/lib/hooks/useForm"
 import { Scroll } from '@/scroll';
@@ -46,8 +46,8 @@ export const GetInTouchForm = ({ open, setOpen }: { open: boolean, setOpen: Reac
       console.log(e);
     }
   }
-  const onSubmit = () => {
-    handleSubmit(handleFormSubmit)
+  const onSubmit = (event: FormEvent) => {
+    handleSubmit(handleFormSubmit)(event)
   }
   // reset form
   useEffect(reset, [open]);
