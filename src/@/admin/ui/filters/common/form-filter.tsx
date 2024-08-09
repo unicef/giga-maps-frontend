@@ -10,9 +10,12 @@ import FilterRangeFields from './filter-range-fields';
 import FilterDropdownFields from './filter-dropdown-filter';
 import FilterCommonFields from './filter-common-fields';
 import { cleanOptionFields } from '~/@/admin/utils/filter-list.util';
+import { $userPermissions } from '~/core/auth/models';
 
 const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: number }) => {
   const formData = useStore($formFilterData);
+  const permissions = useStore($userPermissions);
+
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -61,7 +64,7 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
       </FilterFormScroll>
       <ButtonWrapper>
         <Button onClick={() => adminFilterRoute.navigate()} style={{ background: '#474747' }}>Cancel</Button>
-        <Button type='submit'>{isEditMode ? 'Update' : 'Save'}</Button>
+        <Button disabled={isEditMode ? !permissions.CAN_UPDATE_ADVANCE_FILTER : !permissions.CAN_ADD_ADVANCE_FILTER} type='submit'>{isEditMode ? 'Update' : 'Save'}</Button>
       </ButtonWrapper>
     </Form>
   )
