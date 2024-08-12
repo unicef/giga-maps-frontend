@@ -1,9 +1,9 @@
 import { Button, Form, TextArea } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { useEffect } from 'react';
+import { FormEvent, useEffect } from 'react';
 
 import { $currentSelectedApiData } from '~/@/api-docs/models/explore-api.model';
-import { $requestAPIPopup } from '~/@/api-docs/models/popup.model';
+import { $requestAPIPopup, onRequestAPIPopup } from '~/@/api-docs/models/popup.model';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '~/@/common/modal';
 
 import { $dowloadApiModalContainerStyle, $modalBodyStyle, $modalFooterStyle, $modalHeadingStyle, ModalDescription, TextInputWrapper } from './modals.style';
@@ -52,8 +52,8 @@ const ReuestApiKeyPopup = () => {
     } catch (e) { }
   }
 
-  const onFormSubmit = () => {
-    handleSubmit(onSubmit)
+  const onFormSubmit = (event: FormEvent) => {
+    handleSubmit(onSubmit)(event)
   }
 
   return (

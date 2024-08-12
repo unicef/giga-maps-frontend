@@ -82,7 +82,6 @@ function useForm(
     reset,
     handleSubmit: (onSubmitCallback: (_: FormValues) => void) => (event: FormEvent) => {
       event.preventDefault();
-      console.log('validate()', validate())
       if (validate()) {
         onSubmitCallback(values);
       }
