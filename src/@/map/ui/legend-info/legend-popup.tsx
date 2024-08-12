@@ -23,7 +23,7 @@ import {
   $coverageStats,
   $connectivityBenchMark,
   $benchmarkmarkUtils,
-  $layerUtils, 
+  $layerUtils,
   $staticLegendsSelected
 } from '~/@/sidebar/sidebar.model';
 import { $country } from '~/@/country/country.model';
@@ -313,30 +313,31 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
             {
               legends.values.map(({ key, label }) => {
                 return (
-                  <div className='legend-container' key={`${key}`}>
-                    <div className='checkbox-with-label'>
-                      {shouldShowControls && (
-                        <CheckBoxContainer>
-                          <Checkbox
-                            id={key}
-                            labelText={''}
-                            checked={staticLayerCheckedStatus[key]}
-                            onChange={() => handleStaticLayerToggle(key)}
-                          />
-                        </CheckBoxContainer>
-                      )}
-                      <div key={key} className='real-time-connetivity-info'>
-                        <InnerCircle $backColor={legends.colors[key]} $large />
-                        <span><p>{label}{" "}</p></span>
+                  (coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label]) > 0 && (
+                    <div className='legend-container' key={`${key}`}>
+                      <div className='checkbox-with-label'>
+                        {shouldShowControls && (
+                          <CheckBoxContainer>
+                            <Checkbox
+                              id={key}
+                              labelText={''}
+                              checked={staticLayerCheckedStatus[key]}
+                              onChange={() => handleStaticLayerToggle(key)}
+                            />
+                          </CheckBoxContainer>
+                        )}
+                        <div key={key} className='real-time-connetivity-info'>
+                          <InnerCircle $backColor={legends.colors[key]} $large />
+                          <span><p>{label}{" "}</p></span>
 
+                        </div>
                       </div>
+                      {shouldShowControls && coverageStats?.connected_schools && (
+                        <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
+                      )}
+
                     </div>
-                    {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
-                    )}
-
-                  </div>
-
+                  )
 
                 )
               }
