@@ -11,19 +11,23 @@ import { adminCountry, router } from '~/core/routes';
 import { speedConverterUtil } from '~/lib/utils';
 
 import { BottomButtonWrapper, CountryFormScroll, CountryListDataLayer, DateOfJoiningWrapper, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, LastWeekStatusWrapper, MultiSelectLayerConfig, RowContainer, SchoolFieldsWrapper, UploadFlagImage } from "../../styles/admin-styles";
+import { getFilterPublishedListFx } from '~/@/admin/effects/filter-fx';
+import { $filterPublishedList } from '~/@/admin/models/filter-list.model';
 
 
 const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId?: number }) => {
 
   const id = Number(countryItemId);
   const formDataCountry = useStore($formDataCountry);
-  const publishDataLayerListResponce = useStore($publishDataLayerListResponce)
+  const publishDataLayerListResponce = useStore($publishDataLayerListResponce);
+  const filterPublishedList = useStore($filterPublishedList);
   const [selectedFile, setSelectedFile] = useState(null)
   const [layerDescriptions, setLayerDescriptions] = useState<Record<string, string>>({});
   const [layersBenchmark, setLayersBenchmark] = useState<Record<string, string>>({});
   const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
   const [selectedActiveLayers, setSelectedActiveLayers] = useState<{ id: number; name: string; }[]>([]);
+  const [selectedActiveFilters, setSelectedActiveFilters] = useState<{ id: number; name: string; }[]>([]);
   const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.toSorted((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
   const [defaultLayer, setDefaultLayer] = useState<number | undefined>();
 
@@ -46,12 +50,12 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   }, [publishDataLayerListResponce])
 
   const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name })), [publishDataLayerListResponce]);
-
+  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name })), [filterPublishedList]);
   useEffect(() => {
     if (formDataCountry?.active_layers_list) {
       const dataSourceList = {} as Record<string, { name: string, description: string }>;
       let currentDefaultLayer;
-      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_source: { name?: string, description?: string } }) => {
+      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string } }) => {
         dataSourceList[String(layer.data_layer_id)] = {
           name: '',
           description: '',
@@ -71,6 +75,18 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     }
   }, [formDataCountry?.active_layers_list, layerListAvailablility])
 
+  useEffect(() => {
+    if (formDataCountry?.active_filters_list && filterListAvailablility.length) {
+      const activeFilterList = formDataCountry.active_filters_list.map((filter: { advance_filter_id: number; }) => {
+        return {
+          id: filter.advance_filter_id,
+          name: filterPublishedList.find((item) => item.id === filter.advance_filter_id)?.name ?? '',
+        }
+      })
+      console.log('activeFilterList', activeFilterList)
+      setSelectedActiveFilters(activeFilterList);
+    }
+  }, [formDataCountry?.active_filters_list, filterListAvailablility])
   useEffect(() => {
     const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {} } = formDataCountry?.benchmark_metadata || {};
     setLayersBenchmark({ ...live_layer });
@@ -118,6 +134,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         data_sources: dataSource[String(layer.id)],
         is_default: String(defaultLayer) === String(layer.id)
       }))));
+      formData.append('active_filters_list', JSON.stringify(selectedActiveFilters?.map((filter) => ({
+        advance_filter_id: filter.id
+      }))));
+
 
       if (selectedFile) {
         formData.append('flag', selectedFile);
@@ -146,6 +166,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
 
   useEffect(() => {
     void getPublishDataLayerListFx()
+    void getFilterPublishedListFx()
   }, [])
 
   const imageSource = selectedFile ? URL.createObjectURL(selectedFile) : formDataCountry?.flag;
@@ -172,7 +193,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               style={{ display: 'none' }} />
             <Button
               id="flag-upload-button"
-              onClick={() => document.getElementById('fileInput').click()}
+              onClick={() => document.getElementById('fileInput')?.click()}
               kind='primary'> Upload</Button>
           </UploadFlagImage>
           <InputContainer>
@@ -330,6 +351,28 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               />
             </InputBoxWrapper>
           </InputContainer>
+          <InputContainer>
+            <MultiSelectLayerConfig
+              name="active_filters_list"
+              required
+              label="Choose active filters"
+              titleText="Active filters"
+              itemToString={(item: { id: number; name: string }) => item.name || ''}
+              itemToElement={(item: { id: number; name: string }) => (
+                <span>
+                  {item.name}
+                </span>
+              )}
+              items={filterListAvailablility}
+              id={`active-filters`}
+              onChange={({ selectedItems }: { selectedItems: { id: number; name: string }[] }) => {
+                setSelectedActiveFilters(selectedItems);
+              }}
+              selectedItems={selectedActiveFilters}
+            />
+          </InputContainer>
+        </RowContainer>
+        <RowContainer>
           <InputContainer>
             <MultiSelectLayerConfig
               name="active_layers_list"

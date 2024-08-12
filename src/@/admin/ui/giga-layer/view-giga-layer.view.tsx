@@ -153,7 +153,7 @@ const AdminViewLayer = () => {
           {activeDeactiveId && <Actionable
             onAction={() => void updateLayerStatus(activeDeactiveId)}
             onClose={() => setActiveDeactiveId(null)}
-            title={isDisabled ? 'Activate - ' : 'Deactive -'}
+            title={isDisabled ? 'Activate - ' : 'Deactivate -'}
           />
           }
           {isDisabled && isPublisher && !isDefaultLayer && <LayerContentWrapper top={1}>
