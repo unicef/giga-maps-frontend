@@ -6,10 +6,10 @@ import { getFilterType } from '~/@/admin/utils/filter-list.util';
 const FilterPlaceholderForm = () => {
   const formData = useStore($formFilterData);
 
-  const { isRange } = getFilterType(formData.type);
+  const { isRange, isInput } = getFilterType(formData.type);
   const isAutoCompute = formData?.options?.range_auto_compute;
   return (<>
-    {!isRange && <>
+    {isInput && <>
       <FilterInputLabel>
         Placeholder
       </FilterInputLabel>

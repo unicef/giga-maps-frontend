@@ -49,6 +49,7 @@ const headers = [
 ]
 
 const ListFilterView = () => {
+  const loading = useStore(getFilterListFx.pending);
   const permissions = useStore($userPermissions);
   const [promptData, setPromptData] = useState<null | PromptActionableType>(null);
   const [search, setSearchValue] = useState('');
@@ -233,7 +234,7 @@ const ListFilterView = () => {
                     )}
                   </TableDataBody>
                 </Table>
-                <EmptyList $color="#000">No data found</EmptyList>
+                {!rows.length && !loading && <EmptyList $color="#000">No data found</EmptyList>}
               </TableWrapper>
             </FilterScroll>
           </DataTableContainer>;

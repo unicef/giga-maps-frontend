@@ -27,6 +27,7 @@ export const AdminMainRightPanel = styled.div`
     width: calc(100vw - 17rem);
     height: 100%;
     position: relative;
+    overflow:hidden;
 `
 
 export const AdminTopHeading = styled.div`

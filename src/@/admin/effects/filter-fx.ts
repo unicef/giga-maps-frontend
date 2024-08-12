@@ -12,7 +12,7 @@ export const getFilterListFx = createEffect(({ page, pageSize, search }: { page:
     query.set('search', search)
   }
   return createRequestAuthFx({
-    url: `accounts/adv_filters/?${query.toString()}&ordering=-last_modified_at,name&expand=column_configuration,published_by`
+    url: `accounts/adv_filters/?${query.toString()}&ordering=-last_modified_at&expand=column_configuration,published_by`
   }) as Promise<APIListType<FilterListType>>
 })
 
