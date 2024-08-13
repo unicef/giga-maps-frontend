@@ -5,9 +5,9 @@ import { createRequestAuthFx } from "~/core/auth/effects/common.fx";
 
 import { ApiKeysAdminRequestType } from "../types/api-request.type";
 
-export const getAllApiKeyRequest = createEffect(({ page, pageSize }: { page: number; pageSize: number }) => {
+export const getAllApiKeyRequest = createEffect(({ page, pageSize, countryIds, search }: { page: number; pageSize: number, countryIds?: string, search?: string }) => {
   return createRequestAuthFx({
-    url: `accounts/api_keys/?page_size=${pageSize}&page=${page}&expand=user,api&ordering=-status`
+    url: `accounts/api_keys/?page_size=${pageSize}&page=${page}${countryIds ? `&country_id__in=${countryIds}` : ''}${search ? `&search=${search}` : ''}&expand=user,api&ordering=-status`
   }) as Promise<APIListType<ApiKeysAdminRequestType>>
 })
 
