@@ -6,8 +6,8 @@ import { Filter } from '@carbon/icons-react';
 import { ApiKeysDataWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
 import { EmptyList } from '~/@/common/style/styled-component-style';
 
-import { deleteApiKeyRequestFx, getAllApiKeyRequest } from '../../effects/api-request-fx';
-import { $apiRequestListResponse, $apiRequestPageNo, onChangeApiKeyPage, reloadApiRequest } from '../../models/api-request-model';
+import { deleteApiKeyRequestFx, getAllApiKeyRequest, getCountryApiFx } from '../../effects/api-request-fx';
+import { $apiRequestListResponse, $apiRequestPageNo, $countryApiKeyList, onChangeApiKeyPage, reloadApiRequest } from '../../models/api-request-model';
 import PageTitleComponent from '../common-components/page-title-component';
 import Pagination from '../common-components/Pagination';
 import { ApiKeyRequestListScroll, DeleteConfirmation, ToolbarContent } from '../styles/admin-styles';
@@ -23,6 +23,7 @@ const AdminApiKey = () => {
   const { page, pageSize } = useStore($apiRequestPageNo);
   const [apiKeyDeleteId, setApiKeyDeleteId] = useState<null | number>(null);
   const countryList = useStore($countryList)
+  const filterCountryList = useStore($countryApiKeyList)
   const [searchValue, setSearchValue] = useState('')
   const [showFilter, setShowFilter] = useState(false);
   const [countryFilterValues, setCountryFilterValues] = useState<number[]>([]);
@@ -30,6 +31,10 @@ const AdminApiKey = () => {
   const getApiKeyRequest = () => {
     void getAllApiKeyRequest({ page, pageSize, countryIds: countryFilterValues.join(','), search: searchValue })
   }
+
+  useEffect(() => {
+    getCountryApiFx('?has_api_requests=true&fields=id,name')
+  }, [])
 
   useEffect(() => {
     getApiKeyRequest();
@@ -113,14 +118,14 @@ const AdminApiKey = () => {
       </ApiKeyRequestListScroll>
       <Pagination page={page} pageSize={pageSize} count={count} setPage={({ page, pageSize }) => onChangeApiKeyPage({ page, pageSize })} />
       <CountryFilterModal
-        name="country-daily-summary"
+        name="country-filter-api-key"
         open={showFilter}
         updateList={(values) => {
           setCountryFilterValues(values as number[])
         }}
         filterValues={[]}
         setOpen={setShowFilter}
-        list={countryList}
+        list={filterCountryList}
       />
     </div >
   )
