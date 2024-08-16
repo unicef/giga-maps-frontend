@@ -3,7 +3,7 @@ import { Button, Form } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { FormEvent } from 'react'
 
-import { $currentGigaLayerItem, $formData } from '~/@/admin/models/giga-layer.model';
+import { $currentGigaLayerItem, $formData, onUdpateGigaLayerForm } from '~/@/admin/models/giga-layer.model';
 import { LayerStatusType, LayerTypeChoices } from '~/@/admin/types/giga-layer.type';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import { adminGigaLayer, router } from '~/core/routes';
@@ -65,7 +65,7 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
           <GigaUploadIcon />
           <GigaFields isEditMode={isEditMode} isDefaultLayer={isDefaultLayer} />
           <GigaBenchmarkForm isDefaultLayer={isDefaultLayer} />
-          <GigaLegendForm isDefaultLayer={isDefaultLayer} />
+          <GigaLegendForm legendConfigs={formData.legendConfigs} onUpdate={(config) => onUdpateGigaLayerForm(['legendConfigs', config])} />
         </ViewLayerWrapper>
       </GigaLayerScroll>
       <LayerConfigButtonWrapper>

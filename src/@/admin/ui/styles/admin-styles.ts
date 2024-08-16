@@ -525,6 +525,10 @@ line-height: 1rem;
 `
 export const LegendCategotyContainer = styled.div`
 margin-top:1rem;
+input[type="color"]{
+    width: 2rem;
+    height: 2rem;
+}
 `
 
 export const PublishedLayerWrapper = styled.div`

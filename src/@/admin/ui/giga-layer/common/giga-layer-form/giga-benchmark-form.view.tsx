@@ -75,6 +75,7 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
           </InputLabel>
         </Div>
       </DataLayerNameField>
+
     </DataLayerFieldContainer>
   </>
 }

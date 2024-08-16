@@ -11,6 +11,7 @@ import { adminCountry, router } from '~/core/routes';
 import { speedConverterUtil } from '~/lib/utils';
 
 import { BottomButtonWrapper, CountryFormScroll, CountryListDataLayer, DateOfJoiningWrapper, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, LastWeekStatusWrapper, MultiSelectLayerConfig, RowContainer, SchoolFieldsWrapper, UploadFlagImage } from "../../styles/admin-styles";
+import CountryLegendBenchmark from './common/CountryLegendBenchmark';
 
 
 const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId?: number }) => {
@@ -406,6 +407,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                       />
                     </SchoolFieldsWrapper>
                   </InputContainer>}
+                </RowContainer>
+                <RowContainer>
+                  <CountryLegendBenchmark />
+                  <div></div>
                 </RowContainer>
                 <RowContainer>
                   <InputContainer>

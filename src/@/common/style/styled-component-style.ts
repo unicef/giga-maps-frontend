@@ -64,7 +64,7 @@ export const Text = styled.p<{ $size?: number; $weight?: number; $transform?: st
   `}
 `
 
-export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: string; $height?: string; }>`
+export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: string; $width?: string; $height?: string; }>`
 
   ${props => props.$padding && css`
     padding: ${props.$padding};
@@ -72,6 +72,10 @@ export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: str
 
   ${props => props.$height && css`
     height: ${props.$height};
+  `}
+
+  ${props => props.$width && css`
+    width: ${props.$width};
   `}
 
   ${props => props.$margin && css`

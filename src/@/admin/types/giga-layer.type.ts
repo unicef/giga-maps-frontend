@@ -173,9 +173,9 @@ export interface MessageModeChoices {
 }
 
 type ValuesType<T> = T[keyof T];
-type LegendConfigsType = Record<'good' | 'moderate' | 'bad' | 'unknown', { values: number[], labels: string }>;
+export type LegendConfigType = Record<string, { values: string[], labels: string, tooltip?: string }>;
 export type GigaLayerFormType = {
-  legendConfigs: LegendConfigsType;
+  legendConfigs: LegendConfigType;
   isReverse: boolean;
   sourceType: DataSourceTypeChoices[];
   code: DataLayer['code'],
