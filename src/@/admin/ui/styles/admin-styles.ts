@@ -27,6 +27,7 @@ export const AdminMainRightPanel = styled.div`
     width: calc(100vw - 17rem);
     height: 100%;
     position: relative;
+    overflow:hidden;
 `
 
 export const AdminTopHeading = styled.div`
@@ -261,8 +262,8 @@ export const TableTopHead = styled(TableHead)`
 }
 `
 
-export const TableWrapper = styled.div`
-    min-height: calc(100vh - 10.5rem);
+export const TableWrapper = styled.div<{ $minHeight?: string }>`
+    min-height: calc(100vh - ${props => props.$minHeight ?? '10.5rem'});
     .cds--data-table thead {
         position: sticky;
         top: 0;
@@ -291,7 +292,7 @@ export const RenewIcon = styled(Renew)`
 
 export const InputContainer = styled.div`
     width: 48%;
-    margin-top:2rem;
+    margin-top:1rem;
     select{
         background:#ffffff;
     }
@@ -384,7 +385,7 @@ export const DatePickerBoxWrapper = styled.div`
 `
 export const RowContainer = styled.div`
     flex-wrap:wrap;
-    padding: 0rem 3.3rem 1rem 3rem;
+    padding: 0rem 3rem 1rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -434,7 +435,7 @@ margin-top: 1.5rem;
 
 `
 export const MultiSelectLayerConfig = styled(MultiSelect)`
-margin-top: 1.5rem;
+/* margin-top: 1.5rem; */
 #aggregate-on-select,#apiSource-select,#parameter-select,#country-select{
     background-color: #FAFAFA;
 }
@@ -998,7 +999,21 @@ min-height: calc(100vh - 7rem);
 `
 
 export const DeleteConfirmation = styled.div`
-position: fixed;
-z-index: 5;
-width: calc(100% - 17rem);
+    position: fixed;
+    z-index: 5;
+    width: calc(100% - 17rem);
+`
+export const AddFilterContainer = styled.div`
+    height: 100vh;
+    width: 18.5rem;
+    z-index: 999;
+    position: fixed;
+    right: 0;
+    top: 0;
+    background: #222;
+`
+
+export const AddEditForm = styled.div`
+    display: flex;
+    padding: 1rem 0rem;
 `
