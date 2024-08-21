@@ -12,7 +12,7 @@ export interface DataLayer {
   is_reverse: boolean;
   category: string
   applicable_countries: number[]
-  legend_configs: LegendConfigsType
+  legend_configs: LegendConfigType
   global_benchmark: GlobalBenchmark
   status: LayerStatusType
   published_by: null | CreatedBy
