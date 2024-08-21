@@ -116,6 +116,9 @@ export interface ApiConfig {
   MESSAGE_SEVERITY_TYPE_CHOICES: MessageSeverityTypeChoices
   MESSAGE_MODE_CHOICES: MessageModeChoices
   PERMISSION_CHOICES: Record<string, string>
+  FILTER_TYPE_CHOICES: Record<string, string>
+  FILTER_QUERY_PARAM_CHOICES: Record<string, string>
+  FILTER_STATUS_CHOICES: Record<string, string>
 }
 
 export interface ApiCategoryChoices {

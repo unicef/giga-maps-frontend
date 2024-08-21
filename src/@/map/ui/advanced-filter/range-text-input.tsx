@@ -3,20 +3,19 @@ import { StyledCheckbox, StyledTextInputContainer, StyledTextInputWrapper } from
 import { FormLabel, TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
 import { evaluateExpression } from "~/lib/utils";
-import { $country } from "~/@/country/country.model";
-import { useStore } from "effector-react";
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
 
-const RangeTextInput = ({ name, description, active_countries_range = {}, value: rangeValue, parameter, include_none_filter: noneFilter, itemKey, downcast_aggr_str, upcast_aggr_str, onChange }: AdvanceFilterType & {
+const RangeTextInput = ({ name, description, options, value: rangeValue, column_configuration: parameter, itemKey, onChange }: AdvanceFilterType & {
   value: { none_range: boolean; value: string }; itemKey: string; onChange: (key: string, value: {
     none_range: boolean;
     value: string;
   }) => void
 }) => {
-  const country = useStore($country);
-  const placeholders = active_countries_range[country?.id ?? 'default'] || {};
-  const { min_place_holder: minPlaceholder, max_place_holder: maxPlaceholder, max_value = Infinity, min_value = 0 } = placeholders;
+  const { downcast_aggr_str, upcast_aggr_str } = parameter?.options ?? {};
+  const minPlaceholder = options?.active_range?.min_place_holder ?? options?.minPlaceholder;
+  const maxPlaceholder = options?.active_range?.max_place_holder ?? options?.maxPlaceholder;
+  const noneFilter = options?.include_none_filter;
   const [minValue, setMinValue] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState<number | null>(null);
   const { value, none_range: isNoneRange } = rangeValue || {};
@@ -42,7 +41,7 @@ const RangeTextInput = ({ name, description, active_countries_range = {}, value:
         <TextInput
           type="number"
           size="sm"
-          id={`${parameter.field}-min-input`}
+          id={`${parameter.name}-min-input`}
           labelText=""
           placeholder={minPlaceholder ?? "Min(0)"}
           value={minValue ?? ''}
@@ -57,16 +56,18 @@ const RangeTextInput = ({ name, description, active_countries_range = {}, value:
                 value: ''
               });
             } else {
+              const min = evaluateExpression(upcast_aggr_str, e.target.value);
+              const max = evaluateExpression(upcast_aggr_str, maxValue);
               onChange(itemKey, {
                 none_range: isNoneRange,
-                value: `${evaluateExpression(upcast_aggr_str, e.target.value) ?? null},${evaluateExpression(upcast_aggr_str, maxValue) ?? null}`
+                value: `${min ? min : null},${max ? max : null}`
               })
             }
           }}
         />
         <TextInput
           size="sm"
-          id={`${parameter.field}-max-input`}
+          id={`${parameter.name}-max-input`}
           type="number"
           labelText=""
           placeholder={maxPlaceholder ?? "Max"}
@@ -82,9 +83,11 @@ const RangeTextInput = ({ name, description, active_countries_range = {}, value:
                 value: ''
               });
             } else {
+              const min = evaluateExpression(upcast_aggr_str, minValue);
+              const max = evaluateExpression(upcast_aggr_str, e.target.value);
               onChange(itemKey, {
                 none_range: isNoneRange,
-                value: `${evaluateExpression(upcast_aggr_str, minValue) ?? null},${evaluateExpression(upcast_aggr_str, e.target.value) ?? null}`
+                value: `${min ? min : null},${max ? max : null}`
               })
             }
           }}

@@ -35,6 +35,7 @@ export const defaultCountryForm = {
   "flag": "",
   "description": "",
   "data_source": "",
+  "last_weekly_status_id": "",
   "date_schools_mapped": '',
   "last_weekly_status": null,
   "date_of_join": null,
@@ -44,5 +45,6 @@ export const defaultCountryForm = {
     layer_descriptions: {},
     default_national_benchmark: {},
   },
-  active_layers_list: []
+  active_layers_list: [],
+  active_filters_list: []
 }

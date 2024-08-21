@@ -53,6 +53,11 @@ export const permisionsList = {
   CAN_VIEW_NOTIFICATION: "can_view_notification",
   CAN_CREATE_NOTIFICATION: "can_create_notification",
   CAN_DELETE_NOTIFICATION: "can_delete_notification",
+  CAN_VIEW_ADVANCE_FILTER: "can_view_advance_filter",
+  CAN_ADD_ADVANCE_FILTER: "can_add_advance_filter",
+  CAN_UPDATE_ADVANCE_FILTER: "can_update_advance_filter",
+  CAN_PUBLISH_ADVANCE_FILTER: "can_publish_advance_filter"
+
 } satisfies Record<string, string>
 
 type PermissionKeyType = keyof typeof permisionsList;
