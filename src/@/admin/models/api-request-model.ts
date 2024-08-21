@@ -3,8 +3,9 @@ import { combine, createEvent, createStore, merge, restore, sample } from "effec
 import { APIListType } from "~/api/types";
 import { setPayload } from "~/lib/effector-kit";
 
-import { changeApiKeyRequestFx, deleteApiKeyRequestFx, getAllApiKeyRequest, updateApiKeyExtensionFx } from "../effects/api-request-fx";
+import { changeApiKeyRequestFx, deleteApiKeyRequestFx, getAllApiKeyRequest, getCountryApiFx, updateApiKeyExtensionFx } from "../effects/api-request-fx";
 import { ApiKeysAdminRequestType } from "../types/api-request.type";
+import { CountryListType } from "~/@/api-docs/types/country-list.type";
 
 export const onChangeApiKeyPage = createEvent<{ page: number; pageSize: number; }>();
 export const $apiRequestPageNo = restore(onChangeApiKeyPage, { page: 1, pageSize: 20 });
@@ -12,6 +13,9 @@ export const $apiRequestPageNo = restore(onChangeApiKeyPage, { page: 1, pageSize
 export const reloadApiRequest = createEvent();
 export const $apiRequestListResponse = createStore<APIListType<ApiKeysAdminRequestType> | null>(null);
 $apiRequestListResponse.on(getAllApiKeyRequest.doneData, setPayload);
+
+export const $countryApiKeyList = createStore<CountryListType[]>([]);
+$countryApiKeyList.on(getCountryApiFx.doneData, setPayload);
 
 export const onChangeApiKeyRequest = createEvent<{ id: number; body: { status: string; } }>();
 
