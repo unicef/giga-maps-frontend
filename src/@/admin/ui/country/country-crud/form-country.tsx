@@ -12,8 +12,9 @@ import { speedConverterUtil } from '~/lib/utils';
 
 import { BottomButtonWrapper, CountryFormScroll, CountryListDataLayer, DateOfJoiningWrapper, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, LastWeekStatusWrapper, MultiSelectLayerConfig, RowContainer, SchoolFieldsWrapper, UploadFlagImage } from "../../styles/admin-styles";
 import CountryLegendBenchmark from './common/CountryLegendBenchmark';
-import { getFilterPublishedListFx } from '~/@/admin/effects/filter-fx';
-import { $filterPublishedList } from '~/@/admin/models/filter-list.model';
+import { getFilterPublishedListFx } from '@/admin/effects/filter-fx';
+import { $filterPublishedList } from '@/admin/models/filter-list.model';
+import { LegendConfigType } from '~/@/admin/types/giga-layer.type';
 
 
 const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId?: number }) => {
@@ -27,9 +28,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [layersBenchmark, setLayersBenchmark] = useState<Record<string, string>>({});
   const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
+  const [legendConfigList, setLegendConfigList] = useState<Record<string, LegendConfigType>>({});
   const [selectedActiveLayers, setSelectedActiveLayers] = useState<{ id: number; name: string; }[]>([]);
   const [selectedActiveFilters, setSelectedActiveFilters] = useState<{ id: number; name: string; }[]>([]);
-  const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.toSorted((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
+  const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
   const [defaultLayer, setDefaultLayer] = useState<number | undefined>();
 
   const updateDefaultNationalBenchmark = (id: number, checked: boolean) => {
@@ -55,13 +57,15 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   useEffect(() => {
     if (formDataCountry?.active_layers_list) {
       const dataSourceList = {} as Record<string, { name: string, description: string }>;
+      const legendConfigDefault = {} as Record<string, LegendConfigType>;
       let currentDefaultLayer;
-      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string } }) => {
+      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string }, legend_configs?: LegendConfigType; }) => {
         dataSourceList[String(layer.data_layer_id)] = {
           name: '',
           description: '',
           ...layer.data_sources
         }
+        legendConfigDefault[String(layer.data_layer_id)] = layer.legend_configs || {};
         if (layer.is_default) {
           currentDefaultLayer = layer?.data_layer_id;
         }
@@ -70,9 +74,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
           name: layersNames[String(layer.data_layer_id)],
         }
       });
-      setSelectedActiveLayers(activeLayerList.filter((item) => item.name));
+      setSelectedActiveLayers(activeLayerList);
       setDataSource(dataSourceList);
       setDefaultLayer(currentDefaultLayer);
+      setLegendConfigList(legendConfigDefault);
     }
   }, [formDataCountry?.active_layers_list, layersNames]);
 
@@ -94,7 +99,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     setDefaultNationalBenchmark({ ...default_national_benchmark });
   }, [formDataCountry?.benchmark_metadata]);
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event: FormEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
     if (file) {
       const allowedTypes = ['image/jpeg', 'image/png'];
@@ -113,7 +118,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     }
   };
 
-  const handleFormSubmit = async (event: FormEvent) => {
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedFile && !isEdit) {
       setToasterWarning("Please Upload flag image")
@@ -132,7 +137,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('active_layers_list', JSON.stringify(selectedActiveLayers?.map((layer) => ({
         data_layer_id: layer.id,
         data_sources: dataSource[String(layer.id)],
-        is_default: String(defaultLayer) === String(layer.id)
+        is_default: String(defaultLayer) === String(layer.id),
+        legend_configs: legendConfigList[String(layer.id)] ?? {}
       }))));
       formData.append('active_filters_list', JSON.stringify(selectedActiveFilters?.map((filter) => ({
         advance_filter_id: filter.id
@@ -147,7 +153,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         live_layer: layersBenchmark,
         layer_descriptions: layerDescriptions,
         default_national_benchmark: defaultNationalBenchmark,
-        static_layer: {}
+        static_layer: {},
       }));
 
       try {
@@ -397,7 +403,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         <CountryListDataLayer>
           <h3>Associated Giga layers: </h3>
           {
-            filteredPublishDataLayerList.map((item, index) => (
+            filteredPublishDataLayerList.map((item: Layer) => (
               selectedActiveLayers.some(layer => layer.id === item.id) && <React.Fragment key={item.id}>
                 <div style={{ marginTop: '1rem', paddingLeft: '3rem', gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                   <p style={{ fontWeight: 'bold' }}>{item.name} ({item.type.toLowerCase()})</p>
@@ -449,10 +455,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                       />
                     </SchoolFieldsWrapper>
                   </InputContainer>}
-                </RowContainer>
-                <RowContainer>
-                  <CountryLegendBenchmark />
-                  <div></div>
+                  <CountryLegendBenchmark config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
                 </RowContainer>
                 <RowContainer>
                   <InputContainer>

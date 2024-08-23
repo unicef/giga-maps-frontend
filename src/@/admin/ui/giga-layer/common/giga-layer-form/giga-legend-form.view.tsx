@@ -82,7 +82,6 @@ export default function GigaLegendForm({ legendConfigs = defaultGigaLayerForm.le
                     type="text"
                     labelText="Legend type"
                     name={`${item.value}_labels`}
-                    required
                     id={`legend-value-${index}`}
                     placeholder="Enter display value"
                     value={legendConfigs[item.value]?.labels}
@@ -90,9 +89,8 @@ export default function GigaLegendForm({ legendConfigs = defaultGigaLayerForm.le
                   />
                   <TextInput
                     type="text"
-                    labelText="Category Values"
+                    labelText="Category Values(ex- SQL:)"
                     name={`${item.value}_values`}
-                    required={item.required}
                     id={`legend-name-${index}`}
                     placeholder="Enter legend category"
                     value={legendConfigs[item.value]?.values.join(',')}
