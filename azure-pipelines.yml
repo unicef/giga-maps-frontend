@@ -1,7 +1,11 @@
 trigger:
-  - develop
-  - staging
-  - release/*
+  branches:
+    include:
+    - develop
+    - staging
+  tags:
+    include:
+    - 'release-*'
 
 name: $(SourceBranchName).$(Build.BuildId).$(Date:yyyyMMdd).$(Rev:r)
   
@@ -95,10 +99,7 @@ steps:
   condition:
     and(
       succeeded(),
-      or(
-        eq(variables['Build.SourceBranch'], 'refs/heads/staging'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-      )
+      eq(variables['Build.SourceBranch'], 'refs/heads/staging')
     )
       
 - task: Docker@2
@@ -112,10 +113,7 @@ steps:
   condition:
     and(
       succeeded(),
-      or(
-        eq(variables['Build.SourceBranch'], 'refs/heads/staging'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-      )
+      eq(variables['Build.SourceBranch'], 'refs/heads/staging')
     )
 
 - task: Docker@2
@@ -137,7 +135,7 @@ steps:
   condition:
     and(
       succeeded(),
-      startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+      startsWith(variables['Build.SourceBranch'], 'refs/tags/release-')
     )
       
 - task: Docker@2
@@ -151,5 +149,5 @@ steps:
   condition:
     and(
       succeeded(),
-      startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+      startsWith(variables['Build.SourceBranch'], 'refs/tags/release-')
     )
