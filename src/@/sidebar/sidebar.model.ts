@@ -96,7 +96,7 @@ export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (l
 })
 
 export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $downloadLayerId, (countryCode, activeLayers, downloadLayerId) => {
-  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? downloadLayerId;
+  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? null//downloadLayerId;
   return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : null;
 })
 export const $isActiveCurrentLayer = combine($activeLayerByCountries, $selectedLayerId, $countryCode, (activeLayers, selectedId, countryCode) => {
