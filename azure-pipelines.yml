@@ -99,9 +99,7 @@ steps:
   condition:
     and(
       succeeded(),
-      or(
-        eq(variables['Build.SourceBranch'], 'refs/heads/staging')
-      )
+      eq(variables['Build.SourceBranch'], 'refs/heads/staging')
     )
       
 - task: Docker@2
@@ -115,9 +113,7 @@ steps:
   condition:
     and(
       succeeded(),
-      or(
-        eq(variables['Build.SourceBranch'], 'refs/heads/staging')
-      )
+      eq(variables['Build.SourceBranch'], 'refs/heads/staging')
     )
 
 - task: Docker@2
