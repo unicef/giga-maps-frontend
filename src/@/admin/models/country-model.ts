@@ -38,7 +38,10 @@ export const $countryDailySummaryListPageNo = CountryDailySummaryListGate.state.
 
 
 export const $publishDataLayerListResponce = createStore<DataLayer[]>([]);
-$publishDataLayerListResponce.on(getPublishDataLayerListFx.doneData, setPayloadResults);
+$publishDataLayerListResponce.on(getPublishDataLayerListFx.doneData, (state, payload) => {
+  const results = payload.results.filter((item) => !(item.type === 'LIVE' && !item.created_by))
+  return [...results];
+});
 
 export const onUdpateCountrySummaryForm = createEvent<[]>();
 export const onUdpateCountryDailySummaryForm = createEvent<[]>();

@@ -70,11 +70,11 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
           name: layersNames[String(layer.data_layer_id)],
         }
       });
-      setSelectedActiveLayers(activeLayerList);
+      setSelectedActiveLayers(activeLayerList.filter((item) => item.name));
       setDataSource(dataSourceList);
       setDefaultLayer(currentDefaultLayer);
     }
-  }, [formDataCountry?.active_layers_list, layerListAvailablility])
+  }, [formDataCountry?.active_layers_list, layersNames]);
 
   useEffect(() => {
     if (formDataCountry?.active_filters_list && filterListAvailablility.length) {
@@ -84,7 +84,6 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
           name: filterPublishedList.find((item) => item.id === filter.advance_filter_id)?.name ?? '',
         }
       })
-      console.log('activeFilterList', activeFilterList)
       setSelectedActiveFilters(activeFilterList);
     }
   }, [formDataCountry?.active_filters_list, filterListAvailablility])

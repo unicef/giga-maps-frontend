@@ -80,57 +80,60 @@ const ListGigaLayer = () => {
             </TableDataHead>
             <TableDataBody>
               {
-                dataLayerList?.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableDataCell>
-                      <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
-                    </TableDataCell>
-                    <TableDataCell>
-                      <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
-                    </TableDataCell>
-                    <TableDataCell>
-                      {item?.data_sources_list.map((sourceApiObj, index, array) => (
-                        <span key={sourceApiObj.id}>{sourceApiObj.name}
-                          {index !== array.length - 1 && ','}
-                        </span>
-                      ))}
-                    </TableDataCell>
-                    <TableDataCell>
-                      <span>{Object.values(item?.data_source_column ?? {})[0]?.alias}</span>
-                    </TableDataCell>
-                    <TableDataCell>
+                dataLayerList?.map((item) => {
+                  if (!item.created_by && item.type === 'LIVE') return null;
+                  return (
+                    <TableRow key={item.id}>
+                      <TableDataCell>
+                        <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
+                      </TableDataCell>
+                      <TableDataCell>
+                        <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
+                      </TableDataCell>
+                      <TableDataCell>
+                        {item?.data_sources_list.map((sourceApiObj, index, array) => (
+                          <span key={sourceApiObj.id}>{sourceApiObj.name}
+                            {index !== array.length - 1 && ','}
+                          </span>
+                        ))}
+                      </TableDataCell>
+                      <TableDataCell>
+                        <span>{Object.values(item?.data_source_column ?? {})[0]?.alias}</span>
+                      </TableDataCell>
+                      <TableDataCell>
 
-                      <span>{item?.data_sources_list[0].version}</span>
+                        <span>{item?.data_sources_list[0].version}</span>
 
-                    </TableDataCell>
-                    <TableDataCell>
-                      {
-                        <StatusWrapper color={DataSourceStatusChoices[item?.status.toUpperCase()]}>
-                          {DataSourceStatusNames[item?.status]}
-                        </StatusWrapper>
-                      }
-                    </TableDataCell>
-                    <TableDataCell>
-                      {item?.applicable_countries.length > 0 ? item?.applicable_countries.length : countryList?.length}
-                      <CountryListToggletip
-                        align="bottom">
-                        <ToggletipButton>
-                          <DataLayerActiveCountries>
-                            View list
-                          </DataLayerActiveCountries>
-                        </ToggletipButton>
-                        <CountryListToggletipContent>
-                          <p className="list-content">
-                            {getCountryName(item.applicable_countries)?.map((country) => country?.name).join(', ') || 'All countries'}
-                          </p>
-                        </CountryListToggletipContent>
-                      </CountryListToggletip>
-                    </TableDataCell>
-                    <TableDataCell>
-                      {item?.published_by?.user_name ?? "--"}
-                    </TableDataCell>
-                  </TableRow>
-                ))
+                      </TableDataCell>
+                      <TableDataCell>
+                        {
+                          <StatusWrapper color={DataSourceStatusChoices[item?.status.toUpperCase()]}>
+                            {DataSourceStatusNames[item?.status]}
+                          </StatusWrapper>
+                        }
+                      </TableDataCell>
+                      <TableDataCell>
+                        {item?.applicable_countries.length > 0 ? item?.applicable_countries.length : countryList?.length}
+                        <CountryListToggletip
+                          align="bottom">
+                          <ToggletipButton>
+                            <DataLayerActiveCountries>
+                              View list
+                            </DataLayerActiveCountries>
+                          </ToggletipButton>
+                          <CountryListToggletipContent>
+                            <p className="list-content">
+                              {getCountryName(item.applicable_countries)?.map((country) => country?.name).join(', ') || 'All countries'}
+                            </p>
+                          </CountryListToggletipContent>
+                        </CountryListToggletip>
+                      </TableDataCell>
+                      <TableDataCell>
+                        {item?.published_by?.user_name ?? "--"}
+                      </TableDataCell>
+                    </TableRow>
+                  )
+                })
               }
             </TableDataBody>
           </Table >
