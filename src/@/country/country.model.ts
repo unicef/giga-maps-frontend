@@ -37,6 +37,7 @@ $country.on(fetchCountryFx.doneData, setPayload);
 export const $dataSource = $country.map((country) => country?.data_source ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
+export const $countryConnectivityNames = $country.map((country) => country?.benchmark_metadata?.connectivity_types ?? {});
 export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark ?? {});
 
 export const $admin1Data = sample({

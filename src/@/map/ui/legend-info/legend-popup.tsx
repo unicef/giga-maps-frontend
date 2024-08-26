@@ -23,7 +23,7 @@ import {
   $coverageStats,
   $connectivityBenchMark,
   $benchmarkmarkUtils,
-  $layerUtils, 
+  $layerUtils,
   $staticLegendsSelected
 } from '~/@/sidebar/sidebar.model';
 import { $country } from '~/@/country/country.model';
@@ -78,7 +78,7 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
   const isCoverage = selectedLayerId === coverageLayerId;
   const { isLive, isStatic, isSchoolStatus } = currentLayerTypeUtils;
 
-  const { benchmarkLogic, globalBenchmarkValue, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
+  const { benchmarkLogic, globalBenchmarkValue, globalConnectivityName, countryConnectivityNames, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
   const speedGood = useStore($connectivitySpeedGood);
   const speedModerate = useStore($connectivitySpeedModerate);
   const speedNoInternet = useStore($connectivitySpeednoInternet);
@@ -198,8 +198,8 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
   useEffect(() => {
     const keys = countryBenchmarkDescriptions ? Object.keys(countryBenchmarkDescriptions) : [];
     if (selectedLayerData?.id && keys.includes(selectedLayerData.id.toString())) {
-      const description = countryBenchmarkDescriptions[selectedLayerData.id];
-      setNationalBenchMarkDescription(description);
+      const description = countryBenchmarkDescriptions?.[selectedLayerData.id];
+      setNationalBenchMarkDescription(description ?? "");
     }
   }, [selectedLayerData?.id, countryBenchmarkDescriptions]);
 
@@ -270,41 +270,44 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
               {connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchMarkDescription ? <Tooltip label={nationalBenchMarkDescription} align='top'>
                 <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
                   <LiveLayerBenchmark>
-                    National Benchmark - {nationalBenchmarkValue}{unitLabel}
+                    {countryConnectivityNames?.[selectedLayerId] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
                   </LiveLayerBenchmark>
                 </button>
               </Tooltip> : <LiveLayerBenchmark>
-                National Benchmark - {nationalBenchmarkValue}{unitLabel}
+                {countryConnectivityNames?.[selectedLayerId] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
               </LiveLayerBenchmark> : <LiveLayerBenchmark>
-                Global Benchmark - {globalBenchmarkValue}{unitLabel}
+                {globalConnectivityName ?? 'Global Benchmark'} - {globalBenchmarkValue}{unitLabel}
               </LiveLayerBenchmark>}
 
               {
-                legends.values.map(({ key, label }) => (
-                  <div key={key}>
-                    <Tooltip leaveDelayMs={50} label={`${benchmarkLogic && key != "unknown" ? benchmarkLogic[key] : `Doesn't match any criteria`}`} align='left'>
-                      <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-                        <div className='legend-container'>
-                          <div className='checkbox-with-label'>
-                            {shouldShowControls && <CheckBoxContainer><Checkbox id={key}
-                              labelText={''}
-                              checked={realtimeCheckedStatus[key]}
-                              onChange={() => handleRealtimeLayerChange(key)} >
-                            </Checkbox></CheckBoxContainer>}
+                legends.values.map(({ key, label, tooltip }) => {
+                  let tooltipLabel = `${benchmarkLogic && key != "unknown" ? benchmarkLogic[key] : `Doesn't match any criteria`}`;
+                  return (
+                    <div key={key}>
+                      <Tooltip leaveDelayMs={50} label={tooltip ?? tooltipLabel} align='left'>
+                        <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
+                          <div className='legend-container'>
+                            <div className='checkbox-with-label'>
+                              {shouldShowControls && <CheckBoxContainer><Checkbox id={key}
+                                labelText={''}
+                                checked={realtimeCheckedStatus[key]}
+                                onChange={() => handleRealtimeLayerChange(key)} >
+                              </Checkbox></CheckBoxContainer>}
 
-                            <div key={key} className='real-time-connetivity-info'>
-                              <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
-                              <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
-                              <span><p>{label}</p></span>
+                              <div key={key} className='real-time-connetivity-info'>
+                                <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
+                                <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
+                                <span><p>{label}</p></span>
+                              </div>
                             </div>
-                          </div>
 
-                          {shouldShowControls && key === 'bad' ? <div className='legend-value'>{formatNumber(realtimeStats['no_internet'])}</div> : shouldShowControls && <div className='legend-value'>{formatNumber(realtimeStats[key])}</div>}
-                        </div>
-                      </button>
-                    </Tooltip>
-                  </div>
-                )
+                            {shouldShowControls && key === 'bad' ? <div className='legend-value'>{formatNumber(realtimeStats['no_internet'])}</div> : shouldShowControls && <div className='legend-value'>{formatNumber(realtimeStats[key])}</div>}
+                          </div>
+                        </button>
+                      </Tooltip>
+                    </div>
+                  )
+                }
                 )}
             </div>}
 

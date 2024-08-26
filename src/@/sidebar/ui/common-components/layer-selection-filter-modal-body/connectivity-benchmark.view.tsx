@@ -5,8 +5,10 @@ import { Information } from '@carbon/icons-react'
 
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
 import {
+  $benchmarkmarkUtils,
   $connectivityBenchMark,
   $isNationalBenchmark,
+  $layerUtils,
   changeConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';
 import { imperativeHandle } from "~/lib/utils/react.util";
@@ -15,6 +17,8 @@ import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.styl
 import { $countryBenchmark, $countryDefaultNational } from "~/@/country/country.model";
 
 export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
+  const { globalConnectivityName, countryConnectivityNames, } = useStore($benchmarkmarkUtils)
+  const { selectedLayerId } = useStore($layerUtils);
   const connectivityBenchMark = useStore($connectivityBenchMark);
   const countryBenchmark = useStore($countryBenchmark)
   const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] = useState<ConnectivityBenchMarks>(connectivityBenchMark);
@@ -67,12 +71,12 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
         onChange={(selection) => setConnectivityBenchmarkValue(selection as ConnectivityBenchMarks)}
       >
         <RadioButton
-          labelText="Global"
+          labelText={globalConnectivityName ?? 'Global'}
           value={ConnectivityBenchMarks.global}
           id="globalId"
         />
         <RadioButton
-          labelText="National"
+          labelText={countryConnectivityNames?.[layerId ?? selectedLayerId ?? ""] ?? 'National'}
           value={ConnectivityBenchMarks.national}
           id="nationalId"
           disabled={!isNationalBenchmark}

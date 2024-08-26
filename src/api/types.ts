@@ -163,6 +163,8 @@ export type Country = {
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
+    layer_descriptions: Record<string, string>
+    connectivity_types: Record<string, string>
   }
   data_status: {
     week: {

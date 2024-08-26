@@ -1,7 +1,7 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
@@ -144,7 +144,7 @@ export const $currentLayerLegends = combine({
     },
     values: [],
     reverseMapping: {}
-  } as { colors: Record<string, string>; values: { key: string, label: string }[], reverseMapping: Record<string, string> };
+  } as { colors: Record<string, string>; values: { key: string, label: string; tooltip?: string }[], reverseMapping: Record<string, string> };
   if (currentLayerTypeUtils.isLive && !Object.values(selectedLayerData?.legend_configs || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
@@ -157,6 +157,7 @@ export const $currentLayerLegends = combine({
       return ({
         key,
         label: item.labels,
+        tooltip: item.tooltip
       })
     }
     );
@@ -165,10 +166,10 @@ export const $currentLayerLegends = combine({
   return legends;
 })
 
-export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, (countryBenchmark, selectedLayerData, connectivityBenchMark) => {
+export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, $countryConnectivityNames, (countryBenchmark, selectedLayerData, connectivityBenchMark, countryConnectivityNames) => {
   if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
-  const { convert_unit: unit, value } = global_benchmark;
+  const { convert_unit: unit, value, connectivity_type: globalConnectivityName } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
   const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
@@ -181,7 +182,9 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
     globalBenchmarkValue,
     nationalBenchmarkValue,
     isNational: nationalBenchmarkValue > 0,
-    benchmarkLogic
+    benchmarkLogic,
+    globalConnectivityName,
+    countryConnectivityNames
   })
 });
 
