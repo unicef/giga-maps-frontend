@@ -149,11 +149,17 @@ export const PageTitleWrapper = styled.div<{ isSticky?: boolean }>`
         top: 0;
         z-index: 1;
     `}
-    padding: 3.75rem 2rem 1rem 1rem;
+    padding: 3.75rem 2rem 1rem 0rem;
     background: #222;
     display:flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    button {
+        margin-right: 1rem;
+        path:not([data-icon-path]):not([fill=none]), .cds--btn__icon {
+            fill: #fff !important;
+        }       
+    }
 `
 
 export const SearchContainer = styled.div`
