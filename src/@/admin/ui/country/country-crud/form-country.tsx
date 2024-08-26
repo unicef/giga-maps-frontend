@@ -14,7 +14,7 @@ import { BottomButtonWrapper, CountryFormScroll, CountryListDataLayer, DateOfJoi
 import CountryLegendBenchmark from './common/CountryLegendBenchmark';
 import { getFilterPublishedListFx } from '@/admin/effects/filter-fx';
 import { $filterPublishedList } from '@/admin/models/filter-list.model';
-import { LegendConfigType } from '~/@/admin/types/giga-layer.type';
+import { DataLayer, LegendConfigType } from '~/@/admin/types/giga-layer.type';
 
 
 const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId?: number }) => {
@@ -403,7 +403,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         <CountryListDataLayer>
           <h3>Associated Giga layers: </h3>
           {
-            filteredPublishDataLayerList.map((item: Layer) => (
+            filteredPublishDataLayerList.map((item: DataLayer) => (
               selectedActiveLayers.some(layer => layer.id === item.id) && <React.Fragment key={item.id}>
                 <div style={{ marginTop: '1rem', paddingLeft: '3rem', gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                   <p style={{ fontWeight: 'bold' }}>{item.name} ({item.type.toLowerCase()})</p>
@@ -455,7 +455,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                       />
                     </SchoolFieldsWrapper>
                   </InputContainer>}
-                  <CountryLegendBenchmark config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
+                  <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
                 </RowContainer>
                 <RowContainer>
                   <InputContainer>

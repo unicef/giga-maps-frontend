@@ -11,6 +11,7 @@ import { getRecentActionListFx } from "../../effects/recent-action-fx";
 import { getAllUserListFx } from "../../effects/user-management-fx";
 import { getSchoolMasterListFx, publishAllSchoolMasterFx, publishSchoolMasterFx, updateSchoolMasterFx } from "../../effects/data-source.fx";
 import { addFilterFx, deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from "../../effects/filter-fx";
+import { getDataLayerListFx, getDataLayerByIdFx, createDataLayerFx, publishDataLayerFx } from "../../effects/giga-layer-fx";
 
 
 export const $adminAllLoader = combine([
@@ -48,5 +49,9 @@ export const $adminAllLoader = combine([
   addFilterFx.pending,
   editFilterFx.pending,
   deleteFilterFx.pending,
-  publishFilterFx.pending
+  publishFilterFx.pending,
+  getDataLayerListFx.pending,
+  getDataLayerByIdFx.pending,
+  createDataLayerFx.pending,
+  publishDataLayerFx.pending,
 ], (allLoaders) => allLoaders.some(Boolean))

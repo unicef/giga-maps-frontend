@@ -75,7 +75,7 @@ export default function GigaLegendForm({ legendConfigs = defaultGigaLayerForm.le
                 <AccordionItem title={<ColorPickerWrapper key={`${item.name}-${index}`}>
                   <ColorPicker disabled type="color" value={connectivityColors[item?.value]} />
                   <div>
-                    <span>{item.name} - {legendConfigs[item.value]?.labels ?? item.example}</span>
+                    <span>&nbsp;{item.name} - <b>{legendConfigs[item.value]?.labels ?? item.example}</b></span>
                   </div>
                 </ColorPickerWrapper>}>
                   <TextInput

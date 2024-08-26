@@ -292,6 +292,7 @@ export const RenewIcon = styled(Renew)`
 
 export const InputContainer = styled.div`
     width: 48%;
+    position: relative;
     margin-top:1rem;
     select{
         background:#ffffff;
@@ -475,6 +476,8 @@ background: transparent;
 outline: none;
 width: 2rem;
 height: 2rem;
+min-width: 2rem;
+min-height: 2rem;
 margin: 0;
 `
 
@@ -482,7 +485,6 @@ export const ColorPickerWrapper = styled.div`
 margin-top: 0.5rem;
 display: flex;
 align-items: center;
-justify-items: spread;
     > p{
     color: var(--primary - black - 100 - giga - black, #222);
     font-family: Open Sans;
@@ -493,12 +495,11 @@ justify-items: spread;
 }
     > div{
     /* margin-top: 0.5rem; */
-    display: flex;
-    width: 100%;
-    align-items: center;
+    /* display: flex; */
+    /* width: 100%; */
+    /* align-items: center; */
 
-        > span{
-
+        > p{
         margin-left: 0.65rem;
         color: #6F6F6F;
         font-family: Open Sans;
@@ -529,6 +530,13 @@ margin-top:1rem;
 input[type="color"]{
     width: 2rem;
     height: 2rem;
+}
+
+.cds--accordion__content {
+    padding-inline-end: 0;
+}
+.cds--text-input__label-wrapper {
+    margin-top: 1rem;
 }
 `
 

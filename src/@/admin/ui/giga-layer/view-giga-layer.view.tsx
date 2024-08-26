@@ -137,11 +137,15 @@ const AdminViewLayer = () => {
                 {Object.entries(layerItem?.legend_configs).map(([name, data]) => <ColorPickerWrapper key={name}>
                   <ColorPicker disabled type="color" value={coverageColors[name.toLowerCase()]} />
                   <div>
-                    <span><b>{data?.labels} - </b></span>
-                    {isLive && <span>{labels[name.toLowerCase()]} </span>}
-                    {data?.labels && (
-                      <span style={{ textTransform: 'none' }}><b>{data?.values?.join(', ')}</b></span>)
+                    <p><b>{data?.labels}</b></p>
+                    {!data?.labels && <p>
+                      {isLive && <span>{labels[name.toLowerCase()]} </span>}
+                    </p>}
+                    <p>{data?.labels && (
+                      <span style={{ textTransform: 'none' }}>{data?.values?.join(', ')}</span>)
                     }
+                    </p>
+                    {data?.tooltip && <p>Tooltip: {data?.tooltip}</p>}
                   </div>
                 </ColorPickerWrapper>)}</LayerDetail>
             </LayerContentWrapper>
