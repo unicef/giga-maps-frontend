@@ -176,6 +176,20 @@ export type Country = {
       end_date: string;
     }
   }
+  active_layers_list?: {
+    data_layer_id: number
+    is_default: boolean
+    data_sources: {
+      name: string
+      description: string
+    }
+    is_applicable: boolean
+    legend_configs: Record<string, {
+      values: string[]
+      labels: string
+      tooltip: string
+    }>
+  }[]
   admin_metadata: AdminMetadataType;
   admin1_metadata: AdminMetadataType[];
 };

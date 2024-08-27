@@ -30,7 +30,7 @@ import { $country } from '~/@/country/country.model';
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $globalStats } from '~/@/map/map.model';
 import { $stylePaintData } from '../../map.model';
-import { CustomeLegendPopover, InnerCircle, InnerCircleConnectivity, LegendContentWrapper, LegendHeaderWrapper } from './legend-button.style';
+import { CircleWrapper, CustomeLegendPopover, InnerCircle, InnerCircleConnectivity, LegendContentWrapper, LegendHeaderWrapper } from './legend-button.style';
 import styled from 'styled-components';
 import { formatNumber } from '~/lib/utils';
 
@@ -254,7 +254,7 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
                     </Checkbox></CheckBoxContainer>}
                     <div key={`${key}${index}`} className='conneted-info'>
                       <InnerCircle $backColor={paintData[key]} />
-                      <span><p>{ConnectivityStatusNames[key]}</p></span>
+                      <p className="label">{ConnectivityStatusNames[key]}</p>
                     </div>
                   </div>
                   {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key])}</div>}
@@ -270,15 +270,14 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
               {connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchMarkDescription ? <Tooltip label={nationalBenchMarkDescription} align='top'>
                 <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
                   <LiveLayerBenchmark>
-                    {countryConnectivityNames?.[selectedLayerId] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
+                    {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
                   </LiveLayerBenchmark>
                 </button>
               </Tooltip> : <LiveLayerBenchmark>
-                {countryConnectivityNames?.[selectedLayerId] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
+                {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
               </LiveLayerBenchmark> : <LiveLayerBenchmark>
                 {globalConnectivityName ?? 'Global Benchmark'} - {globalBenchmarkValue}{unitLabel}
               </LiveLayerBenchmark>}
-
               {
                 legends.values.map(({ key, label, tooltip }) => {
                   let tooltipLabel = `${benchmarkLogic && key != "unknown" ? benchmarkLogic[key] : `Doesn't match any criteria`}`;
@@ -295,9 +294,11 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
                               </Checkbox></CheckBoxContainer>}
 
                               <div key={key} className='real-time-connetivity-info'>
-                                <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
-                                <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
-                                <span><p>{label}</p></span>
+                                <CircleWrapper>
+                                  <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
+                                  <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
+                                </CircleWrapper>
+                                <p className="label">{label}</p>
                               </div>
                             </div>
 

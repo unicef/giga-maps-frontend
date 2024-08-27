@@ -1,7 +1,7 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
@@ -134,7 +134,14 @@ export const $currentLayerLegends = combine({
   selectedLayerData: $selectedLayerData,
   stylePaintData: $stylePaintData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
-}, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData }) => {
+  countryActiveLayersDataById: $countryActiveLayersDataById,
+  connectivityBenchmark: $connectivityBenchMark
+}, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData, connectivityBenchmark, countryActiveLayersDataById }) => {
+  let apiLegends = selectedLayerData?.legend_configs;
+  console.log(apiLegends,)
+  if (connectivityBenchmark === ConnectivityBenchMarks.national) {
+    apiLegends = countryActiveLayersDataById[selectedLayerData?.id ?? ""]?.legend_configs
+  }
   const legends = {
     colors: {
       good: stylePaintData.good,
@@ -145,14 +152,14 @@ export const $currentLayerLegends = combine({
     values: [],
     reverseMapping: {}
   } as { colors: Record<string, string>; values: { key: string, label: string; tooltip?: string }[], reverseMapping: Record<string, string> };
-  if (currentLayerTypeUtils.isLive && !Object.values(selectedLayerData?.legend_configs || {}).length) {
+  if (currentLayerTypeUtils.isLive && !Object.values(apiLegends || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
       label: ConnectivityDistributionNames[key],
     }));
   } else {
     const reverseMapping = {} as Record<string, string>
-    legends.values = Object.entries(selectedLayerData?.legend_configs ?? {}).map(([key, item]: [string, any]) => {
+    legends.values = Object.entries(apiLegends ?? {}).map(([key, item]: [string, any]) => {
       reverseMapping[item.labels] = key;
       return ({
         key,
