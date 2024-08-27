@@ -90,12 +90,6 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
           placeholder="Enter connectivity type (default: Global)"
           onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, connectivity_type: e.target.value }])}
         />
-        <Div $margin="0.5rem 0">
-          <InputLabel>
-            {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(baseValue || 0))}
-            {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
-          </InputLabel>
-        </Div>
       </DataLayerNameField>
 
     </DataLayerFieldContainer>
