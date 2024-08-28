@@ -45,7 +45,7 @@ export interface GlobalBenchmark {
   value: string
   unit: string
   convert_unit: string;
-  connectivity_type?: string
+  benchmark_type?: string
 }
 
 export enum LayerTypeChoices {
@@ -64,6 +64,12 @@ export interface LayerType {
   global_benchmark: GlobalBenchmark
   created_by: null | string
   is_reverse: boolean;
+  data_source_column: Record<string, {
+    alias: string;
+    base_benchmark: number;
+    display_unit: string;
+    name: string;
+  }>
   active_countries_list: { country: number, is_default: boolean }[]
   benchmark_metadata: {
     base_benchmark: string;

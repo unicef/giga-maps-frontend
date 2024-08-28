@@ -123,8 +123,10 @@ export const CircleWrapper = styled.div`
   justify-content: center;
 `
 export const InnerCircle = styled.div<{ $backColor?: string; $margin?: string, $large?: boolean }>`
-min-width: ${props => props.$large ? 'calc(0.4rem + (0.4rem * 0.33))' : '0.4rem'};
-min-height: ${props => props.$large ? 'calc(0.4rem + (0.4rem * 0.33))' : '0.4rem'};
+min-width: ${props => props.$large ? '0.52rem' : '0.4rem'};
+min-height: ${props => props.$large ? '0.52rem' : '0.4rem'};
+max-width: ${props => props.$large ? '0.52rem' : '0.4rem'};
+max-height: ${props => props.$large ? '0.52rem' : '0.4rem'};
 background: ${(prop) => prop.$backColor};
 border-radius: 50%;
 /* margin:${props => props.$margin ?? '0 0.5rem 0 0'}; */

@@ -14,7 +14,7 @@ import { GigaLayerText, SidePanelLayerWrapper } from './styles/giga-layer.style'
 
 
 const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
-  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, activeLayerByCountryCode } = useStore($layerUtils);
+  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, coverageDynamicLayerData, activeLayerByCountryCode } = useStore($layerUtils);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
   const { isLive, isSchoolStatus } = currentLayerTypeUtils;
   const updateLayer = useCallback((prevSelectedId: number | null) => {
@@ -59,20 +59,20 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
             }
           }}
         />
-        {coverageLayerData && <GigaLayerButton
-          label={coverageLayerData.name}
+        <GigaLayerButton
+          label={coverageDynamicLayerData?.name ?? "Cellular Coverage"}
           popup={popup}
-          disabled={!activeLayerByCountryCode[String(coverageLayerData.id)]}
-          isActive={coverageLayerData.id === selectedLayerId}
-          icon={<CustomIcon dangerouslySetInnerHTML={{ __html: coverageLayerData.icon }} />}
+          disabled={!coverageDynamicLayerData || !activeLayerByCountryCode[String(coverageDynamicLayerData?.id)]}
+          isActive={coverageDynamicLayerData?.id === selectedLayerId}
+          icon={<CustomIcon dangerouslySetInnerHTML={{ __html: coverageDynamicLayerData?.icon ?? "" }} />}
           onClick={() => {
-            if (coverageLayerData) {
-              updateLayer(coverageLayerData.id);
+            if (coverageDynamicLayerData) {
+              updateLayer(coverageDynamicLayerData.id);
               resetCoverageFilterSelection()
             }
           }}
-        />}
-        {popup && staticLayers.map((layer) => (!!layer.created_by && <GigaLayerButton
+        />
+        {popup && staticLayers.map((layer) => ((layer.created_by && layer.id !== coverageDynamicLayerData?.id) && <GigaLayerButton
           key={layer.name}
           disabled={!activeLayerByCountryCode[layer.id]}
           label={layer.name}

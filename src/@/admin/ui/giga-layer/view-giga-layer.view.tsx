@@ -118,6 +118,10 @@ const AdminViewLayer = () => {
               <LayerLabel>Base benchmark</LayerLabel>
               <LayerDetail>{Object.values(layerItem?.data_source_column)?.[0]?.base_benchmark}</LayerDetail>
             </LayerContentWrapper>
+            <LayerContentWrapper>
+              <LayerLabel>Benchmark Name</LayerLabel>
+              <LayerDetail>{layerItem?.global_benchmark?.benchmark_type ?? 'Global'}</LayerDetail>
+            </LayerContentWrapper>
             {!legendLength && <LegendCategotyContainer>
               <LayerLabel>Legends</LayerLabel>
               {

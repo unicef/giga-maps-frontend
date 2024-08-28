@@ -75,6 +75,11 @@ export const $downloadLayerData = $layersList.map(layers => layers?.find(layer =
 export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
 export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && !layer.created_by) ?? null);
 export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id ?? null);
+export const $downloadDynamicLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
+export const $downloadDynamicLayerId = $downloadDynamicLayerData.map(layer => layer?.id ?? null);
+export const $coverageDynamicLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
+export const $coverageDynamicLayerId = $coverageDynamicLayerData.map(layer => layer?.id ?? null);
+
 export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (layers, countryIdToCode) => {
   const list = {} as Record<string, { activeCountries: string[] }>
   const countryDefaultLayerList = {} as Record<string, number>;
@@ -176,7 +181,7 @@ export const $currentLayerLegends = combine({
 export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, $countryConnectivityNames, (countryBenchmark, selectedLayerData, connectivityBenchMark, countryConnectivityNames) => {
   if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
-  const { convert_unit: unit, value, connectivity_type: globalConnectivityName } = global_benchmark;
+  const { convert_unit: unit, value, benchmark_type: globalConnectivityName } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
   const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
@@ -205,6 +210,10 @@ export const $layerUtils = combine({
   selectedLayerData: $selectedLayerData,
   downloadLayerId: $downloadLayerId,
   downloadLayerData: $downloadLayerData,
+  downloadDynamicLayerId: $downloadDynamicLayerId,
+  downloadDynamicLayerData: $downloadDynamicLayerData,
+  coverageDynamicLayerId: $coverageDynamicLayerId,
+  coverageDynamicLayerData: $coverageDynamicLayerData,
   coverageLayerId: $coverageLayerId,
   coverageLayerData: $coverageLayerData,
   currentLayerTypeUtils: $currentLayerTypeUtils,

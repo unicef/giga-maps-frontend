@@ -253,7 +253,9 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
 
                     </Checkbox></CheckBoxContainer>}
                     <div key={`${key}${index}`} className='conneted-info'>
-                      <InnerCircle $backColor={paintData[key]} />
+                      <CircleWrapper>
+                        <InnerCircle $backColor={paintData[key]} />
+                      </CircleWrapper>
                       <p className="label">{ConnectivityStatusNames[key]}</p>
                     </div>
                   </div>
@@ -330,8 +332,10 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
                         </CheckBoxContainer>
                       )}
                       <div key={key} className='real-time-connetivity-info'>
-                        <InnerCircle $backColor={legends.colors[key]} $large />
-                        <span><p>{label}{" "}</p></span>
+                        <CircleWrapper>
+                          <InnerCircle $backColor={legends.colors[key]} $large />
+                        </CircleWrapper>
+                        <p className="label">{label}{" "}</p>
 
                       </div>
                     </div>

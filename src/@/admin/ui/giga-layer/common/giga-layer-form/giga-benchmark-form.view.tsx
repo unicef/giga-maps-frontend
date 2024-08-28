@@ -14,7 +14,6 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
 
   if (!formData.dataSourceColumn || String(formData.type) === String(LayerTypeChoices.STATIC)) return null;
   const unit = formData?.dataSourceColumn?.unit as string;
-  const connectivityType = formData?.globalBenchmark?.connectivity_type as string;
   const baseValue = formData?.dataSourceColumn?.base_benchmark as number;
   const benchmarkValue = formData?.globalBenchmark?.value;
   return <>
@@ -79,16 +78,16 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
 
       <DataLayerNameField>
         <InputLabel>
-          Connectivity Type
+          Benchmark Type
         </InputLabel>
         <TextInput
           type="text"
           labelText=""
           name='globalBenchmark'
           id="connectivity-type"
-          value={formData?.globalBenchmark?.connectivity_type}
-          placeholder="Enter connectivity type (default: Global)"
-          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, connectivity_type: e.target.value }])}
+          value={formData?.globalBenchmark?.benchmark_type}
+          placeholder="Enter benchmark type (default: Global)"
+          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, benchmark_type: e.target.value }])}
         />
       </DataLayerNameField>
 

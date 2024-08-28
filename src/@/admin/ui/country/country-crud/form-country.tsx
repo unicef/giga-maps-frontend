@@ -26,7 +26,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [selectedFile, setSelectedFile] = useState(null)
   const [layerDescriptions, setLayerDescriptions] = useState<Record<string, string>>({});
   const [layersBenchmark, setLayersBenchmark] = useState<Record<string, string>>({});
-  const [connectivityTypes, setConnectivityTypes] = useState<Record<string, string>>({});
+  const [benchmarkTypes, setbenchmarkTypes] = useState<Record<string, string>>({});
   const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
   const [legendConfigList, setLegendConfigList] = useState<Record<string, LegendConfigType>>({});
@@ -94,11 +94,11 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     }
   }, [formDataCountry?.active_filters_list, filterListAvailablility])
   useEffect(() => {
-    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {}, connectivity_types = {} } = formDataCountry?.benchmark_metadata || {};
+    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {}, benchmark_types = {} } = formDataCountry?.benchmark_metadata || {};
     setLayersBenchmark({ ...live_layer });
     setLayerDescriptions({ ...layer_descriptions });
     setDefaultNationalBenchmark({ ...default_national_benchmark });
-    setConnectivityTypes({ ...connectivity_types });
+    setbenchmarkTypes({ ...benchmark_types });
   }, [formDataCountry?.benchmark_metadata]);
 
   const handleFileChange = (event: FormEvent<HTMLInputElement>) => {
@@ -156,7 +156,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         layer_descriptions: layerDescriptions,
         default_national_benchmark: defaultNationalBenchmark,
         static_layer: {},
-        connectivity_types: connectivityTypes
+        benchmark_types: benchmarkTypes
       }));
 
       try {
@@ -461,17 +461,17 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                   <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
                   <InputContainer style={{ alignSelf: 'flex-start' }}>
                     <InputLabel>
-                      Connectivity type (default: National)
+                      Benchmark type (default: National)
                     </InputLabel>
                     <SchoolFieldsWrapper>
                       <TextInput
                         labelText=""
-                        id={`connectivity-type-${item?.id}`}
-                        name={`${item?.name}_connectivity_type`}
-                        placeholder="Enter connectivity type (default: National)"
-                        value={connectivityTypes[item?.id] || ""}
+                        id={`benchmark-types-${item?.id}`}
+                        name={`${item?.name}_benchmark-type`}
+                        placeholder="Enter benchmark type (default: National)"
+                        value={benchmarkTypes[item?.id] || ""}
                         onChange={(e) => {
-                          setConnectivityTypes({ ...connectivityTypes, [item?.id]: e.target.value })
+                          setbenchmarkTypes({ ...benchmarkTypes, [item?.id]: e.target.value })
                         }
                         }
                       />

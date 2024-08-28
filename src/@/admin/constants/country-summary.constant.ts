@@ -44,7 +44,7 @@ export const defaultCountryForm = {
     live_layer: {},
     layer_descriptions: {},
     default_national_benchmark: {},
-    connectivity_types: {},
+    benchmark_types: {},
   },
   active_layers_list: [],
   active_filters_list: []
