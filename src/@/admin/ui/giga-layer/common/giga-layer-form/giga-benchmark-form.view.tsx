@@ -78,7 +78,7 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
 
       <DataLayerNameField>
         <InputLabel>
-          Benchmark Type
+          Benchmark Name
         </InputLabel>
         <TextInput
           type="text"
@@ -86,7 +86,7 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
           name='globalBenchmark'
           id="connectivity-type"
           value={formData?.globalBenchmark?.benchmark_type}
-          placeholder="Enter benchmark type (default: Global)"
+          placeholder="Enter benchmark name (default: Global)"
           onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, benchmark_type: e.target.value }])}
         />
       </DataLayerNameField>

@@ -48,12 +48,12 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   }
   const layersNames = useMemo(() => {
     return publishDataLayerListResponce.reduce((acc, curr) => {
-      acc[curr.id] = curr.name;
+      acc[curr.id] = curr;
       return acc;
-    }, {} as Record<string, string>)
+    }, {} as Record<string, DataLayer>)
   }, [publishDataLayerListResponce])
 
-  const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name })), [publishDataLayerListResponce]);
+  const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name, code: item.code })), [publishDataLayerListResponce]);
   const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name })), [filterPublishedList]);
   useEffect(() => {
     if (formDataCountry?.active_layers_list) {
@@ -72,7 +72,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         }
         return {
           id: layer.data_layer_id,
-          name: layersNames[String(layer.data_layer_id)],
+          name: layersNames[String(layer.data_layer_id)]?.name,
+          code: layersNames[String(layer.data_layer_id)]?.code
         }
       });
       setSelectedActiveLayers(activeLayerList);
@@ -388,10 +389,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               required
               label="Choose active layers"
               titleText="Active layers"
-              itemToString={(item: { id: number; name: string }) => item.name || ''}
-              itemToElement={(item: { id: number; name: string }) => (
+              itemToString={(item: DataLayer) => item.name || ''}
+              itemToElement={(item: DataLayer) => (
                 <span>
-                  {item.name}
+                  {item.name} ({item.code})
                 </span>
               )}
               items={layerListAvailablility}
@@ -443,40 +444,42 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                       </Div>
                     </SchoolFieldsWrapper>
                   </InputContainer>}
-                  {item.type === 'LIVE' && <InputContainer>
-                    <InputLabel>
-                      National benchmark description
-                    </InputLabel>
-                    <SchoolFieldsWrapper>
-                      <TextInput
-                        labelText=""
-                        id={`${item?.name}{item?.id}`}
-                        name={item?.name}
-                        placeholder="Enter national benchmark"
-                        value={layerDescriptions[item?.id] || ""}
-                        onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
-                      />
-                    </SchoolFieldsWrapper>
-                  </InputContainer>}
-                  <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
-                  <InputContainer style={{ alignSelf: 'flex-start' }}>
-                    <InputLabel>
-                      Benchmark type (default: National)
-                    </InputLabel>
-                    <SchoolFieldsWrapper>
-                      <TextInput
-                        labelText=""
-                        id={`benchmark-types-${item?.id}`}
-                        name={`${item?.name}_benchmark-type`}
-                        placeholder="Enter benchmark type (default: National)"
-                        value={benchmarkTypes[item?.id] || ""}
-                        onChange={(e) => {
-                          setbenchmarkTypes({ ...benchmarkTypes, [item?.id]: e.target.value })
-                        }
-                        }
-                      />
-                    </SchoolFieldsWrapper>
-                  </InputContainer>
+                  {item.type === 'LIVE' && <>
+                    <InputContainer>
+                      <InputLabel>
+                        National benchmark description
+                      </InputLabel>
+                      <SchoolFieldsWrapper>
+                        <TextInput
+                          labelText=""
+                          id={`${item?.name}{item?.id}`}
+                          name={item?.name}
+                          placeholder="Enter national benchmark"
+                          value={layerDescriptions[item?.id] || ""}
+                          onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
+                        />
+                      </SchoolFieldsWrapper>
+                    </InputContainer>}
+                    <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
+                    <InputContainer style={{ alignSelf: 'flex-start' }}>
+                      <InputLabel>
+                        Benchmark name (default: National)
+                      </InputLabel>
+                      <SchoolFieldsWrapper>
+                        <TextInput
+                          labelText=""
+                          id={`benchmark-types-${item?.id}`}
+                          name={`${item?.name}_benchmark-type`}
+                          placeholder="Enter benchmark name (default: National)"
+                          value={benchmarkTypes[item?.id] || ""}
+                          onChange={(e) => {
+                            setbenchmarkTypes({ ...benchmarkTypes, [item?.id]: e.target.value })
+                          }
+                          }
+                        />
+                      </SchoolFieldsWrapper>
+                    </InputContainer>
+                  </>}
                 </RowContainer>
                 <RowContainer>
                   <InputContainer>

@@ -78,7 +78,7 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
   const isCoverage = selectedLayerId === coverageLayerId;
   const { isLive, isStatic, isSchoolStatus } = currentLayerTypeUtils;
 
-  const { benchmarkLogic, globalBenchmarkValue, globalConnectivityName, countryConnectivityNames, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
+  const { benchmarkLogic, globalBenchmarkValue, benchmarkName, countryConnectivityNames, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
   const speedGood = useStore($connectivitySpeedGood);
   const speedModerate = useStore($connectivitySpeedModerate);
   const speedNoInternet = useStore($connectivitySpeednoInternet);
@@ -278,7 +278,7 @@ const LegendPopup = ({ open, setOpen, children }: PropsWithChildren<{ open: bool
               </Tooltip> : <LiveLayerBenchmark>
                 {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {nationalBenchmarkValue}{unitLabel}
               </LiveLayerBenchmark> : <LiveLayerBenchmark>
-                {globalConnectivityName ?? 'Global Benchmark'} - {globalBenchmarkValue}{unitLabel}
+                {benchmarkName ?? 'Global Benchmark'} - {globalBenchmarkValue}{unitLabel}
               </LiveLayerBenchmark>}
               {
                 legends.values.map(({ key, label, tooltip }) => {
