@@ -45,7 +45,7 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
           value={benchmarkValue}
           required
           placeholder="Enter global benchmark"
-          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, value: e.target.value }])}
+          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, unit, value: e.target.value }])}
         />
       </DataLayerNameField>
       <Div $margin="0.5rem 0">
