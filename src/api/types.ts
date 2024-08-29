@@ -164,7 +164,7 @@ export type Country = {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
     layer_descriptions: Record<string, string>
-    benchmark_types: Record<string, string>
+    benchmark_name: Record<string, string>
   }
   data_status: {
     week: {

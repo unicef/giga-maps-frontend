@@ -36,7 +36,7 @@ export interface GlobalBenchmark {
   value: string
   unit: string
   convert_unit: string;
-  benchmark_type?: string;
+  benchmark_name?: string;
 }
 
 export interface DataSource {

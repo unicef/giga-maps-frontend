@@ -111,16 +111,16 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           {isLive && <>
             <LayerContentWrapper>
-              <LayerLabel>Global benchmark</LayerLabel>
+              <LayerLabel>Global Benchmark</LayerLabel>
               <LayerDetail>{layerItem?.global_benchmark?.value}</LayerDetail>
             </LayerContentWrapper>
             <LayerContentWrapper>
-              <LayerLabel>Base benchmark</LayerLabel>
+              <LayerLabel>Base Benchmark</LayerLabel>
               <LayerDetail>{Object.values(layerItem?.data_source_column)?.[0]?.base_benchmark}</LayerDetail>
             </LayerContentWrapper>
             <LayerContentWrapper>
               <LayerLabel>Benchmark Name</LayerLabel>
-              <LayerDetail>{layerItem?.global_benchmark?.benchmark_type ?? 'Global'}</LayerDetail>
+              <LayerDetail>{layerItem?.global_benchmark?.benchmark_name ?? 'Global'}</LayerDetail>
             </LayerContentWrapper>
             {!legendLength && <LegendCategotyContainer>
               <LayerLabel>Legends</LayerLabel>
@@ -155,7 +155,7 @@ const AdminViewLayer = () => {
             </LayerContentWrapper>
           }
           <LayerContentWrapper>
-            <LayerLabel>Created by</LayerLabel>
+            <LayerLabel>Created By</LayerLabel>
             <LayerDetail>{layerItem?.created_by?.user_name}</LayerDetail>
           </LayerContentWrapper>
           {activeDeactiveId && <Actionable

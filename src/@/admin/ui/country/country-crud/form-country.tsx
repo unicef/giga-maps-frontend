@@ -26,7 +26,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [selectedFile, setSelectedFile] = useState(null)
   const [layerDescriptions, setLayerDescriptions] = useState<Record<string, string>>({});
   const [layersBenchmark, setLayersBenchmark] = useState<Record<string, string>>({});
-  const [benchmarkTypes, setbenchmarkTypes] = useState<Record<string, string>>({});
+  const [benchmarkNames, setbenchmarkNames] = useState<Record<string, string>>({});
   const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
   const [legendConfigList, setLegendConfigList] = useState<Record<string, LegendConfigType>>({});
@@ -95,11 +95,11 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     }
   }, [formDataCountry?.active_filters_list, filterListAvailablility])
   useEffect(() => {
-    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {}, benchmark_types = {} } = formDataCountry?.benchmark_metadata || {};
+    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {}, benchmark_name = {} } = formDataCountry?.benchmark_metadata || {};
     setLayersBenchmark({ ...live_layer });
     setLayerDescriptions({ ...layer_descriptions });
     setDefaultNationalBenchmark({ ...default_national_benchmark });
-    setbenchmarkTypes({ ...benchmark_types });
+    setbenchmarkNames({ ...benchmark_name });
   }, [formDataCountry?.benchmark_metadata]);
 
   const handleFileChange = (event: FormEvent<HTMLInputElement>) => {
@@ -157,7 +157,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         layer_descriptions: layerDescriptions,
         default_national_benchmark: defaultNationalBenchmark,
         static_layer: {},
-        benchmark_types: benchmarkTypes
+        benchmark_name: benchmarkNames
       }));
 
       try {
@@ -418,7 +418,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                 <RowContainer>
                   {item.type === 'LIVE' && <InputContainer>
                     <InputLabel>
-                      National benchmark ({item.global_benchmark?.unit})
+                      National / School benchmark ({item.global_benchmark?.unit})
                       <Checkbox id={`default-national-benchmark-${item.id}`} disabled={!layersBenchmark[item?.id]} labelText="Is default benchmark" name={item.name} value={item.id} checked={defaultNationalBenchmark[item?.id]} onChange={(_, { checked }) => updateDefaultNationalBenchmark(item.id, checked)} />
                     </InputLabel>
                     <SchoolFieldsWrapper>
@@ -447,7 +447,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                   {item.type === 'LIVE' && <>
                     <InputContainer>
                       <InputLabel>
-                        National benchmark description
+                        National / School benchmark description
                       </InputLabel>
                       <SchoolFieldsWrapper>
                         <TextInput
@@ -471,9 +471,9 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                           id={`benchmark-types-${item?.id}`}
                           name={`${item?.name}_benchmark-type`}
                           placeholder="Enter benchmark name (default: National)"
-                          value={benchmarkTypes[item?.id] || ""}
+                          value={benchmarkNames[item?.id] || ""}
                           onChange={(e) => {
-                            setbenchmarkTypes({ ...benchmarkTypes, [item?.id]: e.target.value })
+                            setbenchmarkNames({ ...benchmarkNames, [item?.id]: e.target.value })
                           }
                           }
                         />

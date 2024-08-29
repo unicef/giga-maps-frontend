@@ -126,7 +126,7 @@ export const $currentLayerCountryDataSource = combine($selectedLayerData, $count
 })
 
 export const $benchmarkNamesAllLayers = $layersList.map(layers => layers.reduce((acc, curr) => {
-  acc[curr.id ?? ""] = curr?.global_benchmark?.benchmark_type;
+  acc[curr.id ?? ""] = curr?.global_benchmark?.benchmark_name;
   return acc
 }, {} as Record<string, string>))
 
@@ -185,7 +185,7 @@ export const $currentLayerLegends = combine({
 export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, $countryConnectivityNames, (countryBenchmark, selectedLayerData, connectivityBenchMark, countryConnectivityNames) => {
   if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
-  const { convert_unit: unit, value, benchmark_type: benchmarkName } = global_benchmark;
+  const { convert_unit: unit, value, benchmark_name: benchmarkName } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
   const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
