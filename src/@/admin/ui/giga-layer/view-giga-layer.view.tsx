@@ -111,7 +111,7 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           {isLive && <>
             <LayerContentWrapper>
-              <LayerLabel>Global Benchmark</LayerLabel>
+              <LayerLabel>Global / School Benchmark</LayerLabel>
               <LayerDetail>{layerItem?.global_benchmark?.value}</LayerDetail>
             </LayerContentWrapper>
             <LayerContentWrapper>

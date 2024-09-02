@@ -14,6 +14,7 @@ import {
   $connectivityBenchMark,
   $benchmarkmarkUtils,
   $layerUtils,
+  $schoolStats,
 } from '~/@/sidebar/sidebar.model';
 import { $country } from '~/@/country/country.model';
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
@@ -39,10 +40,11 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const countryObj = useStore($country);
   const countryBenchmarkDescriptions = countryObj?.benchmark_metadata?.layer_descriptions;
   const [realtimeCheckedStatus, setRealtimeCheckedStatus] = useState<CheckedStatus>({});
-  const realtimeStatsFromStore = useStore($connectivityStats)
+  const realtimeStatsFromStore = useStore($connectivityStats);
+  const schoolRealTimeStats = useStore($schoolStats);
   const realtimeStats = realtimeStatsFromStore?.real_time_connected_schools ?? {} as defaultLegendValuesType;
-  const bencharkmarkValue = realtimeStatsFromStore?.benchmark_metadata.rounded_benchmark_value;
-  const unitLabel = realtimeStatsFromStore?.benchmark_metadata.display_unit;
+  const bencharkmarkValue = (realtimeStatsFromStore ?? schoolRealTimeStats?.[0])?.benchmark_metadata.rounded_benchmark_value;
+  const unitLabel = (realtimeStatsFromStore ?? schoolRealTimeStats?.[0])?.benchmark_metadata.display_unit;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
   const handleRealtimeLayerChange = (key: string) => {

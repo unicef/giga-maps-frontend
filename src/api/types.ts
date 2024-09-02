@@ -93,6 +93,15 @@ export type SchoolStatsType = {
   statistics: SchoolInfoStats;
   graph_data: GraphData[];
   geopoint: GeoJSONPoint
+  benchmark_metadata: {
+    base_benchmark: string;
+    benchmark_unit: string;
+    benchmark_value: string;
+    parameter_column_unit: string;
+    round_unit_value: string;
+    rounded_benchmark_value: string;
+    display_unit: string;
+  }
 };
 
 

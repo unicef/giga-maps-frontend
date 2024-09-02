@@ -1,9 +1,8 @@
 import { combine } from "effector";
 
 import { downloadCountryDataFx } from "~/@/api-docs/effects/explore-api-fx";
-
 import { getAboutusContentFx, getImagesListFx, updateAboutusContentFx, uploadImagesFx } from "../../effects/about-us-fx";
-import { createOrUpdateCountryFx, deleteCountryDailySummaryFx, deleteCountryFx, deleteCountrySummaryFx, getCountryDailySummaryListFx, getCountryListFx, getCountrySummaryListFx } from "../../effects/api-country-fx";
+import { createOrUpdateCountryFx, deleteCountryDailySummaryFx, deleteCountryFx, deleteCountrySummaryFx, getCountryDailySummaryListFx, getCountryIdFx, getCountryListFx, getCountrySummaryListFx } from "../../effects/api-country-fx";
 import { deleteSchoolDailyFx, deleteSchoolFx, deleteSchoolSummaryFx, getCsvImportListFx, getSchoolDailyListFx, getSchoolListFx, getSchoolSummaryListFx, importCsvFx } from "../../effects/api-school-fx";
 import { deleteBackgroundTaskFx, getBackgroundTaskListFx } from "../../effects/background-task-fx";
 import { deleteContactMessageFx, getContactMessageListFx } from "../../effects/contact-message-fx";
@@ -39,6 +38,7 @@ export const $adminAllLoader = combine([
   uploadImagesFx.pending,
   getImagesListFx.pending,
   getAllUserListFx.pending,
+  getCountryIdFx.pending,
   downloadCountryDataFx.pending,
   getSchoolMasterListFx.pending,
   updateSchoolMasterFx.pending,
