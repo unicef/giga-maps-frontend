@@ -64,6 +64,7 @@ export interface LayerType {
   global_benchmark: GlobalBenchmark
   created_by: null | string
   is_reverse: boolean;
+  data_sources_list?: { id: number, name: string }[];
   data_source_column: Record<string, {
     alias: string;
     base_benchmark: number;

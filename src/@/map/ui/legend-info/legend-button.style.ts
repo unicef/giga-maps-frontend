@@ -151,3 +151,32 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 `
+
+
+export const CheckBoxContainer = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  .cds--checkbox-label::before{
+    border: 1px solid grey;
+    border-width: 1px;
+    background-color: white;
+  }
+  .cds--checkbox-label::after {
+        border-block-end: 1.5px solid black;
+    border-inline-start: 1.5px solid black;
+  }
+  .cds--checkbox:checked + .cds--checkbox-label::before{
+    border: 1px solid grey;
+    border-width: 1px;
+    background-color: white;
+  }
+`
+
+export const LiveLayerBenchmark = styled.div`
+  color:${props => props.theme.text};
+  font-size: 0.65rem;
+  opacity: 0.6;
+  margin-top: 0.2rem;
+  cursor: pointer;
+  text-decoration: underline;
+`

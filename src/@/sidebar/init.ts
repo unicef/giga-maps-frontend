@@ -281,6 +281,7 @@ sample({
   target: createEffect(({ downloadLayerId }: { downloadLayerId: number | null }) => {
     onSelectMainLayer(downloadLayerId);
     onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id)
+    changeConnectivityBenchmark(ConnectivityBenchMarks.global)
   })
 })
 // reset on country change - giga layer selection;

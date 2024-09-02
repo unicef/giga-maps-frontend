@@ -26,6 +26,7 @@ export type defaultLegendValuesType = {
   moderate: number;
   no_internet: number;
   unknown: number;
+  [key: string]: number
 }
 export type ConnectivityStat = {
   live_avg: number;
@@ -41,6 +42,8 @@ export type ConnectivityStat = {
     benchmark_value: string;
     parameter_column_unit: string;
     round_unit_value: string;
+    rounded_benchmark_value: string;
+    display_unit: string;
   }
 };
 export type SchoolInfoStats = {
