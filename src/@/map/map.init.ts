@@ -67,7 +67,6 @@ sample({
     if (routes.map || routes.country || routes.schools) {
       void fetchLayerListFx();
       void fetchCountriesFx();
-      void fetchAdvanceFilterFx();
     }
   })
 })
@@ -229,16 +228,6 @@ sample({
   target: changeLayersFx,
 });
 
-// sample({
-//   clock: merge([$countryCode, mapSchools.visible, $admin1Code, sample({
-//     clock: $isTimeplayer,
-//     filter: Boolean
-//   })
-//   ]),
-//   source: combine({ map: $map }),
-//   target: clearMapDataFx,
-// })
-
 // update dots, change on coverage filter
 sample({
   clock: $coverageFilter,
@@ -384,11 +373,12 @@ sample({
   target: onPausePlayTimeplayerFx
 })
 
-// sample({
-//   clock: merge([mapCountry.visible, mapCountry.router.historyUpdated]),
-//   source: combine({
-//     mapRoutes: $mapRoutes,
-//     params: 
-//   }),
-// })
+
+// call filter api on country change
+sample({
+  clock: $country,
+  filter: (country) => !!country?.id,
+  fn: (country) => country?.id ?? 0,
+  target: fetchAdvanceFilterFx
+})
 onLoadPage();

@@ -273,21 +273,22 @@ export interface AdvanceFilterType {
   name: string
   type: string
   description: string
-  choices?: Choice[]
-  parameter: Parameter
-  active_countries_list: number[] | null
-  upcast_aggr_str?: string
-  downcast_aggr_str?: string
-  include_none_filter?: boolean
-  place_holder?: string;
-  min_place_holder?: string;
-  max_place_holder?: string;
-  active_countries_range?: Record<string, {
-    min_place_holder?: string;
-    max_place_holder?: string;
-    max_value?: number;
-    min_value?: number;
-  }>
+  column_configuration: ColumnConfiguration
+  options?: {
+    choices?: Choice[]
+    placeholder?: string;
+    minPlaceholder?: string;
+    maxPlaceholder?: string;
+    include_none_filter?: boolean
+    active_range?: {
+      min_value: number
+      max_value: number
+      min_place_holder: string
+      max_place_holder: string
+      include_none_filter?: boolean
+    }
+  }
+  query_param_filter: string
 }
 
 export interface Choice {
@@ -295,9 +296,15 @@ export interface Choice {
   value: string
 }
 
-export interface Parameter {
+export interface ColumnConfiguration {
+  name: string
   label: string
-  table: string
-  field: string
-  filter: string
+  type: string
+  table_name: string
+  table_alias: string
+  table_label: string
+  options?: {
+    downcast_aggr_str?: string;
+    upcast_aggr_str?: string;
+  }
 }

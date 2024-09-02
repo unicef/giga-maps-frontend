@@ -35,10 +35,9 @@ const FilterButton = () => {
     if (routes.schools || !country?.id || !advanceFilterList?.length) {
       return true;
     }
-    return !advanceFilterList.some(item => {
-      return (!item.active_countries_list?.length || item.active_countries_list?.includes(country?.id || 0));
-    })
+    return false;
   }, [advanceFilterList, country?.id, routes.schools]);
+
   const sidebarHeight = useStore($sidebarHeight)
   if (isDisabled) return null;
   return (
