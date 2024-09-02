@@ -95,7 +95,7 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           <LayerContentWrapper>
             <LayerLabel>Layer Type</LayerLabel>
-            <LayerDetail>{layerItem.type?.toLowerCase()} Layer</LayerDetail>
+            <LayerDetail $textTransform='capitalize'>{layerItem.type?.toLowerCase()} layer</LayerDetail>
           </LayerContentWrapper>
           <LayerContentWrapper>
             <LayerLabel>API Source</LayerLabel>
@@ -121,6 +121,10 @@ const AdminViewLayer = () => {
             <LayerContentWrapper>
               <LayerLabel>Benchmark Name</LayerLabel>
               <LayerDetail>{layerItem?.global_benchmark?.benchmark_name ?? 'Global'}</LayerDetail>
+            </LayerContentWrapper>
+            <LayerContentWrapper>
+              <LayerLabel>Is reverse</LayerLabel>
+              <LayerDetail>{String(layerItem?.is_reverse)}</LayerDetail>
             </LayerContentWrapper>
             {!legendLength && <LegendCategotyContainer>
               <LayerLabel>Legends</LayerLabel>

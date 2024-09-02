@@ -87,16 +87,16 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
       <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
         <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
           {isNational ? <LiveLayerBenchmark>
-            {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {bencharkmarkValue}{unitLabel}
+            {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {bencharkmarkValue} {unitLabel}
           </LiveLayerBenchmark> : <LiveLayerBenchmark>
-            {benchmarkName ?? 'Global Benchmark'} - {bencharkmarkValue}{unitLabel}
+            {benchmarkName ?? 'Global Benchmark'} - {bencharkmarkValue} {unitLabel}
           </LiveLayerBenchmark>}
         </button>
       </TooltipButton>
       {
         legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
           const logicLabel = `${(benchmarkLogic && key) != "unknown" ? benchmarkLogic?.[key] : `Doesn't match any criteria`}`;
-          const toolTiplabel = tooltip ?? logicLabel;
+          const toolTiplabel = tooltip ? tooltip : logicLabel;
           return (
             <div key={key}>
               <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
