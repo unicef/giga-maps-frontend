@@ -34,10 +34,10 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
   imperativeHandle(ref, handleBenchmarkChange);
 
   useEffect(() => {
-    if (layerId) {
+    if (selectedLayerId || layerId) {
       let currentBenchmarkValue = connectivityBenchmarkValue;
-      const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? 0];
-      const hasDefaultNationalBenchmark = !!defaultNationalBenchmark[layerId];
+      const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? selectedLayerId ?? 0];
+      const hasDefaultNationalBenchmark = !!defaultNationalBenchmark[layerId ?? selectedLayerId ?? 0];
       if (currentBenchmarkValue === ConnectivityBenchMarks.national && (!isCountryNationalBenchmark || !hasDefaultNationalBenchmark)) {
         currentBenchmarkValue = ConnectivityBenchMarks.global;
       }
@@ -48,7 +48,7 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
       setIsNationalBenchmark(isCountryNationalBenchmark);
       setConnectivityBenchmarkValue(currentBenchmarkValue)
     }
-  }, [layerId, defaultNationalBenchmark, setConnectivityBenchmarkValue])
+  }, [layerId, selectedLayerId, defaultNationalBenchmark, setConnectivityBenchmarkValue])
 
   return (
     <PopoverFilterContentBenchmark>

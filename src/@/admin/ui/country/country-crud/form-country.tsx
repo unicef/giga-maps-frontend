@@ -54,7 +54,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   }, [publishDataLayerListResponce])
 
   const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name, code: item.code })), [publishDataLayerListResponce]);
-  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name })), [filterPublishedList]);
+  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name, code: item.code })), [filterPublishedList]);
   useEffect(() => {
     if (formDataCountry?.active_layers_list) {
       const dataSourceList = {} as Record<string, { name: string, description: string }>;
@@ -86,9 +86,11 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   useEffect(() => {
     if (formDataCountry?.active_filters_list && filterListAvailablility.length) {
       const activeFilterList = formDataCountry.active_filters_list.map((filter: { advance_filter_id: number; }) => {
+        const foundFilter = filterListAvailablility.find((item) => item.id === filter.advance_filter_id);
         return {
           id: filter.advance_filter_id,
-          name: filterPublishedList.find((item) => item.id === filter.advance_filter_id)?.name ?? '',
+          name: foundFilter?.name ?? '',
+          code: foundFilter?.code ?? ''
         }
       })
       setSelectedActiveFilters(activeFilterList);
@@ -370,7 +372,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               itemToString={(item: { id: number; name: string }) => item.name || ''}
               itemToElement={(item: { id: number; name: string }) => (
                 <span>
-                  {item.name}
+                  {item.name} ({item.code})
                 </span>
               )}
               items={filterListAvailablility}
@@ -437,10 +439,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                         }
                       />
                       <Div $margin="0.5rem 0">
-                        <InputLabel>
+                        {!isNaN(Number(layersBenchmark[item?.id])) && <InputLabel>
                           {speedConverterUtil(item.global_benchmark.unit, item.global_benchmark.convert_unit, Number(layersBenchmark[item?.id] || 0))}
                           {' '}<b>{item?.global_benchmark?.convert_unit?.toUpperCase()}</b>
-                        </InputLabel>
+                        </InputLabel>}
                       </Div>
                     </SchoolFieldsWrapper>
                   </InputContainer>}
@@ -459,7 +461,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                           onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
                         />
                       </SchoolFieldsWrapper>
-                    </InputContainer>}
+                    </InputContainer>
                     <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
                     <InputContainer style={{ alignSelf: 'flex-start' }}>
                       <InputLabel>
