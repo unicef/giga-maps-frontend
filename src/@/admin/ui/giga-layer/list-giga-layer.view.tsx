@@ -1,5 +1,5 @@
 import { Add } from '@carbon/icons-react';
-import { Button, Table, TableHeader, TableRow, ToggletipButton } from '@carbon/react'
+import { Button, Table, TableHeader, TableRow, TableToolbar, ToggletipButton } from '@carbon/react'
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react'
 
@@ -13,17 +13,19 @@ import { $dataLayerListResponce, $dataListLayerCount, onGetDataLayerList } from 
 import PageTitleComponent from '../common-components/page-title-component'
 import Pagination from '../common-components/Pagination';
 import { AdminTableScroll, CountryListToggletip, CountryListToggletipContent, DataLayerActiveCountries, SearchContainer, TableDataBody, TableDataCell, TableDataHead, TableWrapper } from '../styles/admin-styles'
+import SearchToolbar from '../common-components/search-toolbar';
 
 const ListGigaLayer = () => {
   const dataLayerList = useStore($dataLayerListResponce)
   const count = useStore($dataListLayerCount);
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
+  const [searchValue, setSearchValue] = useState('')
   const countryList = useStore($countryList)
   const userPermission = useStore($userPermissions);
   const isEditor = userPermission.CAN_ADD_DATA_LAYER;
   useEffect(() => {
-    onGetDataLayerList({ page, pageSize })
-  }, [page, pageSize])
+    onGetDataLayerList({ page, pageSize, search: searchValue })
+  }, [page, pageSize, searchValue])
 
   const getCountryName = (activeCountriesIds: number[]) => {
     const activeCountries = countryList.filter(item => activeCountriesIds.includes(item.id));
@@ -36,17 +38,20 @@ const ListGigaLayer = () => {
         title={"Giga layer"}
         subTitle={"List of giga layer"}
         recentlyView={false} />
-      <SearchContainer>
-        <Link to={addGigaLayer}>
-          <Button
-            renderIcon={Add}
-            onClick={() => { }}
-            disabled={!isEditor}
-          >
-            Add new layer
-          </Button>
-        </Link>
-      </SearchContainer>
+      <TableToolbar>
+        <SearchContainer>
+          <SearchToolbar placeholder="Search by layer name, code" onSearchChange={setSearchValue} />
+          <Link to={addGigaLayer}>
+            <Button
+              renderIcon={Add}
+              onClick={() => { }}
+              disabled={!isEditor}
+            >
+              Add new layer
+            </Button>
+          </Link>
+        </SearchContainer>
+      </TableToolbar>
       <AdminTableScroll $contentHeight="13.2rem">
         <TableWrapper>
           <Table aria-label="data-layer-list-data-table" >
