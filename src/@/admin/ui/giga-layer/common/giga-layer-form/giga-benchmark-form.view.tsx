@@ -49,10 +49,10 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
         />
       </DataLayerNameField>
       <Div $margin="0.5rem 0">
-        <InputLabel>
+        {!isNaN(Number(benchmarkValue)) && <InputLabel>
           {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(benchmarkValue ?? 0))}
           {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
-        </InputLabel>
+        </InputLabel>}
       </Div>
       <DataLayerNameField>
         <InputLabel>

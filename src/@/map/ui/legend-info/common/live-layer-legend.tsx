@@ -23,12 +23,14 @@ import { formatNumber } from '~/lib/utils';
 import { $stylePaintData } from "~/@/map/map.model";
 import { defaultLegendValuesType } from "~/api/types";
 import { TooltipButton } from "~/@/common/style/styled-component-style";
+import { $mapRoutes } from "~/core/routes";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+  const { schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId } = useStore($layerUtils);
   const { benchmarkLogic, benchmarkName, countryConnectivityNames, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
@@ -43,8 +45,8 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const realtimeStatsFromStore = useStore($connectivityStats);
   const schoolRealTimeStats = useStore($schoolStats);
   const realtimeStats = realtimeStatsFromStore?.real_time_connected_schools ?? {} as defaultLegendValuesType;
-  const bencharkmarkValue = (realtimeStatsFromStore ?? schoolRealTimeStats?.[0])?.benchmark_metadata.rounded_benchmark_value;
-  const unitLabel = (realtimeStatsFromStore ?? schoolRealTimeStats?.[0])?.benchmark_metadata.display_unit;
+  const bencharkmarkValue = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata.rounded_benchmark_value;
+  const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata.display_unit;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
   const handleRealtimeLayerChange = (key: string) => {
