@@ -95,7 +95,7 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           <LayerContentWrapper>
             <LayerLabel>Layer Type</LayerLabel>
-            <LayerDetail>{layerItem.type?.toLowerCase()} Layer</LayerDetail>
+            <LayerDetail $textTransform='capitalize'>{layerItem.type?.toLowerCase()} layer</LayerDetail>
           </LayerContentWrapper>
           <LayerContentWrapper>
             <LayerLabel>API Source</LayerLabel>
@@ -111,12 +111,20 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           {isLive && <>
             <LayerContentWrapper>
-              <LayerLabel>Global benchmark</LayerLabel>
+              <LayerLabel>Global / School Benchmark</LayerLabel>
               <LayerDetail>{layerItem?.global_benchmark?.value}</LayerDetail>
             </LayerContentWrapper>
             <LayerContentWrapper>
-              <LayerLabel>Base benchmark</LayerLabel>
+              <LayerLabel>Base Benchmark</LayerLabel>
               <LayerDetail>{Object.values(layerItem?.data_source_column)?.[0]?.base_benchmark}</LayerDetail>
+            </LayerContentWrapper>
+            <LayerContentWrapper>
+              <LayerLabel>Benchmark Name</LayerLabel>
+              <LayerDetail>{layerItem?.global_benchmark?.benchmark_name ?? 'Global'}</LayerDetail>
+            </LayerContentWrapper>
+            <LayerContentWrapper>
+              <LayerLabel>Is reverse</LayerLabel>
+              <LayerDetail>{String(layerItem?.is_reverse)}</LayerDetail>
             </LayerContentWrapper>
             {!legendLength && <LegendCategotyContainer>
               <LayerLabel>Legends</LayerLabel>
@@ -137,17 +145,21 @@ const AdminViewLayer = () => {
                 {Object.entries(layerItem?.legend_configs).map(([name, data]) => <ColorPickerWrapper key={name}>
                   <ColorPicker disabled type="color" value={coverageColors[name.toLowerCase()]} />
                   <div>
-                    <span><b>{data?.labels} - </b></span>
-                    {isLive && <span>{labels[name.toLowerCase()]} </span>}
-                    {data?.labels && (
-                      <span style={{ textTransform: 'none' }}><b>{data?.values?.join(', ')}</b></span>)
+                    <p><b>{data?.labels}</b></p>
+                    {!data?.labels && <p>
+                      {isLive && <span>{labels[name.toLowerCase()]} </span>}
+                    </p>}
+                    <p>{data?.labels && (
+                      <span style={{ textTransform: 'none' }}>{data?.values?.join(', ')}</span>)
                     }
+                    </p>
+                    {data?.tooltip && <p>Tooltip: {data?.tooltip}</p>}
                   </div>
                 </ColorPickerWrapper>)}</LayerDetail>
             </LayerContentWrapper>
           }
           <LayerContentWrapper>
-            <LayerLabel>Created by</LayerLabel>
+            <LayerLabel>Created By</LayerLabel>
             <LayerDetail>{layerItem?.created_by?.user_name}</LayerDetail>
           </LayerContentWrapper>
           {activeDeactiveId && <Actionable

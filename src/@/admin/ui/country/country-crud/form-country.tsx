@@ -11,8 +11,10 @@ import { adminCountry, router } from '~/core/routes';
 import { speedConverterUtil } from '~/lib/utils';
 
 import { BottomButtonWrapper, CountryFormScroll, CountryListDataLayer, DateOfJoiningWrapper, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, LastWeekStatusWrapper, MultiSelectLayerConfig, RowContainer, SchoolFieldsWrapper, UploadFlagImage } from "../../styles/admin-styles";
-import { getFilterPublishedListFx } from '~/@/admin/effects/filter-fx';
-import { $filterPublishedList } from '~/@/admin/models/filter-list.model';
+import CountryLegendBenchmark from './common/CountryLegendBenchmark';
+import { getFilterPublishedListFx } from '@/admin/effects/filter-fx';
+import { $filterPublishedList } from '@/admin/models/filter-list.model';
+import { DataLayer, LegendConfigType } from '~/@/admin/types/giga-layer.type';
 
 
 const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId?: number }) => {
@@ -24,11 +26,13 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [selectedFile, setSelectedFile] = useState(null)
   const [layerDescriptions, setLayerDescriptions] = useState<Record<string, string>>({});
   const [layersBenchmark, setLayersBenchmark] = useState<Record<string, string>>({});
+  const [benchmarkNames, setbenchmarkNames] = useState<Record<string, string>>({});
   const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
+  const [legendConfigList, setLegendConfigList] = useState<Record<string, LegendConfigType>>({});
   const [selectedActiveLayers, setSelectedActiveLayers] = useState<{ id: number; name: string; }[]>([]);
   const [selectedActiveFilters, setSelectedActiveFilters] = useState<{ id: number; name: string; }[]>([]);
-  const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.toSorted((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
+  const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
   const [defaultLayer, setDefaultLayer] = useState<number | undefined>();
 
   const updateDefaultNationalBenchmark = (id: number, checked: boolean) => {
@@ -44,57 +48,63 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   }
   const layersNames = useMemo(() => {
     return publishDataLayerListResponce.reduce((acc, curr) => {
-      acc[curr.id] = curr.name;
+      acc[curr.id] = curr;
       return acc;
-    }, {} as Record<string, string>)
+    }, {} as Record<string, DataLayer>)
   }, [publishDataLayerListResponce])
 
-  const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name })), [publishDataLayerListResponce]);
-  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name })), [filterPublishedList]);
+  const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name, code: item.code })), [publishDataLayerListResponce]);
+  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name, code: item.code })), [filterPublishedList]);
   useEffect(() => {
     if (formDataCountry?.active_layers_list) {
       const dataSourceList = {} as Record<string, { name: string, description: string }>;
+      const legendConfigDefault = {} as Record<string, LegendConfigType>;
       let currentDefaultLayer;
-      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string } }) => {
+      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string }, legend_configs?: LegendConfigType; }) => {
         dataSourceList[String(layer.data_layer_id)] = {
           name: '',
           description: '',
           ...layer.data_sources
         }
+        legendConfigDefault[String(layer.data_layer_id)] = layer.legend_configs || {};
         if (layer.is_default) {
           currentDefaultLayer = layer?.data_layer_id;
         }
         return {
           id: layer.data_layer_id,
-          name: layersNames[String(layer.data_layer_id)],
+          name: layersNames[String(layer.data_layer_id)]?.name,
+          code: layersNames[String(layer.data_layer_id)]?.code
         }
       });
       setSelectedActiveLayers(activeLayerList);
       setDataSource(dataSourceList);
       setDefaultLayer(currentDefaultLayer);
+      setLegendConfigList(legendConfigDefault);
     }
-  }, [formDataCountry?.active_layers_list, layerListAvailablility])
+  }, [formDataCountry?.active_layers_list, layersNames]);
 
   useEffect(() => {
     if (formDataCountry?.active_filters_list && filterListAvailablility.length) {
       const activeFilterList = formDataCountry.active_filters_list.map((filter: { advance_filter_id: number; }) => {
+        const foundFilter = filterListAvailablility.find((item) => item.id === filter.advance_filter_id);
         return {
           id: filter.advance_filter_id,
-          name: filterPublishedList.find((item) => item.id === filter.advance_filter_id)?.name ?? '',
+          name: foundFilter?.name ?? '',
+          code: foundFilter?.code ?? ''
         }
       })
-      console.log('activeFilterList', activeFilterList)
       setSelectedActiveFilters(activeFilterList);
     }
   }, [formDataCountry?.active_filters_list, filterListAvailablility])
   useEffect(() => {
-    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {} } = formDataCountry?.benchmark_metadata || {};
+    const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {}, benchmark_name = {} } = formDataCountry?.benchmark_metadata || {};
     setLayersBenchmark({ ...live_layer });
     setLayerDescriptions({ ...layer_descriptions });
     setDefaultNationalBenchmark({ ...default_national_benchmark });
+    setbenchmarkNames({ ...benchmark_name });
   }, [formDataCountry?.benchmark_metadata]);
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event: FormEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
     if (file) {
       const allowedTypes = ['image/jpeg', 'image/png'];
@@ -113,7 +123,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     }
   };
 
-  const handleFormSubmit = async (event: FormEvent) => {
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedFile && !isEdit) {
       setToasterWarning("Please Upload flag image")
@@ -132,7 +142,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('active_layers_list', JSON.stringify(selectedActiveLayers?.map((layer) => ({
         data_layer_id: layer.id,
         data_sources: dataSource[String(layer.id)],
-        is_default: String(defaultLayer) === String(layer.id)
+        is_default: String(defaultLayer) === String(layer.id),
+        legend_configs: legendConfigList[String(layer.id)] ?? {}
       }))));
       formData.append('active_filters_list', JSON.stringify(selectedActiveFilters?.map((filter) => ({
         advance_filter_id: filter.id
@@ -147,7 +158,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         live_layer: layersBenchmark,
         layer_descriptions: layerDescriptions,
         default_national_benchmark: defaultNationalBenchmark,
-        static_layer: {}
+        static_layer: {},
+        benchmark_name: benchmarkNames
       }));
 
       try {
@@ -360,7 +372,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               itemToString={(item: { id: number; name: string }) => item.name || ''}
               itemToElement={(item: { id: number; name: string }) => (
                 <span>
-                  {item.name}
+                  {item.name} ({item.code})
                 </span>
               )}
               items={filterListAvailablility}
@@ -379,10 +391,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               required
               label="Choose active layers"
               titleText="Active layers"
-              itemToString={(item: { id: number; name: string }) => item.name || ''}
-              itemToElement={(item: { id: number; name: string }) => (
+              itemToString={(item: DataLayer) => item.name || ''}
+              itemToElement={(item: DataLayer) => (
                 <span>
-                  {item.name}
+                  {item.name} ({item.code})
                 </span>
               )}
               items={layerListAvailablility}
@@ -397,7 +409,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         <CountryListDataLayer>
           <h3>Associated Giga layers: </h3>
           {
-            filteredPublishDataLayerList.map((item, index) => (
+            filteredPublishDataLayerList.map((item: DataLayer) => (
               selectedActiveLayers.some(layer => layer.id === item.id) && <React.Fragment key={item.id}>
                 <div style={{ marginTop: '1rem', paddingLeft: '3rem', gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                   <p style={{ fontWeight: 'bold' }}>{item.name} ({item.type.toLowerCase()})</p>
@@ -408,7 +420,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                 <RowContainer>
                   {item.type === 'LIVE' && <InputContainer>
                     <InputLabel>
-                      National benchmark ({item.global_benchmark?.unit})
+                      National / School benchmark ({item.global_benchmark?.unit})
                       <Checkbox id={`default-national-benchmark-${item.id}`} disabled={!layersBenchmark[item?.id]} labelText="Is default benchmark" name={item.name} value={item.id} checked={defaultNationalBenchmark[item?.id]} onChange={(_, { checked }) => updateDefaultNationalBenchmark(item.id, checked)} />
                     </InputLabel>
                     <SchoolFieldsWrapper>
@@ -427,28 +439,49 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                         }
                       />
                       <Div $margin="0.5rem 0">
-                        <InputLabel>
+                        {!isNaN(Number(layersBenchmark[item?.id])) && <InputLabel>
                           {speedConverterUtil(item.global_benchmark.unit, item.global_benchmark.convert_unit, Number(layersBenchmark[item?.id] || 0))}
                           {' '}<b>{item?.global_benchmark?.convert_unit?.toUpperCase()}</b>
-                        </InputLabel>
+                        </InputLabel>}
                       </Div>
                     </SchoolFieldsWrapper>
                   </InputContainer>}
-                  {item.type === 'LIVE' && <InputContainer>
-                    <InputLabel>
-                      National benchmark description
-                    </InputLabel>
-                    <SchoolFieldsWrapper>
-                      <TextInput
-                        labelText=""
-                        id={`${item?.name}{item?.id}`}
-                        name={item?.name}
-                        placeholder="Enter national benchmark"
-                        value={layerDescriptions[item?.id] || ""}
-                        onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
-                      />
-                    </SchoolFieldsWrapper>
-                  </InputContainer>}
+                  {item.type === 'LIVE' && <>
+                    <InputContainer>
+                      <InputLabel>
+                        National / School benchmark description
+                      </InputLabel>
+                      <SchoolFieldsWrapper>
+                        <TextInput
+                          labelText=""
+                          id={`${item?.name}{item?.id}`}
+                          name={item?.name}
+                          placeholder="Enter national benchmark"
+                          value={layerDescriptions[item?.id] || ""}
+                          onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
+                        />
+                      </SchoolFieldsWrapper>
+                    </InputContainer>
+                    <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
+                    <InputContainer style={{ alignSelf: 'flex-start' }}>
+                      <InputLabel>
+                        Benchmark name (default: National)
+                      </InputLabel>
+                      <SchoolFieldsWrapper>
+                        <TextInput
+                          labelText=""
+                          id={`benchmark-types-${item?.id}`}
+                          name={`${item?.name}_benchmark-type`}
+                          placeholder="Enter benchmark name (default: National)"
+                          value={benchmarkNames[item?.id] || ""}
+                          onChange={(e) => {
+                            setbenchmarkNames({ ...benchmarkNames, [item?.id]: e.target.value })
+                          }
+                          }
+                        />
+                      </SchoolFieldsWrapper>
+                    </InputContainer>
+                  </>}
                 </RowContainer>
                 <RowContainer>
                   <InputContainer>

@@ -34,7 +34,7 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
     </SelectLayerConfig>
     <DataLayerFieldContainer>
       <InputLabel>
-        Global Giga Benchmark({unit})
+        Global / School Benchmark({unit})
       </InputLabel>
       <DataLayerNameField>
         <TextInput
@@ -45,14 +45,14 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
           value={benchmarkValue}
           required
           placeholder="Enter global benchmark"
-          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { value: e.target.value, unit }])}
+          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, unit, value: e.target.value }])}
         />
       </DataLayerNameField>
       <Div $margin="0.5rem 0">
-        <InputLabel>
+        {!isNaN(Number(benchmarkValue)) && <InputLabel>
           {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(benchmarkValue ?? 0))}
           {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
-        </InputLabel>
+        </InputLabel>}
       </Div>
       <DataLayerNameField>
         <InputLabel>
@@ -75,6 +75,23 @@ export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefau
           </InputLabel>
         </Div>
       </DataLayerNameField>
+
+      <DataLayerNameField>
+        <InputLabel>
+          Benchmark Name
+        </InputLabel>
+        <TextInput
+          type="text"
+          labelText=""
+          name='globalBenchmark'
+          id="connectivity-type"
+          value={formData?.globalBenchmark?.benchmark_name}
+          placeholder="Enter benchmark name (default: Global)"
+          defaultValue={'Global'}
+          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, benchmark_name: e.target.value }])}
+        />
+      </DataLayerNameField>
+
     </DataLayerFieldContainer>
   </>
 }

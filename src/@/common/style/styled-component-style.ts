@@ -64,7 +64,7 @@ export const Text = styled.p<{ $size?: number; $weight?: number; $transform?: st
   `}
 `
 
-export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: string; $height?: string; }>`
+export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: string; $width?: string; $height?: string; }>`
 
   ${props => props.$padding && css`
     padding: ${props.$padding};
@@ -72,6 +72,10 @@ export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: str
 
   ${props => props.$height && css`
     height: ${props.$height};
+  `}
+
+  ${props => props.$width && css`
+    width: ${props.$width};
   `}
 
   ${props => props.$margin && css`
@@ -184,4 +188,18 @@ export const TooltipStyle = styled(Tooltip) <{ $maxWidth?: string }>`
   .cds--popover-content {
     max-inline-size: ${props => props.$maxWidth ?? "18rem"};
   }
+`
+
+export const TooltipButton = styled(Tooltip) <{ $hideLabel?: boolean; }>`
+    button {
+      padding: 0;
+      border: none;
+      background: inherit;
+      cursor: pointer;
+    }
+    ${props => props.$hideLabel && css`
+      .cds--popover {
+        display: none;
+      }
+    `}
 `

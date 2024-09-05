@@ -1,7 +1,7 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
@@ -75,6 +75,11 @@ export const $downloadLayerData = $layersList.map(layers => layers?.find(layer =
 export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
 export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && !layer.created_by) ?? null);
 export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id ?? null);
+export const $downloadDynamicLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
+export const $downloadDynamicLayerId = $downloadDynamicLayerData.map(layer => layer?.id ?? null);
+export const $coverageDynamicLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
+export const $coverageDynamicLayerId = $coverageDynamicLayerData.map(layer => layer?.id ?? null);
+
 export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (layers, countryIdToCode) => {
   const list = {} as Record<string, { activeCountries: string[] }>
   const countryDefaultLayerList = {} as Record<string, number>;
@@ -96,7 +101,7 @@ export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (l
 })
 
 export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $downloadLayerId, (countryCode, activeLayers, downloadLayerId) => {
-  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? downloadLayerId;
+  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? null//downloadLayerId;
   return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : null;
 })
 export const $isActiveCurrentLayer = combine($activeLayerByCountries, $selectedLayerId, $countryCode, (activeLayers, selectedId, countryCode) => {
@@ -120,6 +125,10 @@ export const $currentLayerCountryDataSource = combine($selectedLayerData, $count
   return selectedData.active_countries_list.find(activeLayers => activeLayers.country === country.id)?.data_sources || null
 })
 
+export const $benchmarkNamesAllLayers = $layersList.map(layers => layers.reduce((acc, curr) => {
+  acc[curr.id ?? ""] = curr?.global_benchmark?.benchmark_name;
+  return acc
+}, {} as Record<string, string>))
 
 export const $currentLayerTypeUtils = combine(
   $schoolStatusSelectedLayer, $selectedLayerData,
@@ -134,7 +143,14 @@ export const $currentLayerLegends = combine({
   selectedLayerData: $selectedLayerData,
   stylePaintData: $stylePaintData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
-}, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData }) => {
+  countryActiveLayersDataById: $countryActiveLayersDataById,
+  connectivityBenchmark: $connectivityBenchMark
+}, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData, connectivityBenchmark, countryActiveLayersDataById }) => {
+  let apiLegends = selectedLayerData?.legend_configs;
+  console.log(apiLegends,)
+  if (connectivityBenchmark === ConnectivityBenchMarks.national) {
+    apiLegends = countryActiveLayersDataById[selectedLayerData?.id ?? ""]?.legend_configs
+  }
   const legends = {
     colors: {
       good: stylePaintData.good,
@@ -144,19 +160,20 @@ export const $currentLayerLegends = combine({
     },
     values: [],
     reverseMapping: {}
-  } as { colors: Record<string, string>; values: { key: string, label: string }[], reverseMapping: Record<string, string> };
-  if (currentLayerTypeUtils.isLive && !Object.values(selectedLayerData?.legend_configs || {}).length) {
+  } as { colors: Record<string, string>; values: { key: string, label: string; tooltip?: string }[], reverseMapping: Record<string, string> };
+  if (currentLayerTypeUtils.isLive && !Object.values(apiLegends || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
       label: ConnectivityDistributionNames[key],
     }));
   } else {
     const reverseMapping = {} as Record<string, string>
-    legends.values = Object.entries(selectedLayerData?.legend_configs ?? {}).map(([key, item]: [string, any]) => {
+    legends.values = Object.entries(apiLegends ?? {}).map(([key, item]: [string, any]) => {
       reverseMapping[item.labels] = key;
       return ({
         key,
         label: item.labels,
+        tooltip: item.tooltip
       })
     }
     );
@@ -165,10 +182,10 @@ export const $currentLayerLegends = combine({
   return legends;
 })
 
-export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, (countryBenchmark, selectedLayerData, connectivityBenchMark) => {
+export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, $countryConnectivityNames, (countryBenchmark, selectedLayerData, connectivityBenchMark, countryConnectivityNames) => {
   if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
-  const { convert_unit: unit, value } = global_benchmark;
+  const { convert_unit: unit, value, benchmark_name: benchmarkName } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
   const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
@@ -181,7 +198,9 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
     globalBenchmarkValue,
     nationalBenchmarkValue,
     isNational: nationalBenchmarkValue > 0,
-    benchmarkLogic
+    benchmarkLogic,
+    benchmarkName,
+    countryConnectivityNames
   })
 });
 
@@ -195,6 +214,10 @@ export const $layerUtils = combine({
   selectedLayerData: $selectedLayerData,
   downloadLayerId: $downloadLayerId,
   downloadLayerData: $downloadLayerData,
+  downloadDynamicLayerId: $downloadDynamicLayerId,
+  downloadDynamicLayerData: $downloadDynamicLayerData,
+  coverageDynamicLayerId: $coverageDynamicLayerId,
+  coverageDynamicLayerData: $coverageDynamicLayerData,
   coverageLayerId: $coverageLayerId,
   coverageLayerData: $coverageLayerData,
   currentLayerTypeUtils: $currentLayerTypeUtils,

@@ -254,7 +254,7 @@ const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState>) => {
 }
 // school view info api
 sample({
-  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate]),
+  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
   source: sourceForInfo,
   fn: schoolInfoFn,
   filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -281,6 +281,7 @@ sample({
   target: createEffect(({ downloadLayerId }: { downloadLayerId: number | null }) => {
     onSelectMainLayer(downloadLayerId);
     onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id)
+    changeConnectivityBenchmark(ConnectivityBenchMarks.global)
   })
 })
 // reset on country change - giga layer selection;
