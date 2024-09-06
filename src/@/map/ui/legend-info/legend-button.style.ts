@@ -179,4 +179,5 @@ export const LiveLayerBenchmark = styled.div`
   margin-top: 0.2rem;
   cursor: pointer;
   text-decoration: underline;
+  text-align: left;
 `

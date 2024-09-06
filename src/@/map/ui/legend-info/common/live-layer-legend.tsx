@@ -15,6 +15,7 @@ import {
   $benchmarkmarkUtils,
   $layerUtils,
   $schoolStats,
+  $benchmarkNamesAllLayers,
 } from '~/@/sidebar/sidebar.model';
 import { $country } from '~/@/country/country.model';
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
@@ -33,7 +34,8 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const { schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId } = useStore($layerUtils);
-  const { benchmarkLogic, benchmarkName, countryConnectivityNames, nationalBenchmarkValue } = useStore($benchmarkmarkUtils)
+  const { benchmarkLogic, countryConnectivityNames } = useStore($benchmarkmarkUtils)
+  const benchmarkNames = useStore($benchmarkNamesAllLayers);
   const speedGood = useStore($connectivitySpeedGood);
   const speedModerate = useStore($connectivitySpeedModerate);
   const speedNoInternet = useStore($connectivitySpeednoInternet);
@@ -89,9 +91,9 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
       <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
         <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
           {isNational ? <LiveLayerBenchmark>
-            {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {bencharkmarkValue} {unitLabel}
+            {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {bencharkmarkValue}&nbsp;{unitLabel}
           </LiveLayerBenchmark> : <LiveLayerBenchmark>
-            {benchmarkName ?? 'Global Benchmark'} - {bencharkmarkValue} {unitLabel}
+            {benchmarkNames[selectedLayerId ?? ""] ?? 'Global Benchmark'} - {bencharkmarkValue}&nbsp;{unitLabel}
           </LiveLayerBenchmark>}
         </button>
       </TooltipButton>
