@@ -21,28 +21,24 @@ exports[`RoleList render CreateRole by click 1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.c2 {
-  fill: #fff;
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
-    <div
-      class="c1"
-    >
-      <h3>
-        Create Role
-      </h3>
-      <p />
-    </div>
     <span
       class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
     >
@@ -51,28 +47,24 @@ exports[`RoleList render CreateRole by click 1`] = `
       >
         <button
           aria-labelledby="tooltip-:r11:"
-          class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--secondary"
-          data-testid="refresh-list"
-          title="Refresh"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
           type="button"
         >
           <svg
             aria-hidden="true"
-            class="c2"
-            color="white"
+            class="cds--btn__icon"
             fill="currentColor"
             focusable="false"
-            height="14"
+            height="16"
             preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 32 32"
-            width="14"
+            viewBox="0 0 16 16"
+            width="16"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M12 10H6.78A11 11 0 0127 16h2A13 13 0 006 7.68V4H4v8h8zM20 22h5.22A11 11 0 015 16H3a13 13 0 0023 8.32V28h2V20H20z"
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
             />
           </svg>
-           
         </button>
       </div>
       <span
@@ -84,17 +76,26 @@ exports[`RoleList render CreateRole by click 1`] = `
         <span
           class="cds--popover-content cds--tooltip-content"
         >
-          Refresh
+          Go Back
         </span>
         <span
           class="cds--popover-caret"
         />
       </span>
     </span>
+    <div
+      class="c1"
+    >
+      <h3>
+        Create Role
+      </h3>
+      <p />
+    </div>
   </div>
   .c1 {
   width: 48%;
-  margin-top: 2rem;
+  position: relative;
+  margin-top: 1rem;
 }
 
 .c1 select {
@@ -120,7 +121,7 @@ exports[`RoleList render CreateRole by click 1`] = `
 
 .c0 {
   flex-wrap: wrap;
-  padding: 0rem 3.3rem 1rem 3rem;
+  padding: 0rem 3rem 1rem 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -267,30 +268,24 @@ exports[`RoleList render RolesList and take snapshot 1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.c2 {
-  fill: #fff;
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
-    <div
-      class="c1"
-    >
-      <h3>
-        Roles
-      </h3>
-      <p>
-        List of user roles
-      </p>
-    </div>
     <span
       class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
     >
@@ -299,28 +294,24 @@ exports[`RoleList render RolesList and take snapshot 1`] = `
       >
         <button
           aria-labelledby="tooltip-:r0:"
-          class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--secondary"
-          data-testid="refresh-list"
-          title="Refresh"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
           type="button"
         >
           <svg
             aria-hidden="true"
-            class="c2"
-            color="white"
+            class="cds--btn__icon"
             fill="currentColor"
             focusable="false"
-            height="14"
+            height="16"
             preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 32 32"
-            width="14"
+            viewBox="0 0 16 16"
+            width="16"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M12 10H6.78A11 11 0 0127 16h2A13 13 0 006 7.68V4H4v8h8zM20 22h5.22A11 11 0 015 16H3a13 13 0 0023 8.32V28h2V20H20z"
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
             />
           </svg>
-           
         </button>
       </div>
       <span
@@ -332,13 +323,23 @@ exports[`RoleList render RolesList and take snapshot 1`] = `
         <span
           class="cds--popover-content cds--tooltip-content"
         >
-          Refresh
+          Go Back
         </span>
         <span
           class="cds--popover-caret"
         />
       </span>
     </span>
+    <div
+      class="c1"
+    >
+      <h3>
+        Roles
+      </h3>
+      <p>
+        List of user roles
+      </p>
+    </div>
   </div>
   .c0 {
   width: 100%;
