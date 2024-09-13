@@ -227,7 +227,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-labelledby="tooltip-:r9:"
+            aria-labelledby="tooltip-:r4:"
             type="button"
           >
             <svg
@@ -252,7 +252,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-:r9:"
+          id="tooltip-:r4:"
           role="tooltip"
         >
           <span
@@ -283,7 +283,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           >
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-              id="num_computers-min-input"
+              id="-min-input"
               placeholder="Min(0)"
               title="Min(0)"
               type="number"
@@ -310,7 +310,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           >
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-              id="num_computers-max-input"
+              id="-max-input"
               placeholder="Max"
               title="Max"
               type="number"

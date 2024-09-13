@@ -493,7 +493,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                         labelText=""
                         id={`${item?.name}data_source${item?.id}`}
                         name={`${item?.name}_data_source_name`}
-                        placeholder="Enter data soure name"
+                        placeholder="Enter data source name"
                         value={dataSource[item.id]?.name || ""}
                         onChange={(e) => setDataSource({ ...dataSource, [item.id]: { ...dataSource[item.id], name: e.target.value } })}
                       />
