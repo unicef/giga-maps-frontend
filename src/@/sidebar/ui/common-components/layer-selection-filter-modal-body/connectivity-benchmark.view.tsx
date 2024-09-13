@@ -14,10 +14,10 @@ import {
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.style";
-import { $countryBenchmark, $countryDefaultNational } from "~/@/country/country.model";
+import { $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
 
 export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
-  const { countryConnectivityNames, } = useStore($benchmarkmarkUtils)
+  const countryConnectivityNames = useStore($countryConnectivityNames)
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
   const { selectedLayerId } = useStore($layerUtils);
   const connectivityBenchMark = useStore($connectivityBenchMark);

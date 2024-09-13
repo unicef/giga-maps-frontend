@@ -53,6 +53,7 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
   width: calc(100vw - 17rem);
   height: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .c2 {

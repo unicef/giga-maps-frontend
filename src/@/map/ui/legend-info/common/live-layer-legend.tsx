@@ -17,7 +17,7 @@ import {
   $schoolStats,
   $benchmarkNamesAllLayers,
 } from '~/@/sidebar/sidebar.model';
-import { $country } from '~/@/country/country.model';
+import { $country, $countryConnectivityNames } from '~/@/country/country.model';
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { CheckBoxContainer, CircleWrapper, InnerCircle, InnerCircleConnectivity, LiveLayerBenchmark } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
@@ -34,7 +34,8 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const { schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId } = useStore($layerUtils);
-  const { benchmarkLogic, countryConnectivityNames } = useStore($benchmarkmarkUtils)
+  const { benchmarkLogic } = useStore($benchmarkmarkUtils)
+  const countryConnectivityNames = useStore($countryConnectivityNames);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
   const speedGood = useStore($connectivitySpeedGood);
   const speedModerate = useStore($connectivitySpeedModerate);

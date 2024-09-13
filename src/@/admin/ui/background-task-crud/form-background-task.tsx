@@ -94,7 +94,7 @@ const BackgroundTaskForm = () => {
           <InputLabel>
             Log
           </InputLabel>
-          <p>
+          <p style={{ wordWrap: 'break-word'}}>
             {formatLog(formBackgroundTask?.log)}
           </p>
         </BackgroundTasktTextAreaContainer>

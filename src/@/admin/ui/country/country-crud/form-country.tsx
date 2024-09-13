@@ -428,7 +428,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                         labelText=""
                         id={`${item?.name}{item?.id}`}
                         name={item?.name}
-                        placeholder="Enter national benchmark"
+                        placeholder="Enter national / school benchmark"
                         value={layersBenchmark[item?.id] || ""}
                         onChange={(e) => {
                           if (!e.target.value) {
@@ -456,7 +456,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                           labelText=""
                           id={`${item?.name}{item?.id}`}
                           name={item?.name}
-                          placeholder="Enter national benchmark"
+                          placeholder="Enter national / school benchmark description"
                           value={layerDescriptions[item?.id] || ""}
                           onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
                         />
@@ -493,7 +493,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                         labelText=""
                         id={`${item?.name}data_source${item?.id}`}
                         name={`${item?.name}_data_source_name`}
-                        placeholder="Enter datasoure name"
+                        placeholder="Enter data source name"
                         value={dataSource[item.id]?.name || ""}
                         onChange={(e) => setDataSource({ ...dataSource, [item.id]: { ...dataSource[item.id], name: e.target.value } })}
                       />
