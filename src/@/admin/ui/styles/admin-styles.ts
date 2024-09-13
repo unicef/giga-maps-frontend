@@ -364,7 +364,8 @@ export const InputBoxWrapper = styled.div`
 `
 export const BackgroundTaskInputBoxWrapper = styled.div`
     margin-top : 0.5rem;
-     width:100% !important;
+    width:100% !important;
+    word-wrap: break-word;
     p {
         font-size: 14px;
         font-weight: 400;
