@@ -11,24 +11,31 @@ import {
   changeCoverageUnknown,
   $coverageStats,
   $layerUtils,
+  $connectivityBenchMark,
+  $benchmarkNamesAllLayers,
 } from '~/@/sidebar/sidebar.model';
-import { CheckBoxContainer, CircleWrapper, InnerCircle } from '../legend-button.style';
+import { CheckBoxContainer, CircleWrapper, InnerCircle, LiveLayerBenchmark } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
-import { TooltipButton } from "~/@/common/style/styled-component-style";
-import { ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
+import { Div, TooltipButton } from "~/@/common/style/styled-component-style";
+import { ConnectivityBenchMarks, ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
+import { $country, $countryConnectivityNames } from "~/@/country/country.model";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
-
+  const countryConnectivityNames = useStore($countryConnectivityNames);
+  const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId, coverageLayerId } = useStore($layerUtils);
   const isCoverage = selectedLayerId === coverageLayerId;
-
   const coverageStats: any = useStore($coverageStats);
-
-  const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
+  const connectivityBenchMark = useStore($connectivityBenchMark)
+  const countryObj = useStore($country);
+  const countryBenchmarkDescriptions = countryObj?.benchmark_metadata?.layer_descriptions;
+  const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
+  const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
+  const benchmarkNames = useStore($benchmarkNamesAllLayers);
 
   const handleStaticLayerToggle = (key: string) => {
     const newStatus = !staticLayerCheckedStatus[key];
@@ -67,11 +74,20 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
 
   return (<div className='school-status'>
     <h3>{selectedLayerData?.name}</h3>
+    <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
+      <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
+        {isNational ? <LiveLayerBenchmark>
+          {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"}
+        </LiveLayerBenchmark> : <LiveLayerBenchmark>
+          {benchmarkNames[selectedLayerId ?? ""] ?? 'Global Benchmark'}
+        </LiveLayerBenchmark>}
+      </button>
+    </TooltipButton>
     {
       legends.values.map(({ key, label, tooltip }) => {
         const logicLabel = key === ConnectivityDistribution.unknown ? (tooltip || `Doesn't match any criteria`) : tooltip;
         const toolTiplabel = logicLabel;
-        return (
+        return (<Div key={key}>
           <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
             <button>
               <div className='legend-container' key={`${key}`}>
@@ -99,7 +115,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
               </div>
             </button>
           </TooltipButton>
-        )
+        </Div>)
       }
       )}
   </div>

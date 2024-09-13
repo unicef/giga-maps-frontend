@@ -21,7 +21,6 @@ const CoverageLayerContanier = styled.div`
 `
 
 const CoverageLayer = () => {
-  const potentialCoverageOpenStatus = useStore($potentialCoverageOpenStatus);
   const coverageStats = useStore($coverageStats);
   const isLoading = useStore($isLoadingCountryAdminView);
   const legends = coverageStats?.connected_schools;
@@ -47,24 +46,24 @@ const CoverageLayer = () => {
         setDisplayNumber(0);
         setDisplayText('Insufficient data');
       }
-    } else if(legendsList.length > 1) {
-        const firstValue = legendsList[0] ? legendsList[0][1] : 0;
-        const secondValue = legendsList[1] ? legendsList[1][1] : 0;
-        const thirdValue = legendsList[2] ? legendsList[2][1] : 0;
-        const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
-        const sum = firstValue + secondValue + thirdValue + fourthValue;
-        setDisplayNumber(firstValue + secondValue + thirdValue);
-        setDisplayText(`Schools with ${selectedLayerData?.name} data out of ${formatNumber(sum)} schools mapped`);
-      }else {
-        setDisplayNumber(0);
-        setDisplayText('Insufficient data');
-      }
+    } else if (legendsList.length > 1) {
+      const firstValue = legendsList[0] ? legendsList[0][1] : 0;
+      const secondValue = legendsList[1] ? legendsList[1][1] : 0;
+      const thirdValue = legendsList[2] ? legendsList[2][1] : 0;
+      const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
+      const sum = firstValue + secondValue + thirdValue + fourthValue;
+      setDisplayNumber(firstValue + secondValue + thirdValue);
+      setDisplayText(`Schools with ${selectedLayerData?.name} data out of ${formatNumber(sum)} schools mapped`);
+    } else {
+      setDisplayNumber(0);
+      setDisplayText('Insufficient data');
+    }
   }, [selectedLayerId, legendsList, totalSchools]);
 
   return (
     <CoverageLayerContanier>
       <Div>
-        <CurrentLayerNameIcon showFilter={false} label={selectedLayerData?.name} icon={selectedLayerData?.icon} />
+        <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} />
         <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
             <Div>
