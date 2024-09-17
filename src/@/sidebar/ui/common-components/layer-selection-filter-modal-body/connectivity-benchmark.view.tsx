@@ -14,7 +14,7 @@ import {
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.style";
-import { $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
+import { $countryActiveLayersDataById, $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
 
 export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
   const countryConnectivityNames = useStore($countryConnectivityNames)
@@ -25,7 +25,8 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
   const countryBenchmark = useStore($countryBenchmark)
   const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] = useState<ConnectivityBenchMarks>(connectivityBenchMark);
   const defaultNationalBenchmark = useStore($countryDefaultNational);
-  const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? selectedLayerId ?? 0];
+  const currentLegendConfig = useStore($countryActiveLayersDataById)[layerId ?? selectedLayerId ?? ""]?.legend_configs ?? {};
+  const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? selectedLayerId ?? 0] || Object.keys(currentLegendConfig).length > 0;
   const handleBenchmarkChange = () => {
     changeConnectivityBenchmark(connectivityBenchmarkValue)
   };
