@@ -10,6 +10,7 @@ import { deleteContactMessageFx, getContactMessageListFx } from "../../effects/c
 import { getRecentActionListFx } from "../../effects/recent-action-fx";
 import { getAllUserListFx } from "../../effects/user-management-fx";
 import { getSchoolMasterListFx, publishAllSchoolMasterFx, publishSchoolMasterFx, updateSchoolMasterFx } from "../../effects/data-source.fx";
+import { addFilterFx, deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from "../../effects/filter-fx";
 
 
 export const $adminAllLoader = combine([
@@ -42,5 +43,10 @@ export const $adminAllLoader = combine([
   updateSchoolMasterFx.pending,
   publishSchoolMasterFx.pending,
   publishAllSchoolMasterFx.pending,
-  createOrUpdateCountryFx.pending
+  createOrUpdateCountryFx.pending,
+  getFilterListFx.pending,
+  addFilterFx.pending,
+  editFilterFx.pending,
+  deleteFilterFx.pending,
+  publishFilterFx.pending
 ], (allLoaders) => allLoaders.some(Boolean))

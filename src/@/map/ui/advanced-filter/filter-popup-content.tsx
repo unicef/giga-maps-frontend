@@ -13,10 +13,11 @@ import { router } from "~/core/routes";
 import { $isMobile } from "~/core/media-query";
 
 const components = {
-  'drop-down': SingleDropdown,
-  'drop-down-multiselect': MultiSelectDropdown,
-  'range': RangeTextInput,
-  'input': TextField,
+  'DROPDOWN': SingleDropdown,
+  'DROPDOWN_MULTISELECT': MultiSelectDropdown,
+  'RANGE': RangeTextInput,
+  'INPUT': TextField,
+  'BOOLEAN': SingleDropdown
 } as Record<string, React.ComponentType<any>>;
 
 
@@ -30,11 +31,6 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     value: string;
   }>>({})
   const country = useStore($country);
-  const filterList = useMemo(() => {
-    return advanceFilterList.filter(item => {
-      return !item.active_countries_list?.length || item.active_countries_list?.includes(country?.id ?? 0);
-    })
-  }, [advanceFilterList, country?.id])
 
   const onChange = (key: string, value: string) => {
     setSelectedFields({ ...selectedFields, [key]: value })
@@ -45,9 +41,9 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       none_range: boolean;
       value: string;
     }>;
-    filterList?.forEach(item => {
-      const itemKey = `${item.parameter.field}__${item.parameter.filter}`;
-      const field = urlFieldList[item.parameter.field];
+    advanceFilterList?.forEach(item => {
+      const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
+      const field = urlFieldList[item.column_configuration.name];
       if (field) {
         const isRange = field.filter.includes('range');
         const isNone = field.filter.includes('none');
@@ -56,12 +52,12 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           value: field.value
         } : field.value
       } else {
-        selectedFields[`${item.parameter.field}__${item.parameter.filter}`] = ''
+        selectedFields[`${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
     })
     setSelectedFields(selectedFields)
     setIsReady(true)
-  }, [filterList, urlFieldList]);
+  }, [advanceFilterList, urlFieldList]);
 
   const onApply = async (e: MouseEvent) => {
     e.preventDefault();
@@ -104,23 +100,16 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       </FilterHeaderWrapper>
       <Form aria-label="filter-form">
         <ScrollableContainer>
-          {filterList.map((item, index) => {
+          {advanceFilterList.map((item, index) => {
             const Component = components[item.type] as React.JSXElementConstructor<any>;
             if (!Component) return null;
-            const itemKey = `${item.parameter.field}__${item.parameter.filter}`;
+            const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
             return (
               <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} onChange={onChange} />
             )
           })}
         </ScrollableContainer>
         <FilterActionButtonWrapper>
-          {/* <StyledApplyFilterDropdown
-            size="sm"
-            label={items[1]}
-            id="default"
-            titleText="Apply filters to"
-            initialSelectedItem={items[0]}
-            items={items} /> */}
           <Button
             type="reset"
             kind="secondary"

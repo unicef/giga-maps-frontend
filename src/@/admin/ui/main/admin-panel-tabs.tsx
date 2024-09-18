@@ -1,4 +1,4 @@
-import { Building, ContentView, DataBase, Earth, Email, Layers, Logout, RecentlyViewed, Result, UserMultiple, VirtualColumnKey } from '@carbon/icons-react';
+import { Building, ContentView, DataBase, Earth, Email, Filter, Layers, Logout, RecentlyViewed, Result, UserMultiple, VirtualColumnKey } from '@carbon/icons-react';
 import { Button, SideNavItems } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useState } from 'react';
@@ -7,7 +7,7 @@ import MenuItemLink from '~/@/common/menu-item-link';
 import { LogoutButtonWrapper } from '~/core/auth/auth.style';
 import { onLogout } from '~/core/auth/azure-msal/model';
 import { $isAdminUser, $userPermissions } from '~/core/auth/models';
-import { adminAboutUs, adminApiKeys, adminCountry, adminGigaLayer, adminSchools, backgroundTask, contactMessage, dataSource, docsExporeApi, recentActions, userList, userRoles } from '~/core/routes';
+import { adminAboutUs, adminApiKeys, adminCountry, adminFilterRoute, adminGigaLayer, adminSchools, backgroundTask, contactMessage, dataSource, docsExporeApi, recentActions, userList, userRoles } from '~/core/routes';
 import { Link } from '~/lib/router';
 
 import { getInvalidateCacheFx } from '../../effects/admin-main-fx';
@@ -38,6 +38,9 @@ const AdminPanelTabs = () => {
                 Giga layers
               </MenuItemLink>
             }
+            {permissions.CAN_VIEW_ADVANCE_FILTER && <MenuItemLink to={adminFilterRoute} icon={Filter}>
+              Filters
+            </MenuItemLink>}
             {(permissions.CAN_VIEW_ALL_ROLES || permissions.CAN_VIEW_USER) &&
               <AdminSideNavMenu
                 title="User Management"

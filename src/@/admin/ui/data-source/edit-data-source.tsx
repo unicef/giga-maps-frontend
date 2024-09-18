@@ -52,7 +52,7 @@ const EditDataSource = () => {
   }
 
   useEffect(() => {
-    getCountryDataSourceFx('?has_school_master_records=true');
+    getCountryDataSourceFx('?has_school_master_records=true&fields=id,name');
   }, [])
 
   useEffect(() => {
