@@ -14,7 +14,7 @@ import { GigaLayerText, SidePanelLayerWrapper } from './styles/giga-layer.style'
 
 
 const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
-  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, coverageDynamicLayerData, activeLayerByCountryCode } = useStore($layerUtils);
+  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, staticPopupActiveLayer, activeLayerByCountryCode } = useStore($layerUtils);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
   const { isLive, isSchoolStatus } = currentLayerTypeUtils;
   const updateLayer = useCallback((prevSelectedId: number | null) => {
@@ -60,19 +60,19 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           }}
         />
         <GigaLayerButton
-          label={coverageDynamicLayerData?.name ?? "Cellular Coverage"}
+          label={staticPopupActiveLayer?.name ?? "Cellular Coverage"}
           popup={popup}
-          disabled={!coverageDynamicLayerData || !activeLayerByCountryCode[String(coverageDynamicLayerData?.id)]}
-          isActive={coverageDynamicLayerData?.id === selectedLayerId}
-          icon={<CustomIcon dangerouslySetInnerHTML={{ __html: coverageDynamicLayerData?.icon ?? "" }} />}
+          disabled={!staticPopupActiveLayer || !activeLayerByCountryCode[String(staticPopupActiveLayer?.id)]}
+          isActive={staticPopupActiveLayer?.id === selectedLayerId}
+          icon={<CustomIcon dangerouslySetInnerHTML={{ __html: staticPopupActiveLayer?.icon ?? "" }} />}
           onClick={() => {
-            if (coverageDynamicLayerData) {
-              updateLayer(coverageDynamicLayerData.id);
+            if (staticPopupActiveLayer) {
+              updateLayer(staticPopupActiveLayer.id);
               resetCoverageFilterSelection()
             }
           }}
         />
-        {popup && staticLayers.map((layer) => ((layer.created_by && layer.id !== coverageDynamicLayerData?.id) && <GigaLayerButton
+        {popup && staticLayers.map((layer) => ((layer.created_by && layer.id !== staticPopupActiveLayer?.id) && <GigaLayerButton
           key={layer.name}
           disabled={!activeLayerByCountryCode[layer.id]}
           label={layer.name}
