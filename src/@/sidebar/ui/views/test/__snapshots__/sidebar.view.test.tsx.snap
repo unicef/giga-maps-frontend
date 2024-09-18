@@ -220,40 +220,54 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   align-items: center;
 }
 
-.c43 .conneted-info p,
-.c43 .real-time-connetivity-info p {
+.c43 .conneted-info .label,
+.c43 .real-time-connetivity-info .label {
+  margin-left: 0.3rem;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
+  text-wrap: nowrap;
 }
 
 .c44 {
-  width: 0.4rem;
-  height: 0.4rem;
-  background: #00d661;
-  border-radius: 50%;
-  margin: 0 0.5rem 0 0;
   position: relative;
-  z-index: 2;
+  width: clamp(1rem,1rem,1rem);
+  height: clamp(1rem,1rem,1rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .c45 {
-  width: 0.4rem;
-  height: 0.4rem;
-  background: #ED5B4C;
+  min-width: 0.4rem;
+  min-height: 0.4rem;
+  max-width: 0.4rem;
+  max-height: 0.4rem;
+  background: #00d661;
   border-radius: 50%;
-  margin: 0 0.5rem 0 0;
   position: relative;
   z-index: 2;
 }
 
 .c46 {
-  width: 0.4rem;
-  height: 0.4rem;
+  min-width: 0.4rem;
+  min-height: 0.4rem;
+  max-width: 0.4rem;
+  max-height: 0.4rem;
+  background: #ED5B4C;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.c47 {
+  min-width: 0.4rem;
+  min-height: 0.4rem;
+  max-width: 0.4rem;
+  max-height: 0.4rem;
   background: #1D8Cf0;
   border-radius: 50%;
-  margin: 0 0.5rem 0 0;
   position: relative;
   z-index: 2;
 }
@@ -2487,12 +2501,16 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                           >
                             <div
                               class="c44"
-                            />
-                            <span>
-                              <p>
-                                Connected
-                              </p>
-                            </span>
+                            >
+                              <div
+                                class="c45"
+                              />
+                            </div>
+                            <p
+                              class="label"
+                            >
+                              Connected
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -2506,13 +2524,17 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                             class="conneted-info"
                           >
                             <div
-                              class="c45"
-                            />
-                            <span>
-                              <p>
-                                Not connected
-                              </p>
-                            </span>
+                              class="c44"
+                            >
+                              <div
+                                class="c46"
+                              />
+                            </div>
+                            <p
+                              class="label"
+                            >
+                              Not connected
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -2526,13 +2548,17 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                             class="conneted-info"
                           >
                             <div
-                              class="c46"
-                            />
-                            <span>
-                              <p>
-                                Unknown
-                              </p>
-                            </span>
+                              class="c44"
+                            >
+                              <div
+                                class="c47"
+                              />
+                            </div>
+                            <p
+                              class="label"
+                            >
+                              Unknown
+                            </p>
                           </div>
                         </div>
                       </div>

@@ -21,16 +21,68 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
+    <span
+      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+    >
+      <div
+        class="cds--tooltip-trigger__wrapper"
+      >
+        <button
+          aria-labelledby="tooltip-:r0:"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="cds--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
+            />
+          </svg>
+        </button>
+      </div>
+      <span
+        aria-hidden="true"
+        class="cds--popover"
+        id="tooltip-:r0:"
+        role="tooltip"
+      >
+        <span
+          class="cds--popover-content cds--tooltip-content"
+        >
+          Go Back
+        </span>
+        <span
+          class="cds--popover-caret"
+        />
+      </span>
+    </span>
     <div
       class="c1"
     >
@@ -80,11 +132,11 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="ccs-:r0:-tabpanel-0"
+          aria-controls="ccs-:r2:-tabpanel-0"
           aria-selected="true"
           class="cds--tabs__nav-item cds--tabs__nav-link cds--tabs__nav-item--selected"
           data-testid="admin-School-tab"
-          id="ccs-:r0:-tab-0"
+          id="ccs-:r2:-tab-0"
           role="tab"
           tabindex="0"
           type="button"
@@ -128,11 +180,11 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
           </div>
         </button>
         <button
-          aria-controls="ccs-:r0:-tabpanel-1"
+          aria-controls="ccs-:r2:-tabpanel-1"
           aria-selected="false"
           class="cds--tabs__nav-item cds--tabs__nav-link"
           data-testid="admin-School Summary-tab"
-          id="ccs-:r0:-tab-1"
+          id="ccs-:r2:-tab-1"
           role="tab"
           tabindex="-1"
           type="button"
@@ -176,11 +228,11 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
           </div>
         </button>
         <button
-          aria-controls="ccs-:r0:-tabpanel-2"
+          aria-controls="ccs-:r2:-tabpanel-2"
           aria-selected="false"
           class="cds--tabs__nav-item cds--tabs__nav-link"
           data-testid="admin-School Daily Connectivity Summary-tab"
-          id="ccs-:r0:-tab-2"
+          id="ccs-:r2:-tab-2"
           role="tab"
           tabindex="-1"
           type="button"
@@ -224,11 +276,11 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
           </div>
         </button>
         <button
-          aria-controls="ccs-:r0:-tabpanel-3"
+          aria-controls="ccs-:r2:-tabpanel-3"
           aria-selected="false"
           class="cds--tabs__nav-item cds--tabs__nav-link"
           data-testid="admin-File Import-tab"
-          id="ccs-:r0:-tab-3"
+          id="ccs-:r2:-tab-3"
           role="tab"
           tabindex="-1"
           type="button"
@@ -483,7 +535,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
               <button
                 aria-expanded="false"
                 aria-haspopup="true"
-                aria-labelledby="tooltip-:r6:"
+                aria-labelledby="tooltip-:r8:"
                 class="cds--btn--icon-only cds--toolbar-action cds--overflow-menu cds--overflow-menu cds--overflow-menu--md cds--btn cds--btn--md cds--layout--size-md cds--btn--primary"
                 title="Settings"
                 type="button"
@@ -509,7 +561,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:r6:"
+              id="tooltip-:r8:"
               role="tooltip"
             >
               <span
@@ -734,8 +786,8 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:rh:"
-        id="cds-pagination-select-:rh:-count-label"
+        for="cds-pagination-select-:rj:"
+        id="cds-pagination-select-:rj:-count-label"
       >
         Items per page
       </label>
@@ -753,7 +805,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:rh:"
+                id="cds-pagination-select-:rj:"
                 title=""
               >
                 <option
@@ -823,7 +875,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:rh:-right"
+            for="cds-pagination-select-:rj:-right"
           >
             Page number, of 1 pages
           </label>
@@ -835,7 +887,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:rh:-right"
+                id="cds-pagination-select-:rj:-right"
                 title=""
               >
                 <option
@@ -879,7 +931,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:ri:"
+              aria-labelledby="tooltip-:rk:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -903,7 +955,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:ri:"
+            id="tooltip-:rk:"
             role="tooltip"
           >
             <span
@@ -923,7 +975,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:rk:"
+              aria-labelledby="tooltip-:rm:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -947,7 +999,7 @@ exports[`School Crud Tab render MainSchoolView 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:rk:"
+            id="tooltip-:rm:"
             role="tooltip"
           >
             <span
