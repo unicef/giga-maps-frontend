@@ -62,6 +62,44 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
           </InputContainer>
           <InputContainer>
             <InputLabel>
+              Connectivity speed benchmark
+            </InputLabel>
+            <InputBoxWrapper>
+              <TextInput
+                type="number"
+                min={0}
+                labelText=""
+                id="connectivity-speed-benchmark"
+                name='connectivity_speed_benchmark'
+                placeholder='Enter connectivity speed benchmark'
+                value={formDataSchoolSummary?.download_speed_benchmark}
+                onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
+              />
+            </InputBoxWrapper>
+          </InputContainer>
+        </RowContainer>
+        <RowContainer>
+          <InputContainer>
+            <InputLabel>
+              Connectivity upload speed
+            </InputLabel>
+            <InputBoxWrapper>
+              <TextInput
+                type="number"
+                min={0}
+                labelText=""
+                id="connectivity-upload-speed"
+                name='connectivity_upload_speed'
+                value={formDataSchoolSummary?.connectivity_upload_speed}
+                onChange={(e) =>
+                  onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])
+                }
+                placeholder='Enter connectivity upload speed'
+              />
+            </InputBoxWrapper>
+          </InputContainer>
+          <InputContainer>
+            <InputLabel>
               Connectivity latency
             </InputLabel>
             <InputBoxWrapper>
@@ -335,6 +373,9 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
               />
             </InputBoxWrapper>
           </DailyCountryInput>
+        </RowContainer>
+        <RowContainer>
+        
         </RowContainer>
       </SchoolFormScroll>
       <BottomButtonWrapper>
