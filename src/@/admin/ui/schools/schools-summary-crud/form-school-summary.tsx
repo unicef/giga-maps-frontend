@@ -374,9 +374,6 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
             </InputBoxWrapper>
           </DailyCountryInput>
         </RowContainer>
-        <RowContainer>
-        
-        </RowContainer>
       </SchoolFormScroll>
       <BottomButtonWrapper>
         <Button
