@@ -205,6 +205,14 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
 
 export const $isNationalBenchmark = $benchmarkmarkUtils.map(({ isNational }) => isNational);
 
+export const $staticPopupActiveLayer = combine($activeLayerByCountryCode, $staticLayers, $coverageDynamicLayerData, (activeLayerByCountryCode, staticLayers, coverageDynamicLayerData) => {
+  if (activeLayerByCountryCode[coverageDynamicLayerData?.id ?? ""]) return coverageDynamicLayerData;
+  if (staticLayers?.length > 0) {
+    return staticLayers.find(item => activeLayerByCountryCode[item?.id ?? ""]) ?? null;
+  }
+  return null;
+})
+
 export const $layerUtils = combine({
   layers: $layersList,
   liveLayers: $connectivityLayers,
@@ -223,7 +231,8 @@ export const $layerUtils = combine({
   currentLayerLegends: $currentLayerLegends,
   isActiveCurrentLayer: $isActiveCurrentLayer,
   activeLayerByCountryCode: $activeLayerByCountryCode,
-  currentDefaultLayerId: $currentDefaultLayerId
+  currentDefaultLayerId: $currentDefaultLayerId,
+  staticPopupActiveLayer: $staticPopupActiveLayer
 });
 
 export const openHistoryChart = createEvent<boolean>();
@@ -313,10 +322,6 @@ $multiSelectionSchoolCheckbox.on(changeMultiSelectionSchoolCheckbox, (state: Mul
 export const onSchoolUncheck = createEvent<number>();
 export const $schoolStats = createStore<SchoolStatsType[] | null>([])
 $schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
-
-export const $indicatorBenchmark = combine($country, (country) => {
-  return null;
-})
 
 export const $connectivityColorsWithBenchmark = combine($stylePaintData, (style) => {
   return ({

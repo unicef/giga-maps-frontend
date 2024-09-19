@@ -446,7 +446,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                       </Div>
                     </SchoolFieldsWrapper>
                   </InputContainer>}
-                  {item.type === 'LIVE' && <>
+                  {item.type === 'LIVE' &&
                     <InputContainer>
                       <InputLabel>
                         National / School benchmark description
@@ -462,26 +462,26 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                         />
                       </SchoolFieldsWrapper>
                     </InputContainer>
-                    <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
-                    <InputContainer style={{ alignSelf: 'flex-start' }}>
-                      <InputLabel>
-                        Benchmark name (default: National)
-                      </InputLabel>
-                      <SchoolFieldsWrapper>
-                        <TextInput
-                          labelText=""
-                          id={`benchmark-types-${item?.id}`}
-                          name={`${item?.name}_benchmark-type`}
-                          placeholder="Enter benchmark name (default: National)"
-                          value={benchmarkNames[item?.id] || ""}
-                          onChange={(e) => {
-                            setbenchmarkNames({ ...benchmarkNames, [item?.id]: e.target.value })
-                          }
-                          }
-                        />
-                      </SchoolFieldsWrapper>
-                    </InputContainer>
-                  </>}
+                  }
+                  <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
+                  <InputContainer style={{ alignSelf: 'flex-start' }}>
+                    <InputLabel>
+                      Benchmark name (default: National)
+                    </InputLabel>
+                    <SchoolFieldsWrapper>
+                      <TextInput
+                        labelText=""
+                        id={`benchmark-types-${item?.id}`}
+                        name={`${item?.name}_benchmark-type`}
+                        placeholder="Enter benchmark name (default: National)"
+                        value={benchmarkNames[item?.id] || ""}
+                        onChange={(e) => {
+                          setbenchmarkNames({ ...benchmarkNames, [item?.id]: e.target.value })
+                        }
+                        }
+                      />
+                    </SchoolFieldsWrapper>
+                  </InputContainer>
                 </RowContainer>
                 <RowContainer>
                   <InputContainer>

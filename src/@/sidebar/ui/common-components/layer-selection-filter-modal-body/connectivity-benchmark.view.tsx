@@ -14,17 +14,19 @@ import {
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.style";
-import { $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
+import { $countryActiveLayersDataById, $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
 
 export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
   const countryConnectivityNames = useStore($countryConnectivityNames)
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
-  const { selectedLayerId } = useStore($layerUtils);
+  const { selectedLayerId, currentLayerTypeUtils } = useStore($layerUtils);
+  const { isLive } = currentLayerTypeUtils;
   const connectivityBenchMark = useStore($connectivityBenchMark);
   const countryBenchmark = useStore($countryBenchmark)
   const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] = useState<ConnectivityBenchMarks>(connectivityBenchMark);
   const defaultNationalBenchmark = useStore($countryDefaultNational);
-  const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? selectedLayerId ?? 0];
+  const currentLegendConfig = useStore($countryActiveLayersDataById)[layerId ?? selectedLayerId ?? ""]?.legend_configs ?? {};
+  const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? selectedLayerId ?? 0] || Object.keys(currentLegendConfig).length > 0;
   const handleBenchmarkChange = () => {
     changeConnectivityBenchmark(connectivityBenchmarkValue)
   };
@@ -52,15 +54,15 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <h2 className="filter-popover-title">Real-time connectivity data layer benchmark</h2>
-        <Tooltip className='info-icon' align="left" autoAlign={true} label={"You will see the impact on map legend where green is for schools surpassing global or national standards, yellow is for schools between global or national connectivity standard and red category which is for schools receiving lowest level of connectivity. "}>
+        <h2 className="filter-popover-title">{isLive ? 'Real-time connectivity ' : 'Static '} data layer benchmark</h2>
+        <Tooltip className='info-icon' align="left-top" autoAlign={true} label={"You will see the impact on map legend where green is for schools surpassing global or national standards, yellow is for schools between global or national connectivity standard and red category which is for schools receiving lowest level of connectivity. "}>
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>
         </Tooltip>
       </div>
-      <p className="filter-popover-explanation">Please select if you wish to view the selected real-time connectivity data layer as per Giga’s global connectivity standard or the national standard of the country selected.</p>
-
+      {isLive && <p className="filter-popover-explanation">Please select if you wish to view the selected real-time connectivity data layer as per Giga’s global connectivity standard or the national standard of the country selected.</p>}
+      {!isLive && <p className="filter-popover-explanation">Please select if you wish to view the selected static data layer as per Giga’s global standard or the national standard of the country selected.</p>}
       <RadioButtonGroup
         name="radio-button-group"
         defaultSelected={connectivityBenchmarkValue}

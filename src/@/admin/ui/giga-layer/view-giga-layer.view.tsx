@@ -109,6 +109,10 @@ const AdminViewLayer = () => {
             <LayerLabel>Countries</LayerLabel>
             <LayerDetail>{countriesNames}</LayerDetail>
           </LayerContentWrapper>
+          <LayerContentWrapper>
+            <LayerLabel>Benchmark Name</LayerLabel>
+            <LayerDetail>{layerItem?.global_benchmark?.benchmark_name ?? 'Global'}</LayerDetail>
+          </LayerContentWrapper>
           {isLive && <>
             <LayerContentWrapper>
               <LayerLabel>Global / School Benchmark</LayerLabel>
@@ -117,10 +121,6 @@ const AdminViewLayer = () => {
             <LayerContentWrapper>
               <LayerLabel>Base Benchmark</LayerLabel>
               <LayerDetail>{Object.values(layerItem?.data_source_column)?.[0]?.base_benchmark}</LayerDetail>
-            </LayerContentWrapper>
-            <LayerContentWrapper>
-              <LayerLabel>Benchmark Name</LayerLabel>
-              <LayerDetail>{layerItem?.global_benchmark?.benchmark_name ?? 'Global'}</LayerDetail>
             </LayerContentWrapper>
             <LayerContentWrapper>
               <LayerLabel>Is reverse</LayerLabel>

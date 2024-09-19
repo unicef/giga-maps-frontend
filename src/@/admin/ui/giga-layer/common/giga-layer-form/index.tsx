@@ -36,8 +36,8 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
         is_reverse: formData.isReverse,
         applicable_countries: countryList.filter((country) => formData.applicableCountries.includes(country.id)).map((item) => ({ name: item.code })),
         legend_configs: { ...defaultGigaLayerForm.legendConfigs, ...formData.legendConfigs },
+        global_benchmark: { ...(formData.type === LayerTypeChoices.LIVE ? { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } : { benchmark_name: formData?.globalBenchmark?.benchmark_name ?? 'Global' }) },
         ...(!layerItem?.status ? { status: LayerStatusType.DRAFT } : {}),
-        ...(formData.type === LayerTypeChoices.LIVE ? { global_benchmark: { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } } : {}),
       }
 
       await createDataLayerFx({
