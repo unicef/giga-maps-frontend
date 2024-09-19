@@ -323,10 +323,6 @@ export const onSchoolUncheck = createEvent<number>();
 export const $schoolStats = createStore<SchoolStatsType[] | null>([])
 $schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
 
-export const $indicatorBenchmark = combine($country, (country) => {
-  return null;
-})
-
 export const $connectivityColorsWithBenchmark = combine($stylePaintData, (style) => {
   return ({
     connectivityColors: style.connectivity,

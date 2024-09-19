@@ -228,7 +228,7 @@ sample({
 
 // for all coverage layers
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
