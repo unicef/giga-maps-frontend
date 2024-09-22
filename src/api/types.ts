@@ -89,7 +89,7 @@ export type SchoolStatsType = {
   connectivity_uptime: number;
   statistics: SchoolInfoStats;
   graph_data: GraphData[];
-  geopoint: GeoJSONPoint
+  geopoint: GeoJSONPoint;
 };
 
 
