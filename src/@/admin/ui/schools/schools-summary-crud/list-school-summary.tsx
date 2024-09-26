@@ -60,6 +60,9 @@ const ListSchoolSummary = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
+  const currentUrl = window.location.href;
+  const url = new URL(currentUrl)
+  const gigaIdSchool = url.searchParams.get('giga_id_school')
 
   const getSchoolSummaryList = () => {
     void getSchoolSummaryListFx({ page, pageSize, search: searchValue, filter: countryFilterValues.join(',') })
@@ -87,8 +90,16 @@ const ListSchoolSummary = () => {
   };
 
   useEffect(() => {
+    if(gigaIdSchool){
+      setSearchValue(gigaIdSchool)
+      setPageAndSize({ page: 1, pageSize })
+      setSearchApiCall(true)
+    }
+  }, [gigaIdSchool])
+
+  useEffect(() => {
     getSchoolSummaryList();
-  }, [page, pageSize, countryFilterValues, searchApiCall])
+  }, [page, pageSize, countryFilterValues, searchApiCall, searchValue])
 
   const serachFn = () => {
     setPageAndSize({ page: 1, pageSize });
