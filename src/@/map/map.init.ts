@@ -155,6 +155,15 @@ export const $schoolStatsMap = $schoolStats.map((schools) => {
   return schools?.map(schoolStatsMap) ?? null;
 })
 
+export const $schoolAdminId = $schoolStats.map((schools) => {
+  if (schools?.length) {
+    const ids = new Set(schools?.map((school) => school.admin1_id));
+    console.log(ids.size === 1 ? schools[0].admin1_id : 0, ids)
+    return ids.size === 1 ? schools[0].admin1_id : 0
+  }
+  return null;
+})
+
 const schoolConnectivityLength = $schoolStatsMap.map((data) => data?.length);
 export const gigaLayerSource = combine({
   selectedLayerIds: $selectedLayers,
@@ -174,6 +183,7 @@ export const gigaLayerSource = combine({
   admin1Data: $admin1Data,
   schoolStats: $schoolStatsMap,
   isMobile: $isMobile,
+  schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString
 })
 
@@ -203,7 +213,8 @@ sample({
     $map,
     countryReceived,
     $admin1Data,
-    schoolConnectivityLength,
+    $schoolAdminId,
+    // schoolConnectivityLength,
     $schoolStatsMap,
     $connectivityBenchMark,
     $countrySearchString,
@@ -218,6 +229,19 @@ sample({
   target: changeLayersFx,
 })
 
+// sample({
+//   clock: merge([
+//     $selectedLayers, $map, $connectivityFilter, onReloadedMap,
+//     $mapRouteVisible,
+//     $map,
+//     countryReceived,
+//     $admin1Data,
+//     // schoolConnectivityLength,
+//     // $schoolStatsMap,
+//     $connectivityBenchMark,
+//     $countrySearchString,
+//   ]), fn: (value) => console.log(value)
+// })
 // clear map data on country change;
 
 sample({
