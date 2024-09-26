@@ -150,7 +150,8 @@ const sourceForInfo = combine({
 
 export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id }: ReturnType<typeof sourceForInfo.getState>) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
-  const selectedLayerId = layersUtils.selectedLayerId ?? lastSelectedLayers.layerId ?? layersUtils.coverageLayerId
+  const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
+  const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
   const isDownload = selectedLayerId === layersUtils?.downloadLayerId;
   const isCoverage = selectedLayerId === layersUtils?.coverageLayerId;
   const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === selectedLayerId)?.type);
