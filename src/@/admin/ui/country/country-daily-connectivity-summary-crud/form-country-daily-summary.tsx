@@ -43,12 +43,13 @@ const FormCountryDailySummary = ({ isEdit, formData, onUdpateForm, onSubmit }: {
           <InputBoxWrapper>
             <TextInput
               type="number"
+              step="any"
               labelText=""
               id="connectivity-latency"
               name='connectivity_latency'
               placeholder='Enter connectivity latency'
               value={formData?.connectivity_latency}
-              onChange={(e) => onUdpateForm([e.target.name, Number(e.target.value)])}
+              onChange={(e) => onUdpateForm([e.target.name, parseFloat(e.target.value)])}
             />
           </InputBoxWrapper>
         </InputContainer>

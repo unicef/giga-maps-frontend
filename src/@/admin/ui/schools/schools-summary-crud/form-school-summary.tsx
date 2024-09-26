@@ -105,13 +105,14 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
             <InputBoxWrapper>
               <TextInput
                 type="number"
+                step="any"
                 min={0}
                 labelText=""
                 id="connectivity-latency"
                 name='connectivity_latency'
                 placeholder='Enter connectivity latency'
                 value={formDataSchoolSummary?.connectivity_latency}
-                onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
+                onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, parseFloat(e.target.value)])}
               />
             </InputBoxWrapper>
           </InputContainer>
@@ -379,7 +380,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
         <Button
           kind="secondary"
           onClick={() => {
-            router.back();
+            router.navigate('/admin/schools/?tab=1');
           }}
         >
           Cancel

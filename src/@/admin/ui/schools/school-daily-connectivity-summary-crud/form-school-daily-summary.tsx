@@ -66,13 +66,14 @@ const FormSchoolDailySummary = ({ isEditMode, schoolDailyId }: { isEditMode: boo
           <InputBoxWrapper>
             <TextInput
               type="number"
+              step="any"
               min={0}
               labelText=""
               id="connectivity-latency"
               name='connectivity_latency'
               placeholder='Enter connectivity latency'
               value={formSchoolDaily?.connectivity_latency}
-              onChange={(e) => onUdpateSchoolDailyForm([e.target.name, Number(e.target.value)])}
+              onChange={(e) => onUdpateSchoolDailyForm([e.target.name, parseFloat(e.target.value)])}
             />
           </InputBoxWrapper>
         </InputContainer>

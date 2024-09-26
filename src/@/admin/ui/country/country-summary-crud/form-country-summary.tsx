@@ -70,13 +70,14 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
             <InputBoxWrapper>
               <TextInput
                 type='number'
+                step="any"
                 min={0}
                 labelText=""
                 id="connectivity-latency"
                 name='connectivity_latency'
                 placeholder='Enter connectivity latency'
                 value={formDataCountrySummary?.connectivity_latency}
-                onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
+                onChange={(e) => onUdpateCountrySummaryForm([e.target.name, parseFloat(e.target.value)])}
               />
             </InputBoxWrapper>
           </DailyCountryInput>
@@ -442,7 +443,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
         <Button
           kind="secondary"
           onClick={() => {
-            router.back();
+            router.navigate('/admin/country/?tab=1');
           }}
         >
           Cancel
