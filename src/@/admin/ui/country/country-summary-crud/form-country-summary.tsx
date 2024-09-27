@@ -55,7 +55,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 labelText=""
                 id="connectivity-speed"
                 name='connectivity_speed'
-                value={formDataCountrySummary?.connectivity_speed}
+                value={formDataCountrySummary?.connectivity_speed || ''}
                 onChange={(e) =>
                   onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])
                 }
@@ -76,7 +76,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="connectivity-latency"
                 name='connectivity_latency'
                 placeholder='Enter connectivity latency'
-                value={formDataCountrySummary?.connectivity_latency}
+                value={formDataCountrySummary?.connectivity_latency || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, parseFloat(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -90,7 +90,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
               labelText=""
               id={`select-country`}
               name='country'
-              value={formDataCountrySummary?.country}
+              value={formDataCountrySummary?.country || ''}
               onChange={(e) => {
                 onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])
               }
@@ -145,7 +145,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-school"
                 placeholder='Enter school number'
                 name='schools_total'
-                value={formDataCountrySummary?.schools_total}
+                value={formDataCountrySummary?.schools_total || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -162,7 +162,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-connected-school"
                 placeholder='Enter connected school'
                 name='schools_connected'
-                value={formDataCountrySummary?.schools_connected}
+                value={formDataCountrySummary?.schools_connected || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -181,7 +181,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-Schools-connectivity-good"
                 placeholder='Enter schools connectivity good'
                 name='schools_connectivity_good'
-                value={formDataCountrySummary?.schools_connectivity_good}
+                value={formDataCountrySummary?.schools_connectivity_good || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -198,7 +198,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 placeholder='Enter schools connectivity moderate'
                 id="num-schools-connectivity-moderate"
                 name='schools_connectivity_moderate'
-                value={formDataCountrySummary?.schools_connectivity_moderate}
+                value={formDataCountrySummary?.schools_connectivity_moderate || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -215,7 +215,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-schools-connectivity-no"
                 placeholder='Enter schools connectivity no'
                 name='schools_connectivity_no'
-                value={formDataCountrySummary?.schools_connectivity_no}
+                value={formDataCountrySummary?.schools_connectivity_no || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -234,7 +234,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-schools-connectivity-unknown"
                 placeholder='Enter schools connectivity unknown'
                 name='schools_connectivity_unknown'
-                value={formDataCountrySummary?.schools_connectivity_unknown}
+                value={formDataCountrySummary?.schools_connectivity_unknown || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -251,7 +251,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-schools-coverage-good"
                 placeholder='Enter schools coverage good'
                 name='schools_coverage_good'
-                value={formDataCountrySummary?.schools_coverage_good}
+                value={formDataCountrySummary?.schools_coverage_good || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -268,7 +268,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-schools-coverage-moderate"
                 placeholder='Enter schools coverage moderate'
                 name='schools_coverage_moderate'
-                value={formDataCountrySummary?.schools_coverage_moderate}
+                value={formDataCountrySummary?.schools_coverage_moderate || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -287,7 +287,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 placeholder='Enter schools coverage no'
                 id="num-schools-coverage-no"
                 name='schools_coverage_no'
-                value={formDataCountrySummary?.schools_coverage_no}
+                value={formDataCountrySummary?.schools_coverage_no || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -304,7 +304,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-schools-coverage-unknown"
                 placeholder='Enter schools coverage unknown'
                 name='schools_coverage_unknown'
-                value={formDataCountrySummary?.schools_coverage_unknown}
+                value={formDataCountrySummary?.schools_coverage_unknown || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -320,7 +320,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="num-avg-distance-school"
                 placeholder='Enter avg distance school'
                 name='avg_distance_school'
-                value={formDataCountrySummary?.avg_distance_school}
+                value={formDataCountrySummary?.avg_distance_school || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, parseFloat(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -355,7 +355,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 id="countr-year"
                 placeholder='Enter year'
                 name='year'
-                value={formDataCountrySummary?.year}
+                value={formDataCountrySummary?.year || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -372,7 +372,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
                 placeholder='Enter week'
                 id="country-week"
                 name='week'
-                value={formDataCountrySummary?.week}
+                value={formDataCountrySummary?.week || ''}
                 onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -388,7 +388,7 @@ const FormCountrySummary = ({ isEditMode, countrySummaryItemId }: { isEditMode: 
               id="integration-status"
               placeholder='Enter integration status'
               name='integration_status'
-              value={formDataCountrySummary?.integration_status}
+              value={formDataCountrySummary?.integration_status || ''}
               onChange={(e) => onUdpateCountrySummaryForm([e.target.name, Number(e.target.value)])}
               defaultValue="4"
             >
