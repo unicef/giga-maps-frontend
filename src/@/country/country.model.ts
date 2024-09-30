@@ -24,6 +24,8 @@ export const $countryCode = createStore<string>('');
 $countryCode.on(changeCountryCode, setPayload);
 export const $admin1Code = mapCountry.params.map((params) => (params?.path && getCountryAdminCode(params?.path)?.admin1) || null);
 
+export const $countryAdminSchoolId = createStore<number | null>(null);
+
 export const $countries = createStore<CountryBasic[] | null>(null);
 $countries.on(fetchCountriesFx.doneData, setPayload);
 
@@ -185,11 +187,11 @@ sample({
 
 // Zoom to country bounds
 sample({
-  clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView]),
-  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng }),
-  fn: ({ mapContext, params, schoolFocusLatLng }) => {
+  clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView, $countryAdminSchoolId]),
+  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId }),
+  fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId }) => {
     const { admin1: admin1Code } = getCountryAdminCode(params?.path);
-    const levelsCode = [mapContext.countryCode, admin1Code].filter(Boolean)
+    const levelsCode = [mapContext.countryCode, (admin1Code ?? countryAdminSchoolId)].filter(Boolean)
     const levelLength = levelsCode.length;
     return {
       ...mapContext,

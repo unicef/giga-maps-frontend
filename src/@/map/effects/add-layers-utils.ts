@@ -31,7 +31,7 @@ export const createSourceForMapAndCountry = async ({ map, schoolAdminId, country
     // return;
   }
   let admin1Id = mapRoute.schools ? schoolAdminId : admin1Data?.id;
-  if (mapRoute.schools && !admin1Id) {
+  if (mapRoute.schools) {
     if (admin1Id) {
       admin1Data = country?.admin1_metadata?.find(admin => admin.id === admin1Id) ?? null;
     } else if (admin1Id === 0) {

@@ -3,7 +3,7 @@ import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
 import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolStats, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -45,7 +45,6 @@ import {
 } from './map.model';
 import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
-import { SchoolStatsType } from '~/api/types';
 import { $theme } from '~/core/theme.model';
 import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
 import { $isMobile } from '../admin/models/media-query';
@@ -139,30 +138,6 @@ $map.watch(setCenter, (map: Map | null, center) => {
   map?.setCenter(center);
 });
 
-const schoolStatsMap = (school: SchoolStatsType) => ({
-  name: school.name,
-  geopoint: school?.geopoint,
-  liveAvg: school?.connectivity_speed || school?.live_avg || 0,
-  staticValue: school?.field_value ?? school?.coverage_type ?? school?.statistics?.coverage_type,
-  staticType: school?.field_status ?? school?.coverage_status,
-  connectivityStatus: school.connectivity_status || school.statistics.connectivity_status,
-  isRealTime: school.is_rt_connected,
-  connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
-  id: school?.id,
-  externalId: school?.external_id,
-})
-export const $schoolStatsMap = $schoolStats.map((schools) => {
-  return schools?.map(schoolStatsMap) ?? null;
-})
-
-export const $schoolAdminId = $schoolStats.map((schools) => {
-  if (schools?.length) {
-    const ids = new Set(schools?.map((school) => school.admin1_id));
-    console.log(ids.size === 1 ? schools[0].admin1_id : 0, ids)
-    return ids.size === 1 ? schools[0].admin1_id : 0
-  }
-  return null;
-})
 
 const schoolConnectivityLength = $schoolStatsMap.map((data) => data?.length);
 export const gigaLayerSource = combine({
