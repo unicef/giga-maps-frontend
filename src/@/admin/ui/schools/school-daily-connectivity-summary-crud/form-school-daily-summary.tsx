@@ -1,4 +1,4 @@
-import { Button, DatePicker, DatePickerInput, Form, TextInput } from '@carbon/react'
+import { Button, DatePicker, DatePickerInput, Form, TextInput } from '@carbon/react';
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import { FormEvent } from 'react';
@@ -7,7 +7,7 @@ import { createOrUpdateSchoolDailyFx } from '~/@/admin/effects/api-school-fx';
 import { $formSchoolDaily, onChangeAdminSchoolTab, onUdpateSchoolDailyForm } from '~/@/admin/models/school-model';
 import { adminSchools, router } from '~/core/routes';
 
-import { BottomButtonWrapper, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, RowContainer, } from '../../styles/admin-styles'
+import { BottomButtonWrapper, DatePickerBoxWrapper, InputBoxWrapper, InputContainer, InputLabel, RowContainer, } from '../../styles/admin-styles';
 
 const FormSchoolDailySummary = ({ isEditMode, schoolDailyId }: { isEditMode: boolean, schoolDailyId?: number }) => {
 
@@ -51,7 +51,7 @@ const FormSchoolDailySummary = ({ isEditMode, schoolDailyId }: { isEditMode: boo
               labelText=""
               id="connectivity-speed"
               name='connectivity_speed'
-              value={formSchoolDaily?.connectivity_speed}
+              value={formSchoolDaily?.connectivity_speed || ''}
               onChange={(e) =>
                 onUdpateSchoolDailyForm([e.target.name, Number(e.target.value)])
               }
@@ -66,13 +66,14 @@ const FormSchoolDailySummary = ({ isEditMode, schoolDailyId }: { isEditMode: boo
           <InputBoxWrapper>
             <TextInput
               type="number"
+              step="any"
               min={0}
               labelText=""
               id="connectivity-latency"
               name='connectivity_latency'
               placeholder='Enter connectivity latency'
-              value={formSchoolDaily?.connectivity_latency}
-              onChange={(e) => onUdpateSchoolDailyForm([e.target.name, Number(e.target.value)])}
+              value={formSchoolDaily?.connectivity_latency || ''}
+              onChange={(e) => onUdpateSchoolDailyForm([e.target.name, parseFloat(e.target.value)])}
             />
           </InputBoxWrapper>
         </InputContainer>
@@ -91,7 +92,7 @@ const FormSchoolDailySummary = ({ isEditMode, schoolDailyId }: { isEditMode: boo
               id="school-id"
               name='school'
               placeholder='Enter school id'
-              value={formSchoolDaily?.school}
+              value={formSchoolDaily?.school || ''}
               onChange={(e) => onUdpateSchoolDailyForm([e.target.name, Number(e.target.value)])}
             />
           </InputBoxWrapper>

@@ -43,7 +43,7 @@ $publishDataLayerListResponce.on(getPublishDataLayerListFx.doneData, (_state, pa
   return [...results];
 });
 
-export const onUdpateCountrySummaryForm = createEvent<[]>();
+export const onUdpateCountrySummaryForm = createEvent<(string | number)[]>();
 export const onUdpateCountryDailySummaryForm = createEvent<[]>();
 export const onUdpateCountryForm = createEvent<any[]>();
 
