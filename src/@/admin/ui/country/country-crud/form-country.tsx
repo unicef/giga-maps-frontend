@@ -225,7 +225,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                   onChange={(e) => onUdpateCountryForm([e.target.name, e.target.value])}
                 />
               </InputBoxWrapper>
-              <Link href="/admin/country/?tab=1" target="_blank">
+              <Link href={`/admin/country/country-summary/edit/${formDataCountry?.last_weekly_status_id}`} target="_blank">
                 <Search />
               </Link>
             </LastWeekStatusWrapper>
