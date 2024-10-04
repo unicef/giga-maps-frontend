@@ -48,8 +48,8 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const realtimeStatsFromStore = useStore($connectivityStats);
   const schoolRealTimeStats = useStore($schoolStats);
   const realtimeStats = realtimeStatsFromStore?.real_time_connected_schools ?? {} as defaultLegendValuesType;
-  const bencharkmarkValue = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata.rounded_benchmark_value;
-  const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata.display_unit;
+  const bencharkmarkValue = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.rounded_benchmark_value;
+  const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.display_unit;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
   const handleRealtimeLayerChange = (key: string) => {
