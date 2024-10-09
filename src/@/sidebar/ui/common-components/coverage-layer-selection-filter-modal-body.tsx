@@ -14,8 +14,10 @@ import {
 
 import { PopoverFilterContentCoverageConnectivityStatus } from "./styles/layer-filter-modal.style";
 import { CoverageBenchmarkNames, CoverageColorNames } from "../global-and-country-view-components/container/layer-view.constant";
+import { useTranslation } from "react-i18next";
 
 const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilterBody(_props, ref) {
+  const { t } = useTranslation();
   const coverageStats = useStore($coverageStats);
   const defaultStatus = useStore($coverageStatusAll);
   const [currentStatus, setCurrentStatus] = useState<Record<string, boolean>>(defaultStatus);
@@ -39,9 +41,8 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilter
   return (
     <ModalBody>
       <PopoverFilterContentCoverageConnectivityStatus>
-        <h2 className="filter-popover-title">{selectedLayerData?.name} status</h2>
-        <p className="filter-popover-explanation">Explanation about what are the speeds and
-          the logic behind them</p>
+        <h2 className="filter-popover-title">{selectedLayerData?.name} {t('status')}</h2>
+        <p className="filter-popover-explanation">{t('explanation-about-what-are-the-speeds-and-the-logic-behind-them')}</p>
         <fieldset className="cds--fieldset">
           {Object.entries(legends ?? {}).map(([key, value]) => {
             const label = isCoverage ? CoverageBenchmarkNames[key] : key;

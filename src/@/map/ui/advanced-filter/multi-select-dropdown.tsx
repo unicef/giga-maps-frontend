@@ -24,7 +24,7 @@ const MultiSelectDropdown = ({ name, description, column_configuration: paramete
       </>}
       id={`mutli-select-dropdown-${parameter.name}`}
       items={items}
-      label={<>{placeholder ?? `Select ${name}`}1</>}
+      label={<>{placeholder ?? `Select ${name}`}{t('1')}</>}
       initialSelectedItems={selectedItem}
       selectedItem={selectedItem}
       onChange={({ selectedItems }: { selectedItems: { value: string }[] }) => {

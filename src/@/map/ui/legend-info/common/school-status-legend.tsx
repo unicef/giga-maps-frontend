@@ -11,13 +11,14 @@ import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
+import { useTranslation } from "react-i18next";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
-
+  const { t } = useTranslation();
   const paintData = useStore($stylePaintData);
   const { currentLayerTypeUtils } = useStore($layerUtils);
   const { isSchoolStatus } = currentLayerTypeUtils;
@@ -60,7 +61,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
 
   if (!isSchoolStatus) return null;
   return (<div className='school-status'>
-    <h3>School status</h3>
+    <h3>{t('school-status')}</h3>
     {
       Object.values(ConnectivityStatusDistribution).map((key, index) => (
         <div className='legend-container' key={`${key}`}>

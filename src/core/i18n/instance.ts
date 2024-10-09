@@ -23,7 +23,7 @@ export const i18n = i18next
     resources,
     supportedLngs: ['de', 'en', 'fr'],
     detection: {
-
+      order: ['navigator', 'localStorage', 'cookie'],
     },
     fallbackLng: 'en',
     debug: true

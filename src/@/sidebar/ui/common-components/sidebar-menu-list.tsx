@@ -8,25 +8,27 @@ import { $isMobile } from '~/core/media-query';
 import { router } from '~/core/routes';
 
 import { onChangeMenu } from '../../sidebar.model';
+import { useTranslation } from 'react-i18next';
 
 
 
 const SidebarMenuList = () => {
+  const { t } = useTranslation();
   const isMobile = useStore($isMobile)
 
   return (
     <SideBarMenuList>
       <SideNavItems>
         <MenuItemBlank onClick={() => onChangeMenu(false)} href={'/docs/explore-api'} renderIcon={Api} target="_blank">
-          API’s and Download
+          {t('api-s-and-download')}
         </MenuItemBlank>
         <MenuItemBlank onClick={() => onChangeMenu(false)} renderIcon={InformationSquare} href={'/about'} target="_blank">
-          About Giga maps
+          {t('about-giga-maps')}
         </MenuItemBlank>
         <MenuItem onClick={() => {
           router.navigate(`/map?popover=tour`)
         }} renderIcon={WatsonHealthThumbnailPreview} >
-          Tour
+          {t('tour')}
         </MenuItem>
       </SideNavItems>
       {
