@@ -1,8 +1,18 @@
 import Airtable from 'airtable';
 import { SchoolStatsType } from '~/api/types';
+import { AIRTABLE_API_KEY } from '~/env';
 
+let base: Airtable.Base | null = null;
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appU5WGL7iucR55vv');
+try {
+  if (AIRTABLE_API_KEY) {
+    base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base('appU5WGL7iucR55vv');
+  } else {
+    console.warn('Airtable API key not provided. Some features may be unavailable.');
+  }
+} catch (error) {
+  console.error('Error initializing Airtable:', error);
+}
 
 // Define the statistics keys based on SchoolStatsType
 const statisticsKeys: Array<keyof SchoolStatsType['statistics']> = [
@@ -30,17 +40,25 @@ export type CountryConfig = {
 };
 
 export const fetchConfig = async (): Promise<CountryConfig[]> => {
-  const records = await base('Country Configs').select().all();
-  const config: CountryConfig[] = records.map(record => {
-    const countryCode = record.get('Country Code') as number;
-    // console.log("statisticsKeys", statisticsKeys)
-    const enabledStatistics: CountryConfig['enabledStatistics'] = statisticsKeys.filter(stat =>
-      record.get(stat) === true
-    );
+  if (!base) {
+    console.warn('Airtable base not initialized. Returning empty config.');
+    return [];
+  }
 
+  try {
+    const records = await base('Country Configs').select().all();
+    const config: CountryConfig[] = records.map(record => {
+      const countryCode = record.get('Country Code') as number;
+      // console.log("statisticsKeys", statisticsKeys)
+      const enabledStatistics: CountryConfig['enabledStatistics'] = statisticsKeys.filter(stat =>
+        record.get(stat) === true
+      );
+      return { countryCode, enabledStatistics };
+    });
 
-    return { countryCode, enabledStatistics };
-  });
-
-  return config;
+    return config;
+  } catch (error) {
+    console.error('Error fetching config:', error);
+    return [];
+  }
 };
