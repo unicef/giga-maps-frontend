@@ -23,6 +23,18 @@ const allStatistics: StatisticConfig[] = [
   { key: 'connectivity_latency', label: 'Connectivity latency' },
   { key: 'coverage_availability', label: 'Coverage availability' },
   { key: 'coverage_type', label: 'Coverage type' },
+  { key: 'connectivity_govt', label: 'Government connectivity' },
+  { key: 'computer_availability', label: 'Computer availability' },
+  { key: 'num_students_girls', label: 'Number of female students' },
+  { key: 'num_students_boys', label: 'Number of male students' },
+  { key: 'num_students_other', label: 'Number of other students' },
+  { key: 'num_teachers_female', label: 'Number of female teachers' },
+  { key: 'num_teachers_male', label: 'Number of male teachers' },
+  { key: 'teachers_trained', label: 'Number of trained teachers' },
+  { key: 'sustainable_business_model', label: 'Sustainable business model' },
+  { key: 'device_availability', label: 'Device availability' },
+  { key: 'num_tablets', label: 'Number of tablets' },
+  { key: 'num_robotic_equipment', label: 'Number of robotic equipment' }
 ];
 
 const defaultStatistics: (keyof SchoolStatsType['statistics'])[] = [

@@ -31,8 +31,18 @@ const statisticsKeys: Array<keyof SchoolStatsType['statistics']> = [
   'connectivity_latency',
   'coverage_availability',
   'coverage_type',
-  'created',
-  'modified'
+  'connectivity_govt',
+  'computer_availability',
+  'num_students_girls',
+  'num_students_boys',
+  'num_students_other',
+  'num_teachers_female',
+  'num_teachers_male',
+  'teachers_trained',
+  'sustainable_business_model',
+  'device_availability',
+  'num_tablets',
+  'num_robotic_equipment'
 ];
 export type CountryConfig = {
   countryCode: number;
