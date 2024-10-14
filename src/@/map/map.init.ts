@@ -3,7 +3,7 @@ import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
 import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolStats, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -45,7 +45,6 @@ import {
 } from './map.model';
 import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
-import { SchoolStatsType } from '~/api/types';
 import { $theme } from '~/core/theme.model';
 import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
 import { $isMobile } from '../admin/models/media-query';
@@ -139,21 +138,6 @@ $map.watch(setCenter, (map: Map | null, center) => {
   map?.setCenter(center);
 });
 
-const schoolStatsMap = (school: SchoolStatsType) => ({
-  name: school.name,
-  geopoint: school?.geopoint,
-  liveAvg: school?.connectivity_speed || school?.live_avg || 0,
-  staticValue: school?.field_value ?? school?.coverage_type ?? school?.statistics?.coverage_type,
-  staticType: school?.field_status ?? school?.coverage_status,
-  connectivityStatus: school.connectivity_status || school.statistics.connectivity_status,
-  isRealTime: school.is_rt_connected,
-  connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
-  id: school?.id,
-  externalId: school?.external_id,
-})
-export const $schoolStatsMap = $schoolStats.map((schools) => {
-  return schools?.map(schoolStatsMap) ?? null;
-})
 
 const schoolConnectivityLength = $schoolStatsMap.map((data) => data?.length);
 export const gigaLayerSource = combine({
@@ -174,6 +158,7 @@ export const gigaLayerSource = combine({
   admin1Data: $admin1Data,
   schoolStats: $schoolStatsMap,
   isMobile: $isMobile,
+  schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString
 })
 
@@ -203,7 +188,8 @@ sample({
     $map,
     countryReceived,
     $admin1Data,
-    schoolConnectivityLength,
+    $schoolAdminId,
+    // schoolConnectivityLength,
     $schoolStatsMap,
     $connectivityBenchMark,
     $countrySearchString,
@@ -218,6 +204,19 @@ sample({
   target: changeLayersFx,
 })
 
+// sample({
+//   clock: merge([
+//     $selectedLayers, $map, $connectivityFilter, onReloadedMap,
+//     $mapRouteVisible,
+//     $map,
+//     countryReceived,
+//     $admin1Data,
+//     // schoolConnectivityLength,
+//     // $schoolStatsMap,
+//     $connectivityBenchMark,
+//     $countrySearchString,
+//   ]), fn: (value) => console.log(value)
+// })
 // clear map data on country change;
 
 sample({

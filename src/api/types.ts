@@ -77,6 +77,7 @@ export type SchoolStatsType = {
   coverage_type: string;
   external_id: string;
   environment: string;
+  admin1_id?: number;
   admin1_name?: string;
   admin2_name?: string;
   admin1_code?: string;

@@ -4,7 +4,7 @@ import { combine, createEffect, merge, sample } from 'effector';
 
 import {
   $admin1Id,
-  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString
+  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString, $countryAdminSchoolId
 } from '~/@/country/country.model';
 import {
   $connectivityBenchMark,
@@ -34,6 +34,7 @@ import {
   changeConnectivityBenchmark,
   $currentLayerTypeUtils,
   $isNationalBenchmark,
+  $schoolAdminId,
 } from '~/@/sidebar/sidebar.model';
 import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
@@ -371,4 +372,15 @@ sample({
   },
   filter: ({ country, currentLayerTypeUtils }) => !!country && currentLayerTypeUtils.isLive,
   target: changeConnectivityBenchmark
+})
+
+sample({
+  source: combine($schoolAdminId, $schoolStats),
+  fn: ([schoolAdminId, schoolStats]) => {
+    if (schoolAdminId && (schoolStats?.length ?? 0) > 1) {
+      return schoolAdminId;
+    }
+    return null;
+  },
+  target: $countryAdminSchoolId
 })

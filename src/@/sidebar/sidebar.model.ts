@@ -322,6 +322,29 @@ $multiSelectionSchoolCheckbox.on(changeMultiSelectionSchoolCheckbox, (state: Mul
 export const onSchoolUncheck = createEvent<number>();
 export const $schoolStats = createStore<SchoolStatsType[] | null>([])
 $schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
+export const schoolStatsMap = (school: SchoolStatsType) => ({
+  name: school.name,
+  geopoint: school?.geopoint,
+  liveAvg: school?.connectivity_speed || school?.live_avg || 0,
+  staticValue: school?.field_value ?? school?.coverage_type ?? school?.statistics?.coverage_type,
+  staticType: school?.field_status ?? school?.coverage_status,
+  connectivityStatus: school.connectivity_status || school.statistics.connectivity_status,
+  isRealTime: school.is_rt_connected,
+  connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
+  id: school?.id,
+  externalId: school?.external_id,
+})
+export const $schoolStatsMap = $schoolStats.map((schools) => {
+  return schools?.map(schoolStatsMap) ?? null;
+})
+
+export const $schoolAdminId = $schoolStats.map((schools) => {
+  if (schools?.length) {
+    const ids = new Set(schools?.map((school) => school.admin1_id));
+    return ids.size === 1 ? (schools[0].admin1_id ?? 0) : 0
+  }
+  return null;
+})
 
 export const $connectivityColorsWithBenchmark = combine($stylePaintData, (style) => {
   return ({

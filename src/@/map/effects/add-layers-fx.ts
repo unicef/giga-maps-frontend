@@ -31,11 +31,13 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
   let { schoolLayerId, selectedLayerId, isLastSelectionChange } = getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
   if (isLastSelectionChange || !checkSourceAvailable(map, defaultSource)) {
     // create source data country and global view;
-    if (mapRoute.map || mapRoute.country) {
-      await createSourceForMapAndCountry({ ...props, selectedLayerId });
-    } else if (mapRoute.schools) {
-      createSourceForSchool({ ...props, selectedLayerId });
+    if (mapRoute.map || mapRoute.country || mapRoute.schools) {
+      const next = await createSourceForMapAndCountry({ ...props, selectedLayerId });
+      if (!next) return;
     }
+    // else if (mapRoute.schools) {
+    //   createSourceForSchool({ ...props, selectedLayerId });
+    // }
   }
   // create and update layers 
   createAndUpdateMapLayer({ ...props, selectedLayerId, schoolLayerId });
@@ -49,6 +51,7 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
 const callDelay = delayMethodCall();
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
+  console.log('changeLayersFx', { ...props })
   const { timeout = 10, selectedLayerIds, refresh, lastSelectedLayer, map } = props;
   if (!map) return;
   const { isLastSelectionChange } = getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
