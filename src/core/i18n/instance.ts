@@ -4,9 +4,8 @@ import { initReactI18next } from "react-i18next";
 import en from './resources/en.json'
 import fr from './resources/fr.json'
 import { appStarted } from "./store";
-// the translations
-// (tip move them in a JSON file and import them,
-// or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
+import { defaultLanguage, supportedLanguages } from "./constant";
+
 const resources = {
   en: {
     translation: en
@@ -21,11 +20,11 @@ export const i18n = i18next
   .use(I18nextBrowserLanguageDetector)
   .init({
     resources,
-    supportedLngs: ['de', 'en', 'fr'],
+    supportedLngs: supportedLanguages,
     detection: {
       order: ['navigator', 'localStorage', 'cookie'],
     },
-    fallbackLng: 'en',
+    fallbackLng: defaultLanguage,
     debug: true
   })
 
