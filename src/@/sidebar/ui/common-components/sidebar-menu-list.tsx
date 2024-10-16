@@ -5,7 +5,7 @@ import { useStore } from 'effector-react';
 import { MenuItem, MenuItemBlank, MobileFooterContainer, SideBarMenuList } from '~/@/common/menu-item-link/menu-item-link.style';
 import FooterCommonLogo from '~/@/map/ui/footer-common-logo';
 import { $isMobile } from '~/core/media-query';
-import { router } from '~/core/routes';
+import { map, router } from '~/core/routes';
 
 import { onChangeMenu } from '../../sidebar.model';
 import { useTranslation } from 'react-i18next';
@@ -57,35 +57,36 @@ const LanguageDropdown = styled(Dropdown)`
 
 const SidebarMenuList = () => {
   const { t } = useTranslation();
+  const isMapView = useStore(map.visible);
   const isMobile = useStore($isMobile)
   const selectedLngObj = useStore($SelectedLngObj)
   return (
     <SideBarMenuList>
       <SideNavItems>
         <MenuItemBlank onClick={() => onChangeMenu(false)} href={'/docs/explore-api'} renderIcon={Api} target="_blank">
-          {t('api-s-and-download')}
+          {t('api-s-and-download', 'API’s and Download')}
         </MenuItemBlank>
         <MenuItemBlank onClick={() => onChangeMenu(false)} renderIcon={InformationSquare} href={'/about'} target="_blank">
-          {t('about-giga-maps')}
+          {t('about-giga-maps', 'About Giga Maps')}
         </MenuItemBlank>
         <MenuItem onClick={() => {
           router.navigate(`/map?popover=tour`)
         }} renderIcon={WatsonHealthThumbnailPreview} >
-          {t('tour')}
+          {t('tour', 'Tour')}
         </MenuItem>
       </SideNavItems>
-      <LanguageDropdown
+      {isMapView && <LanguageDropdown
         id="language"
         direction="bottom"
         titleText=""
         selectedItem={selectedLngObj}
         items={languages}
-        itemToString={item => item ? item.name : ''}
-        onChange={({ selectedItem }) => {
+        itemToString={(item: { name: string; code: string }) => item ? item.name : ''}
+        onChange={({ selectedItem }: { selectedItem: { code: string } }) => {
           console.log(selectedItem);
           onLanguageChange(selectedItem.code)
         }}
-      />
+      />}
       {
         isMobile &&
         <MobileFooterContainer>
