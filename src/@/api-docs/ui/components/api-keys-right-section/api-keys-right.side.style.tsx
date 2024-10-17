@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const ApiKeysDataWrapper = styled.div`
 margin-top: 0;
-min-height:calc(100vh - 13.5rem);
+min-height:calc(100vh - 10.5rem);
   td {
     background: #FFFFFF
   }
