@@ -17,7 +17,7 @@ export const $dataListLayerCount = createStore(0);
 $dataLayerListResponce.on(getDataLayerListFx.doneData, setPayloadResults);
 $dataListLayerCount.on(getDataLayerListFx.doneData, (_, response) => response?.count || 0);
 
-export const onGetDataLayerList = createEvent<{ page: number; pageSize: number; }>();
+export const onGetDataLayerList = createEvent<{ page: number; pageSize: number; search?: string }>();
 
 export const createDataLayer = createEvent<void>()
 

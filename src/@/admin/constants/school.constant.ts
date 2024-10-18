@@ -53,7 +53,9 @@ export const defaultSchoolSummaryForm = {
   schools_within_2km: null,
   schools_within_3km: null,
   week: null,
-  year: null
+  year: null,
+  download_speed_benchmark: null,
+  connectivity_upload_speed: null
 }
 
 export const defaultSchoolDailyForm = {

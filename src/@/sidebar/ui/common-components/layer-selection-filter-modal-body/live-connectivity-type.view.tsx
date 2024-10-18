@@ -9,7 +9,7 @@ import {
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentConnectivitytype } from "../styles/layer-filter-modal.style";
-import { LayerType } from "~/@/sidebar/types";
+import { LayerType, LayerTypeChoices } from "~/@/sidebar/types";
 import { $country } from "~/@/country/country.model";
 
 
@@ -39,7 +39,7 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
         }}
       >
         {connectivityLayers.map((layer: LayerType) => {
-          if (layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <></>;
+          if ((!layer.created_by && layer.type === LayerTypeChoices.LIVE) || layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <></>;
           return (
             <RadioButton
               key={layer.id}

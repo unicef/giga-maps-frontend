@@ -24,6 +24,8 @@ export const $countryCode = createStore<string>('');
 $countryCode.on(changeCountryCode, setPayload);
 export const $admin1Code = mapCountry.params.map((params) => (params?.path && getCountryAdminCode(params?.path)?.admin1) || null);
 
+export const $countryAdminSchoolId = createStore<number | null>(null);
+
 export const $countries = createStore<CountryBasic[] | null>(null);
 $countries.on(fetchCountriesFx.doneData, setPayload);
 
@@ -37,7 +39,9 @@ $country.on(fetchCountryFx.doneData, setPayload);
 export const $dataSource = $country.map((country) => country?.data_source ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
+export const $countryConnectivityNames = $country.map((country) => country?.benchmark_metadata?.benchmark_name ?? {});
 export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark ?? {});
+export const $countryActiveLayersDataById = $country.map((country) => country?.active_layers_list?.reduce((acc, layer) => ({ ...acc, [layer.data_layer_id]: layer }), {} as Record<string, any>) ?? {});
 
 export const $admin1Data = sample({
   source: combine($country, $admin1Code, (country, admin1Code) => {
@@ -183,11 +187,11 @@ sample({
 
 // Zoom to country bounds
 sample({
-  clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView]),
-  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng }),
-  fn: ({ mapContext, params, schoolFocusLatLng }) => {
+  clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView, $countryAdminSchoolId]),
+  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId }),
+  fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId }) => {
     const { admin1: admin1Code } = getCountryAdminCode(params?.path);
-    const levelsCode = [mapContext.countryCode, admin1Code].filter(Boolean)
+    const levelsCode = [mapContext.countryCode, (admin1Code ?? countryAdminSchoolId)].filter(Boolean)
     const levelLength = levelsCode.length;
     return {
       ...mapContext,

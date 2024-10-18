@@ -10,7 +10,7 @@ describe('LayerSelectionFilterModalBody', () => {
 
   it('should render title', () => {
     render(<LayerSelectionFilterModalBody />);
-    const title = screen.getAllByText(/Real-time connectivity data layer/i);
+    const title = screen.getAllByText(/Static data layer benchmark/i);
     expect(title).toBeTruthy()
   });
 

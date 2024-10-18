@@ -126,7 +126,7 @@ export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBe
   return params;
 }
 
-export const getCountryParams = (country: boolean, countryId?: number, admin1Id?: number) => {
+export const getCountryParams = (country: boolean, countryId?: number, admin1Id?: number | null) => {
   let params = country && countryId ? `country_id=${countryId}` : ''
   if (admin1Id) {
     params += `&admin1_id=${admin1Id}`
@@ -134,11 +134,11 @@ export const getCountryParams = (country: boolean, countryId?: number, admin1Id?
   return params;
 }
 
-export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number }) => {
+export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number | null }) => {
   let url = ''
   const { downloadLayerId, coverageLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
-  const countryParams = getCountryParams(mapRoute.country, country?.id, admin1Id);
+  const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
   if (downloadLayerId === layerId || !layerId) {
     url = connectivityUrl;
@@ -159,7 +159,7 @@ export const createSource = ({ map, source = defaultSource, url }: CreateSourceT
   map.addSource(source, {
     tiles: [url],
     minzoom: 0,
-    maxzoom: 2,
+    maxzoom: 8,
     ...options,
     type: "vector",
   });

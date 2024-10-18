@@ -6,6 +6,7 @@ import { Information } from '@carbon/icons-react'
 
 import { $dataSource } from "~/@/country/country.model"
 import { $currentLayerCountryDataSource, $currentLayerTypeUtils } from "~/@/sidebar/sidebar.model"
+import { TooltipButton } from "~/@/common/style/styled-component-style"
 
 const FooterContainer = styled.div`
   background: ${props => props.theme.main};
@@ -59,12 +60,10 @@ color: ${props => props.theme.titleDesc};
     /* margin-bottom: 0.5rem; */
 
     button {
-      background: none; 
-      border: none;
-      padding: 0;
       color: ${props => props.theme.titleDesc};
       margin-top: 0.5rem;
       font-size: 0.75rem;
+      text-align: left;
     }
     .header{
       font-weight: 700;
@@ -160,11 +159,11 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
           {/* <span>{dataSource}</span> */}
           {dataSourceName?.map((dataSource: string, index: number) => {
             const isLast = index === dataSourceName?.length - 1;
-            return (<Tooltip enterDelayMs={dataSourceDescription?.[index] ? 200 : 900000} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
+            return (<TooltipButton enterDelayMs={200} $hideLabel={!dataSourceDescription?.[index]} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
               <button>
-                <span>{dataSource}{!isLast && `, `}&nbsp;</span>
+                {dataSource}{!isLast && `, `}&nbsp;
               </button>
-            </Tooltip>)
+            </TooltipButton>)
           })}
         </div>
       </DataSourceContainer>

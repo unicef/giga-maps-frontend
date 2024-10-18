@@ -32,10 +32,10 @@ export const LayerLabel = styled.p`
   font-size: 0.75rem;
 `
 
-export const LayerDetail = styled.p`
+export const LayerDetail = styled.p<{ $textTransform?: string; }>`
   margin-top: 0.5rem;
   color: #161616;
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: capitalize;
+  text-transform: ${(props) => props.$textTransform ?? 'none'};
 `

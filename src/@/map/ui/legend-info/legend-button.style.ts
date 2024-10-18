@@ -103,33 +103,42 @@ export const LegendContentWrapper = styled.div`
         display :flex;
         margin-top: 1rem;
         align-items: center;
-        p{
+        .label {
+          margin-left: 0.3rem;
           color:  ${props => props.theme.text};
           font-size: 0.75rem;
           font-weight: 400;
           line-height: 1.125rem;
+          text-wrap: nowrap;
         }
       }
 
 `
-
+export const CircleWrapper = styled.div`
+  position: relative;
+  width: clamp(1rem, 1rem, 1rem);
+  height: clamp(1rem, 1rem, 1rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 export const InnerCircle = styled.div<{ $backColor?: string; $margin?: string, $large?: boolean }>`
-width: ${props => props.$large ? 'calc(0.4rem + (0.4rem * 0.33))' : '0.4rem'};
-height: ${props => props.$large ? 'calc(0.4rem + (0.4rem * 0.33))' : '0.4rem'};
+min-width: ${props => props.$large ? '0.52rem' : '0.4rem'};
+min-height: ${props => props.$large ? '0.52rem' : '0.4rem'};
+max-width: ${props => props.$large ? '0.52rem' : '0.4rem'};
+max-height: ${props => props.$large ? '0.52rem' : '0.4rem'};
 background: ${(prop) => prop.$backColor};
 border-radius: 50%;
-margin:${props => props.$margin ?? '0 0.5rem 0 0'};
+/* margin:${props => props.$margin ?? '0 0.5rem 0 0'}; */
 position: relative;
 z-index: 2;
 `
 
 export const InnerCircleConnectivity = styled.div<{ $backColor?: string }>`
-width: 0.7rem;
-height: 0.7rem;
+width: clamp(0.7rem, 0.7rem, 0.7rem);
+min-height: clamp(0.7rem, 0.7rem, 0.7rem);
 background: ${(prop) => prop.$backColor};
 border-radius: 50%;
-margin-right:0.5rem;
-transform: translate(-50%, -50%);
 z-index: 1;
 animation-duration: 1.2s;
 animation-iteration-count: infinite;
@@ -137,8 +146,38 @@ animation-delay: 0.2s;
 animation-direction: alternate;
 transform-origin: top left;
 animation-name: glowly;
-margin-top: 0.7rem;
 position: absolute;
-left: 3.2px;
-top: -2.2px;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+`
+
+
+export const CheckBoxContainer = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  .cds--checkbox-label::before{
+    border: 1px solid grey;
+    border-width: 1px;
+    background-color: white;
+  }
+  .cds--checkbox-label::after {
+        border-block-end: 1.5px solid black;
+    border-inline-start: 1.5px solid black;
+  }
+  .cds--checkbox:checked + .cds--checkbox-label::before{
+    border: 1px solid grey;
+    border-width: 1px;
+    background-color: white;
+  }
+`
+
+export const LiveLayerBenchmark = styled.div`
+  color:${props => props.theme.text};
+  font-size: 0.65rem;
+  opacity: 0.6;
+  margin-top: 0.2rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: left;
 `

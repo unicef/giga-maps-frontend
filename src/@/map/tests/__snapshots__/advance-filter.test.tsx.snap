@@ -21,87 +21,28 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
   fill: !important;
 }
 
-.c7 {
+.c2 {
   width: 100%;
 }
 
-.c7 button {
+.c2 button {
   width: 50%;
   padding-right: 0;
 }
 
-.c2 {
-  padding: 0.5rem 1rem;
-}
-
-.c2 .cds--list-box__field {
-  border-bottom: 1px solid;
-}
-
-.c2 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
-  color: #222;
-}
-
 .c1 {
-  max-height: calc(100vh - 20.5rem);
+  height: calc(100vh - 9.9rem);
   padding-bottom: 2rem;
-}
-
-.c3 {
-  padding: 0.5rem 1rem;
-}
-
-.c3 .group-input {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0;
-}
-
-.c3 .cds--label {
-  margin-bottom: 0.5rem;
-}
-
-.c6 {
-  padding: 0.5rem 1rem;
-}
-
-.c6 .cds--list-box__field--wrapper {
-  border-bottom: 1px solid var(--cds-border-strong);
-}
-
-.c6 .cds--list-box--expanded.cds--list-box--lg .cds--list-box__menu {
-  max-block-size: 20rem;
-}
-
-.c6 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
-  color: #222;
-}
-
-.c6 .cds--checkbox-label-text {
-  font-size: 0.75rem;
-}
-
-.c4 {
-  padding: 0.5rem 1rem;
-}
-
-.c5 {
-  margin: 0.5rem 0;
-}
-
-.c5 .cds--checkbox-label-text {
-  font-size: 0.75rem;
 }
 
 @media (min-width:769px) {
   .c0 {
-    min-width: 23rem;
+    min-width: 18rem;
   }
 }
 
 @media (max-width:768px) {
-  .c7 {
+  .c2 {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -127,7 +68,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
           Filter Schools by
         </h3>
         <span
-          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
         >
           <div
             class="cds--tooltip-trigger__wrapper"
@@ -136,7 +77,6 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
               aria-labelledby="tooltip-:r0:"
               class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
               data-testid="filter-close"
-              title="Close filter"
               type="button"
             >
               <svg
@@ -180,512 +120,6 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
           class="scrollbar-container c1 ps"
         >
           <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r2:-toggle-button"
-              id="downshift-:r2:-label"
-            >
-              School Region
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-environment"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r2:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r2:-label"
-                class="cds--list-box__field"
-                id="downshift-:r2:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r2:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r2:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r3:-toggle-button"
-              id="downshift-:r3:-label"
-            >
-              School Type
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-school_type"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r3:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r3:-label"
-                class="cds--list-box__field"
-                id="downshift-:r3:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r3:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r3:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r4:-toggle-button"
-              id="downshift-:r4:-label"
-            >
-              Education Level
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-education_level"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r4:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r4:-label"
-                class="cds--list-box__field"
-                id="downshift-:r4:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r4:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r4:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c3"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              No of Students
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_students-min-input"
-                      placeholder="Min (0)"
-                      title="Min (0)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_students-max-input"
-                      placeholder="Max (1 Lac)"
-                      title="Max (1 Lac)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c5"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-num_students__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-num_students__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="c3"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              Download Speed
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="connectivity_speed-min-input"
-                      placeholder="Min (MBs)"
-                      title="Min (MBs)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="connectivity_speed-max-input"
-                      placeholder="Max (MBs)"
-                      title="Max (MBs)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c5"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-connectivity_speed__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-connectivity_speed__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r5:-toggle-button"
-              id="downshift-:r5:-label"
-            >
-              Has Computer Lab
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-computer_lab"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r5:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r5:-label"
-                class="cds--list-box__field"
-                id="downshift-:r5:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r5:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r5:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--multi-select__wrapper cds--list-box__wrapper c6"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r6:-toggle-button"
-              id="downshift-:r6:-label"
-            >
-              Coverage Type
-            </label>
-            <div
-              class="cds--multi-select cds--list-box cds--list-box--lg"
-              id="mutli-select-dropdown-coverage_type"
-            >
-              <div
-                class="cds--list-box__field--wrapper"
-              >
-                <button
-                  aria-activedescendant=""
-                  aria-controls="downshift-:r6:-menu"
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  aria-labelledby="downshift-:r6:-label"
-                  class="cds--list-box__field"
-                  id="downshift-:r6:-toggle-button"
-                  role="combobox"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="cds--list-box__label"
-                    id="multiselect-field-label-1"
-                  >
-                    Select Coverage Type1
-                  </span>
-                  <div
-                    class="cds--list-box__menu-icon"
-                  >
-                    <svg
-                      aria-label="Open menu"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      name="chevron--down"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                      />
-                      <title>
-                        Open menu
-                      </title>
-                    </svg>
-                  </div>
-                </button>
-              </div>
-              <ul
-                aria-labelledby="downshift-:r6:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r6:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
             class="ps__rail-x"
             style="left: 0px; top: 0px;"
           >
@@ -707,7 +141,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
           </div>
         </div>
         <div
-          class="c7"
+          class="c2"
         >
           <button
             class="cds--btn cds--btn--secondary"
@@ -793,7 +227,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-labelledby="tooltip-:r9:"
+            aria-labelledby="tooltip-:r4:"
             type="button"
           >
             <svg
@@ -818,7 +252,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-:r9:"
+          id="tooltip-:r4:"
           role="tooltip"
         >
           <span
@@ -849,7 +283,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           >
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-              id="num_computers-min-input"
+              id="-min-input"
               placeholder="Min(0)"
               title="Min(0)"
               type="number"
@@ -876,7 +310,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           >
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-              id="num_computers-max-input"
+              id="-max-input"
               placeholder="Max"
               title="Max"
               type="number"

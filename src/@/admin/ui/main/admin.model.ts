@@ -1,9 +1,8 @@
 import { combine } from "effector";
 
 import { downloadCountryDataFx } from "~/@/api-docs/effects/explore-api-fx";
-
 import { getAboutusContentFx, getImagesListFx, updateAboutusContentFx, uploadImagesFx } from "../../effects/about-us-fx";
-import { createOrUpdateCountryFx, deleteCountryDailySummaryFx, deleteCountryFx, deleteCountrySummaryFx, getCountryDailySummaryListFx, getCountryListFx, getCountrySummaryListFx } from "../../effects/api-country-fx";
+import { createOrUpdateCountryFx, deleteCountryDailySummaryFx, deleteCountryFx, deleteCountrySummaryFx, getCountryDailySummaryListFx, getCountryIdFx, getCountryListFx, getCountrySummaryListFx } from "../../effects/api-country-fx";
 import { deleteSchoolDailyFx, deleteSchoolFx, deleteSchoolSummaryFx, getCsvImportListFx, getSchoolDailyListFx, getSchoolListFx, getSchoolSummaryListFx, importCsvFx } from "../../effects/api-school-fx";
 import { deleteBackgroundTaskFx, getBackgroundTaskListFx } from "../../effects/background-task-fx";
 import { deleteContactMessageFx, getContactMessageListFx } from "../../effects/contact-message-fx";
@@ -11,6 +10,7 @@ import { getRecentActionListFx } from "../../effects/recent-action-fx";
 import { getAllUserListFx } from "../../effects/user-management-fx";
 import { getSchoolMasterListFx, publishAllSchoolMasterFx, publishSchoolMasterFx, updateSchoolMasterFx } from "../../effects/data-source.fx";
 import { addFilterFx, deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from "../../effects/filter-fx";
+import { getDataLayerListFx, getDataLayerByIdFx, createDataLayerFx, publishDataLayerFx } from "../../effects/giga-layer-fx";
 
 
 export const $adminAllLoader = combine([
@@ -38,6 +38,7 @@ export const $adminAllLoader = combine([
   uploadImagesFx.pending,
   getImagesListFx.pending,
   getAllUserListFx.pending,
+  getCountryIdFx.pending,
   downloadCountryDataFx.pending,
   getSchoolMasterListFx.pending,
   updateSchoolMasterFx.pending,
@@ -48,5 +49,9 @@ export const $adminAllLoader = combine([
   addFilterFx.pending,
   editFilterFx.pending,
   deleteFilterFx.pending,
-  publishFilterFx.pending
+  publishFilterFx.pending,
+  getDataLayerListFx.pending,
+  getDataLayerByIdFx.pending,
+  createDataLayerFx.pending,
+  publishDataLayerFx.pending,
 ], (allLoaders) => allLoaders.some(Boolean))
