@@ -26,6 +26,7 @@ export type defaultLegendValuesType = {
   moderate: number;
   no_internet: number;
   unknown: number;
+  [key: string]: number
 }
 export type ConnectivityStat = {
   live_avg: number;
@@ -41,6 +42,8 @@ export type ConnectivityStat = {
     benchmark_value: string;
     parameter_column_unit: string;
     round_unit_value: string;
+    rounded_benchmark_value: string;
+    display_unit: string;
   }
 };
 export type SchoolInfoStats = {
@@ -86,6 +89,7 @@ export type SchoolStatsType = {
   coverage_type: string;
   external_id: string;
   environment: string;
+  admin1_id?: number;
   admin1_name?: string;
   admin2_name?: string;
   admin1_code?: string;
@@ -102,6 +106,15 @@ export type SchoolStatsType = {
   statistics: SchoolInfoStats;
   graph_data: GraphData[];
   geopoint: GeoJSONPoint
+  benchmark_metadata: {
+    base_benchmark: string;
+    benchmark_unit: string;
+    benchmark_value: string;
+    parameter_column_unit: string;
+    round_unit_value: string;
+    rounded_benchmark_value: string;
+    display_unit: string;
+  }
 };
 
 
@@ -175,6 +188,8 @@ export type Country = {
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
+    layer_descriptions: Record<string, string>
+    benchmark_name: Record<string, string>
   }
   data_status: {
     week: {
@@ -186,6 +201,20 @@ export type Country = {
       end_date: string;
     }
   }
+  active_layers_list?: {
+    data_layer_id: number
+    is_default: boolean
+    data_sources: {
+      name: string
+      description: string
+    }
+    is_applicable: boolean
+    legend_configs: Record<string, {
+      values: string[]
+      labels: string
+      tooltip: string
+    }>
+  }[]
   admin_metadata: AdminMetadataType;
   admin1_metadata: AdminMetadataType[];
 };

@@ -4,6 +4,7 @@ import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
 import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList } from "../utils";
+import { mapSchools } from "~/core/routes";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
@@ -14,7 +15,7 @@ export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelect
   return { schoolLayerId, selectedLayerId, isLastSelectionChange };
 }
 
-export const createSourceForMapAndCountry = async ({ map, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data }: ChangeLayerOptions & { selectedLayerId: number | null; }) => {
+export const createSourceForMapAndCountry = async ({ map, schoolAdminId, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data }: ChangeLayerOptions & { selectedLayerId: number | null; }) => {
   if (!map) return;
   // cancel animation;
   cancelAnimationFrame(animateCircleHandler.requestId)
@@ -29,9 +30,19 @@ export const createSourceForMapAndCountry = async ({ map, countrySearch, connect
     layerId = lastSelectedLayer.layerId ?? coverageLayerId;
     // return;
   }
-  const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id: admin1Data?.id, countrySearch });
+  let admin1Id = mapRoute.schools ? schoolAdminId : admin1Data?.id;
+  if (mapRoute.schools) {
+    if (admin1Id) {
+      admin1Data = country?.admin1_metadata?.find(admin => admin.id === admin1Id) ?? null;
+    } else if (admin1Id === 0) {
+      admin1Id = undefined;
+    } else {
+      return false;
+    }
+  }
+  const url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id, countrySearch });
   const options = {} as VectorSource;
-  if (mapRoute.country && country) {
+  if (!!country) {
     const removeBounds = ignoreCountriesForBounds.includes(country.code.toLocaleLowerCase());
     if (admin1Data) {
       options.bounds = admin1Data.bbox as VectorSource['bounds'];
@@ -45,6 +56,7 @@ export const createSourceForMapAndCountry = async ({ map, countrySearch, connect
     }
   }
   createSource({ map, url }, options)
+  return true;
 }
 
 export const createSourceForSchool = ({ map, layerUtils, schoolStats, selectedLayerId, lastSelectedLayer }: Pick<ChangeLayerOptions, "map" | "schoolStats" | "layerUtils" | "lastSelectedLayer"> & { selectedLayerId: number | null; }) => {
@@ -71,9 +83,9 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
   const options: Record<string, any> = {
     filter: isLive ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer) : filterCoverageList(coverageFilter, isDynamicLayer)
   };
-  if (!mapRoute.schools) {
-    options['source-layer'] = "default"
-  }
+  // if (!mapRoute.schools) {
+  options['source-layer'] = "default"
+  // }
   // create selected layer;
   if (isSourceAvailable && selectedLayerId) {
     if (isLive) {

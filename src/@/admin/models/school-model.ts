@@ -72,7 +72,7 @@ export const onChangeAdmin2 = createEvent<AdminType[]>();
 $admin2Values.on(onChangeAdmin2, setPayload);
 
 
-export const onUdpateSchoolSummaryForm = createEvent<string[]>();
+export const onUdpateSchoolSummaryForm = createEvent<(string | number)[]>();
 export const $formSchoolSummary = createStore(defaultSchoolSummaryForm);
 $formSchoolSummary.on(onUdpateSchoolSummaryForm, (state, payload) => {
   const [name, value] = payload;

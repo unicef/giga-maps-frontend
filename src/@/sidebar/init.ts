@@ -4,7 +4,7 @@ import { combine, createEffect, merge, sample } from 'effector';
 
 import {
   $admin1Id,
-  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString
+  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString, $countryAdminSchoolId
 } from '~/@/country/country.model';
 import {
   $connectivityBenchMark,
@@ -34,6 +34,7 @@ import {
   changeConnectivityBenchmark,
   $currentLayerTypeUtils,
   $isNationalBenchmark,
+  $schoolAdminId,
 } from '~/@/sidebar/sidebar.model';
 import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
@@ -150,7 +151,8 @@ const sourceForInfo = combine({
 
 export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id }: ReturnType<typeof sourceForInfo.getState>) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
-  const selectedLayerId = layersUtils.selectedLayerId ?? lastSelectedLayers.layerId ?? layersUtils.coverageLayerId
+  const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
+  const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
   const isDownload = selectedLayerId === layersUtils?.downloadLayerId;
   const isCoverage = selectedLayerId === layersUtils?.coverageLayerId;
   const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === selectedLayerId)?.type);
@@ -168,9 +170,9 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   if (country?.id) {
     params.set('country_id', String(country.id));
   }
-  if (!mapRoutes.map && isLive) {
-    params.set('benchmark', connectivityBenchMark);
-  }
+  // if (!mapRoutes.map && isLive) {
+  params.set('benchmark', connectivityBenchMark);
+  // }
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
@@ -228,7 +230,7 @@ sample({
 
 // for all coverage layers
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -254,7 +256,7 @@ const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState>) => {
 }
 // school view info api
 sample({
-  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate]),
+  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
   source: sourceForInfo,
   fn: schoolInfoFn,
   filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -281,23 +283,9 @@ sample({
   target: createEffect(({ downloadLayerId }: { downloadLayerId: number | null }) => {
     onSelectMainLayer(downloadLayerId);
     onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id)
+    changeConnectivityBenchmark(ConnectivityBenchMarks.global)
   })
 })
-// reset on country change - giga layer selection;
-// sample({
-//   clock: merge([$country, $selectedLayerId]),
-//   source: combine({ country: $country, selectedLayerData: $selectedLayerData, downloadLayerId: $downloadLayerId }),
-//   fn: ({ country, selectedLayerData, downloadLayerId }) => {
-//     if (country && selectedLayerData) {
-//       const { applicable_countries: applicableCountries, type } = selectedLayerData;
-//       if (applicableCountries?.length && !applicableCountries.includes(country.id)) {
-//         let defaultLayerId = isLiveLayer(type) ? downloadLayerId : null;
-//         onSelectMainLayer(defaultLayerId);
-//       }
-//     }
-//     return null;
-//   },
-// })
 
 // update school layer when main layer changed
 sample({
@@ -384,4 +372,15 @@ sample({
   },
   filter: ({ country, currentLayerTypeUtils }) => !!country && currentLayerTypeUtils.isLive,
   target: changeConnectivityBenchmark
+})
+
+sample({
+  source: combine($schoolAdminId, $schoolStats),
+  fn: ([schoolAdminId, schoolStats]) => {
+    if (schoolAdminId && (schoolStats?.length ?? 0) > 1) {
+      return schoolAdminId;
+    }
+    return null;
+  },
+  target: $countryAdminSchoolId
 })
