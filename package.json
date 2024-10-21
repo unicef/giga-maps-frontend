@@ -149,6 +149,7 @@
     "@carbon/styles": "1.39.0",
     "@matt-block/react-recaptcha-v2": "^2.0.1",
     "@withease/i18next": "^23.2.2",
+    "airtable": "^0.12.2",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "effector": "^22.8.6",

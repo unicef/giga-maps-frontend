@@ -76,18 +76,22 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
     <h3>{selectedLayerData?.name}</h3>
     <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
       <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-        {isNational ? <LiveLayerBenchmark>
-          {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"}
-        </LiveLayerBenchmark> : <LiveLayerBenchmark>
-          {benchmarkNames[selectedLayerId ?? ""] ?? 'Global Benchmark'}
-        </LiveLayerBenchmark>}
+        {isNational && countryConnectivityNames?.[selectedLayerId as number] ? (
+          <LiveLayerBenchmark>
+            {countryConnectivityNames[selectedLayerId as number]}
+          </LiveLayerBenchmark>
+        ) : (!isNational && benchmarkNames[selectedLayerId ?? ""]) ? (
+          <LiveLayerBenchmark>
+            {benchmarkNames[selectedLayerId ?? ""]}
+          </LiveLayerBenchmark>
+        ) : null}
       </button>
     </TooltipButton>
     {
       legends.values.map(({ key, label, tooltip }) => {
         const logicLabel = key === ConnectivityDistribution.unknown ? (tooltip || `Doesn't match any criteria`) : tooltip;
         const toolTiplabel = logicLabel;
-        return (<Div key={key}>
+        return (coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label] > 0 ? <Div key={key}>
           <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
             <button>
               <div className='legend-container' key={`${key}`}>
@@ -115,7 +119,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
               </div>
             </button>
           </TooltipButton>
-        </Div>)
+        </Div> : null)
       }
       )}
   </div>
