@@ -64,6 +64,18 @@ export type SchoolInfoStats = {
   coverage_type: string;
   created: string;
   modified: string;
+  connectivity_govt: string;
+  computer_availability: string;
+  num_students_girls: number;
+  num_students_boys: number;
+  num_students_other: number;
+  num_teachers_female: number;
+  num_teachers_male: number;
+  teachers_trained: number;
+  sustainable_business_model: string;
+  device_availability: string;
+  num_tablets: number;
+  num_robotic_equipment: number;
 }
 export type SchoolStatsType = {
   is_rt_connected: boolean;
