@@ -2,7 +2,8 @@ import i18next from "i18next";
 import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import en from './resources/en.json'
-import fr from './resources/fr.json'
+import es from './resources/es.json'
+import pt from './resources/pt.json'
 import { appStarted } from "./store";
 import { defaultLanguage, supportedLanguages } from "./constant";
 
@@ -10,8 +11,11 @@ const resources = {
   en: {
     translation: en
   },
-  fr: {
-    translation: fr
+  es: {
+    translation: es
+  },
+  pt: {
+    translation: pt
   }
 };
 
@@ -22,7 +26,8 @@ export const i18n = i18next
     resources,
     supportedLngs: supportedLanguages,
     detection: {
-      order: ['navigator', 'localStorage', 'cookie'],
+      order: ['localStorage', 'navigator'],
+      excludeCacheFor: ['localStorage'],
     },
     fallbackLng: defaultLanguage,
     debug: true

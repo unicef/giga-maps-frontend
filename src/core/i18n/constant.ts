@@ -1,13 +1,19 @@
 
 export const languages = [
   {
-    code: 'en',
     name: 'English',
+    code: 'en',
+  },
+  // spanish and portuguese
+  {
+    name: 'Española',
+    code: 'es',
   },
   {
-    code: 'fr',
-    name: 'Français',
-  }
+    name: 'Português',
+    code: 'pt',
+  },
+
 ]
 
 export const defaultLanguage = 'en'
