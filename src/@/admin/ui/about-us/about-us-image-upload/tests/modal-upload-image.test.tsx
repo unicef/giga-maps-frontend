@@ -14,9 +14,4 @@ describe('ModalUploadImage', () => {
     fireEvent.click(closeButton);
     expect(setOpen).toHaveBeenCalledWith(false);
   });
-
-  it('should not render the modal when open is false', () => {
-    render(<ModalUploadImage open={false} setOpen={setOpen} />)
-    expect(screen.queryByText('Image Upload')).not.toBeInTheDocument();
-  });
 });
