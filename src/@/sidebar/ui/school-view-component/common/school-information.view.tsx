@@ -13,8 +13,7 @@ import { StatisticsStatus } from '../styles/school-information.style';
 import { SchoolDetailInfo, SchoolDetailItem, SchoolDetailTitle, SingleInfoContainer } from '../styles/school-view-style';
 import { $country } from '~/@/country/country.model';
 import { $isLoadingSchoolView } from '~/@/sidebar/sidebar.model';
-import { getStatisticsConfig } from '~/@/sidebar/config/school-information-config'
-import { StatisticConfig } from '../../../config/school-information-config'; // Adjust the import path as needed
+import { getStatisticsConfig, StatisticConfig, groupOrder } from '../../../config/school-information-config';
 
 const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => {
   const [statisticsConfig, setStatisticsConfig] = useState<StatisticConfig[]>([]);
@@ -24,11 +23,9 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
 
   useEffect(() => {
     const fetchConfig = async () => {
-
       if (country?.id) {
         const config = await getStatisticsConfig(country.id);
         setStatisticsConfig(config);
-
       }
     };
 
@@ -38,6 +35,33 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({ schoolDetails: schoolData, stylePaintData });
   // 
   const schoolCoordinates = (JSON.parse(JSON.stringify(schoolData?.geopoint?.coordinates ?? []))).reverse();
+
+  const groupStatistics = (statistics: StatisticConfig[]) => {
+    const groups = statistics.reduce((acc, stat) => {
+      if (!acc[stat.group]) {
+        acc[stat.group] = [];
+      }
+      acc[stat.group].push(stat);
+      return acc;
+    }, {} as { [key: string]: StatisticConfig[] });
+
+    return groupOrder.filter(group => groups[group] && groups[group].length > 0)
+      .map(group => ({ groupName: group, stats: groups[group] }));
+  };
+
+  const renderStatistic = (config: StatisticConfig) => (
+    <SingleInfoContainer $width={true} key={config.key}>
+      <Hashtag />
+      <p>
+        {config.label}: {' '}
+        {typeof schoolData?.statistics[config.key] === 'boolean'
+          ? schoolData?.statistics[config.key] ? 'Yes' : 'No'
+          : schoolData?.statistics[config.key] !== undefined && schoolData?.statistics[config.key] !== null
+            ? schoolData?.statistics[config.key].toString()
+            : 'N/A'}
+      </p>
+    </SingleInfoContainer>
+  );
 
   if (!schoolData) return null;
   return (
@@ -77,16 +101,11 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
         <p>Education level: {schoolData?.education_level}</p>
       </SingleInfoContainer>}
 
-      {statisticsConfig.map((config) => (
-        <SingleInfoContainer $width={true} key={config.key}>
-          <Hashtag />
-          <p>
-            {config.label}: {' '}
-            {typeof schoolData?.statistics[config.key] === 'boolean'
-              ? schoolData?.statistics[config.key] ? 'Yes' : 'No'
-              : schoolData?.statistics[config.key] || 'N/A'}
-          </p>
-        </SingleInfoContainer>
+      {groupStatistics(statisticsConfig).map(({ groupName, stats }) => (
+        <React.Fragment key={groupName}>
+          <br /><br />
+          {stats.map(renderStatistic)}
+        </React.Fragment>
       ))}
     </>
   );
