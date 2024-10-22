@@ -41,7 +41,7 @@ const allStatistics: StatisticConfig[] = [
   { key: 'num_students_other', label: 'Number of other students', group: 'Students' },
   { key: 'num_teachers_female', label: 'Number of female teachers', group: 'Teachers' },
   { key: 'num_teachers_male', label: 'Number of male teachers', group: 'Teachers' },
-  { key: 'teachers_trained', label: 'Number of trained teachers', group: 'Teachers' },
+  { key: 'teachers_trained', label: 'Trained Teacher Availability', group: 'Teachers' },
   { key: 'sustainable_business_model', label: 'Sustainable business model', group: 'Other' },
   { key: 'device_availability', label: 'Device availability', group: 'Technology' },
   { key: 'num_robotic_equipment', label: 'Number of robotic equipment', group: 'Technology' },
