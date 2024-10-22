@@ -22,7 +22,8 @@ const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
         {
           !!value && <DateWeekWrapper>
             <StatisticsStatusLg $color={color}>
-              {value.toLowerCase()}
+
+              {value === 'true' ? 'Yes' : value === 'false' ? 'No' : value}
             </StatisticsStatusLg>
           </DateWeekWrapper>
         }
