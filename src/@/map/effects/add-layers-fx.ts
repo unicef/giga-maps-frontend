@@ -51,12 +51,17 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
 const callDelay = delayMethodCall();
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
-  console.log('changeLayersFx', { ...props })
-  const { timeout = 10, selectedLayerIds, refresh, lastSelectedLayer, map } = props;
+  let { timeout = 100, selectedLayerIds, isCheckedLastDate, mapRoute, refresh, lastSelectedLayer, map } = props;
   if (!map) return;
   const { isLastSelectionChange } = getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
   if (isLastSelectionChange) {
     deleteSourceAndLayers({ map })
+  }
+  if (isLastSelectionChange && !(isCheckedLastDate || mapRoute.map)) {
+    return;
+  }
+  if (mapRoute.map) {
+    timeout = 1000;
   }
   callDelay(timeout, createAndUpdateLayer, props);
 });
