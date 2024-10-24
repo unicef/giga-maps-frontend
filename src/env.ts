@@ -13,7 +13,7 @@ export const API_MAPBOX_ACCESS_TOKEN =
   process.env.API_MAPBOX_ACCESS_TOKEN ?? '';
 
 export const API_BASE_URL =
-  process.env.API_BASE_URL ?? 'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
+  'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
 
 export const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY ?? '';
 
