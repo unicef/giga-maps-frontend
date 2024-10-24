@@ -6,6 +6,7 @@ import { router } from "~/core/routes";
 import { $schoolPopupData } from "../map.init";
 import { UNKNOWN } from '../map.types';
 import { PointCoordinates } from "~/core/global-types";
+import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
 
 type SchoolPopupDataType = ReturnType<typeof $schoolPopupData.getState>
 
@@ -41,7 +42,8 @@ const setContentHTML = (el: HTMLElement, className = '', content = '') => {
 }
 
 export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintData, layerUtils, isGotoSchool, countryCode }: { popupElement: HTMLElement, isGotoSchool?: boolean; countryCode?: string; unit?: string; } & SchoolPopupDataType) => {
-  const { selectedLayerData, currentLayerTypeUtils } = layerUtils;
+  const { selectedLayerData, currentLayerTypeUtils, isSchoolBenchmark, benchmarkNamesAllLayers, countryConnectivityNames: countryConnectivityNames,
+    connectivityBenchMarks } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit;
@@ -74,6 +76,11 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
     }
     if (outerCircle && feature?.isRealTime) {
       outerCircle.style.backgroundColor = stylePaintData[feature?.connectivityType ?? UNKNOWN];
+    }
+    if (isSchoolBenchmark) {
+      const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
+      setContentHTML(popupTemplate, '.benchmark-value-label', `${benchmarkTitle} ${feature?.schoolBenchmark}`);
+      showElement(popupElement, '.benchmark-value-label')
     }
   } else if (isStatic) {
     showElement(popupTemplate, '.static-container');
