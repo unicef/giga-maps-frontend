@@ -168,7 +168,7 @@ const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (sourc
 })
 
 const mapLayerFilter = ({ isCheckedLastDate, mapRoute }: ReturnType<typeof gigaLayerSource.getState>) => {
-  return isCheckedLastDate || mapRoute.map;
+  return true; //isCheckedLastDate || mapRoute.map;
 }
 
 const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });

@@ -172,6 +172,11 @@ export const createSchoolSource = ({ map, source = defaultSource, schoolData }: 
   });
 }
 
+export const getAllSourceLayers = (map: Map, sourceId = defaultSource) => {
+  const layersFromSource = map.getStyle().layers.filter(layer => layer.source === sourceId);
+  return layersFromSource
+}
+
 export const checkSourceAvailable = (map: Map, sourceId: string): boolean => {
   const { sources } = map.getStyle();
   return !!sources && !!sources[sourceId];
