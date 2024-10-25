@@ -213,6 +213,16 @@ export const $staticPopupActiveLayer = combine($activeLayerByCountryCode, $stati
   return null;
 })
 
+export const $isSchoolBenchmark = combine($selectedLayerData, $connectivityBenchMark, $country, (selectedLayer, conntectivityBenchmark, country) => {
+  const isLive = isLiveLayer(selectedLayer?.type);
+  if (!isLive) return false;
+  if (conntectivityBenchmark === ConnectivityBenchMarks.global) {
+    return selectedLayer?.global_benchmark.value.startsWith('SQL:')
+  } else if (conntectivityBenchmark === ConnectivityBenchMarks.national) {
+    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""].startsWith('SQL:')
+  }
+})
+// $isSchoolBenchmark.watch((data) => console.log('is school benchmark', data));
 export const $layerUtils = combine({
   layers: $layersList,
   liveLayers: $connectivityLayers,
@@ -232,7 +242,11 @@ export const $layerUtils = combine({
   isActiveCurrentLayer: $isActiveCurrentLayer,
   activeLayerByCountryCode: $activeLayerByCountryCode,
   currentDefaultLayerId: $currentDefaultLayerId,
-  staticPopupActiveLayer: $staticPopupActiveLayer
+  staticPopupActiveLayer: $staticPopupActiveLayer,
+  isSchoolBenchmark: $isSchoolBenchmark,
+  benchmarkNamesAllLayers: $benchmarkNamesAllLayers,
+  countryConnectivityNames: $countryConnectivityNames,
+  connectivityBenchMarks: $connectivityBenchMark
 });
 
 export const openHistoryChart = createEvent<boolean>();
@@ -333,6 +347,7 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
   id: school?.id,
   externalId: school?.external_id,
+  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`
 })
 export const $schoolStatsMap = $schoolStats.map((schools) => {
   return schools?.map(schoolStatsMap) ?? null;
