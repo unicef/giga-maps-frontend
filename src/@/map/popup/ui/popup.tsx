@@ -27,9 +27,9 @@ justify-content:space-between;
 `
 export const SchoolInfoWrapper = styled.div`
 display:flex;
-align-items:center;
+align-items:baseline;
 margin-top:0.75rem;
-&.hide {
+&.hide, .hide {
   display: none;
 }
 svg{
@@ -39,6 +39,11 @@ svg{
   margin-right:0.25rem;
   margin-top: -0.12rem;
 }
+`
+
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const SchoolName = styled.h6`
@@ -124,7 +129,10 @@ export const Popup = () => {
           </SchoolInfoWrapper>
           <SchoolInfoWrapper className="live-container hide">
             <Wifi />
-            <Label className="map-school-connectivity-speed"></Label>
+            <FlexColumn>
+              <Label className="map-school-connectivity-speed"></Label>
+              <Label className="benchmark-value-label hide"></Label>
+            </FlexColumn>
           </SchoolInfoWrapper>
           <SchoolInfoWrapper className="static-container hide">
             <span className="static-icon"><TransmissionLte /></span>
