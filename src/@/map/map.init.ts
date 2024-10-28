@@ -138,8 +138,6 @@ $map.watch(setCenter, (map: Map | null, center) => {
   map?.setCenter(center);
 });
 
-
-const schoolConnectivityLength = $schoolStatsMap.map((data) => data?.length);
 export const gigaLayerSource = combine({
   selectedLayerIds: $selectedLayers,
   map: $map,
