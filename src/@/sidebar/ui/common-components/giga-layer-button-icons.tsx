@@ -39,7 +39,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
       {popup && <GigaLayerText>{t('giga-layers')}</GigaLayerText>}
       <SidePanelLayerWrapper $wrap={popup}>
         <GigaLayerButton
-          label="School status"
+          label={t("school-status")}
           popup={popup}
           isActive={isSchoolStatus}
           icon={<Account className='layer-icon' />}
@@ -48,7 +48,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           }}
         />
         <GigaLayerButton
-          label="Real-time Connectivity"
+          label={t("real-time-connectivity")}
           disabled={!(activeLayerByCountryCode[String(currentDefaultLayerId)])}
           popup={popup}
           isActive={isLive}

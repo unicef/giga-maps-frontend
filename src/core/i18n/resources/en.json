@@ -41,5 +41,8 @@
   "weekly": "Weekly",
   "monthly": "Monthly",
   "real-time-connectivity-data-layer": "Real-time connectivity data layer",
-  "please-select-the-real-time-connectivity-data-layer-you-want-to-visualise-on-the-map": "Please select the real-time connectivity data layer you want to visualise on the map."
+  "please-select-the-real-time-connectivity-data-layer-you-want-to-visualise-on-the-map": "Please select the real-time connectivity data layer you want to visualise on the map.",
+  "data-layer-selection": "Data layer selection",
+  "data-source": "Data source",
+  "data-source-1": "Data source :"
 }
