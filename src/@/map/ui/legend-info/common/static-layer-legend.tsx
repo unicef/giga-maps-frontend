@@ -91,35 +91,39 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
       legends.values.map(({ key, label, tooltip }) => {
         const logicLabel = key === ConnectivityDistribution.unknown ? (tooltip || `Doesn't match any criteria`) : tooltip;
         const toolTiplabel = logicLabel;
-        return (coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label] > 0 ? <Div key={key}>
-          <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
-            <button>
-              <div className='legend-container' key={`${key}`}>
-                <div className='checkbox-with-label'>
-                  {shouldShowControls && (
-                    <CheckBoxContainer>
-                      <Checkbox
-                        id={key}
-                        labelText={''}
-                        checked={staticLayerCheckedStatus[key]}
-                        onChange={() => handleStaticLayerToggle(key)}
-                      />
-                    </CheckBoxContainer>
-                  )}
-                  <div key={key} className='real-time-connetivity-info'>
-                    <CircleWrapper>
-                      <InnerCircle $backColor={legends.colors[key]} $large />
-                    </CircleWrapper>
-                    <p className="label">{label}{" "}</p>
+        return (
+          (coverageStats?.connected_schools &&
+            (isCoverage ? CoverageKeyMapping[key] : label) in coverageStats.connected_schools &&
+            coverageStats.connected_schools[isCoverage ? CoverageKeyMapping[key] : label] > 0)
+            ? <Div key={key}>
+              <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
+                <button>
+                  <div className='legend-container' key={`${key}`}>
+                    <div className='checkbox-with-label'>
+                      {shouldShowControls && (
+                        <CheckBoxContainer>
+                          <Checkbox
+                            id={key}
+                            labelText={''}
+                            checked={staticLayerCheckedStatus[key]}
+                            onChange={() => handleStaticLayerToggle(key)}
+                          />
+                        </CheckBoxContainer>
+                      )}
+                      <div key={key} className='real-time-connetivity-info'>
+                        <CircleWrapper>
+                          <InnerCircle $backColor={legends.colors[key]} $large />
+                        </CircleWrapper>
+                        <p className="label">{label}{" "}</p>
+                      </div>
+                    </div>
+                    {shouldShowControls && coverageStats?.connected_schools && (
+                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
+                    )}
                   </div>
-                </div>
-                {shouldShowControls && coverageStats?.connected_schools && (
-                  <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
-                )}
-              </div>
-            </button>
-          </TooltipButton>
-        </Div> : null)
+                </button>
+              </TooltipButton>
+            </Div> : null)
       }
       )}
   </div>

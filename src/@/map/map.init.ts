@@ -138,8 +138,6 @@ $map.watch(setCenter, (map: Map | null, center) => {
   map?.setCenter(center);
 });
 
-
-const schoolConnectivityLength = $schoolStatsMap.map((data) => data?.length);
 export const gigaLayerSource = combine({
   selectedLayerIds: $selectedLayers,
   map: $map,
@@ -168,7 +166,7 @@ const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (sourc
 })
 
 const mapLayerFilter = ({ isCheckedLastDate, mapRoute }: ReturnType<typeof gigaLayerSource.getState>) => {
-  return isCheckedLastDate || mapRoute.map;
+  return true; //isCheckedLastDate || mapRoute.map;
 }
 
 const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });

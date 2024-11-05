@@ -97,16 +97,19 @@ export function evaluateExpression(expression?: string, val?: string | number | 
   // Define a regular expression to match {val}
   if (!expression || !val) return val;
   const regex = /\{val\}/g;
+  try {
+    // Replace {val} with the actual number
+    const modifiedExpression = expression.replace(regex, String(val));
 
-  // Replace {val} with the actual number
-  const modifiedExpression = expression.replace(regex, String(val));
+    // Use Function constructor to create a function
+    // and pass val as a parameter
+    const func = new Function(`return ${modifiedExpression};`);
 
-  // Use Function constructor to create a function
-  // and pass val as a parameter
-  const func = new Function(`return ${modifiedExpression};`);
+    // Call the function with the actual value
+    const result = func(val);
 
-  // Call the function with the actual value
-  const result = func(val);
-
-  return Number(parseFloat(result).toFixed(0));
+    return Number(parseFloat(result).toFixed(0));
+  } catch {
+    return val;
+  }
 }
