@@ -1,4 +1,4 @@
-import { Button, Form, TextArea } from '@carbon/react';
+import { Button, Form, Link, TextArea } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { FormEvent, useEffect } from 'react';
 
@@ -68,6 +68,7 @@ const ReuestApiKeyPopup = () => {
         }} $headingStyle={$modalHeadingStyle} title="Request API Key" />
         <ModalBody $style={$modalBodyStyle}>
           <ModalDescription> Please select the countries for which you need data access. Please explain how you plan to utilise the data for each country.  </ModalDescription>
+          {exploreApiData?.code === "DAILY_CHECK_APP" && <Link size="sm" href='https://opendatacommons.org/licenses/odbl/'>Giga Meter data is made available under the Open Database License(ODBL)</Link>}
           {requestApiPopup && <CountryMultiDropdown
             onMenuChange={(open: boolean) => {
               if (!open) {
