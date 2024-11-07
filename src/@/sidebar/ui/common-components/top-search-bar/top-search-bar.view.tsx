@@ -8,6 +8,7 @@ import { getInputValue } from '~/lib/event-reducers';
 
 import { $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, } from './top-search-bar.model';
 import { CountrySearchIcon, SearchContainer, SearchWrapper } from './top-search-bar.style';
+import { useTranslation } from 'react-i18next';
 
 
 const onChange = changeSearchText.prepend(getInputValue);
@@ -18,6 +19,7 @@ const TopSearchBar = () => {
   const showCountries = useStore($showCountries)
   const isMobile = useStore($isMobile)
   const [mobileSearch, setMobileSearch] = useState(false)
+  const { t } = useTranslation();
 
   const onBlurSearch = () => {
     setTimeout(() => {
@@ -47,7 +49,7 @@ const TopSearchBar = () => {
       ) : null}
       {(isMobile && mobileSearch || !isMobile) && <SearchContainer
         size="lg"
-        placeholder="Search country, region, school, id"
+        placeholder={t("search-country-region-school-id")}
         labelText="Search"
         closeButtonLabelText="Clear search input"
         id="main-search-bar"

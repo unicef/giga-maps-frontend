@@ -31,9 +31,8 @@ export default function ConnectivityLayer() {
       <CurrentLayerNameIcon isLiveLayer={true} label={t("real-time-connectivity")} />
       <Div $margin='1rem 1rem 0rem 1rem'>
         {isLoading ? <LoadingText width="80%" $marginEnd='2' /> : <Text $color={theme.titleDesc}>
-          {`${formatNumber(noOfSchoolsMeasure)} schools with real-time connectivity data across ${formatNumber(globalStats.schools_connected)} schools mapped`}
+          {t("schools-with-real-time-mapped", { schoolCount: formatNumber(noOfSchoolsMeasure), globalCount: formatNumber(globalStats.schools_connected) })}
         </Text>}
-
         <DateWeekWrapper>
           <LiveAverage isLoading={isLoading} color={color} icon={icon ?? ""} unit={global_benchmark?.convert_unit ?? ""} value={connectivityStats?.live_avg ?? 0} />
           <WeekSlider />

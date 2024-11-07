@@ -12,6 +12,7 @@ import { ActiveButtonWrapper, LegendWrapper } from "./legend-button.style";
 import LegendPopup from "./legend-popup";
 import { $country } from '~/@/country/country.model';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 sample({
   clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country, $showThemeLayer, $showAdvancedFilter]),
@@ -24,6 +25,7 @@ sample({
   target: onShowLegend,
 })
 const LegendButton = () => {
+  const { t } = useTranslation();
   const showLegend = useStore($showLegend);
   const isMobile = useStore($isMobile);
   const isProductTour = useStore($isProductTour);
@@ -42,7 +44,7 @@ const LegendButton = () => {
           <IconButton
             align="left"
             size="sm"
-            label="Legend"
+            label={t("legend")}
             onClick={toggleShowLegend}>
             <Information />
           </IconButton>

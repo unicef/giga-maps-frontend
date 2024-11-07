@@ -124,7 +124,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
       <div>
         <DataSourceHeader>
           <p>{t('data-source')} </p>
-          <Tooltip className="data-source-tooltip" align="top" label={"Data is sourced from 50+ government ministries, open-source communities, Internet service providers, Giga’s AI model and measurement app, and multiple educational and research institutions."}>
+          <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
             <button className="sb-tooltip-trigger" type="button">
               <Information />
             </button>
@@ -148,7 +148,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
     <div>
       {!isFooter && <DataSourceHeader>
         <p>{t('data-source')} </p>
-        <Tooltip className="data-source-tooltip" align="top" label={"Data is sourced from 50+ government ministries, open-source communities, Internet service providers, Giga’s AI model and measurement app, and multiple educational and research institutions."}>
+        <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>
