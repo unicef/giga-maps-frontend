@@ -79,7 +79,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
     }
     if (isSchoolBenchmark) {
       const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
-      setContentHTML(popupTemplate, '.benchmark-value-label', `${benchmarkTitle} ${feature?.schoolBenchmark}`);
+      setContentHTML(popupTemplate, '.benchmark-value-label', `${benchmarkTitle} - ${feature?.schoolBenchmark}`);
       showElement(popupTemplate, '.benchmark-value-label')
     }
   } else if (isStatic) {

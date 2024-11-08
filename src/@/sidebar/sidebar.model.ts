@@ -14,6 +14,7 @@ import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, Multisch
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { evaluateExpression } from '~/lib/utils';
 import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
+import { UNKNOWN } from '../map/map.types';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -340,7 +341,7 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   name: school.name,
   geopoint: school?.geopoint,
   liveAvg: school?.connectivity_speed || school?.live_avg || 0,
-  staticValue: school?.field_value ?? school?.coverage_type ?? school?.statistics?.coverage_type,
+  staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
   staticType: school?.field_status ?? school?.coverage_status,
   connectivityStatus: school.connectivity_status || school.statistics.connectivity_status,
   isRealTime: school.is_rt_connected,
