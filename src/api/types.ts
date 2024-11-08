@@ -114,6 +114,7 @@ export type SchoolStatsType = {
     round_unit_value: string;
     rounded_benchmark_value: string;
     display_unit: string;
+    convert_unit: string;
   }
 };
 
