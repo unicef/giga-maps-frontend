@@ -207,7 +207,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
 }
 
 .c5 {
-  max-height: calc(100vh - 10.5rem);
+  max-height: calc(100vh - 13.5rem);
 }
 
 .c4 .cds--search-magnifier-icon {
@@ -1446,7 +1446,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
 }
 
 .c5 {
-  max-height: calc(100vh - 10.5rem);
+  max-height: calc(100vh - 13.5rem);
 }
 
 .c4 .cds--search-magnifier-icon {

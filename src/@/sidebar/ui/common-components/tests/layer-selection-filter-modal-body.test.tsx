@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { testWrapper } from '~/tests/jest-wrapper';
 import LayerSelectionFilterModalBody from '../layer-selection-filter-modal-body';
+import "~/core/i18n/instance"
+
 describe('LayerSelectionFilterModalBody', () => {
 
   it('should render component', () => {

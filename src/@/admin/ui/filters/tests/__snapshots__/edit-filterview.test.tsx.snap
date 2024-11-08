@@ -1,0 +1,885 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditFilterList should call getFilterListIdFx with id when id is provided 1`] = `
+<DocumentFragment>
+  .c0 {
+  height: 100vh;
+  width: 18.5rem;
+  z-index: 999;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background: #222;
+}
+
+.c1 {
+  max-height: calc(100vh - 3.1rem);
+}
+
+.c2 {
+  padding: 0rem 1rem;
+}
+
+.c3 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.c3 h6 {
+  font-size: 0.875rem;
+  color: #f5f5f5;
+  padding-top: 1rem;
+}
+
+.c6 {
+  color: #c0c0c0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.c6.center-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c6 .cds--radio-button:checked+.cds--radio-button__label .cds--radio-button__appearance::before {
+  background-color: #c0c0c0;
+}
+
+.c6 .cds--checkbox-label::before,
+.c6 .cds--radio-button__appearance,
+.c6 .cds--radio-button:checked+.cds--radio-button__label .cds--radio-button__appearance {
+  border-color: #c0c0c0;
+}
+
+.c6 .cds--label {
+  color: #c0c0c0;
+}
+
+.c6 .cds--btn--ghost.cds--btn--icon-only .cds--btn__icon path:not([data-icon-path]):not([fill=none]),
+.c6 .cds--btn--ghost.cds--btn--icon-only .cds--btn__icon {
+  fill: #c0c0c0;
+}
+
+.c8 {
+  margin-top: 0.5rem;
+}
+
+.c8 .cds--label {
+  color: #c0c0c0;
+}
+
+.c8 .cds--select-input {
+  background: #333333;
+  color: #f5f5f5;
+}
+
+.c8 .cds--list-box__label {
+  color: #f5f5f5;
+}
+
+.c8 svg {
+  fill: #f5f5f5;
+}
+
+.c7 .cds--text-input {
+  background: #333333;
+  color: #f5f5f5;
+}
+
+.c7 .cds--text-input::placeholder {
+  color: #f5f5f5;
+}
+
+.c7 .cds--text-input:disabled {
+  color: #f5f5f5;
+  -webkit-text-fill-color: #f5f5f5;
+  opacity: 0.4;
+}
+
+.c7 input:-webkit-autofill,
+.c7 input:-webkit-autofill:hover,
+.c7 input:-webkit-autofill:focus,
+.c7 textarea:-webkit-autofill,
+.c7 textarea:-webkit-autofill:hover,
+.c7 textarea:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px #333333 inset;
+  -webkit-text-fill-color: #f5f5f5;
+}
+
+.c4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c5 {
+  width: 90%;
+}
+
+.c9 Button {
+  width: 50%;
+}
+
+<div
+    class="c0"
+  >
+    <form
+      class="cds--form"
+      style="display: flex; flex-direction: column; color: white; height: inherit; justify-content: space-between;"
+    >
+      <div
+        class="scrollbar-container c1 ps"
+      >
+        <div
+          class="c2"
+        >
+          <div
+            class="c3"
+          >
+            <h6>
+              Edit filter
+            </h6>
+          </div>
+        </div>
+        <div
+          class="c4"
+        >
+          <div
+            class="0 c5"
+          >
+            <div
+              class="c6"
+            >
+              Unique Code
+            </div>
+            <div
+              class="cds--form-item c7 cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              />
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input"
+                    disabled=""
+                    id="layer-code"
+                    name="code"
+                    placeholder="Enter layer unique code"
+                    required=""
+                    title="Enter layer unique code"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item c8"
+            >
+              <div
+                class="cds--select"
+              >
+                <label
+                  class="cds--label"
+                  for="parameter-select"
+                >
+                  Parameter
+                </label>
+                <div
+                  class="cds--select-input__wrapper"
+                >
+                  <select
+                    class="cds--select-input"
+                    id="parameter-select"
+                    name="column_configuration"
+                    placeholder="Choose parameter type"
+                    required=""
+                    title=""
+                  >
+                    <option
+                      class="cds--select-option"
+                      value=""
+                    >
+                      Choose parameter
+                    </option>
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--select__arrow"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item c8"
+            >
+              <div
+                class="cds--select"
+              >
+                <label
+                  class="cds--label"
+                  for="filter-type-select"
+                >
+                  Filter type
+                </label>
+                <div
+                  class="cds--select-input__wrapper"
+                >
+                  <select
+                    class="cds--select-input"
+                    id="filter-type-select"
+                    name="type"
+                    placeholder="Choose filter type"
+                    required=""
+                    title=""
+                  >
+                    <option
+                      class="cds--select-option"
+                      value=""
+                    >
+                      Choose filter type
+                    </option>
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--select__arrow"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              Filter name
+            </div>
+            <div
+              class="cds--form-item c7 cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              />
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input"
+                    id="filter-name"
+                    name="name"
+                    placeholder="Enter filter name"
+                    required=""
+                    title="Enter filter name"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              Filter description
+            </div>
+            <div
+              class="cds--form-item c7 cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              />
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input"
+                    id="filter-description"
+                    name="description"
+                    placeholder="Enter description"
+                    title="Enter description"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item c8"
+            >
+              <div
+                class="cds--select"
+              >
+                <label
+                  class="cds--label"
+                  for="filter-type-select"
+                >
+                  Query Param filter
+                </label>
+                <div
+                  class="cds--select-input__wrapper"
+                >
+                  <select
+                    class="cds--select-input"
+                    id="filter-type-select"
+                    name="query_param_filter"
+                    placeholder="Choose query param filter"
+                    required=""
+                    title=""
+                  >
+                    <option
+                      class="cds--select-option"
+                      value=""
+                    >
+                      Choose query param
+                    </option>
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--select__arrow"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ps__rail-x"
+          style="left: 0px; top: 0px;"
+        >
+          <div
+            class="ps__thumb-x"
+            style="left: 0px; width: 0px;"
+            tabindex="0"
+          />
+        </div>
+        <div
+          class="ps__rail-y"
+          style="top: 0px; left: 0px;"
+        >
+          <div
+            class="ps__thumb-y"
+            style="top: 0px; height: 0px;"
+            tabindex="0"
+          />
+        </div>
+      </div>
+      <div
+        class="1 c9"
+      >
+        <button
+          class="cds--btn cds--btn--primary"
+          style="background: rgb(71, 71, 71);"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="cds--btn cds--btn--primary cds--btn--disabled"
+          disabled=""
+          type="submit"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditFilterList should navigate to adminFilterRoute if id is not provided 1`] = `
+<DocumentFragment>
+  .c0 {
+  height: 100vh;
+  width: 18.5rem;
+  z-index: 999;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background: #222;
+}
+
+.c1 {
+  max-height: calc(100vh - 3.1rem);
+}
+
+.c2 {
+  padding: 0rem 1rem;
+}
+
+.c3 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.c3 h6 {
+  font-size: 0.875rem;
+  color: #f5f5f5;
+  padding-top: 1rem;
+}
+
+.c6 {
+  color: #c0c0c0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.c6.center-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c6 .cds--radio-button:checked+.cds--radio-button__label .cds--radio-button__appearance::before {
+  background-color: #c0c0c0;
+}
+
+.c6 .cds--checkbox-label::before,
+.c6 .cds--radio-button__appearance,
+.c6 .cds--radio-button:checked+.cds--radio-button__label .cds--radio-button__appearance {
+  border-color: #c0c0c0;
+}
+
+.c6 .cds--label {
+  color: #c0c0c0;
+}
+
+.c6 .cds--btn--ghost.cds--btn--icon-only .cds--btn__icon path:not([data-icon-path]):not([fill=none]),
+.c6 .cds--btn--ghost.cds--btn--icon-only .cds--btn__icon {
+  fill: #c0c0c0;
+}
+
+.c8 {
+  margin-top: 0.5rem;
+}
+
+.c8 .cds--label {
+  color: #c0c0c0;
+}
+
+.c8 .cds--select-input {
+  background: #333333;
+  color: #f5f5f5;
+}
+
+.c8 .cds--list-box__label {
+  color: #f5f5f5;
+}
+
+.c8 svg {
+  fill: #f5f5f5;
+}
+
+.c7 .cds--text-input {
+  background: #333333;
+  color: #f5f5f5;
+}
+
+.c7 .cds--text-input::placeholder {
+  color: #f5f5f5;
+}
+
+.c7 .cds--text-input:disabled {
+  color: #f5f5f5;
+  -webkit-text-fill-color: #f5f5f5;
+  opacity: 0.4;
+}
+
+.c7 input:-webkit-autofill,
+.c7 input:-webkit-autofill:hover,
+.c7 input:-webkit-autofill:focus,
+.c7 textarea:-webkit-autofill,
+.c7 textarea:-webkit-autofill:hover,
+.c7 textarea:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px #333333 inset;
+  -webkit-text-fill-color: #f5f5f5;
+}
+
+.c4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c5 {
+  width: 90%;
+}
+
+.c9 Button {
+  width: 50%;
+}
+
+<div
+    class="c0"
+  >
+    <form
+      class="cds--form"
+      style="display: flex; flex-direction: column; color: white; height: inherit; justify-content: space-between;"
+    >
+      <div
+        class="scrollbar-container c1 ps"
+      >
+        <div
+          class="c2"
+        >
+          <div
+            class="c3"
+          >
+            <h6>
+              Edit filter
+            </h6>
+          </div>
+        </div>
+        <div
+          class="c4"
+        >
+          <div
+            class="0 c5"
+          >
+            <div
+              class="c6"
+            >
+              Unique Code
+            </div>
+            <div
+              class="cds--form-item c7 cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              />
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input"
+                    disabled=""
+                    id="layer-code"
+                    name="code"
+                    placeholder="Enter layer unique code"
+                    required=""
+                    title="Enter layer unique code"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item c8"
+            >
+              <div
+                class="cds--select"
+              >
+                <label
+                  class="cds--label"
+                  for="parameter-select"
+                >
+                  Parameter
+                </label>
+                <div
+                  class="cds--select-input__wrapper"
+                >
+                  <select
+                    class="cds--select-input"
+                    id="parameter-select"
+                    name="column_configuration"
+                    placeholder="Choose parameter type"
+                    required=""
+                    title=""
+                  >
+                    <option
+                      class="cds--select-option"
+                      value=""
+                    >
+                      Choose parameter
+                    </option>
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--select__arrow"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item c8"
+            >
+              <div
+                class="cds--select"
+              >
+                <label
+                  class="cds--label"
+                  for="filter-type-select"
+                >
+                  Filter type
+                </label>
+                <div
+                  class="cds--select-input__wrapper"
+                >
+                  <select
+                    class="cds--select-input"
+                    id="filter-type-select"
+                    name="type"
+                    placeholder="Choose filter type"
+                    required=""
+                    title=""
+                  >
+                    <option
+                      class="cds--select-option"
+                      value=""
+                    >
+                      Choose filter type
+                    </option>
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--select__arrow"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              Filter name
+            </div>
+            <div
+              class="cds--form-item c7 cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              />
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input"
+                    id="filter-name"
+                    name="name"
+                    placeholder="Enter filter name"
+                    required=""
+                    title="Enter filter name"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="c6"
+            >
+              Filter description
+            </div>
+            <div
+              class="cds--form-item c7 cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              />
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input"
+                    id="filter-description"
+                    name="description"
+                    placeholder="Enter description"
+                    title="Enter description"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item c8"
+            >
+              <div
+                class="cds--select"
+              >
+                <label
+                  class="cds--label"
+                  for="filter-type-select"
+                >
+                  Query Param filter
+                </label>
+                <div
+                  class="cds--select-input__wrapper"
+                >
+                  <select
+                    class="cds--select-input"
+                    id="filter-type-select"
+                    name="query_param_filter"
+                    placeholder="Choose query param filter"
+                    required=""
+                    title=""
+                  >
+                    <option
+                      class="cds--select-option"
+                      value=""
+                    >
+                      Choose query param
+                    </option>
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--select__arrow"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ps__rail-x"
+          style="left: 0px; top: 0px;"
+        >
+          <div
+            class="ps__thumb-x"
+            style="left: 0px; width: 0px;"
+            tabindex="0"
+          />
+        </div>
+        <div
+          class="ps__rail-y"
+          style="top: 0px; left: 0px;"
+        >
+          <div
+            class="ps__thumb-y"
+            style="top: 0px; height: 0px;"
+            tabindex="0"
+          />
+        </div>
+      </div>
+      <div
+        class="1 c9"
+      >
+        <button
+          class="cds--btn cds--btn--primary"
+          style="background: rgb(71, 71, 71);"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="cds--btn cds--btn--primary cds--btn--disabled"
+          disabled=""
+          type="submit"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
