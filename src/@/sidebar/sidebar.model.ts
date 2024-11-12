@@ -64,6 +64,8 @@ $connectivitySpeedUnknown.on(changeConnectivitySpeedUnknown, setPayload);
 export const $layersList = createStore<LayerType[]>([]);
 $layersList.on(fetchLayerListFx.doneData, setPayloadResults)
 
+export const $layerListTranslated = createStore<LayerType[]>([]);
+
 export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
 export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
 
@@ -106,7 +108,7 @@ export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountr
   return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : null;
 })
 export const $isActiveCurrentLayer = combine($activeLayerByCountries, $selectedLayerId, $countryCode, (activeLayers, selectedId, countryCode) => {
-  return !!selectedId && activeLayers.list[selectedId]?.activeCountries.includes(countryCode.toLowerCase())
+  return !!selectedId && activeLayers.list[selectedId]?.activeCountries?.includes(countryCode.toLowerCase())
 })
 
 export const $activeLayerByCountryCode = combine($layersList, $activeLayerByCountries, $countryCode, (layers, activeLayers, countryCode) => {

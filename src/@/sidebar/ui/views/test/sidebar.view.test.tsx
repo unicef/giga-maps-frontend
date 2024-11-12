@@ -10,6 +10,7 @@ import { testWrapper } from '~/tests/jest-wrapper';
 import Sidebar from '../sidebar.view';
 import layers from '~/tests/data/layers-data';
 import globalStatusData from '~/tests/data/globalStatus.data';
+import { fetchMockResponse } from '~/tests/fetchMock';
 
 
 const setMobileView = createEvent<boolean>()
@@ -18,14 +19,7 @@ $isMobile.on(setMobileView, (_, payload) => payload)
 describe('Sidebar', () => {
 
   beforeEach(() => {
-    fetchMock.mockResponse((req) => {
-      if (req.url.includes('api/accounts/layers/')) {
-        return Promise.resolve(JSON.stringify(layers))
-      } else if (req.url.includes('statistics/global-stat/')) {
-        return Promise.resolve(JSON.stringify(globalStatusData))
-      }
-      return Promise.resolve(JSON.stringify({}))
-    });
+    fetchMock.mockResponse(fetchMockResponse);
   })
 
   test('renders Sidebar and take a snapshop', () => {
