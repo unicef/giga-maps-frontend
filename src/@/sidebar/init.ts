@@ -36,15 +36,18 @@ import {
   $isNationalBenchmark,
   $schoolAdminId,
 } from '~/@/sidebar/sidebar.model';
-import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchLayerListFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
-import { ConnectivityBenchMarks, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { ConnectivityBenchMarks, Layers, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { format } from 'date-fns';
 import { isLiveLayer } from './sidebar.util';
+import { languageStore } from '~/core/i18n/store';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { defaultLanguage } from '~/core/i18n/constant';
 
 $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
@@ -383,4 +386,27 @@ sample({
     return null;
   },
   target: $countryAdminSchoolId
+})
+
+sample({
+  clock: merge([fetchLayerListFx.doneData, languageStore.$language]),
+  source: combine({ layersList: $layersList, lng: languageStore.$language }),
+  filter: ({ layersList }) => {
+    return !!layersList?.length
+  },
+  target: createEffect(({ layersList, lng }: { layersList: Layers[]; lng: string }) => {
+
+    if (lng === defaultLanguage) return layersList;
+    console.log('original data', layersList)
+    const data = extractDataWithMapping({ layers: layersList }, [
+      "layers.*.description",
+    ])
+
+    console.log('extracted keys', data);
+
+    const translatedData = reconstructJson(data);
+    console.log('translated data', translatedData);
+    // extract translation string from json
+
+  })
 })

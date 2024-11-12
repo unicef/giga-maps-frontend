@@ -30,7 +30,7 @@ i18next
       excludeCacheFor: ['localStorage'],
     },
     fallbackLng: defaultLanguage,
-    debug: true
+    debug: false
   })
 
 // start app;

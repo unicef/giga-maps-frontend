@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 sample({
   clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country, $showThemeLayer, $showAdvancedFilter]),
   source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
-  fn: (_, selectedLayerId) => true,
+  fn: () => true,
   filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
     if (showAdvancedFilter || showThemeLayer) return false;
     return !isMobile
