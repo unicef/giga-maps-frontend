@@ -1,5 +1,6 @@
 import { dataLayerlistMock, singleLayerMock } from "./data/admin-data-layer"
 import apiConfigData from "./data/api-config-data"
+import connectivityConfigData from "./data/connectivity-config-data"
 import { countryList } from "./data/country-filter-modal"
 import dataSourcesData from "./data/data-sources-data"
 import filterData from "./data/filter-data"
@@ -29,6 +30,8 @@ export const fetchMockResponse = (req: any) => {
     return Promise.resolve(JSON.stringify(filterData))
   } else if (req.url.includes('accounts/layers')) {
     return Promise.resolve(JSON.stringify({ results: dataLayerlistMock, count: 2 }))
+  } else if (req.url.includes('/statistics/connectivityconfigs/')) {
+    return Promise.resolve(JSON.stringify(connectivityConfigData))
   } else {
     return Promise.resolve(JSON.stringify({}))
   }

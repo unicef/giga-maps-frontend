@@ -25,6 +25,7 @@ const MapPage = () => {
   const { code = '' } = useStore(mapCountry.params) ?? {};
   const isProductTour = useStore($isProductTour);
   const isTimeplayer = useStore($isTimeplayer)
+  console.log({ isProductTour });
   useEffect(() => {
     if (code) {
       changeCountryCode(code);
