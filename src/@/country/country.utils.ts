@@ -1,4 +1,4 @@
-import { $countryCode } from '~/@/country/country.model';
+import { $countryCode, $countrySearchParams } from '~/@/country/country.model';
 import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl";
 
 import { mapCountry } from "~/core/routes";
@@ -15,7 +15,8 @@ export const getAdminCountryLayerLine = (level: CountryAdminLevel) => `${AdminLa
 
 export const getCurrentCountrySearchPath = (countryCode: string) => {
   const currentCountryCode = $countryCode.getState();
-  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase()) {
+  const { selectedCount } = $countrySearchParams.getState();
+  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase() && selectedCount >= 1) {
     return window.location.search;
   }
 }

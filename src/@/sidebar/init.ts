@@ -149,7 +149,7 @@ const sourceForInfo = combine({
   countrySearch: $countrySearchString
 })
 
-export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id }: ReturnType<typeof sourceForInfo.getState>) => {
+export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
   const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
   const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
@@ -176,7 +176,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  if (schoolParams?.schoolIds) {
+  if (schoolParams?.schoolIds && (mapRoutes.schools || isSchoolClicked)) {
     let schoolKeys = '';
     if (typeof schoolParams.schoolIds === 'number') {
       schoolKeys = String(schoolParams.schoolIds);
@@ -240,7 +240,7 @@ sample({
 })
 
 
-const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState>) => {
+const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const { downloadLayerId, coverageLayerId } = props.layersUtils;
   const { query, id } = getCurrentQueryId(props);
   let url = `api/accounts/layers/${id}/info/`
@@ -270,7 +270,7 @@ sample({
 sample({
   clock: $schoolClickedId,
   source: sourceForInfo,
-  fn: (props, schoolIds) => schoolInfoFn({ ...props, schoolParams: { schoolIds: [Number(schoolIds)], country: null } }),
+  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: [Number(schoolIds)], country: null } }),
   target: fetchSchoolPopupDataFx
 })
 
