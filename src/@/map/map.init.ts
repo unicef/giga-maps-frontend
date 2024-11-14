@@ -60,6 +60,7 @@ sample({
   clock: merge([onLoadPage, map.visible]),
   source: $mapRoutes,
   target: createEffect((routes: ReturnType<typeof $mapRoutes.getState>) => {
+    console.log('....called, routes', routes);
     if (routes.map) {
       void fetchGlobalStatsFx({});
     }

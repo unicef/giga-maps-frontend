@@ -1281,7 +1281,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
               <span
                 class="cds--side-nav__link-text"
               >
-                About Giga Maps
+                About Giga maps
               </span>
             </a>
           </li>
@@ -1336,12 +1336,14 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
               id="downshift-:r2:-toggle-button"
               role="combobox"
               tabindex="0"
-              title=""
+              title="English"
               type="button"
             >
               <span
                 class="cds--list-box__label"
-              />
+              >
+                English
+              </span>
               <div
                 class="cds--list-box__menu-icon"
               >
@@ -1436,7 +1438,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
           </span>
         </span>
         <div
-          aria-label="search-country-region-school-id"
+          aria-label="Search country, region, school, id"
           class="cds--search cds--search--lg c11 sidebar-searchbox"
           role="search"
         >
@@ -1471,7 +1473,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
             autocomplete="off"
             class="cds--search-input"
             id="main-search-bar"
-            placeholder="search-country-region-school-id"
+            placeholder="Search country, region, school, id"
             role="searchbox"
             type="text"
             value=""
@@ -1514,7 +1516,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
               <span
                 class="sidebar-worldview-globalText"
               >
-                worldwide
+                Worldwide
               </span>
               <span
                 class="sidebar-worldview-contriesText"
@@ -1564,7 +1566,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <span
                   class="cds--popover-content cds--tooltip-content"
                 >
-                  share-content
+                  Share content
                 </span>
                 <span
                   class="cds--popover-caret"
@@ -1597,7 +1599,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   <h3
                     class="cds--modal-header__heading cds--type-beta"
                   >
-                    share
+                    Share
                   </h3>
                   <button
                     aria-label="Close"
@@ -1632,7 +1634,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                       class="field-wrapper"
                     >
                       <span>
-                        copy-url
+                        Copy URL
                       </span>
                       <div
                         class="text-input-container"
@@ -1706,7 +1708,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                               <span
                                 class="cds--popover-content cds--tooltip-content"
                               >
-                                copy
+                                Copy
                               </span>
                               <span
                                 class="cds--popover-caret"
@@ -1720,7 +1722,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                       class="share-icons-container"
                     >
                       <span>
-                        or-share-using
+                        Or share using
                       </span>
                       <div
                         class="social-share-icons"
@@ -1898,14 +1900,14 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <p
                   class="c22"
                 >
-                  global-school-connectivity-map
+                  Global School connectivity map
                 </p>
               </div>
               <div
                 class="c23"
               >
                 <p>
-                  an-open-live-global-map-of-schools-and-their-connectivity
+                  An open & live global map of schools and their connectivity
                 </p>
               </div>
               <div
@@ -1940,7 +1942,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <a
                   class="cds--link"
                 >
-                  take-the-tour
+                  Take the tour
                 </a>
               </div>
             </div>
@@ -1968,9 +1970,9 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 class="c26"
               >
                 <p>
-                  0 6m 
+                  0 /6M 
                   <span>
-                    schools-location-mapped
+                    schools location mapped
                   </span>
                 </p>
                 <span
@@ -2012,7 +2014,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     <span
                       class="cds--popover-content cds--tooltip-content"
                     >
-                      school-geolocations-mapped-and-supplemental-open-data
+                      School geolocations mapped using government, Giga’s AI model and supplemental open data.
                     </span>
                     <span
                       class="cds--popover-caret"
@@ -2054,7 +2056,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <p>
                   0 
                   <span>
-                    schools-connectivity-status-mapped
+                    schools connectivity status mapped
                   </span>
                 </p>
                 <span
@@ -2096,7 +2098,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     <span
                       class="cds--popover-content cds--tooltip-content"
                     >
-                      school-connectivity-status-a-real-time-measurement-source
+                      'School connectivity status mapped using government data or a real-time measurement source.
                     </span>
                     <span
                       class="cds--popover-caret"
@@ -2152,7 +2154,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <p>
                   0 
                   <span>
-                    schools-with-real-time-data-mapped
+                    schools with real-time data mapped
                   </span>
                 </p>
                 <span
@@ -2194,7 +2196,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     <span
                       class="cds--popover-content cds--tooltip-content"
                     >
-                      schools-with-periodical-software-and-hardware-based-solutions
+                      Schools with periodical in-school internet measurements from software and hardware-based solutions.
                     </span>
                     <span
                       class="cds--popover-caret"
@@ -2245,7 +2247,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
             class="cds--btn cds--btn--primary"
             type="button"
           >
-            explore-countries
+            Explore countries
             <svg
               aria-hidden="true"
               class="cds--btn__icon"
@@ -2321,7 +2323,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <span
                   class="cds--popover-content cds--tooltip-content"
                 >
-                  zoom-in
+                  Zoom in
                 </span>
                 <span
                   class="cds--popover-caret"
@@ -2364,7 +2366,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <span
                   class="cds--popover-content cds--tooltip-content"
                 >
-                  zoom-out
+                  Zoom out
                 </span>
                 <span
                   class="cds--popover-caret"
@@ -2425,7 +2427,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <span
                   class="cds--popover-content cds--tooltip-content"
                 >
-                  tour
+                  Tour
                 </span>
                 <span
                   class="cds--popover-caret"
@@ -2481,7 +2483,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     <span
                       class="cds--popover-content cds--tooltip-content"
                     >
-                      theme-layers
+                      Theme & Layers
                     </span>
                     <span
                       class="cds--popover-caret"
@@ -2539,7 +2541,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     <span
                       class="cds--popover-content cds--tooltip-content"
                     >
-                      legend
+                      Legend
                     </span>
                     <span
                       class="cds--popover-caret"
@@ -2563,7 +2565,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                       class="school-status"
                     >
                       <h3>
-                        school-status
+                        School status
                       </h3>
                       <div
                         class="legend-container"

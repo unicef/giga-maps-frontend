@@ -176,7 +176,7 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     required=""
                     title="Enter layer unique code"
                     type="text"
-                    value=""
+                    value="TEST-FILTER-004"
                   />
                   <span
                     class="cds--text-input__counter-alert"
@@ -306,7 +306,7 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     required=""
                     title="Enter filter name"
                     type="text"
-                    value=""
+                    value="Available devices"
                   />
                   <span
                     class="cds--text-input__counter-alert"
@@ -339,7 +339,7 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     placeholder="Enter description"
                     title="Enter description"
                     type="text"
-                    value=""
+                    value="Filter to check the device availability"
                   />
                   <span
                     class="cds--text-input__counter-alert"

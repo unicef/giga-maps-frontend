@@ -1,20 +1,25 @@
 import { describe, test, } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createEvent } from 'effector';
 
-import { onChangeMenu } from '~/@/sidebar/sidebar.model';
+import { onChangeMenu, onSelectMainLayer } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { router } from '~/core/routes';
+import { mapCountry, mapOverview, router } from '~/core/routes';
 import { testWrapper } from '~/tests/jest-wrapper';
 
 import Sidebar from '../sidebar.view';
-import layers from '~/tests/data/layers-data';
-import globalStatusData from '~/tests/data/globalStatus.data';
 import { fetchMockResponse } from '~/tests/fetchMock';
-
+import "~/core/i18n/instance"
+import { fetchCountryLiveLayerInfo, fetchLayerListFx } from '~/api/project-connect';
 
 const setMobileView = createEvent<boolean>()
 $isMobile.on(setMobileView, (_, payload) => payload)
+
+import { SimpleBarChart } from "@carbon/charts-react";
+
+jest.mock('@carbon/charts-react', () => ({
+  SimpleBarChart: jest.fn().mockReturnValue(null),
+}));
 
 describe('Sidebar', () => {
 
@@ -58,11 +63,33 @@ describe('Sidebar', () => {
   test("Render in mobile view", async () => {
     onChangeMenu(false)
     setMobileView(true)
-    const { container, getByTestId } = render(testWrapper(<Sidebar />))
+    const { container } = render(testWrapper(<Sidebar />))
     const sliderButton = container.querySelector('#mobile-view-slider')
     await fireEvent.click(sliderButton as Element)
     const tourButton = container.querySelector('#tour-button')
     expect(tourButton).toBeNull();
+  })
+
+  test("Render global view", async () => {
+    mapOverview.navigate();
+    render(testWrapper(<Sidebar />))
+    expect(screen.getByText('Global School connectivity map')).toBeInTheDocument();
+  })
+
+  test("Render country view", async () => {
+    mapCountry.navigate({ code: 'br' });
+    await fetchLayerListFx();
+    onSelectMainLayer(9)
+    await fetchCountryLiveLayerInfo({ query: '?start_date=2022-09-01&end_date=2022-09-30', id: 9 });
+    const { container } = render(testWrapper(<Sidebar />))
+    expect(screen.getByText('schools with real-time connectivity data', { exact: false })).toBeInTheDocument();
+    const filterBtn = container.querySelector('.filter-icon-button');
+    fireEvent.click(filterBtn as Element);
+    // expect(screen.getByText('Real-time connectivity data layer', { exact: false })).toBeInTheDocument();
+    // const radioRTO = container.querySelector('#Round Trip Time - RTT19');
+    // fireEvent.click(radioRTO as Element);
+    // const applyBtn = screen.findByText('Apply');
+    // fireEvent.click(applyBtn as Element);
   })
 
 })

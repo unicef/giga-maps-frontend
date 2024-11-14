@@ -410,7 +410,6 @@ export const $isProductTour = sample({
       onChangeTourStartPopup(true)
     }
     const params = new URLSearchParams(searchParams)
-    console.log({ searchParams, isVisible })
     return params.get('popover') === 'tour'
   }
 })

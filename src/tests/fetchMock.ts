@@ -1,11 +1,16 @@
 import { dataLayerlistMock, singleLayerMock } from "./data/admin-data-layer"
 import apiConfigData from "./data/api-config-data"
 import connectivityConfigData from "./data/connectivity-config-data"
+import connectivityStatsData from "./data/connectivity-stats.data"
 import { countryList } from "./data/country-filter-modal"
+import countrySingleData from "./data/country.single.data"
 import dataSourcesData from "./data/data-sources-data"
+import filterAdminData from "./data/filter-admin-data"
 import filterData from "./data/filter-data"
+import filterEditData from "./data/filterEditData"
 import globalStatusData from "./data/globalStatus.data"
 import layersData from "./data/layers-data"
+import liveInfoData from "./data/live-info.data"
 import schoolMasterData from "./data/school-master-data"
 
 export const fetchMockResponse = (req: any) => {
@@ -20,18 +25,28 @@ export const fetchMockResponse = (req: any) => {
     return Promise.resolve(JSON.stringify(dataSourcesData))
   } else if (req.url.includes('/accounts/app_configs/')) {
     return Promise.resolve(JSON.stringify(apiConfigData))
-  } else if (req.url.includes('locations/countries/')) {
+  } else if (req.url.includes('locations/countries/br')) {
+    return Promise.resolve(JSON.stringify(countrySingleData))
+  } else if (req.url.includes("locations/countries/")) {
     return Promise.resolve(JSON.stringify(countryList))
   } else if (req.url.includes('/sources/school_master')) {
     return Promise.resolve(JSON.stringify(schoolMasterData));
   } else if (req.url.includes('statistics/global-stat/')) {
     return Promise.resolve(JSON.stringify(globalStatusData))
+  } else if (req.url.includes('accounts/adv_filters/?page_size')) {
+    return Promise.resolve(JSON.stringify(filterAdminData))
+  } else if (req.url.includes("accounts/adv_filters/?id=")) {
+    return Promise.resolve(JSON.stringify(filterEditData))
   } else if (req.url.includes('accounts/adv_filters')) {
     return Promise.resolve(JSON.stringify(filterData))
   } else if (req.url.includes('accounts/layers')) {
     return Promise.resolve(JSON.stringify({ results: dataLayerlistMock, count: 2 }))
   } else if (req.url.includes('/statistics/connectivityconfigs/')) {
     return Promise.resolve(JSON.stringify(connectivityConfigData))
+  } else if (req.url.includes('api/statistics/connectivity/?start_date')) {
+    return Promise.resolve(JSON.stringify(connectivityStatsData))
+  } else if (req.url.includes('/info/') && req.url.includes('?start_date')) {
+    return Promise.resolve(JSON.stringify(liveInfoData))
   } else {
     return Promise.resolve(JSON.stringify({}))
   }
