@@ -1,8 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { useStore } from "effector-react";
+import { render, screen } from "@testing-library/react";
 import AddEditFilterListForm from "../form-filter";
-import { addFilterFx, editFilterFx } from "~/@/admin/effects/filter-fx";
-import { $userPermissions } from "~/core/auth/models";
 import { fetchMockResponse } from "~/tests/fetchMock";
 
 

@@ -214,6 +214,198 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     >
                       Choose parameter
                     </option>
+                    <option
+                      class="cds--select-option"
+                      value="29"
+                    >
+                      Building Govt ID (building_id_govt)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="18"
+                    >
+                      Computer Availability (computer_availability)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="11"
+                    >
+                      Connectivity Type (connectivity_type)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="10"
+                    >
+                      Coverage Type (coverage_type)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="26"
+                    >
+                      Device Availability (device_availability)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="7"
+                    >
+                      Download Speed (connectivity_speed)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="3"
+                    >
+                      Education Level (education_level)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="32"
+                    >
+                      Education Level (education_level_lower)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="12"
+                    >
+                      Fiber Node Distance (fiber_node_distance)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="8"
+                    >
+                      Has Computer Lab (computer_lab)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="9"
+                    >
+                      Has Live Connectivity (connectivity)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="13"
+                    >
+                      Microwave Node Distance (microwave_node_distance)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="17"
+                    >
+                      Nearest GSM Distance (nearest_gsm_distance)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="15"
+                    >
+                      Nearest LTE Distance (nearest_lte_distance)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="14"
+                    >
+                      Nearest NR Distance (nearest_nr_distance)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="16"
+                    >
+                      Nearest UMTS Distance (nearest_umts_distance)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="20"
+                    >
+                      Number of Boy Students (num_students_boys)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="4"
+                    >
+                      Number of Computers (num_computers)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="22"
+                    >
+                      Number of Female Teachers (num_teachers_female)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="19"
+                    >
+                      Number of Girl Students (num_students_girls)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="23"
+                    >
+                      Number of Male Teachers (num_teachers_male)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="21"
+                    >
+                      Number of Other Students (num_students_other)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="28"
+                    >
+                      Number of Robotic Equipment (num_robotic_equipment)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="30"
+                    >
+                      Number of Schools per Building (num_schools_per_building)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="5"
+                    >
+                      Number of Students (num_students)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="27"
+                    >
+                      Number of Tablets (num_tablets)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="6"
+                    >
+                      Number of Teachers (num_teachers)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="1"
+                    >
+                      Region (environment)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="2"
+                    >
+                      School Type (school_type)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="31"
+                    >
+                      School Type (school_type_lower)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="25"
+                    >
+                      Sustainable Business Model (sustainable_business_model)
+                    </option>
+                    <option
+                      class="cds--select-option"
+                      value="24"
+                    >
+                      Trained Teachers (teachers_trained)
+                    </option>
                   </select>
                   <svg
                     aria-hidden="true"
