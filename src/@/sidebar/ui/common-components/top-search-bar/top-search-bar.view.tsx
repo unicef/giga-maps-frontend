@@ -30,7 +30,7 @@ const TopSearchBar = () => {
     <SearchWrapper className="top-search-bar">
       <CountrySearchIcon
         align={'bottom-left'}
-        label='Country List'
+        label={t('country-list')}
         className='main-search-list'
         onClick={() => {
           onShowCountriesAdminList(!showCountries)
@@ -51,7 +51,7 @@ const TopSearchBar = () => {
         size="lg"
         placeholder={t("search-country-region-school-id")}
         labelText="Search"
-        closeButtonLabelText="Clear search input"
+        closeButtonLabelText={t("clear-search-input")}
         id="main-search-bar"
         autoFocus={isMobile}
         onChange={onChange}

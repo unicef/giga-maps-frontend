@@ -85,5 +85,15 @@
   "zoom-out": "Zoom out",
   "theme-layers": "Theme & Layers",
   "legend": "Legend",
-  "select-country-region-school-s": "Select country, region, school(s)"
+  "select-country-region-school-s": "Select country, region, school(s)",
+  "country-list": "Country List",
+  "clear-search-input": "Clear search input",
+  "school-list": "School List",
+  "not-found": "Not found",
+  "search-schools": "Search schools",
+  "maximum-school-selection-allowed": "Maximum of {{maxSchools}} school selection allowed",
+  "we-couldn-t-find-what-you-re-looking-for": "We couldn’t find what you’re looking for",
+  "try-again-with-a-different-term": "Try again with a different term",
+  "school-s-selected": "School(s) Selected",
+  "recent": "Recent"
 }

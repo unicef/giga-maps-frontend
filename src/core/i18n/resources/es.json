@@ -84,5 +84,16 @@
   "zoom-in": "Acercar",
   "zoom-out": "Alejar",
   "theme-layers": "Tema y capas",
-  "legend": "Leyenda"
+  "legend": "Leyenda",
+  "select-country-region-school-s": "Seleccionar país, región, escuela(s)",
+  "country-list": "Lista de países",
+  "clear-search-input": "Borrar entrada de búsqueda",
+  "school-list": "Lista de escuelas",
+  "not-found": "No encontrado",
+  "search-schools": "Buscar escuelas",
+  "maximum-school-selection-allowed": "Se permite un máximo de {{maxSchools}} selección de escuelas",
+  "we-couldn-t-find-what-you-re-looking-for": "No pudimos encontrar lo que estás buscando",
+  "try-again-with-a-different-term": "Intenta nuevamente con un término diferente",
+  "school-s-selected": "Escuela(s) seleccionada(s)",
+  "recent": "Reciente"
 }
