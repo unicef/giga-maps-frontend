@@ -9,12 +9,14 @@ import { mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
-import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { evaluateExpression } from '~/lib/utils';
 import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
 import { UNKNOWN } from '../map/map.types';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -63,6 +65,17 @@ $connectivitySpeedUnknown.on(changeConnectivitySpeedUnknown, setPayload);
 // layer model 
 export const $layersList = createStore<LayerType[]>([]);
 $layersList.on(fetchLayerListFx.doneData, setPayloadResults)
+$layersList.on(publishLayersTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const list = reconstructJson(data, { layersList: state }).layersList as LayerType[];
+  return [...list]
+})
+export const $layersListMapping = createStore<[string, string][]>([]);
+$layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
+  const list = Object.entries(extractDataWithMapping({ layersList: payload.results }, publishLayersListMapping)).filter(([_key, value]) => !!value);
+  return list;
+})
+
 
 export const $layerListTranslated = createStore<LayerType[]>([]);
 

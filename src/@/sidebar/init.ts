@@ -35,6 +35,7 @@ import {
   $currentLayerTypeUtils,
   $isNationalBenchmark,
   $schoolAdminId,
+  $layersListMapping,
 } from '~/@/sidebar/sidebar.model';
 import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchLayerListFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
@@ -46,8 +47,7 @@ import { ConnectivityBenchMarks, Layers, SCHOOL_STATUS_LAYER } from './sidebar.c
 import { format } from 'date-fns';
 import { isLiveLayer } from './sidebar.util';
 import { languageStore } from '~/core/i18n/store';
-import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
-import { defaultLanguage } from '~/core/i18n/constant';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
 
 $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
@@ -389,24 +389,10 @@ sample({
 })
 
 sample({
-  clock: merge([fetchLayerListFx.doneData, languageStore.$language]),
-  source: combine({ layersList: $layersList, lng: languageStore.$language }),
-  filter: ({ layersList }) => {
-    return !!layersList?.length
+  clock: merge([$layersListMapping, languageStore.$language]),
+  source: { mapping: $layersListMapping, lng: languageStore.$language },
+  filter: ({ mapping, lng }) => {
+    return !!mapping?.length && !!lng
   },
-  target: createEffect(({ layersList, lng }: { layersList: Layers[]; lng: string }) => {
-
-    if (lng === defaultLanguage) return layersList;
-    console.log('original data', layersList)
-    const data = extractDataWithMapping({ layers: layersList }, [
-      "layers.*.description",
-    ])
-
-    console.log('extracted keys', data);
-
-    const translatedData = reconstructJson(data);
-    console.log('translated data', translatedData);
-    // extract translation string from json
-
-  })
+  target: publishLayersTranslationFx
 })

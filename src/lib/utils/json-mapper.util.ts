@@ -1,5 +1,5 @@
-type JsonObject = Record<string, any>;
-type MappedData = Record<string, any>;
+export type JsonObject = Record<string, any>;
+export type MappedData = Record<string, any>;
 
 const extractValue = (
   obj: any,
@@ -83,8 +83,8 @@ const setValue = (obj: JsonObject, keys: string[], value: any) => {
   }
 }
 
-export const reconstructJson = (mappedData: MappedData): JsonObject => {
-  const result: JsonObject = {};
+export const reconstructJson = (mappedData: MappedData, resultJson?: JsonObject): JsonObject => {
+  const result: JsonObject = resultJson ?? {};
 
   for (const path in mappedData) {
     const value = mappedData[path];
