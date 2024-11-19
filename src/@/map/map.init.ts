@@ -48,6 +48,8 @@ import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { $theme } from '~/core/theme.model';
 import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
 import { $isMobile } from '../admin/models/media-query';
+import { languageStore } from '~/core/i18n/store';
+import { mapLabelLayerList } from '../country/country.constant';
 
 sample({
   source: $theme,
@@ -378,4 +380,19 @@ sample({
   fn: (country) => country?.id ?? 0,
   target: fetchAdvanceFilterFx
 })
+
+sample({
+  clock: merge([languageStore.$language, $map]),
+  source: combine({ map: $map, lng: languageStore.$language }),
+  target: createEffect(({ map, lng }: { map: Map, lng: string }) => {
+    if (!map || !lng) return;
+    for (let key in mapLabelLayerList) {
+      map.setLayoutProperty(mapLabelLayerList[key], 'text-field', [
+        'get',
+        `name_${lng}`
+      ]);
+    }
+  })
+})
+
 onLoadPage();

@@ -47,7 +47,7 @@ export const mapLabelLayerList = {
   stateLabel: 'state-label',
   minorLabel: 'settlement-minor-label',
   majorLabel: 'settlement-major-label'
-}
+} as Record<string, string>;
 
 export const mapAdminLayerList = {
   admin1Boundary: 'admin-1-boundary',
