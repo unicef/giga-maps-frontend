@@ -10,11 +10,12 @@ import logo from '~/assets/images/giga-logo.png';
 import whiteLogo from '~/assets/images/white-logo-small.png';
 import { useStore } from 'effector-react';
 import { $theme, ThemeType } from '~/core/theme.model';
+import { useTranslation } from 'react-i18next';
 
 const ProductTourEndPopup = ({ open, setOpen }:
   { open: boolean, setOpen: (open: boolean) => void }) => {
   const isLight = useStore($theme) === ThemeType.light;
-
+  const { t } = useTranslation();
   return (
     <Modal size={'sm'} open={open}
       $containerStyle={$tourStartModalContainer}
@@ -29,7 +30,7 @@ const ProductTourEndPopup = ({ open, setOpen }:
       </ModalHeader>
       <ModalBody $style={$tourStartModalBody}>
         <TourStartDescription>
-          Have any comment or feedback? <CarbonLink href={'/about#live-map-get-in-touch'} target='_blank'> Contact us</CarbonLink>
+          {t('have-any-comment-or-feedback')} <CarbonLink href={'/about#live-map-get-in-touch'} target='_blank'> {t('contact-us')}</CarbonLink>
         </TourStartDescription>
         <BottonContainer>
           <Link to={map}>
@@ -39,7 +40,7 @@ const ProductTourEndPopup = ({ open, setOpen }:
                 setOpen(false)
               }}
               size='sm' >
-              About Gigamaps
+              {t('about-gigamaps')}
             </Button>
           </Link>
           <Link to={map}>
@@ -48,7 +49,7 @@ const ProductTourEndPopup = ({ open, setOpen }:
                 setOpen(false)
               }}
               size='sm' >
-              Start Exploring
+              {t('start-exploring')}
             </Button>
           </Link>
         </BottonContainer>

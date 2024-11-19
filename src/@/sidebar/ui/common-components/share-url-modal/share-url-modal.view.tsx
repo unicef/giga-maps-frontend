@@ -9,10 +9,11 @@ import Twitter from '../../../../../assets/images/twitter.svg'
 import WhatsApp from '../../../../../assets/images/whatsapp.svg'
 import { $layerFilterHeadingStyle } from '../styles/layer-filter-modal.style';
 import { ShareModalStyle, ShareUrlStyle } from './share-url.style';
+import { useTranslation } from 'react-i18next';
 
 const ShareURLModal = ({ shareModalOpen, setshareModalOpen, currentLink }:
   { shareModalOpen: boolean, setshareModalOpen: React.Dispatch<React.SetStateAction<boolean>>, currentLink: string }) => {
-
+  const { t } = useTranslation();
   const copyToClipboard = () => {
     void navigator.clipboard.writeText(currentLink);
   }
@@ -26,18 +27,18 @@ const ShareURLModal = ({ shareModalOpen, setshareModalOpen, currentLink }:
       $containerStyle={ShareModalStyle}
       preventCloseOnClickOutside
     >
-      <ModalHeader title="Share" $headingStyle={$layerFilterHeadingStyle} closeModal={() => setshareModalOpen(false)} />
+      <ModalHeader title={t("share")} $headingStyle={$layerFilterHeadingStyle} closeModal={() => setshareModalOpen(false)} />
       <Scroll>
         <ModalBody $style={ShareUrlStyle}>
           <div className='field-wrapper'>
-            <span>Copy URL</span>
+            <span>{t('copy-url')}</span>
             <div className='text-input-container'>
               <TextInput labelText="" id="text-input-1" type="text" value={currentLink} readOnly />
-              <CopyButton align="bottom" className='copy-button' iconDescription="Copy" onClick={copyToClipboard} />
+              <CopyButton align="bottom" className='copy-button' iconDescription={t("copy")} onClick={copyToClipboard} />
             </div>
           </div>
           <div className='share-icons-container'>
-            <span>Or share using</span>
+            <span>{t('or-share-using')}</span>
             <div className='social-share-icons'>
               <Link target="_blank"
                 href={`https://twitter.com/intent/tweet?text=Giga Maps&url=https://twitter.com/intent/tweet?text=giga-maps&url=${encodeURIComponent(`${currentLink}`)}`}>

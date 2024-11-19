@@ -7,9 +7,11 @@ import { $connectivityYears, $currentLayerTypeUtils, $isTimeplayer, onToggleTime
 import { useRoute } from '~/lib/router';
 import { mapCountry } from '~/core/routes';
 import { $admin1Code } from '~/@/country/country.model';
+import { useTranslation } from 'react-i18next';
 
 
 const TimeplayerButton = () => {
+  const { t } = useTranslation();
   const isTimePlayer = useStore($isTimeplayer);
   const isCountryView = useRoute(mapCountry);
   const admin1 = useStore($admin1Code)
@@ -22,7 +24,7 @@ const TimeplayerButton = () => {
         <IconButton
           align="left"
           size="sm"
-          label="Timeplayer"
+          label={t("timeplayer")}
           onClick={() => onToggleTimeplayer(!isTimePlayer)}>
           <Play />
         </IconButton>

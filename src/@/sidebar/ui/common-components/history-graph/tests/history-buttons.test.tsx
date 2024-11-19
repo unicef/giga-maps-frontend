@@ -1,8 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import HistoryButtons from '../history-buttons.view';
-import userEvent from '@testing-library/user-event';
-import { changeHistoryIntervalUnit } from '~/@/sidebar/history-graph.model';
-import { IntervalUnit } from '~/lib/date-fns-kit/types';
+import "~/core/i18n/instance"
 
 describe('Layer schools connectivity status', () => {
   beforeEach(() => {

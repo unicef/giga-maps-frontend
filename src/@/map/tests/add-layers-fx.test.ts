@@ -21,7 +21,10 @@ describe('changeLayersFx', () => {
       map,
       selectedLayerIds: [1],
       lastSelectedLayer: null,
-      refresh: true
+      refresh: true,
+      mapRoute: {
+        map: false
+      }
     } as any);
     expect(result).toBeUndefined();
   });
@@ -30,7 +33,10 @@ describe('changeLayersFx', () => {
     const result = await changeLayersFx({
       map,
       selectedLayerIds: [1],
-      lastSelectedLayer: null
+      lastSelectedLayer: null,
+      mapRoute: {
+        map: true
+      }
     } as any);
     expect(result).toBeUndefined();
   });

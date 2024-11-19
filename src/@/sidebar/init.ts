@@ -35,16 +35,19 @@ import {
   $currentLayerTypeUtils,
   $isNationalBenchmark,
   $schoolAdminId,
+  $layersListMapping,
 } from '~/@/sidebar/sidebar.model';
-import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchLayerListFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
-import { ConnectivityBenchMarks, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { ConnectivityBenchMarks, Layers, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { format } from 'date-fns';
 import { isLiveLayer } from './sidebar.util';
+import { languageStore } from '~/core/i18n/store';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
 
 $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
@@ -383,4 +386,13 @@ sample({
     return null;
   },
   target: $countryAdminSchoolId
+})
+
+sample({
+  clock: merge([$layersListMapping, languageStore.$language]),
+  source: { mapping: $layersListMapping, lng: languageStore.$language },
+  filter: ({ mapping, lng }) => {
+    return !!mapping?.length && !!lng
+  },
+  target: publishLayersTranslationFx
 })

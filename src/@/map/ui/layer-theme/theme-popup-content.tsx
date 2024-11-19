@@ -10,9 +10,11 @@ import { styles } from '../../map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $style, changeStyle, onEnableAdminBoundaries, onEnableTitlesAndLabels } from '../../map.model';
 import { Style } from '../../map.types';
 import { CheckboxGroupWrapper, CustomCheckbox, CustomRadioButton, RadioButtonGroupWrapper, ThemeActionButtonWrapper, ThemeHeaderWrapper } from './theme-button.style';
+import { useTranslation } from "react-i18next";
 
 const mapThemeList = styles.filter((style: string) => !gigaThemeList.includes(style as ThemeType))
 const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
+  const { t } = useTranslation();
   const style = useStore($style);
   const theme = useStore($theme);
   const isAdminBoundaries = useStore($isAdminBoundaries);
@@ -40,7 +42,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
     <PopoverContent className="theme-layer-popover-content">
       <ThemeHeaderWrapper>
         <h3>
-          Themes & layers
+          {t('themes-layers')}
         </h3>
       </ThemeHeaderWrapper>
       <Form aria-label="layer-theme-form">
@@ -53,7 +55,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
           name="theme-radio-button-group-giga"
           defaultSelected={gigaTheme}>
           {gigaThemeList.map((item, index) => (
-            <CustomRadioButton key={`giga-${item}`} labelText={<><span className="capitalize">{item}</span> mode</>} value={item} id={`giga_${item}_${index}`} />
+            <CustomRadioButton key={`giga-${item}`} labelText={<><span className="capitalize">{item}</span> {t('mode')}</>} value={item} id={`giga_${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
 
@@ -67,7 +69,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
           }} legendText="Map types" name="theme-radio-button-group" defaultSelected={defaultMapStyle}>
           <CustomRadioButton labelText={`Default view`} value={'default'} id={`default-view-radio`} />
           {mapThemeList.map((item, index) => (
-            <CustomRadioButton key={item} labelText={<><span className="capitalize">{item}</span> view</>} value={item} id={`${item}_${index}`} />
+            <CustomRadioButton key={item} labelText={<><span className="capitalize">{item}</span> {t('view')}</>} value={item} id={`${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
         <CheckboxGroupWrapper legendText="Layers">
@@ -76,12 +78,12 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
         </CheckboxGroupWrapper>
         <ThemeActionButtonWrapper>
           <Button type="reset" kind="secondary" onClick={() => setOpen(false)}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button type="submit" onClick={(e) => {
             void onApply(e)
           }}>
-            Apply
+            {t('apply')}
           </Button>
         </ThemeActionButtonWrapper>
       </Form>

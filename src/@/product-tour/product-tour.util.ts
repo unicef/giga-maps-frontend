@@ -17,10 +17,10 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'On the map view you can navigate between different countries and zoom in to explore specific areas and schools.'
+            value: 'on-the-map-view-areas-and-schools'
           }],
           description:
-            'On the map view you can navigate between different countries and zoom in to explore specific areas and schools.',
+            'on-the-map-explore-specific-areas-and-schools',
           actionItem: '',
           title: 'Map navigation',
           style: {
@@ -43,10 +43,10 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'Every country has dots. Each dot represents a mapped school. In this legend panel you can view the different colors of each dot.'
+            value: 'every-country-has-dots-you-can-view-the-each-dot'
           }, {
             type: 'text',
-            value: 'Blinking dots represent schools showing real-time connectivity. (real time connectivity layer)'
+            value: 'blinking-dots-real-time-connectivity-layer'
           }],
           title: 'Map legend',
           style: {}
@@ -72,10 +72,10 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'You can customize how you want to view the map by clicking the themes & layers button:'
+            value: 'you-can-customize-themes-layers-button'
           }, {
             type: 'text',
-            value: 'Switch between themes and turn on/off certain layers.'
+            value: 'switch-between-certain-layers'
           }],
           title: 'Map themes & layers',
           style: {}
@@ -101,7 +101,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'You can also search for a specific country,region or school using search in sidebar.'
+            value: 'you-can-also-search-in-sidebar'
           },
           {
             type: 'clone',
@@ -109,13 +109,13 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
           },
           {
             type: 'text',
-            value: 'or type your text by clicking inside the search panel.'
+            value: 'or-type-your-search-panel'
           },
           {
             type: 'clone',
             value: isMobile ? '.search-icon' : '.sidebar-searchbox'
           },],
-          title: 'Select & search ',
+          title: 'select-search',
 
           style: {}
         },
@@ -138,10 +138,10 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'The side panel shows the data that each country, region or school has based on the selected layers.'
+            value: 'the-side-panel-selected-layers'
           }, {
             type: 'text',
-            value: 'You can view, filter and share different data inputs based on date and type.'
+            value: 'you-can-view-filter-on-date-and-type'
           }],
           title: 'Data panel',
           style: {}
@@ -159,12 +159,12 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'Gigamaps has several layers you can select, view and overlay.'
+            value: 'gigamaps-has-several-overlay'
           }, {
             type: 'text',
-            value: 'By default the connectivity status base layer is selected along with the real-time connectivity layer.'
+            value: 'by-default-the-connectivity-layer'
           }],
-          title: 'Giga layers',
+          title: 'giga-layers',
           style: {}
         },
         highlightBox: {
@@ -180,10 +180,10 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
         popupProps: {
           content: [{
             type: 'text',
-            value: 'You can find out more info about Giga and Giga maps.'
+            value: 'you-can-find-giga-maps'
           }, {
             type: 'text',
-            value: 'You can also go to our open-source Api pages.'
+            value: 'you-can-open-source-api-pages'
           }],
           title: 'Resources',
           style: {},
