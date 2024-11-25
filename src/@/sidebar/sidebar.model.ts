@@ -281,9 +281,6 @@ $staticLegendsSelected.on(staticLegendsSelection, (state, payload) => {
   const isButtonSelected = state.includes(payload);
   if (isButtonSelected) {
     // If the button is already selected, remove it from the selected buttons i.e unselect it
-    if (payload === '') {
-      return [];
-    }
     return state.filter((id) => id !== payload);
   }
   // If the button is not selected, check if the maximum limit of 3 buttons is reached
