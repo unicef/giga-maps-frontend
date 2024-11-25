@@ -4,7 +4,6 @@ import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
 import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList } from "../utils";
-import { mapSchools } from "~/core/routes";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
