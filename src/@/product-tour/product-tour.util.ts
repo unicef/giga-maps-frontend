@@ -143,7 +143,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
             type: 'text',
             value: 'you-can-view-filter-on-date-and-type'
           }],
-          title: 'Data panel',
+          title: 'data-panel',
           style: {}
         },
         highlightBox: {
@@ -185,7 +185,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
             type: 'text',
             value: 'you-can-open-source-api-pages'
           }],
-          title: 'Resources',
+          title: 'resources',
           style: {},
         },
         highlightBox: {

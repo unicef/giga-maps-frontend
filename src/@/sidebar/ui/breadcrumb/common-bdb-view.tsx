@@ -11,6 +11,7 @@ import { Link, useRoute } from '~/lib/router';
 import { $allLoadings, $isLoadingSchoolView, $schoolStats } from '../../sidebar.model';
 import { LoadingText } from '~/@/common/style/styled-component-style';
 import { getCurrentCountrySearchPath } from '~/@/country/country.utils';
+import { useTranslation } from 'react-i18next';
 
 const BreadcrumbEllipsis = styled(BreadcrumbItem) <{ $maxWidth?: number; }>`
   .cds--link {
@@ -57,6 +58,7 @@ export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPa
 }
 
 export const GoToSchool = () => {
+  const { t } = useTranslation();
   const schools = useStore($schoolStats) ?? [];
   const country = useStore($country);
   const isSchoolGreaterThanOne = schools?.length > 1;
@@ -83,7 +85,7 @@ export const GoToSchool = () => {
   return (
     <>
       <BreadcrumbCustom data-floating-menu-container>
-        <OverflowMenu aria-label="Overflow menu in a breadcrumb">
+        <OverflowMenu aria-label="Overflow menu in a breadcrumb" iconDescription={t("admins")}>
           <BreadcrumbOverflow $isActive={!isSchoolGreaterThanOne && !!admin1Code} onClick={clickAdmin1} itemText={admin1Text} />
           <BreadcrumbOverflow $isActive={false} itemText={admin2Text} />
         </OverflowMenu>

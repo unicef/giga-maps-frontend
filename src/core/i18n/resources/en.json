@@ -95,5 +95,19 @@
   "we-couldn-t-find-what-you-re-looking-for": "We couldn’t find what you’re looking for",
   "try-again-with-a-different-term": "Try again with a different term",
   "school-s-selected": "School(s) Selected",
-  "recent": "Recent"
+  "recent": "Recent",
+  "schools": "Schools",
+  "themes": "Themes",
+  "map-types": "Map types",
+  "layers": "Layers",
+  "administrative-boundaries": "Administrative boundaries",
+  "titles-and-labels": "Titles and Labels",
+  "next": "Next",
+  "previous": "Previous",
+  "data-panel": "Data panel",
+  "resources": "Resources: ",
+  "thanks-for-taking-the-tour-of": "Thanks for taking the tour of",
+  "admins": "Admins",
+  "schools-with-coverage-schools-mapped": "Schools with {{layerName}} data out of {{totalSchools}} schools mapped",
+  "insufficient-data": "Insufficient data"
 }

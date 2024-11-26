@@ -33,8 +33,8 @@ const LayerSelectionFilterModal = ({
         onRequestClose={() => {
           setOpen(false)
         }}
-        primaryButtonText="Apply"
-        secondaryButtonText="Reset">
+        primaryButtonText={t("apply")}
+        secondaryButtonText={t("reset")}>
         {''}
       </ModalFooter>
     </Modal>
