@@ -51,7 +51,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
             setCurrentStyle(value as Style);
             setGigaTheme(value as ThemeType)
           }}
-          legendText="Themes"
+          legendText={t("themes")}
           name="theme-radio-button-group-giga"
           defaultSelected={gigaTheme}>
           {gigaThemeList.map((item, index) => (
@@ -66,15 +66,15 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
             } else {
               setCurrentStyle(value as Style)
             }
-          }} legendText="Map types" name="theme-radio-button-group" defaultSelected={defaultMapStyle}>
+          }} legendText={t("map-types")} name="theme-radio-button-group" defaultSelected={defaultMapStyle}>
           <CustomRadioButton labelText={`Default view`} value={'default'} id={`default-view-radio`} />
           {mapThemeList.map((item, index) => (
             <CustomRadioButton key={item} labelText={<><span className="capitalize">{item}</span> {t('view')}</>} value={item} id={`${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
-        <CheckboxGroupWrapper legendText="Layers">
-          <CustomCheckbox checked={currentAdminBoundaries} onChange={() => setCurrentAdminBoundaries(prev => !prev)} labelText={`Administrative boundaries`} id="admin-boundary" />
-          <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTitlesAndLabels(prev => !prev)} labelText={`Titles and Labels`} id="titles-label" />
+        <CheckboxGroupWrapper legendText={t("layers")}>
+          <CustomCheckbox checked={currentAdminBoundaries} onChange={() => setCurrentAdminBoundaries(prev => !prev)} labelText={t('administrative-boundaries')} id="admin-boundary" />
+          <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTitlesAndLabels(prev => !prev)} labelText={t('titles-and-labels')} id="titles-label" />
         </CheckboxGroupWrapper>
         <ThemeActionButtonWrapper>
           <Button type="reset" kind="secondary" onClick={() => setOpen(false)}>

@@ -95,5 +95,19 @@
   "we-couldn-t-find-what-you-re-looking-for": "Não conseguimos encontrar o que você está procurando",
   "try-again-with-a-different-term": "Tente novamente com um termo diferente",
   "school-s-selected": "Escola(s) Selecionada(s)",
-  "recent": "Recente"
+  "recent": "Recente",
+  "schools": "Escuelas",
+  "themes": "Temas",
+  "map-types": "Vistas del mapa",
+  "layers": "Capas superpuestas",
+  "administrative-boundaries": "Límites administrativos",
+  "titles-and-labels": "Títulos y rótulos",
+  "next": "Siguiente",
+  "previous": "Anterior",
+  "data-panel": "Panel de datos",
+  "resources": "Recursos disponibles:",
+  "thanks-for-taking-the-tour-of": "Gracias por realizar el recorrido de",
+  "admins": "Administradores",
+  "schools-with-coverage-schools-mapped": "{{layerName}} escuelas con datos de {{totalSchools}} escuelas mapeadas",
+  "insufficient-data": "Datos insuficientes"
 }

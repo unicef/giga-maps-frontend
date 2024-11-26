@@ -21,7 +21,7 @@ const ProductTourEndPopup = ({ open, setOpen }:
       $containerStyle={$tourStartModalContainer}
       preventCloseOnClickOutside id='tour-end-giga-map-modal'
     >
-      <ModalHeader title="Thanks for taking the tour of "
+      <ModalHeader title={t("thanks-for-taking-the-tour-of")}
         $headingStyle={$tourStartModalHeader}
       >
         <div className='giga-text'>

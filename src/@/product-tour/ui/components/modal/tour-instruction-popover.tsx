@@ -88,23 +88,22 @@ const TourInstructionPopover = (
             size='sm'
             kind='ghost'
             className='previous'
-            iconDescription="previous"
+            iconDescription={t("previous")}
             hasIconOnly renderIcon={ChevronLeft}
-            onClick={
-              () => {
-                if (firstSubStep) {
-                  onChangeTourStarted(false)
-                  onChangeTourStartPopup(true)
-                }
-                onChangeCurrentSubStep(currentSubStep - 1)
-              }} >
+            onClick={() => {
+              if (firstSubStep) {
+                onChangeTourStarted(false)
+                onChangeTourStartPopup(true)
+              }
+              onChangeCurrentSubStep(currentSubStep - 1)
+            }} >
           </Button>}
           <Button
             size='sm'
             className='next'
             hasIconOnly
             renderIcon={ChevronRight}
-            iconDescription="Next"
+            iconDescription={t("next")}
             onClick={() => {
               if (lastSubStep) {
                 onChangeTourStarted(false)
