@@ -12,3 +12,10 @@ export const filterTranslationFx = createEffect(({ mapping }: { mapping: [string
     mapping
   })
 })
+
+export const countryTranslationFx = createEffect(({ mapping }: { mapping: [string, string][]; lng: string }) => {
+  return createTranslationFx({
+    mapping
+  })
+})
+

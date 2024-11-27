@@ -2,7 +2,7 @@ import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-gra
 import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString } from '~/@/country/country.model';
+import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryMapping } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
@@ -51,7 +51,7 @@ import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPaus
 import { $isMobile } from '../admin/models/media-query';
 import { languageStore } from '~/core/i18n/store';
 import { mapLabelLayerList } from '../country/country.constant';
-import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
+import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 
 sample({
   source: $theme,
@@ -404,6 +404,15 @@ sample({
     return !!mapping?.length && !!lng
   },
   target: filterTranslationFx
+})
+
+sample({
+  clock: merge([$countryMapping, languageStore.$language]),
+  source: { mapping: $countryMapping, lng: languageStore.$language },
+  filter: ({ mapping, lng }) => {
+    return !!mapping?.length && !!lng
+  },
+  target: countryTranslationFx
 })
 
 onLoadPage();
