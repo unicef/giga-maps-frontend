@@ -57,7 +57,7 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
         alignItems: 'center',
       }}>
         <h2 className="filter-popover-title">{isLive ? 'Real-time connectivity ' : 'Static '} {t('data-layer-benchmark')}</h2>
-        <Tooltip className='info-icon' align="left-top" autoAlign={true} label={"You will see the impact on map legend where green is for schools surpassing global or national standards, yellow is for schools between global or national connectivity standard and red category which is for schools receiving lowest level of connectivity. "}>
+        <Tooltip className='info-icon' align="left-top" autoAlign={true} label={t("you-will-for-schools-between-global-or-national-level-of-connectivity")}>
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>
@@ -72,12 +72,12 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
         onChange={(selection) => setConnectivityBenchmarkValue(selection as ConnectivityBenchMarks)}
       >
         <RadioButton
-          labelText={benchmarkNames[layerId ?? selectedLayerId ?? ""] ?? 'Global'}
+          labelText={benchmarkNames[layerId ?? selectedLayerId ?? ""] ?? t('global')}
           value={ConnectivityBenchMarks.global}
           id="globalId"
         />
         <RadioButton
-          labelText={countryConnectivityNames?.[layerId ?? selectedLayerId ?? ""] ?? 'National'}
+          labelText={countryConnectivityNames?.[layerId ?? selectedLayerId ?? ""] ?? t('national')}
           value={ConnectivityBenchMarks.national}
           id="nationalId"
           disabled={!isCountryNationalBenchmark}

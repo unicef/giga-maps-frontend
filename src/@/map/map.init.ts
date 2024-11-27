@@ -26,6 +26,7 @@ import { addSchoolMarkers } from './effects/add-marker-fx';
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
+  $filterListMapping,
   $map,
   $popup,
   $reloadStyle,
@@ -50,6 +51,7 @@ import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPaus
 import { $isMobile } from '../admin/models/media-query';
 import { languageStore } from '~/core/i18n/store';
 import { mapLabelLayerList } from '../country/country.constant';
+import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 
 sample({
   source: $theme,
@@ -393,6 +395,15 @@ sample({
       ]);
     }
   })
+})
+
+sample({
+  clock: merge([$filterListMapping, languageStore.$language]),
+  source: { mapping: $filterListMapping, lng: languageStore.$language },
+  filter: ({ mapping, lng }) => {
+    return !!mapping?.length && !!lng
+  },
+  target: filterTranslationFx
 })
 
 onLoadPage();

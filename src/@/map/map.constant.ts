@@ -279,3 +279,8 @@ export const animateCircleConfig = {
   opacityMax: 1,
   opacityMin: 0.2
 }
+
+export const filterListMapping = [
+  'filterList.*.description',
+  'filterList.*.name',
+]
