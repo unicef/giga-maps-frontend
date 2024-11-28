@@ -108,12 +108,8 @@ export const worldViewsCountries = [
 ]
 
 export const countryMapping = [
-  'active_layers_list.*.legend_configs.good.labels',
-  'active_layers_list.*.legend_configs.good.tooltip',
-  'active_layers_list.*.legend_configs.moderate.labels',
-  'active_layers_list.*.legend_configs.moderate.tooltip',
-  'active_layers_list.*.legend_configs.bad.labels',
-  'active_layers_list.*.legend_configs.bad.tooltip',
-  'active_layers_list.*.legend_configs.unknown.labels',
-  'active_layers_list.*.legend_configs.unknown.tooltip',
+  'active_layers_list.*.legend_configs.{*}.labels',
+  'active_layers_list.*.legend_configs.{*}.tooltip',
+  'benchmark_metadata.benchmark_name.{*}',
+  'benchmark_metadata.layer_descriptions.{*}',
 ]

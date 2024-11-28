@@ -38,6 +38,7 @@ export const $countryIdToCode = $countries.map((countries) => countries?.reduce(
 }, {} as Record<string, string>) ?? {});
 
 export const $country = createStore<Country | null>(null);
+export const $countryId = $country.map(country => country?.id ?? null);
 $country.on(fetchCountryFx.doneData, setPayload);
 $country.on(countryTranslationFx.doneData, (state, payload) => {
   const { data } = payload as { data: Record<string, string> }
@@ -218,7 +219,7 @@ sample({
 });
 
 sample({
-  clock: merge([$country, $map]),
+  clock: merge([$countryId, $map]),
   source: combine({ map: $map, country: $country }),
   fn: ({ map, country }) => ({
     map,

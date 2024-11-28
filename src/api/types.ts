@@ -14,6 +14,7 @@ export type GlobalStats = {
     not_connected: number;
     unknown: number;
   };
+  schools_with_connectivity_status_mapped: number; mber
 }
 
 export type GraphData = {

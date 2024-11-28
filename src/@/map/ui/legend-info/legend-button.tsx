@@ -10,12 +10,12 @@ import { debounce } from '~/lib/effector-kit';
 
 import { ActiveButtonWrapper, LegendWrapper } from "./legend-button.style";
 import LegendPopup from "./legend-popup";
-import { $country } from '~/@/country/country.model';
+import { $country, $countryId } from '~/@/country/country.model';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 sample({
-  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $country, $showThemeLayer, $showAdvancedFilter]),
+  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $countryId, $showThemeLayer, $showAdvancedFilter]),
   source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
   fn: () => true,
   filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {

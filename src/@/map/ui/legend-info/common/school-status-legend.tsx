@@ -12,6 +12,7 @@ import { $globalStats, $stylePaintData } from '~/@/map/map.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
 import { useTranslation } from "react-i18next";
+import { $lng } from "~/core/i18n/store";
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -19,6 +20,7 @@ interface CheckedStatus {
 
 const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
   const { t } = useTranslation();
+  const lng = useStore($lng);
   const paintData = useStore($stylePaintData);
   const { currentLayerTypeUtils } = useStore($layerUtils);
   const { isSchoolStatus } = currentLayerTypeUtils;
@@ -79,7 +81,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
               <p className="label">{ConnectivityStatusNames[key]}</p>
             </div>
           </div>
-          {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key])}</div>}
+          {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key], lng)}</div>}
         </div>
       )
       )}
