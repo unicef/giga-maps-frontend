@@ -109,5 +109,9 @@
   "thanks-for-taking-the-tour-of": "Thanks for taking the tour of",
   "admins": "Admins",
   "schools-with-coverage-schools-mapped": "Schools with {{layerName}} data out of {{totalSchools}} schools mapped",
-  "insufficient-data": "Insufficient data"
+  "insufficient-data": "Insufficient data",
+  "you-will-for-schools-between-global-or-national-level-of-connectivity": "You will see the impact on map legend where green is for schools surpassing global or national standards, yellow is for schools between global or national connectivity standard and red category which is for schools receiving lowest level of connectivity.",
+  "show-more": "Show more",
+  "global": "Global",
+  "national": "National"
 }

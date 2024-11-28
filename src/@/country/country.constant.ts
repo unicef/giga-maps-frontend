@@ -106,3 +106,10 @@ export const worldViewsCountries = [
     "name": "Turkey"
   }
 ]
+
+export const countryMapping = [
+  'active_layers_list.*.legend_configs.{*}.labels',
+  'active_layers_list.*.legend_configs.{*}.tooltip',
+  'benchmark_metadata.benchmark_name.{*}',
+  'benchmark_metadata.layer_descriptions.{*}',
+]

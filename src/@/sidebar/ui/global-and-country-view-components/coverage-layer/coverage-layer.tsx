@@ -10,6 +10,7 @@ import styled, { useTheme } from 'styled-components';
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { useTranslation } from 'react-i18next';
+import { $lng } from '~/core/i18n/store';
 
 const CoverageLayerContanier = styled.div` 
   display: flex;
@@ -23,11 +24,12 @@ const CoverageLayerContanier = styled.div`
 
 const CoverageLayer = () => {
   const { t } = useTranslation();
+  const lng = useStore($lng)
   const coverageStats = useStore($coverageStats);
   const isLoading = useStore($isLoadingCountryAdminView);
   const legends = coverageStats?.connected_schools;
   const totalSchools = coverageStats?.total_schools ?? 0;
-  const { selectedLayerId, coverageLayerId, selectedLayerData } = useStore($layerUtils);
+  const { selectedLayerData } = useStore($layerUtils);
   const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
 
   const [displayNumber, setDisplayNumber] = useState(0);
@@ -45,12 +47,12 @@ const CoverageLayer = () => {
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
       setDisplayNumber(firstValue + secondValue + thirdValue);
-      setDisplayText(t('schools-with-coverage-schools-mapped', { totalSchools: formatNumber(sum), layerName: selectedLayerData?.name }));
+      setDisplayText(t('schools-with-coverage-schools-mapped', { totalSchools: formatNumber(sum, lng), layerName: selectedLayerData?.name }));
     } else {
       setDisplayNumber(0);
       setDisplayText('insufficient-data');
     }
-  }, [legendsList, totalSchools]);
+  }, [legendsList, totalSchools, lng]);
 
   return (
     <CoverageLayerContanier>
@@ -60,7 +62,7 @@ const CoverageLayer = () => {
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
             <Div>
               <Text $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
-                {isDataAvailable ? formatNumber(displayNumber) : ""}
+                {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>
                 {displayText}

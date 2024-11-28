@@ -2,7 +2,7 @@ import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-gra
 import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString } from '~/@/country/country.model';
+import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryMapping, $countryId } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
@@ -26,6 +26,7 @@ import { addSchoolMarkers } from './effects/add-marker-fx';
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
+  $filterListMapping,
   $map,
   $popup,
   $reloadStyle,
@@ -50,6 +51,7 @@ import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPaus
 import { $isMobile } from '../admin/models/media-query';
 import { languageStore } from '~/core/i18n/store';
 import { mapLabelLayerList } from '../country/country.constant';
+import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 
 sample({
   source: $theme,
@@ -375,9 +377,9 @@ sample({
 
 // call filter api on country change
 sample({
-  clock: $country,
-  filter: (country) => !!country?.id,
-  fn: (country) => country?.id ?? 0,
+  clock: $countryId,
+  filter: (countryId) => !!countryId,
+  fn: (countryId) => countryId ?? 0,
   target: fetchAdvanceFilterFx
 })
 
@@ -393,6 +395,24 @@ sample({
       ]);
     }
   })
+})
+
+sample({
+  clock: merge([$filterListMapping, languageStore.$language]),
+  source: { mapping: $filterListMapping, lng: languageStore.$language },
+  filter: ({ mapping, lng }) => {
+    return !!mapping?.length && !!lng
+  },
+  target: filterTranslationFx
+})
+
+sample({
+  clock: merge([$countryMapping, languageStore.$language]),
+  source: { mapping: $countryMapping, lng: languageStore.$language },
+  filter: ({ mapping, lng }) => {
+    return !!mapping?.length && !!lng
+  },
+  target: countryTranslationFx
 })
 
 onLoadPage();

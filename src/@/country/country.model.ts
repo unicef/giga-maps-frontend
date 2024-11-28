@@ -17,6 +17,9 @@ import { addCountriesFx, zoomToCountryFx } from './effects';
 import { createUpdateCountriesLayer } from './effects/create-update-countries-layer';
 import { getUserCurrentCountryISOFx } from './effects/detect-country-iso';
 import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from './effects/update-lookup-source-map';
+import { countryMapping } from './country.constant';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
 
 export const onLoadPage = createEvent();
 export const changeCountryCode = createEvent<string>();
@@ -35,7 +38,19 @@ export const $countryIdToCode = $countries.map((countries) => countries?.reduce(
 }, {} as Record<string, string>) ?? {});
 
 export const $country = createStore<Country | null>(null);
+export const $countryId = $country.map(country => country?.id ?? null);
 $country.on(fetchCountryFx.doneData, setPayload);
+$country.on(countryTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const result = reconstructJson(data, state as Country) as Country;
+  return { ...result }
+})
+
+export const $countryMapping = createStore<[string, string][]>([]);
+$countryMapping.on(fetchCountryFx.doneData, (_, payload) => {
+  return Object.entries(extractDataWithMapping(payload, countryMapping)).filter(([_key, value]) => !!value);
+})
+
 export const $dataSource = $country.map((country) => country?.data_source ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
@@ -204,7 +219,7 @@ sample({
 });
 
 sample({
-  clock: merge([$country, $map]),
+  clock: merge([$countryId, $map]),
   source: combine({ map: $map, country: $country }),
   fn: ({ map, country }) => ({
     map,

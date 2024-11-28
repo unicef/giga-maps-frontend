@@ -2,6 +2,8 @@ import i18next from 'i18next';
 import { createStore, createEvent } from 'effector';
 import { createI18nextIntegration } from '@withease/i18next';
 import { languages } from './constant';
+import TranslationCacheUtility from './translation-cache-utility';
+import * as resources from './resources';
 
 // Event that should be called after application initialization
 export const appStarted = createEvent();
@@ -15,5 +17,9 @@ export const languageStore = createI18nextIntegration({
   setup: appStarted,
 });
 
+export const $lng = languageStore.$language;
 export const $SelectedLngObj = languageStore.$language.map((lng) => languages.find((l) => l.code === lng));
 export const onLanguageChange = languageStore.changeLanguageFx;
+
+export const translationCache = new TranslationCacheUtility()
+translationCache.initializeWithI18nResources(resources)

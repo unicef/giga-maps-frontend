@@ -1,5 +1,7 @@
 /* use this file to create global utils methods */
 
+import { defaultLanguage } from "~/core/i18n/constant";
+
 
 export const shuffleArray = (array: unknown[]): unknown[] => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -10,13 +12,20 @@ export const shuffleArray = (array: unknown[]): unknown[] => {
   return array;
 }
 
-export function formatNumber(value = 0) {
+export const LanguageSuffixes = {
+  en: { thousand: 'k', million: 'M', billion: 'B', trillion: 'T' },
+  es: { thousand: 'mil', million: 'M', billion: 'MM', trillion: 'B' },
+  pt: { thousand: 'mil', million: 'M', billion: 'B', trillion: 'T' },
+} as Record<string, { thousand: string; million: string; billion: string; trillion: string }>
+
+export function formatNumber(value = 0, lng: string | null = defaultLanguage) {
+  const currentSuffix = LanguageSuffixes[lng ?? defaultLanguage];
   if (Math.abs(value) >= 1000000000) {
-    return `${(value / 1000000000).toFixed(1)}B`;
+    return `${(value / 1000000000).toFixed(1)}${currentSuffix.billion}`;
   } if (Math.abs(value) >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}M`;
+    return `${(value / 1000000).toFixed(1)}${currentSuffix.million}`;
   } if (Math.abs(value) >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`;
+    return `${(value / 1000).toFixed(1)}${currentSuffix.thousand}`;
   }
   return value > 0 ? value : '0';
 }

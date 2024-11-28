@@ -84,4 +84,14 @@ export const getDefaultFormula = (unit: string) => {
 
 export const publishLayersListMapping = [
   'layersList.*.description',
+  'layersList.*.name',
+  'layersList.*.global_benchmark.benchmark_name',
+  'layersList.*.legend_configs.good.labels',
+  'layersList.*.legend_configs.good.tooltip',
+  'layersList.*.legend_configs.moderate.labels',
+  'layersList.*.legend_configs.moderate.tooltip',
+  'layersList.*.legend_configs.bad.labels',
+  'layersList.*.legend_configs.bad.tooltip',
+  'layersList.*.legend_configs.unknown.labels',
+  'layersList.*.legend_configs.unknown.tooltip'
 ]

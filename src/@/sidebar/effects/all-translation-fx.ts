@@ -6,3 +6,16 @@ export const publishLayersTranslationFx = createEffect(({ mapping }: { mapping: 
     mapping
   })
 })
+
+export const filterTranslationFx = createEffect(({ mapping }: { mapping: [string, string][]; lng: string }) => {
+  return createTranslationFx({
+    mapping
+  })
+})
+
+export const countryTranslationFx = createEffect(({ mapping }: { mapping: [string, string][]; lng: string }) => {
+  return createTranslationFx({
+    mapping
+  })
+})
+

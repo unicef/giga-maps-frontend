@@ -13,10 +13,16 @@ const extractValue = (
     return;
   }
 
-  if (key === '*') {
-    if (Array.isArray(obj)) {
+  if (key === '*' || key === '{*}') {
+    const isArray = Array.isArray(obj);
+    if (isArray) {
       obj.forEach((item, index) => {
         extractValue(item, restKeys, `${currentPath}.${index}`, result);
+      });
+    } else {
+      const items = Object.keys(obj);
+      items.forEach((item) => {
+        extractValue(obj[item], restKeys, `${currentPath}.{${item}}`, result);
       });
     }
   } else if (restKeys.length === 0 && !isString) {
@@ -50,7 +56,7 @@ export const extractDataWithMapping = (
 }
 
 const setValue = (obj: JsonObject, keys: string[], value: any) => {
-  const [key, ...restKeys] = keys;
+  let [key, ...restKeys] = keys;
 
   // Check if the key is an array index
   const arrayIndexMatch = key.match(/^(\d+)$/);
@@ -72,6 +78,7 @@ const setValue = (obj: JsonObject, keys: string[], value: any) => {
       setValue(obj[index], restKeys, value);
     }
   } else {
+    key = key.replace('{', '').replace('}', '');
     if (restKeys.length === 0) {
       obj[key] = value;
     } else {

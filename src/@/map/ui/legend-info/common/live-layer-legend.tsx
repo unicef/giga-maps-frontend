@@ -25,12 +25,14 @@ import { $stylePaintData } from "~/@/map/map.model";
 import { defaultLegendValuesType } from "~/api/types";
 import { TooltipButton } from "~/@/common/style/styled-component-style";
 import { $mapRoutes } from "~/core/routes";
+import { $lng } from "~/core/i18n/store";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+  const lng = useStore($lng);
   const { schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId } = useStore($layerUtils);
@@ -122,7 +124,7 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
                         <p className="label">{label}</p>
                       </div>
                     </div>
-                    {shouldShowControls && key === 'bad' ? <div className='legend-value'>{formatNumber(realtimeStats?.['no_internet'] ?? 0)}</div> : shouldShowControls && <div className='legend-value'>{formatNumber(realtimeStats?.[key] ?? 0)}</div>}
+                    {shouldShowControls && key === 'bad' ? <div className='legend-value'>{formatNumber(realtimeStats?.['no_internet'] ?? 0, lng)}</div> : shouldShowControls && <div className='legend-value'>{formatNumber(realtimeStats?.[key] ?? 0, lng)}</div>}
                   </div>
                 </button>
               </TooltipButton>

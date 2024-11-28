@@ -14,9 +14,11 @@ import { DateWeekWrapper } from './connectivity-layer.style';
 import LiveAverage from './live-average.view';
 import { UNKNOWN } from '~/@/map/map.types';
 import { useTranslation } from 'react-i18next';
+import { $lng } from '~/core/i18n/store';
 
 export default function ConnectivityLayer() {
   const { t } = useTranslation();
+  const lng = useStore($lng);
   const { icon, global_benchmark } = useStore($selectedLayerData) ?? {};
   const connectivityStats = useStore($connectivityStats);
   const isLoading = useStore($isLoadingCountryAdminView);
@@ -31,7 +33,7 @@ export default function ConnectivityLayer() {
       <CurrentLayerNameIcon isLiveLayer={true} label={t("real-time-connectivity")} />
       <Div $margin='1rem 1rem 0rem 1rem'>
         {isLoading ? <LoadingText width="80%" $marginEnd='2' /> : <Text $color={theme.titleDesc}>
-          {t("schools-with-real-time-mapped", { schoolCount: formatNumber(noOfSchoolsMeasure), globalCount: formatNumber(globalStats.schools_connected) })}
+          {t("schools-with-real-time-mapped", { schoolCount: formatNumber(noOfSchoolsMeasure, lng), globalCount: formatNumber(globalStats.schools_connected, lng) })}
         </Text>}
         <DateWeekWrapper>
           <LiveAverage isLoading={isLoading} color={color} icon={icon ?? ""} unit={global_benchmark?.convert_unit ?? ""} value={connectivityStats?.live_avg ?? 0} />

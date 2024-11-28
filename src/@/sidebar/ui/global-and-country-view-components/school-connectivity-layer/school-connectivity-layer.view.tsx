@@ -11,6 +11,7 @@ import CurrentLayerNameIcon from '../../common-components/current-layer-name-Ico
 import { SchoolInfoSection } from '../styles/layer-view-common.style';
 import styled, { useTheme } from 'styled-components';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { $lng } from '~/core/i18n/store';
 
 const SchoolConnectivityLayerContainer = styled.div`
   display: flex;
@@ -23,12 +24,13 @@ const SchoolConnectivityLayerContainer = styled.div`
 `
 
 const SchoolConnectivityLayer = () => {
+  const lng = useStore($lng)
   const globalStats = useStore($globalStats);
   const isLoading = useStore($isLoadingCountryAdminView);
   const schoolView = useRoute(mapSchools);
   const stylePaintData = useStore($stylePaintData);
-  const connectedNumber = formatNumber(globalStats?.connected_schools?.connected || 0);
-  const totalMappedNumber = formatNumber(globalStats?.schools_connected || 0);
+  const connectedNumber = formatNumber(globalStats?.connected_schools?.connected || 0, lng);
+  const totalMappedNumber = formatNumber(globalStats?.schools_connected || 0, lng);
   const isConnected = globalStats?.connected_schools?.connected > 0;
   const theme = useTheme();
   return (

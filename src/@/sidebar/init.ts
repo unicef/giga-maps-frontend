@@ -4,7 +4,7 @@ import { combine, createEffect, merge, sample } from 'effector';
 
 import {
   $admin1Id,
-  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString, $countryAdminSchoolId
+  $country, $countryCode, countryReceived, onRecenterView, $countries, $countryDefaultNational, $countrySearchString, $countryAdminSchoolId, $countryId
 } from '~/@/country/country.model';
 import {
   $connectivityBenchMark,
@@ -93,7 +93,7 @@ const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (co
 }))
 
 sample({
-  clock: merge([countryIdAndSchoolIds, $selectedLayerId]),
+  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId]),
   source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId }),
   fn: ({ countryIdAndSchoolIds, selectedLayerId }) => {
     const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
@@ -200,7 +200,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
 }
 // only for download layer;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -211,7 +211,7 @@ sample({
 
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -222,7 +222,7 @@ sample({
 
 // for mobile coverage layer;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -233,7 +233,7 @@ sample({
 
 // for all coverage layers
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -362,7 +362,7 @@ sample({
 
 // default national for a country and layer
 sample({
-  clock: merge([$country, $connectivityLayers]),
+  clock: merge([$countryId, $connectivityLayers]),
   source: combine({ isNationalBenchmark: $isNationalBenchmark, connectivityBenchMark: $connectivityBenchMark, countryDefaultNational: $countryDefaultNational, country: $country, currentLayerTypeUtils: $currentLayerTypeUtils, selectedLayerId: $selectedLayerId }),
   fn: ({ isNationalBenchmark, countryDefaultNational = {}, selectedLayerId, connectivityBenchMark }) => {
     let currentBenchmark = connectivityBenchMark;
@@ -396,3 +396,4 @@ sample({
   },
   target: publishLayersTranslationFx
 })
+

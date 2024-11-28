@@ -43,7 +43,7 @@ sample({
   fn: ({ unit, interval }) => {
     return getInterval(unit === IntervalUnit.week ? interval.start : interval.end, unit)
   },
-  target: $historyInterval,
+  target: changeHistoryInterval,
 });
 
 sample({
@@ -59,11 +59,11 @@ sample({
 });
 
 sample({
-  source: combine([$historyInterval, $historyIntervalUnit]),
   clock: nextHistoryInterval,
+  source: combine([$historyInterval, $historyIntervalUnit]),
   fn: ([interval, unit]) =>
     getInterval(add(interval.start, { [`${unit}s`]: 1 }), unit),
-  target: $historyInterval,
+  target: changeHistoryInterval,
 });
 
 sample({
@@ -71,7 +71,7 @@ sample({
   clock: previousHistoryInterval,
   fn: ([interval, unit]) =>
     getInterval(sub(interval.start, { [`${unit}s`]: 1 }), unit),
-  target: $historyInterval,
+  target: changeHistoryInterval,
 });
 
 sample({
@@ -100,7 +100,7 @@ sample({
   fn: (unit, lastAvailableDates) => {
     return lastAvailableDates ? lastAvailableDates[unit] : defaultInterval()
   },
-  target: $historyInterval
+  target: changeHistoryInterval
 })
 
 // reset 
