@@ -17,6 +17,8 @@ import { onChangeTourStartPopup } from '../product-tour/models/product-tour.mode
 import { UNKNOWN } from '../map/map.types';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
+import { $lng } from '~/core/i18n/store';
+import i18next from 'i18next';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -68,7 +70,7 @@ $layersList.on(fetchLayerListFx.doneData, setPayloadResults)
 $layersList.on(publishLayersTranslationFx.doneData, (state, payload) => {
   const { data } = payload as { data: Record<string, string> }
   const list = reconstructJson(data, { layersList: state }).layersList as LayerType[];
-  return [...list]
+  return list.map((item) => ({ ...item, legend_configs: { ...item.legend_configs } }))
 })
 export const $layersListMapping = createStore<[string, string][]>([]);
 $layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
@@ -160,7 +162,8 @@ export const $currentLayerLegends = combine({
   stylePaintData: $stylePaintData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
   countryActiveLayersDataById: $countryActiveLayersDataById,
-  connectivityBenchmark: $connectivityBenchMark
+  connectivityBenchmark: $connectivityBenchMark,
+  lng: $lng
 }, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData, connectivityBenchmark, countryActiveLayersDataById }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -179,7 +182,7 @@ export const $currentLayerLegends = combine({
   if (currentLayerTypeUtils.isLive && !Object.values(apiLegends || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
-      label: ConnectivityDistributionNames[key],
+      label: i18next.t(ConnectivityDistributionNames[key]),
     }));
   } else {
     const reverseMapping = {} as Record<string, string>

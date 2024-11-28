@@ -3,9 +3,8 @@
   "global-school-connectivity-map": "Global School connectivity map",
   "an-open-live-global-map-of-schools-and-their-connectivity": "An open & live global map of schools and their connectivity",
   "take-the-tour": "Take the tour",
-  "6m": "/6M",
   "schools-location-mapped": "schools location mapped",
-  "across": "across",
+  "across-no-countries": "across {{count}} countries",
   "countries": "countries",
   "schools-connectivity-status-mapped": "schools connectivity status mapped",
   "schools-with-real-time-data-mapped": "schools with real-time data mapped",
@@ -113,5 +112,14 @@
   "you-will-for-schools-between-global-or-national-level-of-connectivity": "You will see the impact on map legend where green is for schools surpassing global or national standards, yellow is for schools between global or national connectivity standard and red category which is for schools receiving lowest level of connectivity.",
   "show-more": "Show more",
   "global": "Global",
-  "national": "National"
+  "national": "National",
+  "good": "Good",
+  "moderate": "Moderate",
+  "bad": "Bad",
+  "unknown": "Unknown",
+  "connected": "Connected",
+  "not-connected": "Not Connected",
+  "national-benchmark": "National Benchmark",
+  "global-benchmark": "Global Benchmark",
+  "doesnt-match-any-criteria": "Doesn't match any criteria"
 }

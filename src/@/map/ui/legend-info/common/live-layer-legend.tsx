@@ -26,6 +26,7 @@ import { defaultLegendValuesType } from "~/api/types";
 import { TooltipButton } from "~/@/common/style/styled-component-style";
 import { $mapRoutes } from "~/core/routes";
 import { $lng } from "~/core/i18n/store";
+import { useTranslation } from "react-i18next";
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -33,6 +34,7 @@ interface CheckedStatus {
 
 const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
   const lng = useStore($lng);
+  const { t } = useTranslation();
   const { schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId } = useStore($layerUtils);
@@ -94,15 +96,15 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
       <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
         <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
           {isNational ? <LiveLayerBenchmark>
-            {countryConnectivityNames?.[selectedLayerId as number] ?? "National Benchmark"} - {bencharkmarkValue}&nbsp;{unitLabel}
+            {countryConnectivityNames?.[selectedLayerId as number] ?? t('national-benchmark')} - {bencharkmarkValue}&nbsp;{unitLabel}
           </LiveLayerBenchmark> : <LiveLayerBenchmark>
-            {benchmarkNames[selectedLayerId ?? ""] ?? 'Global Benchmark'} - {bencharkmarkValue}&nbsp;{unitLabel}
+            {benchmarkNames[selectedLayerId ?? ""] ?? t('global-benchmark')} - {bencharkmarkValue}&nbsp;{unitLabel}
           </LiveLayerBenchmark>}
         </button>
       </TooltipButton>
       {
         legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
-          const logicLabel = `${(benchmarkLogic && key) != "unknown" ? benchmarkLogic?.[key] : `Doesn't match any criteria`}`;
+          const logicLabel = `${(benchmarkLogic && key) != "unknown" ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
           const toolTiplabel = tooltip ? tooltip : logicLabel;
           return (
             <div key={key}>

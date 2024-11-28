@@ -78,7 +78,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
               <CircleWrapper>
                 <InnerCircle $backColor={paintData[key]} />
               </CircleWrapper>
-              <p className="label">{ConnectivityStatusNames[key]}</p>
+              <p className="label">{t(ConnectivityStatusNames[key])}</p>
             </div>
           </div>
           {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key], lng)}</div>}

@@ -31,7 +31,6 @@ const LandingPage = () => {
   const theme = useTheme();
   const { t } = useTranslation();
   const lng = useStore($lng) ?? defaultLanguage;
-  console.log(lng, 'lng................')
 
   useEffect(() => {
     const startDate = format(defaultInterval().start, 'dd-MM-yyyy');
@@ -77,7 +76,7 @@ const LandingPage = () => {
                 </SchoolNumberWrapper>
                 <MappedInfoWrapper>
                   <p>
-                    {t('across')} {globalstats?.no_of_countries ?? 0} {t('countries')}
+                    {t('across-no-countries', { count: globalstats?.no_of_countries ?? 0 })}
                   </p>
                 </MappedInfoWrapper>
               </>}
