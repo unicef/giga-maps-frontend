@@ -5,7 +5,7 @@ import { getBaseUrl } from "~/api/project-connect";
 import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
 
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, LayerDataProps, mapPaintData } from "./map.constant";
+import { animateCircleConfig, Colors, defaultWorldView, LayerDataProps, mapPaintData } from "./map.constant";
 import { setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
@@ -336,7 +336,7 @@ export const filterSchoolStatus = (lengendsSelected: string[]) => {
 }
 
 // Creates a worldview filtes for Mapbox Boundaries tilesets
-export const wvFilter = (worldview = "IN") => {
+export const wvFilter = (worldview = defaultWorldView) => {
   return [
     "any",
     ["==", "all", ["get", "worldview"]],
@@ -344,6 +344,13 @@ export const wvFilter = (worldview = "IN") => {
   ];
 }
 
+export const notHasDispute = (worldview = defaultWorldView) => {
+  return [
+    "all",
+    ["!", ["has", "dispute"]],
+    wvFilter(worldview),
+  ]
+}
 export const filterCountry = (countryCode: string, operator = "==", worldView?: string) => {
   // Create a filter expression for the boundary layer using the country and worldview selection
   if (!countryCode) return []

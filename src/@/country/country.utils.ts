@@ -4,7 +4,7 @@ import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl
 import { mapCountry } from "~/core/routes";
 
 import { Colors, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
-import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, showLayer, wvFilter } from "../map/utils";
+import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
@@ -91,24 +91,45 @@ export const createLineLayerForCountry = ({ map, paintData, level, selectedLevel
   const { isLessThan } = getCountryLevels(level, selectedLevel);
   const layerId = getAdminCountryLayerLine(level);
   const isLevel0 = level === CountryAdminLevel.level0;
+  const liveOFilter = isLevel0 ? notHasDispute(worldView) : wvFilter(worldView);
   if (!map.getLayer(layerId) && !isLessThan) {
     map.addLayer({
       id: getAdminCountryLayerLine(level),
       type: 'line',
       source: getAdminCountrySource(level),
       "source-layer": `boundaries_admin_${level}`,
-      filter: countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : wvFilter(worldView),
+      filter: countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : liveOFilter,
       paint: {
         'line-color': getCountryLine(paintData),
         'line-width': getCountryLineWidth(),
       },
-    });
-    map.setFilter('admin-0-boundary-disputed', countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : wvFilter(worldView));
+    }, 'admin-0-boundary-disputed');
+    if (isLevel0) {
+      map.setPaintProperty('admin-0-boundary-disputed', 'line-opacity', [
+        'case',
+        [
+          'all',
+          ["==", ["get", "dispute"], "true"],
+          wvFilter(worldView),
+        ],
+        0, 1
+      ]);
+
+      map.setPaintProperty('admin-0-boundary-disputed', 'line-opacity', [
+        'case',
+        [
+          'all',
+          ["!", ["has", "dispute"]],
+          wvFilter(worldView),
+        ],
+        1, 0
+      ]);
+    }
   } else if (isLessThan) {
     hideLayer(map, layerId);
   } else {
     showLayer(map, layerId)
-    map.setFilter(layerId, countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : wvFilter(worldView));
+    map.setFilter(layerId, countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : liveOFilter);
   }
 }
 
