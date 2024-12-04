@@ -36,6 +36,7 @@ $formData.on(onUdpateGigaLayerForm, (state, payload: [string, GigaLayerAllValueT
       sourceType: [],
       dataSource: [],
       dataSourceColumn: null,
+      supportedFunctions: null,
       globalBenchmark: null
     }
   }
@@ -104,6 +105,7 @@ sample({
   clock: $currentGigaLayerItem,
   fn: (layer) => {
     if (!layer) return defaultGigaLayerForm;
+    const dataSourceColumn = Object.values(layer?.data_source_column ?? [])[0];
     return ({
       code: layer?.code,
       name: layer?.name,
@@ -116,7 +118,8 @@ sample({
       })),
       isReverse: layer?.is_reverse,
       dataSource: layer?.data_sources_list?.map(source => source.id),
-      dataSourceColumn: Object.values(layer?.data_source_column ?? [])[0],
+      dataSourceColumn,
+      supportedFunctions: dataSourceColumn?.supported_functions?.[0] ?? null,
       applicableCountries: layer.applicable_countries,
       globalBenchmark: layer?.global_benchmark,
       benchmarkConvertUnit: layer?.global_benchmark?.convert_unit,
