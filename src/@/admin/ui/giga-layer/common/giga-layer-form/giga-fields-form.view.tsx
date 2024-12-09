@@ -171,13 +171,13 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
     {isLive && <SelectLayerConfig
       name="supportedFunctions"
       required
-      labelText="Convert functions"
+      labelText="Parameter Aggregator Function"
       id={`convert-function-select`}
       value={formData.supportedFunctions?.name}
-      placeholder="Select convert functions"
+      placeholder="Select Parameter Aggregator Function"
       onChange={(e) => onUdpateGigaLayerForm([e.target.name, supportedFunctions?.find(item => e.target.value === item.name)])}
     >
-      <SelectItem value="" text="Select convert functions" />
+      <SelectItem value="" text="Select Parameter Aggregator Function" />
       {supportedFunctions?.map((item) => <SelectItem key={item?.name} value={item?.name} text={`${item?.verbose} ${item.description ? `(${item.description})` : ''}`} />)}
     </SelectLayerConfig>}
     <MultiSelectLayerConfig
