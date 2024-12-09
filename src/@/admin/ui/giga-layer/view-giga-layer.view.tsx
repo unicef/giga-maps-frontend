@@ -105,10 +105,10 @@ const AdminViewLayer = () => {
             <LayerLabel>Parameter</LayerLabel>
             <LayerDetail>{parameterName}</LayerDetail>
           </LayerContentWrapper>
-          <LayerContentWrapper>
+          {layerItem?.data_source_column_function?.verbose && <LayerContentWrapper>
             <LayerLabel>Parameter Aggregator Function</LayerLabel>
             <LayerDetail>{`${layerItem?.data_source_column_function.verbose} ${layerItem.data_source_column_function.description ? `(${layerItem.data_source_column_function.description})` : ''}`}</LayerDetail>
-          </LayerContentWrapper>
+          </LayerContentWrapper>}
           <LayerContentWrapper>
             <LayerLabel>Countries</LayerLabel>
             <LayerDetail>{countriesNames}</LayerDetail>

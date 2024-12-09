@@ -1,12 +1,11 @@
 import { FileUploader } from "@carbon/react"
 import { UploadFlagImage } from "../../../styles/admin-styles"
-import { FormEvent } from "react"
+import { FormEvent, useRef } from "react"
 import { $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model"
 import { useStore } from "effector-react"
 
 export const GigaUploadIcon = () => {
   const formData = useStore($formData);
-
   const onUploadIcon = (e: FormEvent<HTMLInputElement>) => {
     const files = e?.currentTarget?.files;
     if (!files) {
@@ -17,6 +16,13 @@ export const GigaUploadIcon = () => {
       return console.log('Please select an SVG file');
     }
 
+    const sizeInBytes = file.size; // File size in bytes
+    const sizeInKB = (sizeInBytes / 1024).toFixed(2); // Convert to KB
+    if (Number(sizeInKB) > 500) {
+      console.log('File size exceeds 500 KB');
+      alert('File size should not exceed 500 KB');
+      return;
+    }
     // Process the uploaded file here (read as text or array buffer)
     const reader = new FileReader();
 
@@ -38,7 +44,7 @@ export const GigaUploadIcon = () => {
       <FileUploader
         id="file-upload"
         labelTitle="Upload layer icon"
-        labelDescription="Only .svg file is supported."
+        labelDescription="Max file size is 500 KB. Only .svg file is supported."
         buttonLabel="Upload"
         buttonKind="primary"
         size="md"
