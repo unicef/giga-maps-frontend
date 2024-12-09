@@ -119,7 +119,7 @@ sample({
       isReverse: layer?.is_reverse,
       dataSource: layer?.data_sources_list?.map(source => source.id),
       dataSourceColumn,
-      supportedFunctions: dataSourceColumn?.supported_functions?.[0] ?? null,
+      supportedFunctions: layer?.data_source_column_function,
       applicableCountries: layer.applicable_countries,
       globalBenchmark: layer?.global_benchmark,
       benchmarkConvertUnit: layer?.global_benchmark?.convert_unit,
