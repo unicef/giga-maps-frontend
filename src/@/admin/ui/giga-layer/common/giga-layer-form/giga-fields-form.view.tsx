@@ -94,7 +94,6 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
           id="layer-description"
           value={formData.description}
           onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
-          required
           placeholder="Enter layer description"
         />
       </DataLayerNameField>
