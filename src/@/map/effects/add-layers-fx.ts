@@ -15,9 +15,11 @@ import {
   filterSchoolStatus,
   getMapId,
   removePreviewsMapClickHandlers,
+  staticSource,
 } from '@/map/utils';
 
-import { cancelAnimation, createAndUpdateMapLayer, createSourceForMapAndCountry, createSourceForSchool, getLayerIdsAndLastChange } from './add-layers-utils';
+import { cancelAnimation, createAndUpdateConnectiivtyStatusLayer, createAndUpdateMapLayer, createSourceForMapAndCountry, getLayerIdsAndLastChange } from './add-layers-utils';
+import { SCHOOL_LAYER_ID } from '../map.constant';
 
 const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> => {
   if (!props.map) { return };
@@ -35,15 +37,11 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
       const next = await createSourceForMapAndCountry({ ...props, selectedLayerId });
       if (!next) return;
     }
-    // else if (mapRoute.schools) {
-    //   createSourceForSchool({ ...props, selectedLayerId });
-    // }
   }
   // create and update layers 
   createAndUpdateMapLayer({ ...props, selectedLayerId, schoolLayerId });
   // update giga selection
   changeGigaSelection({
-    schoolId: schoolLayerId,
     layerId: selectedLayerId ?? lastSelectedLayer.layerId
   });
 }
@@ -65,6 +63,18 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   }
   callDelay(timeout, createAndUpdateLayer, props);
 });
+
+export const changeStaticLayerFx = createEffect(async (props: ChangeLayerOptions) => {
+  const { map, mapRoute } = props;
+  if (!map) return;
+  if (mapRoute.map) {
+    deleteSourceAndLayers({ map, sourceId: staticSource })
+    return;
+  }
+  const next = await createSourceForMapAndCountry({ ...props, selectedLayerId: null, isConnectivityStatus: true });
+  if (!next) return;
+  createAndUpdateConnectiivtyStatusLayer(props);
+})
 
 export const updateCoverageFilter = createEffect(({ map, layerUtils, coverageFilter, lastSelectedLayer }: UpdateCoverageFilterOptions) => {
   if (!map) return;
@@ -90,13 +100,12 @@ export const updateConnectivityFilter = createEffect(({ map, layerUtils, connect
   }
 })
 
-export const updateConnectivityStatus = createEffect(({ map, lengendsSelected, lastSelectedLayer }: UpdateConnectivityType & { lengendsSelected: string[] }) => {
+export const updateConnectivityStatus = createEffect(({ map, lengendsSelected }: UpdateConnectivityType & { lengendsSelected: string[] }) => {
   if (!map) return;
-  const { schoolId } = lastSelectedLayer;
-  const layer = map.getLayer(getMapId(schoolId));
+  const layer = map.getLayer(getMapId(SCHOOL_LAYER_ID));
   if (layer) {
     const filter = filterSchoolStatus(lengendsSelected);
-    map.setFilter(getMapId(schoolId), filter);
+    map.setFilter(getMapId(SCHOOL_LAYER_ID), filter);
   }
 })
 
@@ -108,6 +117,10 @@ export const clearMapDataFx = createEffect(({ map }: { map: Map | null }) => {
   removePreviewsMapClickHandlers(map);
   // delete existing source;
   deleteSourceAndLayers({ map });
+
+  // delete static resource
+
+  deleteSourceAndLayers({ map, sourceId: staticSource });
 
 })
 

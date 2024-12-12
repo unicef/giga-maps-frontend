@@ -3,7 +3,7 @@ import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
 import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap, $schoolStatusSelectedLayer } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -21,7 +21,7 @@ import {
 } from '@/map/effects';
 import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
-import { updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
+import { changeStaticLayerFx, updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
 import { addSchoolMarkers } from './effects/add-marker-fx';
 import { stylePaintData } from './map.constant';
 import {
@@ -169,10 +169,27 @@ const mapLayerFilter = ({ isCheckedLastDate, mapRoute }: ReturnType<typeof gigaL
   return true; //isCheckedLastDate || mapRoute.map;
 }
 
+const timePlayerActive = sample({
+  clock: $isTimeplayer,
+  filter: isActive => !isActive
+});
+
 const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 // change giga layer on selection of layers
+
 sample({
-  clock: merge([$selectedLayers, $map]),
+  clock: merge([$mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
+  source: gigaLayerSource,
+  fn: combineGigaFn({}),
+  filter: ({ map }, clockChange) => {
+    console.log('clockChange', clockChange);
+    return !!map;
+  },
+  target: changeStaticLayerFx
+})
+
+sample({
+  clock: merge([$selectedLayerId, $map]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: mapLayerFilter,
@@ -191,31 +208,13 @@ sample({
     $schoolStatsMap,
     $connectivityBenchMark,
     $countrySearchString,
-    sample({
-      clock: $isTimeplayer,
-      filter: isActive => !isActive
-    })
+    timePlayerActive
   ]),
   source: gigaLayerSource,
   filter: mapLayerFilter,
   fn: combineGigaFn({ refresh: true }),
   target: changeLayersFx,
 })
-
-// sample({
-//   clock: merge([
-//     $selectedLayers, $map, $connectivityFilter, onReloadedMap,
-//     $mapRouteVisible,
-//     $map,
-//     countryReceived,
-//     $admin1Data,
-//     // schoolConnectivityLength,
-//     // $schoolStatsMap,
-//     $connectivityBenchMark,
-//     $countrySearchString,
-//   ]), fn: (value) => console.log(value)
-// })
-// clear map data on country change;
 
 sample({
   clock: $connectivityFilter,

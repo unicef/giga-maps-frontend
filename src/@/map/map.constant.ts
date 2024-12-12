@@ -10,6 +10,7 @@ export const defaultCenter: Center = [-40, -14];
 export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
 export const MAP_SAMPLING = 300000;
+export const SCHOOL_LAYER_ID = 10001
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
@@ -267,7 +268,6 @@ export const matchConnectivityCase = {
 }
 
 export const defaultGigaLayers = {
-  schoolId: 0, // require for on/off
   layerId: 0 // require for on/off
 }
 export const animateCircleConfig = {

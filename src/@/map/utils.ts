@@ -5,7 +5,7 @@ import { getBaseUrl } from "~/api/project-connect";
 import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
 
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, defaultWorldView, LayerDataProps, mapPaintData } from "./map.constant";
+import { animateCircleConfig, Colors, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
 import { setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
@@ -108,8 +108,10 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
 }
 
 export const defaultSource = 'map-data-source';
+export const staticSource = 'map-data-source-static';
 export const coverageUrl = 'api/locations/schools/tiles';
 export const connectivityUrl = 'api/locations/schools/tiles/connectivity';
+export const connectivityStatusUrl = "api/locations/schools/tiles/connectivity_status"
 export const getDynamicUrl = (layerId: string) => `api/accounts/layers/${layerId}/map`
 
 export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark"> & { isLive?: boolean }): string => {
@@ -126,6 +128,7 @@ export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBe
   return params;
 }
 
+
 export const getCountryParams = (country: boolean, countryId?: number, admin1Id?: number | null) => {
   let params = country && countryId ? `country_id=${countryId}` : ''
   if (admin1Id) {
@@ -134,6 +137,14 @@ export const getCountryParams = (country: boolean, countryId?: number, admin1Id?
   return params;
 }
 
+export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySearch }: Pick<ChangeLayerOptions, "mapRoute" | "country" | "countrySearch"> & { admin1Id?: number | null }) => {
+  const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
+  let params = getBaseUrl(`${connectivityStatusUrl}/?${countryParams}`);
+  if (countrySearch) {
+    params += `&${countrySearch}`
+  }
+  return `${params}&z={z}&x={x}&y={y}.mvt`;
+}
 export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number | null }) => {
   let url = ''
   const { downloadLayerId, coverageLayerId } = layerUtils;
@@ -301,7 +312,7 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = def
     minzoom: 0,
     paint,
     ...options
-  }, getMapId(SCHOOL_STATUS_LAYER.id));
+  }, getMapId(SCHOOL_LAYER_ID));
   // create on click on dots;
   // clear click event before creating new layer;
 

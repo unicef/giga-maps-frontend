@@ -65,7 +65,7 @@ export const changeRealtimeSchoolConnectedOpenStatus = createEvent<boolean>();
 export const $realtimeSchoolConnectedOpenStatus = createStore<boolean>(true);
 $realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, setPayload);
 
-export const changeGigaSelection = createEvent<{ schoolId: number | null; layerId: number | null }>();
+export const changeGigaSelection = createEvent<{ layerId: number | null }>();
 export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
 
 export const setPopupOnClickDot = createEvent<{ id: string; geopoint: GeoJSONPoint }>();
