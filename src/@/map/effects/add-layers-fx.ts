@@ -8,18 +8,16 @@ import { delayMethodCall } from '~/lib/utils';
 
 import {
   checkSourceAvailable,
-  defaultSource,
   deleteSourceAndLayers,
   filterConnectivityList,
   filterCoverageList,
   filterSchoolStatus,
   getMapId,
   removePreviewsMapClickHandlers,
-  staticSource,
 } from '@/map/utils';
 
 import { cancelAnimation, createAndUpdateConnectiivtyStatusLayer, createAndUpdateMapLayer, createSourceForMapAndCountry, getLayerIdsAndLastChange } from './add-layers-utils';
-import { SCHOOL_LAYER_ID } from '../map.constant';
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from '../map.constant';
 
 const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> => {
   if (!props.map) { return };
@@ -31,7 +29,7 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
     mapRoute,
   } = props;
   let { schoolLayerId, selectedLayerId, isLastSelectionChange } = getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
-  if (isLastSelectionChange || !checkSourceAvailable(map, defaultSource)) {
+  if (isLastSelectionChange || !checkSourceAvailable(map, DEFAULT_SOURCE)) {
     // create source data country and global view;
     if (mapRoute.map || mapRoute.country || mapRoute.schools) {
       const next = await createSourceForMapAndCountry({ ...props, selectedLayerId });
@@ -68,7 +66,7 @@ export const changeStaticLayerFx = createEffect(async (props: ChangeLayerOptions
   const { map, mapRoute } = props;
   if (!map) return;
   if (mapRoute.map) {
-    deleteSourceAndLayers({ map, sourceId: staticSource })
+    deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE })
     return;
   }
   const next = await createSourceForMapAndCountry({ ...props, selectedLayerId: null, isConnectivityStatus: true });
@@ -120,7 +118,7 @@ export const clearMapDataFx = createEffect(({ map }: { map: Map | null }) => {
 
   // delete static resource
 
-  deleteSourceAndLayers({ map, sourceId: staticSource });
+  deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE });
 
 })
 

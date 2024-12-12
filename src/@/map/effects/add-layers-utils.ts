@@ -3,9 +3,8 @@ import { VectorSource } from "mapbox-gl";
 import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, defaultSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, staticSource, generateStaticLayerUrl } from "../utils";
-import { mapSchools } from "~/core/routes";
-import { SCHOOL_LAYER_ID } from "../map.constant";
+import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from "../map.constant";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
@@ -18,7 +17,7 @@ export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelect
 
 export const createSourceForMapAndCountry = async ({ map, schoolAdminId, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data, isConnectivityStatus }: ChangeLayerOptions & { selectedLayerId: number | null; isConnectivityStatus?: boolean }) => {
   if (!map) return;
-  const sourceId = isConnectivityStatus ? staticSource : defaultSource;
+  const sourceId = isConnectivityStatus ? CONNECTIVITY_STATUS_SOURCE : DEFAULT_SOURCE;
   if (!isConnectivityStatus) {
     // cancel animation;
     cancelAnimationFrame(animateCircleHandler.requestId)
@@ -28,7 +27,7 @@ export const createSourceForMapAndCountry = async ({ map, schoolAdminId, country
   // create new source
 
   // remove click handlers
-  removePreviewsMapClickHandlers(map);
+  removePreviewsMapClickHandlers(map, sourceId);
   const { coverageLayerId } = layerUtils;
   if (!layerId) {
     layerId = lastSelectedLayer.layerId ?? coverageLayerId;
@@ -73,7 +72,7 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
   const { currentLayerTypeUtils, downloadLayerId, coverageLayerId } = layerUtils;
   const { isLive } = currentLayerTypeUtils;
   const isDynamicLayer = !(selectedLayerId === downloadLayerId || selectedLayerId === coverageLayerId);
-  const isSourceAvailable = checkSourceAvailable(map, defaultSource);
+  const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
   const options: Record<string, any> = {
     filter: isLive ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer) : filterCoverageList(coverageFilter, isDynamicLayer),
     'source-layer': "default"
@@ -119,11 +118,11 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
 export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintData, selectedLayerIds, schoolLegends, isMobile }: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
   const { schoolId: schoolLayerId } = selectedLayerIds;
-  const isSourceAvailable = checkSourceAvailable(map, staticSource);
+  const isSourceAvailable = checkSourceAvailable(map, CONNECTIVITY_STATUS_SOURCE);
   // create school layer;
   if (isSourceAvailable && schoolLayerId) {
     createSchoolLayer(map, {
-      source: staticSource,
+      source: CONNECTIVITY_STATUS_SOURCE,
       id: getMapId(SCHOOL_LAYER_ID),
       paintData,
       isMobile,

@@ -11,6 +11,11 @@ export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
 export const MAP_SAMPLING = 300000;
 export const SCHOOL_LAYER_ID = 10001
+export const DEFAULT_SOURCE = 'map-data-source';
+export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
+export const COVERAGE_URL = 'api/locations/schools/tiles';
+export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
+export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',

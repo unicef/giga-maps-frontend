@@ -45,7 +45,7 @@ describe('clearMapDataFx', () => {
       removeSource: jest.fn(),
       getStyle: () => ({
         sources: {
-          [defaultSource]: true,
+          [DEFAULT_SOURCE]: true,
           layers: []
         }
       })
@@ -64,7 +64,7 @@ describe('clearMapDataFx', () => {
 });
 
 import { updateCoverageFilter } from '../effects/add-layers-fx';
-import { defaultSource } from '../utils';
+import { DEFAULT_SOURCE } from '../map.constant';
 
 describe('updateCoverageFilter', () => {
 
