@@ -88,11 +88,11 @@ export const updateCoverageFilter = createEffect(({ map, layerUtils, coverageFil
 
 export const updateConnectivityFilter = createEffect(({ map, layerUtils, connectivitySpeedFilter, lastSelectedLayer }: UpdateConnectivityFilterOptions) => {
   if (!map) return;
-  const { selectedLayerId, downloadLayerId } = layerUtils;
+  const { selectedLayerId, globalLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const mapLayer = map.getLayer(getMapId(selectedLayerId));
   if (isLive && mapLayer) {
-    const isDynamicLayer = selectedLayerId !== downloadLayerId;
+    const isDynamicLayer = selectedLayerId !== globalLayerId;
     const filter = filterConnectivityList(connectivitySpeedFilter, isDynamicLayer);
     map.setFilter(getMapId(selectedLayerId), filter);
   }

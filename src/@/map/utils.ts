@@ -32,9 +32,10 @@ export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
 
 export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
   const ids = Object.keys(mapDotsClickIdsAndHandler[source]);
-  ids.forEach((id) => {
+  if (!ids?.length) return;
+  ids?.forEach((id) => {
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-    delete mapDotsClickIdsAndHandler[id];
+    delete mapDotsClickIdsAndHandler[source][id];
   })
 }
 
@@ -146,14 +147,12 @@ export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySea
 }
 export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number | null }) => {
   let url = ''
-  const { downloadLayerId, coverageLayerId } = layerUtils;
+  const { globalLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
-  if (downloadLayerId === layerId || !layerId) {
+  if (globalLayerId === layerId || !layerId) {
     url = CONNECTIVITY_URL;
-  } else if (layerId === coverageLayerId) {
-    url = COVERAGE_URL
   } else {
     url = getDynamicUrl(String(layerId))
   }
@@ -193,6 +192,9 @@ export const checkSourceAvailable = (map: Map, sourceId: string): boolean => {
 }
 
 export const deleteSourceAndLayers = ({ map, sourceId = DEFAULT_SOURCE }: { map: Map, sourceId?: string }): void => {
+  // remove click handlers
+  removePreviewsMapClickHandlers(map, sourceId);
+
   if (!checkSourceAvailable(map, sourceId)) return;
   const { layers } = map.getStyle();
   layers?.forEach((layer) => {

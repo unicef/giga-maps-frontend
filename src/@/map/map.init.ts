@@ -182,7 +182,6 @@ sample({
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: ({ map }, clockChange) => {
-    console.log('clockChange', clockChange);
     return !!map;
   },
   target: changeStaticLayerFx

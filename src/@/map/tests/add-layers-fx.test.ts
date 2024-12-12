@@ -150,7 +150,7 @@ describe('updateConnectivityFilter', () => {
     };
     const layerUtils = {
       selectedLayerId: 1,
-      downloadLayerId: 2,
+      globalLayerId: 2,
       currentLayerTypeUtils: {
         isLive: true
       }
@@ -179,7 +179,7 @@ describe('updateConnectivityFilter', () => {
     };
     const layerUtils = {
       selectedLayerId: 1,
-      downloadLayerId: 2,
+      globalLayerId: 2,
       currentLayerTypeUtils: {
         isLive: false
       }
@@ -214,7 +214,7 @@ describe('updateConnectivityFilter', () => {
 
     const layerUtils = {
       selectedLayerId: 1,
-      downloadLayerId: 2,
+      globalLayerId: 2,
       currentLayerTypeUtils: {
         isLive: true
       }
@@ -245,7 +245,7 @@ describe('updateConnectivityFilter', () => {
 
     const layerUtils = {
       selectedLayerId: 1,
-      downloadLayerId: 2,
+      globalLayerId: 2,
       currentLayerTypeUtils: {
         isLive: false
       }

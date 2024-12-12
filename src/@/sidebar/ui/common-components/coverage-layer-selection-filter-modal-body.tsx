@@ -20,8 +20,7 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilter
   const defaultStatus = useStore($coverageStatusAll);
   const [currentStatus, setCurrentStatus] = useState<Record<string, boolean>>(defaultStatus);
   const legends = coverageStats?.connected_schools;
-  const { selectedLayerId, coverageLayerId, currentLayerLegends, selectedLayerData } = useStore($layerUtils);
-  const isCoverage = selectedLayerId === coverageLayerId;
+  const { currentLayerLegends, selectedLayerData } = useStore($layerUtils);
   const handleApply = useCallback(() => {
     changeCoverage5g4g(currentStatus.good)
     changeCoverage3g2g(currentStatus.moderate)
@@ -44,8 +43,8 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilter
           the logic behind them</p>
         <fieldset className="cds--fieldset">
           {Object.entries(legends ?? {}).map(([key, value]) => {
-            const label = isCoverage ? CoverageBenchmarkNames[key] : key;
-            const keyName = isCoverage ? CoverageColorNames[key] : currentLayerLegends.reverseMapping[key];
+            const label = key;
+            const keyName = currentLayerLegends.reverseMapping[key];
             return value > 0 &&
               <Checkbox
                 key={keyName}

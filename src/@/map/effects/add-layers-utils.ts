@@ -25,9 +25,6 @@ export const createSourceForMapAndCountry = async ({ map, schoolAdminId, country
   // delete existing source;
   deleteSourceAndLayers({ map, sourceId });
   // create new source
-
-  // remove click handlers
-  removePreviewsMapClickHandlers(map, sourceId);
   const { coverageLayerId } = layerUtils;
   if (!layerId) {
     layerId = lastSelectedLayer.layerId ?? coverageLayerId;
@@ -69,9 +66,9 @@ export const createSourceForMapAndCountry = async ({ map, schoolAdminId, country
 
 export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter, coverageFilter, layerUtils, selectedLayerId, paintData, schoolLayerId, lastSelectedLayer, schoolLegends, isMobile }: ChangeLayerOptions & { selectedLayerId: number | null; schoolLayerId: number | null; }) => {
   if (!map) return;
-  const { currentLayerTypeUtils, downloadLayerId, coverageLayerId } = layerUtils;
+  const { currentLayerTypeUtils, globalLayerId } = layerUtils;
   const { isLive } = currentLayerTypeUtils;
-  const isDynamicLayer = !(selectedLayerId === downloadLayerId || selectedLayerId === coverageLayerId);
+  const isDynamicLayer = !(selectedLayerId === globalLayerId);
   const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
   const options: Record<string, any> = {
     filter: isLive ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer) : filterCoverageList(coverageFilter, isDynamicLayer),
