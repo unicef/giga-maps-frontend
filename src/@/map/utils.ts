@@ -41,7 +41,7 @@ export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
 export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
   mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(e.point, {
-      layers: [...Object.keys(mapDotsClickIdsAndHandler[source])],
+      layers: [...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length) return;
     const feature = features[0];
