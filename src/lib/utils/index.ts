@@ -18,7 +18,7 @@ export const LanguageSuffixes = {
   pt: { thousand: 'mil', million: 'M', billion: 'B', trillion: 'T' },
 } as Record<string, { thousand: string; million: string; billion: string; trillion: string }>
 
-export function formatNumber(value = 0, lng: string | null = defaultLanguage) {
+export function formatNumber(value: number = 0, lng: string | null = defaultLanguage) {
   const currentSuffix = LanguageSuffixes[lng ?? defaultLanguage];
   if (Math.abs(value) >= 1000000000) {
     return `${(value / 1000000000).toFixed(1)}${currentSuffix.billion}`;
