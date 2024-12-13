@@ -1,7 +1,7 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById, $admin1Id } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
@@ -217,7 +217,7 @@ export const $isSchoolBenchmark = combine($selectedLayerData, $connectivityBench
   if (conntectivityBenchmark === ConnectivityBenchMarks.global) {
     return selectedLayer?.global_benchmark.value.startsWith('SQL:')
   } else if (conntectivityBenchmark === ConnectivityBenchMarks.national) {
-    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""].startsWith('SQL:')
+    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""]?.startsWith('SQL:')
   }
 })
 
@@ -232,7 +232,7 @@ export const $layerUtils = combine({
   downloadLayerId: $downloadLayerId,
   downloadLayerData: $downloadLayerData,
   coverageLayerId: $coverageLayerId,
-  coverageDynamicLayerData: $coverageLayerData,
+  coverageLayerData: $coverageLayerData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
   currentLayerLegends: $currentLayerLegends,
   isActiveCurrentLayer: $isActiveCurrentLayer,
@@ -283,7 +283,8 @@ $staticLegendsSelected.on(selectAllStaticLegendsSelection, (state) => {
   return [ConnectivityStatusDistribution.connected, ConnectivityStatusDistribution.notConnected, ConnectivityStatusDistribution.unknown]
 })
 
-export const resetCoverageFilterSelection = createEvent();
+export const resetCoverageFilterSelection = createEvent<number>();
+export const checkConnectivityBenchmark = createEvent<number>();
 
 export const changeCoverage5g4g = createEvent<boolean>();
 export const $coverage5g4g = restore(changeCoverage5g4g, true)

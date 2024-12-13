@@ -33,8 +33,8 @@ import {
   $currentDefaultLayerId,
   changeConnectivityBenchmark,
   $currentLayerTypeUtils,
-  $isNationalBenchmark,
   $schoolAdminId,
+  checkConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';
 import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
@@ -335,20 +335,32 @@ sample({
   target: onRecenterView
 })
 
+const benchmarkSource = combine({ connectivityBenchMark: $connectivityBenchMark, countryDefaultNational: $countryDefaultNational, country: $country, currentLayerTypeUtils: $currentLayerTypeUtils, selectedLayerId: $selectedLayerId });
+const benchmarkFn = (isClockId: boolean) => ({ countryDefaultNational = {}, selectedLayerId, connectivityBenchMark }: ReturnType<typeof benchmarkSource.getState>, clockLayerId: any) => {
+  let currentBenchmark = connectivityBenchMark;
+  const layerId = isClockId ? clockLayerId : selectedLayerId;
+  if (countryDefaultNational && countryDefaultNational[layerId ?? ""]) {
+    currentBenchmark = ConnectivityBenchMarks.national
+  } else {
+    currentBenchmark = ConnectivityBenchMarks.global
+  }
+  return currentBenchmark
+}
+
 // default national for a country and layer
 sample({
-  clock: merge([$country, $connectivityLayers]),
-  source: combine({ isNationalBenchmark: $isNationalBenchmark, connectivityBenchMark: $connectivityBenchMark, countryDefaultNational: $countryDefaultNational, country: $country, currentLayerTypeUtils: $currentLayerTypeUtils, selectedLayerId: $selectedLayerId }),
-  fn: ({ isNationalBenchmark, countryDefaultNational = {}, selectedLayerId, connectivityBenchMark }) => {
-    let currentBenchmark = connectivityBenchMark;
-    if (countryDefaultNational && countryDefaultNational[selectedLayerId || 0]) {
-      currentBenchmark = ConnectivityBenchMarks.national
-    } else {
-      currentBenchmark = ConnectivityBenchMarks.global
-    }
-    return currentBenchmark
-  },
-  filter: ({ country, currentLayerTypeUtils }) => !!country && currentLayerTypeUtils.isLive,
+  clock: merge([$country, $layersList]),
+  source: benchmarkSource,
+  fn: benchmarkFn(false),
+  filter: ({ country }) => !!country,
+  target: changeConnectivityBenchmark
+})
+// for static layer 
+sample({
+  clock: checkConnectivityBenchmark,
+  source: benchmarkSource,
+  fn: benchmarkFn(true),
+  filter: ({ country }) => !!country,
   target: changeConnectivityBenchmark
 })
 

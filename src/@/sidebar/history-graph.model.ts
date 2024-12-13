@@ -10,7 +10,7 @@ import { getInterval, isCurrentInterval } from '~/lib/date-fns-kit';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { getInverted, setPayload } from '~/lib/effector-kit';
 
-import { $connectivityAvailability, $layerUtils } from "./sidebar.model";
+import { $connectivityAvailability, $currentLayerTypeUtils, $layerUtils, $selectedLayerId } from "./sidebar.model";
 import { createHistoryIntervalFormat } from './sidebar.util';
 
 export const changeHistoryIntervalUnit = createEvent<IntervalUnit>();
@@ -28,9 +28,8 @@ export const $isPreviousHistoryIntervalAvailable = createStore(false);
 export const $lastAvailableDates = createStore<null | { [IntervalUnit.week]: Interval, [IntervalUnit.month]: Interval }>(null);
 
 export const $isCheckedLastDate = combine([
-  $lastAvailableDates, $layerUtils
-], ([lastAvailableDates, layerUtils]) => {
-  const { currentLayerTypeUtils } = layerUtils;
+  $lastAvailableDates, $currentLayerTypeUtils
+], ([lastAvailableDates, currentLayerTypeUtils]) => {
   const { isLive } = currentLayerTypeUtils;
   if (isLive) {
     return !!lastAvailableDates
@@ -106,4 +105,4 @@ sample({
 // reset 
 $historyIntervalUnit.on(changeHistoryIntervalUnit, setPayload);
 $historyInterval.reset(router.historyUpdated);
-$lastAvailableDates.reset(router.historyUpdated);
+$lastAvailableDates.reset(router.historyUpdated, $selectedLayerId);
