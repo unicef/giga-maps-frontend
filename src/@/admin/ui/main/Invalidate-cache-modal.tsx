@@ -96,7 +96,10 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
         <ModalBody $style={$modalBodyStyle} style={{ paddingBottom: '1.2rem' }}>
           <ModalDescription style={{ marginBottom: '1rem' }}> Please select the type of cache you want to clear </ModalDescription>
 
-          <RadioButtonGroup name="type" valueSelected={type} onChange={setType}
+          <RadioButtonGroup
+            name="type"
+            valueSelected={type}
+            onChange={(selection) => setType(selection as FormTypeFields)}
             defaultSelected="all">
             <RadioButton id="radio-button-1" value={FormTypeFields.all} labelText="All" />
             <RadioButton id="radio-button-2" value={FormTypeFields.country} labelText="Country" />
@@ -117,15 +120,17 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
               titleText={'Select Country *'}
               placeholder={'Select Country'}
               items={countryList}
-              itemToString={(item: CountryListType) => item?.name}
+              itemToString={(item: CountryListType | null) => item?.name ?? ''}
               itemToElement={(item: CountryListType) => item.name}
-              onChange={({ selectedItem }: { selectedItem: CountryListType }) => {
-                handleChange({
-                  target: {
-                    name: 'id',
-                    value: selectedItem?.id
-                  }
-                })
+              onChange={(data: { selectedItem: CountryListType | null }) => {
+                if (data.selectedItem) {
+                  handleChange({
+                    target: {
+                      name: 'id',
+                      value: data.selectedItem.id
+                    }
+                  })
+                }
               }}
             />
             <Div $margin='1rem 0'>
@@ -138,15 +143,17 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
               titleText={'Select Layer *'}
               placeholder={'Select Layer'}
               items={dataList}
-              itemToString={(item: DataLayer) => item?.name}
+              itemToString={(item: DataLayer | null) => item?.name ?? ''}
               itemToElement={(item: DataLayer) => `${item.name} (${item.code})`}
-              onChange={({ selectedItem }: { selectedItem: DataLayer }) => {
-                handleChange({
-                  target: {
-                    name: 'id',
-                    value: selectedItem?.id
-                  }
-                })
+              onChange={(data: { selectedItem: DataLayer | null }) => {
+                if (data.selectedItem) {
+                  handleChange({
+                    target: {
+                      name: 'id',
+                      value: data.selectedItem.id
+                    }
+                  })
+                }
               }}
             />
             <Div $margin='1rem 0'>
