@@ -96,18 +96,15 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
 
   if (!mapRoute.map) return;
   // create school layer;
-  if (isSourceAvailable && schoolLayerId) {
+  if (isSourceAvailable) {
     createSchoolLayer(map, {
       id: getMapId(SCHOOL_LAYER_ID),
       paintData,
       isMobile,
       options: {
-        ...options,
-        filter: filterSchoolStatus(schoolLegends)
+        'source-layer': "default"
       }, mapRoute
     });
-  } else {
-    hideLayer(map, getMapId(SCHOOL_LAYER_ID));
   }
 
 }
