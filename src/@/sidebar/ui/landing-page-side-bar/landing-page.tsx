@@ -66,7 +66,7 @@ const LandingPage = () => {
               <>
                 <SchoolNumberWrapper>
                   <p>
-                    {formatNumber(globalstats?.schools_connected ?? 0, lng)} 6{LanguageSuffixes[lng].million} <span>{t('schools-location-mapped')}</span>
+                    {formatNumber(globalstats?.schools_connected ?? 0, lng)}/6{LanguageSuffixes[lng].million} <span>{t('schools-location-mapped')}</span>
                   </p>
                   <Tooltip align="left" label={t('school-geolocations-mapped-and-supplemental-open-data')} className='information-icon' >
                     <button className="sb-tooltip-trigger" type="button">
@@ -90,7 +90,7 @@ const LandingPage = () => {
               <>
                 <SchoolNumberWrapper>
                   <p>
-                    {formatNumber((globalstats?.schools_with_connectivity_status_mapped ?? 0, lng))} <span>{t('schools-connectivity-status-mapped')}</span>
+                    {formatNumber(globalstats?.schools_with_connectivity_status_mapped ?? 0, lng)} <span>{t('schools-connectivity-status-mapped')}</span>
                   </p>
                   <Tooltip align="left" label={t('school-connectivity-status-a-real-time-measurement-source')} className='information-icon'>
                     <button className="sb-tooltip-trigger" type="button">
