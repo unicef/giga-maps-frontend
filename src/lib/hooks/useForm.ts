@@ -57,6 +57,7 @@ function useForm(
   }, [values])
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    console.log(event.target)
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   }, [values]);

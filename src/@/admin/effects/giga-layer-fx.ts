@@ -6,7 +6,7 @@ import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 import { DataLayer, DataSource, LayerStatusType, PreviewDataType } from "../types/giga-layer.type"
 
 
-export const getDataLayerListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number; search: string }) => {
+export const getDataLayerListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number; search?: string }) => {
   return createRequestAuthFx({
     url: `accounts/layers/?expand=created_by,last_modified_by,published_by&page_size=${pageSize}&page=${page}${search ? `&search=${search}` : ''}&ordering=-last_modified_at,name`
   }) as Promise<APIListType<DataLayer>>
