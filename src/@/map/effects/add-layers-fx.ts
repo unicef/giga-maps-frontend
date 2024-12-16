@@ -47,13 +47,13 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
 const callDelay = delayMethodCall();
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
-  let { timeout = 100, selectedLayerIds, isCheckedLastDate, mapRoute, refresh, lastSelectedLayer, map } = props;
+  let { timeout = 100, zoomState, selectedLayerIds, isCheckedLastDate, mapRoute, refresh, lastSelectedLayer, map } = props;
   if (!map) return;
   const { isLastSelectionChange } = getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
   if (isLastSelectionChange) {
     deleteSourceAndLayers({ map })
   }
-  if (isLastSelectionChange && !(isCheckedLastDate || mapRoute.map)) {
+  if (isLastSelectionChange && !(isCheckedLastDate || mapRoute.map) || zoomState !== 'end') {
     return;
   }
   if (mapRoute.map) {
@@ -63,9 +63,9 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
 });
 
 export const changeStaticLayerFx = createEffect(async (props: ChangeLayerOptions) => {
-  const { map, mapRoute } = props;
+  const { map, mapRoute, zoomState } = props;
   if (!map) return;
-  if (mapRoute.map) {
+  if (mapRoute.map || zoomState !== 'end') {
     deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE })
     return;
   }
@@ -112,7 +112,9 @@ export const clearMapDataFx = createEffect(({ map }: { map: Map | null }) => {
   // clear all running animation
   cancelAnimation()
   // remove click event;
-  removePreviewsMapClickHandlers(map);
+  removePreviewsMapClickHandlers(map, DEFAULT_SOURCE);
+  removePreviewsMapClickHandlers(map, CONNECTIVITY_STATUS_SOURCE);
+
   // delete existing source;
   deleteSourceAndLayers({ map });
 

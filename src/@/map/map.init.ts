@@ -34,6 +34,7 @@ import {
   $schoolMarkers,
   $selectedGigaLayers,
   $stylePaintData,
+  $zoomState,
   changeStyle,
   onCreateSchoolPopup,
   onLoadPage,
@@ -157,7 +158,8 @@ export const gigaLayerSource = combine({
   schoolStats: $schoolStatsMap,
   isMobile: $isMobile,
   schoolAdminId: $schoolAdminId,
-  countrySearch: $countrySearchString
+  countrySearch: $countrySearchString,
+  zoomState: $zoomState
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
@@ -178,7 +180,8 @@ const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 // change giga layer on selection of layers
 
 sample({
-  clock: merge([$mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
+  clock: merge([$zoomState,
+    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: ({ map }, clockChange) => {
@@ -207,7 +210,8 @@ sample({
     $schoolStatsMap,
     $connectivityBenchMark,
     $countrySearchString,
-    timePlayerActive
+    timePlayerActive,
+    $zoomState
   ]),
   source: gigaLayerSource,
   filter: mapLayerFilter,
