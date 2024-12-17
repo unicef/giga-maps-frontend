@@ -184,14 +184,14 @@ sample({
     $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
-  filter: ({ map }, clockChange) => {
+  filter: ({ map }) => {
     return !!map;
   },
   target: changeStaticLayerFx
 })
 
 sample({
-  clock: merge([$selectedLayerId, $map]),
+  clock: merge([$selectedLayerId]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: mapLayerFilter,
@@ -201,12 +201,10 @@ sample({
 sample({
   clock: merge([
     onReloadedMap,
-    $mapRouteVisible,
     $map,
     countryReceived,
     $admin1Data,
     $schoolAdminId,
-    // schoolConnectivityLength,
     $schoolStatsMap,
     $connectivityBenchMark,
     $countrySearchString,

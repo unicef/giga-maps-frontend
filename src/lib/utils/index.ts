@@ -54,16 +54,17 @@ export const setLocalStorage = (name: string, value: unknown) => {
 }
 
 export const delayMethodCall = () => {
-  let timerId: ReturnType<typeof setTimeout>;
-  return (timeout = 0, callback = (_args: any) => { }, props = {}) => {
+  let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
+  const trigger = (timeout = 0, callback = (_args: any) => { }, props = {}) => {
     clearTimeout(timerId);
-    if (timeout && timeout > 0) {
-      timerId = setTimeout(() => {
-        return callback(props);
-      }, timeout);
-    } else {
+    timerId = setTimeout(() => {
       return callback(props);
-    }
+    }, timeout);
+    return timerId;
+  };
+  return {
+    timerId,
+    trigger,
   }
 }
 

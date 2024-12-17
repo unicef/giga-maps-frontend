@@ -45,21 +45,24 @@ const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> =>
 }
 
 const callDelay = delayMethodCall();
+let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
-  let { timeout = 100, zoomState, selectedLayerIds, isCheckedLastDate, mapRoute, refresh, lastSelectedLayer, map } = props;
+  let { timeout = 20, zoomState, selectedLayerIds, isCheckedLastDate, mapRoute, refresh, lastSelectedLayer, map } = props;
   if (!map) return;
+  clearTimeout(timerId);
   const { isLastSelectionChange } = getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
+  const zoomEnd = zoomState === 'end';
   if (isLastSelectionChange) {
     deleteSourceAndLayers({ map })
   }
-  if (isLastSelectionChange && !(isCheckedLastDate || mapRoute.map) || zoomState !== 'end') {
+  if (isLastSelectionChange && !(isCheckedLastDate) || !zoomEnd) {
     return;
   }
   if (mapRoute.map) {
-    timeout = 1000;
+    timeout = 50;
   }
-  callDelay(timeout, createAndUpdateLayer, props);
+  timerId = callDelay.trigger(timeout, createAndUpdateLayer, props);
 });
 
 export const changeStaticLayerFx = createEffect(async (props: ChangeLayerOptions) => {
