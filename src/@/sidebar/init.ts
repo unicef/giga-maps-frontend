@@ -190,20 +190,10 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   }
   return { query, id: selectedLayerId };
 }
-// only for download layer;
-// sample({
-//   clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
-//   source: sourceForInfo,
-//   fn: getCurrentQueryId,
-//   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
-//     return mapRoutes.country && (!!country?.id || !!admin1Id) && !!isCheckedLastDate && layersUtils?.selectedLayerId === layersUtils?.downloadLayerId;
-//   },
-//   target: fetchConnectivityLayerFx
-// })
 
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 200 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -212,7 +202,7 @@ sample({
   target: fetchCountryLiveLayerInfo
 })
 
-// for all coverage layers
+// for all static layers
 sample({
   clock: merge([$countrySearchString, $country, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
   source: sourceForInfo,
