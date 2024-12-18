@@ -53,14 +53,18 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
   const inValidateCacheResponse = useStore($inValidateCacheResponse);
   const countryList = useStore($countryList);
   const dataList = useStore($dataLayerListResponce);
-  const isLayerType = values['type'] === 'layer'
+  const isLayerType = type === 'layer'
   const isPending = useStore(getInvalidateCacheFx.pending);
 
   useEffect(() => {
-    if (isLayerType && !getDataLayerListFx.pending.getState() && !dataList?.length) {
+    if (isLayerType && !getDataLayerListFx.pending.getState()) {
       getDataLayerListFx({ page: 1, pageSize: 100 })
     }
-  }, [isLayerType])
+  }, [isLayerType, getDataLayerListFx, dataList]);
+
+  useEffect(() => {
+    setType(FormTypeFields.country);
+  }, [open]);
 
   useEffect(() => {
     reset();

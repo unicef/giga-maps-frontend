@@ -36,7 +36,7 @@ import {
   $schoolAdminId,
   checkConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';
-import { fetchConnectivityLayerFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { mapSchools, router, $mapRoutes, mapOverview } from '~/core/routes';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
