@@ -483,7 +483,7 @@ const FormSchools = ({ isEditMode, schoolId }: { isEditMode: boolean, schoolId?:
               Weekly Stats
             </InputLabel>
             <WeeklyStatslinkSchool>
-              <Link href={`/admin/schools/?tab=1&giga_id_school=${formSchool?.giga_id_school}`} target="_blank">
+              <Link href={`/admin/schools/?tab=1&schoolId=${formSchool?.id}`} target="_blank">
                 Here
               </Link>
               {/* <Link onClick={() => onChangeAdminSchoolTab(1)} to={adminSchools}>Here</Link> */}
