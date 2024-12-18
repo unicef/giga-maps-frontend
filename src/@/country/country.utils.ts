@@ -3,8 +3,8 @@ import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl
 
 import { mapCountry } from "~/core/routes";
 
-import { Colors, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
-import { checkSourceAvailable, filterCountry, findLayer, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
+import { Colors, CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
+import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
@@ -161,7 +161,7 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
   const layerName = getAdminCountryLayerFill(level);
   map.on('click', (event: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(event.point, {
-      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler)],
+      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length || features.length && features[0].layer.id !== layerName && CountryAdminLevel.level0 !== level) return;
     const feature = findLayer(features, layerName);
