@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 
-import { LoadingText, Text } from '~/@/common/style/styled-component-style';
+import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
 import { $isLoadingCountryAdminView } from '~/@/sidebar/sidebar.model';
 import { mapSchools } from '~/core/routes';
@@ -12,6 +12,7 @@ import { SchoolInfoSection } from '../styles/layer-view-common.style';
 import styled, { useTheme } from 'styled-components';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { $lng } from '~/core/i18n/store';
+import { useTranslation } from 'react-i18next';
 
 const SchoolConnectivityLayerContainer = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ const SchoolConnectivityLayerContainer = styled.div`
 
 const SchoolConnectivityLayer = () => {
   const lng = useStore($lng)
+  const { t } = useTranslation();
   const globalStats = useStore($globalStats);
   const isLoading = useStore($isLoadingCountryAdminView);
   const schoolView = useRoute(mapSchools);
@@ -36,18 +38,18 @@ const SchoolConnectivityLayer = () => {
   return (
     <SchoolConnectivityLayerContainer>
       <div>
-        <CurrentLayerNameIcon showFilter={false} label='Connectivity status' isSchoolStatus={true} />
+        <CurrentLayerNameIcon showFilter={false} label={t("connectivity-status")} isSchoolStatus={true} />
         {!schoolView && <SchoolInfoSection>
           {isLoading ? <>  <LoadingText $blockSize='3.5625' width="4rem" />
             <LoadingText $blockSize='0.5' />
-          </> : <>
+          </> : <Div $margin='0rem 1rem 0rem 0rem'>
             <Text $size={2.375} $color={isConnected ? stylePaintData.connected : theme.text}>
               {isConnected ? connectedNumber : totalMappedNumber}
             </Text>
             <Text $color={theme.titleDesc}>
-              {isConnected ? `Connected schools for ${totalMappedNumber} ` : ''}schools mapped
+              {isConnected ? `${t("connected-schools-for-total-mapped-number", { total: totalMappedNumber })} ` : ''}{t('schools-mapped')}
             </Text>
-          </>}
+          </Div>}
         </SchoolInfoSection>}
       </div>
       <FooterDataSourcePopUp showOldDataSource={true} size={25} isFooter={false} />
