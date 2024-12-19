@@ -9,9 +9,9 @@ import useForm from '~/lib/hooks/useForm';
 import { CountryListType } from '~/@/api-docs/types/country-list.type';
 import { Div, Text } from '~/@/common/style/styled-component-style';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
-import { $dataLayerListResponce } from '../../models/giga-layer.model';
+import { $cacheDataLayerList, $dataLayerListResponce } from '../../models/giga-layer.model';
 import { useEffect, useState } from 'react';
-import { getDataLayerListFx } from '../../effects/giga-layer-fx';
+import { cacheDataLayerListFx, getDataLayerListFx } from '../../effects/giga-layer-fx';
 import { DataLayer } from '../../types/giga-layer.type';
 import { getInvalidateCacheFx } from '../../effects/admin-main-fx';
 import { onCreateNotification } from '~/@/common/Toast/toast.model';
@@ -52,13 +52,13 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
   const { values, errors, isError, touched, reset, handleChange, handleSubmit, handleBlur } = useForm(defaultFields, validationRules[type]);
   const inValidateCacheResponse = useStore($inValidateCacheResponse);
   const countryList = useStore($countryList);
-  const dataList = useStore($dataLayerListResponce);
+  const dataList = useStore($cacheDataLayerList);
   const isLayerType = type === 'layer'
   const isPending = useStore(getInvalidateCacheFx.pending);
 
   useEffect(() => {
-    if (isLayerType && !getDataLayerListFx.pending.getState()) {
-      getDataLayerListFx({ page: 1, pageSize: 100 })
+    if (isLayerType && !getDataLayerListFx.pending.getState() && !dataList.length) {
+      cacheDataLayerListFx({ page: 1, pageSize: 500 })
     }
   }, [isLayerType, getDataLayerListFx, dataList]);
 
@@ -118,7 +118,7 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
               subtitle="It will impact the performance of the application for all the users for 5-10 minutes."
             />
           </Div>}
-          {type === FormTypeFields.country && <>
+          {type === FormTypeFields.country && <Div $margin='0 0 6.8rem 0'>
             <SelectCountry
               id={'country'}
               titleText={'Select Country *'}
@@ -140,8 +140,8 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
             <Div $margin='1rem 0'>
               <Text $color="#9E9E9E"> It will clear all cache related to this country.</Text>
             </Div>
-          </>}
-          {type === FormTypeFields.layer && <>
+          </Div>}
+          {type === FormTypeFields.layer && <Div $margin='0 0 6.8rem 0'>
             <SelectCountry
               id={'layer'}
               titleText={'Select Layer *'}
@@ -163,7 +163,7 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
             <Div $margin='1rem 0'>
               <Text $color="#9E9E9E"> It will clear all cache related to this layer.</Text>
             </Div>
-          </>}
+          </Div>}
         </ModalBody>
         <ModalFooter $style={$modalFooterStyle}>
           <Button
