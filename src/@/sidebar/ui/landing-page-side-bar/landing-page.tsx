@@ -100,7 +100,7 @@ const LandingPage = () => {
                 </SchoolNumberWrapper>
                 <MappedInfoWrapper>
                   <p>
-                    {t('across')} {globalstats?.countries_with_connectivity_status_mapped ?? 0} {t('countries')}
+                    {t('across-no-countries', { count: globalstats?.countries_with_connectivity_status_mapped ?? 0 })}
                   </p>
                   <span>
                     {formatNumber(globalstats?.schools_with_connectivity_status_mapped ?? 0, lng)}
@@ -108,7 +108,7 @@ const LandingPage = () => {
                 </MappedInfoWrapper>
                 <BarChart
                   type={"schools-connectivity"}
-                  TooltipAlign={"top"}
+                  tooltipAlign={"top"}
                   total={(globalstats?.schools_with_connectivity_status_mapped ?? 0)}
                   categories={[ConnectivityStatusNames.connected, ConnectivityStatusNames.not_connected, /*ConnectivityStatusNames.unknown*/]}
                   categoryColors={[stylePaintData.good, stylePaintData.bad, stylePaintData.unknown]}
@@ -134,7 +134,7 @@ const LandingPage = () => {
               </SchoolNumberWrapper>
               <MappedInfoWrapper>
                 <p>
-                  {t('across')} {connectivityStats?.countries_with_realtime_data ?? 0} {t('countries')}
+                  {t('across-no-countries', { count: connectivityStats?.countries_with_realtime_data ?? 0 })}
                 </p>
                 <span>
                   {formatNumber(connectivityStats?.no_of_schools_measure, lng)}
@@ -142,7 +142,7 @@ const LandingPage = () => {
               </MappedInfoWrapper>
               <BarChart
                 type={"real-time-schools-connectivity"}
-                TooltipAlign={"top"}
+                tooltipAlign={"top"}
                 total={connectivityStats?.no_of_schools_measure ?? 0}
                 categories={[ConnectivityDistributionNames.good, ConnectivityDistributionNames.moderate, ConnectivityDistributionNames.bad, ConnectivityDistributionNames.unknown]}
                 categoryColors={[stylePaintData.good, stylePaintData.moderate, stylePaintData.bad, stylePaintData.unknown,]}

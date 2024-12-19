@@ -7,24 +7,26 @@ import {
 } from '../styles/landing-page-style';
 import { useStore } from 'effector-react';
 import { $lng } from '~/core/i18n/store';
+import { useTranslation } from 'react-i18next';
 
 
 const BarChart = ({
   type,
-  TooltipAlign,
+  tooltipAlign,
   total,
   categories,
   categoryColors,
   categoryValues,
 }: {
   type: string,
-  TooltipAlign: string,
+  tooltipAlign: string,
   total: number,
   categories: string[],
   categoryColors: string[],
   categoryValues: number[],
 }) => {
   const lng = useStore($lng);
+  const { t } = useTranslation();
   const calculateFlexGrow = (value: number) => {
     if (value === 0) {
       return 0
@@ -44,8 +46,8 @@ const BarChart = ({
           backgroundcolor={categoryColors[index]}
           label={
             type === "schools-connectivity" ?
-              `${formatNumber(categoryValues[index], lng)} schools mapped with ${category} status`
-              : `${formatNumber(categoryValues[index], lng)} schools with ${category} connection this week`
+              t("format-schools-mapped-with-category-status", { value: formatNumber(categoryValues[index], lng), category: t(category) })
+              : t("schools-with-connection-this-week", { value: formatNumber(categoryValues[index], lng), category: t(category) })
           }
         >
           <TooltipButton

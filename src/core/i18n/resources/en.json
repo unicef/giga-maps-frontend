@@ -121,5 +121,11 @@
   "not-connected": "Not Connected",
   "national-benchmark": "National Benchmark",
   "global-benchmark": "Global Benchmark",
-  "doesnt-match-any-criteria": "Doesn't match any criteria"
+  "doesnt-match-any-criteria": "Doesn't match any criteria",
+  "format-schools-mapped-with-category-status": "{{value}} schools mapped with {{category}} status",
+  "schools-with-connection-this-week": "{{value}} schools with {{category}} connection this week",
+  "connected-schools-for-total-mapped-number": "Connected schools for {{total}}",
+  "schools-mapped": "schools mapped",
+  "connectivity-status": "Connectivity status",
+  "cellular-coverage": "Cellular coverage"
 }

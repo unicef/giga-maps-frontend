@@ -40,7 +40,7 @@ export default function FooterTourContact({ message }: { readonly message?: stri
     {message && <Message>{message}</Message>}
     <LinkButtons>
       <Link onClick={() => router.navigate(`/map?popover=tour`)} >{t('take-the-tour')}</Link>
-      <span>&{t('or')};</span>
+      <span>&nbsp;{t('or')}&nbsp;</span>
       <Link href='/about#live-map-get-in-touch' target='_blank'>{t('contact-us')}</Link>
     </LinkButtons>
   </RootWrapper>)
