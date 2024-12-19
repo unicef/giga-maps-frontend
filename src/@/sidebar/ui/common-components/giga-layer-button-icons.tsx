@@ -62,7 +62,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           }}
         />
         <GigaLayerButton
-          label={staticPopupActiveLayer?.name ?? "Cellular Coverage"}
+          label={staticPopupActiveLayer?.name ?? t("cellular-coverage")}
           popup={popup}
           disabled={!staticPopupActiveLayer || !activeLayerByCountryCode[String(staticPopupActiveLayer?.id)]}
           isActive={staticPopupActiveLayer?.id === selectedLayerId}
