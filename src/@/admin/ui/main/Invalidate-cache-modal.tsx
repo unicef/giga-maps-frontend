@@ -17,7 +17,7 @@ import { getInvalidateCacheFx } from '../../effects/admin-main-fx';
 import { onCreateNotification } from '~/@/common/Toast/toast.model';
 
 interface FormValues {
-  [key: string]: string; // Generic type for form field values
+  [key: string]: string | number; // Generic type for form field values
 }
 
 enum FormTypeFields {
@@ -49,7 +49,7 @@ const validationRules = {
 
 function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readonly setOpen: any }) {
   const [type, setType] = useState<FormTypeFields>(FormTypeFields.country);
-  const { values, errors, isError, touched, reset, handleChange, handleSubmit, handleBlur } = useForm(defaultFields, validationRules[type]);
+  const { isError, reset, handleChange, handleSubmit } = useForm(defaultFields, validationRules[type]);
   const inValidateCacheResponse = useStore($inValidateCacheResponse);
   const countryList = useStore($countryList);
   const dataList = useStore($cacheDataLayerList);
@@ -84,7 +84,7 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
   const onFormSubmit = async (data: FormValues) => {
     getInvalidateCacheFx({
       key: type,
-      ...(data.id ? { id: data.id } : {}),
+      ...(data.id ? { id: data.id, ...(type === 'country' ? { code: countryList.find((item: CountryListType) => item.id === data.id)?.code } : {}) } : {}),
     })
   }
   return (
@@ -131,7 +131,7 @@ function InvalidatCacheModal({ open, setOpen }: { readonly open: boolean; readon
                   handleChange({
                     target: {
                       name: 'id',
-                      value: data.selectedItem.id
+                      value: data.selectedItem?.id
                     }
                   })
                 }

@@ -24,7 +24,7 @@ export const zoomOut = createEvent();
 export const setLoader = createEvent<Marker>();
 export const onLoadPage = createEvent();
 export const onZoomStateChange = createEvent<'start' | 'end' | null>();
-export const $zoomState = createStore<'start' | 'end' | null>(window.location.pathname === '/map' ? 'end' : null);
+export const $zoomState = createStore<'start' | 'end' | null>(null);
 $zoomState.on(onZoomStateChange, setPayload);
 
 export const updateSchoolMarker = createEvent<SchoolMarker[]>()
