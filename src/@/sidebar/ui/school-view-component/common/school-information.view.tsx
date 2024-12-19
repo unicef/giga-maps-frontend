@@ -90,7 +90,7 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
         <Hashtag />
         <p>Giga id: <span className="lowercase">{schoolData?.giga_id_school}</span></p>
       </SingleInfoContainer>}
-      {schoolData?.admin1_name && <SingleInfoContainer $width={true} >
+      {schoolData?.admin1_name && schoolData?.admin1_description_ui_label && <SingleInfoContainer $width={true} >
         <Hashtag />
         <p>{schoolData?.admin1_description_ui_label}: {schoolData?.admin1_name}</p>
       </SingleInfoContainer>}
