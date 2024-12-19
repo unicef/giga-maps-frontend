@@ -14,12 +14,14 @@ import { SchoolDetailInfo, SchoolDetailItem, SchoolDetailTitle, SingleInfoContai
 import { $country } from '~/@/country/country.model';
 import { $isLoadingSchoolView } from '~/@/sidebar/sidebar.model';
 import { getStatisticsConfig, StatisticConfig, groupOrder } from '../../../config/school-information-config';
+import { useTranslation } from 'react-i18next';
 
 const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => {
   const [statisticsConfig, setStatisticsConfig] = useState<StatisticConfig[]>([]);
   const isLoading = useStore($isLoadingSchoolView);
   const stylePaintData = useStore($stylePaintData);
   const country = useStore($country);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -67,8 +69,8 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
   return (
     <>
       <SchoolDetailTitle>
-        School Details
-        <TooltipStyle align="top" label={'School details'}>
+        {t('school-details')}
+        <TooltipStyle align="top" label={t('school-details')}>
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>

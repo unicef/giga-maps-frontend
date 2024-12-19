@@ -6,17 +6,19 @@ import { Scroll } from '@/scroll';
 
 import LayerSelectionFilterModalBody from "./layer-selection-filter-modal-body";
 import { $layerFilterFooterStyle, $layerFilterHeadingStyle, $layerFilterModalStyle } from "./styles/layer-filter-modal.style";
+import { useTranslation } from "react-i18next";
 
 const LayerSelectionFilterModal = ({
   open, setOpen
 }: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const layerFilterButtonRef = useRef(null);
   const filterModalRef = useRef<{ apply: () => void } | null>(null);
+  const { t } = useTranslation();
 
   return (
     <Modal open={open} $containerStyle={$layerFilterModalStyle} preventCloseOnClickOutside id='layer-selection-filter-modal' launcherButtonRef={layerFilterButtonRef}
     >
-      <ModalHeader title="Data layer selection" $headingStyle={$layerFilterHeadingStyle}
+      <ModalHeader title={t("data-layer-selection")} $headingStyle={$layerFilterHeadingStyle}
         closeModal={() => setOpen(false)}
       />
       <Scroll className="layer-selection-filter-body-scroll" >
@@ -31,8 +33,8 @@ const LayerSelectionFilterModal = ({
         onRequestClose={() => {
           setOpen(false)
         }}
-        primaryButtonText="Apply"
-        secondaryButtonText="Reset">
+        primaryButtonText={t("apply")}
+        secondaryButtonText={t("reset")}>
         {''}
       </ModalFooter>
     </Modal>

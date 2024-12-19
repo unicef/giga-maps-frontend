@@ -11,13 +11,16 @@ import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
+import { useTranslation } from "react-i18next";
+import { $lng } from "~/core/i18n/store";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
-
+  const { t } = useTranslation();
+  const lng = useStore($lng);
   const paintData = useStore($stylePaintData);
   const { currentLayerTypeUtils } = useStore($layerUtils);
   const { isSchoolStatus } = currentLayerTypeUtils;
@@ -60,7 +63,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
 
   if (!isSchoolStatus) return null;
   return (<div className='school-status'>
-    <h3>School status</h3>
+    <h3>{t('school-status')}</h3>
     {
       Object.values(ConnectivityStatusDistribution).map((key, index) => (
         <div className='legend-container' key={`${key}`}>
@@ -75,10 +78,10 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
               <CircleWrapper>
                 <InnerCircle $backColor={paintData[key]} />
               </CircleWrapper>
-              <p className="label">{ConnectivityStatusNames[key]}</p>
+              <p className="label">{t(ConnectivityStatusNames[key])}</p>
             </div>
           </div>
-          {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key])}</div>}
+          {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key], lng)}</div>}
         </div>
       )
       )}

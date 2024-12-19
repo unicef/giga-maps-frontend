@@ -43,7 +43,13 @@ color: ${props => props.$isActive ? props.theme.white : props.theme.titleDesc};
 font-size: 0.75rem;
 font-weight: 400;
 line-height: 1rem;
-letter-spacing: 0.02rem;
+letter-spacing: -0.01rem;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 2;
+overflow: hidden;
+text-overflow: ellipsis;
+word-break: break-word;
 }
 }
 `

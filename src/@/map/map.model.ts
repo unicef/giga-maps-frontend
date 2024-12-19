@@ -10,9 +10,12 @@ import {
   defaultGigaLayers,
   defaultGlobalStats,
   defaultStyle,
+  filterListMapping,
   stylePaintData,
 } from './map.constant';
 import { Center, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
+import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
 export const $reloadStyle = createStore<boolean>(false);
 export const onReloadedMap = createEvent();
@@ -81,6 +84,17 @@ $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 
 export const $advanceFilterList = createStore<AdvanceFilterType[]>([]);
 $advanceFilterList.on(fetchAdvanceFilterFx.doneData, setPayloadResults);
+$advanceFilterList.on(filterTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const list = reconstructJson(data, { filterList: state }).filterList
+  return [...list]
+})
+export const $filterListMapping = createStore<[string, string][]>([]);
+$filterListMapping.on(fetchAdvanceFilterFx.doneData, (_, payload) => {
+  const list = Object.entries(extractDataWithMapping({ filterList: payload.results }, filterListMapping)).filter(([_key, value]) => !!value);
+  return list;
+})
+
 
 $map.reset(map.visible);
 $schoolConnectedOpenStatus.reset(resetSchoolConnectedOpenStatus);

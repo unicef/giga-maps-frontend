@@ -8,6 +8,7 @@ import { getSearchResultsFx } from '../container/search-result.fx';
 import SearchResultList from '../views/search-result.list.view';
 import { SearchResultWrapper } from '../styles/search-result-style';
 import { testWrapper } from '~/tests/jest-wrapper';
+import "~/core/i18n/instance"
 
 describe('SearchResultList', () => {
   beforeEach(() => {

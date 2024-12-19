@@ -1,8 +1,8 @@
-import { getAllByText, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import SchoolCoverageLayer from '../school-coverage-layer/school-coverage-layer';
 import { router } from '~/core/routes';
 import { testWrapper } from '~/tests/jest-wrapper';
-
+import "~/core/i18n/instance"
 
 describe('SchoolCoverageLayer', () => {
 

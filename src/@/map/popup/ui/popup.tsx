@@ -7,6 +7,7 @@ import { ConnectivityStatusCircle } from '~/@/sidebar/ui/school-view-component/s
 import { InnerCircle, InnerCircleConnectivity } from '../../ui/legend-info/legend-button.style';
 import { $country } from '~/@/country/country.model';
 import { useStore } from 'effector-react';
+import { useTranslation } from 'react-i18next';
 
 const SchoolMarkerWrapper = styled.div`
   // position: relative;
@@ -109,6 +110,7 @@ const ConnectivityCircleWrapper = styled.div`
   position: relative;
 `
 export const Popup = () => {
+  const { t } = useTranslation();
   return (
     <div className="school-popup-data">
       <SchoolMarkerWrapper className="shool-marker-wrapper">
@@ -141,7 +143,7 @@ export const Popup = () => {
         </PopupTemplate>
         <GoToSchoolButton className="go-to-school hide" type="button"
           renderIcon={ArrowRight} >
-          Go to School page
+          {t('go-to-school-page')}
         </GoToSchoolButton>
       </div>
 

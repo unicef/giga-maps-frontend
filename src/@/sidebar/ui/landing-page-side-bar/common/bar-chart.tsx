@@ -5,6 +5,8 @@ import {
   CustomTooltip,
   TooltipButton,
 } from '../styles/landing-page-style';
+import { useStore } from 'effector-react';
+import { $lng } from '~/core/i18n/store';
 
 
 const BarChart = ({
@@ -22,6 +24,7 @@ const BarChart = ({
   categoryColors: string[],
   categoryValues: number[],
 }) => {
+  const lng = useStore($lng);
   const calculateFlexGrow = (value: number) => {
     if (value === 0) {
       return 0
@@ -41,8 +44,8 @@ const BarChart = ({
           backgroundcolor={categoryColors[index]}
           label={
             type === "schools-connectivity" ?
-              `${formatNumber(categoryValues[index])} schools mapped with ${category} status`
-              : `${formatNumber(categoryValues[index])} schools with ${category} connection this week`
+              `${formatNumber(categoryValues[index], lng)} schools mapped with ${category} status`
+              : `${formatNumber(categoryValues[index], lng)} schools with ${category} connection this week`
           }
         >
           <TooltipButton

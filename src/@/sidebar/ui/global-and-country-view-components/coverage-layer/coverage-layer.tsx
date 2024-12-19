@@ -9,6 +9,8 @@ import styled, { useTheme } from 'styled-components';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { useTranslation } from 'react-i18next';
+import { $lng } from '~/core/i18n/store';
 
 const CoverageLayerContanier = styled.div` 
   display: flex;
@@ -21,11 +23,13 @@ const CoverageLayerContanier = styled.div`
 `
 
 const CoverageLayer = () => {
+  const { t } = useTranslation();
+  const lng = useStore($lng)
   const coverageStats = useStore($coverageStats);
   const isLoading = useStore($isLoadingCountryAdminView);
   const legends = coverageStats?.connected_schools;
   const totalSchools = coverageStats?.total_schools ?? 0;
-  const { selectedLayerId, coverageLayerId, selectedLayerData } = useStore($layerUtils);
+  const { selectedLayerData } = useStore($layerUtils);
   const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
 
   const [displayNumber, setDisplayNumber] = useState(0);
@@ -36,29 +40,19 @@ const CoverageLayer = () => {
   const theme = useTheme();
   // this block of useEffect needs refactoring, all this logic should come from column config
   useEffect(() => {
-    if (selectedLayerId === coverageLayerId) {
-      if (legendsList.length > 1) {
-        const firstValue = legendsList[0] ? legendsList[0][1] : 0;
-        const secondValue = legendsList[1] ? legendsList[1][1] : 0;
-        setDisplayNumber(firstValue + secondValue);
-        setDisplayText(`Schools with coverage data out of ${formatNumber(totalSchools)} schools mapped`);
-      } else {
-        setDisplayNumber(0);
-        setDisplayText('Insufficient data');
-      }
-    } else if (legendsList.length > 1) {
+    if (legendsList.length > 1) {
       const firstValue = legendsList[0] ? legendsList[0][1] : 0;
       const secondValue = legendsList[1] ? legendsList[1][1] : 0;
       const thirdValue = legendsList[2] ? legendsList[2][1] : 0;
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
       setDisplayNumber(firstValue + secondValue + thirdValue);
-      setDisplayText(`Schools with ${selectedLayerData?.name} data out of ${formatNumber(sum)} schools mapped`);
+      setDisplayText(t('schools-with-coverage-schools-mapped', { totalSchools: formatNumber(sum, lng), layerName: selectedLayerData?.name }));
     } else {
       setDisplayNumber(0);
-      setDisplayText('Insufficient data');
+      setDisplayText('insufficient-data');
     }
-  }, [selectedLayerId, legendsList, totalSchools]);
+  }, [legendsList, totalSchools, lng]);
 
   return (
     <CoverageLayerContanier>
@@ -68,7 +62,7 @@ const CoverageLayer = () => {
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
             <Div>
               <Text $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
-                {isDataAvailable ? formatNumber(displayNumber) : ""}
+                {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>
                 {displayText}

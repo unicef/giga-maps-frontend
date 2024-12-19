@@ -9,11 +9,13 @@ export type GlobalStats = {
     value: number;
     unit: string;
   };
+  countries_with_connectivity_status_mapped: number;
   connected_schools: {
     connected: number;
     not_connected: number;
     unknown: number;
   };
+  schools_with_connectivity_status_mapped: number;
 }
 
 export type GraphData = {
@@ -36,6 +38,7 @@ export type ConnectivityStat = {
   real_time_connected_schools: defaultLegendValuesType;
   graph_data: GraphData[];
   live_avg_connectivity: string;
+  countries_with_realtime_data: number;
   benchmark_metadata: {
     base_benchmark: string;
     benchmark_unit: string;

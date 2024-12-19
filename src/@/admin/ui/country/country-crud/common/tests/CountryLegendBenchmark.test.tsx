@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { LegendConfigType } from "~/@/admin/types/giga-layer.type";
 import CountryLegendBenchmark from "../CountryLegendBenchmark";
 import { defaultGigaLayerForm } from "~/@/admin/constants/giga-layer.constant";
+import "~/core/i18n/instance"
 
 describe('CountryLegendBenchmark Component', () => {
   const mockOnChange = jest.fn();
@@ -35,10 +36,10 @@ describe('CountryLegendBenchmark Component', () => {
     fireEvent.click(applyGlobalButton);
     expect(mockOnChange).toHaveBeenCalledWith({ ...mockGlobalConfig });
   });
-  
-  it('renders the default legend configs if config is undefined', () => {
+
+  it('renders the empty legend configs if config is undefined', () => {
     render(<CountryLegendBenchmark config={undefined} onChange={mockOnChange} globalConfig={mockGlobalConfig} />);
     const defaultLegendLabel = defaultGigaLayerForm.legendConfigs[Object.keys(defaultGigaLayerForm.legendConfigs)[0]].labels;
-    expect(screen.getByText(defaultLegendLabel)).toBeInTheDocument();
+    expect(screen.queryByText(defaultLegendLabel)).not.toBeInTheDocument();
   });
 })

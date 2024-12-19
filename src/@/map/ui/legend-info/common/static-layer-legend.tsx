@@ -19,12 +19,14 @@ import { formatNumber } from '~/lib/utils';
 import { Div, TooltipButton } from "~/@/common/style/styled-component-style";
 import { ConnectivityBenchMarks, ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
 import { $country, $countryConnectivityNames } from "~/@/country/country.model";
+import { $lng } from "~/core/i18n/store";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+  const lng = useStore($lng);
   const countryConnectivityNames = useStore($countryConnectivityNames);
   const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId, coverageLayerId } = useStore($layerUtils);
@@ -118,7 +120,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
                       </div>
                     </div>
                     {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
+                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label], lng)}</div>
                     )}
                   </div>
                 </button>

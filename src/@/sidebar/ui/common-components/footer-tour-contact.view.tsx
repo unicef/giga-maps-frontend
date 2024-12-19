@@ -1,4 +1,5 @@
 import { Link as CarbonLink } from '@carbon/react';
+import { useTranslation } from 'react-i18next';
 import { styled } from "styled-components"
 
 import { router } from "~/core/routes"
@@ -34,12 +35,13 @@ cursor: pointer;
 `
 
 export default function FooterTourContact({ message }: { readonly message?: string; }) {
+  const { t } = useTranslation();
   return (<RootWrapper>
     {message && <Message>{message}</Message>}
     <LinkButtons>
-      <Link onClick={() => router.navigate(`/map?popover=tour`)} >Take the tour</Link>
-      <span>&nbsp;or&nbsp;</span>
-      <Link href='/about#live-map-get-in-touch' target='_blank'>Contact us</Link>
+      <Link onClick={() => router.navigate(`/map?popover=tour`)} >{t('take-the-tour')}</Link>
+      <span>&{t('or')};</span>
+      <Link href='/about#live-map-get-in-touch' target='_blank'>{t('contact-us')}</Link>
     </LinkButtons>
   </RootWrapper>)
 }

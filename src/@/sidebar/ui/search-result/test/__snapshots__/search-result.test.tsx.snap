@@ -910,7 +910,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           Take the tour
         </a>
         <span>
-           or 
+          &or;
         </span>
         <a
           class="cds--link c12"

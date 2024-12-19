@@ -8,6 +8,7 @@ import { MAX_SCHOOL_SELECTED } from '../container/search-result.constant';
 import { $searchSchoolIds, setSchoolSelection } from '../container/search-result.model';
 import { SearchResultApi } from '../container/search-result.type';
 import { SchoolBody, SchoolCheckbox, SchoolItem, SchoolName } from '../styles/search-result-style'
+import { useTranslation } from 'react-i18next';
 
 export const setShowMessage = createEvent<number>()
 const $showMessage = restore(setShowMessage, 0);
@@ -27,6 +28,7 @@ export const SearchSchool = ({ school }: { school: SearchResultApi }) => {
   const schoolId = id.toString();
   const isChecked = selectedSchool.has(schoolId);
   const maxSchoolSelected = selectedSchool.size >= MAX_SCHOOL_SELECTED;
+  const { t } = useTranslation();
   return (<>
     <SchoolItem onClick={event => {
       if (maxSchoolSelected && !isChecked) {
@@ -54,7 +56,7 @@ export const SearchSchool = ({ school }: { school: SearchResultApi }) => {
       role='alert'
       kind='warning-alt'
       onCloseButtonClick={() => setShowMessage(0)}
-      title={`Maximum of ${MAX_SCHOOL_SELECTED} school selection allowed`}
+      title={t("maximum-school-selection-allowed", { maxSchools: MAX_SCHOOL_SELECTED })}
       lowContrast
       hideCloseButton
     />
