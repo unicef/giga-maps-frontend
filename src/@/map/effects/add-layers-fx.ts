@@ -59,9 +59,6 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   if (isLastSelectionChange && !(isCheckedLastDate) || !zoomEnd) {
     return;
   }
-  if (mapRoute.map) {
-    timeout = 50;
-  }
   timerId = callDelay.trigger(timeout, createAndUpdateLayer, props);
 });
 

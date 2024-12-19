@@ -41,6 +41,7 @@ import {
   onLoadPage,
   onReloadedMap,
   onStyleLoaded,
+  onZoomStateChange,
   setCenter,
   zoomIn,
   zoomOut,
@@ -206,6 +207,7 @@ sample({
   clock: merge([
     onReloadedMap,
     $map,
+    $mapRouteVisible,
     countryReceived,
     $admin1Data,
     $schoolAdminId,
@@ -219,6 +221,14 @@ sample({
   filter: mapLayerFilter,
   fn: combineGigaFn({ refresh: true }),
   target: changeLayersFx,
+})
+
+// reset zoom state when map is loaded and map page is visible
+sample({
+  clock: $map,
+  source: mapOverview.visible,
+  fn: () => 'end',
+  target: onZoomStateChange
 })
 
 sample({
