@@ -6,6 +6,34 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
   padding: 1rem;
 }
 
+.c20 {
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: initial;
+  color: #9E9E9E;
+  margin: 0.5rem 0;
+}
+
+.c20 .info-icon button {
+  border: none;
+  background: inherit;
+  margin-left: 0.5rem;
+}
+
+.c20 .info-icon button svg {
+  fill: #7E7E7E;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c17 {
+  margin: 0 0 6.8rem 0;
+}
+
+.c19 {
+  margin: 1rem 0;
+}
+
 .c4 {
   display: flex;
   align-items: center;
@@ -49,7 +77,7 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
   color: #fff;
 }
 
-.c19 {
+.c22 {
   width: calc(100vw - 17rem);
   height: 100%;
   position: relative;
@@ -118,49 +146,27 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
   padding-left: 2.5rem;
 }
 
-.c17 >h3 {
-  color: var(--text-text-primary,#161616);
-  text-align: center;
-  font-family: Open Sans;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.375rem;
-  margin-top: 1rem;
-}
-
-.c17 >p {
-  color: var(--text-text-secondary,#474747);
-  text-align: center;
-  font-family: Open Sans;
+.c16 {
+  color: var(--primary-black-80-giga-dark-grey);
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.125rem;
-  margin-top: 0.5rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
 }
 
-.c16 {
-  display: flex;
-  justify-content: center;
+.c18 {
+  margin-top: 1.5rem;
 }
 
-.c16 span {
-  position: relative;
+.c18 .cds--list-box {
+  background: white;
 }
 
-.c16 .cloud-protect-icon {
-  color: #595959;
-}
-
-.c16 .check-mark-icon {
-  color: #46C66D;
-}
-
-.c16 svg:nth-child(2) {
-  position: absolute;
-  top: 1.2rem;
-  left: 1.2rem;
+.c18 .cds--list-box__menu {
+  height: !important;
+  max-height: 10rem!important;
+  overflow-y: auto;
 }
 
 .c13 >.cds--modal-container {
@@ -176,6 +182,15 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
 
 .c13 >.cds--modal-container .cds--modal-close:hover {
   background-color: transparent!important;
+}
+
+.c14 >h3 {
+  color: var(--text-text-primary, #161616);
+  font-family: Open Sans;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
 }
 
 .c14 button svg {
@@ -249,14 +264,14 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
   line-height: 1.125rem;
 }
 
-.c18 {
+.c21 {
   border: 0.0625rem solid #E6E6E6;
   position: absolute;
   bottom: 0;
   width: 100%;
 }
 
-.c18 >button {
+.c21 >button {
   max-width: 100%;
   width: 100%;
   padding: 1.3rem 1rem 1.3rem 1rem;
@@ -793,87 +808,232 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
               <div
                 class="cds--modal-container-body"
               >
-                <div
-                  class="cds--modal-header c14"
-                >
-                  <button
-                    aria-label="Close"
-                    class="cds--modal-close"
-                    title="Close"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="cds--modal-close__icon"
-                      fill="currentColor"
-                      focusable="false"
-                      height="20"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 32 32"
-                      width="20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div
-                  class="cds--modal-content c15"
-                  style="height: 8rem;"
+                <form
+                  class="cds--form"
                 >
                   <div
-                    class="c16"
+                    class="cds--modal-header c14"
                   >
-                    <span>
+                    <h3
+                      class="cds--modal-header__heading cds--type-beta"
+                    >
+                      Clear Cache
+                    </h3>
+                    <button
+                      aria-label="Close"
+                      class="cds--modal-close"
+                      title="Close"
+                      type="button"
+                    >
                       <svg
                         aria-hidden="true"
-                        class="cloud-protect-icon"
-                        fill="currentColor"
-                        focusable="false"
-                        height="64"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
-                        width="64"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M26,14.1V2h-5v2h3v2h-3v2h3v6.1c-1.7,0.4-3,2-3,3.9c0,2.2,1.8,4,4,4s4-1.8,4-4C29,16.1,27.7,14.6,26,14.1z M25,20 c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2s2,0.9,2,2C27,19.1,26.1,20,25,20z"
-                        />
-                        <path
-                          d="M15,31l-5.5-3.2c-3.4-2-5.5-5.6-5.5-9.5V4c0-1.1,0.9-2,2-2h12v2H6v14.3c0,3.2,1.7,6.2,4.5,7.8l4.5,2.7l4.5-2.7 c1.1-0.7,2.1-1.5,2.8-2.6l1.6,1.1c-0.9,1.3-2.1,2.4-3.5,3.2L15,31z"
-                        />
-                      </svg>
-                      <svg
-                        aria-hidden="true"
-                        class="check-mark-icon"
+                        class="cds--modal-close__icon"
                         fill="currentColor"
                         focusable="false"
                         height="20"
                         preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 20 20"
+                        viewBox="0 0 32 32"
                         width="20"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M10,1c-4.9,0-9,4.1-9,9s4.1,9,9,9s9-4,9-9S15,1,10,1z M8.7,13.5l-3.2-3.2l1-1l2.2,2.2l4.8-4.8l1,1L8.7,13.5z"
-                        />
-                        <path
-                          d="M8.7,13.5l-3.2-3.2l1-1l2.2,2.2l4.8-4.8l1,1L8.7,13.5z"
-                          data-icon-path="inner-path"
-                          fill="none"
-                          opacity="0"
+                          d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                         />
                       </svg>
-                    </span>
+                    </button>
                   </div>
                   <div
-                    class="c17"
+                    class="cds--modal-content c15"
+                    style="padding-bottom: 1.2rem;"
                   >
-                    <p />
+                    <p
+                      class="c16"
+                      style="margin-bottom: 1rem;"
+                    >
+                       Please select the type of cache you want to clear 
+                    </p>
+                    <div
+                      class="cds--form-item"
+                    >
+                      <fieldset
+                        class="cds--radio-button-group cds--radio-button-group--label-right"
+                      >
+                        <div
+                          class="cds--radio-button-wrapper"
+                        >
+                          <input
+                            class="cds--radio-button"
+                            id="radio-button-1"
+                            name="type"
+                            type="radio"
+                            value="all"
+                          />
+                          <label
+                            class="cds--radio-button__label"
+                            for="radio-button-1"
+                          >
+                            <span
+                              class="cds--radio-button__appearance"
+                            />
+                            <span
+                              class="cds--radio-button__label-text"
+                            >
+                              All
+                            </span>
+                          </label>
+                        </div>
+                        <div
+                          class="cds--radio-button-wrapper"
+                        >
+                          <input
+                            checked=""
+                            class="cds--radio-button"
+                            id="radio-button-2"
+                            name="type"
+                            type="radio"
+                            value="country"
+                          />
+                          <label
+                            class="cds--radio-button__label"
+                            for="radio-button-2"
+                          >
+                            <span
+                              class="cds--radio-button__appearance"
+                            />
+                            <span
+                              class="cds--radio-button__label-text"
+                            >
+                              Country
+                            </span>
+                          </label>
+                        </div>
+                        <div
+                          class="cds--radio-button-wrapper"
+                        >
+                          <input
+                            class="cds--radio-button"
+                            id="radio-button-3"
+                            name="type"
+                            type="radio"
+                            value="layer"
+                          />
+                          <label
+                            class="cds--radio-button__label"
+                            for="radio-button-3"
+                          >
+                            <span
+                              class="cds--radio-button__appearance"
+                            />
+                            <span
+                              class="cds--radio-button__label-text"
+                            >
+                              Layer
+                            </span>
+                          </label>
+                        </div>
+                      </fieldset>
+                      <div
+                        class="cds--radio-button__validation-msg"
+                      />
+                    </div>
+                    <div
+                      class="c17"
+                    >
+                      <div
+                        class="cds--list-box__wrapper c18"
+                      >
+                        <label
+                          class="cds--label"
+                          for="country"
+                          id="downshift-2-label"
+                        >
+                          Select Country *
+                        </label>
+                        <div
+                          class="cds--combo-box cds--list-box"
+                        >
+                          <div
+                            class="cds--list-box__field"
+                          >
+                            <input
+                              aria-autocomplete="list"
+                              aria-expanded="false"
+                              aria-haspopup="listbox"
+                              aria-labelledby="downshift-2-label"
+                              aria-owns="downshift-2-menu"
+                              autocomplete="off"
+                              class="cds--text-input cds--text-input--empty"
+                              id="country"
+                              placeholder="Select Country"
+                              role="combobox"
+                              tabindex="0"
+                              title=""
+                              type="text"
+                              value=""
+                            />
+                            <button
+                              aria-haspopup="true"
+                              aria-label="Open"
+                              class="cds--list-box__menu-icon"
+                              data-toggle="true"
+                              role="button"
+                              tabindex="-1"
+                              title="Open"
+                              type="button"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                fill="currentColor"
+                                focusable="false"
+                                height="16"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 16 16"
+                                width="16"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                          <ul
+                            aria-label="Choose an item"
+                            class="cds--list-box__menu"
+                            id="downshift-2-menu"
+                            role="listbox"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="c19"
+                      >
+                        <p
+                          class="c20"
+                        >
+                           It will clear all cache related to this country.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <div
+                    class="cds--modal-footer cds--btn-set"
+                  >
+                    <button
+                      class="cds--btn cds--btn--secondary"
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      class="cds--btn cds--btn--primary cds--btn--disabled"
+                      disabled=""
+                      type="submit"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </form>
               </div>
               <button
                 class="cds--visually-hidden"
@@ -906,7 +1066,7 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
         </div>
       </div>
       <div
-        class="c18"
+        class="c21"
       >
         <button
           class="cds--btn cds--btn--ghost"
@@ -935,7 +1095,7 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
       </div>
     </div>
     <div
-      class="c19"
+      class="c22"
     >
       <div
         class="cds--loading-overlay cds--loading-overlay--stop"
@@ -968,7 +1128,35 @@ exports[`AdminPanelMainComponent renders AdminPanelMainComponent and take a snap
 
 exports[`AdminPanelMainComponent renders AdminPanelTabs and take a snapshop 1`] = `
 <DocumentFragment>
-  .c3 >button {
+  .c13 {
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: initial;
+  color: #9E9E9E;
+  margin: 0.5rem 0;
+}
+
+.c13 .info-icon button {
+  border: none;
+  background: inherit;
+  margin-left: 0.5rem;
+}
+
+.c13 .info-icon button svg {
+  fill: #7E7E7E;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c10 {
+  margin: 0 0 6.8rem 0;
+}
+
+.c12 {
+  margin: 1rem 0;
+}
+
+.c3 >button {
   height: 3rem;
   padding: 0.8rem 1rem 0.8rem 1rem;
 }
@@ -1004,49 +1192,27 @@ exports[`AdminPanelMainComponent renders AdminPanelTabs and take a snapshop 1`] 
   padding-left: 2.5rem;
 }
 
-.c10 >h3 {
-  color: var(--text-text-primary,#161616);
-  text-align: center;
-  font-family: Open Sans;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.375rem;
-  margin-top: 1rem;
-}
-
-.c10 >p {
-  color: var(--text-text-secondary,#474747);
-  text-align: center;
-  font-family: Open Sans;
+.c9 {
+  color: var(--primary-black-80-giga-dark-grey);
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.125rem;
-  margin-top: 0.5rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.01rem;
 }
 
-.c9 {
-  display: flex;
-  justify-content: center;
+.c11 {
+  margin-top: 1.5rem;
 }
 
-.c9 span {
-  position: relative;
+.c11 .cds--list-box {
+  background: white;
 }
 
-.c9 .cloud-protect-icon {
-  color: #595959;
-}
-
-.c9 .check-mark-icon {
-  color: #46C66D;
-}
-
-.c9 svg:nth-child(2) {
-  position: absolute;
-  top: 1.2rem;
-  left: 1.2rem;
+.c11 .cds--list-box__menu {
+  height: !important;
+  max-height: 10rem!important;
+  overflow-y: auto;
 }
 
 .c6 >.cds--modal-container {
@@ -1062,6 +1228,15 @@ exports[`AdminPanelMainComponent renders AdminPanelTabs and take a snapshop 1`] 
 
 .c6 >.cds--modal-container .cds--modal-close:hover {
   background-color: transparent!important;
+}
+
+.c7 >h3 {
+  color: var(--text-text-primary, #161616);
+  font-family: Open Sans;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.75rem;
 }
 
 .c7 button svg {
@@ -1614,87 +1789,232 @@ exports[`AdminPanelMainComponent renders AdminPanelTabs and take a snapshop 1`] 
           <div
             class="cds--modal-container-body"
           >
-            <div
-              class="cds--modal-header c7"
-            >
-              <button
-                aria-label="Close"
-                class="cds--modal-close"
-                title="Close"
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="cds--modal-close__icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="20"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 32 32"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              class="cds--modal-content c8"
-              style="height: 8rem;"
+            <form
+              class="cds--form"
             >
               <div
-                class="c9"
+                class="cds--modal-header c7"
               >
-                <span>
+                <h3
+                  class="cds--modal-header__heading cds--type-beta"
+                >
+                  Clear Cache
+                </h3>
+                <button
+                  aria-label="Close"
+                  class="cds--modal-close"
+                  title="Close"
+                  type="button"
+                >
                   <svg
                     aria-hidden="true"
-                    class="cloud-protect-icon"
-                    fill="currentColor"
-                    focusable="false"
-                    height="64"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 32 32"
-                    width="64"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M26,14.1V2h-5v2h3v2h-3v2h3v6.1c-1.7,0.4-3,2-3,3.9c0,2.2,1.8,4,4,4s4-1.8,4-4C29,16.1,27.7,14.6,26,14.1z M25,20 c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2s2,0.9,2,2C27,19.1,26.1,20,25,20z"
-                    />
-                    <path
-                      d="M15,31l-5.5-3.2c-3.4-2-5.5-5.6-5.5-9.5V4c0-1.1,0.9-2,2-2h12v2H6v14.3c0,3.2,1.7,6.2,4.5,7.8l4.5,2.7l4.5-2.7 c1.1-0.7,2.1-1.5,2.8-2.6l1.6,1.1c-0.9,1.3-2.1,2.4-3.5,3.2L15,31z"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="check-mark-icon"
+                    class="cds--modal-close__icon"
                     fill="currentColor"
                     focusable="false"
                     height="20"
                     preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 32 32"
                     width="20"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M10,1c-4.9,0-9,4.1-9,9s4.1,9,9,9s9-4,9-9S15,1,10,1z M8.7,13.5l-3.2-3.2l1-1l2.2,2.2l4.8-4.8l1,1L8.7,13.5z"
-                    />
-                    <path
-                      d="M8.7,13.5l-3.2-3.2l1-1l2.2,2.2l4.8-4.8l1,1L8.7,13.5z"
-                      data-icon-path="inner-path"
-                      fill="none"
-                      opacity="0"
+                      d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                     />
                   </svg>
-                </span>
+                </button>
               </div>
               <div
-                class="c10"
+                class="cds--modal-content c8"
+                style="padding-bottom: 1.2rem;"
               >
-                <p />
+                <p
+                  class="c9"
+                  style="margin-bottom: 1rem;"
+                >
+                   Please select the type of cache you want to clear 
+                </p>
+                <div
+                  class="cds--form-item"
+                >
+                  <fieldset
+                    class="cds--radio-button-group cds--radio-button-group--label-right"
+                  >
+                    <div
+                      class="cds--radio-button-wrapper"
+                    >
+                      <input
+                        class="cds--radio-button"
+                        id="radio-button-1"
+                        name="type"
+                        type="radio"
+                        value="all"
+                      />
+                      <label
+                        class="cds--radio-button__label"
+                        for="radio-button-1"
+                      >
+                        <span
+                          class="cds--radio-button__appearance"
+                        />
+                        <span
+                          class="cds--radio-button__label-text"
+                        >
+                          All
+                        </span>
+                      </label>
+                    </div>
+                    <div
+                      class="cds--radio-button-wrapper"
+                    >
+                      <input
+                        checked=""
+                        class="cds--radio-button"
+                        id="radio-button-2"
+                        name="type"
+                        type="radio"
+                        value="country"
+                      />
+                      <label
+                        class="cds--radio-button__label"
+                        for="radio-button-2"
+                      >
+                        <span
+                          class="cds--radio-button__appearance"
+                        />
+                        <span
+                          class="cds--radio-button__label-text"
+                        >
+                          Country
+                        </span>
+                      </label>
+                    </div>
+                    <div
+                      class="cds--radio-button-wrapper"
+                    >
+                      <input
+                        class="cds--radio-button"
+                        id="radio-button-3"
+                        name="type"
+                        type="radio"
+                        value="layer"
+                      />
+                      <label
+                        class="cds--radio-button__label"
+                        for="radio-button-3"
+                      >
+                        <span
+                          class="cds--radio-button__appearance"
+                        />
+                        <span
+                          class="cds--radio-button__label-text"
+                        >
+                          Layer
+                        </span>
+                      </label>
+                    </div>
+                  </fieldset>
+                  <div
+                    class="cds--radio-button__validation-msg"
+                  />
+                </div>
+                <div
+                  class="c10"
+                >
+                  <div
+                    class="cds--list-box__wrapper c11"
+                  >
+                    <label
+                      class="cds--label"
+                      for="country"
+                      id="downshift-0-label"
+                    >
+                      Select Country *
+                    </label>
+                    <div
+                      class="cds--combo-box cds--list-box"
+                    >
+                      <div
+                        class="cds--list-box__field"
+                      >
+                        <input
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-haspopup="listbox"
+                          aria-labelledby="downshift-0-label"
+                          aria-owns="downshift-0-menu"
+                          autocomplete="off"
+                          class="cds--text-input cds--text-input--empty"
+                          id="country"
+                          placeholder="Select Country"
+                          role="combobox"
+                          tabindex="0"
+                          title=""
+                          type="text"
+                          value=""
+                        />
+                        <button
+                          aria-haspopup="true"
+                          aria-label="Open"
+                          class="cds--list-box__menu-icon"
+                          data-toggle="true"
+                          role="button"
+                          tabindex="-1"
+                          title="Open"
+                          type="button"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            fill="currentColor"
+                            focusable="false"
+                            height="16"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 16 16"
+                            width="16"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <ul
+                        aria-label="Choose an item"
+                        class="cds--list-box__menu"
+                        id="downshift-0-menu"
+                        role="listbox"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="c12"
+                  >
+                    <p
+                      class="c13"
+                    >
+                       It will clear all cache related to this country.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+              <div
+                class="cds--modal-footer cds--btn-set"
+              >
+                <button
+                  class="cds--btn cds--btn--secondary"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="cds--btn cds--btn--primary cds--btn--disabled"
+                  disabled=""
+                  type="submit"
+                >
+                  Clear
+                </button>
+              </div>
+            </form>
           </div>
           <button
             class="cds--visually-hidden"

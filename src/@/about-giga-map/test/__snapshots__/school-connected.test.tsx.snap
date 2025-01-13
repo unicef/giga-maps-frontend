@@ -86,7 +86,7 @@ exports[`BarChartWrapper Component renders BarChart with correct props 1`] = `
           <span
             class="cds--popover-content cds--tooltip-content"
           >
-            239.1K schools with Connected connection this week
+            schools-with-connection-this-week
           </span>
           <span
             class="cds--popover-caret"
@@ -117,7 +117,7 @@ exports[`BarChartWrapper Component renders BarChart with correct props 1`] = `
           <span
             class="cds--popover-content cds--tooltip-content"
           >
-            95.4K schools with Not connected connection this week
+            schools-with-connection-this-week
           </span>
           <span
             class="cds--popover-caret"

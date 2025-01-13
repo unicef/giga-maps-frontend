@@ -85,6 +85,6 @@ describe('TourInstructionPopover', () => {
       content: []
     };
     const { getByText } = render(testWrapper(<TourInstructionPopover {...props} />));
-    expect(getByText('skip-tour')).toBeInTheDocument();
+    expect(getByText('Skip tour')).toBeInTheDocument();
   });
 });

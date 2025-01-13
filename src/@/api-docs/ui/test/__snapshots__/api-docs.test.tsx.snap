@@ -286,6 +286,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
             <a
               class="c5"
               href="/map"
+              target="_blank"
             >
               <img
                 alt="Giga logo"
@@ -368,7 +369,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
               <span
                 class="cds--side-nav__link-text"
               >
-                About Giga Maps
+                About Giga maps
               </span>
             </a>
           </li>
@@ -423,12 +424,14 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
               id="downshift-:r2:-toggle-button"
               role="combobox"
               tabindex="0"
-              title=""
+              title="English"
               type="button"
             >
               <span
                 class="cds--list-box__label"
-              />
+              >
+                English
+              </span>
               <div
                 class="cds--list-box__menu-icon"
               >
@@ -468,7 +471,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
             class="c11"
           >
             <p>
-              © 2024  
+              © 2025  
               <a
                 class="giga-logo"
                 href="https://www.unicef.org/innovation/giga"
