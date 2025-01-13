@@ -55,7 +55,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
           name="theme-radio-button-group-giga"
           defaultSelected={gigaTheme}>
           {gigaThemeList.map((item, index) => (
-            <CustomRadioButton key={`giga-${item}`} labelText={<><span className="capitalize">{item}</span> {t('mode')}</>} value={item} id={`giga_${item}_${index}`} />
+            <CustomRadioButton key={`giga-${item}`} labelText={t(item + '-mode')} value={item} id={`giga_${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
 
@@ -67,9 +67,9 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
               setCurrentStyle(value as Style)
             }
           }} legendText={t("map-types")} name="theme-radio-button-group" defaultSelected={defaultMapStyle}>
-          <CustomRadioButton labelText={`Default view`} value={'default'} id={`default-view-radio`} />
+          <CustomRadioButton labelText={t('default-view')} value={'default'} id={`default-view-radio`} />
           {mapThemeList.map((item, index) => (
-            <CustomRadioButton key={item} labelText={<><span className="capitalize">{item}</span> {t('view')}</>} value={item} id={`${item}_${index}`} />
+            <CustomRadioButton key={item} labelText={<>{t(item + '-view')}</>} value={item} id={`${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
         <CheckboxGroupWrapper legendText={t("layers")}>

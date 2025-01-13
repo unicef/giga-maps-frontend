@@ -127,5 +127,16 @@
   "connected-schools-for-total-mapped-number": "Escuelas conectadas para {{total}}",
   "schools-mapped": "escuelas mapeadas",
   "connectivity-status": "Estado de conectividad",
-  "cellular-coverage": "Cobertura celular"
+  "cellular-coverage": "Cobertura celular",
+  "map-navigation": "Navegación del mapa",
+  "map-legend": "Leyenda del mapa",
+  "map-themes-layers": "Temas y capas del mapa",
+  "dark-mode": "Modo oscuro",
+  "light-mode": "Modo claro",
+  "accessible-mode": "Modo accesible",
+  "satellite-view": "Vista satélite",
+  "street-view": "Vista callejera",
+  "default-view": "Vista predeterminada",
+  "of-page_one": "de {{count}} página",
+  "of-page_two": "de {{count}} páginas"
 }
