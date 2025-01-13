@@ -14,8 +14,8 @@ export const shuffleArray = (array: unknown[]): unknown[] => {
 
 export const LanguageSuffixes = {
   en: { thousand: 'k', million: 'M', billion: 'B', trillion: 'T' },
-  es: { thousand: 'mil', million: 'M', billion: 'MM', trillion: 'B' },
-  pt: { thousand: 'mil', million: 'M', billion: 'B', trillion: 'T' },
+  es: { thousand: ' mil', million: 'M', billion: 'MM', trillion: 'B' },
+  pt: { thousand: ' mil', million: 'M', billion: 'B', trillion: 'T' },
 } as Record<string, { thousand: string; million: string; billion: string; trillion: string }>
 
 export function formatNumber(value: number = 0, lng: string | null = defaultLanguage) {

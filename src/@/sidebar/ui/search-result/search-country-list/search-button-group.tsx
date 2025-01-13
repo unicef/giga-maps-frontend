@@ -47,6 +47,7 @@ export const SearchButtonGroup = () => {
       pageSizes={[SCHOOL_LIST_PAGE_SIZE]}
       page={currentPage}
       hideSteppers
+      pageRangeText={(_current: number, _count: number) => t('of-page', { count: _count })}
       size="sm"
       onChange={({ page }: { page: number }) => onSchoolListCurrentPage(page)}
     />
