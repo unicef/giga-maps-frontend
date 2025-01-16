@@ -124,7 +124,8 @@
   "doesnt-match-any-criteria": "Doesn't match any criteria",
   "format-schools-mapped-with-category-status": "{{value}} schools mapped with {{category}} status",
   "schools-with-connection-this-week": "{{value}} schools with {{category}} connection this week",
-  "connected-schools-for-total-mapped-number": "Connected schools for {{total}}",
+  "connected-schools-for-total-mapped-number_one": "Connected school for {{count}}",
+  "connected-schools-for-total-mapped-number_other": "Connected schools for {{count}}",
   "schools-mapped": "schools mapped",
   "connectivity-status": "Connectivity status",
   "cellular-coverage": "Cellular coverage",
@@ -138,5 +139,5 @@
   "street-view": "Street view",
   "default-view": "Default view",
   "of-page_one": "of {{count}} page",
-  "of-page_two": "of {{count}} pages"
+  "of-page_other": "of {{count}} pages"
 }
