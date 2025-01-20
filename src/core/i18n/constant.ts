@@ -6,7 +6,7 @@ export const languages = [
   },
   // spanish and portuguese
   {
-    name: 'Española',
+    name: 'Español',
     code: 'es',
   },
   {

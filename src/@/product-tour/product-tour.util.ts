@@ -22,7 +22,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
           description:
             'on-the-map-explore-specific-areas-and-schools',
           actionItem: '',
-          title: 'Map navigation',
+          title: 'map-navigation',
           style: {
             transform: 'translateY(-5.625rem)'
           }
@@ -48,7 +48,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
             type: 'text',
             value: 'blinking-dots-real-time-connectivity-layer'
           }],
-          title: 'Map legend',
+          title: 'map-legend',
           style: {}
         },
         highlightBox: {
@@ -77,7 +77,7 @@ export const getTourData = ({ isMobile }: { isMobile: boolean }) => [
             type: 'text',
             value: 'switch-between-certain-layers'
           }],
-          title: 'Map themes & layers',
+          title: 'map-themes-layers',
           style: {}
         },
         highlightBox: {
