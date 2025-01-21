@@ -47,7 +47,7 @@ const SchoolConnectivityLayer = () => {
               {isConnected ? connectedNumber : totalMappedNumber}
             </Text>
             <Text $color={theme.titleDesc}>
-              {isConnected ? `${t("connected-schools-for-total-mapped-number", { count: Number(totalMappedNumber) })} ` : ''}{t('schools-mapped')}
+              {isConnected ? `${t("connected-schools-for-total-mapped-number", { count: globalStats?.schools_connected ?? 0, total: totalMappedNumber })} ` : ''}{t('schools-mapped')}
             </Text>
           </Div>}
         </SchoolInfoSection>}
