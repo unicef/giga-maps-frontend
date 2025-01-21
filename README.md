@@ -153,17 +153,46 @@ Code of Conduct</h2>
 At Giga, we're committed to maintaining an environment that's respectful, inclusive, and harassment-free for everyone involved in our project and community. We welcome contributors and participants from diverse backgrounds and pledge to uphold the standards. 
 
 
-[Click here for detailed Code of Conduct](#)
+[Click here for detailed Code of Conduct](https://github.com/unicef/giga-documentation/blob/master/.github/CODE_OF_CONDUCT.md)
 
 <h2><a id="contribution-guidelines" class="anchor" aria-hidden="true" href="#contribution-guidelines"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></path></svg></a>
 Contribution Guidelines</h2>
 
-Thank you for considering contributing to Giga Meter Backend! We value your input and aim to make the contribution process as accessible and transparent as possible. Whether you're interested in reporting bugs, discussing code, submitting fixes, proposing features, becoming a maintainer, or engaging with the GigaMeter community, we welcome your involvement.
+Contributions are welcome! Here are several ways you can contribute:
+
+- **[Report Issues](https://github.com/unicef/giga-maps-frontend/issues)**: Submit bugs found or log feature requests for the `giga-maps-frontend` project.
+- **[Submit Pull Requests](https://github.com/unicef/giga-documentation/blob/master/.github/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
+- **[Join the Discussions](https://github.com/unicef/giga-maps-frontend/discussions)**: Share your insights, provide feedback, or ask questions.
 
 If you feel impacted by the work we are doing and would like to contirbute through monetary means then consider donating at <b>https://give.giga.global</b>
 
+<details closed>
+<summary>Contributing Guidelines</summary>
+
+1. **Fork the Repository**: Start by forking the project repository to your github account.
+2. **Clone Locally**: Clone the forked repository to your local machine using a git client.
+   ```sh
+   git clone https://github.com/unicef/giga-maps-frontend
+   ```
+3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
+   ```sh
+   git checkout -b new-feature-x
+   ```
+4. **Make Your Changes**: Develop and test your changes locally.
+5. **Commit Your Changes**: Commit with a clear message describing your updates.
+   ```sh
+   git commit -m 'Implemented new feature x.'
+   ```
+6. **Push to github**: Push the changes to your forked repository.
+   ```sh
+   git push origin new-feature-x
+   ```
+7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
+8. **Review**: Once your PR is reviewed and approved, it will be merged into the main branch. Congratulations on your contribution!
+</details>
+
   
-[Click here for detailed Contribution Guidelines](#)
+[Click here for detailed Contribution Guidelines](https://github.com/unicef/giga-documentation/blob/master/.github/CONTRIBUTING.md)
 
 <h2><a id="license" class="anchor" aria-hidden="true" href="#license"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></path></svg></a>
 License / Legal</h2>
