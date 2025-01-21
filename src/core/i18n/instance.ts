@@ -15,7 +15,7 @@ i18next
     }, {} as any),
     supportedLngs: supportedLanguages,
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage', /*'navigator'*/],
       excludeCacheFor: ['localStorage'],
     },
     fallbackLng: defaultLanguage,

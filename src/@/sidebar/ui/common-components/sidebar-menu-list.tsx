@@ -75,7 +75,7 @@ const SidebarMenuList = () => {
           {t('tour', 'Tour')}
         </MenuItem>
       </SideNavItems>
-      {isMapView && <LanguageDropdown
+      {/* {isMapView && <LanguageDropdown
         id="language"
         direction="bottom"
         titleText=""
@@ -86,7 +86,7 @@ const SidebarMenuList = () => {
           console.log(selectedItem);
           onLanguageChange(selectedItem.code)
         }}
-      />}
+      />} */}
       {
         isMobile &&
         <MobileFooterContainer>
