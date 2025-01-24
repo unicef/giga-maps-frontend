@@ -1591,6 +1591,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
           <div
             class="cds--modal-content c2"
           >
+            <br />
             <p
               class="c3"
             >
