@@ -61,7 +61,7 @@ describe('createSelectedLayer', () => {
     const source = 'test-source';
 
     const mapRoute = {
-      map: null,
+      map: false,
     };
 
     createSelectedLayer(map, { id, isDynamicLayer, source, paintData: stylePaintData.dark, mapRoute });
