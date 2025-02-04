@@ -3,7 +3,7 @@ import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import { appStarted } from "./store";
 import { defaultLanguage, supportedLanguages } from "./constant";
-import * as resources from "./resources";
+import resources from "./resources";
 
 i18next
   .use(initReactI18next) // passes i18n down to react-i18next
