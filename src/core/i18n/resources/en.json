@@ -140,5 +140,9 @@
   "street-view": "Street view",
   "default-view": "Default view",
   "of-page_one": "of {{count}} page",
-  "of-page_other": "of {{count}} pages"
+  "of-page_other": "of {{count}} pages",
+  "country": "Country",
+  "school": "School",
+  "in": "in",
+  "district": "District"
 }

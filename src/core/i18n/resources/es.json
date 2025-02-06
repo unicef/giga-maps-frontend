@@ -140,5 +140,9 @@
   "street-view": "Vista callejera",
   "default-view": "Vista predeterminada",
   "of-page_one": "de {{count}} página",
-  "of-page_other": "de {{count}} páginas"
+  "of-page_other": "de {{count}} páginas",
+  "country": "País",
+  "school": "Escuela",
+  "in": "en",
+  "district": "Distrito"
 }
