@@ -140,5 +140,9 @@
   "street-view": "Visualização de rua",
   "default-view": "Visualização padrão",
   "of-page_one": "de {{count}} página(s)",
-  "of-page_other": "de {{count}} páginas"
+  "of-page_other": "de {{count}} páginas",
+  "country": "País",
+  "school": "Escola",
+  "in": "em",
+  "district": "Distrito"
 }
