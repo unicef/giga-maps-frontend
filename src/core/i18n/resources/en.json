@@ -144,5 +144,6 @@
   "country": "Country",
   "school": "School",
   "in": "in",
-  "district": "District"
+  "district": "District",
+  "threshold": "Threshold"
 }
