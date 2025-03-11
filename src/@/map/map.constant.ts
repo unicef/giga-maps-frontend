@@ -3,9 +3,10 @@ import { Expression } from 'mapbox-gl';
 import { GlobalStats, SchoolStatsType } from '~/api/types';
 import { getLocalStorage } from '~/lib/utils';
 
-import { Center, Style, StylePaintData, Zoom } from './map.types';
+import { Center, Style, StylePaintData } from './map.types';
 
-export const defaultZoom: Zoom = 2;
+export const defaultZoom = 2;
+export const maxZoom = 24;
 export const defaultCenter: Center = [-40, -14];
 export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
