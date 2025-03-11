@@ -6,7 +6,7 @@ import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
 
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
 import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, COVERAGE_URL, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
-import { setPopupOnClickDot } from "./map.model";
+import { $schoolClickedId, setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
 
@@ -45,9 +45,18 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
       layers: [...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length) return;
+    const ids = new Set(features.map((feature) => {
+      return feature.layer.id;
+    }));
+    if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
+      return;
+    }
     const feature = features[0];
-
-    if (feature.layer.id === id && feature.properties) {
+    if ($schoolClickedId.getState() === feature?.properties?.id) {
+      setPopupOnClickDot(null)
+      return;
+    }
+    if (feature?.layer?.id?.includes('_layer') && feature.properties) {
       setPopupOnClickDot({
         id: feature?.properties?.id || 0,
         geopoint: feature.geometry as GeoJSONPoint

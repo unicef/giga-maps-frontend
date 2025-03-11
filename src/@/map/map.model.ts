@@ -74,7 +74,7 @@ $realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, s
 export const changeGigaSelection = createEvent<{ layerId: number | null }>();
 export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
 
-export const setPopupOnClickDot = createEvent<{ id: string; geopoint: GeoJSONPoint }>();
+export const setPopupOnClickDot = createEvent<{ id: number; geopoint: GeoJSONPoint } | null>();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
 export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
