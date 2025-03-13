@@ -52,13 +52,15 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
       return;
     }
     const feature = features[0];
+    const feature2 = features[1];
     if ($schoolClickedId.getState() === feature?.properties?.id) {
       setPopupOnClickDot(null)
       return;
     }
-    if (feature?.layer?.id?.includes('_layer') && feature.properties) {
+    const schoolId = feature?.properties?.id ?? feature2?.properties?.id;
+    if (feature?.layer?.id?.includes('_layer') && schoolId) {
       setPopupOnClickDot({
-        id: feature?.properties?.id || 0,
+        id: schoolId,
         geopoint: feature.geometry as GeoJSONPoint
       });
     }
