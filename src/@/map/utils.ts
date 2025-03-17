@@ -170,7 +170,7 @@ export const createSource = ({ map, source = defaultSource, url }: CreateSourceT
   map.addSource(source, {
     tiles: [url],
     minzoom: 0,
-    maxzoom: 8,
+    maxzoom: 18,
     ...options,
     type: "vector",
   });
