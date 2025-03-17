@@ -53,7 +53,7 @@ export const createSourceForMapAndCountry = async ({ map, schoolAdminId, country
     } else {
       options.bounds = country.admin_metadata.bbox as VectorSource['bounds'];
     }
-    options.maxzoom = 16;
+    options.maxzoom = 18;
     if (removeBounds) {
       delete options.bounds;
       options.maxzoom = 4;
