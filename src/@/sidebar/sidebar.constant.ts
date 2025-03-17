@@ -53,7 +53,7 @@ export const multiSchoolSelection: MultischoolSelectionStats = {
 }
 
 export const SCHOOL_STATUS_LAYER = {
-  id: 10000,
+  id: 10001,
   name: 'School status',
   type: 'SCHOOL_STATUS',
   legend_configs: {

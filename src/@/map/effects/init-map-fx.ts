@@ -1,7 +1,7 @@
 import { createEffect } from 'effector';
 import mapboxGL from 'mapbox-gl';
 
-import { defaultCenter, defaultZoom, styleUrls } from '~/@/map/map.constant';
+import { defaultCenter, defaultZoom, maxZoom, styleUrls } from '~/@/map/map.constant';
 import { changeMap, onStyleLoaded } from '~/@/map/map.model';
 import { InitMapOptions } from '~/@/map/map.types';
 import { API_MAPBOX_ACCESS_TOKEN } from '~/env';
@@ -14,6 +14,7 @@ export const initMapFx = createEffect(
       style: styleUrls[style],
       center: center ?? defaultCenter,
       zoom: zoom ?? defaultZoom,
+      maxZoom: maxZoom,
       container,
     });
     map.dragRotate.disable();
