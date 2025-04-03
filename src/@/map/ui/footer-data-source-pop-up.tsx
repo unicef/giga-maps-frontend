@@ -163,7 +163,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
             const isLast = index === dataSourceName?.length - 1;
             return (<TooltipButton enterDelayMs={200} $hideLabel={!dataSourceDescription?.[index]} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
               <button>
-                {dataSource}{!isLast && `, `}&nbsp;
+                {dataSource?.replace(/Daily Check App/i, "Giga Meter")}{!isLast && `, `}&nbsp;
               </button>
             </TooltipButton>)
           })}
