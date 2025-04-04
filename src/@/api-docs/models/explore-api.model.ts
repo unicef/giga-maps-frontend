@@ -9,6 +9,8 @@ import { downloadExcelFx } from "../effects/download-excel.fx";
 import { downloadCountryDataFx, downloadSchoolDataFx, getCountryListFx, getExploreApiListFx, getSchoolListByCountryFx } from "../effects/explore-api-fx";
 import { CountryListType } from "../types/country-list.type";
 import { ExploreApiType } from "../types/explore-api-type";
+import { validateApiKeyFx } from "../effects/api-keys-fx";
+import { ApiKeysType } from "../types/api-keys.type";
 
 
 export const onLoadApiList = createEvent();
@@ -41,6 +43,9 @@ export const $currentSelectedApiData = sample({
     return exploreData?.find((item: ExploreApiType) => item.id === selectedId) ?? null;
   }
 })
+
+export const $activeApiKeyData = createStore<ApiKeysType['active_api_categories_list']>([])
+$activeApiKeyData.on(validateApiKeyFx.doneData, setPayload)
 
 export const $exploreDataWithFilter = sample({
   source: combine({
