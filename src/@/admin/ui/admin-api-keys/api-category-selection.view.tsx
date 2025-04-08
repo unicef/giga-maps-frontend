@@ -7,7 +7,10 @@ import { updateApiCategoryFx } from "../../effects/api-request-fx"
 
 
 const ApiCategorySelection = ({ item, refresh, isExpired }: { item: ApiKeysAdminRequestType, refresh: () => void, isExpired: boolean }) => {
+  const isDailyCheck = item.api.code === "DAILY_CHECK_APP"
   const gigaMeterApiCategories = useStore($gigaMeterApiCategories)
+
+  if (!isDailyCheck) return null
   const selectedId = item.active_api_categories_list?.[0]?.id ?? gigaMeterApiCategories.find((category) => category.is_default)?.id
   const onChangeCategory = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
