@@ -10,10 +10,10 @@ Giga Maps Frontend </h1>
 <div align="center" >
 
 <!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/unicef/giga-maps-frontend)
-![GitHub Repo stars](https://img.shields.io/github/stars/unicef/giga-maps-frontend)
-![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/Gigaglobal)
-![GitHub License](https://img.shields.io/github/license/unicef/giga-maps-frontend)
+<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/unicef/giga-maps-frontend">
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/unicef/giga-maps-frontend">
+<img alt="X (formerly Twitter) Follow" src="https://img.shields.io/twitter/follow/Gigaglobal">
+<img alt="GitHub License" src="https://img.shields.io/github/license/unicef/giga-maps-frontend">
 
 
 </div>
