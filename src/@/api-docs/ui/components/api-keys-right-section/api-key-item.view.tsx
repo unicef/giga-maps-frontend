@@ -77,7 +77,7 @@ const ApiKeyItem = ({ item: apiItem, countryLength, setApiKeyDeleteId }: { item:
       </TableCell>
       <TableCell className="api-keys-data-table-over-flow-menu">
         <OverflowMenu aria-label="overflow-menu" flipped={true}>
-          {isApproved && <OverflowMenuCustomItem disabled={extensionInProgress} onClick={() => {
+          {isApproved && !isExpired && <OverflowMenuCustomItem disabled={extensionInProgress} onClick={() => {
             onRequestExtensionPopup(apiItem.id);
           }} requireTitle={true} title="Request for extension" itemText="Request for extension" />}
           {(userPermission.CAN_DELETE_API_KEY && <OverflowMenuItem onClick={() => {

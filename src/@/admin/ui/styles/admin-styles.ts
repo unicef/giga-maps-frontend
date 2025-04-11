@@ -820,7 +820,7 @@ max-height:calc(100vh - 13.5rem);
 `
 
 export const ApiKeyRequestListScroll = styled(Scroll)`
-max-height:calc(100vh - 10.5rem);
+max-height:calc(100vh - 13.5rem);
 `
 
 export const DataSourceListScroll = styled(Scroll)`
