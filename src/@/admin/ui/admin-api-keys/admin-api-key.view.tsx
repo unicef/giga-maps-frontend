@@ -6,7 +6,7 @@ import { Filter } from '@carbon/icons-react';
 import { ApiKeysDataWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
 import { EmptyList } from '~/@/common/style/styled-component-style';
 
-import { deleteApiKeyRequestFx, getAllApiKeyRequest, getCountryApiFx } from '../../effects/api-request-fx';
+import { deleteApiKeyRequestFx, getAllApiKeyRequest, getApiCategoryFx, getCountryApiFx } from '../../effects/api-request-fx';
 import { $apiRequestListResponse, $apiRequestPageNo, $countryApiKeyList, onChangeApiKeyPage, reloadApiRequest } from '../../models/api-request-model';
 import PageTitleComponent from '../common-components/page-title-component';
 import Pagination from '../common-components/Pagination';
@@ -34,6 +34,7 @@ const AdminApiKey = () => {
 
   useEffect(() => {
     getCountryApiFx('?has_api_requests=true&fields=id,name')
+    getApiCategoryFx()
   }, [])
 
   useEffect(() => {
@@ -90,6 +91,9 @@ const AdminApiKey = () => {
                   Country
                 </TableHeader>
                 <TableHeader>
+                  Category
+                </TableHeader>
+                <TableHeader>
                   Valid till
                 </TableHeader>
                 <TableHeader>
@@ -107,7 +111,7 @@ const AdminApiKey = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {apiRequestList?.map((item) => <AdminApiKeyItem key={item.id} item={item} setApiKeyDeleteId={setApiKeyDeleteId} countryLength={countryList?.length} />)}
+              {apiRequestList?.map((item) => <AdminApiKeyItem refresh={getApiKeyRequest} key={item.id} item={item} setApiKeyDeleteId={setApiKeyDeleteId} countryLength={countryList?.length} />)}
             </TableBody>
           </Table>
         </ApiKeysDataWrapper>

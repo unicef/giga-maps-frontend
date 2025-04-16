@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
-import { $currentSelectedApiData } from '~/@/api-docs/models/explore-api.model';
+import { $activeApiKeyData, $currentApiKey, $currentSelectedApiData } from '~/@/api-docs/models/explore-api.model';
 import { docsExporeApi } from '~/core/routes';
 
 import ApiBreadcrumb from '../common/api-breadcrumb';
@@ -9,7 +9,19 @@ import { HeaderContainer } from '../common/right-section-header/right-section.he
 
 const ApiInfo = () => {
   const exploreApiData = useStore($currentSelectedApiData);
+  const currentApiKey = useStore($currentApiKey);
+  const activeApiKeyData = useStore($activeApiKeyData)
   const iframeRef = useRef<null | HTMLIFrameElement>(null);
+  const documentationURL = useMemo(() => {
+    if (exploreApiData?.code === 'DAILY_CHECK_APP' && activeApiKeyData?.length > 0) {
+      const category = activeApiKeyData[0]?.api_category_code;
+      const url = new URL(exploreApiData?.documentation_url)
+      const token = encodeURIComponent(currentApiKey);
+      url.pathname += `/${category}`;
+      return url.href + `?token=${token}`;
+    }
+    return exploreApiData?.documentation_url
+  }, [exploreApiData, activeApiKeyData])
   useEffect(() => {
     if (!exploreApiData) {
       docsExporeApi.navigate()
@@ -21,7 +33,7 @@ const ApiInfo = () => {
       <HeaderContainer>
         <ApiBreadcrumb />
       </HeaderContainer>
-      <iframe ref={iframeRef} src={exploreApiData?.documentation_url} style={{ height: '100vh' }} height="100vh" width="100%">
+      <iframe ref={iframeRef} src={documentationURL} style={{ height: '100vh' }} height="100vh" width="100%">
       </iframe>
     </>
   )
