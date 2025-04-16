@@ -40,6 +40,7 @@ const DownloadApiKeyModal = () => {
 
   const onSubmit = async (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
+    setCurrentApiKey(apiInput);
     if (!apiInput || !(await validateApiKey())) {
       return setInvalidKey(true);
     };

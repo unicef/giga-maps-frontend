@@ -47,6 +47,9 @@ export const $currentSelectedApiData = sample({
 export const $activeApiKeyData = createStore<ApiKeysType['active_api_categories_list']>([])
 $activeApiKeyData.on(validateApiKeyFx.doneData, setPayload)
 
+export const setCurrentApiToken = createEvent<string>();
+export const $currentApiToken = restore(setCurrentApiToken, "");
+
 export const $exploreDataWithFilter = sample({
   source: combine({
     exploreData: $exploreApiData,
