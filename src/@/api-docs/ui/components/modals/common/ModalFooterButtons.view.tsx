@@ -23,7 +23,7 @@ export function ModalFooterButtons({ onCancel, isError = false, isLoading = fals
       kind="primary"
       disabled={isError || isLoading}
     >
-      {!isLoading ? <Loading small description={loadingText} />
+      {isLoading ? <Loading small description={loadingText} />
         : 'Submit'}
     </Button>
   </ModalFooter >)
