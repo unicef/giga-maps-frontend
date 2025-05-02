@@ -1,9 +1,9 @@
 import { $notification } from '~/@/common/Toast/toast.model';
 import { $appConfigValues } from '~/@/admin/models/admin-model';
 import { createEvent, createStore, merge, restore, sample } from "effector";
-import { addFilterFx, editFilterFx, filterColumnListFx, getFilterListFx, getFilterListIdFx, getFilterPublishedListFx } from "../effects/filter-fx";
+import { addFilterFx, editFilterFx, filterColumnListFx, getFilterChoicesFx, getFilterListFx, getFilterListIdFx, getFilterPublishedListFx } from "../effects/filter-fx";
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";
-import { FilterConfiguration, FilterListType } from "../types/filter-list.type";
+import { ColumnDBChoicesType, FilterConfiguration, FilterListType } from "../types/filter-list.type";
 import { FilterAllValueType, FilterValueType } from '../types/filter-list-type';
 import { addAdminFilter, editAdminFilter } from '~/core/routes';
 
@@ -26,6 +26,10 @@ export const $filterListCount = createStore(0);
 
 export const onReloadFilterList = createEvent<object>();
 export const $reloadFiler = restore(onReloadFilterList, null);
+
+export const $columnDBChoices = createStore<ColumnDBChoicesType['values']>([]);
+
+$columnDBChoices.on(getFilterChoicesFx.doneData, (_, payload: ColumnDBChoicesType) => payload?.values ?? []);
 
 $filterListResponse.on(getFilterListFx.doneData, setPayloadResults);
 $filterListCount.on(getFilterListFx.doneData, (_, response) => response?.count || 0);
