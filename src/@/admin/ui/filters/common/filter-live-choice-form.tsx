@@ -20,10 +20,10 @@ const MultiSelectChoices = ({ dbChoices, selectedItem, index, onChangeMultiSelec
     label="Choose db values"
     titleText="Group choices"
     $isDark={true}
-    itemToString={(item: any) => item.label || ''}
+    itemToString={(item: any) => item?.label || ''}
     itemToElement={(item: any) => (
       <span>
-        {item.label}
+        {item?.label}
       </span>
     )}
     items={dbChoices}

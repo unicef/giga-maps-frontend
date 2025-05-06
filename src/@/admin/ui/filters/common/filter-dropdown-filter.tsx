@@ -43,7 +43,7 @@ const FilterDropdownFields = () => {
           labelText=""
           name={`choices.${index}.label`}
           id="filter-name"
-          value={item.label}
+          value={item?.label}
           onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, choices: [...choices.slice(0, index), { label: e.target.value, value: item.value }, ...choices.slice(index + 1)] }])}
           required
         />
