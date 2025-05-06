@@ -85,6 +85,7 @@ const FilterLiveChoiceForm = () => {
         />
       </FilterInputLabel>
       <MultiSelectChoices
+        key={'choice-list' + dbChoices?.length}
         index={index}
         dbChoices={dbChoices}
         selectedItem={formData?.options?.choices?.[index]}
