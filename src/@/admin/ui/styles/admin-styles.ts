@@ -442,7 +442,7 @@ margin-top: 1.5rem;
 }
 
 `
-export const MultiSelectLayerConfig = styled(MultiSelect)`
+export const MultiSelectLayerConfig = styled(MultiSelect) <{ $isDark?: boolean }>`
 /* margin-top: 1.5rem; */
 #aggregate-on-select,#apiSource-select,#parameter-select,#country-select{
     background-color: #FAFAFA;
@@ -450,6 +450,25 @@ export const MultiSelectLayerConfig = styled(MultiSelect)`
     button{
     border-bottom: 1px solid var(--cds-border-strong);
 }
+    .cds--multi-select {
+    ${({ $isDark }) => $isDark && css`
+    background-color: #333333;
+    `}
+    .cds--list-box__label {
+        ${({ $isDark }) => $isDark && css`
+        color: #FAFAFA;
+        `}
+    }
+        .cds--list-box__menu-icon svg {
+        ${({ $isDark }) => $isDark && css`
+        fill: #FAFAFA;
+        `}
+        }
+        .cds--tag {
+            ${({ $isDark }) => $isDark && css`
+            background-color: #000;
+            `}
+    } 
 
 `
 
