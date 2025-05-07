@@ -4,12 +4,12 @@ import { useMemo } from "react";
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
 
-const MultiSelectDropdown = ({ name, description, column_configuration: parameter, options: { placeholder, choices } = {}, itemKey, value, onChange }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
+const MultiSelectDropdown = ({ name, description, column_configuration: parameter, options: { placeholder, choices, group_choices: groupChoices } = {}, itemKey, value, extraValue, onChange }: AdvanceFilterType & { value: string; extraValue: string; itemKey: string; onChange: (key: string, value: string, multiKeyValues?: Record<string, string>) => void }) => {
   const items = useMemo(() => [...(choices ?? [])], [choices])
   const selectedItem = useMemo(() => {
-    const values = value?.split(',') || [];
-    return items?.filter((item) => values.includes(item.value)) ?? []
-  }, [items, value])
+    const values = groupChoices ? extraValue?.split('|') || [] : value?.split('|') || [];
+    return items?.filter((item) => values.includes(groupChoices ? item.label : item.value)) ?? []
+  }, [items, value, groupChoices])
   return (
     <StyledMultiSelectFilterConfig
       size="lg"
@@ -27,8 +27,10 @@ const MultiSelectDropdown = ({ name, description, column_configuration: paramete
       label={<>{placeholder ?? `Select ${name}`}</>}
       initialSelectedItems={selectedItem}
       selectedItem={selectedItem}
-      onChange={({ selectedItems }: { selectedItems: { value: string }[] }) => {
-        onChange(itemKey, selectedItems.map((item) => item.value).join(','));
+      onChange={({ selectedItems }: { selectedItems: { value: string; label: string }[] }) => {
+        onChange(itemKey, selectedItems.map((item) => item.value).join('|'), groupChoices ? {
+          [`ignore_${itemKey}`]: selectedItems.map((item) => item.label).join('|')
+        } : undefined);
       }}
     />
   )
