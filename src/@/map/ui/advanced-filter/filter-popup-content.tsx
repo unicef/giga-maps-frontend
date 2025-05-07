@@ -34,8 +34,13 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   }>>({})
   const country = useStore($country);
 
-  const onChange = (key: string, value: string) => {
-    setSelectedFields({ ...selectedFields, [key]: value })
+  // multiple key value pair
+  const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
+    setSelectedFields({
+      ...selectedFields,
+      [key]: value,
+      ...multiKeyValues
+    })
   }
 
   useEffect(() => {
@@ -46,6 +51,8 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     advanceFilterList?.forEach(item => {
       const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
       const field = urlFieldList[item.column_configuration.name];
+      const extraItemKey = `ignore_${item.column_configuration.name}`;
+      const extraField = urlFieldList[extraItemKey];
       if (field) {
         const isRange = field.filter.includes('range');
         const isNone = field.filter.includes('none');
@@ -56,6 +63,9 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       } else {
         selectedFields[`${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
+      if (extraField) {
+        selectedFields[`${extraItemKey}__${item.query_param_filter}`] = extraField.value
+      }
     })
     setSelectedFields(selectedFields)
     setIsReady(true)
@@ -63,18 +73,19 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
 
   const onApply = async (e: MouseEvent) => {
     e.preventDefault();
+    const prefix = 'filter__';
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(selectedFields)) {
       if (value) {
         if (typeof value === 'object') {
           const { none_range, value: rangeValue } = value;
           if (none_range) {
-            params.set(`filter__${key.replace('__range', '__none_range')}`, String(rangeValue) || "null,null");
+            params.set(`${prefix}${key.replace('__range', '__none_range')}`, String(rangeValue) || "null,null");
           } else if (rangeValue) {
-            params.set(`filter__${key}`, String(rangeValue));
+            params.set(`${prefix}${key}`, String(rangeValue));
           }
         } else {
-          params.set(`filter__${key}`, String(value));
+          params.set(`${prefix}${key}`, String(value));
         }
       }
     }
@@ -106,8 +117,11 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
             const Component = components[item.type] as React.JSXElementConstructor<any>;
             if (!Component) return null;
             const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
+            const extraItemKey = `ignore_${itemKey}`;
+            const extraValue = selectedFields[extraItemKey];
+            console.log(extraValue, extraItemKey);
             return (
-              <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} onChange={onChange} />
+              <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
             )
           })}
         </ScrollableContainer>

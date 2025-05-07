@@ -83,20 +83,27 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
   const searchParams = new URLSearchParams(search);
   // iterate over all params and try to parse them to numbers
   const filterSearchParams = new URLSearchParams();
+  let actualSelectedCount = 0;
   const urlFieldList: Record<string, { field: string; filter: string; value: string }> = {};
   for (const [key, value] of searchParams.entries()) {
     try {
       const [start, field, filter] = key.split('__');
       if (start === 'filter' && field && filter) {
-        filterSearchParams.set(`${field}__${filter}`, value);
+        if (!field.startsWith('ignore_')) {
+          filterSearchParams.set(`${field}__${filter}`, value);
+        }
         urlFieldList[field] = { field, filter, value };
+        console.log(field);
+        if (!field.startsWith('ignore_')) {
+          actualSelectedCount++;
+        }
       }
     } catch (e) { }
   }
   return {
     searchParams: filterSearchParams.toString(),
     urlFieldList,
-    selectedCount: Object.keys(urlFieldList).length
+    selectedCount: actualSelectedCount
   };
 });
 
