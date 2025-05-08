@@ -4,18 +4,19 @@ import { useStore } from 'effector-react';
 import { FilterInputLabel, FilterTextInput } from '../filter-list.styles';
 import { $formFilterData, onUdpateFilterForm } from '~/@/admin/models/filter-list.model';
 import { getFilterType } from '~/@/admin/utils/filter-list.util';
+import FilterLiveChoiceForm from './filter-live-choice-form';
 
 const FilterDropdownFields = () => {
   const formData = useStore($formFilterData);
   const { isDropdown } = getFilterType(formData.type);
   if (!isDropdown) return null;
-  const isLiveChoices = !!formData?.options?.live_choices;
+  const isLiveChoices = !!formData?.options?.live_choices || !!formData?.options?.group_choices;
   const choices = formData?.options?.choices ?? [{ label: '', value: '' }];
 
   return (<>
     <FilterInputLabel>
-      <RadioButtonGroup defaultSelected={String(isLiveChoices)} value={String(isLiveChoices)} legendText="Choice Type" name="choiceType" onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, live_choices: e === 'true' ? true : false }])}>
-        <RadioButton value="true" labelText="Auto"></RadioButton>
+      <RadioButtonGroup defaultSelected={String(isLiveChoices)} value={String(isLiveChoices)} legendText="Choice Type" name="choiceType" onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, live_choices: e === 'true' ? true : false, choices: [] }])}>
+        <RadioButton value="true" labelText={!!formData?.options?.group_choices ? "Group" : "Auto"}></RadioButton>
         <RadioButton value="false" labelText="Static"></RadioButton>
       </RadioButtonGroup>
     </FilterInputLabel>
@@ -42,7 +43,7 @@ const FilterDropdownFields = () => {
           labelText=""
           name={`choices.${index}.label`}
           id="filter-name"
-          value={item.label}
+          value={item?.label}
           onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, choices: [...choices.slice(0, index), { label: e.target.value, value: item.value }, ...choices.slice(index + 1)] }])}
           required
         />
@@ -61,6 +62,7 @@ const FilterDropdownFields = () => {
         <Button onClick={() => onUdpateFilterForm(['options', { ...formData.options, choices: [...choices, { label: '', value: '' }] }])} type="button" kind="ghost">Add More Choices</Button>
       </FilterInputLabel>
     </>}
+    {isLiveChoices && <FilterLiveChoiceForm />}
   </>)
 }
 

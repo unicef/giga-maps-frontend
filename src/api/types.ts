@@ -319,6 +319,7 @@ export interface AdvanceFilterType {
   column_configuration: ColumnConfiguration
   options?: {
     choices?: Choice[]
+    group_choices?: boolean;
     placeholder?: string;
     minPlaceholder?: string;
     maxPlaceholder?: string;
