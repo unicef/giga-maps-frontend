@@ -119,7 +119,6 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
             const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
             const extraItemKey = `ignore_${itemKey}`;
             const extraValue = selectedFields[extraItemKey];
-            console.log(extraValue, extraItemKey);
             return (
               <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
             )

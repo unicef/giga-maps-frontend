@@ -3,11 +3,11 @@ import { useStore } from "effector-react"
 import { PropsWithChildren, useMemo } from "react"
 import styled from "styled-components"
 import { Information } from '@carbon/icons-react'
-
 import { $dataSource } from "~/@/country/country.model"
-import { $currentLayerCountryDataSource, $currentLayerTypeUtils } from "~/@/sidebar/sidebar.model"
+import { $currentLayerCountryDataSource, $currentLayerTypeUtils, onShowAdvancedFilter } from "~/@/sidebar/sidebar.model"
 import { TooltipButton } from "~/@/common/style/styled-component-style"
 import { useTranslation } from "react-i18next"
+import FilterCountInfoTag from "./advanced-filter/filter-count-info-tag"
 
 const FooterContainer = styled.div`
   background: ${props => props.theme.main};
@@ -120,57 +120,63 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
   }, [currentDataSource?.name, dataSource, isSchoolStatus])
   const dataSourceDescription = useMemo(() => currentDataSource?.description?.split(';'), [currentDataSource?.description]);
   if (showOldDataSource) {
-    return (<FooterContainer>
+    return (<>
+      <FilterCountInfoTag />
+      <FooterContainer>
+        <div>
+          <DataSourceHeader>
+            <p>{t('data-source')}</p>
+            <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
+              <button className="sb-tooltip-trigger" type="button">
+                <Information />
+              </button>
+            </Tooltip>
+          </DataSourceHeader>
+          <DataSourceContainer>
+            <div className="data-source">
+              {isFooter && <span className='header'>{t('data-source-1')};</span>}
+              <div style={
+                {
+                  marginTop: "0.5rem",
+                }
+              }>{dataSource}</div>
+            </div>
+          </DataSourceContainer>
+        </div>
+      </FooterContainer>
+    </>)
+  }
+  if (!dataSourceName?.length) return null;
+  return (<>
+    <FilterCountInfoTag />
+    <FooterContainer>
       <div>
-        <DataSourceHeader>
-          <p>{t('data-source')} </p>
+        {!isFooter && <DataSourceHeader>
+          <p>{t('data-source')}</p>
           <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
             <button className="sb-tooltip-trigger" type="button">
               <Information />
             </button>
           </Tooltip>
-        </DataSourceHeader>
+        </DataSourceHeader>}
         <DataSourceContainer>
           <div className="data-source">
             {isFooter && <span className='header'>{t('data-source-1')};</span>}
-            <div style={
-              {
-                marginTop: "0.5rem",
-              }
-            }>{dataSource}</div>
+            {/* <span className='text-ellipsis'>{isLengthGreater ? `${dataSource?.substring(0, size)}...` : dataSource}</span> */}
+            {/* <span>{dataSource}</span> */}
+            {dataSourceName?.map((dataSource: string, index: number) => {
+              const isLast = index === dataSourceName?.length - 1;
+              return (<TooltipButton enterDelayMs={200} $hideLabel={!dataSourceDescription?.[index]} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
+                <button>
+                  {dataSource?.replace(/Daily Check App/i, "Giga Meter")}{!isLast && `, `}&nbsp;
+                </button>
+              </TooltipButton>)
+            })}
           </div>
         </DataSourceContainer>
       </div>
-    </FooterContainer>)
-  }
-  if (!dataSourceName?.length) return null;
-  return (<FooterContainer>
-    <div>
-      {!isFooter && <DataSourceHeader>
-        <p>{t('data-source')} </p>
-        <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
-          <button className="sb-tooltip-trigger" type="button">
-            <Information />
-          </button>
-        </Tooltip>
-      </DataSourceHeader>}
-      <DataSourceContainer>
-        <div className="data-source">
-          {isFooter && <span className='header'>{t('data-source-1')};</span>}
-          {/* <span className='text-ellipsis'>{isLengthGreater ? `${dataSource?.substring(0, size)}...` : dataSource}</span> */}
-          {/* <span>{dataSource}</span> */}
-          {dataSourceName?.map((dataSource: string, index: number) => {
-            const isLast = index === dataSourceName?.length - 1;
-            return (<TooltipButton enterDelayMs={200} $hideLabel={!dataSourceDescription?.[index]} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
-              <button>
-                {dataSource?.replace(/Daily Check App/i, "Giga Meter")}{!isLast && `, `}&nbsp;
-              </button>
-            </TooltipButton>)
-          })}
-        </div>
-      </DataSourceContainer>
-    </div>
-  </FooterContainer>)
+    </FooterContainer>
+  </>)
 }
 
 export default FooterDataSourcePopUp

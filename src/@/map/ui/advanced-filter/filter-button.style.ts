@@ -309,10 +309,11 @@ export const StyledCheckbox = styled(Checkbox)`
 
 export const FilterTagContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 1.5rem;
+  padding: 2rem 1rem 0.5rem 1rem;
+  // align-items: center;
+  // justify-content: center;
+  // position: fixed;
+  // bottom: 1.5rem;
   left: 0;
   right: 0;
   z-index: 1;
