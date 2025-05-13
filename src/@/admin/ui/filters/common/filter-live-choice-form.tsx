@@ -7,19 +7,21 @@ import { Close } from '@carbon/icons-react';
 import { useEffect, useMemo } from "react";
 import { getFilterChoicesFx } from "~/@/admin/effects/filter-fx";
 import { ColumnDBChoicesType } from "~/@/admin/types/filter-list.type";
+import MultiSelectDropdownAdv from "../../common/multi-select-dropdown-adv";
 
 
-const MultiSelectChoices = ({ dbChoices, selectedItem, index, onChangeMultiSelect }: { dbChoices: ColumnDBChoicesType['values'], selectedItem: ColumnDBChoicesType['values'][0] | undefined; index: number; onChangeMultiSelect: (_selectedItems: ColumnDBChoicesType['values'], _index: number) => void }) => {
+const MultiSelectChoices = ({ dbChoices, selectedItem, index, onChangeMultiSelect, isPending }: { isPending: boolean; dbChoices: ColumnDBChoicesType['values'], selectedItem: ColumnDBChoicesType['values'][0] | undefined; index: number; onChangeMultiSelect: (_selectedItems: ColumnDBChoicesType['values'], _index: number) => void }) => {
 
   const selectedItems = useMemo(() => {
     return selectedItem?.value ? selectedItem?.value?.split('|')?.map((item: string) => dbChoices?.find((dbItem: ColumnDBChoicesType['values'][0]) => dbItem.value === item)) ?? [] : []
   }, [selectedItem])
-  return <MultiSelectLayerConfig
+  return <MultiSelectDropdownAdv
+    id="choice-list"
     name="choice-list"
     required
-    label="Choose db values"
+    placeholder={isPending ? "Loading..." : "Choose db values"}
     titleText="Group choices"
-    $isDark={true}
+    theme="dark"
     itemToString={(item: any) => item?.label || ''}
     itemToElement={(item: any) => (
       <span>
@@ -27,10 +29,10 @@ const MultiSelectChoices = ({ dbChoices, selectedItem, index, onChangeMultiSelec
       </span>
     )}
     items={dbChoices}
-    id={`active-layers`}
-    onChange={({ selectedItems }: { selectedItems: ColumnDBChoicesType['values'] }) => {
+    onSelectItems={(selectedItems: ColumnDBChoicesType['values']) => {
       onChangeMultiSelect(selectedItems, index)
     }}
+    initialSelectedItems={selectedItems}
     selectedItems={selectedItems}
   />
 }
@@ -40,6 +42,7 @@ const FilterLiveChoiceForm = () => {
   const filterColumnList = useStore($filterColumnList);
   const dbChoices = useStore($columnDBChoices);
   const choices = formData?.options?.choices ?? [];
+  const isPending = useStore(getFilterChoicesFx.pending);
   useEffect(() => {
     if (formData?.column_configuration) {
       const configuration = filterColumnList?.find((item) => item.id === Number(formData.column_configuration));
@@ -50,9 +53,9 @@ const FilterLiveChoiceForm = () => {
 
   const onChangeMultiSelect = (selectedItems: ColumnDBChoicesType['values'], index: number) => {
     // update choices
-    const updatedChoices = choices.map((item, i) => {
+    const updatedChoices = choices?.map((item, i) => {
       if (i === index) {
-        return { ...item, value: selectedItems.map((item) => item?.value).join('|') }
+        return { ...item, value: selectedItems?.map((item) => item?.value).join('|') }
       }
       return item
     })
@@ -90,6 +93,7 @@ const FilterLiveChoiceForm = () => {
         dbChoices={dbChoices}
         selectedItem={formData?.options?.choices?.[index]}
         onChangeMultiSelect={onChangeMultiSelect}
+        isPending={isPending}
       />
       <FilterTextInput
         type="text"
