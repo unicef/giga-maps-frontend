@@ -18,7 +18,7 @@ const FilterSelectedChips = () => {
     }[] = [];
     advanceFilterList?.forEach(item => {
       const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
-      const field = urlFieldList[item.column_configuration.name];
+      const field = urlFieldList[itemKey];
       const name = item.name;
       if (field) {
         selectedFields.push({
