@@ -63,6 +63,8 @@ export const $filterStatusChoices = $appConfigValues.map((config) => {
   }
 })
 
+export const onSetFilterValidationError = createEvent<string>();
+export const $filterValidationError = restore(onSetFilterValidationError, '');
 export const onSetFilterForm = createEvent();
 export const onUdpateFilterForm = createEvent<[string, FilterValueType]>();
 export const $formFilterData = createStore<FilterAllValueType>(defaultFilterData);
@@ -118,3 +120,5 @@ sample({
   fn: () => ({ title: 'Created!', kind: 'success', subtitle: 'Filter created successfully' }),
   target: $notification
 })
+
+$filterValidationError.reset(onUdpateFilterForm)

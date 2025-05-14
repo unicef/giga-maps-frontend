@@ -42,21 +42,21 @@ const darkTheme = css`
     background-color: #333333;
     } 
     .cds--text-input {
-      color: #FAFAFA;
+      color: #c0c0c0;
     }
     .cds--text-input::placeholder {
-        color: #FAFAFA;
+        color: #c0c0c0;
         opacity: 0.8;
     }
-    .cds--list-box__label {
-        color: #FAFAFA;
-    }
+    // .cds--list-box__label {
+    //     color: #c0c0c0;
+    // }
         .cds--list-box__menu-icon svg {
-        fill: #FAFAFA;
+        fill: #c0c0c0;
         }
-        .cds--tag {
-            // background-color: #000;
-    }
+ .cds--label {
+    color: #c0c0c0;
+ }
   
 `;
 
