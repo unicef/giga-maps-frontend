@@ -29,10 +29,12 @@ export const cleanOptionFields = (options: FilterOptionsField, type: string) => 
   } else if (type === 'RANGE') {
     delete options.choices;
     delete options.live_choices;
+    delete options.group_choices;
     delete options.placeholder;
   } else if (type === 'INPUT' || type === 'BOOLEAN') {
     delete options.choices;
     delete options.live_choices;
+    delete options.group_choices;
     delete options.range_auto_compute
     delete options.minPlaceholder
     delete options.maxPlaceholder

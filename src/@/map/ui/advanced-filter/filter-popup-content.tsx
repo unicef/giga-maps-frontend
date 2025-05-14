@@ -50,8 +50,8 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     }>;
     advanceFilterList?.forEach(item => {
       const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
-      const field = urlFieldList[item.column_configuration.name];
-      const extraItemKey = `ignore_${item.column_configuration.name}`;
+      const field = urlFieldList[itemKey];
+      const extraItemKey = `ignore_${itemKey}`;
       const extraField = urlFieldList[extraItemKey];
       if (field) {
         const isRange = field.filter.includes('range');
@@ -64,7 +64,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
         selectedFields[`${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
       if (extraField) {
-        selectedFields[`${extraItemKey}__${item.query_param_filter}`] = extraField.value
+        selectedFields[`${extraItemKey}`] = extraField.value
       }
     })
     setSelectedFields(selectedFields)

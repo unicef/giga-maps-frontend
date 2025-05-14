@@ -15,7 +15,7 @@ const FilterDropdownFields = () => {
 
   return (<>
     <FilterInputLabel>
-      <RadioButtonGroup defaultSelected={String(isLiveChoices)} value={String(isLiveChoices)} legendText="Choice Type" name="choiceType" onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, live_choices: e === 'true' ? true : false, choices: [] }])}>
+      <RadioButtonGroup defaultSelected={String(isLiveChoices)} value={String(isLiveChoices)} legendText="Choice Type" name="choiceType" onChange={(e) => onUdpateFilterForm(['options', { ...formData.options, group_choices: false, live_choices: e === 'true' ? true : false, choices: [] }])}>
         <RadioButton value="true" labelText={!!formData?.options?.group_choices ? "Group" : "Auto"}></RadioButton>
         <RadioButton value="false" labelText="Static"></RadioButton>
       </RadioButtonGroup>

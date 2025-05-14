@@ -92,8 +92,7 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
         if (!field.startsWith('ignore_')) {
           filterSearchParams.set(`${field}__${filter}`, value);
         }
-        urlFieldList[field] = { field, filter, value };
-        console.log(field);
+        urlFieldList[`${field}__${filter}`] = { field, filter, value };
         if (!field.startsWith('ignore_')) {
           actualSelectedCount++;
         }
