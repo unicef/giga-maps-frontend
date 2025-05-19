@@ -5,10 +5,11 @@ import { getBaseUrl } from "~/api/project-connect";
 import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
 
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, COVERAGE_URL, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
+import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, COVERAGE_URL, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
 import { $schoolClickedId, setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
+import { $countryCode } from "../country/country.model";
 
 interface CreateSourceType {
   source?: string;
@@ -68,12 +69,27 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
   map.on('click', id, mapDotsClickIdsAndHandler[source][id]);
 }
 
+const getZoomDivisible = (zoom: number, zoomDivisible?: [number, number][]): number => {
+  if (!zoomDivisible?.length) return zoom;
+  const divisibleValue = getInterpolatedValue(zoomDivisible, zoom);
+  return divisibleValue ? zoom / divisibleValue : zoom;
+}
+
+const getAnimateConfig = () => {
+  const countryAnimatedCircle = CountryPaintData[$countryCode.getState()?.toLowerCase() as keyof typeof CountryPaintData]?.animatedCircle;
+  return {
+    ...animateCircleConfig,
+    ...countryAnimatedCircle
+  }
+}
+
 const setCurrentRadius = () => {
   let lastZoom = 0;
   let radiusValue = [0, 0];
-  const { maxRadius, maxRadiusPortion, startRadiusPortion } = animateCircleConfig;
+  const { maxRadius, maxRadiusPortion, startRadiusPortion, zoomDivisible } = getAnimateConfig();
   return (currentZoom: number) => {
-    currentZoom = Math.min(currentZoom, maxRadius);
+    const value = getZoomDivisible(currentZoom, zoomDivisible);
+    currentZoom = Math.min(value, maxRadius);
     if (currentZoom === lastZoom) {
       return radiusValue;
     }
@@ -193,7 +209,7 @@ export const createSchoolSource = ({ map, source = DEFAULT_SOURCE, schoolData }:
 }
 
 export const getAllSourceLayers = (map: Map, sourceId = DEFAULT_SOURCE) => {
-  const layersFromSource = map.getStyle().layers.filter(layer => layer.source === sourceId);
+  const layersFromSource = map.getStyle().layers.filter((layer: any) => layer.source === sourceId);
   return layersFromSource
 }
 
@@ -247,11 +263,13 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
     ConnectivityStatusDistribution.unknown, connectivityStatusColors.unknown,
     connectivityStatusColors.unknown
   ];
+  const countryCode = $countryCode.getState();
+  const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
   const paint = {
     ...mapPaintData.connectivityStatus,
+    ...currentCountryPaintData?.connectivityStatus,
     "circle-color": circleColor
   } as unknown as CirclePaint;
-
   createCircleLayer(map, {
     id,
     type: "circle",
@@ -269,8 +287,11 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
 }
 
 const getConnectivityPaint = (colorsConnectivity: StylePaintData, isDynamicLayer: boolean) => {
+  const countryCode = $countryCode.getState();
+  const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
   return {
     ...mapPaintData.connectivity,
+    ...currentCountryPaintData?.connectivity,
     "circle-color": [
       ...mapPaintData.connectivity["circle-color"],
       [
@@ -412,4 +433,28 @@ export const matchAdminFilter = (code: string, state: string, color: string) => 
 
 export const findLayer = (features: MapboxGeoJSONFeature[], id: string) => {
   return features.find((feature => feature.layer.id === id))
+}
+
+export const getInterpolatedValue = (stops: [number, number][], zoom: number): number | undefined => {
+  const len = stops.length;
+
+  if (len === 0) throw new Error("Stops array cannot be empty");
+
+  // If zoom is before the first stop, return the first value
+  if (zoom <= stops[0][0]) return stops[0][1];
+
+  // If zoom is after the last stop, return the last value
+  if (zoom >= stops[len - 1][0]) return stops[len - 1][1];
+
+  // Find the zoom interval the current zoom falls into
+  for (let i = 0; i < len - 1; i++) {
+    const [z1, v1] = stops[i];
+    const [z2, v2] = stops[i + 1];
+
+    if (zoom === z1) return v1;
+    if (zoom > z1 && zoom < z2) {
+      const t = (zoom - z1) / (z2 - z1); // linear interpolation factor
+      return v1 + t * (v2 - v1);
+    }
+  }
 }

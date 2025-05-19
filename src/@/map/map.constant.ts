@@ -283,10 +283,57 @@ export const animateCircleConfig = {
   startRadiusPortion: 2,
   maxRadius: 12,
   opacityMax: 1,
-  opacityMin: 0.2
+  opacityMin: 0.2,
+  zoomDivisible: []
 }
 
 export const filterListMapping = [
   'filterList.*.description',
   'filterList.*.name',
 ]
+
+export const CountryPaintData = {
+  "lk": {
+    connectivityStatus: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.1,
+        2, 0.5,
+        4, 1,
+        6, 1.4,
+        8, 1.8,
+        10, 4
+      ]
+    },
+    coverage: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.2,
+        2, 0.85,
+        4, 1.275,
+        5, 1.66,
+        8, 4,
+        10, 5.32
+      ]
+    },
+    connectivity: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.3,
+        2, 0.85,
+        4, 1.275,
+        8, 4,
+        10, 5.32
+      ],
+    },
+    animatedCircle: {
+      zoomDivisible: [
+        [0, 2.9],
+        [2, 2.5],
+        [4, 2.2],
+        [6, 2],
+        [8, 1.2]
+      ] as [number, number][]
+    }
+  }
+} as const;
