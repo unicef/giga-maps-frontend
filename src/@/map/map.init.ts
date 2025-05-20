@@ -2,7 +2,7 @@ import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-gra
 import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryMapping, $countryId } from '~/@/country/country.model';
+import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryId, $countryMapping } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap, $schoolStatusSelectedLayer } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
