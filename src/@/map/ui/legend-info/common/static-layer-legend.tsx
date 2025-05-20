@@ -30,7 +30,6 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
   const countryConnectivityNames = useStore($countryConnectivityNames);
   const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId, coverageLayerId } = useStore($layerUtils);
-  const isCoverage = selectedLayerId === coverageLayerId;
   const coverageStats: any = useStore($coverageStats);
   const connectivityBenchMark = useStore($connectivityBenchMark)
   const countryObj = useStore($country);
@@ -95,8 +94,8 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
         const toolTiplabel = logicLabel;
         return (
           (coverageStats?.connected_schools &&
-            (isCoverage ? CoverageKeyMapping[key] : label) in coverageStats.connected_schools &&
-            coverageStats.connected_schools[isCoverage ? CoverageKeyMapping[key] : label] > 0)
+            (label) in coverageStats.connected_schools &&
+            coverageStats.connected_schools[label] > 0)
             ? <Div key={key}>
               <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
                 <button>
@@ -120,7 +119,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
                       </div>
                     </div>
                     {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label], lng)}</div>
+                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[label])}</div>
                     )}
                   </div>
                 </button>

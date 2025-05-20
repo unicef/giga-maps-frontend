@@ -3,7 +3,7 @@ import { combine, guard, merge, sample, createEffect } from 'effector';
 import { Map } from 'mapbox-gl';
 
 import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryMapping, $countryId } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap, $schoolStatusSelectedLayer } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -21,7 +21,7 @@ import {
 } from '@/map/effects';
 import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
-import { updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
+import { changeStaticLayerFx, updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
 import { addSchoolMarkers } from './effects/add-marker-fx';
 import { stylePaintData } from './map.constant';
 import {
@@ -35,11 +35,13 @@ import {
   $schoolMarkers,
   $selectedGigaLayers,
   $stylePaintData,
+  $zoomState,
   changeStyle,
   onCreateSchoolPopup,
   onLoadPage,
   onReloadedMap,
   onStyleLoaded,
+  onZoomStateChange,
   setCenter,
   zoomIn,
   zoomOut,
@@ -161,7 +163,8 @@ export const gigaLayerSource = combine({
   schoolStats: $schoolStatsMap,
   isMobile: $isMobile,
   schoolAdminId: $schoolAdminId,
-  countrySearch: $countrySearchString
+  countrySearch: $countrySearchString,
+  zoomState: $zoomState
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
@@ -173,10 +176,27 @@ const mapLayerFilter = ({ isCheckedLastDate, mapRoute }: ReturnType<typeof gigaL
   return true; //isCheckedLastDate || mapRoute.map;
 }
 
+const timePlayerActive = sample({
+  clock: $isTimeplayer,
+  filter: isActive => !isActive
+});
+
 const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 // change giga layer on selection of layers
+
 sample({
-  clock: merge([$selectedLayers, $map]),
+  clock: merge([$zoomState,
+    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
+  source: gigaLayerSource,
+  fn: combineGigaFn({}),
+  filter: ({ map }) => {
+    return !!map;
+  },
+  target: changeStaticLayerFx
+})
+
+sample({
+  clock: merge([$selectedLayerId]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: mapLayerFilter,
@@ -186,19 +206,16 @@ sample({
 sample({
   clock: merge([
     onReloadedMap,
-    $mapRouteVisible,
     $map,
+    $mapRouteVisible,
     countryReceived,
     $admin1Data,
     $schoolAdminId,
-    // schoolConnectivityLength,
     $schoolStatsMap,
     $connectivityBenchMark,
     $countrySearchString,
-    sample({
-      clock: $isTimeplayer,
-      filter: isActive => !isActive
-    })
+    timePlayerActive,
+    $zoomState
   ]),
   source: gigaLayerSource,
   filter: mapLayerFilter,
@@ -206,20 +223,13 @@ sample({
   target: changeLayersFx,
 })
 
-// sample({
-//   clock: merge([
-//     $selectedLayers, $map, $connectivityFilter, onReloadedMap,
-//     $mapRouteVisible,
-//     $map,
-//     countryReceived,
-//     $admin1Data,
-//     // schoolConnectivityLength,
-//     // $schoolStatsMap,
-//     $connectivityBenchMark,
-//     $countrySearchString,
-//   ]), fn: (value) => console.log(value)
-// })
-// clear map data on country change;
+// reset zoom state when map is loaded and map page is visible
+sample({
+  clock: $map,
+  source: mapOverview.visible,
+  fn: () => 'end',
+  target: onZoomStateChange
+})
 
 sample({
   clock: $connectivityFilter,
