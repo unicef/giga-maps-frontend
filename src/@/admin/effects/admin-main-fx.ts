@@ -10,8 +10,10 @@ export const getAppConfigValuesFx = createEffect(() => {
   }) as Promise<ApiConfig>
 })
 
-export const getInvalidateCacheFx = createEffect(() => {
+export const getInvalidateCacheFx = createEffect((data: object) => {
   return createRequestAuthFx({
-    url: `accounts/invalidate-cache/`
+    url: `accounts/invalidate-cache-patterns/`,
+    method: 'DELETE',
+    data
   }) as Promise<InvalidateCache>
 })

@@ -1,4 +1,5 @@
 export const defaultSchoolForm = {
+  id: 0,
   external_id: "",
   giga_id_school: "",
   name: "",
