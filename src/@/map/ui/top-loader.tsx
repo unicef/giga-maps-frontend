@@ -5,6 +5,7 @@ import { Map, MapEventType } from 'mapbox-gl';
 import { DEFAULT_SOURCE } from '../map.constant';
 import { useStore } from 'effector-react';
 import ProgressBar from './progress-bar';
+import { $selectedLayerId } from '~/@/sidebar/sidebar.model';
 
 
 const setMapLoadingState = createEvent<boolean>();
@@ -20,8 +21,9 @@ let timeout: ReturnType<typeof setTimeout>;
 let mapDataTilesOnLoad = (e: MapEventType) => { }
 
 sample({
-  clock: merge([$country, $admin1Code, $map]),
-  source: combine({ map: $map, mapPercent: $mapPercent, dataChecking: $dataChecking }),
+  clock: merge([$map, $loadingStatus]),
+  source: combine({ map: $map, mapPercent: $mapPercent, dataChecking: $dataChecking, loadingStatus: $loadingStatus }),
+  filter: (state) => state.loadingStatus === 'active',
   target: createEffect(({ map, dataChecking }: { map: Map; dataChecking: boolean }) => {
     if (!map || dataChecking) return;
     setDataChecking(true);
@@ -32,6 +34,7 @@ sample({
       }
       timeout = setTimeout(() => {
         if (map.getSource(DEFAULT_SOURCE) && map.isSourceLoaded(DEFAULT_SOURCE) && map.areTilesLoaded()) {
+          console.log('called...')
           setMapLoadingState(false);
           setMapPercentage(100);
           setDataChecking(false)
@@ -48,7 +51,7 @@ sample({
 })
 
 
-const resetState = [$countryCode, $admin1Code]
+const resetState = [$countryCode, $admin1Code, $selectedLayerId]
 $isMapLoading.reset(resetState);
 $loadingStatus.reset(resetState);
 $mapPercent.reset(resetState);
