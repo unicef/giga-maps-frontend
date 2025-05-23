@@ -31,7 +31,7 @@ sample({
         setMapPercentage($mapPercent.getState() + 4);
       }
       timeout = setTimeout(() => {
-        if (map.isSourceLoaded(DEFAULT_SOURCE) && map.areTilesLoaded()) {
+        if (map.getSource(DEFAULT_SOURCE) && map.isSourceLoaded(DEFAULT_SOURCE) && map.areTilesLoaded()) {
           setMapLoadingState(false);
           setMapPercentage(100);
           setDataChecking(false)

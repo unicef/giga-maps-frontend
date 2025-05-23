@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 // Animation for when the progress bar completes
 const progressAnimation = keyframes`
@@ -39,7 +39,7 @@ export const ProgressBarStyled = styled.div<{ progress: number; status: 'active'
   position: relative;
   box-shadow: 0 0 10px rgba(15, 98, 254, 0.5);
   
-  ${({ status }) => status === 'finished' && `
+  ${({ status }) => status === 'finished' && css`
     animation: ${progressAnimation} 0.5s ease-out forwards;
   `}
   
