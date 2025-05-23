@@ -27,7 +27,6 @@ export const initMapFx = createEffect(
       if (e.originalEvent) return;
       const date = new Date();
       clearTimeout(timeout);
-      console.log('zoomstart', date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
       onZoomStateChange('start');
     });
 
@@ -39,7 +38,6 @@ export const initMapFx = createEffect(
     map.on('zoomend', (e) => {
       if (e.originalEvent) return;
       const date = new Date();
-      console.log('zoomend', date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
       timeout = setTimeout(() => {
         onZoomStateChange('end');
       }, 10);
