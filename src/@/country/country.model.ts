@@ -85,7 +85,8 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
   const filterSearchParams = new URLSearchParams();
   let actualSelectedCount = 0;
   const urlFieldList: Record<string, { field: string; filter: string; value: string }> = {};
-  for (const [key, value] of searchParams.entries()) {
+  const searchEntires = searchParams.entries();
+  for (const [key, value] of searchEntires) {
     try {
       const [start, field, filter] = key.split('__');
       if (start === 'filter' && field && filter) {
@@ -100,6 +101,7 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
     } catch (e) { }
   }
   return {
+    searchParamsURL: searchParams,
     searchParams: filterSearchParams.toString(),
     urlFieldList,
     selectedCount: actualSelectedCount
