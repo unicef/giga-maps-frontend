@@ -103,7 +103,7 @@ p{
 
 .cds--tooltip-content{
   width: 10rem;
-  max-height: 10rem;
+  max-height: 20rem;
 }
 `
 export const MappedInfoWrapper = styled.div`

@@ -60,9 +60,12 @@ const ListSchoolSummary = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchApiCall, setSearchApiCall] = useState(false)
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
+  const currentUrl = window.location.href;
+  const url = new URL(currentUrl)
+  const schoolId = url.searchParams.get('schoolId')
 
   const getSchoolSummaryList = () => {
-    void getSchoolSummaryListFx({ page, pageSize, search: searchValue, filter: countryFilterValues.join(',') })
+    void getSchoolSummaryListFx({ page, pageSize, search: searchValue, filter: countryFilterValues.join(','), schoolId })
   }
 
   const deleteSchool = async (deleteIds: number[]) => {
@@ -88,7 +91,7 @@ const ListSchoolSummary = () => {
 
   useEffect(() => {
     getSchoolSummaryList();
-  }, [page, pageSize, countryFilterValues, searchApiCall])
+  }, [page, pageSize, countryFilterValues, searchApiCall, searchValue, schoolId])
 
   const serachFn = () => {
     setPageAndSize({ page: 1, pageSize });
@@ -100,7 +103,7 @@ const ListSchoolSummary = () => {
   }
 
   const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === "Enter"){
+    if (event.key === "Enter") {
       event.preventDefault()
       serachFn()
     }

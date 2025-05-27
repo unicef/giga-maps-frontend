@@ -6,6 +6,7 @@ import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, DistictWrapper, Dot, 
 import { mapCountry } from '~/core/routes';
 import { Link } from '~/lib/router';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const expandDistrict = ({ districtCode, isExpanded }: { isExpanded: boolean; districtCode: string }) => {
   setSearchExpandLevel1(isExpanded ? "" : districtCode);
@@ -16,6 +17,7 @@ export const expandDistrict2 = ({ districtCode, isExpanded }: { isExpanded: bool
 }
 
 export const SearchDistrict = ({ districtData, countryId, code: countryCode, prevAdmin1 }: { code: string; districtData: DistrictWithSchoolCount, countryId: string; prevAdmin1?: string; }) => {
+  const { t } = useTranslation();
   const selectedAdmin1 = useStore($searchAdminLevel1);
   const selectedAdmin2 = useStore($searchAdminLevel2);
   const searchSchoolAdmin1 = useStore($searchSchoolAdmin1)
@@ -42,7 +44,7 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
           {showDot && <Dot />}
         </LeftItem>
         {showSchoolButton && <RightItem onClick={() => expandDistrict2({ districtCode: adminId ?? name, isExpanded: isExpanded2 })}>
-          <LinkItem $highlight={isExpanded2}>{schoolCount} Schools</LinkItem>
+          <LinkItem $highlight={isExpanded2}>{schoolCount} {t('schools')}</LinkItem>
           <ChevronRightIcon $highlight={isExpanded2} $secondary />
         </RightItem>}
         {showAdmin2Button &&

@@ -21,7 +21,7 @@ export const dataSourceFields = [
     isEditable: true
   },
   {
-    name: 'name',
+    name: 'Name',
     keyName: 'school_name',
     isEditable: true
   },

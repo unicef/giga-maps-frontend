@@ -10,7 +10,7 @@ let isCacheExpire = true;
 if (cachedCountryISO) {
   const cachedDate = Date.parse(cacheDate);
   if (!isNaN(cachedDate)) {
-    isCacheExpire = cachedDate > Date.now() - 48 * 60 * 60 * 1000;
+    isCacheExpire = cachedDate < Date.now() - 48 * 60 * 60 * 1000;
   }
 }
 export const getUserCurrentCountryISOFx = createEffect(async () => {
@@ -28,7 +28,7 @@ export const getUserCurrentCountryISOFx = createEffect(async () => {
       selectedWorldview = "CN";
     }
     setLocalStorage("countryISO", selectedWorldview);
-    setLocalStorage('countryISO_date', +new Date())
+    setLocalStorage('countryISO_date', new Date().toISOString());
     return selectedWorldview;
   } catch (e) {
     console.error(e);

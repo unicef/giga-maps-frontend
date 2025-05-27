@@ -117,8 +117,7 @@ export const SkipTourButton = styled(Button)`
 `
 
 export const StartTourButton = styled(Button)`
-  width: 68px !important;
-  max-width: 68px !important;
+  max-width: 110px !important;
  
 .cds--btn__icon {
   top: 0.4rem;

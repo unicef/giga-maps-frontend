@@ -65,10 +65,10 @@ const ToolTipCustom = styled(Toggletip)`
     margin-left: 1rem;
   }
   .cds--popover-content {
-    max-inline-size: 48rem;
+    max-inline-size: 38rem;
   }
   .cds--toggletip-content {
-    max-inline-size: 48rem;
+    max-inline-size: 38rem;
   }
 `;
 
@@ -166,7 +166,7 @@ export default function DataSourceActionBar({ selectedRowsData, searchValue, set
           Updates available
         </StatusWrapperDataSource>
       }
-      <ToolTipCustom>
+      <ToolTipCustom align='bottom-left'>
         <ToggletipButton label="Additional information">
           <Information />
         </ToggletipButton>

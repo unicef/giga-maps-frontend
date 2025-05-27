@@ -1,26 +1,22 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { createEvent } from "effector";
 
-import { $admin1Code } from "~/@/country/country.model";
 import { $loggedInUser } from "~/core/auth/models";
 import { currentLayerMockWithDraftStaus, currentLayerMockWithReadyToPublishStaus, dataLayerlistMock, singleLayerMock } from "~/tests/data/admin-data-layer";
 import { loggedInUser } from "~/tests/data/admin-main-data";
 import { testWrapper } from "~/tests/jest-wrapper";
 
 import { getDataPreviewFx } from "../../effects/giga-layer-fx";
-import { $currentGigaLayerItem, $dataLayerListResponce, $previewData } from "../../models/giga-layer.model";
+import { $currentGigaLayerItem, $dataLayerListResponce, $previewData, resetPreviewData } from "../../models/giga-layer.model";
 import DataLayerMainView from "../giga-layer";
 import AddEditGigaLayer from "../giga-layer/add-edit-giga-layer.view";
-import GigaBenchmarkForm from "../giga-layer/common/giga-layer-form/giga-benchmark-form.view";
 import ListGigaLayer from "../giga-layer/list-giga-layer.view";
 import PreviewGigaLayer from "../giga-layer/preview-giga-layer";
 import AdminViewLayer from "../giga-layer/view-giga-layer.view";
 import { addGigaLayer, adminGigaLayer, editGigaLayer, viewGigaLayer } from "~/core/routes";
 import { fetchMockResponse } from "~/tests/fetchMock";
 import { getAppConfigValues } from "../../models/admin-model";
-import { DataSourceType } from "../../constants/giga-layer.constant";
 import { getCountryList } from "~/@/api-docs/models/explore-api.model";
-import userEvent from "@testing-library/user-event";
 
 const setDataLayerListResponce = createEvent();
 $dataLayerListResponce.on(setDataLayerListResponce, (_, payload) => payload)
@@ -38,7 +34,7 @@ describe('DataLayerMainView', () => {
 
   beforeEach(() => {
     getAppConfigValues()
-    getCountryList();
+    getCountryList(false);
     fetchMock.mockResponse(fetchMockResponse)
   })
   test('render DataLayerMainView and take snapshot', () => {
@@ -85,6 +81,7 @@ describe('DataLayerMainView', () => {
   })
 
   test("render with getDataPreviewFx is in pending state", () => {
+    resetPreviewData();
     const spy = jest.spyOn(getDataPreviewFx.pending, 'getState');
     spy.mockReturnValue(true);
     void waitFor(() => {

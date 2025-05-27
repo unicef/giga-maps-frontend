@@ -8,6 +8,7 @@ import { $searchResultCollection, onSearchItemClick } from "../container/search-
 import { SearchType } from "../container/search-result.type";
 import SearchResultNotFoundView from "../search-country-list/search-result-not-found-view";
 import { LeftItem, Loading, SearchItem } from "../styles/search-result-style";
+import { useTranslation } from "react-i18next";
 
 
 function HighlightedText({ query, children }: PropsWithChildren<{ query: string }>) {
@@ -31,7 +32,7 @@ export default function SearchResultList() {
   const isDone = useStore(getSearchResultsFx.inFlight);
   const isListEmpty = !searchResult?.length && !isDone;
   const itemLength = searchResult?.length - 1;
-
+  const { t } = useTranslation();
   return (<>
     {isLoading && <Loading description="Loading..." />}
     {isListEmpty && <SearchResultNotFoundView />}
@@ -42,15 +43,15 @@ export default function SearchResultList() {
           setSearchInMobile(false)
         }} key={`${item?.id}`} $border={itemLength !== index}>
           <LeftItem $fullWidth>
-            <HighlightedText query={searchInput}>{item?.name}</HighlightedText>
-            {item.type === SEARCH_DATA_TYPE.COUNTRY && <span className="type-name">Country</span>}
+            <HighlightedText query={searchInput}>{t(item?.name)}</HighlightedText>
+            {item.type === SEARCH_DATA_TYPE.COUNTRY && <span className="type-name">{t('country')}</span>}
             {item.type === SEARCH_DATA_TYPE.SCHOOL && <span className="type-name">
-              School <span className="light">{' '}in{' '}</span>
-              <span className="highlight">{item?.adminName}{' '}/{' '}{item.countryName}</span>
+              {t('school')} <span className="light">{' '}{t('in')}{' '}</span>
+              <span className="highlight">{item?.adminName}{' '}/{' '}{t(item.countryName)}</span>
             </span>}
             {item.type === SEARCH_DATA_TYPE.ADMIN1 && <span className="type-name">
-              District <span className="light">{' '}in{' '}</span>
-              <span className="highlight">{item.countryName}</span>
+              {t('district')} <span className="light">{' '}{t('in')}{' '}</span>
+              <span className="highlight">{t(item.countryName)}</span>
             </span>}
           </LeftItem>
         </SearchItem>)

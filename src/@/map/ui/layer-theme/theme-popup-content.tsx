@@ -10,9 +10,11 @@ import { styles } from '../../map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $style, changeStyle, onEnableAdminBoundaries, onEnableTitlesAndLabels } from '../../map.model';
 import { Style } from '../../map.types';
 import { CheckboxGroupWrapper, CustomCheckbox, CustomRadioButton, RadioButtonGroupWrapper, ThemeActionButtonWrapper, ThemeHeaderWrapper } from './theme-button.style';
+import { useTranslation } from "react-i18next";
 
 const mapThemeList = styles.filter((style: string) => !gigaThemeList.includes(style as ThemeType))
 const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
+  const { t } = useTranslation();
   const style = useStore($style);
   const theme = useStore($theme);
   const isAdminBoundaries = useStore($isAdminBoundaries);
@@ -40,7 +42,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
     <PopoverContent className="theme-layer-popover-content">
       <ThemeHeaderWrapper>
         <h3>
-          Themes & layers
+          {t('themes-layers')}
         </h3>
       </ThemeHeaderWrapper>
       <Form aria-label="layer-theme-form">
@@ -49,11 +51,11 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
             setCurrentStyle(value as Style);
             setGigaTheme(value as ThemeType)
           }}
-          legendText="Themes"
+          legendText={t("themes")}
           name="theme-radio-button-group-giga"
           defaultSelected={gigaTheme}>
           {gigaThemeList.map((item, index) => (
-            <CustomRadioButton key={`giga-${item}`} labelText={<><span className="capitalize">{item}</span> mode</>} value={item} id={`giga_${item}_${index}`} />
+            <CustomRadioButton key={`giga-${item}`} labelText={t(item + '-mode')} value={item} id={`giga_${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
 
@@ -64,24 +66,24 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
             } else {
               setCurrentStyle(value as Style)
             }
-          }} legendText="Map types" name="theme-radio-button-group" defaultSelected={defaultMapStyle}>
-          <CustomRadioButton labelText={`Default view`} value={'default'} id={`default-view-radio`} />
+          }} legendText={t("map-types")} name="theme-radio-button-group" defaultSelected={defaultMapStyle}>
+          <CustomRadioButton labelText={t('default-view')} value={'default'} id={`default-view-radio`} />
           {mapThemeList.map((item, index) => (
-            <CustomRadioButton key={item} labelText={<><span className="capitalize">{item}</span> view</>} value={item} id={`${item}_${index}`} />
+            <CustomRadioButton key={item} labelText={<>{t(item + '-view')}</>} value={item} id={`${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
-        <CheckboxGroupWrapper legendText="Layers">
-          <CustomCheckbox checked={currentAdminBoundaries} onChange={() => setCurrentAdminBoundaries(prev => !prev)} labelText={`Administrative boundaries`} id="admin-boundary" />
-          <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTitlesAndLabels(prev => !prev)} labelText={`Titles and Labels`} id="titles-label" />
+        <CheckboxGroupWrapper legendText={t("layers")}>
+          <CustomCheckbox checked={currentAdminBoundaries} onChange={() => setCurrentAdminBoundaries(prev => !prev)} labelText={t('administrative-boundaries')} id="admin-boundary" />
+          <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTitlesAndLabels(prev => !prev)} labelText={t('titles-and-labels')} id="titles-label" />
         </CheckboxGroupWrapper>
         <ThemeActionButtonWrapper>
           <Button type="reset" kind="secondary" onClick={() => setOpen(false)}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button type="submit" onClick={(e) => {
             void onApply(e)
           }}>
-            Apply
+            {t('apply')}
           </Button>
         </ThemeActionButtonWrapper>
       </Form>

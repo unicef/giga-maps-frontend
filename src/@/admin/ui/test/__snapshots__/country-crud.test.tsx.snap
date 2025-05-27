@@ -21,16 +21,68 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
+    <span
+      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+    >
+      <div
+        class="cds--tooltip-trigger__wrapper"
+      >
+        <button
+          aria-labelledby="tooltip-:r0:"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="cds--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
+            />
+          </svg>
+        </button>
+      </div>
+      <span
+        aria-hidden="true"
+        class="cds--popover"
+        id="tooltip-:r0:"
+        role="tooltip"
+      >
+        <span
+          class="cds--popover-content cds--tooltip-content"
+        >
+          Go Back
+        </span>
+        <span
+          class="cds--popover-caret"
+        />
+      </span>
+    </span>
     <div
       class="c1"
     >
@@ -80,11 +132,11 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="ccs-:r0:-tabpanel-0"
+          aria-controls="ccs-:r2:-tabpanel-0"
           aria-selected="true"
           class="cds--tabs__nav-item cds--tabs__nav-link cds--tabs__nav-item--selected"
           data-testid="admin-Country-tab"
-          id="ccs-:r0:-tab-0"
+          id="ccs-:r2:-tab-0"
           role="tab"
           tabindex="0"
           type="button"
@@ -128,11 +180,11 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
           </div>
         </button>
         <button
-          aria-controls="ccs-:r0:-tabpanel-1"
+          aria-controls="ccs-:r2:-tabpanel-1"
           aria-selected="false"
           class="cds--tabs__nav-item cds--tabs__nav-link"
           data-testid="admin-Country Summary-tab"
-          id="ccs-:r0:-tab-1"
+          id="ccs-:r2:-tab-1"
           role="tab"
           tabindex="-1"
           type="button"
@@ -176,11 +228,11 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
           </div>
         </button>
         <button
-          aria-controls="ccs-:r0:-tabpanel-2"
+          aria-controls="ccs-:r2:-tabpanel-2"
           aria-selected="false"
           class="cds--tabs__nav-item cds--tabs__nav-link"
           data-testid="admin-Country Daily Connectivity Summary-tab"
-          id="ccs-:r0:-tab-2"
+          id="ccs-:r2:-tab-2"
           role="tab"
           tabindex="-1"
           type="button"
@@ -320,7 +372,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:r2:"
+                aria-labelledby="tooltip-:r4:"
                 class="cds--btn cds--btn--primary"
                 data-testid="verify-selected-country"
                 type="button"
@@ -351,7 +403,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:r2:"
+              id="tooltip-:r4:"
               role="tooltip"
             >
               <span
@@ -675,8 +727,8 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:rg:"
-        id="cds-pagination-select-:rg:-count-label"
+        for="cds-pagination-select-:ri:"
+        id="cds-pagination-select-:ri:-count-label"
       >
         Items per page
       </label>
@@ -694,7 +746,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:rg:"
+                id="cds-pagination-select-:ri:"
                 title=""
               >
                 <option
@@ -764,7 +816,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:rg:-right"
+            for="cds-pagination-select-:ri:-right"
           >
             Page number, of 1 pages
           </label>
@@ -776,7 +828,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:rg:-right"
+                id="cds-pagination-select-:ri:-right"
                 title=""
               >
                 <option
@@ -820,7 +872,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:rh:"
+              aria-labelledby="tooltip-:rj:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -844,7 +896,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:rh:"
+            id="tooltip-:rj:"
             role="tooltip"
           >
             <span
@@ -864,7 +916,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:rj:"
+              aria-labelledby="tooltip-:rl:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -888,7 +940,7 @@ exports[`Country Crud Tab render MainCountryView 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:rj:"
+            id="tooltip-:rl:"
             role="tooltip"
           >
             <span

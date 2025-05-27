@@ -15,6 +15,8 @@ import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
 import { useEffect } from 'react';
 import { changeCountryCode } from '~/@/country/country.model';
 import { TimeplayerContainer } from './timeplayer/timeplayer-container';
+import '~/core/i18n/instance';
+import TopLoader from './top-loader';
 
 const PopupContainer = styled.div`
   display: none;
@@ -41,6 +43,7 @@ const MapPage = () => {
           <Popup />
         </PopupContainer>
       </Main>
+      <TopLoader />
       <Footer />
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}

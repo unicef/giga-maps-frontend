@@ -7,10 +7,13 @@ import { formatNumber } from '~/lib/utils';
 
 import { CustomTooltip } from '../../landing-page-side-bar/styles/landing-page-style';
 import { LabelProgress, LineBar, ProgressBarWrapper, ToggleWrapper } from './progress-bar.style';
+import { useStore } from 'effector-react';
+import { $lng } from '~/core/i18n/store';
 
 const ProgressBar = ({ value = 0, maxValue = 0, label = "", colorType = "", toggleProps, backColor = "", isLoading = false }: { value?: number, maxValue?: number, label?: string, toggleProps?: ToggleProps; colorType?: string; backColor?: string; isLoading?: boolean }) => {
   const progress = (value / maxValue) * 100; // Calculate the progress percentage
   const togglePresent = !!toggleProps;
+  const lng = useStore($lng);
   return (
     <ProgressBarWrapper $height={togglePresent ? 1.5 : 1.2}>
       {
@@ -42,7 +45,7 @@ const ProgressBar = ({ value = 0, maxValue = 0, label = "", colorType = "", togg
         </>
       }
       <p className="progress-info">
-        {isLoading ? <LoadingText $blockSize='0.7' $marginEnd='0' /> : formatNumber(value)}
+        {isLoading ? <LoadingText $blockSize='0.7' $marginEnd='0' /> : formatNumber(value, lng)}
       </p>
     </ProgressBarWrapper>
   );

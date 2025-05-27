@@ -1,5 +1,5 @@
 import { Add } from '@carbon/icons-react';
-import { Button, Table, TableHeader, TableRow, ToggletipButton } from '@carbon/react'
+import { Button, Table, TableHeader, TableRow, TableToolbar, ToggletipButton } from '@carbon/react'
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react'
 
@@ -13,17 +13,19 @@ import { $dataLayerListResponce, $dataListLayerCount, onGetDataLayerList } from 
 import PageTitleComponent from '../common-components/page-title-component'
 import Pagination from '../common-components/Pagination';
 import { AdminTableScroll, CountryListToggletip, CountryListToggletipContent, DataLayerActiveCountries, SearchContainer, TableDataBody, TableDataCell, TableDataHead, TableWrapper } from '../styles/admin-styles'
+import SearchToolbar from '../common-components/search-toolbar';
 
 const ListGigaLayer = () => {
   const dataLayerList = useStore($dataLayerListResponce)
   const count = useStore($dataListLayerCount);
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
+  const [searchValue, setSearchValue] = useState('')
   const countryList = useStore($countryList)
   const userPermission = useStore($userPermissions);
   const isEditor = userPermission.CAN_ADD_DATA_LAYER;
   useEffect(() => {
-    onGetDataLayerList({ page, pageSize })
-  }, [page, pageSize])
+    onGetDataLayerList({ page, pageSize, search: searchValue })
+  }, [page, pageSize, searchValue])
 
   const getCountryName = (activeCountriesIds: number[]) => {
     const activeCountries = countryList.filter(item => activeCountriesIds.includes(item.id));
@@ -36,17 +38,20 @@ const ListGigaLayer = () => {
         title={"Giga layer"}
         subTitle={"List of giga layer"}
         recentlyView={false} />
-      <SearchContainer>
-        <Link to={addGigaLayer}>
-          <Button
-            renderIcon={Add}
-            onClick={() => { }}
-            disabled={!isEditor}
-          >
-            Add new layer
-          </Button>
-        </Link>
-      </SearchContainer>
+      <TableToolbar>
+        <SearchContainer>
+          <SearchToolbar placeholder="Search by layer name, code" onSearchChange={setSearchValue} />
+          <Link to={addGigaLayer}>
+            <Button
+              renderIcon={Add}
+              onClick={() => { }}
+              disabled={!isEditor}
+            >
+              Add new layer
+            </Button>
+          </Link>
+        </SearchContainer>
+      </TableToolbar>
       <AdminTableScroll $contentHeight="13.2rem">
         <TableWrapper>
           <Table aria-label="data-layer-list-data-table" >
@@ -80,57 +85,60 @@ const ListGigaLayer = () => {
             </TableDataHead>
             <TableDataBody>
               {
-                dataLayerList?.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableDataCell>
-                      <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
-                    </TableDataCell>
-                    <TableDataCell>
-                      <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
-                    </TableDataCell>
-                    <TableDataCell>
-                      {item?.data_sources_list.map((sourceApiObj, index, array) => (
-                        <span key={sourceApiObj.id}>{sourceApiObj.name}
-                          {index !== array.length - 1 && ','}
-                        </span>
-                      ))}
-                    </TableDataCell>
-                    <TableDataCell>
-                      <span>{Object.values(item?.data_source_column ?? {})[0]?.alias}</span>
-                    </TableDataCell>
-                    <TableDataCell>
+                dataLayerList?.map((item) => {
+                  if (!item.created_by && item.type === 'LIVE') return null;
+                  return (
+                    <TableRow key={item.id}>
+                      <TableDataCell>
+                        <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
+                      </TableDataCell>
+                      <TableDataCell>
+                        <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
+                      </TableDataCell>
+                      <TableDataCell>
+                        {item?.data_sources_list.map((sourceApiObj, index, array) => (
+                          <span key={sourceApiObj.id}>{sourceApiObj.name}
+                            {index !== array.length - 1 && ','}
+                          </span>
+                        ))}
+                      </TableDataCell>
+                      <TableDataCell>
+                        <span>{Object.values(item?.data_source_column ?? {})[0]?.alias}</span>
+                      </TableDataCell>
+                      <TableDataCell>
 
-                      <span>{item?.data_sources_list[0].version}</span>
+                        <span>{item?.data_sources_list[0].version}</span>
 
-                    </TableDataCell>
-                    <TableDataCell>
-                      {
-                        <StatusWrapper color={DataSourceStatusChoices[item?.status.toUpperCase()]}>
-                          {DataSourceStatusNames[item?.status]}
-                        </StatusWrapper>
-                      }
-                    </TableDataCell>
-                    <TableDataCell>
-                      {item?.applicable_countries.length > 0 ? item?.applicable_countries.length : countryList?.length}
-                      <CountryListToggletip
-                        align="bottom">
-                        <ToggletipButton>
-                          <DataLayerActiveCountries>
-                            View list
-                          </DataLayerActiveCountries>
-                        </ToggletipButton>
-                        <CountryListToggletipContent>
-                          <p className="list-content">
-                            {getCountryName(item.applicable_countries)?.map((country) => country?.name).join(', ') || 'All countries'}
-                          </p>
-                        </CountryListToggletipContent>
-                      </CountryListToggletip>
-                    </TableDataCell>
-                    <TableDataCell>
-                      {item?.published_by?.user_name ?? "--"}
-                    </TableDataCell>
-                  </TableRow>
-                ))
+                      </TableDataCell>
+                      <TableDataCell>
+                        {
+                          <StatusWrapper color={DataSourceStatusChoices[item?.status.toUpperCase()]}>
+                            {DataSourceStatusNames[item?.status]}
+                          </StatusWrapper>
+                        }
+                      </TableDataCell>
+                      <TableDataCell>
+                        {item?.applicable_countries.length > 0 ? item?.applicable_countries.length : countryList?.length}
+                        <CountryListToggletip
+                          align="bottom">
+                          <ToggletipButton>
+                            <DataLayerActiveCountries>
+                              View list
+                            </DataLayerActiveCountries>
+                          </ToggletipButton>
+                          <CountryListToggletipContent>
+                            <p className="list-content">
+                              {getCountryName(item.applicable_countries)?.map((country) => country?.name).join(', ') || 'All countries'}
+                            </p>
+                          </CountryListToggletipContent>
+                        </CountryListToggletip>
+                      </TableDataCell>
+                      <TableDataCell>
+                        {item?.published_by?.user_name ?? "--"}
+                      </TableDataCell>
+                    </TableRow>
+                  )
+                })
               }
             </TableDataBody>
           </Table >

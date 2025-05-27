@@ -13,8 +13,10 @@ import { $mapRoutes, router } from '~/core/routes';
 import { $country, $countrySearchParams, $countrySearchString } from '~/@/country/country.model';
 import { $advanceFilterList } from '../../map.model';
 import { $isMobile } from '~/core/media-query';
+import { useTranslation } from 'react-i18next';
 
 const FilterButton = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isOpen = useStore($showAdvancedFilter)
   const country = useStore($country);
@@ -46,7 +48,7 @@ const FilterButton = () => {
         <FilterTag onClick={() => {
           onShowAdvancedFilter(true);
         }} onClose={() => router.navigate(`${window.location.pathname}`)} filter type='red'>
-          {selectedCount} filter applied
+          {selectedCount} {t('filter-applied')}
         </FilterTag>
       </FilterTagContainer>}
       <FilterWrapper className="filter-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
@@ -61,7 +63,7 @@ const FilterButton = () => {
               tooltipText='Filters'
             >
               <Tuning fill={theme.white} />
-              <span>Filters</span>
+              <span>{t('filters')}</span>
             </Button>
             {!!countrySearchString && <Tag />}
           </FilterButtonWrapper>

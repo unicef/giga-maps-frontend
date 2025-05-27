@@ -29,7 +29,7 @@ export const getSchoolListByCountryFx = createEffect(({ countryId, query }: { co
 
 export const downloadSchoolDataFx = createEffect(({ pageSize, pageNo, countryId, schoolIds, apiKey }: ReturnType<typeof $downloadFormData.getState>) => {
   return createRequestAuthFx({
-    url: `locations/schools-download/?page=${pageNo}&page_size=${pageSize}&ordering=name&expand=country,last_weekly_status,admin1,admin2${countryId ? "&country_id=" + countryId : ""}${schoolIds && schoolIds?.length > 0 ? "&id__in=" + schoolIds?.join(',') : ""}`,
+    url: `locations/schools-download/?page=${pageNo}&page_size=${pageSize}&ordering=name_lower&expand=country,last_weekly_status,admin1,admin2${countryId ? "&country_id=" + countryId : ""}${schoolIds && schoolIds?.length > 0 ? "&id__in=" + schoolIds?.join(',') : ""}`,
     isDownloadable: true,
     headers: {
       'Api-Key': apiKey,

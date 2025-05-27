@@ -1,10 +1,10 @@
-import { $countryCode } from '~/@/country/country.model';
+import { $countryCode, $countrySearchParams } from '~/@/country/country.model';
 import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl";
 
 import { mapCountry } from "~/core/routes";
 
-import { Colors, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
-import { checkSourceAvailable, filterCountry, findLayer, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, showLayer, wvFilter } from "../map/utils";
+import { Colors, CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
+import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
@@ -15,7 +15,8 @@ export const getAdminCountryLayerLine = (level: CountryAdminLevel) => `${AdminLa
 
 export const getCurrentCountrySearchPath = (countryCode: string) => {
   const currentCountryCode = $countryCode.getState();
-  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase()) {
+  const { selectedCount } = $countrySearchParams.getState();
+  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase() && selectedCount >= 1) {
     return window.location.search;
   }
 }
@@ -91,23 +92,45 @@ export const createLineLayerForCountry = ({ map, paintData, level, selectedLevel
   const { isLessThan } = getCountryLevels(level, selectedLevel);
   const layerId = getAdminCountryLayerLine(level);
   const isLevel0 = level === CountryAdminLevel.level0;
+  const liveOFilter = isLevel0 ? notHasDispute(worldView) : wvFilter(worldView);
   if (!map.getLayer(layerId) && !isLessThan) {
     map.addLayer({
       id: getAdminCountryLayerLine(level),
       type: 'line',
       source: getAdminCountrySource(level),
       "source-layer": `boundaries_admin_${level}`,
-      filter: countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : wvFilter(worldView),
+      filter: countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : liveOFilter,
       paint: {
         'line-color': getCountryLine(paintData),
         'line-width': getCountryLineWidth(),
       },
-    });
+    }, 'admin-0-boundary-disputed');
+    if (isLevel0) {
+      map.setPaintProperty('admin-0-boundary-disputed', 'line-opacity', [
+        'case',
+        [
+          'all',
+          ["==", ["get", "dispute"], "true"],
+          wvFilter(worldView),
+        ],
+        0, 1
+      ]);
+
+      map.setPaintProperty('admin-0-boundary-disputed', 'line-opacity', [
+        'case',
+        [
+          'all',
+          ["!", ["has", "dispute"]],
+          wvFilter(worldView),
+        ],
+        1, 0
+      ]);
+    }
   } else if (isLessThan) {
     hideLayer(map, layerId);
   } else {
     showLayer(map, layerId)
-    map.setFilter(layerId, countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : wvFilter(worldView));
+    map.setFilter(layerId, countryCode ? filterCountry(countryCode, isLevel0 ? "!=" : "==", worldView) : liveOFilter);
   }
 }
 
@@ -138,7 +161,7 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
   const layerName = getAdminCountryLayerFill(level);
   map.on('click', (event: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(event.point, {
-      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler)],
+      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length || features.length && features[0].layer.id !== layerName && CountryAdminLevel.level0 !== level) return;
     const feature = findLayer(features, layerName);

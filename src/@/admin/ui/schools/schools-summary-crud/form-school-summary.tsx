@@ -52,11 +52,49 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 labelText=""
                 id="connectivity-speed"
                 name='connectivity_speed'
-                value={formDataSchoolSummary?.connectivity_speed}
+                value={formDataSchoolSummary?.connectivity_speed || ''}
                 onChange={(e) =>
                   onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])
                 }
                 placeholder='Enter connectivity speed'
+              />
+            </InputBoxWrapper>
+          </InputContainer>
+          <InputContainer>
+            <InputLabel>
+              Connectivity speed benchmark
+            </InputLabel>
+            <InputBoxWrapper>
+              <TextInput
+                type="number"
+                min={0}
+                labelText=""
+                id="download-speed-benchmark"
+                name='download_speed_benchmark'
+                placeholder='Enter connectivity speed benchmark'
+                value={formDataSchoolSummary?.download_speed_benchmark || ''}
+                onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
+              />
+            </InputBoxWrapper>
+          </InputContainer>
+        </RowContainer>
+        <RowContainer>
+          <InputContainer>
+            <InputLabel>
+              Connectivity upload speed
+            </InputLabel>
+            <InputBoxWrapper>
+              <TextInput
+                type="number"
+                min={0}
+                labelText=""
+                id="connectivity-upload-speed"
+                name='connectivity_upload_speed'
+                value={formDataSchoolSummary?.connectivity_upload_speed || ''}
+                onChange={(e) =>
+                  onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])
+                }
+                placeholder='Enter connectivity upload speed'
               />
             </InputBoxWrapper>
           </InputContainer>
@@ -67,13 +105,14 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
             <InputBoxWrapper>
               <TextInput
                 type="number"
+                step="any"
                 min={0}
                 labelText=""
                 id="connectivity-latency"
                 name='connectivity_latency'
                 placeholder='Enter connectivity latency'
-                value={formDataSchoolSummary?.connectivity_latency}
-                onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
+                value={formDataSchoolSummary?.connectivity_latency || ''}
+                onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, parseFloat(e.target.value)])}
               />
             </InputBoxWrapper>
           </InputContainer>
@@ -92,7 +131,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 id="school-id"
                 name='school'
                 placeholder='Enter school id'
-                value={formDataSchoolSummary?.school}
+                value={formDataSchoolSummary?.school || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -105,7 +144,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
               <DatePicker
                 datePickerType="single"
                 dateFormat='d/m/Y'
-                value={formDataSchoolSummary?.date}
+                value={formDataSchoolSummary?.date || ''}
                 onChange={(date) => {
                   onUdpateSchoolSummaryForm(['date', format(date[0], 'dd-MM-yyyy')])
                 }}
@@ -133,7 +172,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 id="num-student"
                 name='num_students'
                 placeholder='Enter number of student'
-                value={formDataSchoolSummary?.num_students}
+                value={formDataSchoolSummary?.num_students || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -150,7 +189,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 id="num-teacher"
                 name='num_teachers'
                 placeholder='Enter number of teachers'
-                value={formDataSchoolSummary?.num_teachers}
+                value={formDataSchoolSummary?.num_teachers || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -169,7 +208,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 id="num-classroom"
                 name='num_classroom'
                 placeholder='Enter number of classroom'
-                value={formDataSchoolSummary?.num_classroom}
+                value={formDataSchoolSummary?.num_classroom || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -186,7 +225,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 id="num-classroom"
                 name='num_latrines'
                 placeholder='Enter number of Latrines'
-                value={formDataSchoolSummary?.num_latrines}
+                value={formDataSchoolSummary?.num_latrines || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -203,7 +242,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 id="num-classroom"
                 name='num_computers'
                 placeholder='Enter number of Computers'
-                value={formDataSchoolSummary?.num_computers}
+                value={formDataSchoolSummary?.num_computers || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, Number(e.target.value)])}
               />
             </InputBoxWrapper>
@@ -240,7 +279,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
             <Select
               labelText=""
               name='connectivity'
-              value={formDataSchoolSummary?.connectivity}
+              value={formDataSchoolSummary?.connectivity || ''}
               id={`connectivity-select`}
               onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, e.target.value])}
               placeholder="Select Connectivity">
@@ -259,7 +298,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
                 name='connectivity_type'
                 id="connectivity_type"
                 placeholder='Enter internet connection type'
-                value={formDataSchoolSummary?.connectivity_type}
+                value={formDataSchoolSummary?.connectivity_type || ''}
                 onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, e.target.value])}
               />
             </InputBoxWrapper>
@@ -272,7 +311,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
               labelText=""
               name='coverage_availability'
               id={`coverage-availability-select`}
-              value={formDataSchoolSummary?.coverage_availability}
+              value={formDataSchoolSummary?.coverage_availability || ''}
               placeholder="Select Coverage availability"
               onChange={(e) => onUdpateSchoolSummaryForm([e.target.name, e.target.value])}
             >
@@ -341,7 +380,7 @@ const FormSchoolSummary = ({ isEditMode, schoolSummaryId }: { isEditMode: boolea
         <Button
           kind="secondary"
           onClick={() => {
-            router.back();
+            router.navigate('/admin/schools/?tab=1');
           }}
         >
           Cancel

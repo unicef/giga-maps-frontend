@@ -23,16 +23,68 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
+    <span
+      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+    >
+      <div
+        class="cds--tooltip-trigger__wrapper"
+      >
+        <button
+          aria-labelledby="tooltip-:r1d:"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="cds--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
+            />
+          </svg>
+        </button>
+      </div>
+      <span
+        aria-hidden="true"
+        class="cds--popover"
+        id="tooltip-:r1d:"
+        role="tooltip"
+      >
+        <span
+          class="cds--popover-content cds--tooltip-content"
+        >
+          Go Back
+        </span>
+        <span
+          class="cds--popover-caret"
+        />
+      </span>
+    </span>
     <div
       class="c1"
     >
@@ -55,36 +107,164 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
   fill: #222;
 }
 
-<div
-    class="c0"
+.c2 .cds--search-magnifier-icon {
+  fill: #222;
+}
+
+.c1 {
+  display: flex;
+  width: 100%;
+}
+
+<section
+    aria-label="data table toolbar"
+    class="cds--table-toolbar"
   >
-    <a
-      href="/admin/giga-layer/create"
+    <div
+      class="c0"
     >
-      <button
-        class="cds--btn cds--btn--primary cds--btn--disabled"
-        disabled=""
-        type="button"
+      <form
+        class="cds--form c1"
       >
-        Add new layer
-        <svg
-          aria-hidden="true"
-          class="cds--btn__icon"
-          fill="currentColor"
-          focusable="false"
-          height="16"
-          preserveAspectRatio="xMidYMid meet"
-          viewBox="0 0 32 32"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          aria-label="Search by layer name, code"
+          class="cds--search cds--search--lg c2 cds--toolbar-search-container-active cds--toolbar-search-container-expandable"
+          role="search"
         >
-          <path
-            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+          <div
+            class="cds--search-magnifier"
+            tabindex="-1"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--search-magnifier-icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5 C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+              />
+            </svg>
+          </div>
+          <label
+            class="cds--label"
+            for="2"
+            id="2-search"
+          >
+            Filter table
+          </label>
+          <input
+            autocomplete="off"
+            class="cds--search-input"
+            id="2"
+            placeholder="Search by layer name, code"
+            role="searchbox"
+            tabindex="0"
+            type="text"
+            value=""
           />
-        </svg>
-      </button>
-    </a>
-  </div>
+          <button
+            aria-label="Clear search input"
+            class="cds--search-close cds--search-close--hidden"
+            title="Clear search input"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+              />
+            </svg>
+          </button>
+        </div>
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:r1g:"
+              class="cds--btn--icon-only cds--btn cds--btn--secondary"
+              type="submit"
+            >
+              <svg
+                aria-hidden="true"
+                aria-label="Search"
+                class="cds--btn__icon"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5 C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:r1g:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Search
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+      </form>
+      <a
+        href="/admin/giga-layer/create"
+      >
+        <button
+          class="cds--btn cds--btn--primary cds--btn--disabled"
+          disabled=""
+          type="button"
+        >
+          Add new layer
+          <svg
+            aria-hidden="true"
+            class="cds--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+            />
+          </svg>
+        </button>
+      </a>
+    </div>
+  </section>
   .c4 {
   padding: 1rem 1rem 1.5rem 1rem;
 }
@@ -326,7 +506,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
                 >
                   <button
-                    aria-controls="id-:r13:"
+                    aria-controls="id-:r1r:"
                     aria-expanded="false"
                     aria-label="Show information"
                     class="cds--toggletip-button"
@@ -340,7 +520,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   </button>
                   <span
                     class="cds--popover"
-                    id="id-:r13:"
+                    id="id-:r1r:"
                   >
                     <span
                       class="cds--popover-content c8"
@@ -365,106 +545,6 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                 class="c4"
               >
                 Test Admin
-              </td>
-            </tr>
-            <tr>
-              <td
-                class="c4"
-              >
-                <a
-                  href="/admin/giga-layer/view/5"
-                />
-              </td>
-              <td
-                class="c4"
-              >
-                <a
-                  href="/admin/giga-layer/view/5"
-                >
-                  Download (default)
-                </a>
-              </td>
-              <td
-                class="c4"
-              >
-                <span>
-                  Daily Check APP and MLab,
-                </span>
-                <span>
-                  QoS
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                <span>
-                  Download Speed
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                <span>
-                  V1.0
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                <div
-                  class="c5"
-                  color="#B9EFCB"
-                >
-                  Published
-                </div>
-              </td>
-              <td
-                class="c4"
-              >
-                3
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
-                >
-                  <button
-                    aria-controls="id-:r14:"
-                    aria-expanded="false"
-                    aria-label="Show information"
-                    class="cds--toggletip-button"
-                    type="button"
-                  >
-                    <span
-                      class="c7"
-                    >
-                      View list
-                    </span>
-                  </button>
-                  <span
-                    class="cds--popover"
-                    id="id-:r14:"
-                  >
-                    <span
-                      class="cds--popover-content c8"
-                    >
-                      <div
-                        class="cds--toggletip-content"
-                      >
-                        <p
-                          class="list-content"
-                        >
-                          All countries
-                        </p>
-                      </div>
-                    </span>
-                    <span
-                      class="cds--popover-caret"
-                    />
-                  </span>
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                --
               </td>
             </tr>
           </tbody>
@@ -504,8 +584,8 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:r15:"
-        id="cds-pagination-select-:r15:-count-label"
+        for="cds-pagination-select-:r1s:"
+        id="cds-pagination-select-:r1s:-count-label"
       >
         Items per page
       </label>
@@ -523,7 +603,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r15:"
+                id="cds-pagination-select-:r1s:"
                 title=""
               >
                 <option
@@ -593,7 +673,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:r15:-right"
+            for="cds-pagination-select-:r1s:-right"
           >
             Page number, of 1 pages
           </label>
@@ -605,7 +685,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r15:-right"
+                id="cds-pagination-select-:r1s:-right"
                 title=""
               >
                 <option
@@ -649,7 +729,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r16:"
+              aria-labelledby="tooltip-:r1t:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -673,7 +753,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r16:"
+            id="tooltip-:r1t:"
             role="tooltip"
           >
             <span
@@ -693,7 +773,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r18:"
+              aria-labelledby="tooltip-:r1v:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -717,7 +797,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r18:"
+            id="tooltip-:r1v:"
             role="tooltip"
           >
             <span

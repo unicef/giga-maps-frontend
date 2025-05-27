@@ -11,8 +11,10 @@ import { ThemeWrapper } from './theme-button.style'
 import { themeLayerBg } from './theme-layer-bg';
 import ThemePopup from './theme-popup';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ThemeButtons = () => {
+  const { t } = useTranslation();
   const isProductTour = useStore($isProductTour);
   const theme = useTheme();
   const isOpen = useStore($showThemeLayer)
@@ -34,7 +36,7 @@ const ThemeButtons = () => {
             <IconButton
               align="left"
               size="sm"
-              label="Theme & Layers"
+              label={t("theme-layers")}
               onClick={openLayerTheme}>
               <Layers fill={theme.white} />
             </IconButton>

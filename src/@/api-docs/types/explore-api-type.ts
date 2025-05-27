@@ -1,5 +1,6 @@
 export interface ExploreApiType {
   id: number
+  code: string
   name: string
   category: string
   description: string

@@ -41,19 +41,23 @@ export const defaultGigaLayerForm = {
   legendConfigs: {
     good: {
       values: [],
-      labels: "Good"
+      labels: "Good",
+      tooltip: ""
     },
     moderate: {
       values: [],
-      labels: "Moderate"
+      labels: "Moderate",
+      tooltip: ""
     },
     bad: {
       values: [],
-      labels: "Bad"
+      labels: "Bad",
+      tooltip: ""
     },
     unknown: {
       values: [],
-      labels: "Unknown"
+      labels: "Unknown",
+      tooltip: ""
     }
   },
   globalBenchmark: null

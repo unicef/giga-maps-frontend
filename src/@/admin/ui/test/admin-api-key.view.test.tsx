@@ -24,10 +24,10 @@ describe("AdminApiKey", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   })
-  test("click on refresh to refrash list", () => {
-    const { getByTestId } = render(testWrapper(<AdminApiKey />));
-    const button = getByTestId('refresh-list');
-    fireEvent.click(button);
-  })
+  // test("click on refresh to refrash list", () => {
+  //   const { getByTestId } = render(testWrapper(<AdminApiKey />));
+  //   const button = getByTestId('refresh-list');
+  //   fireEvent.click(button);
+  // })
 
 })

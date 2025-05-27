@@ -1,4 +1,5 @@
-import { Button, Form, TextArea } from '@carbon/react';
+import { Button, Form, Link, TextArea } from '@carbon/react';
+import { Text } from '~/@/common/style/styled-component-style';
 import { useStore } from 'effector-react';
 import { FormEvent, useEffect } from 'react';
 
@@ -67,6 +68,9 @@ const ReuestApiKeyPopup = () => {
           onRequestAPIPopup(false);
         }} $headingStyle={$modalHeadingStyle} title="Request API Key" />
         <ModalBody $style={$modalBodyStyle}>
+
+          {exploreApiData?.code === "DAILY_CHECK_APP" && <Text style={{ fontSize: '0.8rem' }}> License: The dataset accessed through this API is made available under the <Link rel="noreferrer" style={{ fontSize: '0.7rem', display: 'inline' }} target="_blank" href="https://opendatacommons.org/licenses/odbl/1-0/">Open Data Commons Open Database License (ODbL)</Link>. You are free to copy, distribute, transmit and adapt our data, as long as you credit Giga and its contributors. If you alter or build upon our data, you may distribute the result only under the same licence. The full legal code explains your rights and responsibilities.</Text>}
+          <br />
           <ModalDescription> Please select the countries for which you need data access. Please explain how you plan to utilise the data for each country.  </ModalDescription>
           {requestApiPopup && <CountryMultiDropdown
             onMenuChange={(open: boolean) => {
@@ -117,7 +121,7 @@ const ReuestApiKeyPopup = () => {
           </Button>
         </ModalFooter>
       </Form>
-    </Modal>
+    </Modal >
   )
 }
 

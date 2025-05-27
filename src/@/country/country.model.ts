@@ -17,12 +17,17 @@ import { addCountriesFx, zoomToCountryFx } from './effects';
 import { createUpdateCountriesLayer } from './effects/create-update-countries-layer';
 import { getUserCurrentCountryISOFx } from './effects/detect-country-iso';
 import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from './effects/update-lookup-source-map';
+import { countryMapping } from './country.constant';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
 
 export const onLoadPage = createEvent();
 export const changeCountryCode = createEvent<string>();
 export const $countryCode = createStore<string>('');
 $countryCode.on(changeCountryCode, setPayload);
 export const $admin1Code = mapCountry.params.map((params) => (params?.path && getCountryAdminCode(params?.path)?.admin1) || null);
+
+export const $countryAdminSchoolId = createStore<number | null>(null);
 
 export const $countries = createStore<CountryBasic[] | null>(null);
 $countries.on(fetchCountriesFx.doneData, setPayload);
@@ -33,11 +38,25 @@ export const $countryIdToCode = $countries.map((countries) => countries?.reduce(
 }, {} as Record<string, string>) ?? {});
 
 export const $country = createStore<Country | null>(null);
+export const $countryId = $country.map(country => country?.id ?? null);
 $country.on(fetchCountryFx.doneData, setPayload);
+$country.on(countryTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const result = reconstructJson(data, state as Country) as Country;
+  return { ...result }
+})
+
+export const $countryMapping = createStore<[string, string][]>([]);
+$countryMapping.on(fetchCountryFx.doneData, (_, payload) => {
+  return Object.entries(extractDataWithMapping(payload, countryMapping)).filter(([_key, value]) => !!value);
+})
+
 export const $dataSource = $country.map((country) => country?.data_source ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
+export const $countryConnectivityNames = $country.map((country) => country?.benchmark_metadata?.benchmark_name ?? {});
 export const $countryDefaultNational = $country.map((country) => country?.benchmark_metadata?.default_national_benchmark ?? {});
+export const $countryActiveLayersDataById = $country.map((country) => country?.active_layers_list?.reduce((acc, layer) => ({ ...acc, [layer.data_layer_id]: layer }), {} as Record<string, any>) ?? {});
 
 export const $admin1Data = sample({
   source: combine($country, $admin1Code, (country, admin1Code) => {
@@ -183,11 +202,11 @@ sample({
 
 // Zoom to country bounds
 sample({
-  clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView]),
-  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng }),
-  fn: ({ mapContext, params, schoolFocusLatLng }) => {
+  clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView, $countryAdminSchoolId]),
+  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId }),
+  fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId }) => {
     const { admin1: admin1Code } = getCountryAdminCode(params?.path);
-    const levelsCode = [mapContext.countryCode, admin1Code].filter(Boolean)
+    const levelsCode = [mapContext.countryCode, (admin1Code ?? countryAdminSchoolId)].filter(Boolean)
     const levelLength = levelsCode.length;
     return {
       ...mapContext,
@@ -200,7 +219,7 @@ sample({
 });
 
 sample({
-  clock: merge([$country, $map]),
+  clock: merge([$countryId, $map]),
   source: combine({ map: $map, country: $country }),
   fn: ({ map, country }) => ({
     map,

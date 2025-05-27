@@ -20,6 +20,7 @@ timeoutStore({
 
 const EditCountry = () => {
   const { id } = useStore(editAdminCountry.params) as { id: number };
+  const isPending = useStore(getCountryIdFx.pending);
   const showMessage = useStore($showMessage);
 
   useEffect(() => {
@@ -48,10 +49,10 @@ const EditCountry = () => {
         </CountryToastWrapper>
       }
       <CountryAddEditWrapper>
-        <FormCountry
+        {!isPending && <FormCountry
           countryItemId={id}
           isEdit={true}
-        />
+        />}
       </CountryAddEditWrapper>
     </>
 

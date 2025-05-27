@@ -1,7 +1,6 @@
 import { getCountryLevels, onChangeLabelLayer, getCountryAdminCode, addAdminCountryLayerEvents, createLineLayerForCountry, setCountryBound, getFillColorForLayer, createSourceForAdminCountry, getFilterForFillLayer, createFillLayerForCountry, onChangeAdminBoundariesLayer, getAdminCountrySource, getAdminCountryLayerFill } from './country.utils';
 import { CountryAdminLevel } from './country.constant';
-import { Colors } from '../map/map.constant';
-import { defaultSource } from '../map/utils';
+import { Colors, DEFAULT_SOURCE } from '../map/map.constant';
 
 describe('getCountryLevels', () => {
 
@@ -107,7 +106,7 @@ describe('createSourceForAdminCountry', () => {
       addSource: jest.fn(),
       getStyle: () => ({
         sources: {
-          [defaultSource]: true,
+          [DEFAULT_SOURCE]: true,
           layers: []
         }
       })
@@ -156,7 +155,7 @@ describe('createFillLayerForCountry', () => {
       setFilter: jest.fn(),
       getStyle: () => ({
         sources: {
-          [defaultSource]: true,
+          [DEFAULT_SOURCE]: true,
           layers: []
         }
       })
@@ -382,7 +381,7 @@ describe('addAdminCountryLayerEvents', () => {
       setFilter: jest.fn(),
       getStyle: () => ({
         sources: {
-          [defaultSource]: true,
+          [DEFAULT_SOURCE]: true,
           layers: []
         }
       })

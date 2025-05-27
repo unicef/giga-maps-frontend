@@ -77,7 +77,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
     </DataLayerFieldContainer>
     <DataLayerFieldContainer>
       <InputLabel>
-        Layer description
+        Layer Description
       </InputLabel>
       <DataLayerNameField>
         <TextInput

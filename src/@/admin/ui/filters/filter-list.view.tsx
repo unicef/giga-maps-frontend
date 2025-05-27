@@ -177,7 +177,7 @@ const ListFilterView = () => {
       reloadApiCall();
     }
   }, [onViewPage, reloadFilter, page, pageSize, search]);
-
+  console.log('filter list', filterList.length);
   return (
     <>
       <PageTitleComponent

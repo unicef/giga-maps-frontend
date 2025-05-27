@@ -53,7 +53,7 @@ export const multiSchoolSelection: MultischoolSelectionStats = {
 }
 
 export const SCHOOL_STATUS_LAYER = {
-  id: 10000,
+  id: 10001,
   name: 'School status',
   type: 'SCHOOL_STATUS',
   legend_configs: {
@@ -71,48 +71,6 @@ export const SCHOOL_STATUS_LAYER = {
     }
   }
 }
-export const defaultGigaLayerList = [
-  {
-    id: 10001,
-    created_by: null,
-    name: 'Download speed',
-    type: 'LIVE',
-    data_sources_list: null,
-    global_benchmark: {
-      unit: "bps",
-      value: "2000000"
-    },
-    applicable_countries: [],
-    legend_configs: null
-  },
-  {
-    id: 10002,
-    created_by: null,
-    name: 'Mobile coverage ',
-    type: 'STATIC',
-    data_sources_list: null,
-    global_benchmark: null,
-    applicable_countries: [],
-    legend_configs: {
-      good: {
-        values: ["5G", "4G"],
-        labels: "5G/4G"
-      },
-      moderate: {
-        values: ["3G", "2G"],
-        labels: "3G/2G"
-      },
-      bad: {
-        values: ["no"],
-        labels: "No internet"
-      },
-      unknown: {
-        values: [],
-        labels: "Unknown"
-      }
-    }
-  }
-] as LayerType[]
 
 const conversionFormula = {
   "mbps": "{val} / (1000 * 1000)"
@@ -123,3 +81,17 @@ export const getDefaultFormula = (unit: string) => {
   }
   return "{val}";
 }
+
+export const publishLayersListMapping = [
+  'layersList.*.description',
+  'layersList.*.name',
+  'layersList.*.global_benchmark.benchmark_name',
+  'layersList.*.legend_configs.good.labels',
+  'layersList.*.legend_configs.good.tooltip',
+  'layersList.*.legend_configs.moderate.labels',
+  'layersList.*.legend_configs.moderate.tooltip',
+  'layersList.*.legend_configs.bad.labels',
+  'layersList.*.legend_configs.bad.tooltip',
+  'layersList.*.legend_configs.unknown.labels',
+  'layersList.*.legend_configs.unknown.tooltip'
+]

@@ -34,13 +34,14 @@ import { LayerDetailContainer } from '../search-result/styles/search-result-styl
 import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContainer, VerticalSliderButton, VerticalSliderButtonWrapper } from '../sidebar.style';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
+import { useTranslation } from 'react-i18next';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
 );
 
 export default function Sidebar() {
-
+  const { t } = useTranslation();
   const isMenuOpen = useStore($isMenuOpen);
   const isMobile = useStore($isMobile)
   const sidebarHeight = useStore($sidebarHeight)
@@ -96,7 +97,7 @@ export default function Sidebar() {
                 align="left"
                 id='tour-button'
                 size="sm"
-                label="Tour"
+                label={t("tour")}
                 onClick={() => router.navigate(`/map?popover=tour`)}>
                 <MagicWandFilled />
               </IconButton>

@@ -8,7 +8,7 @@ type EditableFieldProps = {
   readonly item: DataSourceType;
   readonly fieldName: string;
   readonly updatedData: Record<string, Partial<DataSourceType>>,
-  readonly handleInputChange: (_a: string, _b: string, _c: string, _d: string) => void,
+  readonly handleInputChange: (_a: string | number, _b: string, _c: string, _d: string) => void,
   readonly isEditable: boolean
   readonly readOnly: boolean;
 }
@@ -52,7 +52,7 @@ export default function EditableField({ item, fieldName, updatedData, handleInpu
         </Tooltip> : <input
           type='text'
           title={(readOnly || !isEditable) ? 'Read only' : 'Editable'}
-          readOnly={readOnly ?? !isEditable}
+          readOnly={readOnly ? readOnly : !isEditable}
           value={editedData ?? newData ?? ''}
           onChange={(e) => handleInputChange(item.id, fieldName, e.target.value, newData)} />
     }

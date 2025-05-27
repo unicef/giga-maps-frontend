@@ -9,11 +9,13 @@ export type GlobalStats = {
     value: number;
     unit: string;
   };
+  countries_with_connectivity_status_mapped: number;
   connected_schools: {
     connected: number;
     not_connected: number;
     unknown: number;
   };
+  schools_with_connectivity_status_mapped: number;
 }
 
 export type GraphData = {
@@ -26,6 +28,7 @@ export type defaultLegendValuesType = {
   moderate: number;
   no_internet: number;
   unknown: number;
+  [key: string]: number
 }
 export type ConnectivityStat = {
   live_avg: number;
@@ -35,12 +38,15 @@ export type ConnectivityStat = {
   real_time_connected_schools: defaultLegendValuesType;
   graph_data: GraphData[];
   live_avg_connectivity: string;
+  countries_with_realtime_data: number;
   benchmark_metadata: {
     base_benchmark: string;
     benchmark_unit: string;
     benchmark_value: string;
     parameter_column_unit: string;
     round_unit_value: string;
+    rounded_benchmark_value: string;
+    display_unit: string;
   }
 };
 export type SchoolInfoStats = {
@@ -86,6 +92,7 @@ export type SchoolStatsType = {
   coverage_type: string;
   external_id: string;
   environment: string;
+  admin1_id?: number;
   admin1_name?: string;
   admin2_name?: string;
   admin1_code?: string;
@@ -102,6 +109,16 @@ export type SchoolStatsType = {
   statistics: SchoolInfoStats;
   graph_data: GraphData[];
   geopoint: GeoJSONPoint
+  benchmark_metadata: {
+    base_benchmark: string;
+    benchmark_unit: string;
+    benchmark_value: string;
+    parameter_column_unit: string;
+    round_unit_value: string;
+    rounded_benchmark_value: string;
+    display_unit: string;
+    convert_unit: string;
+  }
 };
 
 
@@ -171,10 +188,11 @@ export type Country = {
   data_source: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
-  geometry: GeoJSONGeometry;
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
+    layer_descriptions: Record<string, string>
+    benchmark_name: Record<string, string>
   }
   data_status: {
     week: {
@@ -186,6 +204,20 @@ export type Country = {
       end_date: string;
     }
   }
+  active_layers_list?: {
+    data_layer_id: number
+    is_default: boolean
+    data_sources: {
+      name: string
+      description: string
+    }
+    is_applicable: boolean
+    legend_configs: Record<string, {
+      values: string[]
+      labels: string
+      tooltip: string
+    }>
+  }[]
   admin_metadata: AdminMetadataType;
   admin1_metadata: AdminMetadataType[];
 };
@@ -213,7 +245,6 @@ export type CountryWeeklyStats = {
 export type CountryGeometry = {
   id: number;
   code: string;
-  geometry_simplified: GeoJSONGeometry;
 };
 
 export type SchoolSimplified = {

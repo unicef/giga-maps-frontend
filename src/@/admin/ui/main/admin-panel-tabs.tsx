@@ -19,14 +19,14 @@ const AdminPanelTabs = () => {
   const isAdminUser = useStore($isAdminUser);
   const [invalidateCache, setInvalidateCache] = useState(false)
 
-  const callInvalidateCache = async () => {
-    try {
-      await getInvalidateCacheFx()
-      setInvalidateCache(true)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  // const callInvalidateCache = async () => {
+  //   try {
+  //     await getInvalidateCacheFx()
+  //     setInvalidateCache(true)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
   return (
     <>
@@ -108,8 +108,7 @@ const AdminPanelTabs = () => {
                 data-testid="invalidate-cache"
                 kind='ghost'
                 onClick={() => {
-                  void callInvalidateCache()
-
+                  setInvalidateCache(true)
                 }}
               >Invalidate Cache</Button>
             </InvalidateCacheWrapper>
