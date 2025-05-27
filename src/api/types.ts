@@ -188,7 +188,6 @@ export type Country = {
   data_source: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
-  geometry: GeoJSONGeometry;
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
@@ -246,7 +245,6 @@ export type CountryWeeklyStats = {
 export type CountryGeometry = {
   id: number;
   code: string;
-  geometry_simplified: GeoJSONGeometry;
 };
 
 export type SchoolSimplified = {
