@@ -289,4 +289,6 @@ export const animateCircleConfig = {
 export const filterListMapping = [
   'filterList.*.description',
   'filterList.*.name',
+  'filterList.*.options.choices.*.label',
+  'filterList.*.options.placeholder',
 ]
