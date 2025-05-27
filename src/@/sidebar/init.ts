@@ -87,6 +87,8 @@ export const $getSchoolParams = sample({
   }
 })
 
+export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
+
 const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (country, schoolParams, admin1Id) => ({
   countryId: country?.id,
   schoolIds: schoolParams?.schoolIds,
