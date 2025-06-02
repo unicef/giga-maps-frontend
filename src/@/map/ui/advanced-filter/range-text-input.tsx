@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { evaluateExpression } from "~/lib/utils";
 import { TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
+import { useTranslation } from "react-i18next";
 
 const RangeTextInput = ({ name, description, options, value: rangeValue, column_configuration: parameter, itemKey, onChange }: AdvanceFilterType & {
   value: { none_range: boolean; value: string }; itemKey: string; onChange: (key: string, value: {
@@ -12,13 +13,20 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
     value: string;
   }) => void
 }) => {
+  const { t } = useTranslation();
   const { downcast_aggr_str, upcast_aggr_str } = parameter?.options ?? {};
-  const minPlaceholder = options?.active_range?.min_place_holder ?? options?.minPlaceholder;
-  const maxPlaceholder = options?.active_range?.max_place_holder ?? options?.maxPlaceholder;
+  let minPlaceholder = options?.active_range?.min_place_holder ?? options?.minPlaceholder;
+  let maxPlaceholder = options?.active_range?.max_place_holder ?? options?.maxPlaceholder;
   const noneFilter = options?.include_none_filter;
   const [minValue, setMinValue] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState<number | null>(null);
   const { value, none_range: isNoneRange } = rangeValue || {};
+  // if (minPlaceholder?.startsWith("Min ")) {
+  //   minPlaceholder = `${t("min")}${minPlaceholder.split("Min")[1]}`
+  // }
+  // if (maxPlaceholder?.startsWith("Max ")) {
+  //   maxPlaceholder = `${t("max")}${maxPlaceholder.split("Max")[1]}`
+  // }
   useEffect(() => {
     const [min, max] = value?.split(',') || '';
     setMinValue(Number(evaluateExpression(downcast_aggr_str, min)) || null);
@@ -43,7 +51,7 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
           size="sm"
           id={`${parameter.name}-min-input`}
           labelText=""
-          placeholder={minPlaceholder ?? "Min(0)"}
+          placeholder={minPlaceholder ?? `${t('min')} (0)`}
           value={minValue ?? ''}
           onChange={(e) => {
             const value = Number(e.target.value);
@@ -70,7 +78,7 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
           id={`${parameter.name}-max-input`}
           type="number"
           labelText=""
-          placeholder={maxPlaceholder ?? "Max"}
+          placeholder={maxPlaceholder ?? `${t('max')}`}
           value={maxValue ?? ''}
           onChange={(e) => {
             const value = Number(e.target.value);

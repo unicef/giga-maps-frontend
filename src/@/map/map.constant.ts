@@ -290,6 +290,10 @@ export const animateCircleConfig = {
 export const filterListMapping = [
   'filterList.*.description',
   'filterList.*.name',
+  'filterList.*.options.choices.*.label',
+  'filterList.*.options.placeholder',
+  'filterList.*.options.active_range.min_place_holder',
+  'filterList.*.options.active_range.max_place_holder',
 ]
 
 export const CountryPaintData = {
