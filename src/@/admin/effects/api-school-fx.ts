@@ -47,9 +47,9 @@ export const deleteSchoolFx = createEffect(({ body, }: any) => {
 })
 
 
-export const getSchoolSummaryListFx = createEffect(({ page, pageSize, search, filter }: { page?: number; pageSize?: number; search?: string, filter?: number[] }) => {
+export const getSchoolSummaryListFx = createEffect(({ page, pageSize, search, filter, schoolId }: { page?: number; pageSize?: number; search?: string, filter?: number[], schoolId?: number }) => {
   return createRequestAuthFx({
-    url: `/statistics/schoolweeklystatus/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id=${filter}` : ''}${search ? `&search=${search}` : ''}`
+    url: `/statistics/schoolweeklystatus/?page=${page}&page_size=${pageSize}${(filter && filter.length > 0) ? `&country_id=${filter}` : ''}${search ? `&search=${search}` : ''}${schoolId ? `&school_id=${schoolId}` : ''}`
   }) as Promise<APIListType<SchoolSummaryType>>
 })
 
