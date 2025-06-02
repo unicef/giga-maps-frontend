@@ -137,6 +137,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('iso3_format', formElement.iso3_format?.value);
       formData.append('data_source', formElement.data_source?.value);
       formData.append('last_weekly_status_id', formElement.last_weekly_status_id?.value)
+      formData.append('country_disclaimer', formElement.country_disclaimer?.value)
       formData.append('date_of_join', formElement.date_of_join?.value?.split('/').join('-'));
       formData.append('date_schools_mapped', formElement.date_schools_mapped?.value?.split('/').join('-'));
       formData.append('active_layers_list', JSON.stringify(selectedActiveLayers?.map((layer) => ({
