@@ -300,7 +300,7 @@ export const $schoolPopupData = combine({
 })
 
 sample({
-  clock: merge([fetchSchoolPopupDataFx.doneData, $lng]),
+  clock: merge([fetchSchoolPopupDataFx.doneData]),
   source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
   target: updateSchoolPopupFx
 })

@@ -50,11 +50,11 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
       .map(group => ({ groupName: group, stats: groups[group] }));
   };
 
-  const renderStatistic = (config: StatisticConfig) => (
+  const renderStatistic = (config: StatisticConfig, t: any) => (
     <SingleInfoContainer $width={true} key={config.key}>
       <Hashtag />
       <p>
-        {config.label}: {' '}
+        {t(config.label)}: {' '}
         {typeof schoolData?.statistics[config.key] === 'boolean'
           ? schoolData?.statistics[config.key] ? 'Yes' : 'No'
           : schoolData?.statistics[config.key] !== undefined && schoolData?.statistics[config.key] !== null
@@ -105,7 +105,7 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
       {groupStatistics(statisticsConfig).map(({ groupName, stats }) => (
         <React.Fragment key={groupName}>
           <br /><br />
-          {stats.map(renderStatistic)}
+          {stats.map((item) => renderStatistic(item, t))}
         </React.Fragment>
       ))}
     </>
