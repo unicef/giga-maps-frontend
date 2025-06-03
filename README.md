@@ -7,16 +7,6 @@
 <h1><a id="gigameter" class="anchor" aria-hidden="true" href="#gigablocks"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></path></svg></a>
 Giga Maps Frontend </h1> 
 
-<div align="center" >
-
-<!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
-![GitHub repo size](https://img.shields.io/github/repo-size/unicef/giga-maps-frontend)
-![GitHub stars](https://img.shields.io/github/stars/unicef/giga-maps-frontend)
-![Twitter Follow](https://img.shields.io/twitter/follow/gigaglobal)
-![License](https://img.shields.io/github/license/unicef/giga-maps-frontend)
-
-
-</div>
 
 <details open="open">
 	<summary style="padding-bottom: 10px;"><h2>Table of Contents</h2></summary>
