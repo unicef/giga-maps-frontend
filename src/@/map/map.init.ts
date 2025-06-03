@@ -28,6 +28,7 @@ import {
   $activeSchoolPopup,
   $filterListMapping,
   $map,
+  $multipleSchoolPopup,
   $popup,
   $reloadStyle,
   $schoolClickData,
@@ -43,6 +44,7 @@ import {
   onStyleLoaded,
   onZoomStateChange,
   setCenter,
+  setSchoolCLickupPopupDiv,
   zoomIn,
   zoomOut,
 } from './map.model';
@@ -272,6 +274,7 @@ export const mapMarkerSource = combine({
   map: $map,
   schoolStats: $schoolStatsMap,
   schoolMarkers: $schoolMarkers,
+  multipleSchoolPopup: $multipleSchoolPopup,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils
 })
@@ -299,11 +302,11 @@ export const $schoolPopupData = combine({
   layerUtils: $layerUtils,
 })
 
-sample({
-  clock: merge([fetchSchoolPopupDataFx.doneData]),
-  source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
-  target: updateSchoolPopupFx
-})
+// sample({
+//   clock: merge([fetchSchoolPopupDataFx.doneData]),
+//   source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
+//   target: updateSchoolPopupFx
+// })
 
 sample({
   clock: merge([router.historyUpdated, $isTimeplayer]),
@@ -313,6 +316,7 @@ sample({
     if (popup) {
       popup.remove();
       onCreateSchoolPopup(null);
+      setSchoolCLickupPopupDiv(null)
     }
   }
 })

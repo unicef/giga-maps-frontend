@@ -8,6 +8,7 @@ import { initMapFx } from '@/map/effects';
 import styled, { css } from 'styled-components';
 import { useStore } from 'effector-react';
 import { $isMobile } from '~/core/media-query';
+import MapSchoolPopupMain from './map-school-popup';
 
 const onMapRef = createEvent<HTMLDivElement | null>();
 
@@ -52,6 +53,7 @@ const MapComponent = () => {
   return (
     <MapStyle $isMobile={isMobile}>
       <div key={isMobile ? 'desktop_view' : 'mobile: view'} id="map" ref={onMapRef} style={{ width: '100%', height: '100%' }} />
+      <MapSchoolPopupMain />
     </MapStyle>
   )
 }
