@@ -81,7 +81,18 @@ export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
 export const $popup = createStore<mapboxgl.Popup | null>(null);
 $popup.on(onCreateSchoolPopup, setPayload);
 
+type SchoolClickupPopupType = {
+  id: number;
+  element: HTMLElement,
+  isClicked?: boolean;
+}
+
 export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
+export const setSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
+export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setSchoolCLickupPopupDiv, null);
+
+export const setMultipleSchoolPopup = createEvent<SchoolClickupPopupType[] | null>();
+export const $multipleSchoolPopup = restore(setMultipleSchoolPopup, null);
 export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
 $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 
