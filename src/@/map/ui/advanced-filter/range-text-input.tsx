@@ -111,7 +111,7 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
       }}
         checked={isNoneRange}
         id={`checkbox-${itemKey}`}
-        labelText="Show null values" style={{ padding: "0rem 1rem" }} />}
+        labelText={t('show-null-values')} style={{ padding: "0rem 1rem" }} />}
     </StyledTextInputContainer>
   )
 }

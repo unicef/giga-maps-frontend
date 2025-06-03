@@ -200,5 +200,6 @@
   "Device availability": "Disponibilidad de dispositivos",
   "Number of robotic equipment": "Número de equipos robóticos",
   "Number of tablets": "Número de tabletas",
-  "city": "Ciudad"
+  "city": "Ciudad",
+  "show-null-values": "Mostrar valores nulos"
 }

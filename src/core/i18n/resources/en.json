@@ -200,5 +200,6 @@
   "Device availability": "Device availability",
   "Number of robotic equipment": "Number of robotic equipment",
   "Number of tablets": "Number of tablets",
-  "city": "city"
+  "city": "city",
+  "show-null-values": "Show null values"
 }
