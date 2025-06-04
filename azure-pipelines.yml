@@ -69,6 +69,7 @@ steps:
         --build-arg=ENV=$(ENV_DEV)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_DEV)
       tags: |
         $(tag)
 
@@ -96,6 +97,7 @@ steps:
         --build-arg=ENV=$(ENV_STG)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_STG)
       tags: |
         $(tag)
     condition:
@@ -129,6 +131,7 @@ steps:
         --build-arg=ENV=$(ENV_PROD)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_PROD)
       tags: |
         $(tag)
     condition:

@@ -29,6 +29,7 @@ In order to run the project, you need to install the following:
 - **B2C_CLIENT_ID**: (required) Client ID for login.
 - **ENV**: (optional, default: development) Current environment variable.
 - **MATOMO_SITE_ID**: (optional) Analytics site ID.
+- **LOOMFLOW_API_KEY**: (optional) Loomflow API key.
 
 ## Technology Stack
 
