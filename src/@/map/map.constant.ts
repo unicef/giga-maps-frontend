@@ -292,8 +292,8 @@ export const filterListMapping = [
   'filterList.*.name',
   'filterList.*.options.choices.*.label',
   'filterList.*.options.placeholder',
-  'filterList.*.options.active_range.min_place_holder',
-  'filterList.*.options.active_range.max_place_holder',
+  // 'filterList.*.options.active_range.min_place_holder',
+  // 'filterList.*.options.active_range.max_place_holder',
 ]
 
 export const CountryPaintData = {
