@@ -21,12 +21,12 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
   const [minValue, setMinValue] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState<number | null>(null);
   const { value, none_range: isNoneRange } = rangeValue || {};
-  // if (minPlaceholder?.startsWith("Min ")) {
-  //   minPlaceholder = `${t("min")}${minPlaceholder.split("Min")[1]}`
-  // }
-  // if (maxPlaceholder?.startsWith("Max ")) {
-  //   maxPlaceholder = `${t("max")}${maxPlaceholder.split("Max")[1]}`
-  // }
+  if (minPlaceholder?.startsWith("Min")) {
+    minPlaceholder = `${t("min")}${minPlaceholder.split("Min")[1]}`
+  }
+  if (maxPlaceholder?.startsWith("Max")) {
+    maxPlaceholder = `${t("max")}${maxPlaceholder.split("Max")[1]}`
+  }
   useEffect(() => {
     const [min, max] = value?.split(',') || '';
     setMinValue(Number(evaluateExpression(downcast_aggr_str, min)) || null);
