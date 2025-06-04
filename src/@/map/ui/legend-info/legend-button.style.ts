@@ -74,13 +74,13 @@ export const LegendContentWrapper = styled.div`
     
 
     .school-status{
-      min-width: 175px;
+      min-width: 210px;
     }
     .legend-value {
       margin-top: 1.1rem;
       margin-left: 0.6rem;
       color: grey;
-      font-size: 0.7rem;
+      font-size: 0.875rem;
     }
     .legend-container {
       display:flex;
@@ -93,7 +93,7 @@ export const LegendContentWrapper = styled.div`
     }
       h3{
         color: ${props => props.theme.text};
-        font-size: 0.875rem;
+        font-size: 1.125rem;
         font-weight: 400;
         line-height: 1.25rem;
       }
@@ -106,7 +106,7 @@ export const LegendContentWrapper = styled.div`
         .label {
           margin-left: 0.3rem;
           color:  ${props => props.theme.text};
-          font-size: 0.75rem;
+          font-size: 1rem;
           font-weight: 400;
           line-height: 1.125rem;
           text-wrap: nowrap;
