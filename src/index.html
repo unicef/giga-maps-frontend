@@ -28,6 +28,15 @@
   </script>
   <!-- End Matomo Code -->
 
+  <script>
+    window.LoomFlows = window.LoomFlows || {};
+    LoomFlows.access_token = '<%= htmlWebpackPlugin.options.loomflowApiKey %>';
+    (function (d) {
+      var s = d.createElement('script'); s.async = true;
+      s.src = 'https://loomflows.com/widget/widget.umd.js';
+      (d.head || d.body).appendChild(s);
+    })(document);
+  </script>
 </head>
 
 <body>
