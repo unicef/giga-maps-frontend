@@ -35,6 +35,7 @@ import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContaine
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { useTranslation } from 'react-i18next';
+import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -107,6 +108,7 @@ export default function Sidebar() {
           </TakeTourWrapper>
 
         </MapButtonWrapper>
+        <CountryDisclaimerNotification />
       </SidePanelContainer >
     </MainSideBarContainer>
   )
