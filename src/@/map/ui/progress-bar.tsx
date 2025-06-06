@@ -24,7 +24,8 @@ const pulse = keyframes`
 const shimmer = keyframes`
   0% { transform: translateX(-100%) translateY(0) scale(1, 1); opacity: 0.6; }
   20% { opacity: 0.8; }
-  100% { transform: translateX(100%) translateY(0) scale(1, 1); opacity: 0.1; }
+  60% { transform: translateX(100%) translateY(0) scale(1, 1); opacity: 0.6; }
+  100% { transform: translateX(80%) translateY(0) scale(1, 1); opacity: 0; }
 `;
 
 // Container for the progress bar
@@ -34,7 +35,7 @@ export const ProgressWrapper = styled.div`
   left: 0;
   width: 100%;
   z-index: 1000;
-  height: 6px;
+  height: 5px;
   background-color: rgba(0, 0, 0, 0.05);
   overflow: hidden;
 `;
@@ -42,9 +43,9 @@ export const ProgressWrapper = styled.div`
 // The actual progress bar with animations
 export const ProgressBarStyled = styled.div<{ progress: number; status: 'active' | 'finished' | 'loading' | 'error' }>`
   height: 100%;
-  background: ${({ status }) =>
+  background: ${({ status, progress }) =>
     status === 'error' ? 'linear-gradient(90deg, #fa4d56, #ff7c7c)' :
-      status === 'finished' ? 'linear-gradient(90deg, #42be65, #6fdc8c)' :
+      progress === 100 ? 'linear-gradient(90deg, #42be65, #6fdc8c)' :
         'linear-gradient(90deg, #0f62fe, #3d8dff)'};
   width: ${({ progress }) => `${progress}%`};
   transition: width 0.3s ease-in-out;
@@ -52,7 +53,7 @@ export const ProgressBarStyled = styled.div<{ progress: number; status: 'active'
   box-shadow: 0 0 15px rgba(15, 98, 254, 0.6);
   border-radius: 0 3px 3px 0;
   animation: ${pulse} 2s infinite;
-  
+  transition: all 0.3s ease-in-out;
   ${({ status }) => status === 'finished' && css`
     animation: ${progressAnimation} 0.5s ease-out forwards, ${pulse} 2s infinite;
   `}
@@ -73,7 +74,7 @@ export const ProgressBarStyled = styled.div<{ progress: number; status: 'active'
       rgba(255, 255, 255, 0) 100%
     );
     transform: translateX(-100%) skewX(-20deg);
-    animation: ${shimmer} 1.6s infinite ease-out;
+    animation: ${shimmer} 2s infinite ease-out;
     width: 60%;
   }
   
