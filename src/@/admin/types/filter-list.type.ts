@@ -12,8 +12,16 @@ export interface FilterListType {
   active_countries_list: number[]
 }
 
+export interface ColumnDBChoicesType {
+  values: {
+    label: string
+    value: string
+  }[]
+}
+
 export interface FilterOptionsField {
   live_choices?: boolean
+  group_choices?: boolean
   choices?: { label: string; value: string }[]
   placeholder?: string
   range_auto_compute?: boolean

@@ -1,11 +1,12 @@
 import { combine, createEffect, createEvent, merge, restore, sample } from 'effector';
-import { $admin1Code, $country, $countryCode } from '~/@/country/country.model';
+import { $admin1Code, $country, $countryCode, $countrySearchString } from '~/@/country/country.model';
 import { $map } from '../map.model';
 import { Map, MapEventType } from 'mapbox-gl';
 import { DEFAULT_SOURCE } from '../map.constant';
 import { useStore } from 'effector-react';
 import ProgressBar from './progress-bar';
 import { $selectedLayerId } from '~/@/sidebar/sidebar.model';
+import { $selectedSchoolIds } from '~/@/sidebar/init';
 
 
 const setMapLoadingState = createEvent<boolean>();
@@ -51,7 +52,7 @@ sample({
 })
 
 
-const resetState = [$countryCode, $admin1Code, $selectedLayerId]
+const resetState = [$countryCode, $admin1Code, $selectedLayerId, $countrySearchString, $selectedSchoolIds]
 $isMapLoading.reset(resetState);
 $loadingStatus.reset(resetState);
 $mapPercent.reset(resetState);

@@ -40,6 +40,7 @@ const DownloadApiKeyModal = () => {
 
   const onSubmit = async (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
+    setCurrentApiKey(apiInput);
     if (!apiInput || !(await validateApiKey())) {
       return setInvalidKey(true);
     };
@@ -76,7 +77,7 @@ const DownloadApiKeyModal = () => {
             <p>Don’t have one? </p>
             <Button
               onClick={() => {
-                if (isPublic) {
+                if (isPublic && exploreApiData?.code !== "DAILY_CHECK_APP") {
                   onRequestApiKey(exploreApiData?.id)
                 } else {
                   onRequestAPIPopup(true);

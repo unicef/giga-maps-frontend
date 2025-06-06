@@ -3,7 +3,7 @@ import { createEffect } from "effector";
 import { APIListType } from "~/api/types";
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx";
 
-import { ApiKeysAdminRequestType } from "../types/api-request.type";
+import { ApiCategoryType, ApiKeysAdminRequestType } from "../types/api-request.type";
 
 export const getCountryApiFx = createEffect((query: string) => {
   return createRequestAuthFx({
@@ -35,6 +35,20 @@ export const deleteApiKeyRequestFx = createEffect(({ id }: { id: number }) => {
 export const updateApiKeyExtensionFx = createEffect(({ id, body }: { id: number, body: any; }) => {
   return createRequestAuthFx({
     url: `accounts/api_keys/${id}/`,
+    method: 'PUT',
+    data: body
+  }) as Promise<ApiKeysAdminRequestType>
+});
+
+export const getApiCategoryFx = createEffect(() => {
+  return createRequestAuthFx({
+    url: `accounts/api_categories/?page_size=20&page=1&expand=api,created_by,last_modified_by&ordering=name&api_id`
+  }) as Promise<APIListType<ApiCategoryType>>
+})
+
+export const updateApiCategoryFx = createEffect(({ id, body }: { id: number, body: any; }) => {
+  return createRequestAuthFx({
+    url: `accounts/api_keys/${id}/categories/`,
     method: 'PUT',
     data: body
   }) as Promise<ApiKeysAdminRequestType>

@@ -13,6 +13,7 @@ export interface DataLayer {
   category: string
   applicable_countries: number[]
   legend_configs: LegendConfigType
+  data_source_column_function: SupportedFunctionType
   global_benchmark: GlobalBenchmark
   status: LayerStatusType
   published_by: null | CreatedBy
@@ -77,9 +78,18 @@ export interface ColumnConfig {
   type: string
   on?: string
   unit?: string
-  is_parameters: boolean
+  is_parameters: boolean;
+  base_benchmark: number;
+  display_unit: string;
+  supported_functions: SupportedFunctionType[]
 }
 
+export interface SupportedFunctionType {
+  description: string
+  name: string
+  sql: string
+  verbose: string
+}
 export interface DataSourceColumn {
   "1": N1
 }
@@ -188,10 +198,11 @@ export type GigaLayerFormType = {
   description: DataLayer['description'],
   type: DataLayer['type'] | undefined,
   dataSource: number[],
-  dataSourceColumn: DataLayer['data_source'] | null,
+  dataSourceColumn: ColumnConfig | null,
   applicableCountries: DataLayer['applicable_countries'],
   globalBenchmark: DataLayer['global_benchmark'] | null,
   benchmarkConvertUnit: string,
+  supportedFunctions: SupportedFunctionType | null,
 }
 
 export type GigaLayerAllValueType = ValuesType<GigaLayerFormType>;

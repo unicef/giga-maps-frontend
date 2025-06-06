@@ -40,6 +40,7 @@ export const defaultCountryForm = {
   "last_weekly_status": null,
   "date_of_join": null,
   'iso3_format': '',
+  "country_disclaimer": "",
   benchmark_metadata: {
     live_layer: {},
     layer_descriptions: {},

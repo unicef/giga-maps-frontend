@@ -41,7 +41,7 @@ exports[`CommonUIOnlySchoolConnectivityLayer component should render without cra
       <span
         class="c2 c3"
       >
-        Unknown
+        unknown
       </span>
     </div>
   </div>

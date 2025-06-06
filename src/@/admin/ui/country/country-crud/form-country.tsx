@@ -137,6 +137,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('iso3_format', formElement.iso3_format?.value);
       formData.append('data_source', formElement.data_source?.value);
       formData.append('last_weekly_status_id', formElement.last_weekly_status_id?.value)
+      formData.append('country_disclaimer', formElement.country_disclaimer?.value)
       formData.append('date_of_join', formElement.date_of_join?.value?.split('/').join('-'));
       formData.append('date_schools_mapped', formElement.date_schools_mapped?.value?.split('/').join('-'));
       formData.append('active_layers_list', JSON.stringify(selectedActiveLayers?.map((layer) => ({
@@ -364,24 +365,21 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
             </InputBoxWrapper>
           </InputContainer>
           <InputContainer>
-            <MultiSelectLayerConfig
-              name="active_filters_list"
-              required
-              label="Choose active filters"
-              titleText="Active filters"
-              itemToString={(item: { id: number; name: string }) => item.name || ''}
-              itemToElement={(item: { id: number; name: string }) => (
-                <span>
-                  {item.name} ({item.code})
-                </span>
-              )}
-              items={filterListAvailablility}
-              id={`active-filters`}
-              onChange={({ selectedItems }: { selectedItems: { id: number; name: string }[] }) => {
-                setSelectedActiveFilters(selectedItems);
-              }}
-              selectedItems={selectedActiveFilters}
-            />
+            <InputLabel>
+              Add a country disclaimer
+            </InputLabel>
+            <InputBoxWrapper>
+              <TextInput
+                type="text"
+                labelText=""
+                id="data-souce"
+                maxLength={255}
+                name="country_disclaimer"
+                placeholder='Enter country disclaimer(Max 255 characters)'
+                value={formDataCountry?.country_disclaimer}
+                onChange={(e) => onUdpateCountryForm([e.target.name, e.target.value])}
+              />
+            </InputBoxWrapper>
           </InputContainer>
         </RowContainer>
         <RowContainer>
@@ -403,6 +401,26 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                 setSelectedActiveLayers(selectedItems);
               }}
               selectedItems={selectedActiveLayers}
+            />
+          </InputContainer>
+          <InputContainer>
+            <MultiSelectLayerConfig
+              name="active_filters_list"
+              required
+              label="Choose active filters"
+              titleText="Active filters"
+              itemToString={(item: { id: number; name: string }) => item.name || ''}
+              itemToElement={(item: { id: number; name: string }) => (
+                <span>
+                  {item.name} ({item.code})
+                </span>
+              )}
+              items={filterListAvailablility}
+              id={`active-filters`}
+              onChange={({ selectedItems }: { selectedItems: { id: number; name: string }[] }) => {
+                setSelectedActiveFilters(selectedItems);
+              }}
+              selectedItems={selectedActiveFilters}
             />
           </InputContainer>
         </RowContainer>

@@ -11,6 +11,7 @@ import { $dowloadApiModalContainerStyle, $modalBodyStyle, $modalFooterStyle, $mo
 import CountryMultiDropdown from './download-data-modal/country-multi-select';
 import { requestForApiKeyFx } from '~/@/api-docs/effects/api-keys-fx';
 import useForm from '~/lib/hooks/useForm';
+import { ModalFooterButtons } from './common/ModalFooterButtons.view';
 
 
 interface FormValues {
@@ -37,6 +38,7 @@ const validationRules = {
 
 const ReuestApiKeyPopup = () => {
   const { values, errors, isError, touched, reset, handleChange, handleSubmit, handleBlur } = useForm(defaultFields, validationRules);
+  const isLoading = useStore(requestForApiKeyFx.pending);
   const requestApiPopup = useStore($requestAPIPopup);
   const exploreApiData = useStore($currentSelectedApiData);
   useEffect(reset, [requestApiPopup]);
@@ -105,21 +107,7 @@ const ReuestApiKeyPopup = () => {
               placeholder="Please provide a brief description of how you plan to utilize the data." />
           </TextInputWrapper>
         </ModalBody>
-        <ModalFooter $style={$modalFooterStyle}>
-          <Button
-            kind="secondary"
-            onClick={() => {
-              onRequestAPIPopup(false);
-            }}>
-            Cancel
-          </Button>
-          <Button
-            kind="primary"
-            disabled={isError}
-            type="submit">
-            Submit
-          </Button>
-        </ModalFooter>
+        <ModalFooterButtons onCancel={() => onRequestAPIPopup(false)} isError={isError} isLoading={isLoading} loadingText="Requesting API Key..." />
       </Form>
     </Modal >
   )

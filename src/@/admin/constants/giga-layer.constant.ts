@@ -60,7 +60,8 @@ export const defaultGigaLayerForm = {
       tooltip: ""
     }
   },
-  globalBenchmark: null
+  globalBenchmark: null,
+  supportedFunctions: null,
 } as GigaLayerFormType;
 
 export const DataSourceStatusChoices = {

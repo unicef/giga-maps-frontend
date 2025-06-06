@@ -43,7 +43,7 @@ const ExploreApiCards = ({ item }: { item: ExploreApiType }) => {
           >
             Documentation
           </Button>
-          {isPublic && <Button
+          {item.download_url && <Button
             onClick={AuthCheckWrapper(() => {
               setCurrentExploreApi(item.id);
               onDownloadAPIPopup(true);
