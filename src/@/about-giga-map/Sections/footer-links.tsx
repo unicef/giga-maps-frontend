@@ -8,8 +8,10 @@ const FooterLinks = ({ data }: { data: any }) => {
   return (
     <FooterSection $style={data?.style}>
       <FooterTitleSection>
-        <NavBarGigaLogo $size={'2.5rem'} dangerouslySetInnerHTML={{ __html: data?.content?.logo }}>
-        </NavBarGigaLogo>
+        <div className="footer-logo">
+          <NavBarGigaLogo $size={'2.5rem'} dangerouslySetInnerHTML={{ __html: data?.content?.logo }}>
+          </NavBarGigaLogo>
+        </div>
         <p>
           {data.text?.[0]}
         </p>

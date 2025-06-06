@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import { useEffect, useMemo } from 'react';
 
-import Acknowledgement from '../Sections/acknowledgement';
+
 import FooterLinks from '../Sections/footer-links';
 import FrequentlyAskedQuestions from '../Sections/frequently-asked-questions';
 import GetInTouch from '../Sections/get-in-touch';
@@ -14,7 +14,7 @@ import Resources from '../Sections/resources';
 import SchoolConnected from '../Sections/school-connected';
 import SchoolConnectivity from '../Sections/school-connectivity';
 import SchoolLocation from '../Sections/school-location';
-import Sliders from '../Sections/slides';
+import CaseStudiesModalSection from '../Sections/case-studies-modal';
 import {
   AboutGigaMapModalStyle,
 } from "../styles/about-giga-map-styles";
@@ -32,9 +32,8 @@ const sectionObj = {
   "gigamaps-enabled": GigaMapEnbled,
   "faqs": FrequentlyAskedQuestions,
   "resources": Resources,
-  "slides": Sliders,
+  "slides": CaseStudiesModalSection,
   "partners": GigaPartners,
-  "eleventh": Acknowledgement,
   "live-map-get-in-touch": GetInTouch
 } as const
 
@@ -59,6 +58,12 @@ const AboutGigaMapModal = () => {
     return header
     // return header as AboutType
   }, [aboutUsContent])
+  const acknowledgementData = useMemo(() => {
+    if (!aboutUsContent) {
+      return null
+    }
+    return aboutUsContent.find((item) => item.type === 'eleventh')
+  }, [aboutUsContent])
   useEffect(() => {
     void getAboutUsContentFx();
     void fetchGlobalStatsFx({});
@@ -71,13 +76,26 @@ const AboutGigaMapModal = () => {
       <NavBar data={header} />
       <AboutGigaMapModalStyle>
         {
-          aboutUsContent?.map((singleSection, index) => {
+          aboutUsContent?.filter(section => section.type !== "eleventh")?.map((singleSection, index) => {
             const type = singleSection?.type as keyof typeof sectionObj;
             const SectionComponent = sectionObj[type] as SectionComponentType;
+
+            // Hide school-connected section for now
+            if (type === "school-connected") {
+              return null;
+            }
+
             if (!SectionComponent || !singleSection?.status) {
               return null
             }
             if (SectionComponent) {
+              // Pass acknowledgement data to partners component
+              if (type === "partners") {
+                return <div id={singleSection.type} key={`${index}-${singleSection.title}`}>
+                  <SectionComponent data={singleSection} acknowledgementData={acknowledgementData || undefined} />;
+                </div>
+              }
+
               return <div id={singleSection.type} key={`${index}-${singleSection.title}`}>
                 <SectionComponent data={singleSection} />;
               </div>

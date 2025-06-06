@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem, PaginationNav } from "@carbon/react";
 import { useMemo, useState } from "react";
 
-import { FaqPaginationWrapper, FaqQuestions, FaqSection } from "../styles/about-giga-map-styles";
+import { FaqPaginationWrapper, FaqQuestions, FaqSection, FaqSectionTitle } from "../styles/about-giga-map-styles";
 import { AboutType } from "../about.type";
 
 const FrequentlyAskedQuestions = ({ data }: { data: AboutType }) => {
@@ -17,7 +17,11 @@ const FrequentlyAskedQuestions = ({ data }: { data: AboutType }) => {
 
   return (
     <FaqSection id={data?.type} $style={data.style}>
-      <p className='faq-title'>{data?.title}</p>
+      <FaqSectionTitle>
+        <h2>{data?.title}</h2>
+        <p>Find answers to common questions about Giga Maps and our school connectivity platform</p>
+      </FaqSectionTitle>
+
       <FaqQuestions>
         <Accordion>
           {
@@ -29,15 +33,18 @@ const FrequentlyAskedQuestions = ({ data }: { data: AboutType }) => {
           }
         </Accordion>
       </FaqQuestions>
-      <FaqPaginationWrapper>
-        <PaginationNav
-          page={page}
-          onChange={(page: number) => {
-            setPage(page)
-          }}
-          totalItems={Math.ceil(data?.content.length / itemsPerPage)}
-        />
-      </FaqPaginationWrapper>
+
+      {Math.ceil(data?.content.length / itemsPerPage) > 1 && (
+        <FaqPaginationWrapper>
+          <PaginationNav
+            page={page}
+            onChange={(page: number) => {
+              setPage(page)
+            }}
+            totalItems={Math.ceil(data?.content.length / itemsPerPage)}
+          />
+        </FaqPaginationWrapper>
+      )}
     </FaqSection>
   )
 }

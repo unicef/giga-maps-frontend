@@ -1,11 +1,16 @@
 import FeatureCard from '../common/feature-card'
-import { FeatureCardContainer } from '../styles/about-giga-map-styles'
+import { FeatureCardContainer, ResourcesSectionTitle, ResourcesGrid } from '../styles/about-giga-map-styles'
 import { AboutType } from '../about.type';
 
 const Resources = ({ data }: { data: AboutType }) => {
   return (
     <FeatureCardContainer id={data?.type} $style={data.style}>
-      <div className="resource-wrapper">
+      <ResourcesSectionTitle>
+        <h2>Other Giga Services</h2>
+        <p>Explore the tools and resources that power global school connectivity</p>
+      </ResourcesSectionTitle>
+
+      <ResourcesGrid>
         {
           data?.content.map((resource, index) => (
             <FeatureCard
@@ -18,7 +23,7 @@ const Resources = ({ data }: { data: AboutType }) => {
             />
           ))
         }
-      </div>
+      </ResourcesGrid>
     </FeatureCardContainer>
   )
 }
