@@ -15,7 +15,7 @@ const $dataChecking = restore(setDataChecking, false);
 const $isMapLoading = restore(setMapLoadingState, true)
 const setMapPercentage = createEvent<number>();
 const $mapPercent = restore(setMapPercentage, 20)
-const setLoadingState = createEvent<'active' | 'finished' | 'error'>();
+const setLoadingState = createEvent<'active' | 'finished' | 'loading' | 'error'>();
 const $loadingStatus = restore(setLoadingState, 'active');
 // check for data load
 let timeout: ReturnType<typeof setTimeout>;
@@ -30,19 +30,19 @@ sample({
     setDataChecking(true);
     mapDataTilesOnLoad = function (e: MapEventType) {
       clearTimeout(timeout);
+      setLoadingState('loading')
       if ($mapPercent.getState() < 73) {
         setMapPercentage($mapPercent.getState() + 4);
       }
       timeout = setTimeout(() => {
         if (map.getSource(DEFAULT_SOURCE) && map.isSourceLoaded(DEFAULT_SOURCE) && map.areTilesLoaded()) {
-          console.log('called...')
           setMapLoadingState(false);
           setMapPercentage(100);
           setDataChecking(false)
-          setTimeout(() => {
+          timeout = setTimeout(() => {
             setMapPercentage(0);
             setLoadingState('finished');
-          }, 200)
+          }, 600)
           map.off('data', mapDataTilesOnLoad)
         }
       })
