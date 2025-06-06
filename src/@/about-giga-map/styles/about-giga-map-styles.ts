@@ -214,7 +214,7 @@ padding: 0 2rem;
   grid-template-columns: 1fr;
   gap: 1.5rem;
   padding: 0 1rem;
-}
+    }
 `
 
 export const FeatureCardWrapper = styled.a<{ $style?: string }>`
@@ -265,8 +265,8 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
     
     &::before {
       transform: scaleX(1);
-    }
-    
+  }
+
     &::after {
       opacity: 1;
     }
@@ -388,12 +388,12 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
       border-radius: 12px;
     }
     
-    h3{
-      font-size: 1.25rem;
+      h3{
+        font-size: 1.25rem;
       margin-bottom: 0.75rem;
-    }
+      }
     
-    p{
+      p{
       font-size: 0.9375rem;
       line-height: 1.5;
     }
@@ -405,7 +405,7 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
       span {
         font-size: 0.8125rem;
       }
-    }
+  }
   }
   
   ${props => props.$style && css`${props.$style}`}
@@ -446,7 +446,7 @@ padding: 4rem 2rem;
 min-height: 100vh;
 position: relative;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0.05) 100%);
-
+   
 &::before {
   content: '';
   position: absolute;
@@ -493,11 +493,11 @@ background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0
     height: 20px;
     width: 20px;
     fill: #fff;
-  }
+      }
 }
 
 .right{
-  position: absolute;
+position: absolute;
   right: 2rem;
   z-index: 3;
   background: rgba(39, 122, 255, 0.1);
@@ -532,15 +532,15 @@ background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0
     height: 20px;
     width: 20px;
     fill: #fff;
-  }
-}
+      }
+    }
 
-${props => props.$style ?? css`${props.$style}`}
+    ${props => props.$style ?? css`${props.$style}`}
 
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
   padding: 2rem 1rem;
   
-  .left{
+      .left{
     left: 1rem;
     width: 40px;
     height: 40px;
@@ -548,10 +548,10 @@ ${props => props.$style ?? css`${props.$style}`}
     svg{
       height: 16px;
       width: 16px;
-    }
+      }
   }
   
-  .right {
+      .right {
     right: 1rem;
     width: 40px;
     height: 40px;
@@ -559,8 +559,8 @@ ${props => props.$style ?? css`${props.$style}`}
     svg{
       height: 16px;
       width: 16px;
+      }
     }
-  }
 }
 `
 export const CaseStudiesCardsContainer = styled.div<{ pos: number }>`
@@ -1291,7 +1291,7 @@ export const CaseStudiesCard = styled.div<{ column?: number, $style?: string }>`
   }
   
   .right-spacing {
-    flex: 1 1 0;
+     flex: 1 1 0;
     margin-right: 1px;
   }
   
@@ -1316,7 +1316,7 @@ export const CaseStudiesCard = styled.div<{ column?: number, $style?: string }>`
   ${props => props.$style ?? css`${props.$style}`}
 `
 export const CaseStudyPosterWrapper = styled.div`
-width: 100%; 
+     width: 100%; 
 height: 20rem;
 position: relative;
 overflow: hidden;
@@ -1952,7 +1952,7 @@ export const NavBarButtonWrapper = styled.div`
     @media(max-width: 1200px){
       button {
         margin-left: 1.5rem;
-      }
+    }
     }
     
     @media(max-width: 968px){
@@ -1974,9 +1974,9 @@ margin-right: 1.25rem;
 padding: 0.5rem 0;
 
 a {
-  font-size: 14px;
-  font-weight: 500;
-  color: ${props => props.$active ? '#277AFF' : '#fff'};
+font-size: 14px;
+font-weight: 500;
+color: ${props => props.$active ? '#277AFF' : '#fff'};
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.2s ease;
@@ -2398,7 +2398,7 @@ h2{
 p{
   color: rgba(255, 255, 255, 0.85);
   font-size: 1.125rem;
-  font-weight: 400;
+font-weight: 400;
   line-height: 1.7;
   margin-bottom: 2.5rem;
 }
@@ -2433,7 +2433,7 @@ button{
     
     &::before {
       left: 100%;
-    }
+}
   }
   
   &:active {
@@ -2500,9 +2500,9 @@ export const ResourceSectionImage = styled.div`
 
     img{
       height: 100%;
-      width: 100%;
+    width: 100%;
       border-radius: 24px;
-      object-fit: contain;
+    object-fit: contain;
       transition: all 0.3s ease;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     }
@@ -2606,8 +2606,8 @@ position: relative;
 img{
   width: 180px;
   height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
+    border-radius: 50%;
+    object-fit: cover;
   border: 4px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
@@ -2635,7 +2635,7 @@ img{
   img{
     width: 140px;
     height: 140px;
-  }
+}
 }
 `
 
@@ -2657,7 +2657,7 @@ h3{
   margin-top: 1.5rem;
   color: #fff;
   font-size: 1.5rem;
-  font-weight: 500;
+font-weight: 500;
   line-height: 1.4;
   margin-bottom: 0.5rem;
 }
@@ -2752,9 +2752,9 @@ p {
 
 export const FaqSection = styled.div<{ $style?: string }>`
 padding: 6rem 2rem;
-display: flex;
-flex-direction: column;
-align-items: center;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
 justify-content: center;
 min-height: 100vh;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
@@ -2854,7 +2854,7 @@ width: 100%;
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: -0.01em;
-  text-align: left;
+    text-align: left;
   padding: 0;
   margin: 0;
   flex: 1;
@@ -2865,7 +2865,7 @@ width: 100%;
   font-weight: 300;
   line-height: 1.6;
   letter-spacing: 0;
-  text-align: left;
+    text-align: left;
   color: rgba(255, 255, 255, 0.85);
   padding: 0 2rem 2rem 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -2992,7 +2992,7 @@ backdrop-filter: blur(10px);
   .cds--btn--ghost {
     padding: 0.375rem;
   }
-}
+    }
 `
 
 export const AboutInfoButtonWrapper = styled.div`
@@ -3045,7 +3045,7 @@ p {
   font-size: 1.125rem;
   font-weight: 300;
   line-height: 1.6;
-  text-align: left;
+text-align: left;
   max-width: 500px;
 }
 
@@ -3087,9 +3087,9 @@ margin-bottom: 4rem;
 h4 {
   color: #fff;
   font-size: 1.25rem;
-  font-weight: 500;
+font-weight: 500;
   line-height: 1.4;
-  text-align: left;
+text-align: left;
   margin-bottom: 1.5rem;
   position: relative;
   
@@ -3144,7 +3144,7 @@ h4 {
   gap: 2rem;
   margin-bottom: 3rem;
   
-  .link-list-item {
+.link-list-item {
     padding: 1.5rem 1rem;
   }
   
@@ -3193,7 +3193,7 @@ gap: 2rem;
       
       &:hover {
         color: #4F46E5;
-      }
+}
     }
   }
   
@@ -3204,7 +3204,7 @@ gap: 2rem;
     &:hover {
       fill: #277AFF;
     }
-  }
+}
 }
 
 .left-section {
@@ -3235,7 +3235,7 @@ gap: 2rem;
       width: 20px;
       height: 20px;
       transition: fill 0.2s ease;
-    }
+}
     
     &:hover svg {
       fill: #277AFF;
@@ -3551,7 +3551,7 @@ export const getInTouchStyle = css`
       height: 2px;
       background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
       border-radius: 24px 24px 0 0;
-    }
+  }
   }
   
   h4 {
@@ -3689,7 +3689,7 @@ export const getInTouchStyle = css`
     .cds--modal-close__icon {
       width: 20px;
       height: 20px;
-    }
+  }
   }
   
   .cds--layer-one {
