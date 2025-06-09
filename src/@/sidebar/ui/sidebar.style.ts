@@ -122,14 +122,14 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
     .sidebar__expander {
       cursor: pointer;
     position: absolute;
-        top: 9.5rem;
+        top: 33.5rem;
         left: 100%;
         display: flex;
         width: 16px;
         height: 48px;
         align-items: center;
         justify-content: center;
-        background-color: #7E7E7E;
+        background-color: #181818;
         border: none;
         outline: none;
         padding: 0;
