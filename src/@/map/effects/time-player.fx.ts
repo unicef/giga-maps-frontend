@@ -1,9 +1,9 @@
 import { createEffect } from "effector";
 import { CirclePaint, Map, MapEventType } from "mapbox-gl";
-import { Colors, LayerDataProps, mapPaintData } from "../map.constant";
+import { Colors, DEFAULT_SOURCE, LayerDataProps, mapPaintData } from "../map.constant";
 import { StylePaintData } from "../map.types";
 import { ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
-import { createSource, defaultSource } from "../utils";
+import { createSource } from "../utils";
 import { onLoadTimePlayerData, onSetTimePlayerCurrentYear, onTimeoutTimePlayer, onToggleTimeplayer, setLoaderTimePlayer } from "~/@/sidebar/sidebar.model";
 import { clearMapDataFx } from "./add-layers-fx";
 import { timePlayerData } from "../map.init";
@@ -50,7 +50,7 @@ export const timePlayerFx = createEffect(({ map, timeplayerInfo }: ReturnType<ty
   map.addLayer({
     id: timePlayerLayerId,
     type: 'circle',
-    source: defaultSource,
+    source: DEFAULT_SOURCE,
     'source-layer': "default",
     paint: {
       "circle-color": 'transparent',
@@ -61,7 +61,7 @@ export const timePlayerFx = createEffect(({ map, timeplayerInfo }: ReturnType<ty
   mapDataTilesOnLoad = function (e: MapEventType) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      if (map.isSourceLoaded(defaultSource) && map.areTilesLoaded()) {
+      if (map.isSourceLoaded(DEFAULT_SOURCE) && map.areTilesLoaded()) {
         onLoadTimePlayerData(true);
         map.off('data', mapDataTilesOnLoad)
       }

@@ -1,16 +1,26 @@
-import { createEffect } from "effector"
+import { attach, createEffect } from "effector"
 
 import { APIListType } from "~/api/types"
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 
 import { DataLayer, DataSource, LayerStatusType, PreviewDataType } from "../types/giga-layer.type"
 
-
-export const getDataLayerListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number; search: string }) => {
+export const commonLayerListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number; search?: string }) => {
   return createRequestAuthFx({
     url: `accounts/layers/?expand=created_by,last_modified_by,published_by&page_size=${pageSize}&page=${page}${search ? `&search=${search}` : ''}&ordering=-last_modified_at,name`
   }) as Promise<APIListType<DataLayer>>
 })
+
+export const cacheDataLayerListFx = attach({
+  effect: commonLayerListFx,
+  mapParams: (props) => props,
+})
+
+export const getDataLayerListFx = attach({
+  effect: commonLayerListFx,
+  mapParams: (props) => props,
+})
+
 
 export const getDataLayerByIdFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
