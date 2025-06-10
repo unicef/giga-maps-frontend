@@ -7,30 +7,32 @@ const FooterLinks = ({ data }: { data: any }) => {
 
   return (
     <FooterSection $style={data?.style}>
-      <FooterTitleSection>
-        <div className="footer-logo">
-          <NavBarGigaLogo $size={'2.5rem'} dangerouslySetInnerHTML={{ __html: data?.content?.logo }}>
-          </NavBarGigaLogo>
-        </div>
-        <p>
-          {data.text?.[0]}
-        </p>
-      </FooterTitleSection>
-      <FooterLinksSection>
-        {data?.content?.footerLinks?.map((item: { text: any; }, index: number) => (<div className="link-list-item" dangerouslySetInnerHTML={{ __html: item.text }} key={`${item.text}-${index}`} />))}
-      </FooterLinksSection>
-      <FooterMediaSection>
-        <div className='right-section'>
-          <p>{data?.content?.footerDescription}</p>
+      <div className="section-content">
+        <FooterTitleSection>
+          <div className="footer-logo">
+            <NavBarGigaLogo $size={'2.5rem'} dangerouslySetInnerHTML={{ __html: data?.content?.logo }}>
+            </NavBarGigaLogo>
+          </div>
           <p>
-            © {currentYear}
+            {data.text?.[0]}
           </p>
-          {data?.content?.footerLogo?.map((item: { text: any; }, index: number) => <p key={index} dangerouslySetInnerHTML={{ __html: item.text }} />)}
-        </div>
-        <div className='left-section'>
-          {data?.content?.socialLinks.map((item: { text: any; }, index: number) => <div key={`${item.text}-{index}`} dangerouslySetInnerHTML={{ __html: item.text }} />)}
-        </div>
-      </FooterMediaSection>
+        </FooterTitleSection>
+        <FooterLinksSection>
+          {data?.content?.footerLinks?.map((item: { text: any; }, index: number) => (<div className="link-list-item" dangerouslySetInnerHTML={{ __html: item.text }} key={`${item.text}-${index}`} />))}
+        </FooterLinksSection>
+        <FooterMediaSection>
+          <div className='right-section'>
+            <p>{data?.content?.footerDescription}</p>
+            <p>
+              © {currentYear}
+            </p>
+            {data?.content?.footerLogo?.map((item: { text: any; }, index: number) => <p key={index} dangerouslySetInnerHTML={{ __html: item.text }} />)}
+          </div>
+          <div className='left-section'>
+            {data?.content?.socialLinks.map((item: { text: any; }, index: number) => <div key={`${item.text}-{index}`} dangerouslySetInnerHTML={{ __html: item.text }} />)}
+          </div>
+        </FooterMediaSection>
+      </div>
     </FooterSection>
   )
 }

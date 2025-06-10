@@ -9,41 +9,43 @@ const LiveMap = ({ data }: { data: AboutType }) => {
   const title = data?.title;
   return (
     <AboutSection id={data?.type} $style={data.style}>
-      <AboutInfoSection>
-        <h1 className="heading" dangerouslySetInnerHTML={{ __html: title ?? '' }} />
-        <p>
-          {data?.text?.[0]}
-        </p>
+      <div className="section-content">
+        <AboutInfoSection>
+          <h1 className="heading" dangerouslySetInnerHTML={{ __html: title ?? '' }} />
+          <p>
+            {data?.text?.[0]}
+          </p>
 
-        {/* Enhanced stats preview */}
-        <div className="stats-preview">
-          <div className="stat-item">
-            <span className="stat-number">2.1M</span>
-            <span className="stat-label">Schools mapped</span>
+          {/* Enhanced stats preview */}
+          <div className="stats-preview">
+            <div className="stat-item">
+              <span className="stat-number">2.1M</span>
+              <span className="stat-label">Schools mapped</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">363.5k</span>
+              <span className="stat-label">Connectivity status</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">106.3k</span>
+              <span className="stat-label">Real-time data</span>
+            </div>
           </div>
-          <div className="stat-item">
-            <span className="stat-number">363.5k</span>
-            <span className="stat-label">Connectivity status</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">106.3k</span>
-            <span className="stat-label">Real-time data</span>
-          </div>
-        </div>
 
-        <Link href={data?.cta?.link?.[0]} target="_blank">
-          <ExploreGigaMapButton>
-            <Button kind='primary'
-              renderIcon={ArrowRight}>{data?.cta?.text?.[0]}
-            </Button>
-          </ExploreGigaMapButton>
-        </Link>
-      </AboutInfoSection>
-      <AboutImageSection>
-        <InteractiveGlobeWrapper>
-          <InteractiveGlobe />
-        </InteractiveGlobeWrapper>
-      </AboutImageSection>
+          <Link href={data?.cta?.link?.[0]} target="_blank">
+            <ExploreGigaMapButton>
+              <Button kind='primary'
+                renderIcon={ArrowRight}>{data?.cta?.text?.[0]}
+              </Button>
+            </ExploreGigaMapButton>
+          </Link>
+        </AboutInfoSection>
+        <AboutImageSection>
+          <InteractiveGlobeWrapper>
+            <InteractiveGlobe />
+          </InteractiveGlobeWrapper>
+        </AboutImageSection>
+      </div>
     </AboutSection>
   )
 }

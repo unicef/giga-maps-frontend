@@ -100,6 +100,13 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
   const connectionLinesRef = useRef<THREE.Line[]>([]);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
+  const smartRotationRef = useRef({
+    currentRotationY: 0,
+    currentRotationX: 0,
+    rotationSpeed: 0.001, // Slower continuous rotation
+    pathProgress: 0, // Progress along the smart path (0-1)
+    pathSpeed: 0.0005 // Speed of progression along the path
+  });
 
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
@@ -110,6 +117,69 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [previousMousePosition, setPreviousMousePosition] = useState({ x: 0, y: 0 });
+
+  // Define a smart path that goes through populated regions
+  const smartRotationPath = [
+    { lat: 40, lng: -100 }, // North America
+    { lat: 50, lng: -10 },  // Europe approach
+    { lat: 50, lng: 10 },   // Europe
+    { lat: 30, lng: 50 },   // Middle East
+    { lat: 20, lng: 80 },   // India
+    { lat: 30, lng: 120 },  // East Asia
+    { lat: 0, lng: 140 },   // Southeast Asia
+    { lat: -25, lng: 140 }, // Australia
+    { lat: -30, lng: -60 }, // South America
+    { lat: -10, lng: -40 }, // Brazil
+    { lat: 10, lng: -20 },  // Africa approach
+    { lat: 0, lng: 20 },    // Central Africa
+    { lat: 20, lng: 10 },   // North Africa
+    { lat: 40, lng: -50 }   // Back to North America approach
+  ];
+
+  // Convert lat/lng to rotation angles
+  const latLngToRotation = (lat: number, lng: number) => {
+    const rotationY = (lng * Math.PI) / 180;
+    const rotationX = (-lat * Math.PI) / 180;
+    return { rotationY, rotationX };
+  };
+
+  // Continuous smart rotation logic
+  const updateContinuousSmartRotation = () => {
+    const smartRotation = smartRotationRef.current;
+
+    // Progress along the path
+    smartRotation.pathProgress += smartRotation.pathSpeed;
+    if (smartRotation.pathProgress >= 1) {
+      smartRotation.pathProgress = 0; // Loop back to start
+    }
+
+    // Calculate current position along the path
+    const pathIndex = smartRotation.pathProgress * (smartRotationPath.length - 1);
+    const currentIndex = Math.floor(pathIndex);
+    const nextIndex = (currentIndex + 1) % smartRotationPath.length;
+    const segmentProgress = pathIndex - currentIndex;
+
+    // Interpolate between current and next path points
+    const currentPoint = smartRotationPath[currentIndex];
+    const nextPoint = smartRotationPath[nextIndex];
+
+    const interpolatedLat = currentPoint.lat + (nextPoint.lat - currentPoint.lat) * segmentProgress;
+    let interpolatedLng = currentPoint.lng + (nextPoint.lng - currentPoint.lng) * segmentProgress;
+
+    // Handle longitude wraparound (shortest path)
+    let lngDiff = nextPoint.lng - currentPoint.lng;
+    if (lngDiff > 180) lngDiff -= 360;
+    if (lngDiff < -180) lngDiff += 360;
+    interpolatedLng = currentPoint.lng + lngDiff * segmentProgress;
+
+    // Convert to rotation angles
+    const targetRotation = latLngToRotation(interpolatedLat, interpolatedLng);
+
+    return {
+      rotationY: targetRotation.rotationY,
+      rotationX: targetRotation.rotationX
+    };
+  };
 
   // Convert lat/lng to 3D coordinates
   const latLngToVector3 = (lat: number, lng: number, radius: number): THREE.Vector3 => {
@@ -190,7 +260,7 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
   const createGlowingDots = () => {
     console.log('Creating glowing dots...'); // Debug log
     glowingDotsRef.current = [];
-    const randomDots = generateRandomGlowingDots(300); // Generate 300 random dots for much higher density
+    const randomDots = generateRandomGlowingDots(600); // Generate 600 random dots for extremely high density
     console.log('Generated dots:', randomDots.length); // Debug log
 
     randomDots.forEach((dot, index) => {
@@ -246,14 +316,14 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
   const createConnectionLines = () => {
     connectionLinesRef.current = [];
     const dots = glowingDotsRef.current;
-    const maxConnections = 100; // Double the lines for very dense network effect
+    const maxConnections = 200; // Quadruple the lines for massive network effect
 
     console.log('Creating data transfer lines...'); // Debug log
     console.log('Available dots for connections:', dots.length); // Debug log
 
     // Create random connections with various distances
     let connectionsCreated = 0;
-    for (let i = 0; i < 400 && connectionsCreated < maxConnections; i++) {
+    for (let i = 0; i < 800 && connectionsCreated < maxConnections; i++) {
       const dot1 = dots[Math.floor(Math.random() * dots.length)];
       const dot2 = dots[Math.floor(Math.random() * dots.length)];
 
@@ -446,7 +516,9 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
       animationIdRef.current = requestAnimationFrame(animate);
 
       if (globeRef.current && !isDragging) {
-        globeRef.current.rotation.y += 0.002;
+        const smartRotation = updateContinuousSmartRotation();
+        globeRef.current.rotation.y = smartRotation.rotationY;
+        globeRef.current.rotation.x = smartRotation.rotationX;
       }
 
       // Animate point glow
@@ -558,7 +630,7 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
     };
   }, [isDragging]);
 
-  // Mouse interaction handlers
+  // Simplified mouse interaction handlers
   const handleMouseDown = (event: React.MouseEvent) => {
     setIsDragging(true);
     setPreviousMousePosition({ x: event.clientX, y: event.clientY });

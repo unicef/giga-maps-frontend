@@ -12,7 +12,7 @@ export const AboutGigaMapNavBarStyle = styled.div`
 display: flex;
 align-items: center;
 justify-content: space-between;
-padding: 1rem 2rem;
+padding: 1rem 0;
 background: #000;
 width: 100vw;
 position: fixed;
@@ -20,6 +20,14 @@ top: 0;
 z-index: 10;
 min-height: 4rem;
 box-sizing: border-box;
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 6rem;
+}
 
 .sidebar-menuIcon {
   margin-top: -0.45rem;
@@ -29,12 +37,17 @@ box-sizing: border-box;
 }
 
 @media (max-width: 968px) {
-  padding: 0.75rem 1.5rem;
+  .navbar-content {
+    padding: 0 2rem;
+  }
 }
 
 @media (max-width: 768px) {
-  padding: 0.5rem 1rem;
   min-height: 3.5rem;
+  
+  .navbar-content {
+    padding: 0 5%;
+  }
 }
 `
 
@@ -42,17 +55,20 @@ export const AboutGigaMapBodyStyle = styled.div`
   color: #FFF;
   background-color: #000; 
   display: flex;
-  padding: 6rem 2rem 4rem 2rem;
+  padding-top: 6rem;
+  padding-bottom: 4rem;
   flex-direction: column;
   overflow-y: unset;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
   @media (max-width: 968px) {
-    padding: 5.5rem 1.5rem 4rem 1.5rem;
+    padding-top: 5.5rem;
+    padding-bottom: 4rem;
   }
 
   @media (max-width: 768px) {
-    padding: 5rem 1rem 4rem 1rem;
+    padding-top: 5rem;
+    padding-bottom: 4rem;
   }
 `
 export const ArrowDownIconWrapper = styled.div`
@@ -127,10 +143,13 @@ border-bottom: 1px solid #595959;
 
 `
 export const FeatureCardContainer = styled.div<{ $style?: string }>`
-    padding: 6rem 2rem;
+    padding: 4rem 0;
     background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
-    min-height: 100vh;
     position: relative;
+    
+    .section-content {
+      padding: 0 6rem;
+    }
     
     &::before {
       content: '';
@@ -150,13 +169,17 @@ export const FeatureCardContainer = styled.div<{ $style?: string }>`
     ${props => props.$style && css`${props.$style}`}
     
     @media (max-width: 768px) {
-      padding: 4rem 1rem;
+      padding: 3rem 0;
+      
+      .section-content {
+        padding: 0 5%;
+      }
     }
 `
 
 export const ResourcesSectionTitle = styled.div`
-text-align: center;
-margin-bottom: 4rem;
+text-align: left;
+margin-bottom: 3rem;
 position: relative;
 
 h2 {
@@ -173,15 +196,14 @@ p {
   font-weight: 300;
   line-height: 1.6;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 &::after {
   content: '';
   position: absolute;
   bottom: -1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 80px;
   height: 4px;
   background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
@@ -189,7 +211,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   
   h2 {
     font-size: 2.5rem;
@@ -204,33 +226,32 @@ p {
 
 export const ResourcesGrid = styled.div`
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-gap: 2rem;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 1.5rem;
 max-width: 1200px;
-margin: 0 auto;
-padding: 0 2rem;
+margin-left: auto;
+margin-right: auto;
 
 @media (max-width: 768px) {
   grid-template-columns: 1fr;
-  gap: 1.5rem;
-  padding: 0 1rem;
+  gap: 1rem;
     }
 `
 
 export const FeatureCardWrapper = styled.a<{ $style?: string }>`
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 1.5rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(39, 122, 255, 0.01) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  border-radius: 16px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   text-decoration: none;
   backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  min-height: 280px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-height: 200px;
 
   &::before {
     content: '';
@@ -290,15 +311,15 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
 
   .card-icon {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     background: rgba(39, 122, 255, 0.1);
     border: 2px solid rgba(39, 122, 255, 0.2);
-    border-radius: 14px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -313,10 +334,10 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
 
   h3{
     color: #fff;
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-weight: 500;
     line-height: 1.3;
-    margin-bottom: 0.875rem;
+    margin-bottom: 0.75rem;
     transition: all 0.3s ease;
     letter-spacing: -0.01em;
   }
@@ -324,9 +345,9 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
   p{
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: auto;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.5;
     flex-grow: 1;
     opacity: 0.9;
   }
@@ -336,19 +357,19 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding: 0.75rem 1.25rem;
+    margin-top: 1rem;
+    padding: 0.65rem 1rem;
     background: linear-gradient(135deg, #277AFF 0%, #4F46E5 100%);
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     color: #fff;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 12px rgba(39, 122, 255, 0.3);
+    box-shadow: 0 3px 10px rgba(39, 122, 255, 0.3);
     
     span {
       font-size: 0.875rem;
@@ -379,23 +400,23 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
   }
   
   @media (max-width: 768px) {
-    padding: 1.75rem;
-    min-height: 260px;
+    padding: 1.25rem;
+    min-height: 180px;
     
     .card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
     }
     
       h3{
-        font-size: 1.25rem;
-      margin-bottom: 0.75rem;
+        font-size: 1.125rem;
+      margin-bottom: 0.5rem;
       }
     
       p{
-      font-size: 0.9375rem;
-      line-height: 1.5;
+      font-size: 0.875rem;
+      line-height: 1.4;
     }
     
     .hover-button {
@@ -436,25 +457,38 @@ export const CaseStudiesOneWrapper = styled.div`
     }
 `
 export const SliderWrapper = styled.div<{ $style?: string }>`
+  .section-content {
+    padding: 0 6rem;
+    
+    @media (max-width: 768px) {
+      padding: 0 5%;
+    }
+  }
+  
   ${props => props.$style ?? css`${props.$style}`}
 `
 export const RightAndLeftWrapper = styled.div<{ $style?: string }>`
 display: flex;
 align-items: center;
 justify-content: center;
-padding: 4rem 2rem;
-min-height: 100vh;
+padding: 2rem 0;
 position: relative;
-background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0.05) 100%);
+
+// When used standalone (not within TestimonialSectionWrapper)
+&:not(.within-testimonial) {
+  padding: 4rem 6rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0.05) 100%);
    
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
+  }
 }
    
 .left{
@@ -538,30 +572,32 @@ position: absolute;
     ${props => props.$style ?? css`${props.$style}`}
 
     @media (max-width: 768px) {
-  padding: 2rem 1rem;
+      &:not(.within-testimonial) {
+        padding: 2rem 1rem;
+      }
   
       .left{
-    left: 1rem;
-    width: 40px;
-    height: 40px;
-    
-    svg{
-      height: 16px;
-      width: 16px;
+        left: 1rem;
+        width: 40px;
+        height: 40px;
+        
+        svg{
+          height: 16px;
+          width: 16px;
+        }
       }
-  }
   
       .right {
-    right: 1rem;
-    width: 40px;
-    height: 40px;
-    
-    svg{
-      height: 16px;
-      width: 16px;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        
+        svg{
+          height: 16px;
+          width: 16px;
+        }
       }
     }
-}
 `
 export const CaseStudiesCardsContainer = styled.div<{ pos: number }>`
   display: flex;
@@ -570,20 +606,33 @@ export const CaseStudiesCardsContainer = styled.div<{ pos: number }>`
   margin-top:2rem;
   transition: all 1s;
   transform: translateX(-${props => props.pos ?? 0}%);
+  width: 100%;
+  box-sizing: border-box;
   
 
 `
 export const CaseStudiesOneCardsContainer = styled.div<{ pos: number }>`
   display: flex;
-  justify-content: space-between;
-  margin-top:2rem;
+  margin-top: 2rem;
   transition: all 1s;
   transform: translateX(-${props => props.pos ?? 0}%);
+  width: 100%;
+  box-sizing: border-box;
+  gap: 2rem;
+  padding: 0 1rem;
   
+  @media(max-width: 1024px){
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
 
+  @media(max-width: 768px){
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
 `
 export const CaseStudiesSectionTitle = styled.div`
-text-align: center;
+text-align: left;
 margin-bottom: 4rem;
 position: relative;
 
@@ -600,7 +649,7 @@ p {
   font-size: 1.25rem;
   color: rgba(255, 255, 255, 0.8);
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
   line-height: 1.6;
   font-weight: 300;
 }
@@ -609,11 +658,10 @@ p {
   content: '';
   position: absolute;
   bottom: -2rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 120px;
   height: 4px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.8) 50%, transparent 100%);
+  background: linear-gradient(90deg, rgba(39, 122, 255, 0.8) 0%, transparent 100%);
   border-radius: 2px;
 }
 
@@ -651,12 +699,10 @@ p {
 `
 
 export const CaseStudiesFilterableSection = styled.div`
-padding: 4rem 2rem;
-max-width: 1400px;
-margin: 0 auto;
+padding: 4rem 6rem;
 
 @media (max-width: 768px) {
-  padding: 2rem 1rem;
+  padding: 2rem 5%;
 }
 `
 
@@ -889,24 +935,31 @@ backdrop-filter: blur(10px);
 `
 
 export const CaseStudiesCompactSection = styled.div`
-padding: 4rem 2rem;
-max-width: 1200px;
-margin: 0 auto;
+padding: 4rem 6rem;
 
 @media (max-width: 768px) {
-  padding: 2rem 1rem;
+  padding: 2rem 5%;
 }
 `
 
 export const CompactPreviewGrid = styled.div`
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+display: flex;
+flex-wrap: wrap;
 gap: 1.5rem;
 margin-bottom: 2rem;
 
+& > * {
+  flex: 1 1 280px;
+  min-width: 280px;
+}
+
 @media (max-width: 768px) {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+  
+  & > * {
+    flex: 1 1 250px;
+    min-width: 250px;
+  }
 }
 `
 
@@ -1238,8 +1291,10 @@ padding: 2.5rem;
 export const CaseStudiesCard = styled.div<{ column?: number, $style?: string }>`
   flex: 1 1 0;
   padding: 0 1.5rem;
-  min-width: calc(100% / ${props => props.column ?? 1});
+  min-width: calc((100% / ${props => props.column ?? 1}) - 3rem);
+  max-width: calc((100% / ${props => props.column ?? 1}) - 3rem);
   position: relative;
+  box-sizing: border-box;
   
   &:hover .case-study-container {
     transform: translateY(-12px);
@@ -1440,7 +1495,7 @@ export const PaginationContainer = styled.div`
 `
 
 export const PartnersWrapper = styled.div<{ $style?: string }>`
-padding: 4rem 2rem;
+padding: 4rem 0;
 min-height: 100vh;
 display: flex;
 flex-direction: column;
@@ -1449,28 +1504,28 @@ justify-content: center;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(79, 70, 229, 0.02) 100%);
 position: relative;
 
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
+.section-content {
+  padding: 0 6rem;
+  width: 100%;
 }
 
+
+
 @media (max-width: 768px) {
-  padding: 3rem 1rem;
+  padding: 3rem 0;
   min-height: 80vh;
+  
+  .section-content {
+    padding: 0 5%;
+  }
 }
 
 ${props => props.$style ?? css`${props.$style}`}
 `
 
 export const PartnersSectionTitle = styled.div`
-text-align: center;
+text-align: left;
 margin-bottom: 4rem;
-max-width: 800px;
 
 h2 {
   font-size: 3.5rem;
@@ -1485,8 +1540,7 @@ h2::after {
   content: '';
   position: absolute;
   bottom: -0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 80px;
   height: 2px;
   background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
@@ -2013,22 +2067,36 @@ align-items:center;
 justify-content: space-between;
 width: 100%;
 min-height:100vh;
-padding-left: 1rem;
 position: relative;
-padding-top: 2rem;
-padding-bottom: 2rem;
+padding: 2rem 0;
+
+.section-content {
+  padding: 0 6rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  transform: translateY(-3rem);
+}
+
 @media(max-width: 768px){
   padding: 1rem 0;
   min-height: 70vh;
+  
+  .section-content {
+    padding: 0 5%;
+    flex-direction: column;
+    gap: 2rem;
+    transform: translateY(-1rem);
+  }
 }
   ${props => props.$style ?? css`${props.$style}`}
 `
 export const AboutInfoSection = styled.div`
-width:40%;
+width: 42%;
 position: relative;
 z-index: 1;
-padding-left: 6rem;
-padding-right: 2rem;
 
 .heading {
   color: #fff;
@@ -2137,8 +2205,6 @@ button{
 
 @media(max-width: 768px){
   width: 70%;
-  padding: 2rem 8%;
-  padding-right: 1rem;
   
   .heading {
     font-size: 3rem;
@@ -2179,13 +2245,11 @@ button{
 `
 
 export const AboutImageSection = styled.div`
-width:60%;
-position: absolute;
-right: 0;
-top: 0;
-bottom: 0;
+width: 58%;
+position: relative;
 display: flex;
 align-items: center;
+justify-content: center;
 img{
   width:  100%;
   height:  740px;
@@ -2193,7 +2257,8 @@ img{
   object-position: right;
 }
 @media(max-width: 768px){
-  width:80%;
+  width:100%;
+  margin-top: 2rem;
 }
 `
 
@@ -2327,11 +2392,11 @@ interface ResourceSectionItemProps {
 }
 
 export const ResourceSectionItem = styled.div<ResourceSectionItemProps & { $style?: string }>`
-padding: 4rem 6rem;
+padding: 4rem 6rem 2rem 6rem;
 display: flex;
 align-items: center;
 justify-content: space-between;
-min-height: 100vh;
+min-height: 80vh;
 flex-direction: ${(props) => props.directionReverse ? "row-reverse" : "row"};
 position: relative;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
@@ -2560,14 +2625,15 @@ display: flex;
 align-items: center;
 justify-content: space-between;
 padding: 2rem 3rem;
-min-width: calc(100% / ${props => props.column ?? 1});
+width: 100%;
+flex-shrink: 0;
 background: rgba(255, 255, 255, 0.02);
 border-radius: 20px;
 border: 1px solid rgba(255, 255, 255, 0.05);
 backdrop-filter: blur(10px);
-margin: 0 1rem;
 position: relative;
 overflow: hidden;
+box-sizing: border-box;
 
 &::before {
   content: '';
@@ -2582,13 +2648,11 @@ overflow: hidden;
 @media(max-width: 1024px){
   flex-direction: column;
   padding: 2rem 1.5rem;
-  margin: 0 0.5rem;
 }
 
 @media(max-width: 768px){
   flex-direction: column;
   padding: 1.5rem 1rem;
-  margin: 0 0.25rem;
   border-radius: 16px;
 }
 
@@ -2644,6 +2708,54 @@ width: 70%;
 margin-left: 3rem;
 position: relative;
 
+.quote-icon {
+  position: absolute;
+  top: -1rem;
+  left: -1rem;
+  z-index: 1;
+  
+  svg {
+    width: 48px;
+    height: 36px;
+    opacity: 0.6;
+  }
+}
+
+.testimonial-quote {
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #fff;
+  font-style: italic;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+  padding-left: 2rem;
+}
+
+.testimonial-author {
+  margin-top: 2rem;
+  padding-left: 2rem;
+  
+  h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+  
+  h5 {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+// Legacy support for old structure
 p{
   font-size: 1.75rem;
   font-weight: 300;
@@ -2672,10 +2784,51 @@ h5{
 @media (max-width: 1024px){
   width: 100%;
   margin-left: 0;
-  text-align: center;
+  text-align: left;
+  
+  .quote-icon {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .testimonial-quote {
+    padding-left: 0;
+    text-align: left;
+  }
+  
+  .testimonial-author {
+    padding-left: 0;
+    text-align: left;
+  }
 }
 
 @media (max-width: 768px){
+  .testimonial-quote {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    padding-left: 0;
+  }
+  
+  .testimonial-author {
+    padding-left: 0;
+    
+    h3 {
+      font-size: 1.25rem;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    h5 {
+      font-size: 0.875rem;
+    }
+  }
+  
+  // Legacy support
   p{
     font-size: 1.25rem;
     line-height: 1.6;
@@ -2694,6 +2847,105 @@ h5{
 }
 `
 
+export const TestimonialSectionWrapper = styled.div<{ $style?: string }>`
+padding: 6rem 0 3rem 0;
+background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0.05) 100%);
+min-height: 80vh;
+position: relative;
+
+.section-content {
+  padding: 0 6rem;
+}
+
+&::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
+}
+
+@media (max-width: 768px) {
+  padding: 4rem 0;
+  
+  .section-content {
+    padding: 0 5%;
+  }
+}
+
+${props => props.$style && css`${props.$style}`}
+`
+
+export const TestimonialSectionTitle = styled.div`
+text-align: left;
+margin-bottom: 4rem;
+position: relative;
+
+h2 {
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+p {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 700px;
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+&::after {
+  content: '';
+  position: absolute;
+  bottom: -2rem;
+  left: 0;
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(39, 122, 255, 0.8) 0%, transparent 100%);
+  border-radius: 2px;
+}
+
+@media (max-width: 1024px) {
+  margin-bottom: 3rem;
+  
+  h2 {
+    font-size: 3rem;
+  }
+  
+  p {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  margin-bottom: 2.5rem;
+  
+  h2 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 0 1rem;
+  }
+  
+  &::after {
+    bottom: -1.5rem;
+    width: 80px;
+    height: 3px;
+  }
+}
+`
+
 export const GigaBlogWrapper = styled.div`
 display:flex;
 align-items:center;
@@ -2703,16 +2955,18 @@ justify-content:end;
 `
 
 export const FaqSectionTitle = styled.div`
-text-align: center;
-margin-bottom: 4rem;
+text-align: left;
+margin-bottom: 3rem;
 position: relative;
+width: 100%;
 
 h2 {
   font-size: 3rem;
   font-weight: 300;
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   position: relative;
+  line-height: 1.2;
 }
 
 p {
@@ -2720,16 +2974,15 @@ p {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 300;
   line-height: 1.6;
-  max-width: 700px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 0;
 }
 
 &::after {
   content: '';
   position: absolute;
   bottom: -1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 80px;
   height: 4px;
   background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
@@ -2737,7 +2990,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
   
   h2 {
     font-size: 2.5rem;
@@ -2745,20 +2998,25 @@ p {
   
   p {
     font-size: 1.125rem;
-    padding: 0 1rem;
+    max-width: 100%;
   }
 }
 `
 
 export const FaqSection = styled.div<{ $style?: string }>`
-padding: 6rem 2rem;
- display: flex;
- flex-direction: column;
- align-items: center;
-justify-content: center;
-min-height: 100vh;
+padding: 4rem 0 3rem 0;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+justify-content: flex-start;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
 position: relative;
+
+.section-content {
+  padding: 0 6rem;
+  width: 100%;
+  max-width: none;
+}
 
 &::before {
   content: '';
@@ -2779,15 +3037,29 @@ position: relative;
 }
 
 @media (max-width: 768px) {
-  padding: 4rem 1rem;
+  padding: 3rem 0 2rem 0;
+  
+  .section-content {
+    padding: 0 5%;
+  }
 }
 
 ${props => props.$style ?? css`${props.$style}`}
 `
 export const FaqQuestions = styled.div`
 margin-top: 0;
-max-width: 800px;
 width: 100%;
+
+.faq-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  width: 100%;
+}
+
+.faq-column {
+  width: 100%;
+}
 
 .cds--accordion {
   border: none;
@@ -2878,7 +3150,10 @@ width: 100%;
 }
 
 @media (max-width: 768px) {
-  max-width: 100%;
+  .faq-columns {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
   
   .cds--accordion__heading {
     padding: 1.25rem 1.5rem;
@@ -2903,108 +3178,22 @@ width: 100%;
 }
 `
 
-export const FaqPaginationWrapper = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-width: 100%;
-margin-top: 3rem;
-padding: 2rem;
-background: rgba(255, 255, 255, 0.02);
-border: 1px solid rgba(255, 255, 255, 0.05);
-border-radius: 16px;
-backdrop-filter: blur(10px);
 
-.cds--pagination-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.cds--btn--ghost {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 0.5rem;
-  min-height: auto;
-  transition: all 0.3s ease;
-  
-  &:hover:not([disabled]) {
-    background: rgba(39, 122, 255, 0.1);
-    border-color: rgba(39, 122, 255, 0.3);
-    transform: translateY(-1px);
-  }
-  
-  &:not([disabled]) svg {
-    fill: #277AFF;
-  }
-  
-  &[disabled] {
-    opacity: 0.3;
-    border-color: rgba(255, 255, 255, 0.05);
-    
-    svg {
-      fill: rgba(255, 255, 255, 0.3);
-    }
-  }
-}
-
-.cds--pagination-nav__page {
-  color: #fff;
-  font-weight: 500;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  background: transparent;
-  transition: all 0.3s ease;
-  min-width: 40px;
-  text-align: center;
-  
-  &:hover {
-    background: rgba(39, 122, 255, 0.1);
-    border-color: rgba(39, 122, 255, 0.3);
-    transform: translateY(-1px);
-  }
-  
-  &[aria-current="page"] {
-    background: linear-gradient(135deg, #277AFF 0%, #4F46E5 100%);
-    border-color: transparent;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(39, 122, 255, 0.3);
-  }
-}
-
-@media (max-width: 768px) {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  
-  .cds--pagination-nav {
-    gap: 0.25rem;
-  }
-  
-  .cds--pagination-nav__page {
-    font-size: 0.875rem;
-    padding: 0.375rem 0.75rem;
-    min-width: 36px;
-  }
-  
-  .cds--btn--ghost {
-    padding: 0.375rem;
-  }
-    }
-`
 
 export const AboutInfoButtonWrapper = styled.div`
 display: flex;
 `
 
 export const FooterSection = styled.div<{ $style?: string }>`
-padding: 6rem 7rem 4rem 7rem;
+padding: 6rem 0 4rem 0;
 margin-top: 8rem;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(0, 0, 0, 0.8) 100%);
 position: relative;
 border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+.section-content {
+  padding: 0 6rem;
+}
 
 &::before {
   content: '';
@@ -3016,11 +3205,12 @@ border-top: 1px solid rgba(255, 255, 255, 0.05);
   background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.5) 50%, transparent 100%);
 }
 
-@media (max-width:996px){
-  padding: 5rem 2rem 3rem 2rem;
-}
 @media (max-width:768px){
-  padding: 4rem 1rem 2rem 1rem;
+  padding: 4rem 0 2rem 0;
+  
+  .section-content {
+    padding: 0 5%;
+  }
 }
 ${props => props.$style && css`${props.$style}`}
 `
@@ -3295,7 +3485,7 @@ export const ExploreGigaMapButton = styled.div`
 
 export const GetInTouchSection = styled.div`
   min-height: 80vh;
-  padding: 4rem 2rem;
+  padding: 4rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3303,19 +3493,22 @@ export const GetInTouchSection = styled.div`
   background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(79, 70, 229, 0.03) 100%);
   position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
+  .section-content {
+    padding: 0 6rem;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
   }
+
+
 
   @media (max-width: 768px) {
     min-height: 70vh;
-    padding: 3rem 1rem;
+    padding: 3rem 0;
+    
+    .section-content {
+      padding: 0 5%;
+    }
   }
 `
 
@@ -3323,13 +3516,19 @@ export const GetInTouchSectionTitle = styled.div`
   text-align: center;
   margin-bottom: 3rem;
   max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 
   h2 {
     font-size: 3.5rem;
     font-weight: 300;
-    margin: 0 0 1rem 0;
+    margin: 0 0 1.5rem 0;
     color: #fff;
     line-height: 1.2;
+    background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   p {
@@ -3338,6 +3537,9 @@ export const GetInTouchSectionTitle = styled.div`
     margin: 0;
     line-height: 1.6;
     font-weight: 300;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (max-width: 768px) {
@@ -3367,12 +3569,12 @@ export const GetInTouchContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 900px;
   width: 100%;
 
   .contact-description {
     text-align: center;
     margin: 2rem 0;
+    max-width: 700px;
     
     p {
       font-size: 1.125rem;

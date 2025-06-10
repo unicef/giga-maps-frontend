@@ -137,7 +137,7 @@ const CaseStudiesModalSection = ({
                 {selectedStory.text?.[0]}
               </div>
 
-              {/* Additional details if available */}
+
               {selectedStory.text?.[1] && (
                 <div className="story-details">
                   <div className="detail-item">
