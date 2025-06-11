@@ -38,7 +38,7 @@ const TopSearchBar = () => {
         size="lg"
         kind="primary"
       >
-        <Earth />
+        <span className='label-size'>{t('country-list')}</span>
         <ChevronDown />
       </CountrySearchIcon>
       {isMobile && !mobileSearch ? (

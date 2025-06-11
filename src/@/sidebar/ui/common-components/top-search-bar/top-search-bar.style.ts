@@ -1,4 +1,4 @@
-import { IconButton, Search } from '@carbon/react';
+import { Button, IconButton, Search } from '@carbon/react';
 import styled, { css } from 'styled-components';
 
 export const SearchContainer = styled(Search) <{ $isMobile: boolean }>`
@@ -7,13 +7,13 @@ export const SearchContainer = styled(Search) <{ $isMobile: boolean }>`
 } */
 
 input{
+padding: 0 2.5rem 0 0.5rem !important;
 border-bottom: 1px solid ${props => props.theme.main};
 background: ${props => props.theme.main};
 color: ${props => props.theme.text};
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
- 
 }
 input::placeholder{
   color: #6F6F6F;
@@ -22,8 +22,11 @@ input::placeholder{
   line-height: 1.125rem;
 }
 .cds--search-magnifier{
+  
   svg{
+    display: ${props => props.value ? 'none' : 'inline-block'};
     fill:${props => props.theme.text};
+    left: 9.125rem
   }
 }
 .cds--search-close{
@@ -109,10 +112,15 @@ export const BackButton = styled.div`
     padding-right: 0.5rem;
     padding-left:0.5rem;
     `
-export const CountrySearchIcon = styled(IconButton)`
+export const CountrySearchIcon = styled(Button)`
 
-/* background: #277AFF; */
+/* background:rgb(0, 0, 0); */
 background: ${props => props.theme.main};
+padding-right: 0.5rem;
+padding-left: 0.688rem;
+.label-size {
+  font-size: 0.75rem;
+}
 .cds--btn--primary:hover{
     background-color: ${props => props.theme.main} !important; 
   }
