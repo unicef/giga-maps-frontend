@@ -763,7 +763,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
 
 .c26 .cds--tooltip-content {
   width: 10rem;
-  max-height: 10rem;
+  max-height: 20rem;
 }
 
 .c27 {
@@ -1310,6 +1310,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
               <a
                 class="c9"
                 href="/map"
+                target="_blank"
               >
                 <img
                   alt="Giga logo"
@@ -1863,7 +1864,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                     class="c26"
                   >
                     <p>
-                      0 /6M 
+                      0/6M 
                       <span>
                         schools location mapped
                       </span>
@@ -1991,7 +1992,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                         <span
                           class="cds--popover-content cds--tooltip-content"
                         >
-                          'School connectivity status mapped using government data or a real-time measurement source.
+                          School connectivity status mapped using government data or a real-time measurement source.
                         </span>
                         <span
                           class="cds--popover-caret"
@@ -2385,7 +2386,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                                 <p
                                   class="label"
                                 >
-                                  Not connected
+                                  Not Connected
                                 </p>
                               </div>
                             </div>
@@ -2746,7 +2747,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
           class="c63"
         >
           <p>
-            © 2024  
+            © 2025  
             <a
               class="giga-logo"
               href="https://www.unicef.org/innovation/giga"

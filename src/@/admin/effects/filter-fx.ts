@@ -1,7 +1,7 @@
 import { createEffect } from "effector"
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 import { APIListType } from "~/api/types"
-import { FilterConfiguration, FilterListType } from "../types/filter-list.type"
+import { ColumnDBChoicesType, FilterConfiguration, FilterListType } from "../types/filter-list.type"
 import { FilterAllValueType } from "../types/filter-list-type"
 
 export const getFilterListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number, search?: string }) => {
@@ -61,4 +61,10 @@ export const publishFilterFx = createEffect(({ id }: { id: number }) => {
     method: 'PUT',
     url: `accounts/adv_filters/${id}/publish/`,
   }) as Promise<FilterListType>
+})
+
+export const getFilterChoicesFx = createEffect(({ id }: { id: number }) => {
+  return createRequestAuthFx({
+    url: `accounts/column_configurations/${id}/choices/`,
+  }) as Promise<ColumnDBChoicesType>
 })

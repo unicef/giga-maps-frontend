@@ -90,6 +90,9 @@ const ListFilterView = () => {
   const showOptions = (item: FilterListType) => {
     const { isDropdown, isRange } = getFilterType(item.type);
     if (isDropdown) {
+      if (item.options?.group_choices) {
+        return 'Group choices'
+      }
       return item.options?.live_choices ? 'Live choices' : 'Static choices'
     } else if (isRange) {
       return item.options?.range_auto_compute ? 'Auto compute' : 'Manual compute'
@@ -177,7 +180,6 @@ const ListFilterView = () => {
       reloadApiCall();
     }
   }, [onViewPage, reloadFilter, page, pageSize, search]);
-  console.log('filter list', filterList.length);
   return (
     <>
       <PageTitleComponent

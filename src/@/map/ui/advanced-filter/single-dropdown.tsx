@@ -3,9 +3,11 @@ import { StyledDropdownSingleSelect } from "./filter-button.style"
 import { useMemo } from "react";
 import { Center, TooltipStyle } from "~/@/common/style/styled-component-style";
 import { Information } from '@carbon/icons-react'
+import { useTranslation } from "react-i18next";
 
 const SingleDropdown = ({ name, column_configuration: parameter, options, itemKey, value, onChange, description }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
-  const items = useMemo(() => [{ label: 'All', value: '' }, ...(options?.choices ?? [])], [options?.choices])
+  const { t } = useTranslation();
+  const items = useMemo(() => [{ label: t('all') as string, value: '' }, ...(options?.choices ?? [])], [options?.choices])
   const selectedItem = useMemo(() => options?.choices?.find((item) => item.value === value) ?? items[0], [items, value])
   return (
     <StyledDropdownSingleSelect

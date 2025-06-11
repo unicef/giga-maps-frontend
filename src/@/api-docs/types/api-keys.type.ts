@@ -1,3 +1,5 @@
+import { ApiCategoryType } from "~/@/admin/types/api-request.type"
+
 export interface ApiKeysType {
   id: number
   api_key: string
@@ -14,6 +16,7 @@ export interface ApiKeysType {
   is_active: boolean
   extension_valid_to: string
   has_active_extension_request: string;
+  active_api_categories_list: ApiCategoryType[]
   active_countries_list: {
     id: number
     name: string;

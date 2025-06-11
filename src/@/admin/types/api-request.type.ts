@@ -13,6 +13,7 @@ export interface ApiKeysAdminRequestType {
   created: string
   last_modified_at: string
   is_active: boolean
+  active_api_categories_list: ApiCategoryType[]
   active_countries_list: {
     id: number
     name: string;
@@ -29,7 +30,24 @@ interface User {
 interface Api {
   id: number
   name: string
+  code: string
   category: string
 }
 
 interface Filters { }
+
+export interface ApiCategoryType {
+  id: number
+  code: string
+  name: string
+  description: string
+  api: Api
+  is_default: boolean
+  created_by: string | null
+  last_modified_by: string | null
+  api_category_code: string
+  api_category_name: string
+  api_category_description: string
+  api_category_id: number
+  api_category_is_default: boolean
+}

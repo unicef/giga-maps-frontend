@@ -188,6 +188,7 @@ export type Country = {
   data_source: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
+  country_disclaimer: string;
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
@@ -319,6 +320,7 @@ export interface AdvanceFilterType {
   column_configuration: ColumnConfiguration
   options?: {
     choices?: Choice[]
+    group_choices?: boolean;
     placeholder?: string;
     minPlaceholder?: string;
     maxPlaceholder?: string;

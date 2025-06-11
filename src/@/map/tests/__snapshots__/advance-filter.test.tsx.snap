@@ -1636,7 +1636,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                 >
                   <span
                     class="cds--list-box__label"
-                    id="multiselect-field-label-5"
+                    id="multiselect-field-label-7"
                   >
                     Select Building-id
                   </span>
@@ -1941,7 +1941,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                 >
                   <span
                     class="cds--list-box__label"
-                    id="multiselect-field-label-6"
+                    id="multiselect-field-label-8"
                   >
                     Select Coverage Type
                   </span>
