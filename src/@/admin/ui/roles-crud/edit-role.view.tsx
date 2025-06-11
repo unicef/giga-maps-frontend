@@ -30,7 +30,7 @@ $formData.on(updateFormData, setPayload);
 
 const EditRole = () => {
   const showMessage = useStore($duplicateRecordWarning);
-  const { id } = useStore(editRoles.params) as { id: number };
+  const { id } = useStore(editRoles.params) ?? { id: 0 } as { id: number };
   const formData = useStore($formData);
   const editData = useStore($roleByIdResponse);
   useEffect(() => {

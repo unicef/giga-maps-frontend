@@ -3,6 +3,7 @@ import { fireEvent, render } from "@testing-library/react"
 import { testWrapper } from "~/tests/jest-wrapper"
 
 import ThemeButtons from "../ui/layer-theme/theme-buttons"
+import "~/core/i18n/instance"
 
 describe('ThemeButtons', () => {
   test('ThemeButtons', () => {

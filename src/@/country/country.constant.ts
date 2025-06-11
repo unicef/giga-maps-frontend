@@ -47,7 +47,7 @@ export const mapLabelLayerList = {
   stateLabel: 'state-label',
   minorLabel: 'settlement-minor-label',
   majorLabel: 'settlement-major-label'
-}
+} as Record<string, string>;
 
 export const mapAdminLayerList = {
   admin1Boundary: 'admin-1-boundary',
@@ -105,4 +105,11 @@ export const worldViewsCountries = [
     "code": "TR",
     "name": "Turkey"
   }
+]
+
+export const countryMapping = [
+  'active_layers_list.*.legend_configs.{*}.labels',
+  'active_layers_list.*.legend_configs.{*}.tooltip',
+  'benchmark_metadata.benchmark_name.{*}',
+  'benchmark_metadata.layer_descriptions.{*}',
 ]

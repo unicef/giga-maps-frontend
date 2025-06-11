@@ -5,12 +5,12 @@ import {
   $admin1Code,
 } from '~/@/country/country.model';
 import { defaultInterval, defaultIntervalMonth } from '~/@/sidebar/sidebar.constant';
-import { router } from '~/core/routes';
+import { $mapRoutes, router } from '~/core/routes';
 import { getInterval, isCurrentInterval } from '~/lib/date-fns-kit';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { getInverted, setPayload } from '~/lib/effector-kit';
 
-import { $connectivityAvailability, $layerUtils } from "./sidebar.model";
+import { $connectivityAvailability, $currentLayerTypeUtils, $selectedLayerId } from "./sidebar.model";
 import { createHistoryIntervalFormat } from './sidebar.util';
 
 export const changeHistoryIntervalUnit = createEvent<IntervalUnit>();
@@ -28,10 +28,10 @@ export const $isPreviousHistoryIntervalAvailable = createStore(false);
 export const $lastAvailableDates = createStore<null | { [IntervalUnit.week]: Interval, [IntervalUnit.month]: Interval }>(null);
 
 export const $isCheckedLastDate = combine([
-  $lastAvailableDates, $layerUtils
-], ([lastAvailableDates, layerUtils]) => {
-  const { currentLayerTypeUtils } = layerUtils;
+  $lastAvailableDates, $currentLayerTypeUtils, $mapRoutes
+], ([lastAvailableDates, currentLayerTypeUtils, mapRoutes]) => {
   const { isLive } = currentLayerTypeUtils;
+  if (mapRoutes.map) return true
   if (isLive) {
     return !!lastAvailableDates
   }
@@ -43,7 +43,7 @@ sample({
   fn: ({ unit, interval }) => {
     return getInterval(unit === IntervalUnit.week ? interval.start : interval.end, unit)
   },
-  target: $historyInterval,
+  target: changeHistoryInterval,
 });
 
 sample({
@@ -59,11 +59,11 @@ sample({
 });
 
 sample({
-  source: combine([$historyInterval, $historyIntervalUnit]),
   clock: nextHistoryInterval,
+  source: combine([$historyInterval, $historyIntervalUnit]),
   fn: ([interval, unit]) =>
     getInterval(add(interval.start, { [`${unit}s`]: 1 }), unit),
-  target: $historyInterval,
+  target: changeHistoryInterval,
 });
 
 sample({
@@ -71,7 +71,7 @@ sample({
   clock: previousHistoryInterval,
   fn: ([interval, unit]) =>
     getInterval(sub(interval.start, { [`${unit}s`]: 1 }), unit),
-  target: $historyInterval,
+  target: changeHistoryInterval,
 });
 
 sample({
@@ -100,10 +100,10 @@ sample({
   fn: (unit, lastAvailableDates) => {
     return lastAvailableDates ? lastAvailableDates[unit] : defaultInterval()
   },
-  target: $historyInterval
+  target: changeHistoryInterval
 })
 
 // reset 
 $historyIntervalUnit.on(changeHistoryIntervalUnit, setPayload);
 $historyInterval.reset(router.historyUpdated);
-$lastAvailableDates.reset(router.historyUpdated);
+$lastAvailableDates.reset(router.historyUpdated, $selectedLayerId);

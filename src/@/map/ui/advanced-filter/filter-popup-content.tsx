@@ -11,6 +11,7 @@ import { $country, $countrySearchParams } from "~/@/country/country.model";
 import RangeTextInput from './range-text-input';
 import { router } from "~/core/routes";
 import { $isMobile } from "~/core/media-query";
+import { useTranslation } from "react-i18next";
 
 const components = {
   'DROPDOWN': SingleDropdown,
@@ -22,6 +23,7 @@ const components = {
 
 
 const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
+  const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
   const isMobile = useStore($isMobile);
   const advanceFilterList = useStore($advanceFilterList);
@@ -85,7 +87,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          Filter Schools by
+          {t('filter-schools-by')}
         </h3>
         <IconButton
           size="md"
@@ -117,12 +119,12 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
               router.navigate(`${window.location.pathname}`);
               setOpen(false)
             }}>
-            Reset
+            {t('reset')}
           </Button>
           <Button
             type="submit"
             onClick={(e) => { void onApply(e) }}>
-            Apply
+            {t('apply')}
           </Button>
         </FilterActionButtonWrapper>
       </Form>

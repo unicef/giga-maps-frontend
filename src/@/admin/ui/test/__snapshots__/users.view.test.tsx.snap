@@ -21,16 +21,68 @@ exports[`UserDetailsComponent Render UserPermissionComponent 1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
+    <span
+      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+    >
+      <div
+        class="cds--tooltip-trigger__wrapper"
+      >
+        <button
+          aria-labelledby="tooltip-:rd:"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="cds--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
+            />
+          </svg>
+        </button>
+      </div>
+      <span
+        aria-hidden="true"
+        class="cds--popover"
+        id="tooltip-:rd:"
+        role="tooltip"
+      >
+        <span
+          class="cds--popover-content cds--tooltip-content"
+        >
+          Go Back
+        </span>
+        <span
+          class="cds--popover-caret"
+        />
+      </span>
+    </span>
     <div
       class="c1"
     >
@@ -1185,16 +1237,68 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
 }
 
 .c0 {
-  padding: 3.75rem 2rem 1rem 1rem;
+  padding: 3.75rem 2rem 1rem 0rem;
   background: #222;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.c0 button {
+  margin-right: 1rem;
+}
+
+.c0 button path:not([data-icon-path]):not([fill=none]),
+.c0 button .cds--btn__icon {
+  fill: #fff!important;
 }
 
 <div
     class="c0"
   >
+    <span
+      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
+    >
+      <div
+        class="cds--tooltip-trigger__wrapper"
+      >
+        <button
+          aria-labelledby="tooltip-:r0:"
+          class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="cds--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.7 12.3L2.9 8.5 15 8.5 15 7.5 2.9 7.5 6.7 3.7 6 3 1 8 6 13z"
+            />
+          </svg>
+        </button>
+      </div>
+      <span
+        aria-hidden="true"
+        class="cds--popover"
+        id="tooltip-:r0:"
+        role="tooltip"
+      >
+        <span
+          class="cds--popover-content cds--tooltip-content"
+        >
+          Go Back
+        </span>
+        <span
+          class="cds--popover-caret"
+        />
+      </span>
+    </span>
     <div
       class="c1"
     >
@@ -1426,8 +1530,8 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:r6:"
-        id="cds-pagination-select-:r6:-count-label"
+        for="cds-pagination-select-:r8:"
+        id="cds-pagination-select-:r8:-count-label"
       >
         Items per page
       </label>
@@ -1445,7 +1549,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r6:"
+                id="cds-pagination-select-:r8:"
                 title=""
               >
                 <option
@@ -1515,7 +1619,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:r6:-right"
+            for="cds-pagination-select-:r8:-right"
           >
             Page number, of 1 pages
           </label>
@@ -1527,7 +1631,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r6:-right"
+                id="cds-pagination-select-:r8:-right"
                 title=""
               >
                 <option
@@ -1571,7 +1675,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r7:"
+              aria-labelledby="tooltip-:r9:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -1595,7 +1699,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r7:"
+            id="tooltip-:r9:"
             role="tooltip"
           >
             <span
@@ -1615,7 +1719,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r9:"
+              aria-labelledby="tooltip-:rb:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -1639,7 +1743,7 @@ exports[`UserDetailsComponent render UserListComponent and take snapshot 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r9:"
+            id="tooltip-:rb:"
             role="tooltip"
           >
             <span

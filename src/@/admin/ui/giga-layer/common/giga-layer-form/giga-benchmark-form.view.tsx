@@ -12,69 +12,88 @@ const benchmarkUnitValues = ['bps', 'ms', 'mbps'];
 export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefaultLayer: boolean }) {
   const formData = useStore($formData);
 
-  if (!formData.dataSourceColumn || String(formData.type) === String(LayerTypeChoices.STATIC)) return null;
+  if (!formData.dataSourceColumn) return null;
   const unit = formData?.dataSourceColumn?.unit as string;
   const baseValue = formData?.dataSourceColumn?.base_benchmark as number;
   const benchmarkValue = formData?.globalBenchmark?.value;
+  const isStatic = String(formData.type) === String(LayerTypeChoices.STATIC);
   return <>
-    <DataLayerFieldContainer>
-      <Checkbox disabled={isDefaultLayer} id="checkbox" labelText="Is reverse" checked={formData?.isReverse} onChange={(_, { checked }) => onUdpateGigaLayerForm(['isReverse', checked])} />
-    </DataLayerFieldContainer>
-    <SelectLayerConfig
-      name="benchmarkConvertUnit"
-      required
-      labelText="Convert unit"
-      id={`unit-select`}
-      value={formData?.benchmarkConvertUnit}
-      placeholder="Select unit"
-      onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
-    >
-      <SelectItem value="" text="Select parameter" />
-      {benchmarkUnitValues?.map((value) => <SelectItem key={value} value={value} text={value} />)}
-    </SelectLayerConfig>
-    <DataLayerFieldContainer>
-      <InputLabel>
-        Global Giga Benchmark({unit})
-      </InputLabel>
-      <DataLayerNameField>
-        <TextInput
-          type="text"
-          labelText=""
-          name='globalBenchmark'
-          id="global-giga-benchmark"
-          value={benchmarkValue}
-          required
-          placeholder="Enter global benchmark"
-          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { value: e.target.value, unit }])}
-        />
-      </DataLayerNameField>
-      <Div $margin="0.5rem 0">
+    {!isStatic && <>
+      <DataLayerFieldContainer>
+        <Checkbox disabled={isDefaultLayer} id="checkbox" labelText="Is reverse" checked={formData?.isReverse} onChange={(_, { checked }) => onUdpateGigaLayerForm(['isReverse', checked])} />
+      </DataLayerFieldContainer>
+      <SelectLayerConfig
+        name="benchmarkConvertUnit"
+        required
+        labelText="Convert unit"
+        id={`unit-select`}
+        value={formData?.benchmarkConvertUnit}
+        placeholder="Select unit"
+        onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
+      >
+        <SelectItem value="" text="Select parameter" />
+        {benchmarkUnitValues?.map((value) => <SelectItem key={value} value={value} text={value} />)}
+      </SelectLayerConfig>
+      <DataLayerFieldContainer>
         <InputLabel>
-          {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(benchmarkValue ?? 0))}
-          {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
+          Global / School Benchmark({unit})
         </InputLabel>
-      </Div>
-      <DataLayerNameField>
-        <InputLabel>
-          Base Benchmark({unit})
-        </InputLabel>
-        <TextInput
-          type="text"
-          labelText=""
-          name='dataSourceColumn'
-          id="base-giga-benchmark"
-          value={baseValue}
-          required
-          placeholder="Enter base benchmark"
-          onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData.dataSourceColumn, base_benchmark: e.target.value }])}
-        />
+        <DataLayerNameField>
+          <TextInput
+            type="text"
+            labelText=""
+            name='globalBenchmark'
+            id="global-giga-benchmark"
+            value={benchmarkValue}
+            required
+            placeholder="Enter global benchmark"
+            onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, unit, value: e.target.value }])}
+          />
+        </DataLayerNameField>
         <Div $margin="0.5rem 0">
-          <InputLabel>
-            {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(baseValue || 0))}
+          {!isNaN(Number(benchmarkValue)) && <InputLabel>
+            {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(benchmarkValue ?? 0))}
             {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
-          </InputLabel>
+          </InputLabel>}
         </Div>
-      </DataLayerNameField>
-    </DataLayerFieldContainer>
+        <DataLayerNameField>
+          <InputLabel>
+            Base Benchmark({unit})
+          </InputLabel>
+          <TextInput
+            type="text"
+            labelText=""
+            name='dataSourceColumn'
+            id="base-giga-benchmark"
+            value={baseValue}
+            required
+            placeholder="Enter base benchmark"
+            onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData.dataSourceColumn, base_benchmark: e.target.value }])}
+          />
+          <Div $margin="0.5rem 0">
+            <InputLabel>
+              {speedConverterUtil(unit, formData?.benchmarkConvertUnit, Number(baseValue || 0))}
+              {' '}<b>{formData?.benchmarkConvertUnit.toUpperCase()}</b>
+            </InputLabel>
+          </Div>
+        </DataLayerNameField>
+      </DataLayerFieldContainer>
+    </>}
+    <DataLayerNameField>
+      <InputLabel>
+        Benchmark Name
+      </InputLabel>
+      <TextInput
+        type="text"
+        labelText=""
+        name='globalBenchmark'
+        id="connectivity-type"
+        value={formData?.globalBenchmark?.benchmark_name}
+        placeholder="Enter benchmark name (default: Global)"
+        defaultValue={'Global'}
+        onChange={(e) => onUdpateGigaLayerForm([e.target.name, { ...formData?.globalBenchmark, benchmark_name: e.target.value }])}
+      />
+    </DataLayerNameField>
+
   </>
 }

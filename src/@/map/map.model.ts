@@ -10,9 +10,12 @@ import {
   defaultGigaLayers,
   defaultGlobalStats,
   defaultStyle,
+  filterListMapping,
   stylePaintData,
 } from './map.constant';
 import { Center, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
+import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
 export const $reloadStyle = createStore<boolean>(false);
 export const onReloadedMap = createEvent();
@@ -23,6 +26,9 @@ export const zoomIn = createEvent();
 export const zoomOut = createEvent();
 export const setLoader = createEvent<Marker>();
 export const onLoadPage = createEvent();
+export const onZoomStateChange = createEvent<'start' | 'end' | null>();
+export const $zoomState = createStore<'start' | 'end' | null>(null);
+$zoomState.on(onZoomStateChange, setPayload);
 
 export const updateSchoolMarker = createEvent<SchoolMarker[]>()
 export const $schoolMarkers = createStore<SchoolMarker[]>([])
@@ -65,10 +71,10 @@ export const changeRealtimeSchoolConnectedOpenStatus = createEvent<boolean>();
 export const $realtimeSchoolConnectedOpenStatus = createStore<boolean>(true);
 $realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, setPayload);
 
-export const changeGigaSelection = createEvent<{ schoolId: number | null; layerId: number | null }>();
+export const changeGigaSelection = createEvent<{ layerId: number | null }>();
 export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
 
-export const setPopupOnClickDot = createEvent<{ id: string; geopoint: GeoJSONPoint }>();
+export const setPopupOnClickDot = createEvent<{ id: number; geopoint: GeoJSONPoint } | null>();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
 export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
@@ -81,6 +87,17 @@ $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 
 export const $advanceFilterList = createStore<AdvanceFilterType[]>([]);
 $advanceFilterList.on(fetchAdvanceFilterFx.doneData, setPayloadResults);
+$advanceFilterList.on(filterTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const list = reconstructJson(data, { filterList: state }).filterList
+  return [...list]
+})
+export const $filterListMapping = createStore<[string, string][]>([]);
+$filterListMapping.on(fetchAdvanceFilterFx.doneData, (_, payload) => {
+  const list = Object.entries(extractDataWithMapping({ filterList: payload.results }, filterListMapping)).filter(([_key, value]) => !!value);
+  return list;
+})
+
 
 $map.reset(map.visible);
 $schoolConnectedOpenStatus.reset(resetSchoolConnectedOpenStatus);

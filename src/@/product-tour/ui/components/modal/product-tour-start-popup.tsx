@@ -11,30 +11,32 @@ import logo from '~/assets/images/giga-logo.png';
 import whiteLogo from '~/assets/images/white-logo-small.png';
 import { useStore } from 'effector-react';
 import { $theme, ThemeType } from '~/core/theme.model';
+import { useTranslation } from 'react-i18next';
 
 
 const ProductTourStartPopup = ({ open, setOpen }:
   { open: boolean, setOpen: (open: boolean) => void }) => {
   const isLight = useStore($theme) === ThemeType.light;
+  const { t } = useTranslation()
 
   return (
     <Modal size={'sm'} open={open}
       $containerStyle={$tourStartModalContainer}
       preventCloseOnClickOutside id='tour-giga-map-modal'
     >
-      <ModalHeader title="Welcome to"
+      <ModalHeader title={t("welcome-to")}
         $headingStyle={$tourStartModalHeader}
       >
         <div className='giga-text'>
-          <img src={isLight ? whiteLogo : logo} alt="Giga logo" />
+          <img src={isLight ? whiteLogo : logo} alt={t("giga-logo")} />
         </div>
       </ModalHeader>
       <ModalBody $style={$tourStartModalBody}>
         <TourStartDescription>
-          Gigamaps is a live map of all schools in the world and the status of their internet access.
+          {t('gigamaps-is-a-live-map-of-all-schools-in-the-world-and-the-status-of-their-internet-access')}
         </TourStartDescription>
         <TourStartDescription>
-          To explore the map you can start by selecting a country.
+          {t('to-explore-the-map-you-can-start-by-selecting-a-country')}
         </TourStartDescription>
         <TourStartModalFooter>
           <Link to={map}>
@@ -45,7 +47,7 @@ const ProductTourStartPopup = ({ open, setOpen }:
                 setOpen(false)
                 onChangeTourStarted(false)
               }}>
-              Skip tour
+              {t('skip-tour')}
             </Button>
           </Link>
           <StartTourButton
@@ -61,7 +63,7 @@ const ProductTourStartPopup = ({ open, setOpen }:
               router.navigate('/map/country/bw?popover=tour')
             }}
             type="submit">
-            Start
+            {t('start')}
           </StartTourButton>
         </TourStartModalFooter>
       </ModalBody>

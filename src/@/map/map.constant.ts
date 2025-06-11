@@ -3,13 +3,20 @@ import { Expression } from 'mapbox-gl';
 import { GlobalStats, SchoolStatsType } from '~/api/types';
 import { getLocalStorage } from '~/lib/utils';
 
-import { Center, Style, StylePaintData, Zoom } from './map.types';
+import { Center, Style, StylePaintData } from './map.types';
 
-export const defaultZoom: Zoom = 2;
+export const defaultZoom = 2;
+export const maxZoom = 24;
 export const defaultCenter: Center = [-40, -14];
 export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
 export const MAP_SAMPLING = 300000;
+export const SCHOOL_LAYER_ID = 10001
+export const DEFAULT_SOURCE = 'map-data-source';
+export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
+export const COVERAGE_URL = 'api/locations/schools/tiles';
+export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
+export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
@@ -267,7 +274,6 @@ export const matchConnectivityCase = {
 }
 
 export const defaultGigaLayers = {
-  schoolId: 0, // require for on/off
   layerId: 0 // require for on/off
 }
 export const animateCircleConfig = {
@@ -279,3 +285,8 @@ export const animateCircleConfig = {
   opacityMax: 1,
   opacityMin: 0.2
 }
+
+export const filterListMapping = [
+  'filterList.*.description',
+  'filterList.*.name',
+]

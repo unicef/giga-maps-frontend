@@ -1,5 +1,6 @@
 export type DistrictWithSchoolCount = {
   admin1_description_ui_label: any;
+  admin2_description: string;
   admin1_name?: string;
   admin2_name?: string;
   admin1_id?: string;

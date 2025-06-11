@@ -7,6 +7,7 @@ import { ConnectivityStatusCircle } from '~/@/sidebar/ui/school-view-component/s
 import { InnerCircle, InnerCircleConnectivity } from '../../ui/legend-info/legend-button.style';
 import { $country } from '~/@/country/country.model';
 import { useStore } from 'effector-react';
+import { useTranslation } from 'react-i18next';
 
 const SchoolMarkerWrapper = styled.div`
   // position: relative;
@@ -27,9 +28,9 @@ justify-content:space-between;
 `
 export const SchoolInfoWrapper = styled.div`
 display:flex;
-align-items:center;
+align-items:baseline;
 margin-top:0.75rem;
-&.hide {
+&.hide, .hide {
   display: none;
 }
 svg{
@@ -39,6 +40,11 @@ svg{
   margin-right:0.25rem;
   margin-top: -0.12rem;
 }
+`
+
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const SchoolName = styled.h6`
@@ -104,6 +110,7 @@ const ConnectivityCircleWrapper = styled.div`
   position: relative;
 `
 export const Popup = () => {
+  const { t } = useTranslation();
   return (
     <div className="school-popup-data">
       <SchoolMarkerWrapper className="shool-marker-wrapper">
@@ -124,7 +131,10 @@ export const Popup = () => {
           </SchoolInfoWrapper>
           <SchoolInfoWrapper className="live-container hide">
             <Wifi />
-            <Label className="map-school-connectivity-speed"></Label>
+            <FlexColumn>
+              <Label className="map-school-connectivity-speed"></Label>
+              <Label className="benchmark-value-label hide"></Label>
+            </FlexColumn>
           </SchoolInfoWrapper>
           <SchoolInfoWrapper className="static-container hide">
             <span className="static-icon"><TransmissionLte /></span>
@@ -133,7 +143,7 @@ export const Popup = () => {
         </PopupTemplate>
         <GoToSchoolButton className="go-to-school hide" type="button"
           renderIcon={ArrowRight} >
-          Go to School page
+          {t('go-to-school-page')}
         </GoToSchoolButton>
       </div>
 

@@ -1,5 +1,7 @@
 /* use this file to create global utils methods */
 
+import { defaultLanguage } from "~/core/i18n/constant";
+
 
 export const shuffleArray = (array: unknown[]): unknown[] => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -10,13 +12,20 @@ export const shuffleArray = (array: unknown[]): unknown[] => {
   return array;
 }
 
-export function formatNumber(value = 0) {
+export const LanguageSuffixes = {
+  en: { thousand: 'k', million: 'M', billion: 'B', trillion: 'T' },
+  es: { thousand: ' mil', million: 'M', billion: 'MM', trillion: 'B' },
+  pt: { thousand: ' mil', million: 'M', billion: 'B', trillion: 'T' },
+} as Record<string, { thousand: string; million: string; billion: string; trillion: string }>
+
+export function formatNumber(value: number = 0, lng: string | null = defaultLanguage) {
+  const currentSuffix = LanguageSuffixes[lng ?? defaultLanguage];
   if (Math.abs(value) >= 1000000000) {
-    return `${(value / 1000000000).toFixed(1)}B`;
+    return `${(value / 1000000000).toFixed(1)}${currentSuffix.billion}`;
   } if (Math.abs(value) >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}M`;
+    return `${(value / 1000000).toFixed(1)}${currentSuffix.million}`;
   } if (Math.abs(value) >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`;
+    return `${(value / 1000).toFixed(1)}${currentSuffix.thousand}`;
   }
   return value > 0 ? value : '0';
 }
@@ -45,7 +54,7 @@ export const getLocalStorage = (name: string) => {
   return data;
 }
 
-export const setLocalStorage = (name: string, value: unknown) => {
+export const setLocalStorage = (name: string, value: string | object) => {
   try {
     window?.localStorage?.setItem(name, JSON.stringify(value));
   } catch (e) {
@@ -54,16 +63,17 @@ export const setLocalStorage = (name: string, value: unknown) => {
 }
 
 export const delayMethodCall = () => {
-  let timerId: ReturnType<typeof setTimeout>;
-  return (timeout = 0, callback = (_args: any) => { }, props = {}) => {
+  let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
+  const trigger = (timeout = 0, callback = (_args: any) => { }, props = {}) => {
     clearTimeout(timerId);
-    if (timeout && timeout > 0) {
-      timerId = setTimeout(() => {
-        return callback(props);
-      }, timeout);
-    } else {
+    timerId = setTimeout(() => {
       return callback(props);
-    }
+    }, timeout);
+    return timerId;
+  };
+  return {
+    timerId,
+    trigger,
   }
 }
 
@@ -97,16 +107,19 @@ export function evaluateExpression(expression?: string, val?: string | number | 
   // Define a regular expression to match {val}
   if (!expression || !val) return val;
   const regex = /\{val\}/g;
+  try {
+    // Replace {val} with the actual number
+    const modifiedExpression = expression.replace(regex, String(val));
 
-  // Replace {val} with the actual number
-  const modifiedExpression = expression.replace(regex, String(val));
+    // Use Function constructor to create a function
+    // and pass val as a parameter
+    const func = new Function(`return ${modifiedExpression};`);
 
-  // Use Function constructor to create a function
-  // and pass val as a parameter
-  const func = new Function(`return ${modifiedExpression};`);
+    // Call the function with the actual value
+    const result = func(val);
 
-  // Call the function with the actual value
-  const result = func(val);
-
-  return Number(parseFloat(result).toFixed(0));
+    return Number(parseFloat(result).toFixed(0));
+  } catch {
+    return val;
+  }
 }

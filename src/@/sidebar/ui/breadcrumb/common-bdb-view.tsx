@@ -11,6 +11,7 @@ import { Link, useRoute } from '~/lib/router';
 import { $allLoadings, $isLoadingSchoolView, $schoolStats } from '../../sidebar.model';
 import { LoadingText } from '~/@/common/style/styled-component-style';
 import { getCurrentCountrySearchPath } from '~/@/country/country.utils';
+import { useTranslation } from 'react-i18next';
 
 const BreadcrumbEllipsis = styled(BreadcrumbItem) <{ $maxWidth?: number; }>`
   .cds--link {
@@ -42,6 +43,7 @@ export const GoToMap = () => {
 }
 
 export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPage?: boolean; admin1Name?: string | null }) => {
+  const { t } = useTranslation();
   const countryData = useStore($country);
   const isLoading = useStore($allLoadings).country;
   const { name: countryName = '...', code = ' ' } = countryData ?? {};
@@ -49,7 +51,7 @@ export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPa
   return (<>
     {isLoading ? <LoadingText width='5rem' $marginEnd='0' /> :
       <BreadcrumbEllipsis title={countryName} $maxWidth={isCurrentPage ? 10 : 5} href="#" isCurrentPage={isCurrentPage}>
-        <Link to={mapCountry} params={{ code: code.toLocaleLowerCase() }} query={!isSchoolView ? getCurrentCountrySearchPath(code) : ''}>{countryName}</Link>
+        <Link to={mapCountry} params={{ code: code.toLocaleLowerCase() }} query={!isSchoolView ? getCurrentCountrySearchPath(code) : ''}>{t(countryName)}</Link>
       </BreadcrumbEllipsis>
     }
     {admin1Name && <BreadcrumbEllipsis $maxWidth={5} title={admin1Name} isCurrentPage>{admin1Name}</BreadcrumbEllipsis>}
@@ -57,6 +59,7 @@ export const GoToCountry = ({ isCurrentPage = false, admin1Name }: { isCurrentPa
 }
 
 export const GoToSchool = () => {
+  const { t } = useTranslation();
   const schools = useStore($schoolStats) ?? [];
   const country = useStore($country);
   const isSchoolGreaterThanOne = schools?.length > 1;
@@ -83,7 +86,7 @@ export const GoToSchool = () => {
   return (
     <>
       <BreadcrumbCustom data-floating-menu-container>
-        <OverflowMenu aria-label="Overflow menu in a breadcrumb">
+        <OverflowMenu aria-label="Overflow menu in a breadcrumb" iconDescription={t("admins")}>
           <BreadcrumbOverflow $isActive={!isSchoolGreaterThanOne && !!admin1Code} onClick={clickAdmin1} itemText={admin1Text} />
           <BreadcrumbOverflow $isActive={false} itemText={admin2Text} />
         </OverflowMenu>

@@ -6,6 +6,8 @@ import { Information } from '@carbon/icons-react'
 
 import { $dataSource } from "~/@/country/country.model"
 import { $currentLayerCountryDataSource, $currentLayerTypeUtils } from "~/@/sidebar/sidebar.model"
+import { TooltipButton } from "~/@/common/style/styled-component-style"
+import { useTranslation } from "react-i18next"
 
 const FooterContainer = styled.div`
   background: ${props => props.theme.main};
@@ -59,12 +61,10 @@ color: ${props => props.theme.titleDesc};
     /* margin-bottom: 0.5rem; */
 
     button {
-      background: none; 
-      border: none;
-      padding: 0;
       color: ${props => props.theme.titleDesc};
       margin-top: 0.5rem;
       font-size: 0.75rem;
+      text-align: left;
     }
     .header{
       font-weight: 700;
@@ -104,6 +104,7 @@ p{
 
 const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = false }: PropsWithChildren<{ size: number; isFooter?: boolean, showOldDataSource?: boolean }>) => {
   const dataSource = useStore($dataSource);
+  const { t } = useTranslation();
   const { isSchoolStatus } = useStore($currentLayerTypeUtils)
   const currentDataSource = useStore($currentLayerCountryDataSource);
   const dataSourceName = useMemo(() => {
@@ -122,8 +123,8 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
     return (<FooterContainer>
       <div>
         <DataSourceHeader>
-          <p>Data source </p>
-          <Tooltip className="data-source-tooltip" align="top" label={"Data is sourced from 50+ government ministries, open-source communities, Internet service providers, Giga’s AI model and measurement app, and multiple educational and research institutions."}>
+          <p>{t('data-source')} </p>
+          <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
             <button className="sb-tooltip-trigger" type="button">
               <Information />
             </button>
@@ -131,7 +132,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
         </DataSourceHeader>
         <DataSourceContainer>
           <div className="data-source">
-            {isFooter && <span className='header'>Data source :&nbsp;</span>}
+            {isFooter && <span className='header'>{t('data-source-1')};</span>}
             <div style={
               {
                 marginTop: "0.5rem",
@@ -146,8 +147,8 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
   return (<FooterContainer>
     <div>
       {!isFooter && <DataSourceHeader>
-        <p>Data source </p>
-        <Tooltip className="data-source-tooltip" align="top" label={"Data is sourced from 50+ government ministries, open-source communities, Internet service providers, Giga’s AI model and measurement app, and multiple educational and research institutions."}>
+        <p>{t('data-source')} </p>
+        <Tooltip className="data-source-tooltip" align="top" label={t("data-is-sourced-research-institutions")}>
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>
@@ -155,16 +156,16 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
       </DataSourceHeader>}
       <DataSourceContainer>
         <div className="data-source">
-          {isFooter && <span className='header'>Data source :&nbsp;</span>}
+          {isFooter && <span className='header'>{t('data-source-1')};</span>}
           {/* <span className='text-ellipsis'>{isLengthGreater ? `${dataSource?.substring(0, size)}...` : dataSource}</span> */}
           {/* <span>{dataSource}</span> */}
           {dataSourceName?.map((dataSource: string, index: number) => {
             const isLast = index === dataSourceName?.length - 1;
-            return (<Tooltip enterDelayMs={dataSourceDescription?.[index] ? 200 : 900000} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
+            return (<TooltipButton enterDelayMs={200} $hideLabel={!dataSourceDescription?.[index]} label={dataSourceDescription?.[index]} key={dataSource} autoAlign={true} align="top-right">
               <button>
-                <span>{dataSource}{!isLast && `, `}&nbsp;</span>
+                {dataSource?.replace(/Daily Check App/i, "Giga Meter")}{!isLast && `, `}&nbsp;
               </button>
-            </Tooltip>)
+            </TooltipButton>)
           })}
         </div>
       </DataSourceContainer>

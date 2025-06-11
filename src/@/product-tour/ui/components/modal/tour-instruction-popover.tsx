@@ -10,6 +10,7 @@ import { Link } from "~/lib/router";
 import { $currentSubStep, onChangeCurrentSubStep, onChangeTourEndPopup, onChangeTourStarted, onChangeTourStartPopup } from "../../../models/product-tour.model";
 import { ActionWrapper, ClonedContainer, CurrentStepNumber, NextPreviousWrapper, PopoverContentBox, PopoverDescription, SubStepsContainer, SubStepsDots } from "../../styles/product-tour-styles";
 import { onShowLegend, onShowThemeLayer } from '~/@/sidebar/sidebar.model';
+import { useTranslation } from 'react-i18next';
 
 
 const CloneItem = ({ target }: { target: string }) => {
@@ -37,23 +38,23 @@ const TourInstructionPopover = (
       content: { type: string, value: string }[]
     }) => {
   const theme = useTheme();
-
+  const { t } = useTranslation();
   const arrayForDots = Array.from({ length: totalSubStep }, (_, index) => index);
   const currentSubStep = useStore($currentSubStep);
 
   return (
     <PopoverContentBox className='popover-content-box'>
       <CurrentStepNumber>
-        {title}
+        {t(title)}
       </CurrentStepNumber>
       {content.map((item, index) => {
         if (item.type === 'text') {
           return <PopoverDescription key={`${item.type}-${index}`}>
-            {item.value}
+            {t(item.value)}
           </PopoverDescription>
         }
         if (item.type === 'clone') {
-          return <CloneItem key={`${item.type}-${index}`} target={item.value} />
+          return <CloneItem key={`${item.type}-${index}`} target={t(item.value)} />
         }
         return null;
       }
@@ -79,7 +80,7 @@ const TourInstructionPopover = (
               onShowThemeLayer(false)
               onChangeTourStarted(false)
             }}
-          > Skip Tour
+          > {t('skip-tour')}
           </Button>
         </Link>
         <NextPreviousWrapper>
@@ -87,23 +88,22 @@ const TourInstructionPopover = (
             size='sm'
             kind='ghost'
             className='previous'
-            iconDescription="previous"
+            iconDescription={t("previous")}
             hasIconOnly renderIcon={ChevronLeft}
-            onClick={
-              () => {
-                if (firstSubStep) {
-                  onChangeTourStarted(false)
-                  onChangeTourStartPopup(true)
-                }
-                onChangeCurrentSubStep(currentSubStep - 1)
-              }} >
+            onClick={() => {
+              if (firstSubStep) {
+                onChangeTourStarted(false)
+                onChangeTourStartPopup(true)
+              }
+              onChangeCurrentSubStep(currentSubStep - 1)
+            }} >
           </Button>}
           <Button
             size='sm'
             className='next'
             hasIconOnly
             renderIcon={ChevronRight}
-            iconDescription="Next"
+            iconDescription={t("next")}
             onClick={() => {
               if (lastSubStep) {
                 onChangeTourStarted(false)

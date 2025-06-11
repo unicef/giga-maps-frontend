@@ -5,8 +5,10 @@ import { CustomIcon, Div } from '~/@/common/style/styled-component-style';
 
 import { FilterIconAndName } from '../global-and-country-view-components/styles/layer-view-common.style'
 import { LayerSelectionTextAndFilter } from './layer-selection-text-and-filter';
+import { useTranslation } from 'react-i18next';
 
 const CurrentLayerNameIcon = ({ label, isLiveLayer, isSchoolStatus, icon, showFilter = true }: { label?: string, isLiveLayer?: boolean; isSchoolStatus?: boolean; icon?: string, showFilter?: boolean }) => {
+  const { t } = useTranslation();
   return (
     <FilterIconAndName>
       <Div $flex="center">
@@ -14,7 +16,7 @@ const CurrentLayerNameIcon = ({ label, isLiveLayer, isSchoolStatus, icon, showFi
         {isLiveLayer && < Wifi />}
         {icon && <CustomIcon dangerouslySetInnerHTML={{ __html: icon }} />}
         <h1 className='layer-heading'>{label}</h1>
-        <Tooltip className='info-icon' align="bottom" label={"Key connectivity metrics calculated using periodical in-school internet measurements from software and hardware-based solutions."}>
+        <Tooltip className='info-icon' align="bottom" label={t("key-connectivity-metrics-based-solutions")}>
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>

@@ -1,19 +1,24 @@
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code } from '~/@/country/country.model';
+import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById, $admin1Id } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
-import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
+import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
 import { mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import { getSchoolAvailableDates } from './effects/search-country-fx';
-import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { evaluateExpression } from '~/lib/utils';
 import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
+import { UNKNOWN } from '../map/map.types';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
+import { $lng } from '~/core/i18n/store';
+import i18next from 'i18next';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -36,7 +41,6 @@ $connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
 $connectivityStats.on(fetchCountryLiveLayerInfo.doneData, setPayload);
 
 export const $coverageStats = createStore<CoverageStat | null>(null);
-$coverageStats.on(fetchCoverageLayerFx.doneData, setPayload);
 $coverageStats.on(fetchCountryStaticLayerInfo.doneData, setPayload);
 
 export const onChangeMenu = createEvent<boolean>();
@@ -62,6 +66,19 @@ $connectivitySpeedUnknown.on(changeConnectivitySpeedUnknown, setPayload);
 // layer model 
 export const $layersList = createStore<LayerType[]>([]);
 $layersList.on(fetchLayerListFx.doneData, setPayloadResults)
+$layersList.on(publishLayersTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const list = reconstructJson(data, { layersList: state }).layersList as LayerType[];
+  return list.map((item) => ({ ...item, legend_configs: { ...item.legend_configs } }))
+})
+export const $layersListMapping = createStore<[string, string][]>([]);
+$layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
+  const list = Object.entries(extractDataWithMapping({ layersList: payload.results }, publishLayersListMapping)).filter(([_key, value]) => !!value);
+  return list;
+})
+
+
+export const $layerListTranslated = createStore<LayerType[]>([]);
 
 export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
 export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
@@ -71,10 +88,13 @@ export const $schoolStatusSelectedLayer = restore(onSelectSchoolStatusLayer, SCH
 
 export const onSelectMainLayer = createEvent<number | null>();
 export const $selectedLayerId = restore(onSelectMainLayer, null);
-export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) ?? null);
+export const $globalLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) ?? null);
+export const $globalLayerId = $globalLayerData.map(layer => layer?.id ?? null);
+export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
 export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
-export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && !layer.created_by) ?? null);
+export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
 export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id ?? null);
+
 export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (layers, countryIdToCode) => {
   const list = {} as Record<string, { activeCountries: string[] }>
   const countryDefaultLayerList = {} as Record<string, number>;
@@ -95,12 +115,12 @@ export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (l
   };
 })
 
-export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $downloadLayerId, (countryCode, activeLayers, downloadLayerId) => {
-  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? downloadLayerId;
+export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $globalLayerId, (countryCode, activeLayers, globalLayerId) => {
+  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? globalLayerId;
   return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : null;
 })
 export const $isActiveCurrentLayer = combine($activeLayerByCountries, $selectedLayerId, $countryCode, (activeLayers, selectedId, countryCode) => {
-  return !!selectedId && activeLayers.list[selectedId]?.activeCountries.includes(countryCode.toLowerCase())
+  return !!selectedId && activeLayers.list[selectedId]?.activeCountries?.includes(countryCode.toLowerCase())
 })
 
 export const $activeLayerByCountryCode = combine($layersList, $activeLayerByCountries, $countryCode, (layers, activeLayers, countryCode) => {
@@ -120,6 +140,10 @@ export const $currentLayerCountryDataSource = combine($selectedLayerData, $count
   return selectedData.active_countries_list.find(activeLayers => activeLayers.country === country.id)?.data_sources || null
 })
 
+export const $benchmarkNamesAllLayers = $layersList.map(layers => layers.reduce((acc, curr) => {
+  acc[curr.id ?? ""] = curr?.global_benchmark?.benchmark_name;
+  return acc
+}, {} as Record<string, string>))
 
 export const $currentLayerTypeUtils = combine(
   $schoolStatusSelectedLayer, $selectedLayerData,
@@ -134,7 +158,14 @@ export const $currentLayerLegends = combine({
   selectedLayerData: $selectedLayerData,
   stylePaintData: $stylePaintData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
-}, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData }) => {
+  countryActiveLayersDataById: $countryActiveLayersDataById,
+  connectivityBenchmark: $connectivityBenchMark,
+  lng: $lng
+}, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData, connectivityBenchmark, countryActiveLayersDataById }) => {
+  let apiLegends = selectedLayerData?.legend_configs;
+  if (connectivityBenchmark === ConnectivityBenchMarks.national) {
+    apiLegends = countryActiveLayersDataById[selectedLayerData?.id ?? ""]?.legend_configs
+  }
   const legends = {
     colors: {
       good: stylePaintData.good,
@@ -144,19 +175,20 @@ export const $currentLayerLegends = combine({
     },
     values: [],
     reverseMapping: {}
-  } as { colors: Record<string, string>; values: { key: string, label: string }[], reverseMapping: Record<string, string> };
-  if (currentLayerTypeUtils.isLive && !Object.values(selectedLayerData?.legend_configs || {}).length) {
+  } as { colors: Record<string, string>; values: { key: string, label: string; tooltip?: string }[], reverseMapping: Record<string, string> };
+  if (currentLayerTypeUtils.isLive && !Object.values(apiLegends || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
-      label: ConnectivityDistributionNames[key],
+      label: i18next.t(ConnectivityDistributionNames[key]),
     }));
   } else {
     const reverseMapping = {} as Record<string, string>
-    legends.values = Object.entries(selectedLayerData?.legend_configs ?? {}).map(([key, item]: [string, any]) => {
+    legends.values = Object.entries(apiLegends ?? {}).map(([key, item]: [string, any]) => {
       reverseMapping[item.labels] = key;
       return ({
         key,
         label: item.labels,
+        tooltip: item.tooltip
       })
     }
     );
@@ -165,10 +197,10 @@ export const $currentLayerLegends = combine({
   return legends;
 })
 
-export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, (countryBenchmark, selectedLayerData, connectivityBenchMark) => {
+export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, $countryConnectivityNames, (countryBenchmark, selectedLayerData, connectivityBenchMark, countryConnectivityNames) => {
   if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
-  const { convert_unit: unit, value } = global_benchmark;
+  const { convert_unit: unit, value, benchmark_name: benchmarkName } = global_benchmark;
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
   const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
@@ -181,11 +213,31 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
     globalBenchmarkValue,
     nationalBenchmarkValue,
     isNational: nationalBenchmarkValue > 0,
-    benchmarkLogic
+    benchmarkLogic,
+    benchmarkName,
+    countryConnectivityNames
   })
 });
 
 export const $isNationalBenchmark = $benchmarkmarkUtils.map(({ isNational }) => isNational);
+
+export const $staticPopupActiveLayer = combine($activeLayerByCountryCode, $staticLayers, $coverageLayerData, (activeLayerByCountryCode, staticLayers, coverageDynamicLayerData) => {
+  if (activeLayerByCountryCode[coverageDynamicLayerData?.id ?? ""]) return coverageDynamicLayerData;
+  if (staticLayers?.length > 0) {
+    return staticLayers.find(item => activeLayerByCountryCode[item?.id ?? ""]) ?? null;
+  }
+  return null;
+})
+
+export const $isSchoolBenchmark = combine($selectedLayerData, $connectivityBenchMark, $country, (selectedLayer, conntectivityBenchmark, country) => {
+  const isLive = isLiveLayer(selectedLayer?.type);
+  if (!isLive) return false;
+  if (conntectivityBenchmark === ConnectivityBenchMarks.global) {
+    return selectedLayer?.global_benchmark.value.startsWith('SQL:')
+  } else if (conntectivityBenchmark === ConnectivityBenchMarks.national) {
+    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""]?.startsWith('SQL:')
+  }
+})
 
 export const $layerUtils = combine({
   layers: $layersList,
@@ -193,6 +245,8 @@ export const $layerUtils = combine({
   staticLayers: $staticLayers,
   selectedLayerId: $selectedLayerId,
   selectedLayerData: $selectedLayerData,
+  globalLayerId: $globalLayerId,
+  globalLayerData: $globalLayerData,
   downloadLayerId: $downloadLayerId,
   downloadLayerData: $downloadLayerData,
   coverageLayerId: $coverageLayerId,
@@ -201,7 +255,12 @@ export const $layerUtils = combine({
   currentLayerLegends: $currentLayerLegends,
   isActiveCurrentLayer: $isActiveCurrentLayer,
   activeLayerByCountryCode: $activeLayerByCountryCode,
-  currentDefaultLayerId: $currentDefaultLayerId
+  currentDefaultLayerId: $currentDefaultLayerId,
+  staticPopupActiveLayer: $staticPopupActiveLayer,
+  isSchoolBenchmark: $isSchoolBenchmark,
+  benchmarkNamesAllLayers: $benchmarkNamesAllLayers,
+  countryConnectivityNames: $countryConnectivityNames,
+  connectivityBenchMarks: $connectivityBenchMark
 });
 
 export const openHistoryChart = createEvent<boolean>();
@@ -220,9 +279,6 @@ $staticLegendsSelected.on(staticLegendsSelection, (state, payload) => {
   const isButtonSelected = state.includes(payload);
   if (isButtonSelected) {
     // If the button is already selected, remove it from the selected buttons i.e unselect it
-    if (payload === '') {
-      return [];
-    }
     return state.filter((id) => id !== payload);
   }
   // If the button is not selected, check if the maximum limit of 3 buttons is reached
@@ -242,7 +298,8 @@ $staticLegendsSelected.on(selectAllStaticLegendsSelection, (state) => {
   return [ConnectivityStatusDistribution.connected, ConnectivityStatusDistribution.notConnected, ConnectivityStatusDistribution.unknown]
 })
 
-export const resetCoverageFilterSelection = createEvent();
+export const resetCoverageFilterSelection = createEvent<number>();
+export const checkConnectivityBenchmark = createEvent<number>();
 
 export const changeCoverage5g4g = createEvent<boolean>();
 export const $coverage5g4g = restore(changeCoverage5g4g, true)
@@ -291,8 +348,28 @@ $multiSelectionSchoolCheckbox.on(changeMultiSelectionSchoolCheckbox, (state: Mul
 export const onSchoolUncheck = createEvent<number>();
 export const $schoolStats = createStore<SchoolStatsType[] | null>([])
 $schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
+export const schoolStatsMap = (school: SchoolStatsType) => ({
+  name: school.name,
+  geopoint: school?.geopoint,
+  liveAvg: school?.connectivity_speed || school?.live_avg || 0,
+  staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
+  staticType: school?.field_status ?? school?.coverage_status,
+  connectivityStatus: school.connectivity_status || school.statistics.connectivity_status,
+  isRealTime: school.is_rt_connected,
+  connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
+  id: school?.id,
+  externalId: school?.external_id,
+  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`
+})
+export const $schoolStatsMap = $schoolStats.map((schools) => {
+  return schools?.map(schoolStatsMap) ?? null;
+})
 
-export const $indicatorBenchmark = combine($country, (country) => {
+export const $schoolAdminId = $schoolStats.map((schools) => {
+  if (schools?.length) {
+    const ids = new Set(schools?.map((school) => school.admin1_id));
+    return ids.size === 1 ? (schools[0].admin1_id ?? 0) : 0
+  }
   return null;
 })
 
