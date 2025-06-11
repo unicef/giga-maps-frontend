@@ -8,6 +8,7 @@ import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hid
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
+import { $isNavigateByAdminLevel } from '../map/map.model';
 
 export const getAdminCountrySource = (level: CountryAdminLevel) => `${AdminSourcePrefix}${level}`;
 export const getAdminCountryLayerFill = (level: CountryAdminLevel) => `${AdminLayerFillPrefix}${level}`;
@@ -170,6 +171,9 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
     if (level === CountryAdminLevel.level1) {
       const admin1 = feature.state.giga_id_admin;
       if (admin1) {
+        if (!$isNavigateByAdminLevel.getState()) {
+          return;
+        }
         if (!isMobile) {
           setCountryBound(map, admin1, feature.state.bbox)
         }

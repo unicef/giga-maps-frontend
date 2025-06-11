@@ -171,7 +171,13 @@ export const CheckboxGroupWrapper = styled(CheckboxGroup)`
             border: 1px solid ${props => props.theme.text};
         }
 `
-
+export const ToggleWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 0rem 1rem ;
+    margin-bottom: 1.5rem;
+    color: ${props => props.theme.text} 
+`
 export const BroadcastButton = styled.div`
 position:fixed;
 z-index:10;
