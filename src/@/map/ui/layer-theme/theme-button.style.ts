@@ -192,7 +192,7 @@ right:.5rem;
 bottom:2.5rem;
 
  @media (max-width:768px){
-     bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(40vh + 0.5rem)"};
+     bottom:${props => props.$bottom ? "calc(80vh + 1rem)" : "calc(34vh + 0.5rem)"};
  }
 `
 

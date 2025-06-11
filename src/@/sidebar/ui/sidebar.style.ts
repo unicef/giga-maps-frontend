@@ -100,7 +100,7 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
   @media (max-width: 768px) {
     z-index: 1;
     width: 100%;
-    height: ${props => props.$height ? "60vh" : "40vh"} ;
+    height: ${props => props.$height ? "80vh" : "34vh"} ;
     top: unset;
     bottom: ${props => props.$left ? "-24vh" : "0"};
     position: fixed;

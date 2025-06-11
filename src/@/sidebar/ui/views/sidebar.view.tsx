@@ -35,6 +35,7 @@ import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContaine
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { useTranslation } from 'react-i18next';
+import { useSwipeable } from 'react-swipeable';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -50,14 +51,32 @@ export default function Sidebar() {
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed)
   const isTimeplayer = useStore($isTimeplayer)
+  const swipeHandlers = useSwipeable({
+    onSwipedUp: () => {
+      if (!isSidebarCollapsed) {
+        console.log('Swiped up: collapsing sidebar', isSidebarCollapsed);
+        toggleSidebar(); // collapse
+        setSidebarHeight(!sidebarHeight)
+      }
+    },
+    onSwipedDown: () => {
+      if (isSidebarCollapsed) {
+        console.log('Swiped down: expanding sidebar', isSidebarCollapsed);
+        toggleSidebar(); // expand
+        setSidebarHeight(!sidebarHeight)
+      }
+    },
+    trackTouch: true,
+    delta: 50, // optional: sensitivity threshold (default is 10)
+  });
+  
   return (
     <MainSideBarContainer onClick={() => onClickSidebar()}
       $left={isSidebarCollapsed}
-      $height={sidebarHeight} >
-      <SidePanelContainer className='sidebar'>
+      $height={sidebarHeight} {...swipeHandlers}>
+      <SidePanelContainer className='sidebar'  >
         {
-          isMobile &&
-          <VerticalSliderButtonWrapper id='mobile-view-slider' onClick={() => setSidebarHeight(!sidebarHeight)}>
+          <VerticalSliderButtonWrapper id='mobile-view-slider' >
             <VerticalSliderButton />
           </VerticalSliderButtonWrapper>
         }
