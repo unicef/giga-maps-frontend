@@ -1,20 +1,60 @@
-
 import { AboutType, Content } from '../about.type'
-import { PartnersCardContainer, PartnersWrapper, SingleItemWrapper } from '../styles/about-giga-map-styles'
+import {
+  PartnersWrapper,
+  PartnersSectionTitle,
+  CompactPartnersGrid,
+  CompactPartnerCard,
+  AcknowledgementsSection,
+  SectionDivider,
+  AcknowledgementsGrid,
+  AcknowledgementCard
+} from '../styles/about-giga-map-styles'
 
-const GigaPartners = ({ data }: { data: AboutType }) => {
+interface GigaPartnersProps {
+  data: AboutType;
+  acknowledgementData?: AboutType;
+}
+
+const GigaPartners = ({ data, acknowledgementData }: GigaPartnersProps) => {
   return (
     <PartnersWrapper id={data?.type} $style={data.style}>
-      <h1>{data?.title}</h1>
-      <PartnersCardContainer>
-        {
-          data?.content.map((partner: Content, index: number) => (
-            <SingleItemWrapper key={`${partner.title}-${index}-${partner?.image?.length}`} className='single-item-wrapper'>
-              <img src={partner?.image} />
-            </SingleItemWrapper>
-          ))
-        }
-      </PartnersCardContainer>
+      <div className="section-content">
+        <PartnersSectionTitle>
+          <h2>{data?.title || 'Giga Partners'}</h2>
+          <p>Collaborating with leading organizations to connect every school worldwide</p>
+        </PartnersSectionTitle>
+
+        <CompactPartnersGrid>
+          {data?.content.map((partner: Content, index: number) => (
+            <CompactPartnerCard key={`partner-${index}-${partner?.image?.length}`}>
+              <img src={partner?.image} alt={`Partner ${index + 1}`} />
+            </CompactPartnerCard>
+          ))}
+        </CompactPartnersGrid>
+
+        {/* Enhanced Section Separation */}
+        {acknowledgementData && acknowledgementData.content.length > 0 && (
+          <>
+            <SectionDivider>
+              <div className="divider-line"></div>
+              <div className="divider-content">
+                <h3>Acknowledgements</h3>
+              </div>
+              <div className="divider-line"></div>
+            </SectionDivider>
+
+            <AcknowledgementsSection>
+              <AcknowledgementsGrid>
+                {acknowledgementData.content.map((partner: Content, index: number) => (
+                  <AcknowledgementCard key={`acknowledgement-${index}-${partner?.image?.length}`}>
+                    <img src={partner?.image} alt={`Acknowledgement ${index + 1}`} />
+                  </AcknowledgementCard>
+                ))}
+              </AcknowledgementsGrid>
+            </AcknowledgementsSection>
+          </>
+        )}
+      </div>
     </PartnersWrapper>
   )
 }

@@ -59,42 +59,44 @@ const NavBar = ({ data }: { data?: AboutType | null }) => {
   console.log(isMobile, 'isMobile==')
   return (
     <AboutGigaMapNavBarStyle>
-      {isMobile && isMenu && <MobileNavBar navData={navData} setIsMenu={setIsMenu} />}
-      {isMobile && <IconButton
-        label={isMenu ? "Close" : "Menu"}
-        onClick={() => {
-          setIsMenu(!isMenu);
-        }}
-        size="md"
-        align="bottom"
-        iconDescription='Menu Icon'
-        kind="ghost"
-        className="sidebar-menuIcon"
-      >
-        {isMenu ? <Close size={18} /> : <Menu size={18} />}
-      </IconButton>}
-      <RouterLink to={aboutus}>
-        <NavBarGigaLogo data-testid="nav-bar-logo" $size={isMobile ? '1.1rem' : '1.5rem'} dangerouslySetInnerHTML={{ __html: content?.[0]?.logo }} >
-          {/* <img src={image as string} alt="giga logo" /> */}
-        </NavBarGigaLogo>
-      </RouterLink>
-      <NavBarButtonWrapper>
-        {
-          !isMobile && navData?.map((navItem, index) => (
-            <NavBarButton $active={navItem?.targetList?.includes(activeNav)} key={`${index}-${navItem?.title}`}>
-              <RouterLink to={aboutus} onClick={() => setActiveNav(navItem?.target)} hash={navItem?.target} >
-                {navItem?.name}
-              </RouterLink>
-            </NavBarButton>
-          ))
-        }
-        <Link href={cta?.link?.[0]} target="_blank">
-          <Button kind='ghost'
-            renderIcon={ArrowRight}>
-            {cta?.text?.[0]}
-          </Button>
-        </Link>
-      </NavBarButtonWrapper>
+      <div className="navbar-content">
+        {isMobile && isMenu && <MobileNavBar navData={navData} setIsMenu={setIsMenu} />}
+        {isMobile && <IconButton
+          label={isMenu ? "Close" : "Menu"}
+          onClick={() => {
+            setIsMenu(!isMenu);
+          }}
+          size="md"
+          align="bottom"
+          iconDescription='Menu Icon'
+          kind="ghost"
+          className="sidebar-menuIcon"
+        >
+          {isMenu ? <Close size={18} /> : <Menu size={18} />}
+        </IconButton>}
+        <RouterLink to={aboutus}>
+          <NavBarGigaLogo data-testid="nav-bar-logo" $size={isMobile ? '1.1rem' : '1.5rem'} dangerouslySetInnerHTML={{ __html: content?.[0]?.logo }} >
+            {/* <img src={image as string} alt="giga logo" /> */}
+          </NavBarGigaLogo>
+        </RouterLink>
+        <NavBarButtonWrapper>
+          {
+            !isMobile && navData?.map((navItem, index) => (
+              <NavBarButton $active={navItem?.targetList?.includes(activeNav)} key={`${index}-${navItem?.title}`}>
+                <RouterLink to={aboutus} onClick={() => setActiveNav(navItem?.target)} hash={navItem?.target} >
+                  {navItem?.name}
+                </RouterLink>
+              </NavBarButton>
+            ))
+          }
+          <Link href={cta?.link?.[0]} target="_blank">
+            <Button kind='ghost'
+              renderIcon={ArrowRight}>
+              {cta?.text?.[0]}
+            </Button>
+          </Link>
+        </NavBarButtonWrapper>
+      </div>
     </AboutGigaMapNavBarStyle >
   )
 }

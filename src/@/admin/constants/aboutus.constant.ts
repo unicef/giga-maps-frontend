@@ -161,21 +161,24 @@ export const aboutUsFormList = [
     ]
   },
   {
-    sectionName: 'Section 6 - Gigamaps enabled',
+    sectionName: 'Section 6 - Testimonials (Gigamaps enabled)',
     type: 'gigamaps-enabled',
-    fields: [],
+    fields: [
+      textType({ name: 'Section Title', path: 'title' }),
+      textareaType({ name: 'Style', path: 'style' }),
+    ],
     content: {
-      name: 'Content',
+      name: 'Testimonials',
       path: 'content',
       allowNew: true,
       items: [
         {
-          type: 'info',
+          type: 'testimonial',
           fields: [
-            textType({ name: 'Title', path: 'content.0.title' }),
-            textType({ name: 'Subtitle', path: 'content.0.text.0' }),
-            textType({ name: 'Description', path: 'content.0.text.1' }),
-            imageType({ name: 'Image', path: 'content.0.image' }),
+            textType({ name: 'Person Name', path: 'content.0.title' }),
+            textType({ name: 'Job Title & Organization', path: 'content.0.text.0' }),
+            textareaType({ name: 'Testimonial Quote', path: 'content.0.text.1' }),
+            imageType({ name: 'Person Photo', path: 'content.0.image' }),
             textareaType({ name: 'Style', path: 'content.0.style' }),
           ]
         }
