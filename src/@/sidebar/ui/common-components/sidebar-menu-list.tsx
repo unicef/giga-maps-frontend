@@ -74,6 +74,9 @@ const SidebarMenuList = () => {
         }} renderIcon={WatsonHealthThumbnailPreview} >
           {t('tour', 'Tour')}
         </MenuItem>
+        <MenuItemBlank onClick={() => onChangeMenu(false)} href="https://meter.giga.global" renderIcon={InformationSquare} target="_blank">
+          {t('giga-meter-measure-connectivity', 'Giga Meter: Measure Connectivity')}
+        </MenuItemBlank>
       </SideNavItems>
       {isMapView && <LanguageDropdown
         id="language"

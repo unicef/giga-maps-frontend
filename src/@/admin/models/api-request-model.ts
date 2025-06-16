@@ -1,11 +1,12 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
 import { APIListType } from "~/api/types";
-import { setPayload } from "~/lib/effector-kit";
+import { setPayload, setPayloadResults } from "~/lib/effector-kit";
 
-import { changeApiKeyRequestFx, deleteApiKeyRequestFx, getAllApiKeyRequest, getCountryApiFx, updateApiKeyExtensionFx } from "../effects/api-request-fx";
-import { ApiKeysAdminRequestType } from "../types/api-request.type";
+import { changeApiKeyRequestFx, deleteApiKeyRequestFx, getAllApiKeyRequest, getApiCategoryFx, getCountryApiFx, updateApiCategoryFx, updateApiKeyExtensionFx } from "../effects/api-request-fx";
+import { ApiCategoryType, ApiKeysAdminRequestType } from "../types/api-request.type";
 import { CountryListType } from "~/@/api-docs/types/country-list.type";
+import { $notification } from "~/@/common/Toast/toast.model";
 
 export const onChangeApiKeyPage = createEvent<{ page: number; pageSize: number; }>();
 export const $apiRequestPageNo = restore(onChangeApiKeyPage, { page: 1, pageSize: 20 });
@@ -13,6 +14,13 @@ export const $apiRequestPageNo = restore(onChangeApiKeyPage, { page: 1, pageSize
 export const reloadApiRequest = createEvent();
 export const $apiRequestListResponse = createStore<APIListType<ApiKeysAdminRequestType> | null>(null);
 $apiRequestListResponse.on(getAllApiKeyRequest.doneData, setPayload);
+
+export const $apiCategoryList = createStore<ApiCategoryType[]>([]);
+$apiCategoryList.on(getApiCategoryFx.doneData, setPayloadResults);
+
+export const $gigaMeterApiCategories = $apiCategoryList.map(items => items.filter((item) => {
+  return item.api.code === 'DAILY_CHECK_APP'
+}))
 
 export const $countryApiKeyList = createStore<CountryListType[]>([]);
 $countryApiKeyList.on(getCountryApiFx.doneData, setPayload);
@@ -50,3 +58,13 @@ sample({
   source: combine($apiRequestPageNo, ({ page, pageSize }) => ({ page, pageSize })),
   target: getAllApiKeyRequest
 });
+
+sample({
+  clock: updateApiCategoryFx.doneData,
+  fn: () => ({
+    title: `Category updated successfully`,
+    kind: 'success',
+    subtitle: ''
+  }),
+  target: $notification
+})

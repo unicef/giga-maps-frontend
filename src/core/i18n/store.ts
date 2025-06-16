@@ -17,6 +17,8 @@ export const languageStore = createI18nextIntegration({
   setup: appStarted,
 });
 
+export const t = $i18nextInstance.map((i18next) => i18next.t);
+
 export const $lng = languageStore.$language;
 export const $SelectedLngObj = languageStore.$language.map((lng) => languages.find((l) => l.code === lng));
 export const onLanguageChange = languageStore.changeLanguageFx;
