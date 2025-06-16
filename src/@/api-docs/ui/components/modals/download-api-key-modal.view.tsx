@@ -92,7 +92,7 @@ const DownloadApiKeyModal = () => {
               <TextInput value={apiInput} required onChange={(e) => setApiInput(e.target.value)} id="text-input-explore-api" type="text" labelText="" placeholder='Enter the api_key value' invalid={invalidKey} invalidText={'Please enter valid api key'} />
             </div>
           </TextInputWrapper><br />
-          <ModalDescription> If you would like more information about Giga Maps APIs, please contact us at   <a href="mailto:gigamaps@mail.unicef.org" style={{ color: '#0f62fe' }}> gigamaps@mail.unicef.org</a>.
+          <ModalDescription> If you would like more information about Giga Maps APIs, please contact us at   <a href="mailto:gigamaps@unicef.org" style={{ color: '#0f62fe' }}> gigamaps@unicef.org</a>.
           </ModalDescription>
 
           {exploreApiData?.code === "DAILY_CHECK_APP" && <Div>
