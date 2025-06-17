@@ -7,6 +7,7 @@ import { $schoolPopupData } from "../map.init";
 import { UNKNOWN } from '../map.types';
 import { PointCoordinates } from "~/core/global-types";
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
+import { t } from "~/core/i18n/store";
 
 type SchoolPopupDataType = ReturnType<typeof $schoolPopupData.getState>
 
@@ -63,7 +64,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
 
   const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
   const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
-  const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : UNKNOWN;
+  const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : t.getState()('unknown');
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
@@ -86,7 +87,10 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
     showElement(popupTemplate, '.static-container');
 
     const staticValue = feature?.staticValue as boolean | undefined;
-    const displayValue = staticValue === true ? 'yes' : staticValue === false ? 'no' : staticValue ?? UNKNOWN;
+    let displayValue = staticValue === true ? 'yes' : staticValue === false ? 'no' : staticValue
+    if (!displayValue || displayValue?.toLocaleLowerCase() === 'unknown') {
+      displayValue = t.getState()('unknown')
+    }
     const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', displayValue);
 
     staticElm.style.color = stylePaintData[feature?.staticType ?? UNKNOWN];
