@@ -67,7 +67,7 @@ const DownloadApiKeyModal = () => {
         }} $headingStyle={$modalHeadingStyle} title="Enter API Key" />
         <ModalBody $style={$modalBodyStyle}>
           <ModalDescription>
-            An API key is required to view the documentation for the {exploreApiData?.name} {showDownload ? 'data' : 'API'}. Your existing API keys can be found in your  <a href="https://maps.giga.global/docs/api-keys" target="_blank" rel="noopener noreferrer" style={{ color: '#0f62fe' }}> Giga Maps Dashboard</a>.<div style={{ height: '1rem' }}></div> If you have not yet been provided an API key, please  <a
+            An API key is required to view the documentation for the {exploreApiData?.name} {showDownload ? 'data' : 'API'}. Your existing API keys can be found in your  <a href="/docs/api-keys" target="_blank" rel="noopener noreferrer" style={{ color: '#0f62fe' }}> Giga Maps Dashboard</a>.<div style={{ height: '1rem' }}></div> If you have not yet been provided an API key, please  <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
