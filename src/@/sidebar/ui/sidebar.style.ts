@@ -98,7 +98,6 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
 
 
   @media (max-width: 768px) {
-    z-index: 1;
     width: 100%;
     height: ${props => props.$height ? "60vh" : "40vh"} ;
     top: unset;
@@ -112,74 +111,46 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
   }
 
   @media (min-width: 769px) and (max-width: 1584px) {
-    transition: all 0.3s;
     position: fixed;
     top: 0rem;
     bottom: 5.3rem;
     left: ${props => props.$left ? "-17rem" : "0.5rem"};
     width: 288px ;
     height: 96vh;
-    .sidebar__expander {
-      cursor: pointer;
-    position: absolute;
-        top: 33.5rem;
-        left: 100%;
-        display: flex;
-        width: 16px;
-        height: 48px;
-        align-items: center;
-        justify-content: center;
-        background-color: #181818;
-        border: none;
-        outline: none;
-        padding: 0;
-    
-        >svg {
-          fill:#fff;
-          transition: all .5s;
-          transform: ${props => props.$left ? 'rotate(0deg)' : 'rotate(180deg)'};
-          
-          width: 1rem;
-          height: 1rem;
-        }
-      }
   }
 
   @media only screen and (min-width: 1584px) {
-    transition: all 0.3s;
     position: fixed;
     top: 0rem;
     bottom: 5.3rem;
     left: ${props => props.$left ? "-18.2rem" : "0.5rem"};
     width: 296px ;
     height: 96vh;
-    .sidebar__expander {
-      cursor: pointer;
+  }
+
+ .sidebar__expander {
+    cursor: pointer;
     position: absolute;
-        top: 9.5rem;
-        left: 100%;
-        display: flex;
-        width: 16px;
-        height: 48px;
-        align-items: center;
-        justify-content: center;
-        background-color: #7E7E7E;
-        border: none;
-        outline: none;
-        padding: 0;
-    
-        >svg {
-          transition: all .5s;
-          transform: rotate(180deg);
-          width: 1rem;
-          height: 1rem;
-        }
-      }
-}
-  
-  .sidebar__expander > svg {
-    transform: ${props => props.$left && "rotate(0deg)"};
-    color: #fff;
+    bottom: 5.5rem;
+    left: 100%;
+    display: flex;
+    width: 16px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    background-color: ${props => props.theme.main};
+    border: none;
+    outline: none;
+    padding: 0;
+
+    >svg {
+      fill:#fff;
+      transition: all .5s;
+      transform: ${props => props.$left ? 'rotate(0deg)' : 'rotate(180deg)'};
+      width: 1rem;
+      height: 1rem;
+      color: ${props => props.theme.text};
+    }
   }
 `
 
