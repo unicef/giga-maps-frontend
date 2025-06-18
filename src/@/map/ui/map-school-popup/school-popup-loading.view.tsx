@@ -1,7 +1,6 @@
 import { ButtonSkeleton } from "@carbon/react"
-import { ConnectivityStatusCircle } from "~/@/sidebar/ui/school-view-component/styles/school-view-style"
-import { LocationFilledIcon, PopupTemplate, SchoolInfoWrapper, SchoolNameWrapper, SkeletonHeading, SkeletonLabel } from "./school-popup.style"
-import { Hashtag, TransmissionLte, Wifi } from '@carbon/icons-react'
+import { LiveContainer, LiveContent, LiveStatusRow, PopupTemplate, SchoolInfoWrapper, SchoolNameWrapper, SkeletonHeading, SkeletonLabel } from "./school-popup.style"
+import { Div } from "~/@/common/style/styled-component-style"
 
 export const SchoolPopupLoading = () => {
   return (
@@ -9,25 +8,20 @@ export const SchoolPopupLoading = () => {
       <PopupTemplate>
         <SchoolNameWrapper>
           <SkeletonHeading />
-          <ConnectivityStatusCircle $color={""}>
-          </ConnectivityStatusCircle>
         </SchoolNameWrapper>
         <SchoolInfoWrapper>
-          <Hashtag />
-          <SkeletonLabel width="60%" />
+          <SkeletonLabel width="85%" />
+          <LiveContainer>
+            <LiveContent>
+              <LiveStatusRow>
+              </LiveStatusRow>
+            </LiveContent>
+          </LiveContainer>
+          <SkeletonLabel width="50%" />
         </SchoolInfoWrapper>
-        <SchoolInfoWrapper>
-          <LocationFilledIcon />
-          <SkeletonLabel width="80%" />
-        </SchoolInfoWrapper>
-        <SchoolInfoWrapper>
-          <Wifi />
+        <Div $margin="2rem 0">
           <SkeletonLabel width="40%" />
-        </SchoolInfoWrapper>
-        <SchoolInfoWrapper>
-          <TransmissionLte />
-          <SkeletonLabel width="40%" />
-        </SchoolInfoWrapper>
+        </Div>
       </PopupTemplate>
       <ButtonSkeleton style={{ width: '100%' }} />
     </div>

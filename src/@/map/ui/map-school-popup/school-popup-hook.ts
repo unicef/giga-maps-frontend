@@ -9,6 +9,8 @@ import { UNKNOWN } from "../../map.types";
 import { $mapRoutes } from "~/core/routes";
 import { useMemo } from "react";
 import { $schoolStatsMap } from "~/@/sidebar/sidebar.model";
+import { $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
+import { IntervalUnit } from "~/lib/date-fns-kit/types";
 
 const useSchoolPopupData = () => {
   const { t } = useTranslation();
@@ -16,6 +18,7 @@ const useSchoolPopupData = () => {
   const schoolPopupDiv = useStore($schoolClickedPopupDiv);
   const multipleSchoolDiv = useStore($multipleSchoolPopup)
   const isLoading = useStore(fetchSchoolPopupDataFx.pending);
+  const isWeekly = useStore($historyIntervalUnit) === IntervalUnit.week;
   const countryCode = useStore($countryCode);
   const multipleSchoolStats = useStore($schoolStatsMap);
   const { layerUtils, stylePaintData, feature: schoolStats } = useStore($schoolPopupData);
@@ -23,7 +26,6 @@ const useSchoolPopupData = () => {
     connectivityBenchMarks } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};
-
   const getFeatureInfo = (feature: any) => {
     const unit = global_benchmark?.convert_unit;
     const connecitivityStatusColor = stylePaintData[feature?.connectivityStatus ?? UNKNOWN];
@@ -33,6 +35,7 @@ const useSchoolPopupData = () => {
     const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : t('unknown');
     const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
     let staticValue = feature?.staticValue as boolean | undefined | string;
+    const staticColor = stylePaintData[feature?.staticType ?? UNKNOWN]
     if (typeof staticValue === 'boolean') {
       staticValue = staticValue === true ? 'yes' : 'no';
     } else if (staticValue === 'unknown' || !staticValue) {
@@ -50,6 +53,7 @@ const useSchoolPopupData = () => {
       connectivityValue,
       benchmarkTitle,
       staticValue,
+      staticColor
     }
 
   }
@@ -80,6 +84,7 @@ const useSchoolPopupData = () => {
     isStatic,
     countryCode,
     isSchoolView,
+    isWeekly,
   }
 
 }

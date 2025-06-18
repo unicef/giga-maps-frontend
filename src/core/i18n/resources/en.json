@@ -250,5 +250,8 @@
   "unitary authority": "unitary authority",
   "local government district": "local government district",
   "council area": "council area",
-  "borough": "borough"
+  "borough": "borough",
+  "check-location-on-osm": "Check location on OSM",
+  "connected-this-week": "Connected this week",
+  "connected-this-month": "Connected this month"
 }

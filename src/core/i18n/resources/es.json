@@ -250,5 +250,8 @@
   "unitary authority": "autoridad unitaria",
   "local government district": "distrito de gobierno local",
   "council area": "área del consejo",
-  "borough": "distrito"
+  "borough": "distrito",
+  "check-location-on-osm": "Verificar localización en OSM",
+  "connected-this-week": "Conectado esta semana",
+  "connected-this-month": "Conectado este mes"
 }

@@ -5,21 +5,20 @@ import { useTranslation } from 'react-i18next';
 import { InnerCircle, InnerCircleConnectivity } from '../legend-info/legend-button.style';
 import { router } from '~/core/routes';
 import { PointCoordinates } from '~/core/global-types';
-import { ConnectivityCircleWrapper, FlexColumn, GeoLabel, GoToSchoolButton, Label, LocationFilledIcon, PopupTemplate, SchoolInfoWrapper, SchoolName, SchoolNameWrapper } from './school-popup.style';
+import { ConnectivityCircleWrapper, GoToSchoolButton, Label, LiveContainer, LiveContent, LiveStatusRow, OSMLink, PopupTemplate, SchoolInfoWrapper, SchoolName, SchoolNameWrapper } from './school-popup.style';
 import useSchoolPopupData from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
-  const { isLoading, features, isLive, getFeatureInfo,
+  const { isLoading, features, isLive, isWeekly, getFeatureInfo,
     isStatic, countryCode } = useSchoolPopupData();
 
   if (!features?.length) return null;
-  console.log(features)
   return (
     features.map(({ isClicked, element, feature }) => {
       const { connecitivityColor, connecitivityStatusColor, schoolCoords,
-        connectivityValue, benchmarkTitle, staticValue } = getFeatureInfo(feature);
+        connectivityValue, benchmarkTitle, staticValue, staticColor } = getFeatureInfo(feature);
       return (
         createPortal(isLoading && isClicked ? <SchoolPopupLoading /> : (
           <div className="school-popup-data">
@@ -27,26 +26,30 @@ export const MapSchoolPopup = () => {
               <PopupTemplate className="main-popup-container">
                 <SchoolNameWrapper>
                   <SchoolName className="map-school-name">{feature?.name}</SchoolName>
-                  <ConnectivityCircleWrapper className="map-school-status-circle">
-                    {!isStatic && feature?.isRealTime && <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />}
-                    <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={connecitivityStatusColor} />
-                  </ConnectivityCircleWrapper>
                 </SchoolNameWrapper>
-                <SchoolInfoWrapper>
-                  <LocationFilledIcon />
-                  <GeoLabel className="label map-school-geo">{schoolCoords}</GeoLabel>
-                </SchoolInfoWrapper>
-                {isLive && <SchoolInfoWrapper className="live-container">
-                  <Wifi />
-                  <FlexColumn>
-                    <Label className="map-school-connectivity-speed" style={{ color: connecitivityColor }}>{connectivityValue}</Label>
-                    <Label className="benchmark-value-label">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>
-                  </FlexColumn>
+                {(isLive && feature?.isRealTime || isStatic) && <SchoolInfoWrapper className="live-container">
+                  <LiveContainer>
+                    <ConnectivityCircleWrapper className="map-school-status-circle">
+                      {!isStatic && feature?.isRealTime && <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />}
+                      <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={connecitivityStatusColor} />
+                    </ConnectivityCircleWrapper>
+                    {isLive && <LiveContent>
+                      <LiveStatusRow>
+                        <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
+                        <Label $size="14px" $textTransform="none" style={{ whiteSpace: 'nowrap' }}>{isWeekly ? t('connected-this-week') : t('connected-this-month')}</Label>
+                      </LiveStatusRow>
+                    </LiveContent>}
+                    {isStatic && <Label $color={staticColor} className="map-school-school-coverage">{staticValue}</Label>}
+                  </LiveContainer>
+                  {isLive && <Label $size="14px">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
                 </SchoolInfoWrapper>}
-                {isStatic && <SchoolInfoWrapper className="static-container">
-                  <span className="static-icon"><TransmissionLte /></span>
-                  <Label className="map-school-school-coverage">{staticValue}</Label>
-                </SchoolInfoWrapper>}
+                <OSMLink
+                  href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t('check-location-on-osm')}
+                </OSMLink>
               </PopupTemplate>
               {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
                 router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
@@ -61,8 +64,3 @@ export const MapSchoolPopup = () => {
     })
   );
 };
-
-
-{/* <SchoolMarkerWrapper className="shool-marker-wrapper">
-        <LocationCompanyFilledIcon aria-label="marker" className="school-map-marker" size={46} />
-      </SchoolMarkerWrapper> */}
