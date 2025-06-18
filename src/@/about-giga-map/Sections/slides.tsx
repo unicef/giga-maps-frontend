@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { AboutType } from '../about.type';
 import CaseStudyCard from "../common/case-study-card"
-import { CaseStudiesCardsContainer, CaseStudiesWrapper, RightAndLeftWrapper, SliderWrapper } from "../styles/about-giga-map-styles"
+import { CaseStudiesCardsContainer, CaseStudiesSectionTitle, CaseStudiesWrapper, RightAndLeftWrapper, SliderWrapper } from "../styles/about-giga-map-styles"
 import { $isMobile, $isTablet } from '~/core/media-query';
 
 const onChange = createEvent<number>()
@@ -50,24 +50,30 @@ const Sliders = ({ data }: { data: AboutType }) => {
 
   return (
     <SliderWrapper $style={data.style}>
-      <RightAndLeftWrapper>
-        <Button kind='ghost' className='left' renderIcon={ChevronLeft} onClick={handlePrev} disabled={!isPrev}></Button>
-        <CaseStudiesWrapper>
-          <CaseStudiesCardsContainer pos={current * 100}>
-            {data?.content.map((resouce, index) => (
-              <CaseStudyCard
-                key={`${index}-${resouce?.title}`}
-                column={maxColumns}
-                cardPoster={resouce?.image}
-                title={resouce?.title}
-                description={resouce?.text?.[0]}
-              />
-            ))
-            }
-          </CaseStudiesCardsContainer>
-        </CaseStudiesWrapper>
-        <Button kind='ghost' className='right' renderIcon={ChevronRight} onClick={handleNext} disabled={!isNext}></Button>
-      </RightAndLeftWrapper>
+      <div className="section-content">
+        <CaseStudiesSectionTitle>
+          <h2>{data?.title || 'Success Stories'}</h2>
+          <p>{data?.text?.[0] || 'Discover how Giga is transforming education through connectivity worldwide'}</p>
+        </CaseStudiesSectionTitle>
+        <RightAndLeftWrapper>
+          <Button kind='ghost' className='left' renderIcon={ChevronLeft} onClick={handlePrev} disabled={!isPrev}></Button>
+          <CaseStudiesWrapper>
+            <CaseStudiesCardsContainer pos={current * 100}>
+              {data?.content.map((resouce, index) => (
+                <CaseStudyCard
+                  key={`${index}-${resouce?.title}`}
+                  column={maxColumns}
+                  cardPoster={resouce?.image}
+                  title={resouce?.title}
+                  description={resouce?.text?.[0]}
+                />
+              ))
+              }
+            </CaseStudiesCardsContainer>
+          </CaseStudiesWrapper>
+          <Button kind='ghost' className='right' renderIcon={ChevronRight} onClick={handleNext} disabled={!isNext}></Button>
+        </RightAndLeftWrapper>
+      </div>
     </SliderWrapper>
   )
 }
