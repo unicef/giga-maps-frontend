@@ -100,86 +100,11 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
   const connectionLinesRef = useRef<THREE.Line[]>([]);
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
-  const smartRotationRef = useRef({
-    currentRotationY: 0,
-    currentRotationX: 0,
-    rotationSpeed: 0.001, // Slower continuous rotation
-    pathProgress: 0, // Progress along the smart path (0-1)
-    pathSpeed: 0.0005 // Speed of progression along the path
-  });
-
-  const [tooltip, setTooltip] = useState<{
-    visible: boolean;
-    x: number;
-    y: number;
-    content: string;
-  }>({ visible: false, x: 0, y: 0, content: '' });
+  const rotationSpeedRef = useRef(-0.0008); // Increased speed for faster rotation
+  const lastRotationRef = useRef(0); // Store the last rotation value
 
   const [isDragging, setIsDragging] = useState(false);
   const [previousMousePosition, setPreviousMousePosition] = useState({ x: 0, y: 0 });
-
-  // Define a smart path that goes through populated regions
-  const smartRotationPath = [
-    { lat: 40, lng: -100 }, // North America
-    { lat: 50, lng: -10 },  // Europe approach
-    { lat: 50, lng: 10 },   // Europe
-    { lat: 30, lng: 50 },   // Middle East
-    { lat: 20, lng: 80 },   // India
-    { lat: 30, lng: 120 },  // East Asia
-    { lat: 0, lng: 140 },   // Southeast Asia
-    { lat: -25, lng: 140 }, // Australia
-    { lat: -30, lng: -60 }, // South America
-    { lat: -10, lng: -40 }, // Brazil
-    { lat: 10, lng: -20 },  // Africa approach
-    { lat: 0, lng: 20 },    // Central Africa
-    { lat: 20, lng: 10 },   // North Africa
-    { lat: 40, lng: -50 }   // Back to North America approach
-  ];
-
-  // Convert lat/lng to rotation angles
-  const latLngToRotation = (lat: number, lng: number) => {
-    const rotationY = (lng * Math.PI) / 180;
-    const rotationX = (-lat * Math.PI) / 180;
-    return { rotationY, rotationX };
-  };
-
-  // Continuous smart rotation logic
-  const updateContinuousSmartRotation = () => {
-    const smartRotation = smartRotationRef.current;
-
-    // Progress along the path
-    smartRotation.pathProgress += smartRotation.pathSpeed;
-    if (smartRotation.pathProgress >= 1) {
-      smartRotation.pathProgress = 0; // Loop back to start
-    }
-
-    // Calculate current position along the path
-    const pathIndex = smartRotation.pathProgress * (smartRotationPath.length - 1);
-    const currentIndex = Math.floor(pathIndex);
-    const nextIndex = (currentIndex + 1) % smartRotationPath.length;
-    const segmentProgress = pathIndex - currentIndex;
-
-    // Interpolate between current and next path points
-    const currentPoint = smartRotationPath[currentIndex];
-    const nextPoint = smartRotationPath[nextIndex];
-
-    const interpolatedLat = currentPoint.lat + (nextPoint.lat - currentPoint.lat) * segmentProgress;
-    let interpolatedLng = currentPoint.lng + (nextPoint.lng - currentPoint.lng) * segmentProgress;
-
-    // Handle longitude wraparound (shortest path)
-    let lngDiff = nextPoint.lng - currentPoint.lng;
-    if (lngDiff > 180) lngDiff -= 360;
-    if (lngDiff < -180) lngDiff += 360;
-    interpolatedLng = currentPoint.lng + lngDiff * segmentProgress;
-
-    // Convert to rotation angles
-    const targetRotation = latLngToRotation(interpolatedLat, interpolatedLng);
-
-    return {
-      rotationY: targetRotation.rotationY,
-      rotationX: targetRotation.rotationX
-    };
-  };
 
   // Convert lat/lng to 3D coordinates
   const latLngToVector3 = (lat: number, lng: number, radius: number): THREE.Vector3 => {
@@ -516,9 +441,9 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
       animationIdRef.current = requestAnimationFrame(animate);
 
       if (globeRef.current && !isDragging) {
-        const smartRotation = updateContinuousSmartRotation();
-        globeRef.current.rotation.y = smartRotation.rotationY;
-        globeRef.current.rotation.x = smartRotation.rotationX;
+        // Continue rotation from the last position
+        lastRotationRef.current += rotationSpeedRef.current;
+        globeRef.current.rotation.y = lastRotationRef.current;
       }
 
       // Animate point glow
@@ -527,32 +452,6 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
         const material = point.material as THREE.PointsMaterial;
         material.opacity = 0.8 + Math.sin(time + index) * 0.2;
       });
-
-      // Animate glowing dots with pulsation - DISABLED FOR TESTING
-      // glowingDotsRef.current.forEach((dot) => {
-      //   const material = dot.material as THREE.MeshBasicMaterial;
-      //   const userData = dot.userData;
-
-      //   if (userData.isGlowingDot) {
-      //     // Main dot pulsation
-      //     const pulse = Math.sin(time * userData.pulseSpeed + userData.phaseOffset);
-      //     material.opacity = 0.7 + pulse * 0.3;
-      //     const scale = 1 + pulse * 0.5;
-      //     dot.scale.setScalar(scale);
-      //   } else if (userData.isGlow) {
-      //     // Glow ring pulsation (slower and larger)
-      //     const pulse = Math.sin(time * userData.pulseSpeed * 0.8 + userData.phaseOffset);
-      //     material.opacity = 0.3 + pulse * 0.3;
-      //     const scale = 1 + pulse * 0.4;
-      //     dot.scale.setScalar(scale);
-      //   } else if (userData.isPulse) {
-      //     // Extended pulse effect (slowest and largest)
-      //     const pulse = Math.sin(time * userData.pulseSpeed * 0.6 + userData.phaseOffset);
-      //     material.opacity = 0.1 + pulse * 0.2;
-      //     const scale = 1 + pulse * 0.6;
-      //     dot.scale.setScalar(scale);
-      //   }
-      // });
 
       // Animate data transfer lines
       connectionLinesRef.current.forEach((line) => {
@@ -634,6 +533,10 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
   const handleMouseDown = (event: React.MouseEvent) => {
     setIsDragging(true);
     setPreviousMousePosition({ x: event.clientX, y: event.clientY });
+    // Store current rotation when starting drag
+    if (globeRef.current) {
+      lastRotationRef.current = globeRef.current.rotation.y;
+    }
   };
 
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -660,25 +563,9 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
         ));
 
       globeRef.current.quaternion.multiplyQuaternions(deltaRotationQuaternion, globeRef.current.quaternion);
+      // Update last rotation when dragging
+      lastRotationRef.current = globeRef.current.rotation.y;
       setPreviousMousePosition({ x: event.clientX, y: event.clientY });
-    } else {
-      // Raycasting for hover effects
-      raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
-      const intersects = raycasterRef.current.intersectObjects(pointsRef.current);
-
-      if (intersects.length > 0) {
-        const intersectedPoint = intersects[0].object;
-        const school = intersectedPoint.userData.school;
-
-        setTooltip({
-          visible: true,
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
-          content: `${school.name} - ${school.count} schools - ${school.status}`
-        });
-      } else {
-        setTooltip(prev => ({ ...prev, visible: false }));
-      }
     }
   };
 
@@ -688,7 +575,6 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
 
   const handleMouseLeave = () => {
     setIsDragging(false);
-    setTooltip(prev => ({ ...prev, visible: false }));
   };
 
   return (
@@ -699,18 +585,7 @@ const InteractiveGlobe: React.FC<InteractiveGlobeProps> = ({ className }) => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
-    >
-      {tooltip.visible && (
-        <TooltipWrapper
-          style={{
-            left: tooltip.x,
-            top: tooltip.y,
-          }}
-        >
-          {tooltip.content}
-        </TooltipWrapper>
-      )}
-    </InteractiveGlobeWrapper>
+    />
   );
 };
 
