@@ -49,6 +49,7 @@ import { isLiveLayer } from './sidebar.util';
 import { languageStore } from '~/core/i18n/store';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
 import { SCHOOL_LAYER_ID } from '../map/map.constant';
+import { $isMobile } from '~/core/media-query';
 
 $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
@@ -152,7 +153,8 @@ const sourceForInfo = combine({
   schoolParams: $getSchoolParams,
   lastSelectedLayers: $selectedGigaLayers,
   isCheckedLastDate: $isCheckedLastDate,
-  countrySearch: $countrySearchString
+  countrySearch: $countrySearchString,
+  isMobile: $isMobile
 })
 
 export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
@@ -243,6 +245,7 @@ sample({
 sample({
   clock: $schoolClickedId,
   source: sourceForInfo,
+  filter: ({ isMobile }) => !isMobile,
   fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: [Number(schoolIds)], country: null } }),
   target: fetchSchoolPopupDataFx
 })

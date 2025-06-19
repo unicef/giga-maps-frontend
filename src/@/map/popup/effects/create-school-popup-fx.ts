@@ -2,6 +2,8 @@ import { createEffect } from 'effector';
 
 import { $activeSchoolPopup, $map, onCreateSchoolPopup, setSchoolCLickupPopupDiv } from '../../map.model';
 import { createPopup, getLoadingPopupElm } from '../popup.util';
+import { mapSchools, router } from '~/core/routes';
+import { $countryCode } from '~/@/country/country.model';
 
 export const createLoadingPopupFx = createEffect(({ map, schoolPopupInfo }: { map: ReturnType<typeof $map.getState>; schoolPopupInfo: ReturnType<typeof $activeSchoolPopup.getState> }) => {
   if (!schoolPopupInfo || !map) {
@@ -23,4 +25,9 @@ export const createLoadingPopupFx = createEffect(({ map, schoolPopupInfo }: { ma
     .setLngLat(geopoint.coordinates)
     .setDOMContent(popupDiv)
     .addTo(map)
+})
+
+export const navigateToSchool = createEffect((schoolId: string, countryCode?: string) => {
+  const country = countryCode ?? $countryCode.getState();
+  router.navigate(`/map/schools?country=${country.toLowerCase()}&school_ids=${schoolId}`);
 })
