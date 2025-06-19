@@ -251,7 +251,7 @@
   "local government district": "distrito de governo local",
   "council area": "área do conselho",
   "borough": "bairro",
-  "check-location-on-osm": "Verificar localização no OSM",
-  "connected-this-week": "Conectado esta semana",
-  "connected-this-month": "Conectado este mes"
+  "check-on-osm": "Verificar no OSM",
+  "this-week": "Esta semana",
+  "this-month": "Este mês"
 }

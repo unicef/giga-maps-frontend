@@ -28,6 +28,7 @@ const useSchoolPopupData = () => {
   const { global_benchmark } = selectedLayerData ?? {};
   const getFeatureInfo = (feature: any) => {
     const unit = global_benchmark?.convert_unit;
+    const connectivityStatusValue = feature?.connectivityStatus;
     const connecitivityStatusColor = stylePaintData[feature?.connectivityStatus ?? UNKNOWN];
     const connecitivityColor = stylePaintData[feature?.connectivityType ?? UNKNOWN];
     const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
@@ -53,7 +54,8 @@ const useSchoolPopupData = () => {
       connectivityValue,
       benchmarkTitle,
       staticValue,
-      staticColor
+      staticColor,
+      connectivityStatusValue
     }
 
   }

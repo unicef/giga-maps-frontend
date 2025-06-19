@@ -30,19 +30,7 @@ const MapStyle = styled.div<{ $isMobile: boolean }>`
     bottom: 5.125rem;
   `}
   .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-    border-right-color: ${props => props.theme.main}
-  }
-  .mapboxgl-popup-content {
-    .main-popup-container {
-      background: ${props => props.theme.main};
-      box-shadow: 0px 2px 3px 0px ${props => props.theme.main};
-    } 
-    .map-school-name {
-      color: ${props => props.theme.text};
-    }
-    svg {
-      fill: ${props => props.theme.text};
-    }
+    border-right-color: ${props => props.theme.grayDark}
   }
   
 `

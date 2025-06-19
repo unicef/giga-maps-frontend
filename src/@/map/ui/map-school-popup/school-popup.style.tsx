@@ -5,9 +5,11 @@ import { LocationFilled } from '@carbon/icons-react'
 export const PopupTemplate = styled.div`
   width: 317px; // px to rem
   border-radius: 2px;
-  background: ${props => props.theme.main};
+  background: ${props => props.theme.grayDark};
   padding: 16px;
   box-shadow: 0px 2px 3px 0px ${props => props.theme.main};
+  display: flex;
+  flex-direction: column;
 `
 export const SchoolNameWrapper = styled.div`
 display:flex;
@@ -70,10 +72,17 @@ export const ConnectivityCircleWrapper = styled.div`
 export const OSMLink = styled(Link)`
   margin: 1.5rem 0;
   font-size: 14px;
-  color: ${props => props.theme.titleDesc};
+  width: auto;
+  margin-left: auto;    
   text-decoration: underline;
-  &:hover, &:focus, &:active, &:visited {
-    color: ${props => props.theme.titleDesc};
+  display: flex;
+  align-self: flex-end;
+  gap: 0.2rem;
+  svg {
+    fill: ${props => props.theme.titleBlue};
+  }
+  &:hover, &:focus, &:active {
+    color: ${props => props.theme.titleBlue};
   }
 `
 

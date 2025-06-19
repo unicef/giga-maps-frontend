@@ -251,7 +251,7 @@
   "local government district": "local government district",
   "council area": "council area",
   "borough": "borough",
-  "check-location-on-osm": "Check location on OSM",
-  "connected-this-week": "Connected this week",
-  "connected-this-month": "Connected this month"
+  "check-on-osm": "Check on OSM",
+  "this-week": "This week",
+  "this-month": "This month"
 }
