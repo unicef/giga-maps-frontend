@@ -9,9 +9,11 @@ import { ConnectivityCircleWrapper, GoToSchoolButton, Label, LiveContainer, Live
 import useSchoolPopupData from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
+import { useTheme } from 'styled-components';
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const { isLoading, features, isLive, isWeekly, getFeatureInfo,
     isStatic, countryCode } = useSchoolPopupData();
 
@@ -37,7 +39,7 @@ export const MapSchoolPopup = () => {
                     <LiveContent>
                       {isLive && feature?.isRealTime && <LiveStatusRow>
                         <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                        <Label $size="0.875rem" $textTransform="none" style={{ whiteSpace: 'nowrap' }}>{isWeekly ? t('this-week') : t('this-month')}</Label>
+                        <Label $size="0.875rem" $textTransform="none" $color={theme.text}>{isWeekly ? t('this-week') : t('this-month')}</Label>
                       </LiveStatusRow>}
                       {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
                       {!isStatic && (!isLive || !feature?.isRealTime) &&

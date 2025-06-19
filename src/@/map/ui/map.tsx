@@ -29,8 +29,9 @@ const MapStyle = styled.div<{ $isMobile: boolean }>`
   ${({ $isMobile }) => $isMobile && css`
     bottom: 5.125rem;
   `}
-  .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-    border-right-color: ${props => props.theme.grayDark}
+  // .mapboxgl-popup-anchor-left .mapboxgl-popup-tip, 
+  .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-bottom-color: ${props => props.theme.grayDark}
   }
   
 `

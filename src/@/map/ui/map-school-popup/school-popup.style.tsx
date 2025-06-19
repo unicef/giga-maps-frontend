@@ -32,6 +32,8 @@ export const SchoolName = styled.h6`
   line-height: 28px;
   letter-spacing: 0.01rem;
   margin-bottom: 2px;
+  font-family: 'Open Sans';
+  font-weight: lighter;
 `
 export const Label = styled.span<{ $color?: string, $size?: string, $textTransform?: string }>`
 color: ${props => props.$color || props.theme.titleDesc};

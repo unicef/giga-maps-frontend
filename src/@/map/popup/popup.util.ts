@@ -12,7 +12,7 @@ import { t } from "~/core/i18n/store";
 type SchoolPopupDataType = ReturnType<typeof $schoolPopupData.getState>
 
 export const createPopup = (options?: PopupOptions) => {
-  return new Popup({ offset: 8, anchor: 'left', closeButton: false, focusAfterOpen: true, closeOnMove: true, ...options })
+  return new Popup({ offset: 8, anchor: 'top', closeButton: false, focusAfterOpen: true, closeOnMove: true, ...options, maxWidth: '317px' })
 }
 
 export const getPopupElement = () => {
