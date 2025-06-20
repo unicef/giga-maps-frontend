@@ -14,8 +14,8 @@ import { useTheme } from 'styled-components';
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { isLoading, features, isLive, isWeekly, getFeatureInfo,
-    isStatic, countryCode } = useSchoolPopupData();
+  const { isLoading, features, isLive, getFeatureInfo,
+    isStatic, countryCode, formattedInterval } = useSchoolPopupData();
 
   if (!features?.length) return null;
   return (
@@ -39,7 +39,7 @@ export const MapSchoolPopup = () => {
                     <LiveContent>
                       {isLive && feature?.isRealTime && <LiveStatusRow>
                         <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                        <Label $size="0.875rem" $textTransform="none" $color={theme.text}>{isWeekly ? t('this-week') : t('this-month')}</Label>
+                        <Label $size="0.875rem" $textTransform="none" $color={theme.text}>{formattedInterval}</Label>
                       </LiveStatusRow>}
                       {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
                       {!isStatic && (!isLive || !feature?.isRealTime) &&

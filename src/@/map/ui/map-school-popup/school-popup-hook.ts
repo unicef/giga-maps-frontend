@@ -9,8 +9,9 @@ import { UNKNOWN } from "../../map.types";
 import { $mapRoutes } from "~/core/routes";
 import { useMemo } from "react";
 import { $schoolStatsMap } from "~/@/sidebar/sidebar.model";
-import { $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
+import { $historyInterval, $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
 import { IntervalUnit } from "~/lib/date-fns-kit/types";
+import { formatDateInterval } from "~/lib/date-fns-kit/format-date-interval";
 
 const useSchoolPopupData = () => {
   const { t } = useTranslation();
@@ -18,7 +19,6 @@ const useSchoolPopupData = () => {
   const schoolPopupDiv = useStore($schoolClickedPopupDiv);
   const multipleSchoolDiv = useStore($multipleSchoolPopup)
   const isLoading = useStore(fetchSchoolPopupDataFx.pending);
-  const isWeekly = useStore($historyIntervalUnit) === IntervalUnit.week;
   const countryCode = useStore($countryCode);
   const multipleSchoolStats = useStore($schoolStatsMap);
   const { layerUtils, stylePaintData, feature: schoolStats } = useStore($schoolPopupData);
@@ -26,6 +26,13 @@ const useSchoolPopupData = () => {
     connectivityBenchMarks } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};
+  const intervalUnit = useStore($historyIntervalUnit);
+  const interval = useStore($historyInterval);
+  const formattedInterval = formatDateInterval(
+    interval,
+    intervalUnit,
+    false
+  );
   const getFeatureInfo = (feature: any) => {
     const unit = global_benchmark?.convert_unit;
     const connectivityStatusValue = feature?.connectivityStatus;
@@ -57,8 +64,8 @@ const useSchoolPopupData = () => {
       staticColor,
       connectivityStatusValue
     }
-
   }
+
   const features = useMemo(() => {
     const collectList = [];
     if (schoolPopupDiv) {
@@ -86,7 +93,7 @@ const useSchoolPopupData = () => {
     isStatic,
     countryCode,
     isSchoolView,
-    isWeekly,
+    formattedInterval
   }
 
 }
