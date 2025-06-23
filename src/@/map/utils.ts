@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { CircleLayer, CirclePaint, Map, MapboxGeoJSONFeature, MapLayerMouseEvent, VectorSource } from "mapbox-gl";
 
 import { getBaseUrl } from "~/api/project-connect";
-import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
+import { GeoJSONFeatureCollection, GeoJSONPoint, PointCoordinates } from '~/core/global-types';
 
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
 import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, COVERAGE_URL, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
@@ -10,6 +10,7 @@ import { $schoolClickedId, setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
 import { $countryCode } from "../country/country.model";
+import { setSchoolFocusLatLng } from "../country/country.model";
 
 interface CreateSourceType {
   source?: string;
@@ -60,6 +61,8 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
     }
     const schoolId = feature?.properties?.id ?? feature2?.properties?.id;
     if (feature?.layer?.id?.includes('_layer') && schoolId) {
+      console.log("schoolId", schoolId, feature.geometry)
+      setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
       setPopupOnClickDot({
         id: schoolId,
         geopoint: feature.geometry as GeoJSONPoint

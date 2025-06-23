@@ -8,6 +8,7 @@ import { initMapFx } from '@/map/effects';
 import styled, { css } from 'styled-components';
 import { useStore } from 'effector-react';
 import { $isMobile } from '~/core/media-query';
+import MapSchoolPopupMain from './map-school-popup';
 
 const onMapRef = createEvent<HTMLDivElement | null>();
 
@@ -28,20 +29,9 @@ const MapStyle = styled.div<{ $isMobile: boolean }>`
   ${({ $isMobile }) => $isMobile && css`
     bottom: 5.125rem;
   `}
-  .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-    border-right-color: ${props => props.theme.main}
-  }
-  .mapboxgl-popup-content {
-    .main-popup-container {
-      background: ${props => props.theme.main};
-      box-shadow: 0px 2px 3px 0px ${props => props.theme.main};
-    } 
-    .map-school-name {
-      color: ${props => props.theme.text};
-    }
-    svg {
-      fill: ${props => props.theme.text};
-    }
+  // .mapboxgl-popup-anchor-left .mapboxgl-popup-tip, 
+  .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-bottom-color: ${props => props.theme.grayDark}
   }
   
 `
@@ -52,6 +42,7 @@ const MapComponent = () => {
   return (
     <MapStyle $isMobile={isMobile}>
       <div key={isMobile ? 'desktop_view' : 'mobile: view'} id="map" ref={onMapRef} style={{ width: '100%', height: '100%' }} />
+      <MapSchoolPopupMain />
     </MapStyle>
   )
 }
