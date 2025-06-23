@@ -1,7 +1,7 @@
 import { describe, test, expect, jest } from '@jest/globals'
-import { defaultSource } from '~/@/map/utils'
 import { addCountriesFx } from '../add-countries-fx';
 import { createSourceForAdminCountry } from '../../country.utils'
+import { DEFAULT_SOURCE } from '~/@/map/map.constant';
 
 jest.mock('../../country.utils', () => ({
   createSourceForAdminCountry: jest.fn(),
@@ -16,7 +16,7 @@ describe('addCountriesFx', () => {
       addSource: jest.fn(),
       getStyle: () => ({
         sources: {
-          [defaultSource]: true,
+          [DEFAULT_SOURCE]: true,
           layers: []
         }
       })

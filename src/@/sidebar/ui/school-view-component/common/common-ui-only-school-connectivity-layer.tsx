@@ -10,9 +10,11 @@ import { ConnectivityStatusNames } from '../../global-and-country-view-component
 import { StatisticsStatusLg } from '../styles/school-information.style';
 import { SchoolInformationWrapper } from '../styles/school-view-style';
 import { SchoolInformation } from './school-information.view';
+import { useTranslation } from 'react-i18next';
 
 
 const CommonUIOnlySchoolConnectivityLayer = ({ schoolId }: { schoolId: number }) => {
+  const { t } = useTranslation();
   const SchoolStatsTypes = useStore($schoolStats);
   const schoolData = SchoolStatsTypes?.find((info) => info.id === schoolId);
   const connectivityStatus = schoolData?.connectivity_status ?? schoolData?.statistics?.connectivity_status ?? UNKNOWN
@@ -26,7 +28,7 @@ const CommonUIOnlySchoolConnectivityLayer = ({ schoolId }: { schoolId: number })
         <DateWeekWrapper>
           {isLoading ? <LoadingText width="70%" $blockSize='2.8' /> :
             <StatisticsStatusLg $color={color}>
-              {ConnectivityStatusNames[connectivityStatus]}
+              {t(ConnectivityStatusNames[connectivityStatus])}
             </StatisticsStatusLg >
           }
         </DateWeekWrapper >

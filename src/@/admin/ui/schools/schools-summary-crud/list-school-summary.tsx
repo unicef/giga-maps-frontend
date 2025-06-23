@@ -62,10 +62,10 @@ const ListSchoolSummary = () => {
   const [deleteId, setDeleteId] = useState<null | number[]>(null);
   const currentUrl = window.location.href;
   const url = new URL(currentUrl)
-  const gigaIdSchool = url.searchParams.get('giga_id_school')
+  const schoolId = url.searchParams.get('schoolId')
 
   const getSchoolSummaryList = () => {
-    void getSchoolSummaryListFx({ page, pageSize, search: searchValue, filter: countryFilterValues.join(',') })
+    void getSchoolSummaryListFx({ page, pageSize, search: searchValue, filter: countryFilterValues.join(','), schoolId })
   }
 
   const deleteSchool = async (deleteIds: number[]) => {
@@ -90,16 +90,8 @@ const ListSchoolSummary = () => {
   };
 
   useEffect(() => {
-    if(gigaIdSchool){
-      setSearchValue(gigaIdSchool)
-      setPageAndSize({ page: 1, pageSize })
-      setSearchApiCall(true)
-    }
-  }, [gigaIdSchool])
-
-  useEffect(() => {
     getSchoolSummaryList();
-  }, [page, pageSize, countryFilterValues, searchApiCall, searchValue])
+  }, [page, pageSize, countryFilterValues, searchApiCall, searchValue, schoolId])
 
   const serachFn = () => {
     setPageAndSize({ page: 1, pageSize });
@@ -111,7 +103,7 @@ const ListSchoolSummary = () => {
   }
 
   const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === "Enter"){
+    if (event.key === "Enter") {
       event.preventDefault()
       serachFn()
     }

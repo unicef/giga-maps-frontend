@@ -5,7 +5,7 @@ import { getBaseUrl } from "~/api/project-connect";
 import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
 
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, defaultWorldView, LayerDataProps, mapPaintData } from "./map.constant";
+import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, COVERAGE_URL, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
 import { $schoolClickedId, setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
@@ -22,23 +22,27 @@ export const isDefaultStyle = (style: string) => {
   return gigaThemeList.includes(style as ThemeType)
 };
 
-export const mapDotsClickIdsAndHandler: Record<string, (event: MapLayerMouseEvent) => void> = {};
+export const mapDotsClickIdsAndHandler = {
+  [CONNECTIVITY_STATUS_SOURCE]: {},
+  [DEFAULT_SOURCE]: {}
+} as Record<string, Record<string, (event: MapLayerMouseEvent) => void>>;
 
 export const isConnectivity = (id: string) => id === `${Layers.connectivity}_layer`;
 export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
 
-export const removePreviewsMapClickHandlers = (map: Map) => {
-  const ids = Object.keys(mapDotsClickIdsAndHandler);
-  ids.forEach((id) => {
-    map.off('click', id, mapDotsClickIdsAndHandler[id]);
-    delete mapDotsClickIdsAndHandler[id];
+export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
+  const ids = Object.keys(mapDotsClickIdsAndHandler[source]);
+  if (!ids?.length) return;
+  ids?.forEach((id) => {
+    map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+    delete mapDotsClickIdsAndHandler[source][id];
   })
 }
 
-export const onClickOnSchoolDots = (map: Map, id: string) => {
-  mapDotsClickIdsAndHandler[id] = (e: MapLayerMouseEvent) => {
+export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
+  mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(e.point, {
-      layers: [...Object.keys(mapDotsClickIdsAndHandler)],
+      layers: [...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length) return;
     const ids = new Set(features.map((feature) => {
@@ -61,7 +65,7 @@ export const onClickOnSchoolDots = (map: Map, id: string) => {
       });
     }
   }
-  map.on('click', id, mapDotsClickIdsAndHandler[id]);
+  map.on('click', id, mapDotsClickIdsAndHandler[source][id]);
 }
 
 const setCurrentRadius = () => {
@@ -118,9 +122,7 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
   return animationFrameData;
 }
 
-export const defaultSource = 'map-data-source';
-export const coverageUrl = 'api/locations/schools/tiles';
-export const connectivityUrl = 'api/locations/schools/tiles/connectivity';
+
 export const getDynamicUrl = (layerId: string) => `api/accounts/layers/${layerId}/map`
 
 export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark"> & { isLive?: boolean }): string => {
@@ -137,6 +139,7 @@ export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBe
   return params;
 }
 
+
 export const getCountryParams = (country: boolean, countryId?: number, admin1Id?: number | null) => {
   let params = country && countryId ? `country_id=${countryId}` : ''
   if (admin1Id) {
@@ -145,16 +148,22 @@ export const getCountryParams = (country: boolean, countryId?: number, admin1Id?
   return params;
 }
 
+export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySearch }: Pick<ChangeLayerOptions, "mapRoute" | "country" | "countrySearch"> & { admin1Id?: number | null }) => {
+  const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
+  let params = getBaseUrl(`${CONNECTIVITY_STATUS_URL}/?${countryParams}`);
+  if (countrySearch) {
+    params += `&${countrySearch}`
+  }
+  return `${params}&z={z}&x={x}&y={y}.mvt`;
+}
 export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number | null }) => {
   let url = ''
-  const { downloadLayerId, coverageLayerId } = layerUtils;
+  const { globalLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
-  if (downloadLayerId === layerId || !layerId) {
-    url = connectivityUrl;
-  } else if (layerId === coverageLayerId) {
-    url = coverageUrl
+  if (globalLayerId === layerId || !layerId) {
+    url = CONNECTIVITY_URL;
   } else {
     url = getDynamicUrl(String(layerId))
   }
@@ -166,7 +175,7 @@ export const getMapId = (id: number | null, prefix = ''): string => {
   return '';
 }
 
-export const createSource = ({ map, source = defaultSource, url }: CreateSourceType, options: VectorSource): void => {
+export const createSource = ({ map, source = DEFAULT_SOURCE, url }: CreateSourceType, options: VectorSource): void => {
   map.addSource(source, {
     tiles: [url],
     minzoom: 0,
@@ -176,14 +185,14 @@ export const createSource = ({ map, source = defaultSource, url }: CreateSourceT
   });
 }
 
-export const createSchoolSource = ({ map, source = defaultSource, schoolData }: CreateSourceType) => {
+export const createSchoolSource = ({ map, source = DEFAULT_SOURCE, schoolData }: CreateSourceType) => {
   map.addSource(source, {
     type: 'geojson',
     data: schoolData as unknown as GeoJSON.FeatureCollection,
   });
 }
 
-export const getAllSourceLayers = (map: Map, sourceId = defaultSource) => {
+export const getAllSourceLayers = (map: Map, sourceId = DEFAULT_SOURCE) => {
   const layersFromSource = map.getStyle().layers.filter(layer => layer.source === sourceId);
   return layersFromSource
 }
@@ -193,7 +202,10 @@ export const checkSourceAvailable = (map: Map, sourceId: string): boolean => {
   return !!sources && !!sources[sourceId];
 }
 
-export const deleteSourceAndLayers = ({ map, sourceId = defaultSource }: { map: Map, sourceId?: string }): void => {
+export const deleteSourceAndLayers = ({ map, sourceId = DEFAULT_SOURCE }: { map: Map, sourceId?: string }): void => {
+  // remove click handlers
+  removePreviewsMapClickHandlers(map, sourceId);
+
   if (!checkSourceAvailable(map, sourceId)) return;
   const { layers } = map.getStyle();
   layers?.forEach((layer) => {
@@ -221,7 +233,7 @@ const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string)
   }, layerBefore && map.getLayer(layerBefore) ? layerBefore : '');
 }
 
-export const createSchoolLayer = (map: Map, { id, source = defaultSource, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
+export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
   if (map.getLayer(id)) {
     showLayer(map, id);
     return;
@@ -249,8 +261,10 @@ export const createSchoolLayer = (map: Map, { id, source = defaultSource, paintD
     ...options
   });
 
+  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+  delete mapDotsClickIdsAndHandler[source][id];
   if (!mapRoute.map) {
-    onClickOnSchoolDots(map, id);
+    onClickOnSchoolDots(map, id, CONNECTIVITY_STATUS_SOURCE);
   }
 }
 
@@ -298,7 +312,7 @@ const getPaintData = ({ isLive, paintData, isDynamicLayer }: { isLive?: boolean;
 
 }
 
-export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = defaultSource, paintData, mapRoute, options, isLive, isMobile }: { id: string; isDynamicLayer: boolean; isLive?: boolean; source?: string; paintData: StylePaintData; options: Record<string, string>, isMobile: boolean; mapRoute: ChangeLayerOptions["mapRoute"] }): void => {
+export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEFAULT_SOURCE, paintData, mapRoute, options, isLive, isMobile }: { id: string; isDynamicLayer: boolean; isLive?: boolean; source?: string; paintData: StylePaintData; options: Record<string, string>, isMobile: boolean; mapRoute: ChangeLayerOptions["mapRoute"] }): void => {
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
     return;
@@ -312,14 +326,14 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = def
     minzoom: 0,
     paint,
     ...options
-  }, getMapId(SCHOOL_STATUS_LAYER.id));
+  }, getMapId(SCHOOL_LAYER_ID));
   // create on click on dots;
   // clear click event before creating new layer;
 
-  map.off('click', id, mapDotsClickIdsAndHandler[id]);
-  delete mapDotsClickIdsAndHandler[id];
+  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+  delete mapDotsClickIdsAndHandler[source][id];
   if (!mapRoute.map) {
-    onClickOnSchoolDots(map, id);
+    onClickOnSchoolDots(map, id, source);
   }
 
 }

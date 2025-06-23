@@ -6,7 +6,7 @@ import { useStore } from 'effector-react';
 import { useCallback } from 'react'
 
 import { CustomIcon } from '~/@/common/style/styled-component-style';
-import { $layerUtils, $schoolStatusSelectedLayer, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection } from '~/@/sidebar/sidebar.model';
+import { $layerUtils, $schoolStatusSelectedLayer, checkConnectivityBenchmark, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection } from '~/@/sidebar/sidebar.model';
 
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
 import GigaLayerButton from './giga-layer-button';
@@ -16,13 +16,16 @@ import { useTranslation } from 'react-i18next';
 
 const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
   const { t } = useTranslation();
-  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, staticPopupActiveLayer, activeLayerByCountryCode } = useStore($layerUtils);
+  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, staticPopupActiveLayer, activeLayerByCountryCode } = useStore($layerUtils);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
   const { isLive, isSchoolStatus } = currentLayerTypeUtils;
   const updateLayer = useCallback((prevSelectedId: number | null) => {
     let selectedId = null;
     if (selectedLayerId !== prevSelectedId) {
       selectedId = prevSelectedId
+      if (selectedId) {
+        checkConnectivityBenchmark(selectedId);
+      }
     }
     onSelectMainLayer(selectedId);
   }, [selectedLayerId]);
@@ -82,10 +85,8 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           isActive={layer.id === selectedLayerId}
           icon={<CustomIcon dangerouslySetInnerHTML={{ __html: layer.icon }} />}
           onClick={() => {
-            if (coverageLayerData) {
-              updateLayer(layer.id);
-              resetCoverageFilterSelection()
-            }
+            updateLayer(layer.id);
+            resetCoverageFilterSelection()
           }}
         />))}
       </SidePanelLayerWrapper>
