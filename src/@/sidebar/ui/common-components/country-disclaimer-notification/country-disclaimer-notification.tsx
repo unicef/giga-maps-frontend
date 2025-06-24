@@ -1,9 +1,10 @@
 import { InlineNotification } from "@carbon/react"
 import { createEvent, restore } from "effector";
 import { useStore } from "effector-react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { $country, $countryCode } from "~/@/country/country.model";
 import { $mapRoutes } from "~/core/routes";
+import { $theme, ThemeType } from "~/core/theme.model";
 
 const NotificationWrapper = styled.div`
   position: fixed;
@@ -11,6 +12,10 @@ const NotificationWrapper = styled.div`
   left: 20rem;
   right: 0; 
   max-width: 20rem;
+  .cds--inline-notification--low-contrast.cds--inline-notification--info, .cds--inline-notification--low-contrast.cds--inline-notification--info-square {
+    background-color: ${props => props.theme.main};
+    border-inline-start: 3px solid ${props => props.theme.titleBlue};
+  }
 `
 const onCloseNotification = createEvent<boolean>();
 const $showNotification = restore(onCloseNotification, true)
@@ -18,6 +23,7 @@ const $showNotification = restore(onCloseNotification, true)
 $showNotification.reset($countryCode);
 
 const CountryDisclaimerNotification = () => {
+  const currentTheme = useStore($theme)
   const showNotification = useStore($showNotification)
   const countryData = useStore($country)
   const { country } = useStore($mapRoutes);
@@ -27,7 +33,7 @@ const CountryDisclaimerNotification = () => {
       <InlineNotification
         aria-label="closes notification"
         kind="info"
-        lowContrast
+        lowContrast={ThemeType.light === currentTheme ? true : false}
         onClose={() => onCloseNotification(false)}
         onCloseButtonClick={() => onCloseNotification(false)}
         statusIconDescription="notification"
