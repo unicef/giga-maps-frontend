@@ -72,13 +72,10 @@ export const ConnectivityCircleWrapper = styled.div`
 `
 
 export const OSMLink = styled(Link)`
-  margin: 1.5rem 0;
+  margin: 1.6rem 0 0.8rem;
   font-size: 14px;
   width: auto;
-  margin-left: auto;    
   text-decoration: underline;
-  display: flex;
-  align-self: flex-end;
   gap: 0.2rem;
   svg {
     fill: ${props => props.theme.titleBlue};

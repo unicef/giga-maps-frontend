@@ -314,11 +314,11 @@ export const $schoolPopupData = combine({
   layerUtils: $layerUtils,
 })
 
-// sample({
-//   clock: merge([fetchSchoolPopupDataFx.doneData]),
-//   source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
-//   target: updateSchoolPopupFx
-// })
+sample({
+  clock: merge([fetchSchoolPopupDataFx.doneData]),
+  source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
+  target: updateSchoolPopupFx
+})
 
 sample({
   clock: merge([router.historyUpdated, $isTimeplayer]),
