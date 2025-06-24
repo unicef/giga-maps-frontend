@@ -14,7 +14,7 @@ const ToastWrapper = styled(ToastNotification)`
 export default function Toast(options?: Partial<ToastNotificationProps>) {
   const notification = useStore($notification);
   if (!notification) return null;
-  const { title = "", subtitle = "", kind = 'info' } = notification;
+  const { title = "", subtitle = " ", kind = 'info' } = notification;
 
   return (
     <ToastWrapper
