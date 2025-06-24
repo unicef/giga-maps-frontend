@@ -7,7 +7,7 @@ import { $dataSource } from "~/@/country/country.model"
 import { $currentLayerCountryDataSource, $currentLayerTypeUtils, onShowAdvancedFilter } from "~/@/sidebar/sidebar.model"
 import { TooltipButton } from "~/@/common/style/styled-component-style"
 import { useTranslation } from "react-i18next"
-import FilterCountInfoTag from "./advanced-filter/filter-count-info-tag"
+// import FilterCountInfoTag from "./advanced-filter/filter-count-info-tag"
 
 const FooterContainer = styled.div`
   background: ${props => props.theme.main};
@@ -121,7 +121,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
   const dataSourceDescription = useMemo(() => currentDataSource?.description?.split(';'), [currentDataSource?.description]);
   if (showOldDataSource) {
     return (<>
-      <FilterCountInfoTag />
+      {/* <FilterCountInfoTag /> */}
       <FooterContainer>
         <div>
           <DataSourceHeader>
@@ -148,7 +148,7 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
   }
   if (!dataSourceName?.length) return null;
   return (<>
-    <FilterCountInfoTag />
+    {/* <FilterCountInfoTag /> */}
     <FooterContainer>
       <div>
         {!isFooter && <DataSourceHeader>
