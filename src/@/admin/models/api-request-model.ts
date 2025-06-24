@@ -64,7 +64,6 @@ sample({
   fn: () => ({
     title: `Category updated successfully`,
     kind: 'success',
-    subtitle: ''
   }),
   target: $notification
 })
