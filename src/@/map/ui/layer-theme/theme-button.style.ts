@@ -7,7 +7,7 @@ export const ThemeWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
     border-radius: 62.5rem;
     margin-top:0.5rem;
     @media (max-width:768px){
-        bottom:${(props) => props.$bottom ? "calc(60vh + 0.5rem)" : "calc(40vh + 0.5rem)"}
+        bottom:${(props) => props.$bottom ? "calc(60vh + 0.5rem)" : "calc(32vh + 0.5rem)"}
     }
 `
 export const ZoomButtonWrapper = styled.div`
@@ -198,7 +198,7 @@ right:.5rem;
 bottom:2.5rem;
 
  @media (max-width:768px){
-     bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(40vh + 0.5rem)"};
+     bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(32vh + 0.5rem)"};
  }
 `
 

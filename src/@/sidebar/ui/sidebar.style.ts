@@ -99,7 +99,7 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
 
   @media (max-width: 768px) {
     width: 100%;
-    height: ${props => props.$height ? "60vh" : "40vh"} ;
+    height: ${props => props.$height ? "60vh" : "32vh"} ;
     top: unset;
     bottom: ${props => props.$left ? "-24vh" : "0"};
     position: fixed;
@@ -155,12 +155,16 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
 `
 
 export const VerticalSliderButtonWrapper = styled.div`
-padding: 0.5rem;
+padding: 0.6rem;
 display: flex;
 align-items: center;
 justify-content: center;
 width: 100%;
+margin-bottom: -0.0625rem; 
 background:${props => props.theme.main};
+svg {
+  fill: ${props => props.theme.text};  
+}
 `
 
 export const VerticalSliderButton = styled.div`
@@ -173,7 +177,7 @@ cursor: pointer;
 
 export const SubContainer = styled.div`
 height:calc(100% - 6rem);
-
+background: ${props => props.theme.main} ;
 @media (max-width:768px){
   height:calc(100%);
 }

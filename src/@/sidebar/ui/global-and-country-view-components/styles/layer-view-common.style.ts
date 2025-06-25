@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 
 import { Scroll } from '@/scroll';
 
@@ -83,7 +83,7 @@ padding: 0.55rem 1rem;
 }
 `
 
-export const SidebarFooterGigalayerContainer = styled.div`
+export const SidebarFooterGigalayerContainer = styled.div<{ $hide?: boolean; }>`
 position: fixed;
 bottom: 1.8rem;
 display: flex;
@@ -93,7 +93,10 @@ width: inherit;
 z-index: 1;
 border-top: 1px solid ${props => props.theme.schoolListBack};
 background:${props => props.theme.main};
-
+transition: transform 0.4s ease-in-out;
+${props => props.$hide && css`
+  transform: translateY(100%);
+`}
 .cds--btn--ghost:not([disabled]) svg {
     fill: var(--cds-icon-primary, #161616);
     color: #9e9e9e;
