@@ -142,14 +142,14 @@ export const RightItem = styled.div`
 
 export const LinkItem = styled.span<{ $underline?: boolean; $bold?: boolean; $highlight?: boolean; $secondary?: boolean; }>`
 color:  ${({ $secondary, $highlight }) => {
-  if ($highlight) {
-    return props => props.theme.titleBlue;
-  } else if ($secondary) {
-    return props => props.theme.titleDesc;
-  } else {
-    return props => props.theme.text;
-  }
-}}; 
+    if ($highlight) {
+      return props => props.theme.titleBlue;
+    } else if ($secondary) {
+      return props => props.theme.titleDesc;
+    } else {
+      return props => props.theme.text;
+    }
+  }}; 
 font-size: 0.75rem;
 text-transform: capitalize;
   margin-right: 0.25rem;
@@ -446,9 +446,10 @@ export const SchoolSearch = styled(Search)`
       }
     }
 `
-export const ChevronUpIcon = styled(ChevronUp) <{ 
-  $highlight?: boolean; 
-  $scondary?: boolean; }>`
+export const ChevronUpIcon = styled(ChevronUp) <{
+  $highlight?: boolean;
+  $scondary?: boolean;
+}>`
   fill:  ${({ $secondary, $highlight }) => $highlight ? props => props.theme.titleBlue : $secondary ? props => props.theme.titleDesc : props => props.theme.text}; 
    pointer-events: none;
 `
@@ -518,12 +519,12 @@ height:5rem;
 color: ${props => props.theme.grey60};
 `
 
-export const LayerDetailContainer = styled.div`
+export const LayerDetailContainer = styled.div<{ $height?: string; }>`
  height: calc(100% - 8.5rem);
  background: ${props => props.theme.main} ;
  overflow: hidden;
 
  @media (max-width: 768px) {
-  height: calc(100% - 6rem);
+  height: calc(100% - ${props => props.$height ?? '6rem'});
  }
 `
