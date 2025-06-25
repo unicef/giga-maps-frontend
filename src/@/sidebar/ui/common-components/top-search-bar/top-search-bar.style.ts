@@ -8,7 +8,7 @@ export const SearchContainer = styled(Search) <{ $isMobile: boolean, value: stri
 
 input{
 ${props => !props.$isMobile && css`
-padding: 0 2.5rem 0 1rem !important;
+padding: 0 1.8rem 0 1rem !important;
 `}
 border-bottom: 1px solid ${props => props.theme.main};
 background: ${props => props.theme.main};
@@ -29,7 +29,7 @@ input::placeholder{
     fill:${props => props.theme.text};
     ${props => !props.$isMobile && css`
       display: ${props.value ? 'none' : 'inherit'};
-      left: 10rem;
+      left: 9.5rem;
       right: 0;
     `}
   }
