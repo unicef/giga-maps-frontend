@@ -3,6 +3,7 @@ import { createEvent, restore } from "effector";
 import { useStore } from "effector-react";
 import styled, { useTheme } from "styled-components";
 import { $country, $countryCode } from "~/@/country/country.model";
+import { $isMobile } from "~/core/media-query";
 import { $mapRoutes } from "~/core/routes";
 import { $theme, ThemeType } from "~/core/theme.model";
 
@@ -27,7 +28,8 @@ const CountryDisclaimerNotification = () => {
   const showNotification = useStore($showNotification)
   const countryData = useStore($country)
   const { country } = useStore($mapRoutes);
-  if (!country || !showNotification || !countryData?.country_disclaimer) return null;
+  const isMobile = useStore($isMobile);
+  if (!country || !showNotification || !countryData?.country_disclaimer || isMobile) return null;
   return (
     <NotificationWrapper>
       <InlineNotification
