@@ -71,7 +71,7 @@ const DownloadApiKeyModal = () => {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                if (isPublic) {
+                if (isPublic && exploreApiData?.code !== "DAILY_CHECK_APP") {
                   onRequestApiKey(exploreApiData?.id)
                 } else {
                   onRequestAPIPopup(true);
