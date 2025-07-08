@@ -1,8 +1,8 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
-import { $countries } from "~/@/country/country.model";
+import { $countries, $country } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
-import { mapCountry } from "~/core/routes";
+import { $mapRoutes, mapCountry } from "~/core/routes";
 import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { getId, getLocalStorage, setLocalStorage } from "~/lib/utils";
 
@@ -207,12 +207,16 @@ sample({
 
 sample({
   clock: $query,
-  source: combine($hasSearchInput, $query),
+  source: combine($hasSearchInput, $query, $country, $mapRoutes),
   filter: ([hasSearchInput]) => {
     return hasSearchInput
   },
-  fn: ([_, query]) => {
-    return ({ query })
+  fn: ([_, query, country, mapRoutes]) => {
+    let countryId = country?.id;
+    if (mapRoutes.map) {
+      countryId = undefined;
+    }
+    return ({ query, countryId })
   },
   target: getSearchResultsFx
 })
