@@ -152,6 +152,9 @@ a{
     border: none;
     background: none;
   }
+  select {
+    background: none !important;
+  }
 `;
 
 export const GlobalStyle = createGlobalStyle`${globalStyle}`;
