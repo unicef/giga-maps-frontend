@@ -12,6 +12,7 @@ interface FormValues {
 }
 const defaultFields = {
   full_name: '',
+  email: '',
   organisation: '',
   purpose: '',
   message: ''
@@ -21,6 +22,14 @@ const validationRules = {
   full_name: [{
     required: true,
     message: "Full name is required"
+  }],
+  email: [{
+    required: true,
+    message: "Email is required"
+  },{
+    validate: (value: string) =>
+      !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    message: "Enter a valid email address"
   }],
   organisation: [{
     required: true,
@@ -61,8 +70,9 @@ export const GetInTouchForm = ({ open, setOpen }: { open: boolean, setOpen: Reac
         <Scroll>
           <ModalBody>
             <Theme theme="g90">
-              <p className="form-title">Questions or clarifications? Get in touch with us</p>
+              <p className="form-title">Have a question or need clarification? Contact Giga.</p>
               <TextInput id="name" value={values['full_name']} invalid={!!errors['full_name'] && touched['full_name']} invalidText={errors['full_name']} name="full_name" onChange={handleChange} onBlur={handleBlur} labelText="Full name" placeholder="John Doe" />
+              <TextInput id="email" value={values['email']} invalid={!!errors['email'] && touched['email']} invalidText={errors['email']} name="email" onChange={handleChange} onBlur={handleBlur} labelText="Email" placeholder="John@gmail.com" />
               <TextInput id="email" value={values['organisation']} invalid={!!errors['organisation'] && touched['organisation']} invalidText={errors['organisation']} name="organisation" onChange={handleChange} onBlur={handleBlur} labelText="Your organisation" placeholder="Business name" />
               <Select id="select" value={values['purpose']} invalid={!!errors['purpose'] && touched['purpose']} name="purpose" invalidText={errors['purpose']} onChange={handleChange} onBlur={handleBlur} labelText="Purpose of inquiry" placeholder="Choose an option">
                 <SelectItem value="" text="Choose an option" />
