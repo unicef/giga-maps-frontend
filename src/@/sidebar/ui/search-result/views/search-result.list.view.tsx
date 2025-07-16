@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { useStore } from "effector-react";
 import { PropsWithChildren, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -5,10 +6,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { $searchInput, setSearchInMobile } from "../../common-components/top-search-bar/top-search-bar.model";
 import { SEARCH_DATA_TYPE } from "../container/search-result.constant";
 import { getSearchResultsFx } from "../container/search-result.fx";
-import { $searchResultCollection, $hasMoreResults, loadMoreResults, onSearchItemClick } from "../container/search-result.model";
+import { $searchResultCollection, $hasMoreResults, loadMoreResults, onSearchItemClick, $searchPage } from "../container/search-result.model";
 import { SearchType } from "../container/search-result.type";
 import SearchResultNotFoundView from "../search-country-list/search-result-not-found-view";
-import { LeftItem, Loading, NoMoreResults, SearchItem } from "../styles/search-result-style";
+import { LeftItem, Loading, NoMoreResults, SearchItem, SearchResultScroll } from "../styles/search-result-style";
 import { useTranslation } from "react-i18next";
 
 
@@ -35,6 +36,14 @@ export default function SearchResultList() {
   const itemLength = searchResult?.length - 1;
   const hasMore = useStore($hasMoreResults);
   const { t } = useTranslation();
+  const page = useStore($searchPage)
+  const scrollRef = useRef()
+
+  useEffect(() => {
+    if (scrollRef.current && page === 0) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [page])
 
   const fetchMoreData = () => {
     if (!isLoading && hasMore) {
@@ -71,7 +80,8 @@ export default function SearchResultList() {
       </SearchItem>
     ));
   };
-  return (<>
+  return (<SearchResultScroll ref={scrollRef} id="scrollableDiv">
+
     {isLoading && searchResult?.length === 0 && <Loading description="Loading..." />}
     {isListEmpty && <SearchResultNotFoundView />}
     {!!searchResult?.length && (
@@ -90,5 +100,5 @@ export default function SearchResultList() {
         {renderItems()}
       </InfiniteScroll>
     )}
-  </>)
+  </SearchResultScroll>)
 }
