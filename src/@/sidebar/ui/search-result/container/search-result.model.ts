@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
-import { $countries, $country } from "~/@/country/country.model";
+import { $countries, $country, $countryCode } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
 import { $mapRoutes, mapCountry } from "~/core/routes";
 import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
@@ -61,7 +61,7 @@ $searchSchoolSelectedList.on(setSchoolSelection, (state, payload) => {
 export const triggerSearchApply = createEvent();
 export const $searchSchoolList = createStore<APIListType<SearchResultApi> | null>(null);
 export const onSchoolListCurrentPage = createEvent<number>();
-export const $schoolListCurrentPage = restore<number>(onSchoolListCurrentPage, 1);
+export const $schoolListCurrentPage = restore<number>(onSchoolListCurrentPage, 0);
 export const setSearchSchoolListValue = createEvent<string>();
 export const $searchSchoolListValue = restore(setSearchSchoolListValue, '');
 const $searchSchoolListMax = $searchSchoolListValue.map((value) => value.length > SCHOOL_LIST_SEARCH_LENGTH ? value : '')
@@ -246,11 +246,15 @@ sample({
     if (mapRoutes.map) {
       countryId = undefined;
     }
-    // Reset to page 1 for new queries
+    // Reset to page 0 for new queries
     return ({ query, countryId, page: 0 })
   },
   target: getSearchResultsFx
 });
+
+$query.watch(() => {
+  setSearchPage(0);
+})
 // Handle loading more results
 loadMoreResults.watch(() => {
   const hasSearchInput = $hasSearchInput.getState();
@@ -291,3 +295,4 @@ $searchSchoolList.on(fetchSchoolListFx.doneData, setPayload)
 $searchSchoolListValue.reset([$searchAdminLevel2])
 $schoolListCurrentPage.reset([$searchAdminLevel2])
 $schoolListCurrentPage.reset(setSearchSchoolListValue)
+$searchInput.reset([$countryCode]);
