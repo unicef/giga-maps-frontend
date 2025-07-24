@@ -26,7 +26,7 @@ export const validateApiKeyFx = createEffect((body: any) => {
     url: `accounts/validate_api_key/`,
     method: 'PUT',
     data: body
-  }) as Promise<ApiKeysType>
+  }) as Promise<ApiKeysType['active_api_categories_list']>
 });
 
 export const requestForExtensionFx = createEffect(({ id, body }: { id?: number, body: any; }) => {
