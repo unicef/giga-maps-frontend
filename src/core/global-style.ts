@@ -12,6 +12,7 @@ const globalStyle = css`
     --cds-layer-accent: #F2F2F2;
     --primary-black-80-giga-dark-grey: #474747;
     --text-color-primary: #222222;
+    --cds-background-inverse: #222222;
     /* --text-text-primary: #161616; */
     /* --text-text-secondary: #fff; */
     /* --cds-text-primary: #fff; */

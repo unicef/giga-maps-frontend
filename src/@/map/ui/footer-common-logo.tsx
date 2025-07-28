@@ -8,11 +8,20 @@ const currentYear = new Date().getFullYear();
 const FooterContent = styled.div`
   display: flex;
   align-items: center;
+  .privacy {
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+    color: ${props => props.theme.titleBlue};
+    text-decoration: underline;
+  }
 `
 
 const FooterCommonLogo = () => {
   return (
     <FooterContent>
+      <a className="privacy" href="https://www.unicef.org/legal#privacy-policy" target='_blank' rel="noreferrer">
+        Privacy policy & Terms of use
+      </a>
       <p>
         © {currentYear}{"  "}
         <a href="https://www.unicef.org/innovation/giga" className="giga-logo" target="_blank" rel="noreferrer">
