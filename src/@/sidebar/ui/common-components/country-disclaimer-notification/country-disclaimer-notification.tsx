@@ -18,14 +18,14 @@ const NotificationWrapper = styled.div`
     border-inline-start: 3px solid ${props => props.theme.titleBlue};
   }
 `
-const onCloseNotification = createEvent<boolean>();
-const $showNotification = restore(onCloseNotification, true)
+export const onCloseDiscalimerNotification = createEvent<boolean>();
+export const $showDisclaimerNotification = restore(onCloseDiscalimerNotification, true)
 
-$showNotification.reset($countryCode);
+$showDisclaimerNotification.reset($countryCode);
 
 const CountryDisclaimerNotification = () => {
   const currentTheme = useStore($theme)
-  const showNotification = useStore($showNotification)
+  const showNotification = useStore($showDisclaimerNotification)
   const countryData = useStore($country)
   const { country } = useStore($mapRoutes);
   const isMobile = useStore($isMobile);
@@ -36,8 +36,8 @@ const CountryDisclaimerNotification = () => {
         aria-label="closes notification"
         kind="info"
         lowContrast={ThemeType.light === currentTheme ? true : false}
-        onClose={() => onCloseNotification(false)}
-        onCloseButtonClick={() => onCloseNotification(false)}
+        onClose={() => onCloseDiscalimerNotification(false)}
+        onCloseButtonClick={() => onCloseDiscalimerNotification(false)}
         statusIconDescription="notification"
         subtitle={countryData?.country_disclaimer}
         title="Disclaimer"
