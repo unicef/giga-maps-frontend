@@ -33,7 +33,7 @@ const CountryDisclaimerNotification = () => {
   return (
     <NotificationWrapper>
       <InlineNotification
-        aria-label="closes notification"
+        aria-label="Close notification"
         kind="info"
         lowContrast={ThemeType.light === currentTheme ? true : false}
         onClose={() => onCloseDiscalimerNotification(false)}
