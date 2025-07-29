@@ -74,6 +74,10 @@ export const $searchPage = restore<number>(setSearchPage, 1);
 export const setHasMoreResults = createEvent<boolean>();
 export const $hasMoreResults = restore(setHasMoreResults, true);
 
+// Track if we've loaded all results for the current country
+export const setHasLoadedAllForCurrentCountry = createEvent<boolean>();
+export const $hasLoadedAllForCurrentCountry = restore<boolean>(setHasLoadedAllForCurrentCountry, false);
+
 export const $searchResultResponse = createStore<SearchResultCollection[] | null>(null);
 $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
   // Convert the results to our format
@@ -89,14 +93,22 @@ $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
   })) as SearchResultCollection[];
   const count = payload.count;
   let list = mappedResults;
-
-
+  const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
+  const countryId = $country.getState()?.id;
+  const hasMoreData = (countryId && !hasLoadedAllForCurrentCountry) || list.length === 15;
+  if (countryId && !hasLoadedAllForCurrentCountry && (list.length + (state?.length || 0)) >= count) {
+    setHasLoadedAllForCurrentCountry(true);
+  }
+  console.log(countryId, hasLoadedAllForCurrentCountry, list.length, count, $searchPage.getState())
+  if (countryId && !hasLoadedAllForCurrentCountry && list.length < 15 && $searchPage.getState() === 0) {
+    loadMoreResults();
+  }
   // If we have existing state and this isn't the first page, append the results
-  if (state && list.length < count) {
+  if (state?.length) {
     list = [...state, ...mappedResults];
   }
   // Update hasMoreResults based on API response
-  setHasMoreResults(list.length < count);
+  setHasMoreResults(hasMoreData);
   // Otherwise return just the new results
   return list;
 });
@@ -229,7 +241,15 @@ sample({
 // Reset search page when query changes
 $query.watch(() => {
   setSearchPage(1);
+  setHasLoadedAllForCurrentCountry(false);
+  setHasMoreResults(true);
 });
+
+$hasLoadedAllForCurrentCountry.watch((isLoaded) => {
+  if (isLoaded) {
+    setSearchPage(0);
+  }
+})
 
 // Load more results function
 export const loadMoreResults = createEvent();
@@ -263,6 +283,7 @@ loadMoreResults.watch(() => {
   const country = $country.getState();
   const mapRoutes = $mapRoutes.getState();
   const page = $searchPage.getState();
+  const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
 
   if (hasSearchInput && hasMore) {
     let countryId = country?.id;
@@ -274,7 +295,7 @@ loadMoreResults.watch(() => {
     setSearchPage(page + 1);
 
     // Fetch more results
-    getSearchResultsFx({ query, countryId, page });
+    getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page });
   }
 });
 

@@ -58,7 +58,8 @@ export default function SearchResultList() {
   const renderItems = () => {
     return searchResult?.map((item: SearchType, index: number) => (
       <SearchItem
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           onSearchItemClick(item);
           setSearchInMobile(false);
         }}
@@ -80,7 +81,7 @@ export default function SearchResultList() {
       </SearchItem>
     ));
   };
-  return (<SearchResultScroll ref={scrollRef} id="scrollableDiv">
+  return (<SearchResultScroll ref={scrollRef} id="scrollableDiv" className="search-results-container">
 
     {isLoading && searchResult?.length === 0 && <Loading description="Loading..." />}
     {isListEmpty && <SearchResultNotFoundView />}
