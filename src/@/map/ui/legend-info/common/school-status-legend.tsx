@@ -81,7 +81,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
               <p className="label">{t(ConnectivityStatusNames[key])}</p>
             </div>
           </div>
-          {shouldShowControls && <div className='legend-value'>{formatNumber(schoolStatusStats[key], lng)}</div>}
+          {shouldShowControls && <div className='legend-value' title={schoolStatusStats[key]}>{formatNumber(schoolStatusStats[key], lng)}</div>}
         </div>
       )
       )}

@@ -79,10 +79,8 @@ p{
   font-weight: 600;
   line-height: 0.75rem; 
   margin:0;
-  span{
-    color:  ${props => props.theme.titleDesc};
+  .text {
     font-size: 0.875rem;
-    font-weight: 600;
     line-height: 1.25rem;
     margin-top:0.25rem;
   }

@@ -65,12 +65,12 @@ export const $schoolMappedData = sample({
   fn: ({ globalStats, connectivityStats }) => {
     return [{
       type: 'schools',
-      value: `${formatNumber(globalStats?.schools_connected ?? 0)}/6M`,
+      value: `<span title="${globalStats?.schools_connected ?? 0}">${formatNumber(globalStats?.schools_connected ?? 0)}</span>`,
       chart: null
     },
     {
       type: 'school-connectivity',
-      value: formatNumber((globalStats?.schools_with_connectivity_status_mapped ?? 0)),
+      value: `<span title="${globalStats?.schools_with_connectivity_status_mapped ?? 0}">${formatNumber((globalStats?.schools_with_connectivity_status_mapped ?? 0))}</span>`,
       chart: {
         categories: [ConnectivityStatusNames.connected, ConnectivityStatusNames.not_connected, /*ConnectivityStatusNames.unknown*/],
         categoryColors: [styleData.good, styleData.bad, styleData.unknown],
@@ -82,7 +82,7 @@ export const $schoolMappedData = sample({
     },
     {
       type: 'connectivity',
-      value: formatNumber(connectivityStats?.no_of_schools_measure ?? 0),
+      value: `<span title="${connectivityStats?.no_of_schools_measure ?? 0}">${formatNumber(connectivityStats?.no_of_schools_measure ?? 0)}</span>`,
       chart: {
         categories: [ConnectivityDistributionNames.good, ConnectivityDistributionNames.moderate, ConnectivityDistributionNames.bad, ConnectivityDistributionNames.unknown],
         categoryColors: [styleData.good, styleData.moderate, styleData.bad, styleData.unknown],
