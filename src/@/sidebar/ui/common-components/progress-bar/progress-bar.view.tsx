@@ -45,7 +45,7 @@ const ProgressBar = ({ value = 0, maxValue = 0, label = "", colorType = "", togg
         </>
       }
       <p className="progress-info">
-        {isLoading ? <LoadingText $blockSize='0.7' $marginEnd='0' /> : formatNumber(value, lng)}
+        {isLoading ? <LoadingText $blockSize='0.7' $marginEnd='0' /> : <span title={`${value}`}>{formatNumber(value, lng)}</span>}
       </p>
     </ProgressBarWrapper>
   );

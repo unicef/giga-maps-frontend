@@ -108,7 +108,7 @@ const LayerSchoolsConnectivityStatus = () => {
           <>
             <Div $margin={"0 0 0.75rem 0"}>
               {isLoading ? <LoadingText width="80%" /> :
-                <Text $size={0.75} $color="#9E9E9E"><HashtagIcon size={12} />{`${formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0, lng)} schools mapped`}</Text>
+                <Text $size={0.75} $color="#9E9E9E"><HashtagIcon size={12} /><span title={`${globalstats?.schools_connected ? globalstats?.schools_connected : 0}`}>{formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0, lng)}</span> schools mapped}</Text>
               }
             </Div>
             <ProgressBar

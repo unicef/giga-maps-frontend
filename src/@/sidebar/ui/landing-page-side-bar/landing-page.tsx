@@ -66,7 +66,7 @@ const LandingPage = () => {
               <>
                 <SchoolNumberWrapper>
                   <p>
-                    {formatNumber(globalstats?.schools_connected ?? 0, lng)}/6{LanguageSuffixes[lng].million} <span>{t('schools-location-mapped')}</span>
+                    <span title={`${globalstats?.schools_connected ?? 0}`}>{formatNumber(globalstats?.schools_connected ?? 0, lng)}</span><span title="6000000">/6{LanguageSuffixes[lng].million}</span> <span className="text">{t('schools-location-mapped')}</span>
                   </p>
                   <Tooltip align="left" label={t('school-geolocations-mapped-and-supplemental-open-data')} className='information-icon' >
                     <button className="sb-tooltip-trigger" type="button">
@@ -90,7 +90,7 @@ const LandingPage = () => {
               <>
                 <SchoolNumberWrapper>
                   <p>
-                    {formatNumber(globalstats?.schools_with_connectivity_status_mapped ?? 0, lng)} <span>{t('schools-connectivity-status-mapped')}</span>
+                    <span title={`${globalstats?.schools_with_connectivity_status_mapped}`}>{formatNumber(globalstats?.schools_with_connectivity_status_mapped ?? 0, lng)}</span> <span className="text">{t('schools-connectivity-status-mapped')}</span>
                   </p>
                   <Tooltip align="left" label={t('school-connectivity-status-a-real-time-measurement-source')} className='information-icon'>
                     <button className="sb-tooltip-trigger" type="button">
@@ -99,10 +99,10 @@ const LandingPage = () => {
                   </Tooltip>
                 </SchoolNumberWrapper>
                 <MappedInfoWrapper>
-                  <p>
+                  <p title={`${globalstats?.countries_with_connectivity_status_mapped}`}>
                     {t('across-no-countries', { count: globalstats?.countries_with_connectivity_status_mapped ?? 0 })}
                   </p>
-                  <span>
+                  <span title={`${globalstats?.schools_with_connectivity_status_mapped ?? 0}`}>
                     {formatNumber(globalstats?.schools_with_connectivity_status_mapped ?? 0, lng)}
                   </span>
                 </MappedInfoWrapper>
@@ -124,7 +124,7 @@ const LandingPage = () => {
             </> : <>
               <SchoolNumberWrapper>
                 <p>
-                  {formatNumber(connectivityStats?.no_of_schools_measure ? connectivityStats?.no_of_schools_measure : 0, lng)} <span>{t('schools-with-real-time-data-mapped')}</span>
+                  <span title={connectivityStats?.no_of_schools_measure ?? 0}>{formatNumber(connectivityStats?.no_of_schools_measure ? connectivityStats?.no_of_schools_measure : 0, lng)}</span> <span className="text">{t('schools-with-real-time-data-mapped')}</span>
                 </p>
                 <Tooltip align="left-bottom" label={t('schools-with-periodical-software-and-hardware-based-solutions')} className='information-icon'>
                   <button className="sb-tooltip-rigger" type="button">
@@ -133,10 +133,10 @@ const LandingPage = () => {
                 </Tooltip>
               </SchoolNumberWrapper>
               <MappedInfoWrapper>
-                <p>
+                <p title={connectivityStats?.countries_with_realtime_data ?? 0}>
                   {t('across-no-countries', { count: connectivityStats?.countries_with_realtime_data ?? 0 })}
                 </p>
-                <span>
+                <span title={connectivityStats?.no_of_schools_measure ?? 0}>
                   {formatNumber(connectivityStats?.no_of_schools_measure, lng)}
                 </span>
               </MappedInfoWrapper>
