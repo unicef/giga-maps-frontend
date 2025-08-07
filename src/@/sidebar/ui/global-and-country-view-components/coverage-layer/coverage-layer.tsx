@@ -61,7 +61,7 @@ const CoverageLayer = () => {
         <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
             <Div>
-              <Text title={`${displayNumber}`} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
+              <Text title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
                 {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>

@@ -250,5 +250,6 @@
   "unitary authority": "autoridad unitaria",
   "local government district": "distrito de gobierno local",
   "council area": "área del consejo",
-  "borough": "distrito"
+  "borough": "distrito",
+  "int": "{{val, number}}"
 }
