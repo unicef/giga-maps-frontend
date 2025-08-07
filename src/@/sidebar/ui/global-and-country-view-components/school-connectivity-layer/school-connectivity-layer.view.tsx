@@ -43,7 +43,7 @@ const SchoolConnectivityLayer = () => {
           {isLoading ? <>  <LoadingText $blockSize='3.5625' width="4rem" />
             <LoadingText $blockSize='0.5' />
           </> : <Div $margin='0rem 1rem 0rem 0rem'>
-            <Text title={((isConnected ? globalStats?.connected_schools?.connected : globalStats?.schools_connected) ?? 0).toString()} $size={2.375} $color={isConnected ? stylePaintData.connected : theme.text}>
+            <Text title={t('int', { val: (isConnected ? globalStats?.connected_schools?.connected : globalStats?.schools_connected) ?? 0 })} $size={2.375} $color={isConnected ? stylePaintData.connected : theme.text}>
               {isConnected ? connectedNumber : totalMappedNumber}
             </Text>
             <Text $color={theme.titleDesc}>

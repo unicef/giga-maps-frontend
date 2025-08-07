@@ -126,7 +126,7 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
                         <p className="label">{label}</p>
                       </div>
                     </div>
-                    {shouldShowControls && key === 'bad' ? <div className='legend-value' title={`${realtimeStats?.['no_internet'] ?? 0}`}>{formatNumber(realtimeStats?.['no_internet'] ?? 0, lng)}</div> : shouldShowControls && <div className='legend-value' title={realtimeStats?.[key] ?? 0}>{formatNumber(realtimeStats?.[key] ?? 0, lng)}</div>}
+                    {shouldShowControls && key === 'bad' ? <div className='legend-value' title={t('int', { val: realtimeStats?.['no_internet'] ?? 0 })}>{formatNumber(realtimeStats?.['no_internet'] ?? 0, lng)}</div> : shouldShowControls && <div className='legend-value' title={t('int', { val: realtimeStats?.[key] ?? 0 })}>{formatNumber(realtimeStats?.[key] ?? 0, lng)}</div>}
                   </div>
                 </button>
               </TooltipButton>

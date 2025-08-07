@@ -255,5 +255,6 @@
   "check-on-osm": "Check on OSM",
   "this-week": "This week",
   "this-month": "This month",
-  "no-more-results": "No more results"
+  "no-more-results": "No more results",
+  "int": "{{val, number}}"
 }
