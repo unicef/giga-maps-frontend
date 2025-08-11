@@ -1,4 +1,3 @@
-import { ArrowRight } from '@carbon/icons-react'
 import { Button } from '@carbon/react'
 
 import {
@@ -6,7 +5,8 @@ import {
   GetInTouchSectionTitle,
   GetInTouchContent,
   GetInTouchStats,
-  GetInTouchButton
+  GetInTouchButton,
+  ExploreGigaMapButton
 } from '../styles/about-giga-map-styles'
 import { AboutType } from '../about.type'
 import { GetInTouchForm } from './get-in-touch-form'
@@ -47,9 +47,11 @@ const GetInTouch = ({ data }: { data: AboutType }) => {
             </div>
 
             <GetInTouchButton>
-              <Button onClick={() => setOpen(true)} renderIcon={ArrowRight} size="lg">
-                {data?.cta?.text?.[0] || 'Get in Touch'}
-              </Button>
+              <ExploreGigaMapButton>
+                <Button onClick={() => setOpen(true)} kind="primary">
+                  {data?.cta?.text?.[0] || 'Get in Touch'}
+                </Button>
+              </ExploreGigaMapButton>
             </GetInTouchButton>
           </GetInTouchContent>
         </div>

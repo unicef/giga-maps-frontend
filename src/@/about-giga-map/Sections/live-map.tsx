@@ -34,9 +34,7 @@ const LiveMap = ({ data }: { data: AboutType }) => {
 
           <Link href={data?.cta?.link?.[0]} target="_blank">
             <ExploreGigaMapButton>
-              <Button kind='primary'
-                renderIcon={ArrowRight}>{data?.cta?.text?.[0]}
-              </Button>
+              <Button kind='primary'>{data?.cta?.text?.[0]}</Button>
             </ExploreGigaMapButton>
           </Link>
         </AboutInfoSection>

@@ -1,7 +1,7 @@
 import { ArrowRight } from '@carbon/icons-react'
 import { Button, Link } from '@carbon/react'
 
-import { ResourceSectionImage, ResourceSectionInfo, ResourceSectionItem } from '../styles/about-giga-map-styles'
+import { ResourceSectionImage, ResourceSectionInfo, ResourceSectionItem, ExploreGigaMapButton } from '../styles/about-giga-map-styles'
 import { AboutType } from '../about.type'
 
 const SchoolConnectivity = ({ data }: { data: AboutType }) => {
@@ -12,7 +12,9 @@ const SchoolConnectivity = ({ data }: { data: AboutType }) => {
         <h2>{data?.text?.[1]}</h2>
         <p>{data?.text?.[0]}</p>
         <Link href={data?.cta?.link?.[0]} target="_blank">
-          <Button kind='ghost' renderIcon={ArrowRight}>{data?.cta?.text?.[0]}</Button>
+          <ExploreGigaMapButton>
+            <Button kind='primary'>{data?.cta?.text?.[0]}</Button>
+          </ExploreGigaMapButton>
         </Link>
       </ResourceSectionInfo>
       <ResourceSectionImage>

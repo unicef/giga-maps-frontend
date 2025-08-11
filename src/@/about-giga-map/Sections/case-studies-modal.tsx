@@ -106,7 +106,7 @@ const CaseStudiesModalSection = ({
 
         {shouldShowMoreButton && (
           <ShowAllStoriesButton onClick={() => setShowAllCards(true)}>
-            Show {(data?.content?.length || 0) - initialCardsToShow} More Stories
+            Show {(data?.content?.length || 0) - initialCardsToShow} more stories
           </ShowAllStoriesButton>
         )}
       </CaseStudiesCompactSection>

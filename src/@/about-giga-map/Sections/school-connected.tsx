@@ -7,7 +7,7 @@ import BarChart from '~/@/sidebar/ui/landing-page-side-bar/common/bar-chart'
 
 import { $schoolMappedData } from '../about.model'
 import { AboutType } from '../about.type'
-import { BarChartWrapper, ConnectivityNumberWrapper, ImpactSection, ImpactSectionKnowMore, NumberContainer } from '../styles/about-giga-map-styles'
+import { BarChartWrapper, ConnectivityNumberWrapper, ImpactSection, ImpactSectionKnowMore, NumberContainer, ExploreGigaMapButton } from '../styles/about-giga-map-styles'
 
 const SchoolConnected = ({ data }: { data: AboutType }) => {
   const schoolMappedData = useStore($schoolMappedData);
@@ -16,9 +16,9 @@ const SchoolConnected = ({ data }: { data: AboutType }) => {
       <ImpactSectionKnowMore>
         <p>{data?.title}</p>
         <Link href={data?.cta?.link[0]} target="_blank">
-          <Button kind='ghost'
-            renderIcon={ArrowRight}>{data?.cta?.text[0]}
-          </Button>
+          <ExploreGigaMapButton>
+            <Button kind='primary'>{data?.cta?.text[0]}</Button>
+          </ExploreGigaMapButton>
         </Link>
       </ImpactSectionKnowMore>
       <ConnectivityNumberWrapper>

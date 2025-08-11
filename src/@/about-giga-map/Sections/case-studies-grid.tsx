@@ -99,7 +99,7 @@ const CaseStudiesGridSection = ({
 
       {shouldShowMoreButton && (
         <ShowMoreButton onClick={() => setShowAll(true)}>
-          Show {filteredContent.length - initialItemsToShow} More Stories
+          Show {filteredContent.length - initialItemsToShow} more stories
         </ShowMoreButton>
       )}
     </CaseStudiesFilterableSection>

@@ -151,16 +151,6 @@ export const FeatureCardContainer = styled.div<{ $style?: string }>`
       padding: 0 6rem;
     }
     
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
-    }
-    
     .resource-wrapper {
       display: flex;
       flex-wrap: wrap;
@@ -197,17 +187,6 @@ p {
   line-height: 1.6;
   max-width: 600px;
   margin: 0;
-}
-
-&::after {
-  content: '';
-  position: absolute;
-  bottom: -1rem;
-  left: 0;
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
-  border-radius: 2px;
 }
 
 @media (max-width: 768px) {
@@ -358,18 +337,18 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
     justify-content: center;
     gap: 0.5rem;
     margin-top: 1rem;
-    padding: 0.65rem 1rem;
+    padding: 0.75rem 1.5rem;
     background: linear-gradient(135deg, #277AFF 0%, #4F46E5 100%);
     border: none;
-    border-radius: 10px;
+    border-radius: 50px;
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     font-weight: 600;
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
-    box-shadow: 0 3px 10px rgba(39, 122, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(39, 122, 255, 0.3);
     
     span {
       font-size: 0.875rem;
@@ -382,22 +361,16 @@ export const FeatureCardWrapper = styled.a<{ $style?: string }>`
     }
     
     &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(39, 122, 255, 0.4);
+      
       svg {
         transform: translateX(2px);
       }
     }
   }
 
-  .card-accent {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 4px;
-    height: 4px;
-    background: #277AFF;
-    border-radius: 50%;
-    opacity: 0.6;
-  }
+
   
   @media (max-width: 768px) {
     padding: 1.25rem;
@@ -479,16 +452,6 @@ position: relative;
   padding: 4rem 6rem;
   min-height: 100vh;
   background: linear-gradient(135deg, rgba(39, 122, 255, 0.03) 0%, rgba(0, 0, 0, 0.05) 100%);
-   
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
-  }
 }
    
 .left{
@@ -652,17 +615,6 @@ p {
   margin: 0;
   line-height: 1.6;
   font-weight: 300;
-}
-
-&::after {
-  content: '';
-  position: absolute;
-  bottom: -2rem;
-  left: 0;
-  width: 120px;
-  height: 4px;
-  background: linear-gradient(90deg, rgba(39, 122, 255, 0.8) 0%, transparent 100%);
-  border-radius: 2px;
 }
 
 @media (max-width: 1024px) {
@@ -1080,7 +1032,6 @@ font-size: 0.875rem;
 font-weight: 600;
 cursor: pointer;
 transition: all 0.3s ease;
-text-transform: uppercase;
 letter-spacing: 0.05em;
 
 &:hover {
@@ -1536,17 +1487,6 @@ h2 {
   position: relative;
 }
 
-h2::after {
-  content: '';
-  position: absolute;
-  bottom: -0.5rem;
-  left: 0;
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
-  border-radius: 2px;
-}
-
 p {
   font-size: 1.125rem;
   color: #C8C8C8;
@@ -1683,62 +1623,62 @@ overflow: hidden;
 `
 
 export const SectionDivider = styled.div`
-display: flex;
-align-items: center;
-width: 100%;
-max-width: 1200px;
-margin: 4rem 0;
-position: relative;
-
-.divider-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
-}
-
-.divider-content {
-  margin: 0 2rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  padding: 0 1.5rem;
-  border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 300;
-    color: #E0E0E0;
-    margin: 0;
-    white-space: nowrap;
-  }
-}
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem 0;
+  position: relative;
 
-@media (max-width: 768px) {
-  margin: 3rem 0;
-  
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: transparent;
+  }
+
   .divider-content {
-    margin: 0 1rem;
-    padding: 0 1rem;
+    margin: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    backdrop-filter: none;
+    padding: 0 1.5rem;
+    border-radius: 25px;
+    border: none;
     
     h3 {
-      font-size: 1.125rem;
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: #E0E0E0;
+      margin: 0;
+      white-space: nowrap;
     }
   }
-}
 
-@media (max-width: 480px) {
-  .divider-content {
-    margin: 0 0.5rem;
-    padding: 0 0.75rem;
+  @media (max-width: 768px) {
+    margin: 3rem 0;
     
-    h3 {
-      font-size: 1rem;
+    .divider-content {
+      margin: 0 1rem;
+      padding: 0 1rem;
+      
+      h3 {
+        font-size: 1.125rem;
+      }
     }
   }
-}
+
+  @media (max-width: 480px) {
+    .divider-content {
+      margin: 0 0.5rem;
+      padding: 0 0.75rem;
+      
+      h3 {
+        font-size: 1rem;
+      }
+    }
+  }
 `
 
 export const AcknowledgementsSection = styled.div`
@@ -2106,16 +2046,6 @@ z-index: 1;
   line-height: 1.1;
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
-  
-  &::after {
-    content: '';
-    display: block;
-    width: 120px;
-    height: 4px;
-    background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
-    margin-top: 1.5rem;
-    border-radius: 2px;
-  }
 }
 
 .marginLeft{
@@ -2137,17 +2067,6 @@ p{
   font-weight: 300;
   line-height: 1.6;
   max-width: 28rem;
-  
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: #277AFF;
-    border-radius: 50%;
-    margin-right: 12px;
-    vertical-align: middle;
-  }
 }
 
 button{
@@ -2401,16 +2320,6 @@ flex-direction: ${(props) => props.directionReverse ? "row-reverse" : "row"};
 position: relative;
 background: linear-gradient(135deg, rgba(39, 122, 255, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
 
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
-}
-
 @media(max-width: 968px){
   padding: 3rem 2rem;
 }
@@ -2434,17 +2343,6 @@ h3{
   letter-spacing: 0.1em;
   margin-bottom: 1rem;
   position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -0.5rem;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
-    border-radius: 2px;
-  }
 }
 
 h2{
@@ -2463,7 +2361,7 @@ h2{
 p{
   color: rgba(255, 255, 255, 0.85);
   font-size: 1.125rem;
-font-weight: 400;
+  font-weight: 400;
   line-height: 1.7;
   margin-bottom: 2.5rem;
 }
@@ -2471,7 +2369,6 @@ font-weight: 400;
 button{
   background: linear-gradient(135deg, #277AFF 0%, #4F46E5 100%) !important;
   border: none !important;
-  border-radius: 12px !important;
   padding: 0.875rem 2rem !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
@@ -2498,7 +2395,7 @@ button{
     
     &::before {
       left: 100%;
-}
+    }
   }
   
   &:active {
@@ -2634,16 +2531,6 @@ backdrop-filter: blur(10px);
 position: relative;
 overflow: hidden;
 box-sizing: border-box;
-
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.5) 50%, transparent 100%);
-}
 
 @media(max-width: 1024px){
   flex-direction: column;
@@ -2857,16 +2744,6 @@ position: relative;
   padding: 0 6rem;
 }
 
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
-}
-
 @media (max-width: 768px) {
   padding: 4rem 0;
   
@@ -2978,17 +2855,6 @@ p {
   margin: 0;
 }
 
-&::after {
-  content: '';
-  position: absolute;
-  bottom: -1rem;
-  left: 0;
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
-  border-radius: 2px;
-}
-
 @media (max-width: 768px) {
   margin-bottom: 2.5rem;
   
@@ -3016,16 +2882,6 @@ position: relative;
   padding: 0 6rem;
   width: 100%;
   max-width: none;
-}
-
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.3) 50%, transparent 100%);
 }
 
 .faq-title{
@@ -3107,7 +2963,7 @@ width: 100%;
 }
 
 .cds--accordion__arrow {
-  fill: #277AFF;
+  fill: #fff;
   width: 20px;
   height: 20px;
   transition: all 0.3s ease;
@@ -3195,16 +3051,6 @@ border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: 0 6rem;
 }
 
-&::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, rgba(39, 122, 255, 0.5) 50%, transparent 100%);
-}
-
 @media (max-width:768px){
   padding: 4rem 0 2rem 0;
   
@@ -3277,22 +3123,11 @@ margin-bottom: 4rem;
 h4 {
   color: #fff;
   font-size: 1.25rem;
-font-weight: 500;
+  font-weight: 500;
   line-height: 1.4;
-text-align: left;
+  text-align: left;
   margin-bottom: 1.5rem;
   position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -0.5rem;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(90deg, #277AFF 0%, #4F46E5 100%);
-    border-radius: 1px;
-  }
 }
 
 .footer-link-wrapper { 

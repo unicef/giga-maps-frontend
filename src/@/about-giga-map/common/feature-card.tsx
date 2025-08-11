@@ -10,7 +10,6 @@ const FeatureCard = ({ icon, title, description, style, link }: { icon: any, tit
         <div className="card-icon">
           <CustomIcon dangerouslySetInnerHTML={{ __html: icon }} $size={1.75} />
         </div>
-        <div className="card-accent"></div>
       </div>
 
       <h3>{title}</h3>

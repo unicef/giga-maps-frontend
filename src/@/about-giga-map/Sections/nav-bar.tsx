@@ -3,7 +3,7 @@ import { Button, Link, IconButton } from '@carbon/react'
 
 import { aboutus } from '~/core/routes'
 
-import { AboutGigaMapNavBarStyle, NavBarButton, NavBarButtonWrapper, NavBarGigaLogo } from '../styles/about-giga-map-styles'
+import { AboutGigaMapNavBarStyle, NavBarButton, NavBarButtonWrapper, NavBarGigaLogo, ExploreGigaMapButton } from '../styles/about-giga-map-styles'
 import { Link as RouterLink } from '~/lib/router'
 import { AboutType } from '../about.type'
 import { useStore } from 'effector-react'
@@ -90,10 +90,11 @@ const NavBar = ({ data }: { data?: AboutType | null }) => {
             ))
           }
           <Link href={cta?.link?.[0]} target="_blank">
-            <Button kind='ghost'
-              renderIcon={ArrowRight}>
-              {cta?.text?.[0]}
-            </Button>
+            <ExploreGigaMapButton>
+              <Button kind='primary'>
+                {cta?.text?.[0]}
+              </Button>
+            </ExploreGigaMapButton>
           </Link>
         </NavBarButtonWrapper>
       </div>
