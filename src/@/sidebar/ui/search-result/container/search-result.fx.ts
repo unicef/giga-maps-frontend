@@ -53,7 +53,7 @@ export const getSearchResultsFx = createRequestFx(
     }
 
     const selectFields = `fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name`;
-    const orderingFields = `ordering=-row_score,country_name,admin1_name,admin2_name,name`;
+    const orderingFields = `ordering=-row_score,country_name,name,admin1_name,admin2_name`;
     const searchFields = `&search_fields=name,giga_id_school,external_id,country_name`;
 
     let countryFilter = '';
