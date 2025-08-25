@@ -9,7 +9,7 @@ import styled, { useTheme } from 'styled-components';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { $lng } from '~/core/i18n/store';
 
 const CoverageLayerContanier = styled.div` 
@@ -33,7 +33,7 @@ const CoverageLayer = () => {
   const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
 
   const [displayNumber, setDisplayNumber] = useState(0);
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState<{ key: string, data?: Record<string, any> }>({ key: '', data: {} });
 
   const styledPaintData = useStore($stylePaintData);
   const isDataAvailable = legendsList.length
@@ -47,10 +47,10 @@ const CoverageLayer = () => {
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
       setDisplayNumber(firstValue + secondValue + thirdValue);
-      setDisplayText(t('schools-with-coverage-schools-mapped', { totalSchools: formatNumber(sum, lng), layerName: selectedLayerData?.name }));
+      setDisplayText({ key: 'schools-with-coverage-schools-mapped', data: { totalSchools: formatNumber(sum, lng), totalSchoolsExact: t('int', { val: sum }), layerName: selectedLayerData?.name } });
     } else {
       setDisplayNumber(0);
-      setDisplayText('insufficient-data');
+      setDisplayText({ key: 'insufficient-data' });
     }
   }, [legendsList, totalSchools, lng]);
 
@@ -65,7 +65,10 @@ const CoverageLayer = () => {
                 {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>
-                {displayText}
+                <Trans i18nKey={displayText.key}
+                  values={displayText.data}
+                  components={[<span />]}
+                />
               </Text>
             </Div>}
         </Div>
