@@ -108,7 +108,7 @@
   "resources": "Recursos: ",
   "thanks-for-taking-the-tour-of": "Obrigado por fazer o tour de",
   "admins": "Admins",
-  "schools-with-coverage-schools-mapped": "Escolas com dados {{layerName}} de {{totalSchools}} escolas mapeadas",
+  "schools-with-coverage-schools-mapped": "Escolas com dados {{layerName}} de <0 title='{{totalSchoolsExact}}'>{{totalSchools}}</0> escolas mapeadas",
   "insufficient-data": "Dados insuficientes",
   "you-will-for-schools-between-global-or-national-level-of-connectivity": "Você verá o impacto na legenda do mapa, onde o verde é para escolas que superam os padrões globais ou nacionais, o amarelo é para escolas entre os padrões de conectividade global ou nacional e a categoria vermelha, que é para escolas que recebem o nível mais baixo de conectividade.",
   "show-more": "Mostrar mais",
