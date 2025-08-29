@@ -1,10 +1,11 @@
 import { createEffect } from "effector";
 
 import { APIListType } from "~/api/types";
-import { createRequestAuthFx } from "~/core/auth/effects/common.fx";
+import { createRequestAuthFx, createRequestFx } from "~/core/auth/effects/common.fx";
 
 import { ApiKeysType } from "../types/api-keys.type";
 import { ExploreApiType } from "../types/explore-api-type";
+import { GIGA_MERTER_API_HOST } from "~/env";
 
 export const requestForApiKeyFx = createEffect((body: any) => {
   return createRequestAuthFx({
@@ -35,4 +36,24 @@ export const requestForExtensionFx = createEffect(({ id, body }: { id?: number, 
     method: 'PUT',
     data: body
   }) as Promise<ApiKeysType>
+});
+
+
+type GigaMeterCountriesType = {
+  id: string;
+  code: string;
+  code_iso3: string;
+  name: string;
+  country_id: string;
+  created_at: null | string;
+}
+
+export const getGigaMeterCountriesFx = createEffect(() => {
+  return createRequestFx({
+    baseUrl: `${GIGA_MERTER_API_HOST}/api/v1`,
+    url: `/dailycheckapp_countries`,
+    method: 'GET',
+  }) as Promise<{
+    data: GigaMeterCountriesType[]
+  }>
 });

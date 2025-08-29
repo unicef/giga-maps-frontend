@@ -9,10 +9,16 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '~/@/common/modal';
 
 import { $dowloadApiModalContainerStyle, $modalBodyStyle, $modalFooterStyle, $modalHeadingStyle, ModalDescription, TextInputWrapper } from './modals.style';
 import CountryMultiDropdown from './download-data-modal/country-multi-select';
-import { requestForApiKeyFx } from '~/@/api-docs/effects/api-keys-fx';
+import { getGigaMeterCountriesFx, requestForApiKeyFx } from '~/@/api-docs/effects/api-keys-fx';
 import useForm from '~/lib/hooks/useForm';
 import { ModalFooterButtons } from './common/ModalFooterButtons.view';
+import { createStore } from 'effector';
 
+
+const $gigaMeterCountries = createStore<string[]>([]);
+
+$gigaMeterCountries.on(getGigaMeterCountriesFx.doneData, (_, result) => result?.data?.map((country) => country.code_iso3));
+$gigaMeterCountries.reset($requestAPIPopup)
 
 interface FormValues {
   [key: string]: string; // Generic type for form field values
@@ -37,6 +43,7 @@ const validationRules = {
 }
 
 const ReuestApiKeyPopup = () => {
+  const gigaMeterCountries = useStore($gigaMeterCountries);
   const { values, errors, isError, touched, reset, handleChange, handleSubmit, handleBlur } = useForm(defaultFields, validationRules);
   const isLoading = useStore(requestForApiKeyFx.pending);
   const requestApiPopup = useStore($requestAPIPopup);
@@ -58,6 +65,12 @@ const ReuestApiKeyPopup = () => {
   const onFormSubmit = (event: FormEvent) => {
     handleSubmit(onSubmit)(event)
   }
+
+  useEffect(() => {
+    if (requestApiPopup && exploreApiData?.code === "DAILY_CHECK_APP") {
+      getGigaMeterCountriesFx();
+    }
+  }, [exploreApiData, requestApiPopup])
 
   return (
     <Modal
@@ -82,6 +95,7 @@ const ReuestApiKeyPopup = () => {
             }}
             invalid={!!errors['countries'] && touched['countries']}
             invalidText={errors['countries']}
+            filterCountries={gigaMeterCountries}
             onSelectCountry={(countries) => {
               const ids = countries.map(country => country.id);
               handleChange({
