@@ -51,7 +51,7 @@ type GigaMeterCountriesType = {
 export const getGigaMeterCountriesFx = createEffect(() => {
   return createRequestFx({
     baseUrl: `${GIGA_MERTER_API_HOST}/api/v1`,
-    url: `/dailycheckapp_countries`,
+    url: `/dailycheckapp_countries/all`,
     method: 'GET',
   }) as Promise<{
     data: GigaMeterCountriesType[]
