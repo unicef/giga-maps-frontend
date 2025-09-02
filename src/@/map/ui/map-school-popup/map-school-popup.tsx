@@ -15,7 +15,7 @@ import { useTheme } from 'styled-components';
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { isLoading, features, isLive, getFeatureInfo,
+  const { isLoading, features, isLive, isSchoolBenchmark, getFeatureInfo,
     isStatic, countryCode, formattedInterval } = useSchoolPopupData();
 
   if (!features?.length) return null;
@@ -56,11 +56,8 @@ export const MapSchoolPopup = () => {
                       }
                     </LiveContent>
                   </LiveContainer>
-                  {isLive && benchmarkTitle && <Label $size="14px">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
+                  {isSchoolBenchmark && benchmarkTitle && <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
                 </SchoolInfoWrapper>
-
-                {/* Data source section tailored for popup */}
-                <SchoolPopupDataSource />
               </PopupTemplate>
               {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
                 router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);

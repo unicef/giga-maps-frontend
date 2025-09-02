@@ -3,10 +3,10 @@ import styled from "styled-components"
 import { LocationFilled } from '@carbon/icons-react'
 
 export const PopupTemplate = styled.div`
-  width: 317px; // px to rem
+  width: 15.4375rem; // px to rem
   border-radius: 2px;
   background: ${props => props.theme.grayDark};
-  padding: 16px;
+  padding: 1rem;
   box-shadow: 0px 2px 3px 0px ${props => props.theme.main};
   display: flex;
   flex-direction: column;
@@ -22,24 +22,25 @@ display:flex;
 flex-direction:column;
 align-items:baseline;
 gap: 0.5rem;
+margin-bottom: 0.5rem;
 `
 
 export const SchoolName = styled.h6`
   color: ${props => props.theme.text};
-  font-weight: 400;
-  font-size: 20px;
+  font-size: 0.875rem;
   font-style: normal;
-  line-height: 28px;
+  font-weight: 600;
+  line-height: 1.125rem;
   letter-spacing: 0.01rem;
   margin-bottom: 2px;
-  font-family: 'Open Sans';
-  font-weight: lighter;
+  max-width: 85%;
+  margin-right: 1rem;
 `
 export const Label = styled.span<{ $color?: string, $size?: string, $textTransform?: string }>`
 color: ${props => props.$color || props.theme.titleDesc};
-font-size: ${props => props.$size || '16px'};
+font-size: ${props => props.$size || '.875rem'};
 font-weight: 400;
-line-height: 1.125rem; 
+line-height: 1rem; 
 text-transform: ${props => props.$textTransform || 'capitalize'};
 `
 
@@ -72,10 +73,7 @@ export const ConnectivityCircleWrapper = styled.div`
 `
 
 export const OSMLink = styled(Link)`
-  position: absolute;
-  top: 20px;
-  right: 16px;
-  margin: 0;
+  align-self: flex-start;
   font-size: 14px;
   width: auto;
   text-decoration: none;
@@ -95,7 +93,6 @@ export const LiveContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.5rem;
 `;
 
 export const LiveContent = styled.div`
