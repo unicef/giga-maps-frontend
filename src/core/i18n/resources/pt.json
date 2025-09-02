@@ -256,5 +256,7 @@
   "this-week": "Esta semana",
   "this-month": "Este mês",
   "no-more-results": "Não há mais resultados",
-  "int": "{{val, number}}"
+  "int": "{{val, number}}",
+  "disclaimer": "Aviso",
+  "disclaimer-text": "Este mapa não reflete uma posição do UNICEF sobre o estatuto jurídico de qualquer país ou território, nem sobre a delimitação de quaisquer das suas fronteiras."
 }

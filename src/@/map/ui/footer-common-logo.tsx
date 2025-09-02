@@ -19,9 +19,9 @@ const FooterContent = styled.div`
 const FooterCommonLogo = () => {
   return (
     <FooterContent>
-      <a className="privacy" href="https://www.unicef.org/legal#privacy-policy" target='_blank' rel="noreferrer">
+      {/* <a className="privacy" href="https://www.unicef.org/legal#privacy-policy" target='_blank' rel="noreferrer">
         Privacy policy & Terms of use
-      </a>
+      </a> */}
       <p>
         © {currentYear}{"  "}
         <a href="https://www.unicef.org/innovation/giga" className="giga-logo" target="_blank" rel="noreferrer">
