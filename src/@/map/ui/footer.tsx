@@ -11,6 +11,7 @@ import { formatNumber } from '~/lib/utils';
 import { InformationFilled } from '@carbon/icons-react';
 import { $isMobile } from '~/core/media-query';
 import { $showDisclaimerNotification, onCloseDiscalimerNotification } from '~/@/sidebar/ui/common-components/country-disclaimer-notification/country-disclaimer-notification';
+import { useTranslation } from 'react-i18next';
 
 export const FooterWrapper = styled.footer`
     position: fixed;
@@ -98,20 +99,21 @@ const DisclaimerLink = styled.p`
 
 
 const Footer = () => {
+  const { t } = useTranslation();
   const isCountryView = useStore(mapCountry.visible);
   const country = useStore($country);
   const schoolConnected = useStore($globalStats).schools_connected || 0;
   const { country: isCountry } = useStore($mapRoutes);
   const isMobile = useStore($isMobile);
   const showNotification = useStore($showDisclaimerNotification);
-  const showDisclaimer = isCountry && country?.country_disclaimer && !showNotification && !isMobile;
+  const showDisclaimer = isCountry && !showNotification && !isMobile;
 
   return (
     <FooterWrapper>
       <div>
         {showDisclaimer && <DisclaimerLink onClick={() => onCloseDiscalimerNotification(true)}>
           <InformationFilled />
-          Disclaimer
+          {t("disclaimer")}
         </DisclaimerLink>}
         <p>
           {country && schoolConnected > 0 && schoolConnected > MAP_SAMPLING && isCountryView && (
