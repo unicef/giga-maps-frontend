@@ -23,7 +23,7 @@ const useSchoolPopupData = () => {
   const multipleSchoolStats = useStore($schoolStatsMap);
   const { layerUtils, stylePaintData, feature: schoolStats } = useStore($schoolPopupData);
   const { selectedLayerData, currentLayerTypeUtils, benchmarkNamesAllLayers, countryConnectivityNames: countryConnectivityNames,
-    connectivityBenchMarks } = layerUtils;
+    connectivityBenchMarks, isSchoolBenchmark } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};
   const intervalUnit = useStore($historyIntervalUnit);
@@ -93,7 +93,8 @@ const useSchoolPopupData = () => {
     isStatic,
     countryCode,
     isSchoolView,
-    formattedInterval
+    isSchoolBenchmark,
+    formattedInterval,
   }
 
 }

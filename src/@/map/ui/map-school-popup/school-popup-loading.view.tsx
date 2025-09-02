@@ -19,9 +19,6 @@ export const SchoolPopupLoading = () => {
           </LiveContainer>
           <SkeletonLabel width="50%" />
         </SchoolInfoWrapper>
-        <Div $margin="2rem 0">
-          <SkeletonLabel width="40%" />
-        </Div>
       </PopupTemplate>
       <ButtonSkeleton style={{ width: '100%' }} />
     </div>

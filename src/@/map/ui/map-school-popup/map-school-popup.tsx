@@ -14,7 +14,7 @@ import { useTheme } from 'styled-components';
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { isLoading, features, isLive, getFeatureInfo,
+  const { isLoading, features, isLive, isSchoolBenchmark, getFeatureInfo,
     isStatic, countryCode, formattedInterval } = useSchoolPopupData();
 
   if (!features?.length) return null;
@@ -29,6 +29,13 @@ export const MapSchoolPopup = () => {
               <PopupTemplate>
                 <SchoolNameWrapper>
                   <SchoolName className="map-school-name">{feature?.name}</SchoolName>
+                  <OSMLink
+                    href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Launch />
+                  </OSMLink>
                 </SchoolNameWrapper>
                 <SchoolInfoWrapper className="live-container">
                   <LiveContainer>
@@ -47,16 +54,8 @@ export const MapSchoolPopup = () => {
                       }
                     </LiveContent>
                   </LiveContainer>
-                  {isLive && benchmarkTitle && <Label $size="14px">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
+                  {isSchoolBenchmark && benchmarkTitle && <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
                 </SchoolInfoWrapper>
-                <OSMLink
-                  href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>{t('check-on-osm')}</span>
-                  <Launch />
-                </OSMLink>
               </PopupTemplate>
               {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
                 router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
