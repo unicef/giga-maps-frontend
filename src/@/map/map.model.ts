@@ -43,8 +43,12 @@ export const changeStyle = createEvent<Style>();
 export const $style = createStore<Style>(defaultStyle);
 $style.on(changeStyle, setPayload);
 
+const adminBoundariesStored = getLocalStorage('admin-boundaries') as boolean | undefined;
 export const onEnableAdminBoundaries = createEvent<boolean>();
-export const $isAdminBoundaries = restore(onEnableAdminBoundaries, true);
+export const $isAdminBoundaries = restore(onEnableAdminBoundaries, (typeof adminBoundariesStored === 'boolean' ? adminBoundariesStored : undefined) ?? true);
+onEnableAdminBoundaries.watch((value) => {
+  setLocalStorage('admin-boundaries', value)
+})
 
 export const onEnableTitlesAndLabels = createEvent<boolean>()
 export const $isTilesAndLables = restore(onEnableTitlesAndLabels, true);

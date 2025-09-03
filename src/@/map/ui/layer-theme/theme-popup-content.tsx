@@ -77,13 +77,16 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
           ))}
         </RadioButtonGroupWrapper>
         <CheckboxGroupWrapper legendText={t("layers")}>
+          <ToggleWrapper>
+            <Toggle id="toggle" toggled={currentNavigateByAdminLevel} hideLabel onToggle={() => {
+              setCurrentNavigateByAdminLevel(prev => !prev)
+              setCurrentAdminBoundaries(!currentNavigateByAdminLevel);
+            }} />
+            <Text>Navigate by Admin Level</Text>
+          </ToggleWrapper>
           <CustomCheckbox checked={currentAdminBoundaries} onChange={() => setCurrentAdminBoundaries(prev => !prev)} labelText={t('administrative-boundaries')} id="admin-boundary" />
           <CustomCheckbox checked={currentTitlesAndLabels} onChange={() => setCurrentTitlesAndLabels(prev => !prev)} labelText={t('titles-and-labels')} id="titles-label" />
         </CheckboxGroupWrapper>
-        <ToggleWrapper>
-          <Toggle id="toggle" toggled={currentNavigateByAdminLevel} hideLabel onToggle={() => setCurrentNavigateByAdminLevel(prev => !prev)} />
-          <Text>Navigate by Admin Level</Text>
-        </ToggleWrapper>
         <ThemeActionButtonWrapper>
           <Button type="reset" kind="secondary" onClick={() => setOpen(false)}>
             {t('cancel')}

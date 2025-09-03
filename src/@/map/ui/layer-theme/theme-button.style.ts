@@ -174,8 +174,8 @@ export const CheckboxGroupWrapper = styled(CheckboxGroup)`
 export const ToggleWrapper = styled.div`
     display: flex;
     align-items: center;
-    padding: 0rem 1rem ;
-    margin-bottom: 1.5rem;
+    // padding: 0rem 1rem ;
+    // margin-bottom: 1.5rem;
     color: ${props => props.theme.text} 
 `
 export const BroadcastButton = styled.div`
