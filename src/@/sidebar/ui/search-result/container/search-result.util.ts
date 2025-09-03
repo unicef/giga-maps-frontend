@@ -36,8 +36,10 @@ export const makeSearchDataCollection = (countries: CountryWithDistrictCount[]) 
       countryName,
       countryCode
     } as Country;
-    countryList.push(country);
-    collectSearchAdminData({ data, country, admin1, admin2, level: 1 }, admin1)
+    if (!countryName?.toLocaleLowerCase().startsWith("taiwan")) {
+      countryList.push(country);
+      collectSearchAdminData({ data, country, admin1, admin2, level: 1 }, admin1)
+    }
   });
   return serchDataList;
 }

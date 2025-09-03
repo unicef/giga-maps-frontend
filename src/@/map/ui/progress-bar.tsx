@@ -43,10 +43,7 @@ export const ProgressWrapper = styled.div`
 // The actual progress bar with animations
 export const ProgressBarStyled = styled.div<{ progress: number; status: 'active' | 'finished' | 'loading' | 'error' }>`
   height: 100%;
-  background: ${({ status, progress }) =>
-    status === 'error' ? 'linear-gradient(90deg, #fa4d56, #ff7c7c)' :
-      progress === 100 ? 'linear-gradient(90deg, #42be65, #6fdc8c)' :
-        'linear-gradient(90deg, #0f62fe, #3d8dff)'};
+  background: linear-gradient(90deg, #0f62fe, #3d8dff);
   width: ${({ progress }) => `${progress}%`};
   transition: width 0.3s ease-in-out;
   position: relative;

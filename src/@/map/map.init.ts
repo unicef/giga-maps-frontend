@@ -51,7 +51,7 @@ import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { $theme } from '~/core/theme.model';
 import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
 import { $isMobile } from '../admin/models/media-query';
-import { languageStore } from '~/core/i18n/store';
+import { $lng, languageStore } from '~/core/i18n/store';
 import { mapLabelLayerList } from '../country/country.constant';
 import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 
@@ -277,7 +277,7 @@ export const mapMarkerSource = combine({
 })
 
 sample({
-  clock: $schoolStatsMap,
+  clock: merge([$schoolStatsMap]),
   source: mapMarkerSource,
   target: addSchoolMarkers
 })
@@ -300,7 +300,7 @@ export const $schoolPopupData = combine({
 })
 
 sample({
-  clock: fetchSchoolPopupDataFx.doneData,
+  clock: merge([fetchSchoolPopupDataFx.doneData]),
   source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
   target: updateSchoolPopupFx
 })
