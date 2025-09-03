@@ -93,7 +93,7 @@ export const LegendContentWrapper = styled.div`
     }
       h3{
         color: ${props => props.theme.text};
-        font-size: 1.125rem;
+        font-size: 0.875rem;
         font-weight: 400;
         line-height: 1.25rem;
       }
@@ -106,7 +106,7 @@ export const LegendContentWrapper = styled.div`
         .label {
           margin-left: 0.3rem;
           color:  ${props => props.theme.text};
-          font-size: 1rem;
+          font-size: 0.75rem;
           font-weight: 400;
           line-height: 1.125rem;
           text-wrap: nowrap;
