@@ -1,4 +1,4 @@
-import { createEvent, createStore, restore, sample } from 'effector';
+import { createEvent, createStore, restore } from 'effector';
 
 import { fetchAdvanceFilterFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
@@ -61,17 +61,6 @@ export const $stylePaintData = createStore<StylePaintData>(
 );
 export const $globalStats = createStore<GlobalStats>(defaultGlobalStats);
 $globalStats.on(fetchGlobalStatsFx.doneData, setPayload);
-
-// Handle global stats fetch failures - log error but keep default values
-sample({
-  clock: fetchGlobalStatsFx.failData,
-  fn: (error) => {
-    console.error('Failed to fetch global statistics after retries:', error);
-    // Return default stats to ensure UI doesn't break
-    return defaultGlobalStats;
-  },
-  target: $globalStats
-});
 
 export const $pending = createStore<boolean>(false);
 export const $loader = createStore<Marker | null>(null);
