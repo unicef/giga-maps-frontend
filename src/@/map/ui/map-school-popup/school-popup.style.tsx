@@ -10,11 +10,11 @@ export const PopupTemplate = styled.div`
   box-shadow: 0px 2px 3px 0px ${props => props.theme.main};
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 export const SchoolNameWrapper = styled.div`
 display:flex;
 align-items:center;
-justify-content:space-between;
 margin-bottom: 1rem;
 `
 export const SchoolInfoWrapper = styled.div`
@@ -72,13 +72,19 @@ export const ConnectivityCircleWrapper = styled.div`
 `
 
 export const OSMLink = styled(Link)`
-  margin: 1.6rem 0 0.8rem;
+  position: absolute;
+  top: 20px;
+  right: 16px;
+  margin: 0;
   font-size: 14px;
   width: auto;
-  text-decoration: underline;
-  gap: 0.2rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
   svg {
     fill: ${props => props.theme.titleBlue};
+    width: 16px;
+    height: 16px;
   }
   &:hover, &:focus, &:active {
     color: ${props => props.theme.titleBlue};
