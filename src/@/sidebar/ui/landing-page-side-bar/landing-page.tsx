@@ -66,7 +66,7 @@ const LandingPage = () => {
               <>
                 <SchoolNumberWrapper>
                   <p>
-                    <span title={t('int', { val: globalstats?.schools_connected ?? 0 })}>{formatNumber(globalstats?.schools_connected ?? 0, lng)}</span><span title="6000000">/6{LanguageSuffixes[lng].million}</span> <span className="text">{t('schools-location-mapped')}</span>
+                    <span title={t('int', { val: globalstats?.schools_connected ?? 0 })}>{formatNumber(globalstats?.schools_connected ?? 0, lng)}</span><span title={t('int', { val: 6000000 })}>/6{LanguageSuffixes[lng].million}</span> <span className="text">{t('schools-location-mapped')}</span>
                   </p>
                   <Tooltip align="left" label={t('school-geolocations-mapped-and-supplemental-open-data')} className='information-icon' >
                     <button className="sb-tooltip-trigger" type="button">

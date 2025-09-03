@@ -70,6 +70,7 @@ steps:
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
         --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_DEV)
+        --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_DEV)
       tags: |
         $(tag)
 
@@ -98,6 +99,7 @@ steps:
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
         --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_STG)
+        --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_STG)
       tags: |
         $(tag)
     condition:
@@ -132,6 +134,7 @@ steps:
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
         --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_PROD)
+        --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_PROD)
       tags: |
         $(tag)
     condition:
