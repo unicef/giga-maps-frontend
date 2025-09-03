@@ -121,7 +121,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
                       </div>
                     </div>
                     {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value' title={t('int', { val: coverageStats?.connected_schools[label] })}>{formatNumber(coverageStats?.connected_schools[label], lng)}</div>
+                      <div className='legend-value' data-title={t('int', { val: coverageStats?.connected_schools[label] })}>{formatNumber(coverageStats?.connected_schools[label], lng)}</div>
                     )}
                   </div>
                 </button>
