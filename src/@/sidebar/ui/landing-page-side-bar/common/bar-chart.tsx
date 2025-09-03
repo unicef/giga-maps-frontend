@@ -46,8 +46,8 @@ const BarChart = ({
           backgroundcolor={categoryColors[index]}
           label={
             type === "schools-connectivity" ?
-              <span dangerouslySetInnerHTML={{ __html: t("format-schools-mapped-with-category-status", { value: `<span title="${t('int', { val: categoryValues[index] })}">${formatNumber(categoryValues[index], lng)}</span>`, category: t(category), interpolation: { escapeValue: false } }) }} />
-              : <span dangerouslySetInnerHTML={{ __html: t("schools-with-connection-this-week", { value: `<span title="${t('int', { val: categoryValues[index] })}">${formatNumber(categoryValues[index], lng)}</span>`, category: t(category), interpolation: { escapeValue: false } }) }} />
+              <span dangerouslySetInnerHTML={{ __html: t("format-schools-mapped-with-category-status", { value: `<span data-title="${t('int', { val: categoryValues[index] })}">${formatNumber(categoryValues[index], lng)}</span>`, category: t(category), interpolation: { escapeValue: false } }) }} />
+              : <span dangerouslySetInnerHTML={{ __html: t("schools-with-connection-this-week", { value: `<span data-title="${t('int', { val: categoryValues[index] })}">${formatNumber(categoryValues[index], lng)}</span>`, category: t(category), interpolation: { escapeValue: false } }) }} />
           }
         >
           <TooltipButton

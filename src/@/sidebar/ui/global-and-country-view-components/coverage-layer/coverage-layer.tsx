@@ -60,8 +60,8 @@ const CoverageLayer = () => {
         <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} />
         <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
-            <Div>
-              <Text title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
+            <Div $margin='0rem 0.2rem 0 0'>
+              <Text data-title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
                 {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>
