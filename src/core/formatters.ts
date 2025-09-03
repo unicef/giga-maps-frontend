@@ -34,6 +34,17 @@ export const formatWeekInterval = ({ start, end }: Interval): string => {
   return '';
 }
 
+export const formatMonthInterval = ({ start }: Interval): string => {
+  try {
+    const currentLang = i18next.language?.split('-')[0] || 'en';
+    const locale = dateLocales[currentLang] || dateLocales.en;
+    return format(start, 'MMM yyyy', { locale })
+  } catch (e) {
+    console.log({ start }, e);
+  }
+  return '';
+}
+
 export const formatConnectionSpeed = (speed: number): string =>
   humanFormat(speed, {
     unit: 'b/s',

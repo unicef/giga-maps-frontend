@@ -1,4 +1,4 @@
-import { Button, OverflowMenu, OverflowMenuItem, TableCell, TableRow, ToggletipButton, Tooltip } from '@carbon/react';
+import { Button, OverflowMenu, OverflowMenuItem, RadioButton, RadioButtonGroup, TableCell, TableRow, ToggletipButton, Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { Information } from '@carbon/icons-react'
 import { ApiStatusColors, ApiStatusName } from '~/@/api-docs/api-docs.constant';
@@ -11,9 +11,10 @@ import { onChangeApiKeyRequest } from '../../models/api-request-model';
 import { ApiKeysAdminRequestType } from '../../types/api-request.type';
 import { CountryListToggletip, DataLayerActiveCountries, CountryListToggletipContent } from '../styles/admin-styles';
 import { Div } from '~/@/common/style/styled-component-style';
+import ApiCategorySelection from './api-category-selection.view';
 
 
-const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength }: { item: ApiKeysAdminRequestType, setApiKeyDeleteId: any, countryLength: number }) => {
+const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength, refresh }: { item: ApiKeysAdminRequestType, setApiKeyDeleteId: any, countryLength: number, refresh: () => void }) => {
   const { inProgress, isExpired, extensionInProgress, extensionDeclined } = getApiKeysProps(item);
   const currentStatusType = (isExpired ? ApiStatusName.expired : item.status).toLocaleLowerCase();
   const statusColor = ApiStatusColors[currentStatusType];
@@ -74,6 +75,9 @@ const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength }: { item: Api
             </CountryListToggletipContent>}
           </CountryListToggletip>}
         </Div>
+      </TableCell>
+      <TableCell>
+        <ApiCategorySelection item={item} refresh={refresh} isExpired={isExpired} />
       </TableCell>
       < TableCell>
         <DateWrapper>
