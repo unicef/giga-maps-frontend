@@ -92,7 +92,7 @@ const ReuestApiKeyPopup = () => {
             <br />
             <Div $style={`display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem;`}>
               <Information />
-              <Text style={{ fontSize: '0.8rem', margin: 0 }}><b>Countries with immediate access</b>: Botswana <br />
+              <Text style={{ fontSize: '0.8rem', margin: 0 }}><b>Countries with immediate access</b>: Malawi<br />
                 For rest of other countries, access will be granted based on the request.
               </Text>
             </Div>
