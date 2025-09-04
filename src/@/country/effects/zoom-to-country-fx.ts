@@ -24,7 +24,7 @@ export const zoomToCountryFx = createEffect(
       map.flyTo({
         center: schoolFocusLatLng as LngLatLike,
         zoom: 10,
-        offset: [0, -50]
+        offset: [0, -180]
       });
       return schoolFocusLatLng.toString();
     }
