@@ -88,7 +88,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
 
     const staticValue = feature?.staticValue as boolean | undefined;
     let displayValue = staticValue === true ? 'yes' : staticValue === false ? 'no' : staticValue
-    if (!displayValue || displayValue?.toLocaleLowerCase() === 'unknown') {
+    if (!displayValue || displayValue?.toLocaleLowerCase?.() === 'unknown') {
       displayValue = t.getState()('unknown')
     }
     const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', displayValue);
