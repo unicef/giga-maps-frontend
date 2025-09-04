@@ -28,6 +28,7 @@ import {
   $activeSchoolPopup,
   $filterListMapping,
   $map,
+  $multipleSchoolPopup,
   $popup,
   $reloadStyle,
   $schoolClickData,
@@ -43,10 +44,11 @@ import {
   onStyleLoaded,
   onZoomStateChange,
   setCenter,
+  setSchoolCLickupPopupDiv,
   zoomIn,
   zoomOut,
 } from './map.model';
-import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
+import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { $theme } from '~/core/theme.model';
 import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
@@ -272,6 +274,7 @@ export const mapMarkerSource = combine({
   map: $map,
   schoolStats: $schoolStatsMap,
   schoolMarkers: $schoolMarkers,
+  multipleSchoolPopup: $multipleSchoolPopup,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils
 })
@@ -287,9 +290,21 @@ sample({
   clock: $schoolClickedId,
   source: combine({
     map: $map,
-    schoolPopupInfo: $activeSchoolPopup
+    schoolPopupInfo: $activeSchoolPopup,
+    isMobile: $isMobile
   }),
+  filter: ({ isMobile }) => !isMobile,
   target: createLoadingPopupFx
+})
+
+sample({
+  clock: $schoolClickedId,
+  source: combine({
+    isMobile: $isMobile
+  }),
+  filter: ({ isMobile }, schoolId) => isMobile && schoolId,
+  fn: (_, schoolId) => schoolId,
+  target: navigateToSchool
 })
 
 export const $schoolPopupConnectivityMap = $schoolClickData.map((data) => data?.length ? schoolStatsMap(data[0]) : null)
@@ -313,6 +328,7 @@ sample({
     if (popup) {
       popup.remove();
       onCreateSchoolPopup(null);
+      setSchoolCLickupPopupDiv(null)
     }
   }
 })

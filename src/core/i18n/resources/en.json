@@ -252,5 +252,8 @@
   "council area": "council area",
   "borough": "borough",
   "disclaimer": "Aviso",
-  "disclaimer-text": "Este mapa no refleja la postura de UNICEF sobre la condición jurídica de ningún país o territorio, ni sobre la delimitación de sus fronteras."
+  "disclaimer-text": "Este mapa no refleja la postura de UNICEF sobre la condición jurídica de ningún país o territorio, ni sobre la delimitación de sus fronteras.",
+  "check-on-osm": "Check on OSM",
+  "this-week": "This week",
+  "this-month": "This month"
 }
