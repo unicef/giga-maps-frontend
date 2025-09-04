@@ -26,6 +26,9 @@ export const zoomIn = createEvent();
 export const zoomOut = createEvent();
 export const setLoader = createEvent<Marker>();
 export const onLoadPage = createEvent();
+export const onZoomStateChange = createEvent<'start' | 'end' | null>();
+export const $zoomState = createStore<'start' | 'end' | null>(null);
+$zoomState.on(onZoomStateChange, setPayload);
 
 export const updateSchoolMarker = createEvent<SchoolMarker[]>()
 export const $schoolMarkers = createStore<SchoolMarker[]>([])
@@ -68,7 +71,7 @@ export const changeRealtimeSchoolConnectedOpenStatus = createEvent<boolean>();
 export const $realtimeSchoolConnectedOpenStatus = createStore<boolean>(true);
 $realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, setPayload);
 
-export const changeGigaSelection = createEvent<{ schoolId: number | null; layerId: number | null }>();
+export const changeGigaSelection = createEvent<{ layerId: number | null }>();
 export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
 
 export const setPopupOnClickDot = createEvent<{ id: number; geopoint: GeoJSONPoint } | null>();

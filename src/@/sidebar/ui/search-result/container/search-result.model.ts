@@ -21,7 +21,7 @@ const $query = sample({
 
 export const $searchCountryList = createStore<CountryWithDistrictCount[] | []>([]);
 $searchCountryList.on(fetchCountriesWithDistrictFx.doneData, (_, data) => {
-  return Object.values(data);
+  return Object.values(data ?? {});
 });
 export const $searchCountryAdminCollection = $searchCountryList.map(makeSearchDataCollection)
 export const setSearchCountryExpand = createEvent<string>();

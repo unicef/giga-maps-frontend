@@ -3,7 +3,7 @@ import mapboxgl, { Map } from "mapbox-gl";
 
 import { PreviewDataType } from "../types/giga-layer.type";
 import { addCountryBoundries } from "./map-country-boundary.fx";
-import { defaultSource } from "~/@/map/utils";
+import { DEFAULT_SOURCE } from "~/@/map/map.constant";
 
 const getSchoolsGeoJson = (data: PreviewDataType['map']) => {
   return {
@@ -28,7 +28,7 @@ const getSchoolsGeoJson = (data: PreviewDataType['map']) => {
 
 export const plotMapData = (map: Map, mapData: PreviewDataType['map']) => {
   const data = getSchoolsGeoJson(mapData) as unknown as GeoJSON.Geometry;
-  map.addSource(defaultSource, {
+  map.addSource(DEFAULT_SOURCE, {
     type: 'geojson',
     data
   });
@@ -36,7 +36,7 @@ export const plotMapData = (map: Map, mapData: PreviewDataType['map']) => {
   map.addLayer({
     'id': 'places',
     'type': 'circle',
-    'source': defaultSource,
+    'source': DEFAULT_SOURCE,
     'paint': {
       'circle-color': '#4264fb',
       'circle-radius': 6,
@@ -75,7 +75,7 @@ export const plotMapData = (map: Map, mapData: PreviewDataType['map']) => {
   })
     .on('click', 'places', (e) => createPopup(e))
 
-  map.on('mouseleave', 'places', () => {});
+  map.on('mouseleave', 'places', () => { });
 }
 
 export const previewDataSourceFx = createEffect(({ map, mapData }: { map: Map, mapData: PreviewDataType['map'] }) => {
