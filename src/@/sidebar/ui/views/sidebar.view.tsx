@@ -1,4 +1,4 @@
-import { MagicWandFilled } from '@carbon/icons-react'
+import { MagicWandFilled, ChevronDown, ChevronUp, ChevronRight } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { MouseEvent, } from 'react';
@@ -20,7 +20,6 @@ import { $isMobile } from '~/core/media-query';
 import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
-import Chevron from '../../../../assets/images/chevron.svg';
 import BreadcrumbInfo from '../breadcrumb';
 import CommonComponentGigaLayer from '../common-components/common-component-gigalayer';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
@@ -59,7 +58,8 @@ export default function Sidebar() {
         {
           isMobile &&
           <VerticalSliderButtonWrapper id='mobile-view-slider' onClick={() => setSidebarHeight(!sidebarHeight)}>
-            <VerticalSliderButton />
+            {/* <VerticalSliderButton /> */}
+            {sidebarHeight ? <ChevronDown /> : <ChevronUp />}
           </VerticalSliderButtonWrapper>
         }
         <SideInfoPanelHeaderLogoAndMenuButton />
@@ -69,7 +69,7 @@ export default function Sidebar() {
         <SubContainer>
           <BreadcrumbInfo />
           {mapRoute ? <LandingPage /> :
-            <LayerDetailContainer>
+            <LayerDetailContainer $height={isMobile && !sidebarHeight ? '0rem' : '6rem'}>
               {(countryRoute) && <GlobalAndCountryView />}
               {(schoolRoute) && <SchoolView />}
             </LayerDetailContainer>
@@ -82,7 +82,7 @@ export default function Sidebar() {
             type="button"
             onClick={onToggleSidebar}
           >
-            <Chevron alt="Expand/collapse sidebar" />
+            <ChevronRight />
           </button>
         </SubContainer>
         <MapButtonWrapper $hide={isTimeplayer}>
