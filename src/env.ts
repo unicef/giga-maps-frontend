@@ -15,6 +15,8 @@ export const API_MAPBOX_ACCESS_TOKEN =
 export const API_BASE_URL =
   process.env.API_BASE_URL ?? 'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
 
+export const GIGA_MERTER_API_HOST = process.env.GIGA_METER_API_HOST ?? 'https://uni-ooi-giga-meter-backend-dev.azurewebsites.net';
+
 export const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY ?? '';
 
 // export const RECAPTCHA_KEY = process.env.RECAPTCHA_KEY ?? '';

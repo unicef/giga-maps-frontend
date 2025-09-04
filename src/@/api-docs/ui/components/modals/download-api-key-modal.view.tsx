@@ -96,11 +96,11 @@ const DownloadApiKeyModal = () => {
           </ModalDescription>
 
           {exploreApiData?.code === "DAILY_CHECK_APP" && <Div>
-            <Text $size={0.7}>License: The dataset accessed through this API is made available under the <Link rel="noreferrer" style={{ fontSize: '0.7rem', display: 'inline' }} target="_blank" href="https://opendatacommons.org/licenses/odbl/1-0/">Open Data Commons Open Database License (ODbL)</Link>. You are free to copy, distribute, transmit and adapt our data, as long as you credit Giga and its contributors. If you alter or build upon our data, you may distribute the result only under the same licence. The full legal code explains your rights and responsibilities.
+            <Text $size={0.7}><b>License:</b> The dataset accessed through this API is made available under the <Link rel="noreferrer" style={{ fontSize: '0.7rem', display: 'inline' }} target="_blank" href="https://opendatacommons.org/licenses/odbl/1-0/">Open Data Commons Open Database License (ODbL)</Link>. You are free to copy, distribute, transmit and adapt our data, as long as you credit Giga and its contributors. If you alter or build upon our data, you may distribute the result only under the same licence. The full legal code explains your rights and responsibilities.
             </Text>
           </Div>}
           {exploreApiData?.code === "SCHOOL" && <Div>
-            <Text $size={0.7}>License: The dataset accessed through this API is made available under the <Link rel="noreferrer" style={{ fontSize: '0.7rem', display: 'inline' }} target="_blank" href="https://opendatacommons.org/licenses/odbl/1-0/">Open Data Commons Open Database License (ODbL)</Link>. You are free to copy, distribute, transmit and adapt our data, as long as you credit Giga and its contributors. Portions of this dataset include data from OpenStreetMap, available under the ODbL. If you alter or build upon our data, you may distribute the result only under the same licence. The full legal code explains your rights and responsibilities.
+            <Text $size={0.7}><b>License:</b> The dataset accessed through this API is made available under the <Link rel="noreferrer" style={{ fontSize: '0.7rem', display: 'inline' }} target="_blank" href="https://opendatacommons.org/licenses/odbl/1-0/">Open Data Commons Open Database License (ODbL)</Link>. You are free to copy, distribute, transmit and adapt our data, as long as you credit Giga and its contributors. Portions of this dataset include data from OpenStreetMap, available under the ODbL. If you alter or build upon our data, you may distribute the result only under the same licence. The full legal code explains your rights and responsibilities.
             </Text>
           </Div>}
 

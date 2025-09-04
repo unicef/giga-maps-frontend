@@ -13,7 +13,6 @@ color: ${props => props.theme.text};
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
- 
 }
 input::placeholder{
   color: #6F6F6F;

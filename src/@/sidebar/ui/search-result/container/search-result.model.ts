@@ -1,8 +1,8 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
-import { $countries } from "~/@/country/country.model";
+import { $countries, $country, $countryCode } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
-import { mapCountry } from "~/core/routes";
+import { $mapRoutes, mapCountry } from "~/core/routes";
 import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { getId, getLocalStorage, setLocalStorage } from "~/lib/utils";
 
@@ -61,15 +61,28 @@ $searchSchoolSelectedList.on(setSchoolSelection, (state, payload) => {
 export const triggerSearchApply = createEvent();
 export const $searchSchoolList = createStore<APIListType<SearchResultApi> | null>(null);
 export const onSchoolListCurrentPage = createEvent<number>();
-export const $schoolListCurrentPage = restore<number>(onSchoolListCurrentPage, 1);
+export const $schoolListCurrentPage = restore<number>(onSchoolListCurrentPage, 0);
 export const setSearchSchoolListValue = createEvent<string>();
 export const $searchSchoolListValue = restore(setSearchSchoolListValue, '');
 const $searchSchoolListMax = $searchSchoolListValue.map((value) => value.length > SCHOOL_LIST_SEARCH_LENGTH ? value : '')
 
+// Track current search page
+export const setSearchPage = createEvent<number>();
+export const $searchPage = restore<number>(setSearchPage, 1);
+
+// Track if there are more results to load
+export const setHasMoreResults = createEvent<boolean>();
+export const $hasMoreResults = restore(setHasMoreResults, true);
+
+// Track if we've loaded all results for the current country
+export const setHasLoadedAllForCurrentCountry = createEvent<boolean>();
+export const $hasLoadedAllForCurrentCountry = restore<boolean>(setHasLoadedAllForCurrentCountry, false);
+
 export const $searchResultResponse = createStore<SearchResultCollection[] | null>(null);
 $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
-  const results = setPayloadResults(state, payload) as unknown as SearchResultApi[];
-  return results.map(({ name, admin1_name: admin1Name, admin2_name: admin2Name, country_code: countryCode, country_id: countryId, country_name: countryName, id }) => ({
+  // Convert the results to our format
+  const results = payload.results as unknown as SearchResultApi[];
+  const mappedResults = results.map(({ name, admin1_name: admin1Name, admin2_name: admin2Name, country_code: countryCode, country_id: countryId, country_name: countryName, id }) => ({
     admin1Name,
     admin2Name,
     countryCode,
@@ -77,7 +90,27 @@ $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
     countryName,
     name,
     id
-  })) as SearchResultCollection[]
+  })) as SearchResultCollection[];
+  const count = payload.count;
+  let list = mappedResults;
+  const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
+  const countryId = $country.getState()?.id;
+  const hasMoreData = (countryId && !hasLoadedAllForCurrentCountry) || list.length === 15;
+  if (countryId && !hasLoadedAllForCurrentCountry && (list.length + (state?.length || 0)) >= count) {
+    setHasLoadedAllForCurrentCountry(true);
+  }
+  console.log(countryId, hasLoadedAllForCurrentCountry, list.length, count, $searchPage.getState())
+  if (countryId && !hasLoadedAllForCurrentCountry && list.length < 15 && $searchPage.getState() === 0) {
+    loadMoreResults();
+  }
+  // If we have existing state and this isn't the first page, append the results
+  if (state?.length) {
+    list = [...state, ...mappedResults];
+  }
+  // Update hasMoreResults based on API response
+  setHasMoreResults(hasMoreData);
+  // Otherwise return just the new results
+  return list;
 });
 
 export const $searchResultCollection = sample({
@@ -205,17 +238,66 @@ sample({
   target: fetchCountriesWithDistrictFx
 })
 
+// Reset search page when query changes
+$query.watch(() => {
+  setSearchPage(1);
+  setHasLoadedAllForCurrentCountry(false);
+  setHasMoreResults(true);
+});
+
+$hasLoadedAllForCurrentCountry.watch((isLoaded) => {
+  if (isLoaded) {
+    setSearchPage(0);
+  }
+})
+
+// Load more results function
+export const loadMoreResults = createEvent();
+
+// Sample for initial search
 sample({
   clock: $query,
-  source: combine($hasSearchInput, $query),
+  source: combine($hasSearchInput, $query, $country, $mapRoutes),
   filter: ([hasSearchInput]) => {
     return hasSearchInput
   },
-  fn: ([_, query]) => {
-    return ({ query })
+  fn: ([_, query, country, mapRoutes]) => {
+    let countryId = country?.id;
+    if (mapRoutes.map) {
+      countryId = undefined;
+    }
+    // Reset to page 0 for new queries
+    return ({ query, countryId, page: 0 })
   },
   target: getSearchResultsFx
+});
+
+$query.watch(() => {
+  setSearchPage(0);
 })
+// Handle loading more results
+loadMoreResults.watch(() => {
+  const hasSearchInput = $hasSearchInput.getState();
+  const hasMore = $hasMoreResults.getState();
+  const query = $query.getState();
+  const country = $country.getState();
+  const mapRoutes = $mapRoutes.getState();
+  const page = $searchPage.getState();
+  const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
+
+  if (hasSearchInput && hasMore) {
+    let countryId = country?.id;
+    if (mapRoutes.map) {
+      countryId = undefined;
+    }
+
+    // Increment page number
+    setSearchPage(page + 1);
+
+    // Fetch more results
+    getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page });
+  }
+});
 
 
 
@@ -227,9 +309,11 @@ $searchAdminLevel2.reset($showCountries, $currentExpandCountry, $searchAdminLeve
 $searchSchoolSelectedList.reset([resetSchoolSelection, $currentExpandCountry]);
 
 $searchResultResponse.reset($query);
+$hasMoreResults.reset($query);
 // search on get all country list
 
 $searchSchoolList.on(fetchSchoolListFx.doneData, setPayload)
 $searchSchoolListValue.reset([$searchAdminLevel2])
 $schoolListCurrentPage.reset([$searchAdminLevel2])
 $schoolListCurrentPage.reset(setSearchSchoolListValue)
+$searchInput.reset([$countryCode]);

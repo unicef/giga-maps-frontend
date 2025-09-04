@@ -45,11 +45,11 @@ export const SearchButtonGroup = () => {
       disabled={isLoading}
       totalItems={count}
       pageSizes={[SCHOOL_LIST_PAGE_SIZE]}
-      page={currentPage}
+      page={currentPage + 1}
       hideSteppers
       pageRangeText={(_current: number, _count: number) => t('of-page', { count: _count })}
       size="sm"
-      onChange={({ page }: { page: number }) => onSchoolListCurrentPage(page)}
+      onChange={({ page }: { page: number }) => onSchoolListCurrentPage(page - 1)}
     />
   </FooterWrapper>
 }

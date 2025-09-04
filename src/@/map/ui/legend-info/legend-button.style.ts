@@ -74,13 +74,13 @@ export const LegendContentWrapper = styled.div`
     
 
     .school-status{
-      min-width: 175px;
+      min-width: 210px;
     }
     .legend-value {
       margin-top: 1.1rem;
       margin-left: 0.6rem;
       color: grey;
-      font-size: 0.7rem;
+      font-size: 0.875rem;
     }
     .legend-container {
       display:flex;

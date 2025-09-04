@@ -1,4 +1,4 @@
-import { createEvent, createStore, restore } from 'effector';
+import { createEvent, createStore, restore, sample } from 'effector';
 
 import { fetchAdvanceFilterFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
@@ -54,6 +54,17 @@ export const $stylePaintData = createStore<StylePaintData>(
 export const $globalStats = createStore<GlobalStats>(defaultGlobalStats);
 $globalStats.on(fetchGlobalStatsFx.doneData, setPayload);
 
+// Handle global stats fetch failures - log error but keep default values
+sample({
+  clock: fetchGlobalStatsFx.failData,
+  fn: (error) => {
+    console.error('Failed to fetch global statistics after retries:', error);
+    // Return default stats to ensure UI doesn't break
+    return defaultGlobalStats;
+  },
+  target: $globalStats
+});
+
 export const $pending = createStore<boolean>(false);
 export const $loader = createStore<Marker | null>(null);
 $loader.on(setLoader, setPayload);
@@ -81,7 +92,18 @@ export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
 export const $popup = createStore<mapboxgl.Popup | null>(null);
 $popup.on(onCreateSchoolPopup, setPayload);
 
+type SchoolClickupPopupType = {
+  id: number;
+  element: HTMLElement,
+  isClicked?: boolean;
+}
+
 export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
+export const setSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
+export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setSchoolCLickupPopupDiv, null);
+
+export const setMultipleSchoolPopup = createEvent<SchoolClickupPopupType[] | null>();
+export const $multipleSchoolPopup = restore(setMultipleSchoolPopup, null);
 export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
 $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 

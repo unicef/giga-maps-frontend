@@ -24,9 +24,7 @@ export default function SearchResult() {
       </SearchListWrapper>}
       {isSearchFocus && hasSearchInput &&
         <SearchResultWrapper>
-          <SearchResultScroll>
-            <SearchResultList />
-          </SearchResultScroll>
+          <SearchResultList />
           <FooterTourContact message={t("not-the-results-you-expected")} />
         </SearchResultWrapper>
       }

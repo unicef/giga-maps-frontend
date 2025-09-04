@@ -10,8 +10,8 @@ export const createRequestAuthFx = attach({
   mapParams: (options: ApiRequestType, token) => ({ options, token }),
 });
 
-export const createRequestFx = (options: ApiRequestType) =>
-  attach({
-    effect: backendRequestFx,
-    mapParams: _ => ({ options }),
-  })
+export const createRequestFx = attach({
+  effect: backendRequestFx,
+  source: $authToken,
+  mapParams: (options: ApiRequestType) => ({ options }),
+});

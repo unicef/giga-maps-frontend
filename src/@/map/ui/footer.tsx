@@ -2,13 +2,16 @@ import { useStore } from 'effector-react';
 import styled from 'styled-components';
 
 import { $country } from '~/@/country/country.model';
-import { mapCountry } from '~/core/routes';
+import { $mapRoutes, mapCountry } from '~/core/routes';
 
 import FooterCommonLogo from './footer-common-logo';
 import { $globalStats } from '../map.model';
 import { MAP_SAMPLING } from '../map.constant';
 import { formatNumber } from '~/lib/utils';
-
+import { InformationFilled } from '@carbon/icons-react';
+import { $isMobile } from '~/core/media-query';
+import { $showDisclaimerNotification, onCloseDiscalimerNotification } from '~/@/sidebar/ui/common-components/country-disclaimer-notification/country-disclaimer-notification';
+import { useTranslation } from 'react-i18next';
 
 export const FooterWrapper = styled.footer`
     position: fixed;
@@ -78,24 +81,51 @@ export const FooterWrapper = styled.footer`
 }
 `
 
+const DisclaimerLink = styled.p`
+  color: ${props => props.theme.text};
+  margin-left: 0.25rem;
+  display: flex;
+  align-items: center;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.75rem;
+  svg {
+  fill: ${props => props.theme.titleBlue};
+  margin-right: 4px;  
+}
+`
+
 
 
 const Footer = () => {
+  const { t } = useTranslation();
   const isCountryView = useStore(mapCountry.visible);
   const country = useStore($country);
   const schoolConnected = useStore($globalStats).schools_connected || 0;
+  const { country: isCountry } = useStore($mapRoutes);
+  const isMobile = useStore($isMobile);
+  const showNotification = useStore($showDisclaimerNotification);
+  const showDisclaimer = isCountry && !showNotification && !isMobile;
+
   return (
     <FooterWrapper>
-      <p>
-        {country && schoolConnected > 0 && schoolConnected > MAP_SAMPLING && isCountryView && (
-          <span>School Sampling - {country?.name} - {formatNumber(MAP_SAMPLING)} Approx.</span>
-        )}
-      </p>
+      <div>
+        {showDisclaimer && <DisclaimerLink onClick={() => onCloseDiscalimerNotification(true)}>
+          <InformationFilled />
+          {t("disclaimer")}
+        </DisclaimerLink>}
+        <p>
+          {country && schoolConnected > 0 && schoolConnected > MAP_SAMPLING && isCountryView && (
+            <span>School Sampling - {country?.name} - {formatNumber(MAP_SAMPLING)} Approx.</span>
+          )}
+        </p>
+      </div >
       <div className="footer-content">
         {/* <FooterDataSourcePopUp size={20} /> */}
         <FooterCommonLogo />
       </div>
-    </FooterWrapper>
+    </FooterWrapper >
   );
 };
 
