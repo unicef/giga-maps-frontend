@@ -80,8 +80,7 @@ export const updateCoverageFilter = createEffect(({ map, layerUtils, coverageFil
   const { isStatic } = layerUtils.currentLayerTypeUtils
   const mapLayer = map.getLayer(getMapId(selectedLayerId));
   if (isStatic && mapLayer) {
-    const isDynamicLayer = selectedLayerId !== coverageLayerId;
-    const filter = filterCoverageList(coverageFilter, isDynamicLayer);
+    const filter = filterCoverageList(coverageFilter, true);
     map.setFilter(getMapId(selectedLayerId), filter);
   }
 })
