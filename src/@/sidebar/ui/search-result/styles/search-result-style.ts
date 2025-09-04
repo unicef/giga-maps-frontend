@@ -193,10 +193,18 @@ export const SchoolName = styled.h6`
   overflow: hidden;
 `
 
+export const NoMoreResults = styled.p`
+  color: ${props => props.theme.text};
+  font-size: .75rem;
+  margin: 1.5rem 0;
+  text-align:center;
+  color: ${props => props.theme.schoolId};
+`
+
 export const SchoolBody = styled.span`
   color: ${props => props.theme.schoolId}; 
-  font-size: 10px;
-  margin-top: 10px;
+  font-size: .625rem;
+  margin-top: .625rem;
 `
 export const Loading = styled(InlineLoading)`
   padding: 16px;

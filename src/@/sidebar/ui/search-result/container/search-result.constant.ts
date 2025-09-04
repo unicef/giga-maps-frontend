@@ -5,7 +5,7 @@ export const MAX_SCHOOL_SELECTED = 20;
 export const SCHOOL_LIST_PAGE_SIZE = 50;
 export const SCHOOL_LIST_SEARCH_LENGTH = 2;
 export const SEARCH_SCHOOL_RESULT_SIZE = 15;
-export const SEARCH_COUNTRY_SIZE = 1;
+export const SEARCH_COUNTRY_SIZE = 10;
 export const SEARCH_ADMIN_SIZE = 2;
 export const SEARCH_DATA_TYPE = {
   COUNTRY: 'COUNTRY',
