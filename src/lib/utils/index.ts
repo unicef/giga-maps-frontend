@@ -54,7 +54,7 @@ export const getLocalStorage = (name: string) => {
   return data;
 }
 
-export const setLocalStorage = (name: string, value: string | object) => {
+export const setLocalStorage = (name: string, value: string | object | boolean) => {
   try {
     window?.localStorage?.setItem(name, JSON.stringify(value));
   } catch (e) {

@@ -16,6 +16,7 @@ import {
 import { Center, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
 import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { getLocalStorage, setLocalStorage } from '~/lib/utils';
 
 export const $reloadStyle = createStore<boolean>(false);
 export const onReloadedMap = createEvent();
@@ -42,11 +43,22 @@ export const changeStyle = createEvent<Style>();
 export const $style = createStore<Style>(defaultStyle);
 $style.on(changeStyle, setPayload);
 
+const adminBoundariesStored = getLocalStorage('admin-boundaries') as boolean | undefined;
 export const onEnableAdminBoundaries = createEvent<boolean>();
-export const $isAdminBoundaries = restore(onEnableAdminBoundaries, true);
+export const $isAdminBoundaries = restore(onEnableAdminBoundaries, (typeof adminBoundariesStored === 'boolean' ? adminBoundariesStored : undefined) ?? true);
+onEnableAdminBoundaries.watch((value) => {
+  setLocalStorage('admin-boundaries', value)
+})
 
 export const onEnableTitlesAndLabels = createEvent<boolean>()
 export const $isTilesAndLables = restore(onEnableTitlesAndLabels, true);
+
+export const onEnableNavigateByAdminLevel = createEvent<boolean>()
+const navigateByAdminStored = getLocalStorage('navigate-by-admin-level') as boolean | undefined;
+export const $isNavigateByAdminLevel = restore(onEnableNavigateByAdminLevel, (typeof navigateByAdminStored === 'boolean' ? navigateByAdminStored : undefined) ?? true);
+onEnableNavigateByAdminLevel.watch((value) => {
+  setLocalStorage('navigate-by-admin-level', value)
+})
 
 export const $stylePaintData = createStore<StylePaintData>(
   stylePaintData[defaultStyle]
