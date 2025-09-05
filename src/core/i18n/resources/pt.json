@@ -45,8 +45,8 @@
   "data-source": "Fonte de dados",
   "data-source-1": "Fonte de dados:",
   "data-is-sourced-research-institutions": "Os dados são provenientes de mais de 50 ministérios governamentais, comunidades de código aberto, provedores de serviços de Internet, modelo de IA da Giga e aplicativo de medição, e várias instituições de ensino e pesquisa.",
-  "schools-with-real-time-mapped_one": "{{schoolCount}} escola com dados de conectividade em tempo real em {{globalCount}} escolas mapeadas",
-  "schools-with-real-time-mapped_other": "{{schoolCount}} escolas com dados de conectividade em tempo real em {{globalCount}} escolas mapeadas",
+  "schools-with-real-time-mapped_one": "<0 data-title='{{schoolCountExact}}'>{{schoolCount}}</0> escola com dados de conectividade em tempo real em <0 data-title='{{globalCountExact}}'>{{globalCount}}</0> escolas mapeadas",
+  "schools-with-real-time-mapped_other": "<0 data-title='{{schoolCountExact}}'>{{schoolCount}}</0> escolas com dados de conectividade em tempo real em <0 data-title='{{globalCountExact}}'>{{globalCount}}</0> escolas mapeadas",
   "go-to-school-page": "Ir para a página da escola",
   "school-details": "Detalhes da escola",
   "gigamaps-is-a-live-map-of-all-schools-in-the-world-and-the-status-of-their-internet-access": "Gigamaps é um mapa ao vivo de todas as escolas do mundo e o status de seu acesso à Internet.",
@@ -108,7 +108,7 @@
   "resources": "Recursos: ",
   "thanks-for-taking-the-tour-of": "Obrigado por fazer o tour de",
   "admins": "Admins",
-  "schools-with-coverage-schools-mapped": "Escolas com dados {{layerName}} de {{totalSchools}} escolas mapeadas",
+  "schools-with-coverage-schools-mapped": "Escolas com dados {{layerName}} de <0 data-title='{{totalSchoolsExact}}'>{{totalSchools}}</0> escolas mapeadas",
   "insufficient-data": "Dados insuficientes",
   "you-will-for-schools-between-global-or-national-level-of-connectivity": "Você verá o impacto na legenda do mapa, onde o verde é para escolas que superam os padrões globais ou nacionais, o amarelo é para escolas entre os padrões de conectividade global ou nacional e a categoria vermelha, que é para escolas que recebem o nível mais baixo de conectividade.",
   "show-more": "Mostrar mais",
@@ -256,5 +256,6 @@
   "check-on-osm": "Verificar no OSM",
   "this-week": "Esta semana",
   "this-month": "Este mês",
-  "no-more-results": "Não há mais resultados"
+  "no-more-results": "Não há mais resultados",
+  "int": "{{val, number}}"
 }

@@ -45,8 +45,8 @@
   "data-source": "Data source",
   "data-source-1": "Data source :",
   "data-is-sourced-research-institutions": "Data is sourced from 50+ government ministries, open-source communities, Internet service providers, Giga’s AI model and measurement app, and multiple educational and research institutions.",
-  "schools-with-real-time-mapped_one": "{{schoolCount}} school with real-time connectivity data across {{globalCount}} schools mapped",
-  "schools-with-real-time-mapped_other": "{{schoolCount}} schools with real-time connectivity data across {{globalCount}} schools mapped",
+  "schools-with-real-time-mapped_one": "<0 data-title='{{schoolCountExact}}'>{{schoolCount}}</0> school with real-time connectivity data across <0 data-title='{{globalCountExact}}'>{{globalCount}}</0> schools mapped",
+  "schools-with-real-time-mapped_other": "<0 data-title='{{schoolCountExact}}'>{{schoolCount}}</0> schools with real-time connectivity data across <0 data-title='{{globalCountExact}}'>{{globalCount}}</0> schools mapped",
   "go-to-school-page": "Go to School page",
   "school-details": "School Details",
   "gigamaps-is-a-live-map-of-all-schools-in-the-world-and-the-status-of-their-internet-access": "Gigamaps is a live map of all schools in the world and the status of their internet access.",
@@ -108,7 +108,7 @@
   "resources": "Resources: ",
   "thanks-for-taking-the-tour-of": "Thanks for taking the tour of",
   "admins": "Admins",
-  "schools-with-coverage-schools-mapped": "Schools with {{layerName}} data out of {{totalSchools}} schools mapped",
+  "schools-with-coverage-schools-mapped": "Schools with {{layerName}} data out of <0 data-title='{{totalSchoolsExact}}'>{{totalSchools}}</0> schools mapped",
   "insufficient-data": "Insufficient data",
   "you-will-for-schools-between-global-or-national-level-of-connectivity": "You will see the impact on map legend where green is for schools surpassing global or national standards, yellow is for schools between global or national connectivity standard and red category which is for schools receiving lowest level of connectivity.",
   "show-more": "Show more",
@@ -256,5 +256,6 @@
   "check-on-osm": "Check on OSM",
   "this-week": "This week",
   "this-month": "This month",
-  "no-more-results": "No more results"
+  "no-more-results": "No more results",
+  "int": "{{val, number}}"
 }

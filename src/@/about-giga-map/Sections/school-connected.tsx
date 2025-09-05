@@ -25,8 +25,8 @@ const SchoolConnected = ({ data }: { data: AboutType }) => {
         {data?.content.map((item, index) => (<NumberContainer key={`${index}-${item?.title}`} $style={item.style}>
           <CustomIcon $size={3.5} dangerouslySetInnerHTML={{ __html: item?.image ?? '' }} />
           <div>
-            <h1>
-              {index === 0 ? schoolMappedData[index]?.value?.split('/')[0] : schoolMappedData[index]?.value}
+            <h1 dangerouslySetInnerHTML={{ __html: schoolMappedData[index]?.value }}>
+
             </h1>
             <p>
               {item?.text?.[0]}

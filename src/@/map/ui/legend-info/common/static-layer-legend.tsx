@@ -20,6 +20,7 @@ import { Div, TooltipButton } from "~/@/common/style/styled-component-style";
 import { ConnectivityBenchMarks, ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
 import { $country, $countryConnectivityNames } from "~/@/country/country.model";
 import { $lng } from "~/core/i18n/store";
+import { useTranslation } from "react-i18next";
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -27,6 +28,7 @@ interface CheckedStatus {
 
 const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
   const lng = useStore($lng);
+  const { t } = useTranslation();
   const countryConnectivityNames = useStore($countryConnectivityNames);
   const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId, coverageLayerId } = useStore($layerUtils);
@@ -119,7 +121,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
                       </div>
                     </div>
                     {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[label], lng)}</div>
+                      <div className='legend-value' data-title={t('int', { val: coverageStats?.connected_schools[label] })}>{formatNumber(coverageStats?.connected_schools[label], lng)}</div>
                     )}
                   </div>
                 </button>
