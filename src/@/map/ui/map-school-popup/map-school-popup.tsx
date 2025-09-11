@@ -6,7 +6,7 @@ import { InnerCircle, InnerCircleConnectivity } from '../legend-info/legend-butt
 import { router } from '~/core/routes';
 import { PointCoordinates } from '~/core/global-types';
 import { ConnectivityCircleWrapper, GoToSchoolButton, Label, LiveContainer, LiveContent, LiveStatusRow, OSMLink, PopupTemplate, SchoolInfoWrapper, SchoolName, SchoolNameWrapper } from './school-popup.style';
-import SchoolPopupDataSource from './school-popup-data-source';
+// import SchoolPopupDataSource from './school-popup-data-source';
 import useSchoolPopupData from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
@@ -60,7 +60,7 @@ export const MapSchoolPopup = () => {
                 </SchoolInfoWrapper>
 
                 {/* Data source section tailored for popup */}
-                <SchoolPopupDataSource />
+                {/* <SchoolPopupDataSource /> */}
               </PopupTemplate>
               {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
                 router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
