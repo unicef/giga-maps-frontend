@@ -157,7 +157,6 @@ a{
   /* Custom tooltip styles for data-title attributes */
   [data-title] {
     position: relative;
-    cursor: help;
     display: inline-block;
   }
 
