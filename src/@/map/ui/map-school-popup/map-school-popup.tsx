@@ -29,7 +29,7 @@ export const MapSchoolPopup = () => {
             <div className="map-popup-template">
               <PopupTemplate>
                 <SchoolNameWrapper>
-                  <SchoolName className="map-school-name">{feature?.name}</SchoolName>
+                  <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
                   <OSMLink
                     href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
                     target="_blank"
@@ -48,7 +48,7 @@ export const MapSchoolPopup = () => {
                     <LiveContent>
                       {isLive && feature?.isRealTime && <LiveStatusRow>
                         <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                        <Label $size="0.875rem" $textTransform="none" $color={theme.text}>{formattedInterval}</Label>
+                        <Label $size="0.875rem" $textTransform="none" $color={theme.filterText}>{formattedInterval}</Label>
                       </LiveStatusRow>}
                       {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
                       {!isStatic && (!isLive || !feature?.isRealTime) &&
