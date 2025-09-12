@@ -25,7 +25,7 @@ export const downloadExcelFx = createEffect(async ({ params, result }: Parameter
     downloadLink.click();
 
     // Clean up: Revoke the Object URL to release resources
-    window.URL.revokeObjectURL(csvURL);
+    window?.URL?.revokeObjectURL?.(csvURL);
 
   } catch (e) {
     console.error(e);

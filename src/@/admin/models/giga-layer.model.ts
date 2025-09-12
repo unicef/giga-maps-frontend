@@ -5,7 +5,7 @@ import { addGigaLayer, editGigaLayer, viewGigaLayer } from "~/core/routes";
 import { setPayload, setPayloadFirst, setPayloadResults } from "~/lib/effector-kit";
 
 import { DataSourceName, defaultGigaLayerForm } from "../constants/giga-layer.constant";
-import { createDataLayerFx, getApiSourceValuesFx, getDataLayerByIdFx, getDataLayerListFx, getDataPreviewFx } from "../effects/giga-layer-fx";
+import { cacheDataLayerListFx, createDataLayerFx, getApiSourceValuesFx, getDataLayerByIdFx, getDataLayerListFx, getDataPreviewFx } from "../effects/giga-layer-fx";
 import { clearAdminMapData, previewDataLayerFx } from "../effects/preview-giga-layer-fx";
 import { DataLayer, DataSource, GigaLayerAllValueType, PreviewDataType } from "../types/giga-layer.type";
 import { $adminMap } from "~/@/common/admin-map-preview/admin-map.model";
@@ -17,7 +17,10 @@ export const $dataListLayerCount = createStore(0);
 $dataLayerListResponce.on(getDataLayerListFx.doneData, setPayloadResults);
 $dataListLayerCount.on(getDataLayerListFx.doneData, (_, response) => response?.count || 0);
 
-export const onGetDataLayerList = createEvent<{ page: number; pageSize: number; }>();
+export const $cacheDataLayerList = createStore<DataLayer[]>([]);
+$cacheDataLayerList.on(cacheDataLayerListFx.doneData, setPayloadResults);
+
+export const onGetDataLayerList = createEvent<{ page: number; pageSize: number; search?: string }>();
 
 export const createDataLayer = createEvent<void>()
 

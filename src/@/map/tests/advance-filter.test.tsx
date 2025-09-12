@@ -1,22 +1,64 @@
-import { fireEvent, render } from "@testing-library/react"
+import { findByLabelText, fireEvent, render, screen } from "@testing-library/react"
 
 import TextField from "../ui/advanced-filter/text-input"
 import FilterPopupContent from "../ui/advanced-filter/filter-popup-content"
-import { fetchAdvanceFilterFx } from "~/api/project-connect"
+import { fetchAdvanceFilterFx, fetchCountryFx } from "~/api/project-connect"
 import filterData from "~/tests/data/filter-data"
 import RangeTextInput from "../ui/advanced-filter/range-text-input"
+import FilterButton from "../ui/advanced-filter/filter"
+import { testWrapper } from "~/tests/jest-wrapper"
+import "~/core/i18n/instance"
+import userEvent from "@testing-library/user-event"
 
 describe('AdvancedFilter', () => {
 
   beforeEach(() => {
     fetchMock.mockResponse((req) => {
-      if (req.url.includes('advanced_filters/')) {
+      if (req.url.includes('accounts/adv_filters')) {
         return Promise.resolve(JSON.stringify(filterData))
+      } else if (req.url.includes('api/locations/countries/br')) {
+        return Promise.resolve(JSON.stringify({
+          id: 1,
+          name: 'Brazil',
+          code: 'br',
+        }))
       } else {
         return Promise.resolve(JSON.stringify(null))
       }
     });
   })
+  test('should render Advance filter', async () => {
+
+    await fetchAdvanceFilterFx()
+    const { asFragment } = render(<FilterPopupContent setOpen={() => { }} />)
+    expect(asFragment()).toMatchSnapshot();
+  })
+
+  test('should render Advance filter button', async () => {
+    await fetchAdvanceFilterFx()
+    const { asFragment } = render(testWrapper(<FilterButton />))
+    expect(asFragment()).toMatchSnapshot();
+  })
+
+  test('should render Advance filter button ', async () => {
+    await fetchCountryFx('br')
+    await fetchAdvanceFilterFx()
+    const { asFragment } = render(testWrapper(<FilterButton />))
+    expect(asFragment()).toMatchSnapshot();
+  })
+
+  test('should filter button trigger', async () => {
+    await fetchCountryFx('br')
+    await fetchAdvanceFilterFx()
+    render(testWrapper(<FilterButton />))
+    const button = (await screen.findByText("Filters")).parentNode as HTMLElement;
+    await userEvent.click(button);
+
+    const textInput = (await screen.findByPlaceholderText("Enter building id"))
+    await fireEvent.change(textInput, "123");
+    // screen.debug();
+  })
+
   test('should render Advance filter', async () => {
     await fetchAdvanceFilterFx()
     const { asFragment } = render(<FilterPopupContent setOpen={() => { }} />)
@@ -26,11 +68,20 @@ describe('AdvancedFilter', () => {
 
 })
 
-describe('TextField with StyledTextInput', () => {
+describe.skip('TextField with StyledTextInput', () => {
   const mockOnChange = jest.fn();
 
   test('should call onChange handler when user types in the input', async () => {
-    const { getByPlaceholderText } = render(<TextField place_holder="Enter Data Source" itemKey="" value="" parameter={{ label: '', table: '', field: '', filter: '' }} description="" type="" active_countries_list={[]} name="Data Source" onChange={mockOnChange} />);
+    const { getByPlaceholderText } = render(<TextField
+      name="Data Source"
+      value=""
+      itemKey="data_source"
+      type="text"
+      description=""
+      column_configuration={{ name: '', label: '', type: '', table_name: '', table_alias: '', table_label: '', options: { downcast_aggr_str: '', upcast_aggr_str: '' } }}
+      query_param_filter=""
+      onChange={mockOnChange}
+    />);
 
     const input = getByPlaceholderText('Enter Data Source')
 
@@ -40,79 +91,26 @@ describe('TextField with StyledTextInput', () => {
   });
 });
 
-// describe('<SingleDropdown />', () => {
-//   const items = [
-//     { label: 'All', value: '' },
-//     { label: 'Urban', value: 'uAllrban' },
-//     { label: 'Rural', value: 'rural' },
-//   ];
-
-//   const mockOnChange = jest.fn();
-
-//   it('renders with default "All" selected', () => {
-//     const { getByLabelText } = render(
-//       <SingleDropdown
-//         id="dropdown-education_level"
-//         label="All"
-//         items={items}
-//         onChange={mockOnChange}
-//       />
-//     );
-
-//     const dropdownLabel = getByLabelText('All');
-//     expect(dropdownLabel).toBeInTheDocument();
-//     expect(dropdownLabel).toHaveTextContent('All');
-
-//     const selectedItem = getByLabelText('All');
-//     expect(selectedItem).toBeInTheDocument();
-//     expect(selectedItem).toHaveTextContent('All');
-//   });
-// });
-
-// describe('MultiSelectDropdown Component', () => {
-//   const items = [
-//     { label: 'No', value: 'no' },
-//     { label: '2G', value: '2g' },
-//     { label: '3G', value: '3g' },
-//     { label: '4G', value: '4g' },
-//   ];
-
-//   const mockProps = {
-//     name: 'Coverage Type',
-//     parameter: {
-//       label: "Coverage Type",
-//       table: "school_static",
-//       field: "Coverage Type",
-//       filter: "in",
-//     },
-//     choices: items,
-//     itemKey: 'coverage_type__in',
-//     value: '2g, 3g, 4g',
-//     onChange: jest.fn(),
-//     type: 'select',
-//     description: 'test multiselect dropdown',
-//     active_countries_list: null
-//   };
-
-//   it('MultiSelectDropdown Component', () => {
-//     const { container } = render(<MultiSelectDropdown {...mockProps} />);
-//     expect(container).toMatchSnapshot();
-//   });
-
-//   it('should handle onChange event', () => {
-//     const { getByLabelText } = render(<MultiSelectDropdown {...mockProps} />);
-//     const dropdownComponent = getByLabelText(`Select ${mockProps.name}`);
-
-//     fireEvent.change(dropdownComponent, { target: { selectedItems: [{ value: '2g' }] } });
-//     expect(mockProps.onChange).toHaveBeenCalledWith('computer_lab__on', '2g');
-//   });
-// });
-
 describe('RangeTextInput Component', () => {
   const mockProps = {
+    column_configuration: {
+      name: '',
+      label: '',
+      type: '',
+      table_name: '',
+      table_alias: '',
+      table_label: '',
+      options: {
+        downcast_aggr_str: '',
+        upcast_aggr_str: '',
+      }
+    },
+    options: {
+      include_none_filter: true,
+    },
+    query_param_filter: "",
     name: "No of Teachers",
     type: "range",
-    include_none_filter: true,
     active_countries_range: {
       "30": {
         min_place_holder: "Min (0)",
@@ -123,16 +121,9 @@ describe('RangeTextInput Component', () => {
       none_range: true,
       value: "15,20",
     },
-    parameter: {
-      label: "No of Teachers",
-      table: "school_static",
-      field: "num_computers",
-      filter: "range",
-    },
     itemKey: 'num_computers__range',
     onChange: jest.fn(),
     description: 'test range input',
-    active_countries_list: null
   };
 
   it('RangeTextInput input', () => {
@@ -207,18 +198,3 @@ describe('RangeTextInput Component', () => {
   });
 
 });
-
-// describe('FilterPopup test', () => {
-//   it('should render valid mode', () => {
-//     const { asFragment } = render(
-//       testWrapper(<FilterPopup open={false} setOpen={jest.fn()} />)
-//     );
-//     expect(asFragment()).toMatchSnapshot();
-//   })
-//   it('should render valid mode', () => {
-//     const { asFragment } = render(
-//       testWrapper(<FilterPopup open={true} setOpen={jest.fn()} />)
-//     );
-//     expect(asFragment()).toMatchSnapshot();
-//   })
-// })

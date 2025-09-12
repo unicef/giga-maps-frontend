@@ -9,12 +9,13 @@ import {
 
 import CoverageLayerSelectionFilterModalBody from "./coverage-layer-selection-filter-modal-body";
 import { $layerFilterFooterStyle, $layerFilterHeadingStyle, $layerFilterModalStyle } from "./styles/layer-filter-modal.style";
+import { useTranslation } from "react-i18next";
 
 
 const CoverageLayerSelectionFilterModal = ({
   open, setOpen
 }: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
-
+  const { t } = useTranslation();
   const filterModalRef = useRef<{ handleApply: () => void } | null>(null);
   const CoverageFilterButtonRef = useRef(null);
 
@@ -38,7 +39,7 @@ const CoverageLayerSelectionFilterModal = ({
             resetCoverageFilterSelection();
             setOpen(false);
           }}>
-          Reset
+          {t('reset')}
         </Button>
         <Button
           kind="primary"
@@ -46,7 +47,7 @@ const CoverageLayerSelectionFilterModal = ({
             filterModalRef.current?.handleApply();
             setOpen(false);
           }}>
-          Apply
+          {t('apply')}
         </Button>
       </ModalFooter>
     </Modal>

@@ -13,8 +13,13 @@ import WeekSlider from '../common/week-slider/week-slider.view';
 import { DateWeekWrapper } from './connectivity-layer.style';
 import LiveAverage from './live-average.view';
 import { UNKNOWN } from '~/@/map/map.types';
+import { useTranslation } from 'react-i18next';
+import { $lng } from '~/core/i18n/store';
+import { Trans } from "react-i18next";
 
 export default function ConnectivityLayer() {
+  const { t } = useTranslation();
+  const lng = useStore($lng);
   const { icon, global_benchmark } = useStore($selectedLayerData) ?? {};
   const connectivityStats = useStore($connectivityStats);
   const isLoading = useStore($isLoadingCountryAdminView);
@@ -26,12 +31,15 @@ export default function ConnectivityLayer() {
 
   return (
     <div>
-      <CurrentLayerNameIcon isLiveLayer={true} label="Real-time Connectivity" />
+      <CurrentLayerNameIcon isLiveLayer={true} label={t("real-time-connectivity")} />
       <Div $margin='1rem 1rem 0rem 1rem'>
         {isLoading ? <LoadingText width="80%" $marginEnd='2' /> : <Text $color={theme.titleDesc}>
-          {`${formatNumber(noOfSchoolsMeasure)} schools with real-time connectivity data across ${formatNumber(globalStats.schools_connected)} schools mapped`}
+          <Trans i18nKey="schools-with-real-time-mapped"
+            count={noOfSchoolsMeasure}
+            values={{ schoolCount: formatNumber(noOfSchoolsMeasure, lng), globalCount: formatNumber(globalStats.schools_connected, lng), schoolCountExact: t('int', { val: noOfSchoolsMeasure }), globalCountExact: t('int', { val: globalStats.schools_connected }) }}
+            components={[<span />]}
+          />
         </Text>}
-
         <DateWeekWrapper>
           <LiveAverage isLoading={isLoading} color={color} icon={icon ?? ""} unit={global_benchmark?.convert_unit ?? ""} value={connectivityStats?.live_avg ?? 0} />
           <WeekSlider />

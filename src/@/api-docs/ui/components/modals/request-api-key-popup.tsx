@@ -1,4 +1,7 @@
-import { Button, Form, TextArea } from '@carbon/react';
+import { Button, Form, Link, TextArea } from '@carbon/react';
+import { Information } from '@carbon/icons-react';
+
+import { Div, Text } from '~/@/common/style/styled-component-style';
 import { useStore } from 'effector-react';
 import { FormEvent, useEffect } from 'react';
 
@@ -8,9 +11,16 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '~/@/common/modal';
 
 import { $dowloadApiModalContainerStyle, $modalBodyStyle, $modalFooterStyle, $modalHeadingStyle, ModalDescription, TextInputWrapper } from './modals.style';
 import CountryMultiDropdown from './download-data-modal/country-multi-select';
-import { requestForApiKeyFx } from '~/@/api-docs/effects/api-keys-fx';
+import { getGigaMeterCountriesFx, requestForApiKeyFx } from '~/@/api-docs/effects/api-keys-fx';
 import useForm from '~/lib/hooks/useForm';
+import { ModalFooterButtons } from './common/ModalFooterButtons.view';
+import { createStore } from 'effector';
 
+
+const $gigaMeterCountries = createStore<string[]>([]);
+
+$gigaMeterCountries.on(getGigaMeterCountriesFx.doneData, (_, result) => result?.data?.map((country) => country.code_iso3));
+$gigaMeterCountries.reset($requestAPIPopup)
 
 interface FormValues {
   [key: string]: string; // Generic type for form field values
@@ -35,7 +45,9 @@ const validationRules = {
 }
 
 const ReuestApiKeyPopup = () => {
+  const gigaMeterCountries = useStore($gigaMeterCountries);
   const { values, errors, isError, touched, reset, handleChange, handleSubmit, handleBlur } = useForm(defaultFields, validationRules);
+  const isLoading = useStore(requestForApiKeyFx.pending);
   const requestApiPopup = useStore($requestAPIPopup);
   const exploreApiData = useStore($currentSelectedApiData);
   useEffect(reset, [requestApiPopup]);
@@ -56,6 +68,12 @@ const ReuestApiKeyPopup = () => {
     handleSubmit(onSubmit)(event)
   }
 
+  useEffect(() => {
+    if (requestApiPopup && exploreApiData?.code === "DAILY_CHECK_APP") {
+      getGigaMeterCountriesFx();
+    }
+  }, [exploreApiData, requestApiPopup])
+
   return (
     <Modal
       open={requestApiPopup}
@@ -67,6 +85,19 @@ const ReuestApiKeyPopup = () => {
           onRequestAPIPopup(false);
         }} $headingStyle={$modalHeadingStyle} title="Request API Key" />
         <ModalBody $style={$modalBodyStyle}>
+
+          {exploreApiData?.code === "DAILY_CHECK_APP" && <>
+            <Text style={{ fontSize: '0.8rem' }}><b> License:</b> The dataset accessed through this API is made available under the <Link rel="noreferrer" style={{ fontSize: '0.7rem', display: 'inline' }} target="_blank" href="https://opendatacommons.org/licenses/odbl/1-0/">Open Data Commons Open Database License (ODbL)</Link>. You are free to copy, distribute, transmit and adapt our data, as long as you credit Giga and its contributors. If you alter or build upon our data, you may distribute the result only under the same licence. The full legal code explains your rights and responsibilities.
+            </Text>
+            <br />
+            <Div $style={`display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem;`}>
+              <Information />
+              <Text style={{ fontSize: '0.8rem', margin: 0 }}><b>Countries with immediate access</b>: Malawi<br />
+                For rest of other countries, access will be granted based on the request.
+              </Text>
+            </Div>
+          </>
+          }
           <ModalDescription> Please select the countries for which you need data access. Please explain how you plan to utilise the data for each country.  </ModalDescription>
           {requestApiPopup && <CountryMultiDropdown
             onMenuChange={(open: boolean) => {
@@ -76,6 +107,7 @@ const ReuestApiKeyPopup = () => {
             }}
             invalid={!!errors['countries'] && touched['countries']}
             invalidText={errors['countries']}
+            filterCountries={gigaMeterCountries}
             onSelectCountry={(countries) => {
               const ids = countries.map(country => country.id);
               handleChange({
@@ -101,23 +133,9 @@ const ReuestApiKeyPopup = () => {
               placeholder="Please provide a brief description of how you plan to utilize the data." />
           </TextInputWrapper>
         </ModalBody>
-        <ModalFooter $style={$modalFooterStyle}>
-          <Button
-            kind="secondary"
-            onClick={() => {
-              onRequestAPIPopup(false);
-            }}>
-            Cancel
-          </Button>
-          <Button
-            kind="primary"
-            disabled={isError}
-            type="submit">
-            Submit
-          </Button>
-        </ModalFooter>
+        <ModalFooterButtons onCancel={() => onRequestAPIPopup(false)} isError={isError} isLoading={isLoading} loadingText="Requesting API Key..." />
       </Form>
-    </Modal>
+    </Modal >
   )
 }
 

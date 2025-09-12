@@ -8,12 +8,12 @@ import LayerSelectionFilterModal from './layer-selection-filter-modal';
 
 
 const LayerSelectionFilter = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  // const { isLive, isStatic } = useStore($currentLayerTypeUtils);
 
   return (
     <>
-      {isLive && <LayerSelectionFilterModal open={open} setOpen={setOpen} />}
-      {isStatic && <CoverageLayerSelectionFilterModal open={open} setOpen={setOpen} />}
+      <LayerSelectionFilterModal open={open} setOpen={setOpen} />
+      {/* {isStatic && <CoverageLayerSelectionFilterModal open={open} setOpen={setOpen} />} */}
     </>
   )
 }

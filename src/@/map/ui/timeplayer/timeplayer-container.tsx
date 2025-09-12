@@ -6,6 +6,7 @@ import { ShowCurrentYear } from "./timeplayer-button.style"
 import { useStore } from "effector-react"
 import { $country } from "~/@/country/country.model"
 import { $isMobile } from "~/core/media-query"
+import { useTranslation } from "react-i18next"
 const Container = styled.div`
     position: fixed;
     left: 0;
@@ -21,6 +22,7 @@ const CloseButtonWrapper = styled.div<{ $isMobile: boolean }>`
   z-index: 6000;
 `
 export const TimeplayerContainer = () => {
+  const { t } = useTranslation();
   const timePlayerCurrentYear = useStore($timePlayerCurrentYear);
   const isPauseTimeplayer = useStore($isPauseTimeplayer);
   const isLoading = useStore($isLoadingTimeplayer);
@@ -30,7 +32,7 @@ export const TimeplayerContainer = () => {
     {isLoading && <Loading withOverlay active />}
     {!!timePlayerCurrentYear && <ShowCurrentYear $isMobile={isMobile}>
       <div>
-        <p>Real-time connectivity time player:</p>
+        <p>{t('real-time-connectivity-time-player')}</p>
         <p>{country?.name}</p>
         <p>{timePlayerCurrentYear}</p>
       </div>

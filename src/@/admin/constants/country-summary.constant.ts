@@ -40,10 +40,12 @@ export const defaultCountryForm = {
   "last_weekly_status": null,
   "date_of_join": null,
   'iso3_format': '',
+  "country_disclaimer": "",
   benchmark_metadata: {
     live_layer: {},
     layer_descriptions: {},
     default_national_benchmark: {},
+    benchmark_name: {},
   },
   active_layers_list: [],
   active_filters_list: []

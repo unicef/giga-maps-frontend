@@ -1,4 +1,4 @@
-import { Layers } from '@carbon/icons-react'
+import { Settings } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react'
 import { useStore } from 'effector-react';
 import { useTheme } from 'styled-components';
@@ -8,11 +8,13 @@ import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
 
 import { ActiveButtonWrapper } from '../legend-info/legend-button.style';
 import { ThemeWrapper } from './theme-button.style'
-import { themeLayerBg } from './theme-layer-bg';
 import ThemePopup from './theme-popup';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
 
 const ThemeButtons = () => {
+  const { t } = useTranslation();
   const isProductTour = useStore($isProductTour);
   const theme = useTheme();
   const isOpen = useStore($showThemeLayer)
@@ -30,13 +32,13 @@ const ThemeButtons = () => {
     <>
       <ThemeWrapper className="theme-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
         <ThemePopup open={isOpen} setOpen={onShowThemeLayer}>
-          <ActiveButtonWrapper $backgroundImage={themeLayerBg} $iconColor={theme.white}>
+          <ActiveButtonWrapper >
             <IconButton
               align="left"
               size="sm"
-              label="Theme & Layers"
+              label={t("theme-layers")}
               onClick={openLayerTheme}>
-              <Layers fill={theme.white} />
+              <Settings />
             </IconButton>
           </ActiveButtonWrapper>
         </ThemePopup>

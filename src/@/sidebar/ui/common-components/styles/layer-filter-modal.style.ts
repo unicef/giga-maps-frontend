@@ -205,6 +205,9 @@ margin-top:1.5rem;
     line-height: 1rem;
   }
 }
+.cds--radio-button:disabled + .cds--radio-button__label {
+  opacity: 0.25;
+}
 
 `
 

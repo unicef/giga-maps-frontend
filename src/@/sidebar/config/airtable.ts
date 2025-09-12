@@ -1,12 +1,13 @@
 import Airtable from 'airtable';
 import { SchoolStatsType } from '~/api/types';
-import { AIRTABLE_API_KEY } from '~/env';
+import { AIRTABLE_API_KEY, isProduction, isDevelopment } from '~/env';
 
 let base: Airtable.Base | null = null;
 
 try {
+  const baseId = isProduction ? 'apppNMLhNC48aqZBt' : 'appU5WGL7iucR55vv';
   if (AIRTABLE_API_KEY) {
-    base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base('appU5WGL7iucR55vv');
+    base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
   } else {
     console.warn('Airtable API key not provided. Some features may be unavailable.');
   }

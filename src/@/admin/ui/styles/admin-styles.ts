@@ -149,11 +149,17 @@ export const PageTitleWrapper = styled.div<{ isSticky?: boolean }>`
         top: 0;
         z-index: 1;
     `}
-    padding: 3.75rem 2rem 1rem 1rem;
+    padding: 3.75rem 2rem 1rem 0rem;
     background: #222;
     display:flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    button {
+        margin-right: 1rem;
+        path:not([data-icon-path]):not([fill=none]), .cds--btn__icon {
+            fill: #fff !important;
+        }       
+    }
 `
 
 export const SearchContainer = styled.div`
@@ -292,6 +298,7 @@ export const RenewIcon = styled(Renew)`
 
 export const InputContainer = styled.div`
     width: 48%;
+    position: relative;
     margin-top:1rem;
     select{
         background:#ffffff;
@@ -357,7 +364,8 @@ export const InputBoxWrapper = styled.div`
 `
 export const BackgroundTaskInputBoxWrapper = styled.div`
     margin-top : 0.5rem;
-     width:100% !important;
+    width:100% !important;
+    word-wrap: break-word;
     p {
         font-size: 14px;
         font-weight: 400;
@@ -434,7 +442,7 @@ margin-top: 1.5rem;
 }
 
 `
-export const MultiSelectLayerConfig = styled(MultiSelect)`
+export const MultiSelectLayerConfig = styled(MultiSelect) <{ $isDark?: boolean }>`
 /* margin-top: 1.5rem; */
 #aggregate-on-select,#apiSource-select,#parameter-select,#country-select{
     background-color: #FAFAFA;
@@ -442,6 +450,25 @@ export const MultiSelectLayerConfig = styled(MultiSelect)`
     button{
     border-bottom: 1px solid var(--cds-border-strong);
 }
+    .cds--multi-select {
+    ${({ $isDark }) => $isDark && css`
+    background-color: #333333;
+    `}
+    .cds--list-box__label {
+        ${({ $isDark }) => $isDark && css`
+        color: #FAFAFA;
+        `}
+    }
+        .cds--list-box__menu-icon svg {
+        ${({ $isDark }) => $isDark && css`
+        fill: #FAFAFA;
+        `}
+        }
+        .cds--tag {
+            ${({ $isDark }) => $isDark && css`
+            background-color: #000;
+            `}
+    } 
 
 `
 
@@ -475,6 +502,8 @@ background: transparent;
 outline: none;
 width: 2rem;
 height: 2rem;
+min-width: 2rem;
+min-height: 2rem;
 margin: 0;
 `
 
@@ -482,7 +511,6 @@ export const ColorPickerWrapper = styled.div`
 margin-top: 0.5rem;
 display: flex;
 align-items: center;
-justify-items: spread;
     > p{
     color: var(--primary - black - 100 - giga - black, #222);
     font-family: Open Sans;
@@ -493,12 +521,11 @@ justify-items: spread;
 }
     > div{
     /* margin-top: 0.5rem; */
-    display: flex;
-    width: 100%;
-    align-items: center;
+    /* display: flex; */
+    /* width: 100%; */
+    /* align-items: center; */
 
-        > span{
-
+        > p{
         margin-left: 0.65rem;
         color: #6F6F6F;
         font-family: Open Sans;
@@ -526,6 +553,17 @@ line-height: 1rem;
 `
 export const LegendCategotyContainer = styled.div`
 margin-top:1rem;
+input[type="color"]{
+    width: 2rem;
+    height: 2rem;
+}
+
+.cds--accordion__content {
+    padding-inline-end: 0;
+}
+.cds--text-input__label-wrapper {
+    margin-top: 1rem;
+}
 `
 
 export const PublishedLayerWrapper = styled.div`

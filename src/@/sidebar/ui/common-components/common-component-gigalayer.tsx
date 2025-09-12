@@ -11,19 +11,22 @@ import { SidebarFooterGigalayerContainer } from '../global-and-country-view-comp
 import GigaLayerButtonIcons from './giga-layer-button-icons';
 import { GigaPopUpScroll } from './styles/giga-layer.style';
 import { MoreLayerPopOver } from './styles/layer-filter-modal.style';
+import { useTranslation } from 'react-i18next';
+import { $sidebarHeight } from '../../sidebar.model';
 
 
 const CommonComponentGigaLayer = () => {
   const [modalOpen, setModalOpen] = useState(false);
-
+  const sidebarHeight = useStore($sidebarHeight)
+  const isMobile = useStore($isMobile)
+  const { t } = useTranslation();
   const moreLayerHandler = () => {
     setModalOpen(!modalOpen);
   };
 
-  const isMobile = useStore($isMobile)
 
   return (
-    <SidebarFooterGigalayerContainer className="sidebar-footer-gigalayer-container">
+    <SidebarFooterGigalayerContainer $hide={isMobile && !sidebarHeight} className="sidebar-footer-gigalayer-container">
       <div className="sidebar-footer-gigalayer-icons-container">
         <GigaLayerButtonIcons />
         <Popover open={modalOpen}
@@ -37,7 +40,7 @@ const CommonComponentGigaLayer = () => {
           className='sidebar-footer-gigalayer-icons-popover' >
           <div>
             <div className="popover-trigger">
-              <Tooltip label="Show more" leaveDelayMs={0} align='top-right'>
+              <Tooltip label={t("show-more")} leaveDelayMs={0} align='top-right'>
                 <Button
                   renderIcon={Grid}
                   iconDescription='More layers'

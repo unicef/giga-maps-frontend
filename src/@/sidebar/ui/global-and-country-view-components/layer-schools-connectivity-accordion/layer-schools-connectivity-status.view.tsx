@@ -16,6 +16,8 @@ import ProgressBar from '../../common-components/progress-bar/progress-bar.view'
 import { AccordionDistribution, HashtagIcon } from '../../sidebar.style';
 import { AccordionItemTitle } from '../common/accordion-item-title.view';
 import { ConnectivityStatusNames } from '../container/layer-view.constant';
+import { $lng } from '~/core/i18n/store';
+import { useTranslation } from 'react-i18next';
 
 const SchoolConntectivtyWrapper = styled.div`
   margin-top: 1rem;
@@ -66,6 +68,8 @@ const AccordionTitleWrapper = () => (
 
 const LayerSchoolsConnectivityStatus = () => {
   const isMobile = useStore($isMobile)
+  const lng = useStore($lng)
+  const { t } = useTranslation();
   const globalstats = useStore($globalStats);
   const { stats, country } = useStore($allLoadings);
   const isLoading = stats || country;
@@ -106,7 +110,7 @@ const LayerSchoolsConnectivityStatus = () => {
           <>
             <Div $margin={"0 0 0.75rem 0"}>
               {isLoading ? <LoadingText width="80%" /> :
-                <Text $size={0.75} $color="#9E9E9E"><HashtagIcon size={12} />{`${formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0)} schools mapped`}</Text>
+                <Text $size={0.75} $color="#9E9E9E"><HashtagIcon size={12} /><span title={t('int', { val: globalstats?.schools_connected ? globalstats?.schools_connected : 0 })}>{formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0, lng)}</span> schools mapped}</Text>
               }
             </Div>
             <ProgressBar

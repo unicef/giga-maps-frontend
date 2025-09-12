@@ -12,7 +12,7 @@ export interface DataLayer {
   is_reverse: boolean;
   category: string
   applicable_countries: number[]
-  legend_configs: LegendConfigsType
+  legend_configs: LegendConfigType
   global_benchmark: GlobalBenchmark
   status: LayerStatusType
   published_by: null | CreatedBy
@@ -36,6 +36,7 @@ export interface GlobalBenchmark {
   value: string
   unit: string
   convert_unit: string;
+  benchmark_name?: string;
 }
 
 export interface DataSource {
@@ -176,9 +177,9 @@ export interface MessageModeChoices {
 }
 
 type ValuesType<T> = T[keyof T];
-type LegendConfigsType = Record<'good' | 'moderate' | 'bad' | 'unknown', { values: number[], labels: string }>;
+export type LegendConfigType = Record<string, { values: string[], labels: string, tooltip?: string }>;
 export type GigaLayerFormType = {
-  legendConfigs: LegendConfigsType;
+  legendConfigs: LegendConfigType;
   isReverse: boolean;
   sourceType: DataSourceTypeChoices[];
   code: DataLayer['code'],

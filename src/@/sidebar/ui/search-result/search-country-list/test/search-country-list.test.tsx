@@ -13,12 +13,12 @@ import { $searchCountryList, $searchHistoryData, $searchSchoolIds, $searchSchool
 import { CountryWithDistrictCount, SearchResultApi } from '../../container/search-result.type';
 import { SearchCountryList } from "..";
 import { SearchButtonGroup } from '../search-button-group';
-import { SearchCountry } from '../search-country-view';
-import { expandDistrict, expandDistrict2, SearchDistrict } from '../search-district-view';
+import { expandDistrict2, SearchDistrict } from '../search-district-view';
 import SearchHistory from '../search-history.view';
 import { SearchSchool, setShowMessage } from '../search-school-item-view';
 import SearchSchoolListPanel from '../search-school-list-view';
 import SearchSchoolPanel from '../search-school-panel-view';
+import "~/core/i18n/instance"
 
 const updateContryList = createEvent<CountryWithDistrictCount[]>();
 $isSearchFocused.on(changeIsSearchFocused, setPayload);
@@ -84,7 +84,7 @@ describe('SearchCountryList', () => {
     void waitFor(() => {
       render(<SearchSchoolListPanel />);
     });
-    expect(screen.getByText('Not found found')).toBeInTheDocument();
+    expect(screen.getByText('Not found')).toBeInTheDocument();
   });
 
   test('render SearchSchoolListPanel and close using close button', async () => {

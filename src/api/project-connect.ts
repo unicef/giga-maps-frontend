@@ -102,15 +102,6 @@ export const fetchCountryStaticLayerInfo = createEffect(
     fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`)
 );
 
-export const fetchCoverageLayerFx = createRequestFx(
-  async ({ query }: { query: string },
-  ): Promise<CoverageStat> => {
-    return fetchLayerInfoFx(
-      `api/statistics/coverage/${query}`,
-    )
-  }
-);
-
 export const fetchTimePlayerDataFx = createRequestFx(
   async (query: string, controller?: Controller): Promise<any[]> => {
     return request({

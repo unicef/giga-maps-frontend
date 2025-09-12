@@ -6,10 +6,14 @@ import { $globalStats, $schoolConnectedOpenStatus, changeSchoolConnectedOpenStat
 import { formatNumber } from '~/lib/utils';
 
 import ProgressBar from '../common-components/progress-bar';
+import { $lng } from '~/core/i18n/store';
+import { useTranslation } from 'react-i18next';
 
 const LayerSchoolsConnectivityStatus = () => {
+  const lng = useStore($lng);
   const globalstats = useStore($globalStats);
   const schoolConnectedOpenStatus = useStore($schoolConnectedOpenStatus);
+  const { t } = useTranslation();
   const handleAccordionChange = useCallback(() => {
     changeSchoolConnectedOpenStatus(!schoolConnectedOpenStatus)
   }, [schoolConnectedOpenStatus]);
@@ -19,7 +23,7 @@ const LayerSchoolsConnectivityStatus = () => {
       open={schoolConnectedOpenStatus}
       onHeadingClick={handleAccordionChange} >
       <>
-        <p>{`For ${formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0)} schools mapped`}</p>
+        <p title={t("int", { val: globalstats?.schools_connected })}>{`For ${formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0, lng)} schools mapped`}</p>
         <ProgressBar
           value={globalstats?.connected_schools?.connected}
           maxValue={globalstats?.schools_connected}

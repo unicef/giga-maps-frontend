@@ -6,11 +6,13 @@ import { router } from "~/core/routes";
 import { $schoolPopupData } from "../map.init";
 import { UNKNOWN } from '../map.types';
 import { PointCoordinates } from "~/core/global-types";
+import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
+import { t } from "~/core/i18n/store";
 
 type SchoolPopupDataType = ReturnType<typeof $schoolPopupData.getState>
 
 export const createPopup = (options?: PopupOptions) => {
-  return new Popup({ offset: 25, anchor: 'left', closeButton: false, focusAfterOpen: true, closeOnMove: true, ...options })
+  return new Popup({ offset: 8, anchor: 'top', closeButton: false, focusAfterOpen: true, closeOnMove: true, ...options, maxWidth: '317px' })
 }
 
 export const getPopupElement = () => {
@@ -41,7 +43,8 @@ const setContentHTML = (el: HTMLElement, className = '', content = '') => {
 }
 
 export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintData, layerUtils, isGotoSchool, countryCode }: { popupElement: HTMLElement, isGotoSchool?: boolean; countryCode?: string; unit?: string; } & SchoolPopupDataType) => {
-  const { selectedLayerData, currentLayerTypeUtils } = layerUtils;
+  const { selectedLayerData, currentLayerTypeUtils, isSchoolBenchmark, benchmarkNamesAllLayers, countryConnectivityNames: countryConnectivityNames,
+    connectivityBenchMarks } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit;
@@ -61,7 +64,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
 
   const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
   const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
-  const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : UNKNOWN;
+  const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : t.getState()('unknown');
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
@@ -75,9 +78,20 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
     if (outerCircle && feature?.isRealTime) {
       outerCircle.style.backgroundColor = stylePaintData[feature?.connectivityType ?? UNKNOWN];
     }
+    if (isSchoolBenchmark) {
+      const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
+      setContentHTML(popupTemplate, '.benchmark-value-label', `${benchmarkTitle} - ${feature?.schoolBenchmark}`);
+      showElement(popupTemplate, '.benchmark-value-label')
+    }
   } else if (isStatic) {
     showElement(popupTemplate, '.static-container');
-    const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', `${feature?.staticValue ?? UNKNOWN}`);
+
+    const staticValue = feature?.staticValue as boolean | undefined;
+    let displayValue = staticValue === true ? 'yes' : staticValue === false ? 'no' : staticValue
+    if (!displayValue || displayValue?.toLocaleLowerCase?.() === 'unknown') {
+      displayValue = t.getState()('unknown')
+    }
+    const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', displayValue);
 
     staticElm.style.color = stylePaintData[feature?.staticType ?? UNKNOWN];
     outerCircle.style.display = 'none';

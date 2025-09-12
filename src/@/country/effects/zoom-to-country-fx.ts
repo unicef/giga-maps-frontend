@@ -24,6 +24,7 @@ export const zoomToCountryFx = createEffect(
       map.flyTo({
         center: schoolFocusLatLng as LngLatLike,
         zoom: 10,
+        offset: [0, -180]
       });
       return schoolFocusLatLng.toString();
     }
@@ -38,7 +39,7 @@ export const zoomToCountryFx = createEffect(
         return zoomedCountryCode;
       }
       if (admin1Code) {
-        bounds = country.admin1_metadata?.find(data => data.giga_id_admin === admin1Code)?.bbox;
+        bounds = country.admin1_metadata?.find(data => (data.giga_id_admin === admin1Code || String(data.id) === String(admin1Code)))?.bbox;
       } else if (countryCode) {
         bounds = country.admin_metadata.bbox;
       }

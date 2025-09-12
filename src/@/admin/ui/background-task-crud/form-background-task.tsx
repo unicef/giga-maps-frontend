@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, Form } from '@carbon/react'
 import { useStore } from 'effector-react';
 
@@ -9,6 +10,16 @@ import { BackgroundTaskInputBoxWrapper, BackgroundTasktTextAreaContainer, Bottom
 const BackgroundTaskForm = () => {
 
   const formBackgroundTask = useStore($formBackgroundTask);
+
+  const formatLog = (log: string | undefined) => {
+    if (!log) return null
+    return log.split('\n').map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+  };
 
   return (
     <Form>
@@ -83,8 +94,8 @@ const BackgroundTaskForm = () => {
           <InputLabel>
             Log
           </InputLabel>
-          <p>
-            {formBackgroundTask?.log}
+          <p style={{ wordWrap: 'break-word'}}>
+            {formatLog(formBackgroundTask?.log)}
           </p>
         </BackgroundTasktTextAreaContainer>
       </RowContainer>

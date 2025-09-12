@@ -1,6 +1,7 @@
 import { Information } from '@carbon/icons-react';
 import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
+import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
@@ -82,40 +83,41 @@ export default function LiveAverage({
   color,
   isLoading
 }: { readonly value: number, readonly color: string, readonly isLoading: boolean }) {
+  const { t } = useTranslation();
   const currentLayer = useStore($selectedLayerData);
   const heading = currentLayer?.name;
   const theme = useTheme();
   const dataSourceId = currentLayer?.data_sources_list?.length ? currentLayer.data_sources_list[0].id : undefined;
-  const unitLabel = currentLayer?.data_source_column[dataSourceId].display_unit;
+  const unitLabel = currentLayer?.data_source_column[dataSourceId ?? ""]?.display_unit;
   return (<>
     {isLoading ? <>
       <LoadingText $blockSize="0.9" width="10rem" $marginEnd='1.2' $marginStart="0.6" />
       <LoadingText $blockSize='2.5' width="11rem" $marginEnd='0.5' />
     </> :
-        <LiverAverageWrapper>
-          {value ? <div className="layer-speed">
-            <div>
-              <LayerNameWrapper>
-                <div className='download-wrapper'>
-                  <Text className="layer-text" $color="#9E9E9E">{heading}</Text>
-                </div>
-                <Tooltip align="left" autoAlign={true} label={`${currentLayer?.description} `}>
-                  <button className="sb-tooltip-trigger">
-                    <Information className='tooltip-icon' />
-                  </button>
-                </Tooltip>
-              </LayerNameWrapper>
-              <div className='speed-text-container'>
-                <Text style={{ margin: 0 }} $size={2} $color={color}>
-                  {value}
-                </Text>
-                <Text style={{ margin: 0 }} $size={1} $color={'#9E9E9E'}>&nbsp;<span>{unitLabel}</span></Text>
+      <LiverAverageWrapper>
+        {value ? <div className="layer-speed">
+          <div>
+            <LayerNameWrapper>
+              <div className='download-wrapper'>
+                <Text className="layer-text" $color="#9E9E9E">{heading}</Text>
               </div>
+              <Tooltip align="left" autoAlign={true} label={`${currentLayer?.description} `}>
+                <button className="sb-tooltip-trigger">
+                  <Information className='tooltip-icon' />
+                </button>
+              </Tooltip>
+            </LayerNameWrapper>
+            <div className='speed-text-container'>
+              <Text style={{ margin: 0 }} $size={2} $color={color}>
+                {value}
+              </Text>
+              <Text style={{ margin: 0 }} $size={1} $color={'#9E9E9E'}>&nbsp;<span>{unitLabel}</span></Text>
             </div>
-          </div> : <Div $margin='1rem 0 2.6rem 0'><Text $size={0.75} $color={theme.text}>
-            No Data available.
-          </Text></Div>}
-        </LiverAverageWrapper>
-      }
+          </div>
+        </div> : <Div $margin='1rem 0 2.6rem 0'><Text $size={0.75} $color={theme.text}>
+          {t('no-data-available')}
+        </Text></Div>}
+      </LiverAverageWrapper>
+    }
   </>)
 }

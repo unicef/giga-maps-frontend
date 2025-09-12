@@ -4,13 +4,14 @@ import { $countryList, getCountryList } from "~/@/api-docs/models/explore-api.mo
 import { CountryListType } from "~/@/api-docs/types/country-list.type";
 
 import { CountryMultiSelect } from "../modals.style";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@carbon/react";
 
-export default function CountryMultiDropdown({ countryHasSchool, onSelectCountry, ...others }: { readonly countryHasSchool?: boolean, readonly onSelectCountry: (country: CountryListType[] & Record<string, any>) => void }) {
+export default function CountryMultiDropdown({ countryHasSchool, onSelectCountry, filterCountries = [], ...others }: { readonly countryHasSchool?: boolean, readonly filterCountries?: string[], readonly onSelectCountry: (country: CountryListType[] & Record<string, any>) => void }) {
   const countryList = useStore($countryList)
   const [selectedItems, setSelectedItems] = useState<CountryListType[]>([]);
-  const isSelectedAll = selectedItems.length === countryList.length;
+  const filteredCountryList = useMemo(() => filterCountries.length ? countryList.filter(country => filterCountries?.includes(country.iso3_format)) : countryList, [countryList, filterCountries]);
+  const isSelectedAll = selectedItems.length === filteredCountryList.length;
   useEffect(() => {
     onSelectCountry(selectedItems ?? []);
   }, [selectedItems])
@@ -27,7 +28,7 @@ export default function CountryMultiDropdown({ countryHasSchool, onSelectCountry
       name="countryId"
       titleText="Select Country"
       placeholder={"Select Country"}
-      items={countryList}
+      items={filteredCountryList}
       itemToString={(item: any) => item?.name}
       initialSelectedItems={selectedItems}
       itemToElement={(item: CountryListType) => (
@@ -49,7 +50,7 @@ export default function CountryMultiDropdown({ countryHasSchool, onSelectCountry
         if (isSelectedAll) {
           setSelectedItems([]);
         } else {
-          setSelectedItems(countryList);
+          setSelectedItems(filteredCountryList);
         }
       }}
     >
