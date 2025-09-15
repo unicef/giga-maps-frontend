@@ -341,3 +341,5 @@ export const CountryPaintData = {
     }
   }
 } as const;
+
+export const MaxAllowedDublicateSchoolIds = '500'

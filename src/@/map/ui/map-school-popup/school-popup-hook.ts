@@ -1,17 +1,16 @@
 import { useStore } from "effector-react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { $countryCode } from "~/@/country/country.model";
+import { $historyInterval, $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
+import { $schoolStatsMap } from "~/@/sidebar/sidebar.model";
 import { fetchSchoolPopupDataFx } from "~/api/project-connect";
+import { $mapRoutes } from "~/core/routes";
+import { formatDateInterval } from "~/lib/date-fns-kit/format-date-interval";
 import { $schoolPopupData } from "../../map.init";
 import { $multipleSchoolPopup, $schoolClickedPopupDiv } from "../../map.model";
 import { UNKNOWN } from "../../map.types";
-import { $mapRoutes } from "~/core/routes";
-import { useMemo } from "react";
-import { $schoolStatsMap } from "~/@/sidebar/sidebar.model";
-import { $historyInterval, $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
-import { IntervalUnit } from "~/lib/date-fns-kit/types";
-import { formatDateInterval } from "~/lib/date-fns-kit/format-date-interval";
 
 const useSchoolPopupData = () => {
   const { t } = useTranslation();
@@ -44,6 +43,7 @@ const useSchoolPopupData = () => {
     const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
     let staticValue = feature?.staticValue as boolean | undefined | string;
     const staticColor = stylePaintData[feature?.staticType ?? UNKNOWN]
+    const schoolAtSameLocation = feature?.schoolAtSameLocation;
     if (typeof staticValue === 'boolean') {
       staticValue = staticValue === true ? 'yes' : 'no';
     } else if (staticValue === 'unknown' || !staticValue) {
@@ -62,7 +62,8 @@ const useSchoolPopupData = () => {
       benchmarkTitle,
       staticValue,
       staticColor,
-      connectivityStatusValue
+      connectivityStatusValue,
+      schoolAtSameLocation
     }
   }
 

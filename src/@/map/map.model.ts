@@ -1,22 +1,22 @@
 import { createEvent, createStore, restore, sample } from 'effector';
 
-import { fetchAdvanceFilterFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
+import { getLocalStorage, setLocalStorage } from '~/lib/utils';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import {
   defaultGigaLayers,
   defaultGlobalStats,
   defaultStyle,
   filterListMapping,
-  stylePaintData,
+  stylePaintData
 } from './map.constant';
 import { Center, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
-import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
-import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
-import { getLocalStorage, setLocalStorage } from '~/lib/utils';
 
 export const $reloadStyle = createStore<boolean>(false);
 export const onReloadedMap = createEvent();
@@ -97,8 +97,28 @@ $realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, s
 export const changeGigaSelection = createEvent<{ layerId: number | null }>();
 export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
 
-export const setPopupOnClickDot = createEvent<{ id: number; geopoint: GeoJSONPoint } | null>();
+export const setPopupOnClickDot = createEvent<{ id: number; geopoint?: GeoJSONPoint | null; limitDublicateSchoolsIds?: string | null; allowDublicateSchoolIds?: boolean; } | null>();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
+
+export type DuplicateRequestPayload = {
+  ids: number[];
+  offset?: string;
+  limitDublicateSchoolsIds?: string | null;
+  allowDublicateSchoolIds?: boolean;
+  requestId?: string;
+};
+
+export const setSchoolIdsOnPopupClickDot = createEvent<DuplicateRequestPayload | null>();
+export const $activeDublicateSchoolsPopup = createStore<DuplicateRequestPayload | null>(null)
+  .on(setSchoolIdsOnPopupClickDot, (prev, next) => {
+    return prev && next && prev.requestId === next.requestId ? prev : next;
+  });
+
+export const setLimitDublicateSchoolsIds = createEvent<string | null>(); // use null to mean "no limitDublicateSchoolsIds"
+export const setAllowedDublicateSchoolIds = createEvent<boolean>();
+
+export const $limitDublicateSchoolsIds = createStore<string | null>('0').on(setLimitDublicateSchoolsIds, (_, v) => v);
+export const $allowDublicateSchoolIds = createStore<boolean>(false).on(setAllowedDublicateSchoolIds, (_, v) => v);
 
 export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
 export const $popup = createStore<mapboxgl.Popup | null>(null);
@@ -110,7 +130,9 @@ type SchoolClickupPopupType = {
   isClicked?: boolean;
 }
 
-export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
+export const $schoolClickedId = $activeSchoolPopup.map((data) => data);
+export const $dublicateSchoolsClickedId = $activeDublicateSchoolsPopup.map((data) => data);
+
 export const setSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
 export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setSchoolCLickupPopupDiv, null);
 
@@ -118,6 +140,13 @@ export const setMultipleSchoolPopup = createEvent<SchoolClickupPopupType[] | nul
 export const $multipleSchoolPopup = restore(setMultipleSchoolPopup, null);
 export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
 $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
+
+export const resetDublicateSchoolClickData = createEvent();
+export const setDublicateSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
+export const $dublicateSchoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setDublicateSchoolCLickupPopupDiv, null);
+export const $dublicateSchoolClickData = createStore<SchoolStatsType[] | null>(null)
+$dublicateSchoolClickData.on(fetchDublicateSchoolPopupDataFx.doneData, setPayload);
+$dublicateSchoolClickData.reset(resetDublicateSchoolClickData);
 
 export const $advanceFilterList = createStore<AdvanceFilterType[]>([]);
 $advanceFilterList.on(fetchAdvanceFilterFx.doneData, setPayloadResults);
