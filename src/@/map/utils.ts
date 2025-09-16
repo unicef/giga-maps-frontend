@@ -7,7 +7,7 @@ import { GeoJSONFeatureCollection, GeoJSONPoint, PointCoordinates } from '~/core
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
 import { $countryCode, setSchoolFocusLatLng } from "../country/country.model";
 import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, MaxAllowedDublicateSchoolIds, SCHOOL_LAYER_ID } from "./map.constant";
+import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
 import { $schoolClickedId, resetDublicateSchoolClickData, setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 
@@ -66,7 +66,6 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
       setPopupOnClickDot({
         id: schoolId,
         geopoint: feature.geometry as GeoJSONPoint,
-        limitDublicateSchoolsIds: MaxAllowedDublicateSchoolIds,
         allowDublicateSchoolIds: true
       });
     }

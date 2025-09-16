@@ -1,24 +1,24 @@
-import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
+import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById, $admin1Id } from '~/@/country/country.model';
+import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
 import { mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
+import i18next from 'i18next';
+import { $lng } from '~/core/i18n/store';
+import { evaluateExpression } from '~/lib/utils';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import { UNKNOWN } from '../map/map.types';
+import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
-import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
-import { evaluateExpression } from '~/lib/utils';
-import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
-import { UNKNOWN } from '../map/map.types';
-import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
-import { publishLayersTranslationFx } from './effects/all-translation-fx';
-import { $lng } from '~/core/i18n/store';
-import i18next from 'i18next';
+import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -359,7 +359,11 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
   id: school?.id,
   externalId: school?.external_id,
-  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`
+  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
+  schoolAtSameLocation: {
+    count: school.schools_at_same_location?.count,
+    schoolIds: school.schools_at_same_location?.school_ids,
+  }
 })
 export const $schoolStatsMap = $schoolStats.map((schools) => {
   return schools?.map(schoolStatsMap) ?? null;

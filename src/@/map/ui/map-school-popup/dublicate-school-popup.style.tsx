@@ -4,7 +4,7 @@ import { Scroll } from "~/@/scroll";
 export const DublicateSchoolListWrapper = styled.div`
   font-family: Open Sans;
   width: 17.3125rem;
-  background: #383838;
+  background: ${props => props.theme.grayDark};
   border-radius: 0.125rem;
   box-shadow: 0 0.5rem 1.25rem 0 rgba(0, 0, 0, 0.55);
   overflow: hidden;
@@ -13,7 +13,7 @@ export const DublicateSchoolListWrapper = styled.div`
 `;
 
 export const TotalCountLabel = styled.header`
-  background: #383838;
+  background: ${props => props.theme.grayDark};
   padding: 1rem;
   font-size: 0.875rem;
   color: #d8d8d8;
@@ -22,18 +22,16 @@ export const TotalCountLabel = styled.header`
   line-height: 1rem;
   border-bottom: 0.0625rem solid #525252;
   .data-source-tooltip .cds--tooltip-content {
-    background-color: #383838 !important; /* your custom bg */
-    color: #fff !important;            /* optional, ensure contrast */
+    background-color: ${props => props.theme.grayDark} !important;
+    color: ${props => props.theme.white} !important;            
   }
-
-  /* Also style the caret (arrow) */
   .data-source-tooltip .cds--tooltip-caret {
-    background-color: #383838 !important;
+    background-color: ${props => props.theme.grayDark} !important;
   }
 `;
 
 export const DublicateSchoolList = styled(Scroll)`
-  max-height: 58vh;
+  max-height: 50vh;
   overflow-y: auto;
   padding: 0 1rem;
 `;
@@ -47,6 +45,7 @@ export const SchoolListItem = styled.div`
   border: none;
   border-bottom: 0.0625rem solid #525252;
   text-align: left;
+  overflow: hidden;
 `;
 
 export const ItemTopSection = styled.div`
@@ -62,6 +61,7 @@ export const ItemBottomSection = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-left: 0.375rem;
 `;
 
 export const SchoolInternetSpeed = styled.div`
@@ -74,7 +74,7 @@ export const SchoolInternetSpeed = styled.div`
 export const SchoolName = styled.div`
     font-size: 1.25rem;
     font-weight: 400;
-    color: #f5f5f5;
+    color: ${props => props.theme.filterText};
     line-height: 1.75rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -83,15 +83,8 @@ export const SchoolName = styled.div`
     text-overflow: ellipsis;
 `;
 
-export const ConnectivityLabel = styled.span`
-  color: #46c66d;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5rem;
-`;
-
 export const SchoolItemCount = styled.div`
-  color: #f5f5f5;
+  color: ${props => props.theme.filterText};
   font-family: 'Open Sans';
   font-size: 0.75rem;
   font-weight: 500;

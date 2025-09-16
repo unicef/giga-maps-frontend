@@ -1,5 +1,5 @@
 import { combine, createEffect, merge, sample } from 'effector';
-import { $allowDublicateSchoolIds, $limitDublicateSchoolsIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
+import { $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
 import { debounce, getInverted } from '~/lib/effector-kit';
 
 import {
@@ -51,7 +51,7 @@ import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { format } from 'date-fns';
 import { languageStore } from '~/core/i18n/store';
 import { $isMobile } from '~/core/media-query';
-import { SCHOOL_LAYER_ID } from '../map/map.constant';
+import { MaxAllowedDublicateSchoolIds, SCHOOL_LAYER_ID } from '../map/map.constant';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
@@ -162,11 +162,10 @@ const sourceForInfo = combine({
   isCheckedLastDate: $isCheckedLastDate,
   countrySearch: $countrySearchString,
   isMobile: $isMobile,
-  limitDublicateSchoolsIds: $limitDublicateSchoolsIds,
   allowDublicateSchoolIds: $allowDublicateSchoolIds,
 })
 
-export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked, limitDublicateSchoolsIds, allowDublicateSchoolIds }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
+export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked, allowDublicateSchoolIds }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
   const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
   const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
@@ -203,12 +202,11 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  if (limitDublicateSchoolsIds) {
-    params.set('limit_same_location_schools', String(limitDublicateSchoolsIds));
-  }
 
   if (typeof allowDublicateSchoolIds === 'boolean') {
     params.set('include_same_location_schools', String(allowDublicateSchoolIds));
+    if (allowDublicateSchoolIds)
+      params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
   }
 
   let query = `?${params.toString()}`;
@@ -253,7 +251,7 @@ const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSch
 sample({
   clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
   source: sourceForInfo,
-  fn: schoolInfoFn,
+  fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
   filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {
     return mapRoutes.schools && !!country && !!isCheckedLastDate;
   },
@@ -266,7 +264,7 @@ sample({
   clock: $schoolClickedId,
   source: sourceForInfo,
   filter: ({ isMobile }) => !isMobile,
-  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: [Number(schoolIds?.id)], country: null }, limitDublicateSchoolsIds: schoolIds?.limitDublicateSchoolsIds ?? null, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
+  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: [Number(schoolIds?.id)], country: null }, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
   target: fetchSchoolPopupDataFx
 })
 
@@ -276,7 +274,7 @@ sample({
   clock: setSchoolIdsOnPopupClickDot,
   source: sourceForInfo,
   filter: ({ isMobile }) => !isMobile,
-  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: schoolIds?.ids, country: null }, limitDublicateSchoolsIds: schoolIds?.limitDublicateSchoolsIds ?? null, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
+  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: schoolIds?.ids, country: null }, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
   target: fetchDublicateSchoolPopupDataFx
 })
 

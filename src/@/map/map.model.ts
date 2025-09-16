@@ -97,13 +97,11 @@ $realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, s
 export const changeGigaSelection = createEvent<{ layerId: number | null }>();
 export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
 
-export const setPopupOnClickDot = createEvent<{ id: number; geopoint?: GeoJSONPoint | null; limitDublicateSchoolsIds?: string | null; allowDublicateSchoolIds?: boolean; } | null>();
+export const setPopupOnClickDot = createEvent<{ id: number; geopoint?: GeoJSONPoint | null; allowDublicateSchoolIds?: boolean; } | null>();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
 export type DuplicateRequestPayload = {
   ids: number[];
-  offset?: string;
-  limitDublicateSchoolsIds?: string | null;
   allowDublicateSchoolIds?: boolean;
   requestId?: string;
 };
@@ -114,10 +112,7 @@ export const $activeDublicateSchoolsPopup = createStore<DuplicateRequestPayload 
     return prev && next && prev.requestId === next.requestId ? prev : next;
   });
 
-export const setLimitDublicateSchoolsIds = createEvent<string | null>(); // use null to mean "no limitDublicateSchoolsIds"
 export const setAllowedDublicateSchoolIds = createEvent<boolean>();
-
-export const $limitDublicateSchoolsIds = createStore<string | null>('0').on(setLimitDublicateSchoolsIds, (_, v) => v);
 export const $allowDublicateSchoolIds = createStore<boolean>(false).on(setAllowedDublicateSchoolIds, (_, v) => v);
 
 export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();

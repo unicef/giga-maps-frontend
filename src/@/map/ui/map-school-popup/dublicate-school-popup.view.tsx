@@ -1,17 +1,21 @@
 import { ArrowRight, Information } from '@carbon/icons-react';
 import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
+import { t } from 'i18next';
 import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
+import { $layerUtils, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
-import GreenDotIcon from '~/assets/images/green-dot.svg';
 import { PointCoordinates } from '~/core/global-types';
 import { router } from '~/core/routes';
-import { $dublicateSchoolClickData, setSchoolIdsOnPopupClickDot } from '../../map.model';
-import { ConnectivityLabel, DublicateSchoolList, DublicateSchoolListWrapper, GoToSchoolInfo, ItemBottomSection, ItemTopSection, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, TotalCountLabel } from './dublicate-school-popup.style';
-import { SchoolName } from './school-popup.style';
+import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '../../map.model';
+import { UNKNOWN } from '../../map.types';
+import { InnerCircle, InnerCircleConnectivity } from '../legend-info/legend-button.style';
+import { DublicateSchoolList, DublicateSchoolListWrapper, GoToSchoolInfo, ItemBottomSection, ItemTopSection, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, TotalCountLabel } from './dublicate-school-popup.style';
+import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow, SchoolName } from './school-popup.style';
 
 type Props = {
   schoolIds: number[];
@@ -23,7 +27,7 @@ export default function DublicateSchoolPopup({
   countryCode,
 }: Props) {
   const batchSize = 10;
-  const [visibleSchools, setVisibleSchools] = useState<SchoolStatsType[]>([]);
+  const [visibleSchools, setVisibleSchools] = useState<any[]>([]);
   const requestedCountRef = useRef<number>(0);
   const lastRequestedIdsRef = useRef<number[] | null>(null);
   const isLoadingRef = useRef<boolean>(false);
@@ -32,6 +36,13 @@ export default function DublicateSchoolPopup({
   const globalFetchStore = useStore($dublicateSchoolClickData) as SchoolStatsType[] | null;
   // pending flag from the fetch effect (effector effect)
   const isPending = useStore(fetchDublicateSchoolPopupDataFx.pending);
+  const stylePaintData = useStore($stylePaintData);
+  const layerUtils = useStore($layerUtils);
+
+  const { currentLayerTypeUtils, selectedLayerData } = layerUtils;
+  const { isLive, isStatic } = currentLayerTypeUtils
+  const { global_benchmark } = selectedLayerData ?? {};
+  const unit = global_benchmark?.convert_unit;
 
   // Helper: whether there are more ids left to request
   const total = schoolIds?.length ?? 0;
@@ -143,9 +154,17 @@ export default function DublicateSchoolPopup({
       setVisibleSchools((prev) => {
         // double-guard uniqueness
         const prevIds = new Set(prev.map((p) => Number((p as any).id)));
-        const toAdd = newItems.filter((n) => !prevIds.has(Number((n as any).id)));
+
+        // apply mapping BEFORE uniqueness filter
+        const mappedNewItems = newItems.map((item) => schoolStatsMap(item));
+
+        // only add items not already in state
+        const toAdd = mappedNewItems.filter(
+          (n) => !prevIds.has(Number((n as any).id))
+        );
         return [...prev, ...toAdd];
       });
+
 
       // Clear request-tracking state (we successfully processed this payload)
       lastRequestedIdsRef.current = null;
@@ -165,6 +184,16 @@ export default function DublicateSchoolPopup({
   // If user scrolls quickly and triggers loadMore while a request is pending,
   // requestNextBatch guard will prevent duplicate requests. Once response arrives,
   // subsequent loadMore will request the next slice.
+
+  const getStaticValue = (staticValue: boolean | undefined | string) => {
+    if (typeof staticValue === 'boolean') {
+      staticValue = staticValue === true ? 'yes' : 'no';
+    } else if (staticValue === 'unknown' || !staticValue) {
+      staticValue = t('unknown');
+    } else {
+      staticValue = staticValue;
+    }
+  }
 
   if (!schoolIds || schoolIds.length === 0) return null;
 
@@ -191,8 +220,15 @@ export default function DublicateSchoolPopup({
           }
           scrollableTarget="scrollableDiv"
         >
-          {visibleSchools.map((s, idx) => (
-            <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
+          {visibleSchools.map((s, idx) => {
+            const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
+            const connectivityValue = isLiveNotUnknown ? `${s?.liveAvg ?? 0} ${unit}` : t('unknown');
+            const staticValue = getStaticValue(s?.staticValue) as boolean | undefined | string;
+
+            const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
+            const staticColor = stylePaintData[s?.staticType ?? UNKNOWN]
+            const connecitivityStatusColor = stylePaintData[s?.connectivity_status ?? UNKNOWN];
+            return <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
               <ItemTopSection>
                 <SchoolName title={s.name}>{s.name ?? s.id}</SchoolName>
                 <SchoolItemCount>{`${idx + 1} of (${total})`}</SchoolItemCount>
@@ -200,8 +236,23 @@ export default function DublicateSchoolPopup({
 
               <ItemBottomSection>
                 <SchoolInternetSpeed>
-                  <GreenDotIcon />
-                  <ConnectivityLabel>{s.connectivityLabel ?? ''}</ConnectivityLabel>
+                  <ConnectivityCircleWrapper className="map-school-status-circle">
+                    {!isStatic && s?.isRealTime && (
+                      <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
+                    )}
+                    <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
+                  </ConnectivityCircleWrapper>
+                  <LiveContent>
+                    {isLive && s?.isRealTime && (
+                      <LiveStatusRow>
+                        <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
+                      </LiveStatusRow>
+                    )}
+                    {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
+                    {!isStatic && (!isLive || !s?.isRealTime) && (
+                      <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[s?.connectivityStatus])}</Label>
+                    )}
+                  </LiveContent>
                 </SchoolInternetSpeed>
                 <GoToSchoolInfo
                   className="cds--btn cds--btn--primary"
@@ -216,7 +267,8 @@ export default function DublicateSchoolPopup({
                 </GoToSchoolInfo>
               </ItemBottomSection>
             </SchoolListItem>
-          ))}
+          }
+          )}
         </InfiniteScroll>
       </DublicateSchoolList>
     </DublicateSchoolListWrapper>
