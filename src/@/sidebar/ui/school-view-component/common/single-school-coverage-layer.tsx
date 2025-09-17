@@ -9,6 +9,7 @@ import { getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
 import { DateWeekWrapper } from '../../global-and-country-view-components/connectivity-layer/connectivity-layer.style';
 import { StatisticsStatusLg } from '../styles/school-information.style';
 import { SchoolInformationWrapper } from '../styles/school-view-style';
+import SidebarDublicateSchoolList from './dublicate-school-list-view';
 import { SchoolInformation } from './school-information.view';
 
 const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
@@ -31,7 +32,7 @@ const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
       <SchoolInformationWrapper>
         <SchoolInformation schoolData={schoolDetails} />
       </SchoolInformationWrapper>
-      {/* add dublicate schools herer */}
+      <SidebarDublicateSchoolList scrollableTargetId="school-sidebar-scroll" />
     </div>
   );
 }

@@ -22,7 +22,7 @@ type Props = {
   pageSize?: number;
 };
 
-export default function SchoolDuplicatesPanelSelfContained({
+export default function SidebarDublicateSchoolList({
   scrollableTargetId,
   pageSize = 5,
 }: Props) {

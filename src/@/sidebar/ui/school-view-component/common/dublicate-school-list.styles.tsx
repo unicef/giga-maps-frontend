@@ -34,14 +34,12 @@ export const SchoolItemCount = styled.span`
   margin-right: 0.5rem;
 `;
 
-
-
 export const SchoolName = styled.div`
   border: none;
   padding: 0;
   margin: 0;
   color: ${props => props.theme.titleBlue};
-  font-size: 1rem;
+  font-size: 0.875rem;
   cursor: pointer;
   display: flex;
 `;

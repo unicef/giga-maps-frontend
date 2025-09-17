@@ -38,7 +38,6 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
       <SchoolInformationWrapper>
         <SchoolInformation schoolData={schoolDetails} />
       </SchoolInformationWrapper>
-      {/* add here dublicate */}
       <FooterDataSourcePopUp size={25} isFooter={false} />
     </div>
   );
