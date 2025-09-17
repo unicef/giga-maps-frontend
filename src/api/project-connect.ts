@@ -52,6 +52,20 @@ export const fetchSchoolPopupDataFx = createRequestFx(
     })
 );
 
+// Fetch dublicate school info by IDs
+export const fetchDublicateSchoolPopupDataFx = createRequestFx(
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+    request({
+      url: `${url}${query}`,
+      signal: controller?.getSignal()
+    })
+);
+
+/**
+ * Fetches global statistics with retry mechanism.
+ * Will retry up to 3 times with exponential backoff (1s, 2s, 4s) on failure.
+ * This helps handle network issues, temporary server errors, and timeouts.
+ */
 export const fetchGlobalStatsFx = createRequestFx(
   async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
     url: `api/statistics/global-stat/${query ?? ''}`,

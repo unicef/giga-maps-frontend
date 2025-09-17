@@ -4,12 +4,12 @@ import { CircleLayer, CirclePaint, Map, MapboxGeoJSONFeature, MapLayerMouseEvent
 import { getBaseUrl } from "~/api/project-connect";
 import { GeoJSONFeatureCollection, GeoJSONPoint, PointCoordinates } from '~/core/global-types';
 
-import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, CountryPaintData, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
-import { $schoolClickedId, setPopupOnClickDot } from "./map.model";
-import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
-import { setSchoolFocusLatLng, $countryCode } from "../country/country.model";
+import { $countryCode, setSchoolFocusLatLng } from "../country/country.model";
+import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
+import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
+import { $schoolClickedId, resetDublicateSchoolClickData, setPopupOnClickDot } from "./map.model";
+import { ChangeLayerOptions, StylePaintData } from "./map.types";
 
 interface CreateSourceType {
   source?: string;
@@ -37,6 +37,7 @@ export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
   ids?.forEach((id) => {
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
     delete mapDotsClickIdsAndHandler[source][id];
+    resetDublicateSchoolClickData(); // Reset duplicate school list from popup on close
   })
 }
 
@@ -64,7 +65,8 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
       setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
       setPopupOnClickDot({
         id: schoolId,
-        geopoint: feature.geometry as GeoJSONPoint
+        geopoint: feature.geometry as GeoJSONPoint,
+        allowDublicateSchoolIds: true
       });
     }
   }
