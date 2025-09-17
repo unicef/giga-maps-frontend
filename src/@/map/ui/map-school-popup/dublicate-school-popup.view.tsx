@@ -3,6 +3,7 @@ import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { t } from 'i18next';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import { $layerUtils, schoolStatsMap } from '~/@/sidebar/sidebar.model';
@@ -13,42 +14,82 @@ import { PointCoordinates } from '~/core/global-types';
 import { router } from '~/core/routes';
 import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '../../map.model';
 import { UNKNOWN } from '../../map.types';
-import { InnerCircle, InnerCircleConnectivity } from '../legend-info/legend-button.style';
-import { DublicateSchoolList, DublicateSchoolListWrapper, GoToSchoolInfo, ItemBottomSection, ItemTopSection, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, TotalCountLabel } from './dublicate-school-popup.style';
-import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow, SchoolName } from './school-popup.style';
+import {
+  InnerCircle,
+  InnerCircleConnectivity
+} from '../legend-info/legend-button.style';
+import DublicateSchoolLoader from './dublicate-school-popup-loader.view';
+import {
+  DublicateSchoolList,
+  DublicateSchoolListWrapper,
+  GoToSchoolInfo,
+  ItemBottomSection,
+  ItemTopSection,
+  SchoolInternetSpeed,
+  SchoolItemCount,
+  SchoolListItem,
+  SchoolName,
+  TotalCountLabel
+} from './dublicate-school-popup.style';
+import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from './school-popup.style';
 
 type Props = {
   schoolIds: number[];
   countryCode: string;
+  /**
+   * ID of the scroll container managed by the parent.
+   * Example: parent must render a container with id="parentScrollContainer"
+   * and pass scrollableTargetId="parentScrollContainer".
+   */
+  scrollableTargetId: string;
+  batchSize?: number;
 };
+
+export function getStaticValue(staticValue: boolean | undefined | string | null) {
+  if (typeof staticValue === 'boolean') {
+    return staticValue ? 'yes' : 'no';
+  }
+  if (!staticValue || staticValue === 'unknown') {
+    return t('unknown');
+  }
+  return String(staticValue);
+}
 
 export default function DublicateSchoolPopup({
   schoolIds,
   countryCode,
+  scrollableTargetId,
+  batchSize = 10,
 }: Props) {
-  const batchSize = 10;
-  const [visibleSchools, setVisibleSchools] = useState<any[]>([]);
+  const { t } = useTranslation();
+  const total = schoolIds?.length ?? 0;
+  const [visibleSchools, setVisibleSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
   const requestedCountRef = useRef<number>(0);
   const lastRequestedIdsRef = useRef<number[] | null>(null);
   const isLoadingRef = useRef<boolean>(false);
+  const mountedRef = useRef<boolean>(true);
+  const prevSchoolIdsRef = useRef<number[] | null>(null);
 
-  // global store where the dispatcher populates fetched school objects
-  const globalFetchStore = useStore($dublicateSchoolClickData) as SchoolStatsType[] | null;
-  // pending flag from the fetch effect (effector effect)
+  // effector stores & flags
+  const globalFetchStore = useStore($dublicateSchoolClickData) as any; // shape may vary
   const isPending = useStore(fetchDublicateSchoolPopupDataFx.pending);
   const stylePaintData = useStore($stylePaintData);
   const layerUtils = useStore($layerUtils);
 
-  const { currentLayerTypeUtils, selectedLayerData } = layerUtils;
-  const { isLive, isStatic } = currentLayerTypeUtils
+  // derived from layer utils (kept from your code)
+  const { currentLayerTypeUtils, selectedLayerData } = layerUtils ?? {};
+  const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
   const { global_benchmark } = selectedLayerData ?? {};
-  const unit = global_benchmark?.convert_unit;
+  const unit = global_benchmark?.convert_unit ?? '';
 
-  // Helper: whether there are more ids left to request
-  const total = schoolIds?.length ?? 0;
-  const hasMore = visibleSchools.length < total;
-  const prevSchoolIdsRef = useRef<number[] | null>(null);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
+  // detect changes to incoming schoolIds (parent might pass new list)
   useEffect(() => {
     const prev = prevSchoolIdsRef.current;
     const changed =
@@ -58,17 +99,18 @@ export default function DublicateSchoolPopup({
 
     if (changed) {
       prevSchoolIdsRef.current = [...schoolIds];
+      // reset local UI state & refs
       setVisibleSchools([]);
       requestedCountRef.current = 0;
       lastRequestedIdsRef.current = null;
       isLoadingRef.current = false;
 
-      // Immediately request the first batch on parent update / initial mount
+      // request initial batch immediately
       requestNextBatch();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schoolIds]);
 
-  // Compose next slice without mutating schoolIds
   function getNextSlice(): number[] {
     if (!schoolIds || requestedCountRef.current >= schoolIds.length) return [];
     const start = requestedCountRef.current;
@@ -76,35 +118,55 @@ export default function DublicateSchoolPopup({
     return schoolIds.slice(start, end);
   }
 
-  // Request next batch: sets lastRequestedIdsRef and dispatches the global setter.
   function requestNextBatch() {
-    if (isLoadingRef.current) return; // guard: do not double-request
+    if (isLoadingRef.current) return;
     const nextIds = getNextSlice();
     if (!nextIds || nextIds.length === 0) return;
     isLoadingRef.current = true;
     lastRequestedIdsRef.current = nextIds;
-    // update requestedCount immediately so subsequent calls compute correctly
+    // increment requested count immediately so subsequent calls compute correctly
     requestedCountRef.current += nextIds.length;
 
-    // dispatcher that the rest of the app listens to — only sending ids as requested
+    // dispatch to effector — other parts of app handle the effect
     setSchoolIdsOnPopupClickDot({
       ids: nextIds,
     });
   }
 
-  // Called by InfiniteScroll when user reaches bottom
   const loadMore = () => {
-    if (!hasMore) return;
+    // Don't request if no more
+    if (visibleSchools.length >= total) return;
     requestNextBatch();
   };
 
-  // Watch the global store for responses. When a response matches the last requested ids,
-  // append to visibleSchools and clear loading flag. This comparison assumes the global store
-  // provides the result as an array of SchoolStatsType objects for the last requested ids.
-  // Put this in place of your current useEffect([...globalFetchStore, isPending]) watcher
+  // normalize incoming effector payload into array of SchoolStatsType
+  function normalizeFetchPayload(payload: any): SchoolStatsType[] {
+    if (!payload) return [];
+    if (Array.isArray(payload)) return payload as SchoolStatsType[];
+
+    if (typeof payload === 'object') {
+      // if it's a map of id -> object, return values
+      const vals = Object.values(payload);
+      // detect whether it's an array-like values of objects
+      if (vals.length > 0 && typeof vals[0] === 'object') {
+        return vals as SchoolStatsType[];
+      }
+      // fallback: maybe single object (one school)
+      return [payload as SchoolStatsType];
+    }
+
+    // unexpected shape
+    return [];
+  }
+
   useEffect(() => {
+    if (!mountedRef.current) return;
+
     try {
-      if (!globalFetchStore) {
+      const payloadArr = normalizeFetchPayload(globalFetchStore);
+
+      if (payloadArr.length === 0) {
+        // if there's no payload and no pending request, clear loading trackers
         if (!isPending) {
           isLoadingRef.current = false;
           lastRequestedIdsRef.current = null;
@@ -112,37 +174,14 @@ export default function DublicateSchoolPopup({
         return;
       }
 
-      // --- Normalize store payload into an array of SchoolStatsType ---
-      let payloadArr: SchoolStatsType[] = [];
-
-      if (Array.isArray(globalFetchStore)) {
-        payloadArr = globalFetchStore;
-      } else if (typeof globalFetchStore === 'object') {
-        // If the store is an object map like { id1: {...}, id2: {...} } convert to array
-        // Or it might be a single object representing one school
-        const maybeArray = Object.values(globalFetchStore);
-        // If values are primitives or not objects, fall back to treating the store as single item
-        if (maybeArray.length > 0 && typeof maybeArray[0] === 'object') {
-          payloadArr = maybeArray as unknown as SchoolStatsType[];
-        } else {
-          // fallback: single object
-          payloadArr = [globalFetchStore as unknown as SchoolStatsType];
-        }
-      } else {
-        // unexpected type
-        console.warn('[DBG] unexpected globalFetchStore shape', typeof globalFetchStore);
-        return;
-      }
-
-      // Determine which incoming items correspond to our lastRequested slice (if we still track it)
-      // But even if lastRequested is null (or doesn't match), we will append any new items not already in visibleSchools.
+      // Build set of currently visible IDs to avoid duplicates
       const existingIdsSet = new Set(visibleSchools.map((s) => Number((s as any).id)));
 
-      // Filter out items already present in visibleSchools
-      const newItems = payloadArr.filter((s) => !existingIdsSet.has(Number((s as any).id)));
+      // Filter payload for items not already in UI
+      const newItemsRaw = payloadArr.filter((s) => !existingIdsSet.has(Number((s as any).id)));
 
-      if (newItems.length === 0) {
-        // If there was a pending request but we got no useful payload, clear flags when pending is false
+      if (newItemsRaw.length === 0) {
+        // nothing to add; clear loading if not pending
         if (!isPending) {
           isLoadingRef.current = false;
           lastRequestedIdsRef.current = null;
@@ -150,125 +189,106 @@ export default function DublicateSchoolPopup({
         return;
       }
 
-      // Append the new items
+      // Map raw items via your mapping function then append only unique ones
+      const mappedNew = newItemsRaw.map((item) => schoolStatsMap(item));
+
       setVisibleSchools((prev) => {
-        // double-guard uniqueness
         const prevIds = new Set(prev.map((p) => Number((p as any).id)));
-
-        // apply mapping BEFORE uniqueness filter
-        const mappedNewItems = newItems.map((item) => schoolStatsMap(item));
-
-        // only add items not already in state
-        const toAdd = mappedNewItems.filter(
-          (n) => !prevIds.has(Number((n as any).id))
-        );
+        const toAdd = mappedNew.filter((n) => !prevIds.has(Number((n as any).id)));
         return [...prev, ...toAdd];
       });
 
-
-      // Clear request-tracking state (we successfully processed this payload)
+      // success => clear trackers
       lastRequestedIdsRef.current = null;
       isLoadingRef.current = false;
     } catch (err) {
-      console.error('[DBG] error handling globalFetchStore change:', err);
-      // ensure we don't stay stuck in loading state
+      console.error('[DuplicatePopup] error processing globalFetchStore:', err);
       if (!isPending) {
         isLoadingRef.current = false;
         lastRequestedIdsRef.current = null;
       }
     }
+    // intentionally depend on globalFetchStore & isPending & visibleSchools length
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globalFetchStore, isPending]);
 
-
-  // If user scrolls quickly and triggers loadMore while a request is pending,
-  // requestNextBatch guard will prevent duplicate requests. Once response arrives,
-  // subsequent loadMore will request the next slice.
-
-  const getStaticValue = (staticValue: boolean | undefined | string) => {
-    if (typeof staticValue === 'boolean') {
-      staticValue = staticValue === true ? 'yes' : 'no';
-    } else if (staticValue === 'unknown' || !staticValue) {
-      staticValue = t('unknown');
-    } else {
-      staticValue = staticValue;
-    }
-  }
-
   if (!schoolIds || schoolIds.length === 0) return null;
+
+  const hasMore = visibleSchools.length < total;
 
   return (
     <DublicateSchoolListWrapper>
       <TotalCountLabel>
-        {`(${total}) School location duplicates`}{' '}
-        <Tooltip className="data-source-tooltip" align="top" label={'data-is-sourced-research-institutions'}>
+        {`(${total}) ${t('school-location-duplicates')}`}{' '}
+        <Tooltip className='info-icon' align="top" label={`(${total}) ${t('school-location-duplicates')}`}>
           <button className="sb-tooltip-trigger" type="button">
             <Information size={16} color={'#7e7e7e'} style={{ verticalAlign: 'middle' }} />
           </button>
         </Tooltip>
       </TotalCountLabel>
 
-      <DublicateSchoolList id="scrollableDiv">
+      {/* NOTE: parent must provide a scroll container with id={scrollableTargetId} */}
+      <DublicateSchoolList id={scrollableTargetId}>
         <InfiniteScroll
           dataLength={visibleSchools.length}
           next={loadMore}
           hasMore={hasMore}
           loader={
-            <div style={{ textAlign: 'center', padding: '8px', color: '#aaa' }}>
-              Loading...
-            </div>
+            <DublicateSchoolLoader />
           }
-          scrollableTarget="scrollableDiv"
+          scrollableTarget={scrollableTargetId}
         >
           {visibleSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
             const connectivityValue = isLiveNotUnknown ? `${s?.liveAvg ?? 0} ${unit}` : t('unknown');
-            const staticValue = getStaticValue(s?.staticValue) as boolean | undefined | string;
+            const staticValue = getStaticValue(s?.staticValue);
 
             const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
-            const staticColor = stylePaintData[s?.staticType ?? UNKNOWN]
-            const connecitivityStatusColor = stylePaintData[s?.connectivity_status ?? UNKNOWN];
-            return <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
-              <ItemTopSection>
-                <SchoolName title={s.name}>{s.name ?? s.id}</SchoolName>
-                <SchoolItemCount>{`${idx + 1} of (${total})`}</SchoolItemCount>
-              </ItemTopSection>
+            const staticColor = stylePaintData[s?.staticType ?? UNKNOWN];
+            const connecitivityStatusColor = stylePaintData[s?.connectivityStatus ?? UNKNOWN];
 
-              <ItemBottomSection>
-                <SchoolInternetSpeed>
-                  <ConnectivityCircleWrapper className="map-school-status-circle">
-                    {!isStatic && s?.isRealTime && (
-                      <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
-                    )}
-                    <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
-                  </ConnectivityCircleWrapper>
-                  <LiveContent>
-                    {isLive && s?.isRealTime && (
-                      <LiveStatusRow>
-                        <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                      </LiveStatusRow>
-                    )}
-                    {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
-                    {!isStatic && (!isLive || !s?.isRealTime) && (
-                      <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[s?.connectivityStatus])}</Label>
-                    )}
-                  </LiveContent>
-                </SchoolInternetSpeed>
-                <GoToSchoolInfo
-                  className="cds--btn cds--btn--primary"
-                  onClick={() => {
-                    router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${s.id}`);
-                    setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
-                  }}
-                  aria-label={`View ${s.name}`}
-                  type="button"
-                >
-                  <ArrowRight size={16} />
-                </GoToSchoolInfo>
-              </ItemBottomSection>
-            </SchoolListItem>
-          }
-          )}
+            return (
+              <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
+                <ItemTopSection>
+                  <SchoolName title={s.name}>{s.name ?? s.id}</SchoolName>
+                  <SchoolItemCount>{`${idx + 1} ${t('of')} (${total})`}</SchoolItemCount>
+                </ItemTopSection>
+
+                <ItemBottomSection>
+                  <SchoolInternetSpeed>
+                    <ConnectivityCircleWrapper className="map-school-status-circle">
+                      {!isStatic && s?.isRealTime && (
+                        <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
+                      )}
+                      <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
+                    </ConnectivityCircleWrapper>
+                    <LiveContent>
+                      {isLive && s?.isRealTime && (
+                        <LiveStatusRow>
+                          <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
+                        </LiveStatusRow>
+                      )}
+                      {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
+                      {!isStatic && (!isLive || !s?.isRealTime) && (
+                        <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[s?.connectivityStatus])}</Label>
+                      )}
+                    </LiveContent>
+                  </SchoolInternetSpeed>
+                  <GoToSchoolInfo
+                    className="cds--btn cds--btn--primary"
+                    onClick={() => {
+                      router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${s.id}`);
+                      setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
+                    }}
+                    aria-label={`View ${s.name}`}
+                    type="button"
+                  >
+                    <ArrowRight size={16} />
+                  </GoToSchoolInfo>
+                </ItemBottomSection>
+              </SchoolListItem>
+            );
+          })}
         </InfiniteScroll>
       </DublicateSchoolList>
     </DublicateSchoolListWrapper>

@@ -1,3 +1,4 @@
+import { InlineLoading } from "@carbon/react";
 import styled from "styled-components";
 import { Scroll } from "~/@/scroll";
 
@@ -7,12 +8,11 @@ export const DublicateSchoolListWrapper = styled.div`
   background: ${props => props.theme.grayDark};
   border-radius: 0.125rem;
   box-shadow: 0 0.5rem 1.25rem 0 rgba(0, 0, 0, 0.55);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 `;
 
-export const TotalCountLabel = styled.header`
+export const TotalCountLabel = styled.p`
   background: ${props => props.theme.grayDark};
   padding: 1rem;
   font-size: 0.875rem;
@@ -101,3 +101,7 @@ export const GoToSchoolInfo = styled.button`
   justify-content: center;
   padding: 0.75rem;
 `;
+
+export const LoadingList = styled(InlineLoading)`
+  padding: 16px;
+`
