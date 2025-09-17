@@ -118,6 +118,10 @@ export type SchoolStatsType = {
     rounded_benchmark_value: string;
     display_unit: string;
     convert_unit: string;
+  },
+  schools_at_same_location?: {
+    count: number,
+    school_ids: number[]
   }
 };
 
