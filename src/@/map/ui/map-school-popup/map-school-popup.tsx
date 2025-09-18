@@ -88,43 +88,33 @@ export const MapSchoolPopup = () => {
                     <SchoolInfoWrapper className="live-container">
                       <LiveContainer>
                         <ConnectivityCircleWrapper className="map-school-status-circle">
-                          {!isStatic && feature?.isRealTime && (
-                            <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
-                          )}
+                          {!isStatic && feature?.isRealTime && <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />}
                           <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
                         </ConnectivityCircleWrapper>
                         <LiveContent>
-                          {isLive && feature?.isRealTime && (
-                            <LiveStatusRow>
-                              <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                              <Label $size="0.875rem" $textTransform="none" $color={theme.text}>{formattedInterval}</Label>
-                            </LiveStatusRow>
-                          )}
+                          {isLive && feature?.isRealTime && <LiveStatusRow>
+                            <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
+                            <Label $size="0.875rem" $textTransform="none" $color={theme.filterText}>{formattedInterval}</Label>
+                          </LiveStatusRow>}
                           {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
-                          {!isStatic && (!isLive || !feature?.isRealTime) && (
+                          {!isStatic && (!isLive || !feature?.isRealTime) &&
                             <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[connectivityStatusValue])}</Label>
-                          )}
+                          }
                         </LiveContent>
                       </LiveContainer>
-
-                      {isSchoolBenchmark && benchmarkTitle && (
-                        <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>
-                      )}
+                      {isSchoolBenchmark && benchmarkTitle && <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
                     </SchoolInfoWrapper>
+
+                    {/* Data source section tailored for popup */}
+                    {/* <SchoolPopupDataSource /> */}
                   </PopupTemplate>
-                  {isClicked && (
-                    <GoToSchoolButton
-                      className="go-to-school"
-                      onClick={() => {
-                        router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
-                        setSchoolFocusLatLng(feature?.geopoint.coordinates as PointCoordinates);
-                      }}
-                      type="button"
-                      renderIcon={ArrowRight}
-                    >
-                      {t('go-to-school-page')}
-                    </GoToSchoolButton>
-                  )}
+                  {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
+                    router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
+                    setSchoolFocusLatLng(feature?.geopoint.coordinates as PointCoordinates);
+                  }} type="button"
+                    renderIcon={ArrowRight} >
+                    {t('go-to-school-page')}
+                  </GoToSchoolButton>}
                 </div>}
             </div>
           ),

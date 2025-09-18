@@ -303,8 +303,8 @@ sample({
   source: combine({
     isMobile: $isMobile
   }),
-  filter: ({ isMobile }, schoolId) => isMobile && schoolId?.id,
-  fn: (_, schoolId) => schoolId?.id,
+  filter: ({ isMobile }, schoolId) => isMobile && schoolId,
+  fn: (_, schoolId) => schoolId,
   target: navigateToSchool
 })
 
