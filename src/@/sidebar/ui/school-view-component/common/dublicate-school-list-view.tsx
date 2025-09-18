@@ -7,7 +7,6 @@ import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot
 import { UNKNOWN } from '~/@/map/map.types';
 import { InnerCircle, InnerCircleConnectivity } from '~/@/map/ui/legend-info/legend-button.style';
 import DublicateSchoolLoader from '~/@/map/ui/map-school-popup/dublicate-school-popup-loader.view';
-import { getStaticValue } from '~/@/map/ui/map-school-popup/dublicate-school-popup.view';
 import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from '~/@/map/ui/map-school-popup/school-popup.style';
 import { $layerUtils, $schoolStats, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
@@ -179,6 +178,16 @@ export default function SidebarDublicateSchoolList({
     }
   };
 
+  function getStaticValue(staticValue: boolean | undefined | string | null) {
+    if (typeof staticValue === 'boolean') {
+      return staticValue ? 'yes' : 'no';
+    }
+    if (!staticValue || staticValue === 'unknown') {
+      return t('unknown');
+    }
+    return String(staticValue);
+  }
+
   // Render nothing if there's no duplicate ids
   if (!duplicateIds || duplicateIds.length === 0) return null;
 
@@ -186,7 +195,7 @@ export default function SidebarDublicateSchoolList({
     <SidebarDublicateSchoolWrapper>
       <TotalCountLabel>{`(${totalIds}) ${t('school-duplicates')}`}</TotalCountLabel>
 
-      <DublicateSchoolList id={scrollableTargetId}>
+      <DublicateSchoolList>
         <InfiniteScroll
           dataLength={accumulatedSchools.length}
           next={loadMore}

@@ -1,5 +1,5 @@
 import { combine, createEffect, merge, sample } from 'effector';
-import { $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
+import { $activeSchoolPopup, $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
 import { debounce, getInverted } from '~/lib/effector-kit';
 
 import {
@@ -199,11 +199,12 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
     }
     params.set('school_id__in', schoolKeys);
   }
-  if (typeof allowDublicateSchoolIds === 'boolean') {
-    params.set('include_same_location_schools', String(allowDublicateSchoolIds));
-    if (allowDublicateSchoolIds)
-      params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
+
+  params.set('include_same_location_schools', String(allowDublicateSchoolIds));
+  if (allowDublicateSchoolIds) {
+    params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
   }
+
   let query = `?${params.toString()}`;
   if (mapRoutes.country && countrySearch) {
     query += `&${countrySearch}`;
@@ -257,9 +258,18 @@ sample({
 // fetch click school data
 sample({
   clock: $schoolClickedId,
-  source: sourceForInfo,
-  filter: ({ isMobile }) => !isMobile,
-  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: [Number(schoolIds?.id)], country: null }, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
+  source: combine({
+    info: sourceForInfo,
+    activePopup: $activeSchoolPopup,
+  }),
+  filter: ({ info }) => !info.isMobile,
+  fn: ({ info, activePopup }, schoolIds) =>
+    schoolInfoFn({
+      ...info,
+      isSchoolClicked: true,
+      schoolParams: { schoolIds: [Number(schoolIds)], country: null },
+      allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
+    }),
   target: fetchSchoolPopupDataFx
 });
 
@@ -268,7 +278,7 @@ sample({
   clock: setSchoolIdsOnPopupClickDot,
   source: sourceForInfo,
   filter: ({ isMobile }) => !isMobile,
-  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: schoolIds?.ids, country: null }, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
+  fn: (props, school) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: school?.ids, country: null }, allowDublicateSchoolIds: school?.allowDublicateSchoolIds ?? false }),
   target: fetchDublicateSchoolPopupDataFx
 });
 

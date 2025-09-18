@@ -1,7 +1,6 @@
 import { ArrowRight, Information } from '@carbon/icons-react';
 import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { t } from 'i18next';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -44,16 +43,6 @@ type Props = {
   scrollableTargetId: string;
   batchSize?: number;
 };
-
-export function getStaticValue(staticValue: boolean | undefined | string | null) {
-  if (typeof staticValue === 'boolean') {
-    return staticValue ? 'yes' : 'no';
-  }
-  if (!staticValue || staticValue === 'unknown') {
-    return t('unknown');
-  }
-  return String(staticValue);
-}
 
 export default function DublicateSchoolPopup({
   schoolIds,
@@ -211,6 +200,16 @@ export default function DublicateSchoolPopup({
     // intentionally depend on globalFetchStore & isPending & visibleSchools length
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globalFetchStore, isPending]);
+
+  function getStaticValue(staticValue: boolean | undefined | string | null) {
+    if (typeof staticValue === 'boolean') {
+      return staticValue ? 'yes' : 'no';
+    }
+    if (!staticValue || staticValue === 'unknown') {
+      return t('unknown');
+    }
+    return String(staticValue);
+  }
 
   if (!schoolIds || schoolIds.length === 0) return null;
 
