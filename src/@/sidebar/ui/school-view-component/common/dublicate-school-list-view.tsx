@@ -55,6 +55,7 @@ export default function SidebarDublicateSchoolList({
   }, [selectedSchool]);
 
   const totalIds = duplicateIds.length;
+  const totalDublicateSchoolIdsCount = useMemo(() => selectedSchool?.schools_at_same_location?.count, [selectedSchool])
 
   // local state: accumulated fetched schools (mapped SchoolStatsType objects)
   const [accumulatedSchools, setAccumulatedSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
@@ -193,7 +194,7 @@ export default function SidebarDublicateSchoolList({
 
   return (
     <SidebarDublicateSchoolWrapper>
-      <TotalCountLabel>{`(${totalIds}) ${t('school-duplicates')}`}</TotalCountLabel>
+      <TotalCountLabel>{`(${totalDublicateSchoolIdsCount}) ${t('school-duplicates')}`}</TotalCountLabel>
 
       <DublicateSchoolList>
         <InfiniteScroll
@@ -250,7 +251,7 @@ export default function SidebarDublicateSchoolList({
           })}
         </InfiniteScroll>
 
-        {isShowMoreButton && (
+        {totalIds > 5 && isShowMoreButton && (
           <ToggleLink onClick={() => handleShowMoreClick()} aria-label={t("show-more")} type="button">
             {t("show-more")}
           </ToggleLink>

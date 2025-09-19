@@ -35,6 +35,7 @@ import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from './
 type Props = {
   schoolIds: number[];
   countryCode: string;
+  dublicateSchoolIdsCount: number;
   /**
    * ID of the scroll container managed by the parent.
    * Example: parent must render a container with id="parentScrollContainer"
@@ -47,6 +48,7 @@ type Props = {
 export default function DublicateSchoolPopup({
   schoolIds,
   countryCode,
+  dublicateSchoolIdsCount,
   scrollableTargetId,
   batchSize = 10,
 }: Props) {
@@ -218,8 +220,8 @@ export default function DublicateSchoolPopup({
   return (
     <DublicateSchoolListWrapper>
       <TotalCountLabel>
-        {`(${total}) ${t('school-location-duplicates')}`}{' '}
-        <Tooltip className='info-icon' align="top" label={`(${total}) ${t('school-location-duplicates')}`}>
+        {`(${dublicateSchoolIdsCount}) ${t('school-location-duplicates')}`}{' '}
+        <Tooltip className='info-icon' align="top" label={`(${dublicateSchoolIdsCount}) ${t('school-location-duplicates')}`}>
           <button className="sb-tooltip-trigger" type="button">
             <Information size={16} color={'#7e7e7e'} style={{ verticalAlign: 'middle' }} />
           </button>
