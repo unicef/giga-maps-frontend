@@ -67,6 +67,7 @@ export const MapSchoolPopup = () => {
             <div className="school-popup-data">
               {(!isLoading && isClicked && hasDublicateSchools) ?
                 <DublicateSchoolPopup
+                  dublicateSchoolIdsCount={schoolAtSameLocation.count}
                   schoolIds={schoolAtSameLocation.schoolIds}
                   countryCode={countryCode}
                   scrollableTargetId="parentPopupScrollContainer"
