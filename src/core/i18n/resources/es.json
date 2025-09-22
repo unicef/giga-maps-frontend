@@ -258,5 +258,8 @@
   "no-more-results": "No hay más resultados",
   "int": "{{val, number}}",
   "disclaimer": "Aviso",
-  "disclaimer-text": "Este mapa não reflete uma posição do UNICEF sobre o status legal de qualquer país ou território ou sobre a delimitação de quaisquer fronteiras."
+  "disclaimer-text": "Este mapa não reflete uma posição do UNICEF sobre o status legal de qualquer país ou território ou sobre a delimitação de quaisquer fronteiras.",
+  "school-location-duplicates": "Duplicados de ubicación de escuelas",
+  "school-duplicates": "Escuelas duplicadas",
+  "of": "de"
 }
