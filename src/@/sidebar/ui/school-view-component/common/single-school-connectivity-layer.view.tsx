@@ -22,9 +22,10 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   const stylePaintData = useStore($stylePaintData);
   const { value, color } = getLiveSchoolDetails({ schoolDetails, stylePaintData })
 
-  if (!schoolDetails?.is_rt_connected && schoolId) {
-    return <CommonUIOnlySchoolConnectivityLayer schoolId={schoolId} />
-  }
+  // if (!schoolDetails?.is_rt_connected && schoolId) {
+  //   return <CommonUIOnlySchoolConnectivityLayer schoolId={schoolId} />
+  // }
+
   return (
     <div>
       <Div $margin='0 1rem 0rem 1rem'>
