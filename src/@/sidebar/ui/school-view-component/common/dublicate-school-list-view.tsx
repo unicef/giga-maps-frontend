@@ -167,9 +167,8 @@ export default function SidebarDublicateSchoolList({
 
   // UI click: Show more (when infinite disabled)
   const handleShowMoreClick = () => {
-    // request next chunk; hide the show more button to allow infinite loading after this
-    requestIdsChunk(nextIndexRef.current, pageSize);
     setIsShowMoreButton(false);
+    loadMore();
   };
 
   const handleGoTop = () => {
