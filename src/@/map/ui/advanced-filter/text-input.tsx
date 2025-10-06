@@ -1,20 +1,19 @@
-import { AdvanceFilterType } from "~/api/types"
-import { StyledTextInputWrapper } from "./filter-button.style"
-import { TextInput, Tooltip } from "@carbon/react";
-import { TooltipButton } from "~/@/sidebar/ui/landing-page-side-bar/styles/landing-page-style";
-import { Information } from '@carbon/icons-react'
-import { TooltipStyle } from "~/@/common/style/styled-component-style";
-import { evaluateExpression } from "~/lib/utils";
+import { Information } from '@carbon/icons-react';
+import { TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
+import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { AdvanceFilterType } from "~/api/types";
+import { evaluateExpression } from "~/lib/utils";
+import { StyledTextInputWrapper } from "./filter-button.style";
 
-const TextField = ({ value, itemKey, options, column_configuration: parameter, name, onChange, description }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
+const TextField = ({ value, itemKey, options, column_configuration: parameter, name, onChange, description, light = false }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
   const { downcast_aggr_str, upcast_aggr_str } = parameter.options ?? {};
   const [currentValue, setCurrentValue] = useState('');
   useEffect(() => {
     setCurrentValue(downcast_aggr_str ? evaluateExpression(downcast_aggr_str, value) as string : value)
   }, [value])
   return (
-    <StyledTextInputWrapper>
+    <StyledTextInputWrapper light={light}>
       <TextInput
         size="sm"
         id="text-input-1"
