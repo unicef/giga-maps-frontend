@@ -28,6 +28,8 @@ const productionPlugins = [
   new MiniCssExtractPlugin({
     filename: paths.outputProd.css,
     chunkFilename: paths.outputProd.cssChunks,
+    // Enable CSS chunk splitting
+    experimentalUseImportModule: false,
   }),
   new HtmlWebpackPlugin({
     title: 'Gigamaps',
@@ -67,20 +69,54 @@ export const productionConfig = merge(commonConfig, {
     runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
-      minSize: 0,
-      maxAsyncRequests: 16,
-      maxInitialRequests: 6,
+      minSize: 20000,        // 20kB minimum chunk size
+      maxSize: 150000,       // 150kB maximum chunk size (even more conservative)
+      maxAsyncRequests: 100, // Much higher to allow aggressive splitting
+      maxInitialRequests: 30, // Much higher to allow aggressive splitting
+      enforceSizeThreshold: 150000, // Hard limit - force splitting above this size
       cacheGroups: {
         polyfills: {
           test: testModules(['core-js']),
           enforce: true,
           reuseExistingChunk: true,
+          maxSize: 150000,     // Enforce 150kB limit for polyfills
         },
         react: {
           test: testModules(['react', 'react-dom', 'scheduler']),
           name: 'react',
           enforce: true,
           reuseExistingChunk: true,
+          maxSize: 150000,     // Enforce 150kB limit for React bundle
+        },
+        // Split large vendor libraries more aggressively
+        largeVendors: {
+          test: /[\\/]node_modules[\\/](mapbox-gl|@carbon|effector)[\\/]/,
+          name: 'large-vendors',
+          priority: 30,
+          reuseExistingChunk: true,
+          maxSize: 100000,     // Very aggressive splitting for known large libraries
+          chunks: 'all',
+        },
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          priority: 10,
+          reuseExistingChunk: true,
+          maxSize: 150000,     // Split large vendor libraries
+        },
+        styles: {
+          name: 'styles',
+          type: 'css/mini-extract',
+          chunks: 'all',
+          priority: 20,
+          maxSize: 150000,     // Split large CSS files
+          enforce: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+          maxSize: 150000,     // Enforce 150kB limit for all other chunks
         },
       },
     },
