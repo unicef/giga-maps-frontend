@@ -30,7 +30,7 @@ export const filterColumnListFx = createEffect(() => {
 
 export const getFilterListWithOptionsFx = createEffect((countryId: number) => {
   return createRequestAuthFx({
-    url: `accounts/adv_filters/${countryId}/all?expand=column_configuration`
+    url: `accounts/adv_filters/${countryId}/all/?expand=column_configuration`
   }) as Promise<APIListType<FilterListWithOptionsTypes>>
 });
 
