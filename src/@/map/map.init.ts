@@ -1,8 +1,8 @@
 import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
-import { combine, guard, merge, sample, createEffect } from 'effector';
+import { combine, guard, merge, sample, createEffect, createStore } from 'effector';
 import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryId, $countryMapping } from '~/@/country/country.model';
+import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryId, $countryMapping, $countryActiveFiltersList } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap, $schoolStatusSelectedLayer } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
@@ -26,6 +26,7 @@ import { addSchoolMarkers } from './effects/add-marker-fx';
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
+  $advanceFilterList,
   $filterListMapping,
   $map,
   $multipleSchoolPopup,
@@ -56,6 +57,7 @@ import { $isMobile } from '../admin/models/media-query';
 import { $lng, languageStore } from '~/core/i18n/store';
 import { mapLabelLayerList } from '../country/country.constant';
 import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
+import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
 
 sample({
   source: $theme,
@@ -132,6 +134,28 @@ sample({
   clock: onStyleLoaded,
   fn: () => false,
   target: $reloadStyle
+});
+
+const $derivedCountryActiveFilterList = combine({
+  countryActiveFiltersList: $countryActiveFiltersList,
+  activeFiltersList: $advanceFilterList,
+});
+
+// guard: only run when both are available
+const activeFiltersListClock = guard({
+  source: $derivedCountryActiveFilterList,
+  clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
+  filter: ({ countryActiveFiltersList, activeFiltersList }) =>
+    countryActiveFiltersList != null && activeFiltersList != null,
+});
+
+sample({
+  source: $derivedCountryActiveFilterList,
+  clock: activeFiltersListClock,
+  fn: ({ countryActiveFiltersList, activeFiltersList }) => {
+    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!);
+    return null;
+  },
 });
 
 $map.watch(zoomIn, (map: Map | null) => {

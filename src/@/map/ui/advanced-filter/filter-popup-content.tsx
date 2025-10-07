@@ -13,7 +13,7 @@ import { router } from "~/core/routes";
 import { $isMobile } from "~/core/media-query";
 import { useTranslation } from "react-i18next";
 
-const components = {
+export const components = {
   'DROPDOWN': SingleDropdown,
   'DROPDOWN_MULTISELECT': MultiSelectDropdown,
   'RANGE': RangeTextInput,
