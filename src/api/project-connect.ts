@@ -52,6 +52,15 @@ export const fetchSchoolPopupDataFx = createRequestFx(
     })
 );
 
+// Fetch dublicate school info by IDs
+export const fetchDublicateSchoolPopupDataFx = createRequestFx(
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+    request({
+      url: `${url}${query}`,
+      signal: controller?.getSignal()
+    })
+);
+
 export const fetchGlobalStatsFx = createRequestFx(
   async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
     url: `api/statistics/global-stat/${query ?? ''}`,

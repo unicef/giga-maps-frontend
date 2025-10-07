@@ -1,9 +1,9 @@
-import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
-import { combine, guard, merge, sample, createEffect, createStore } from 'effector';
+import { combine, createEffect, guard, merge, sample } from 'effector';
 import { Map } from 'mapbox-gl';
+import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 
-import { $admin1Data, $country, countryReceived, setSchoolFocusLatLng, $admin1Id, $countrySearchString, $countryId, $countryMapping, $countryActiveFiltersList } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $staticLegendsSelected, $selectedLayerId, onLoadTimePlayerData, onTimeoutTimePlayer, $timePlayerInfo, $isLoadedTimePlayer, $isLoadingTimeplayer, $schoolStatsMap, $schoolAdminId, schoolStatsMap, $schoolStatusSelectedLayer } from '~/@/sidebar/sidebar.model';
+import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList } from '~/@/country/country.model';
+import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -21,11 +21,18 @@ import {
 } from '@/map/effects';
 import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
+import { languageStore } from '~/core/i18n/store';
+import { $theme } from '~/core/theme.model';
+import { $isMobile } from '../admin/models/media-query';
+import { mapLabelLayerList } from '../country/country.constant';
+import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { changeStaticLayerFx, updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
 import { addSchoolMarkers } from './effects/add-marker-fx';
+import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
+  $dublicateSchoolClickData,
   $advanceFilterList,
   $filterListMapping,
   $map,
@@ -51,12 +58,6 @@ import {
 } from './map.model';
 import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
-import { $theme } from '~/core/theme.model';
-import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
-import { $isMobile } from '../admin/models/media-query';
-import { $lng, languageStore } from '~/core/i18n/store';
-import { mapLabelLayerList } from '../country/country.constant';
-import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
 
 sample({
@@ -334,6 +335,13 @@ sample({
 export const $schoolPopupConnectivityMap = $schoolClickData.map((data) => data?.length ? schoolStatsMap(data[0]) : null)
 export const $schoolPopupData = combine({
   feature: $schoolPopupConnectivityMap,
+  stylePaintData: $stylePaintData,
+  layerUtils: $layerUtils,
+})
+
+export const $dublicateSchoolPopupConnectivityMap = $dublicateSchoolClickData.map((data) => data?.length ? data.map(item => schoolStatsMap(item)) : null)
+export const $dublicateSchoolPopupData = combine({
+  feature: $dublicateSchoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
 })
