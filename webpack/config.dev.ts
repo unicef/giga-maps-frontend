@@ -67,6 +67,22 @@ export const developmentConfig = merge<Configuration>(commonConfig, {
     concatenateModules: false,
     minimize: false,
     runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      maxSize: 200000,        // 200kB max chunk size
+      minSize: 20000,         // 20kB min chunk size  
+      maxAsyncRequests: 30,   // Allow more chunks
+      maxInitialRequests: 10, // Allow more initial chunks
+      cacheGroups: {
+        // Your existing cache groups...
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+          maxSize: 200000,     // Enforce 200kB limit everywhere
+        },
+      },
+    },
   },
   stats: {
     performance: false,
