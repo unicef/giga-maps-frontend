@@ -1,5 +1,6 @@
 export interface ApiKeysAdminRequestType {
   id: number
+  description: string;
   api_key: string
   valid_from: string
   valid_to: string

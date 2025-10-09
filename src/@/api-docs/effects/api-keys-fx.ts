@@ -48,6 +48,11 @@ type GigaMeterCountriesType = {
   created_at: null | string;
 }
 
+export type GigaMeterCategoryCountriesType = {
+  category: string;
+  allowedCountries: string[];
+}
+
 export const getGigaMeterCountriesFx = createEffect(() => {
   return createRequestFx({
     baseUrl: `${GIGA_MERTER_API_HOST}/api/v1`,
@@ -55,5 +60,15 @@ export const getGigaMeterCountriesFx = createEffect(() => {
     method: 'GET',
   }) as Promise<{
     data: GigaMeterCountriesType[]
+  }>
+});
+
+export const getGigaMeterCategoryCountriesFx = createEffect(() => {
+  return createRequestFx({
+    baseUrl: `${GIGA_MERTER_API_HOST}/api/v1`,
+    url: `/category-config/allowed-countries`,
+    method: 'GET',
+  }) as Promise<{
+    data: GigaMeterCategoryCountriesType[]
   }>
 });
