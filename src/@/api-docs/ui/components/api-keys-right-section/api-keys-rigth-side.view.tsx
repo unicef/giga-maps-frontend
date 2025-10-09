@@ -15,9 +15,16 @@ import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import Pagination from '~/@/admin/ui/common-components/Pagination';
 import { deleteApiKeyRequestFx } from '~/@/admin/effects/api-request-fx';
 import { DeleteConfirmation } from '~/@/admin/ui/styles/admin-styles';
+import { GigaMeterCategoryCountriesType, getGigaMeterCategoryCountriesFx } from '~/@/api-docs/effects/api-keys-fx';
+import { createStore } from 'effector';
+import { getCountryListFx } from '~/@/api-docs/effects/explore-api-fx';
 
+const $gigaMeterCategoryCountries = createStore<GigaMeterCategoryCountriesType[]>([]);
+
+$gigaMeterCategoryCountries.on(getGigaMeterCategoryCountriesFx.doneData, (_, result) => result?.data);
 const ApiKeysRigthSide = () => {
   const isLoggedIn = useStore($isLoggedIn);
+  const gigaMeterCategoryCountries = useStore($gigaMeterCategoryCountries)
   const { results: apiKeyList, count } = useStore($apiKeysListResponse) ?? {};
   const user = useStore($loggedInUser);
   const countryList = useStore($countryList)
@@ -27,8 +34,15 @@ const ApiKeysRigthSide = () => {
   useEffect(() => {
     if (isLoggedIn && user) {
       void getApiKeyListFx({ userId: user?.id, page, pageSize })
+      getGigaMeterCategoryCountriesFx()
     }
   }, [isLoggedIn && user, page, pageSize])
+
+  useEffect(() => {
+    if (!countryList.length) {
+      getCountryListFx('');
+    }
+  }, [countryList])
 
   const onDeleteApiKey = async (id: number) => {
     setApiKeyDeleteId(null);
@@ -37,7 +51,7 @@ const ApiKeysRigthSide = () => {
       getApiKeyListFx({ userId: user?.id, page, pageSize })
     } catch (e) { console.error(e) }
   }
-  
+
   return (
     <>
       <RightSectonHeader
@@ -67,7 +81,10 @@ const ApiKeysRigthSide = () => {
                   Name
                 </TableHeader>
                 <TableHeader>
-                  Country
+                  Requested country
+                </TableHeader>
+                <TableHeader >
+                  Country access
                 </TableHeader>
                 <TableHeader>
                   Key
@@ -87,7 +104,7 @@ const ApiKeysRigthSide = () => {
             </TableHead>
             <TableBody >
               {
-                apiKeyList?.map((item) => <ApiKeyItem key={item.id} item={item} countryLength={countryList?.length} setApiKeyDeleteId={setApiKeyDeleteId} />)
+                apiKeyList?.map((item) => <ApiKeyItem key={item.id} item={item} gigaMeterCategoryCountries={gigaMeterCategoryCountries} setApiKeyDeleteId={setApiKeyDeleteId} />)
               }
             </TableBody>
           </Table>
