@@ -58,7 +58,7 @@ const ThemePopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: bool
           legendText={t("themes")}
           name="theme-radio-button-group-giga"
           defaultSelected={gigaTheme}>
-          {gigaThemeList.map((item, index) => (
+          {gigaThemeList.filter((item) => item !== 'accessible').map((item, index) => (
             <CustomRadioButton key={`giga-${item}`} labelText={t(item + '-mode')} value={item} id={`giga_${item}_${index}`} />
           ))}
         </RadioButtonGroupWrapper>
