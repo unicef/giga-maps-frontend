@@ -1,16 +1,17 @@
-import { AdvanceFilterType } from "~/api/types";
-import { StyledDropdownSingleSelect } from "./filter-button.style"
+import { Information } from '@carbon/icons-react';
 import { useMemo } from "react";
-import { Center, TooltipStyle } from "~/@/common/style/styled-component-style";
-import { Information } from '@carbon/icons-react'
 import { useTranslation } from "react-i18next";
+import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { AdvanceFilterType } from "~/api/types";
+import { StyledDropdownSingleSelect } from "./filter-button.style";
 
-const SingleDropdown = ({ name, column_configuration: parameter, options, itemKey, value, onChange, description }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
+const SingleDropdown = ({ name, column_configuration: parameter, options, itemKey, value, onChange, description, light = false }: AdvanceFilterType & { value: string; itemKey: string; onChange: (key: string, value: string) => void }) => {
   const { t } = useTranslation();
   const items = useMemo(() => [{ label: t('all') as string, value: '' }, ...(options?.choices ?? [])], [options?.choices])
   const selectedItem = useMemo(() => options?.choices?.find((item) => item.value === value) ?? items[0], [items, value])
   return (
     <StyledDropdownSingleSelect
+      light={light}
       size={'md'}
       label={name}
       id={`dropdown-${parameter.name}`}

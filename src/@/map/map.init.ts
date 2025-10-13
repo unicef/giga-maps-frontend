@@ -2,7 +2,7 @@ import { combine, createEffect, guard, merge, sample } from 'effector';
 import { Map } from 'mapbox-gl';
 import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 
-import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng } from '~/@/country/country.model';
+import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
@@ -33,6 +33,7 @@ import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
   $dublicateSchoolClickData,
+  $advanceFilterList,
   $filterListMapping,
   $map,
   $multipleSchoolPopup,
@@ -57,6 +58,7 @@ import {
 } from './map.model';
 import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
+import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
 
 sample({
   source: $theme,
@@ -133,6 +135,28 @@ sample({
   clock: onStyleLoaded,
   fn: () => false,
   target: $reloadStyle
+});
+
+const $derivedCountryActiveFilterList = combine({
+  countryActiveFiltersList: $countryActiveFiltersList,
+  activeFiltersList: $advanceFilterList,
+});
+
+// guard: only run when both are available
+const activeFiltersListClock = guard({
+  source: $derivedCountryActiveFilterList,
+  clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
+  filter: ({ countryActiveFiltersList, activeFiltersList }) =>
+    countryActiveFiltersList != null && activeFiltersList != null,
+});
+
+sample({
+  source: $derivedCountryActiveFilterList,
+  clock: activeFiltersListClock,
+  fn: ({ countryActiveFiltersList, activeFiltersList }) => {
+    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!);
+    return null;
+  },
 });
 
 $map.watch(zoomIn, (map: Map | null) => {
