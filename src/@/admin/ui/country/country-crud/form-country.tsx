@@ -47,6 +47,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     none_range: boolean;
     value: string;
   }>>({});
+  const [isDefaultFilterValuesLoaded, setIsDefaultFilterValuesLoaded] = useState(false)
 
   const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
   const updateDefaultNationalBenchmark = (id: number, checked: boolean) => {
@@ -275,7 +276,6 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       default_filter_values: { values }
     };
   }, [adminDefinedDefaultFilterValues, activeFiltersById]);
-
   useEffect(() => {
     if (!activeFilters || activeFilters.length === 0) {
       return;
@@ -313,7 +313,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
           }
         }
       }
-
+      setIsDefaultFilterValuesLoaded(true);
       return updated;
     });
   }, [activeFilters, setAdminDefinedDefaultFilterValues]);
@@ -385,8 +385,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
 
   const imageSource = selectedFile ? URL.createObjectURL(selectedFile) : formDataCountry?.flag;
 
-  const defaultsReady = activeFilters.length > 0 &&
-    activeFilters.every(item => adminDefinedDefaultFilterValues.hasOwnProperty(String(item.id)));
+  const defaultsReady = activeFilters.length > 0 && isDefaultFilterValuesLoaded;
 
   return (
     <Form
@@ -753,7 +752,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
             <CountryListDefaultFilterTitle>Associated Giga filters: </CountryListDefaultFilterTitle>
             <CountryListDefaultFilters>
               {activeFilters.map(item => {
-                const Component = components[item.type] as React.JSXElementConstructor<any>;
+                const Component = components?.[item.type] as React.JSXElementConstructor<any>;
                 if (!Component) return null;
                 const itemKey = `${item.id}`;
                 const extraItemKey = `ignore_${itemKey}`;
