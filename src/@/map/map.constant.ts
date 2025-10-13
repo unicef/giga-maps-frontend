@@ -57,7 +57,11 @@ export const Colors = {
   MAGENTA_DARK: "#aa5aa1",
   BRIGHT_ORANGE: '#f5793a',
   SOFT_BLUE: "#85c0f9",
-  TRANSPARENT: 'transparent'
+  TRANSPARENT: 'transparent',
+  ACCESSIBILITY_DOTS_GREEN: '#206031',
+  ACCESSIBILITY_DOTS_YELLOW: '#FBFF05',
+  ACCESSIBILITY_DOTS_MAGENTA: '#E13DF0',
+  ACCESSIBILITY_DOTS_GRAY: '#ABABAB',
 }
 
 const mapCountryOpacity = {
@@ -119,12 +123,12 @@ export let stylePaintData: { [style in Style]: StylePaintData } = {
   },
   accessible: {
     ...commonThemeStyle,
-    connected: Colors.DARK_GREEN,
+    connected: Colors.ACCESSIBILITY_DOTS_GREEN,
     good: Colors.DARK_GREEN,
-    moderate: Colors.YELLOW,
-    bad: Colors.ORANGE_RED,
-    not_connected: Colors.ORANGE_RED,
-    unknown: Colors.PINK,
+    moderate: Colors.ACCESSIBILITY_DOTS_YELLOW,
+    bad: Colors.ACCESSIBILITY_DOTS_MAGENTA,
+    not_connected: Colors.ACCESSIBILITY_DOTS_MAGENTA,
+    unknown: Colors.ACCESSIBILITY_DOTS_GRAY,
   },
 };
 
@@ -137,7 +141,7 @@ export const getDefaultCountryOpacity = (
 ): Expression => [
     'case',
     ['boolean', ['feature-state', 'hover'], false],
-    mapCountryOpacity.hover,
+    mapCountryOpacity.active,
     mapCountryOpacity.active,
   ];
 
