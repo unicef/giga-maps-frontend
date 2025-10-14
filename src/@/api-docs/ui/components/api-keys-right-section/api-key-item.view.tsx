@@ -13,6 +13,7 @@ import { $userPermissions } from '~/core/auth/models';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import { GigaMeterCategoryCountriesType } from '~/@/api-docs/effects/api-keys-fx';
 import { useMemo } from 'react';
+import { Div } from '~/@/common/style/styled-component-style';
 
 const copyToClipboard = (text: string) => {
   void navigator.clipboard.writeText(text);
@@ -70,7 +71,7 @@ const ApiKeyItem = ({ item: apiItem, setApiKeyDeleteId, gigaMeterCategoryCountri
           .filter(country => activeCountryIds.includes(country.id))
           .filter(country => allowedCountries.includes(country.iso3_format))
           .map((item) => item.name);
-        return <>
+        return <Div $flex="center" $width="7rem">
           {countryNames.length === 0 && '-'}
           {countryNames.length === 1 && countryNames[0]}
           {countryNames.length > 1 && countryNames.length}
@@ -87,7 +88,7 @@ const ApiKeyItem = ({ item: apiItem, setApiKeyDeleteId, gigaMeterCategoryCountri
               </p>
             </CountryListToggletipContent>
           </CountryListToggletip>}
-        </>
+        </Div>
       }
     }
     return countryRequested;

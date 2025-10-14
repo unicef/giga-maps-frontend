@@ -12,9 +12,11 @@ import { ApiKeysAdminRequestType } from '../../types/api-request.type';
 import { CountryListToggletip, DataLayerActiveCountries, CountryListToggletipContent } from '../styles/admin-styles';
 import { Div } from '~/@/common/style/styled-component-style';
 import ApiCategorySelection from './api-category-selection.view';
+import { $countryList } from '~/@/api-docs/models/explore-api.model';
+import { useCallback, useMemo } from 'react';
 
 
-const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength, refresh }: { item: ApiKeysAdminRequestType, setApiKeyDeleteId: any, countryLength: number, refresh: () => void }) => {
+const AdminApiKeyItem = ({ item, setApiKeyDeleteId, refresh, gigaMeterCategoryCountries }: { item: ApiKeysAdminRequestType, setApiKeyDeleteId: any, refresh: () => void, gigaMeterCategoryCountries: GigaMeterCategoryCountriesType[] }) => {
   const { inProgress, isExpired, extensionInProgress, extensionDeclined } = getApiKeysProps(item);
   const currentStatusType = (isExpired ? ApiStatusName.expired : item.status).toLocaleLowerCase();
   const statusColor = ApiStatusColors[currentStatusType];
@@ -23,7 +25,9 @@ const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength, refresh }: { 
   const extensionColor = ApiStatusColors[item.extension_status?.toLocaleLowerCase()]
   const isExtension = extensionInProgress ?? extensionDeclined;
   const userPermission = useStore($userPermissions);
-  const isAllCountries = item?.active_countries_list?.length === countryLength;
+  const countryList = useStore($countryList)
+
+  const isAllCountries = item?.active_countries_list?.length === countryList?.length;
   const apiAction = (status: string) => {
     onChangeApiKeyRequest({
       id: item.id,
@@ -42,6 +46,69 @@ const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength, refresh }: { 
     })
   }
   const hasOneCountry = item?.active_countries_list?.length === 1;
+
+  const countryRequested = useCallback((hideInfo: boolean) => {
+    return (
+      <Div $flex="center">
+        {item?.active_countries_list?.length === 0 && '-'}
+        {hasOneCountry && item?.active_countries_list[0].name}
+        {item?.active_countries_list?.length > 1 && item?.active_countries_list?.length}
+        {item?.active_countries_list?.length >= 1 && <CountryListToggletip
+          align="bottom">
+          <ToggletipButton>
+            <DataLayerActiveCountries>
+              {!hasOneCountry && "View list"}
+              {!hideInfo && <Tooltip align="bottom" label={item?.description}>
+                <button className="sb-tooltip-trigger" type="button">
+                  <Information style={{ fill: '#000' }} />
+                </button>
+              </Tooltip>}
+            </DataLayerActiveCountries>
+          </ToggletipButton>
+          {!hasOneCountry && <CountryListToggletipContent>
+            <p className="list-content">
+              {isAllCountries ? 'All countries' : item.active_countries_list?.map((country) => country?.name)?.join(', ')}
+            </p>
+          </CountryListToggletipContent>}
+        </CountryListToggletip>}
+      </Div>
+    )
+  }, [item?.active_countries_list, isAllCountries])
+
+  const countryAccessTo = useMemo(() => {
+    const categoryList = item.active_api_categories_list;
+    const activeCountryIds = item.active_countries_list.map((item) => item.id);
+    if (categoryList?.length) {
+      let category = categoryList[0].code;
+      let allowedCountries = gigaMeterCategoryCountries?.find((item) => item.category === category)?.allowedCountries || [];
+      if (allowedCountries.length) {
+        let countryNames = countryList
+          .filter(country => activeCountryIds.includes(country.id))
+          .filter(country => allowedCountries.includes(country.iso3_format))
+          .map((item) => item.name);
+        return <Div $flex="center">
+          {countryNames.length === 0 && '-'}
+          {countryNames.length === 1 && countryNames[0]}
+          {countryNames.length > 1 && countryNames.length}
+          {countryNames.length > 1 && <CountryListToggletip
+            align="bottom">
+            <ToggletipButton>
+              <DataLayerActiveCountries>
+                View list
+              </DataLayerActiveCountries>
+            </ToggletipButton>
+            <CountryListToggletipContent>
+              <p className="list-content">
+                {countryNames?.join(', ')}
+              </p>
+            </CountryListToggletipContent>
+          </CountryListToggletip>}
+        </Div>
+      }
+    }
+    return countryRequested(true);
+  }, [gigaMeterCategoryCountries, item])
+
   return (
     <TableRow>
       <TableCell className='api-keys-data-table-key-name'>
@@ -52,29 +119,10 @@ const AdminApiKeyItem = ({ item, setApiKeyDeleteId, countryLength, refresh }: { 
         {item.user.first_name}<br />{item.user.email}
       </TableCell>
       <TableCell className='api-keys-data-table-key-name'>
-        <Div $flex="center">
-          {item?.active_countries_list?.length === 0 && '-'}
-          {hasOneCountry && item?.active_countries_list[0].name}
-          {item?.active_countries_list?.length > 1 && item?.active_countries_list?.length}
-          {item?.active_countries_list?.length >= 1 && <CountryListToggletip
-            align="bottom">
-            <ToggletipButton>
-              <DataLayerActiveCountries>
-                {!hasOneCountry && "View list"}
-                <Tooltip align="bottom" label={item?.description}>
-                  <button className="sb-tooltip-trigger" type="button">
-                    <Information style={{ fill: '#000' }} />
-                  </button>
-                </Tooltip>
-              </DataLayerActiveCountries>
-            </ToggletipButton>
-            {!hasOneCountry && <CountryListToggletipContent>
-              <p className="list-content">
-                {isAllCountries ? 'All countries' : item.active_countries_list?.map((country) => country?.name)?.join(', ')}
-              </p>
-            </CountryListToggletipContent>}
-          </CountryListToggletip>}
-        </Div>
+        {countryRequested(false)}
+      </TableCell>
+      <TableCell className='api-keys-data-table-key-name'>
+        {countryAccessTo}
       </TableCell>
       <TableCell>
         <ApiCategorySelection item={item} refresh={refresh} isExpired={isExpired} />

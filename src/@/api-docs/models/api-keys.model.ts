@@ -1,6 +1,6 @@
 import { combine, createEvent, createStore, sample } from "effector";
 
-import { getApiKeyListFx, requestForApiKeyFx, requestForExtensionFx } from '~/@/api-docs/effects/api-keys-fx';
+import { GigaMeterCategoryCountriesType, getApiKeyListFx, getGigaMeterCategoryCountriesFx, requestForApiKeyFx, requestForExtensionFx } from '~/@/api-docs/effects/api-keys-fx';
 import { APIListType } from "~/api/types";
 import { $loggedInUser } from "~/core/auth/models";
 import { setPayload } from "~/lib/effector-kit";
@@ -13,6 +13,10 @@ $apiKeysListResponse.on(getApiKeyListFx.doneData, setPayload);
 
 export const $apiKeysData = $apiKeysListResponse.map((resp) => resp?.results ?? []);
 export const onRequestApiKey = createEvent<number>()
+
+export const $gigaMeterCategoryCountries = createStore<GigaMeterCategoryCountriesType[]>([]);
+$gigaMeterCategoryCountries.on(getGigaMeterCategoryCountriesFx.doneData, (_, result) => result?.data);
+
 sample({
   clock: onRequestApiKey,
   fn: (api) => {
@@ -20,6 +24,7 @@ sample({
   },
   target: requestForApiKeyFx
 })
+
 
 // sample({
 //   source: requestForApiKeyFx.failData,
