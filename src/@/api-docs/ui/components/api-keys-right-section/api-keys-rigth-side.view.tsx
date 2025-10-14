@@ -3,7 +3,7 @@ import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 
 import { getApiKeyListFx } from '~/@/api-docs/effects/api-keys-fx';
-import { $apiKeysListResponse } from '~/@/api-docs/models/api-keys.model';
+import { $apiKeysListResponse, $gigaMeterCategoryCountries } from '~/@/api-docs/models/api-keys.model';
 import { EmptyList } from '~/@/common/style/styled-component-style';
 import { Scroll } from '~/@/scroll';
 import { $isLoggedIn, $loggedInUser } from '~/core/auth/models';
@@ -15,13 +15,9 @@ import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import Pagination from '~/@/admin/ui/common-components/Pagination';
 import { deleteApiKeyRequestFx } from '~/@/admin/effects/api-request-fx';
 import { DeleteConfirmation } from '~/@/admin/ui/styles/admin-styles';
-import { GigaMeterCategoryCountriesType, getGigaMeterCategoryCountriesFx } from '~/@/api-docs/effects/api-keys-fx';
-import { createStore } from 'effector';
+import { getGigaMeterCategoryCountriesFx } from '~/@/api-docs/effects/api-keys-fx';
 import { getCountryListFx } from '~/@/api-docs/effects/explore-api-fx';
 
-const $gigaMeterCategoryCountries = createStore<GigaMeterCategoryCountriesType[]>([]);
-
-$gigaMeterCategoryCountries.on(getGigaMeterCategoryCountriesFx.doneData, (_, result) => result?.data);
 const ApiKeysRigthSide = () => {
   const isLoggedIn = useStore($isLoggedIn);
   const gigaMeterCategoryCountries = useStore($gigaMeterCategoryCountries)
