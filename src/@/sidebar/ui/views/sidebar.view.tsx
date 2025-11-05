@@ -1,7 +1,7 @@
 import { MagicWandFilled, ChevronDown, ChevronUp, ChevronRight, AccessibilityAlt } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { MouseEvent, } from 'react';
+import { MouseEvent, useEffect, } from 'react';
 
 import { BroadcastButton, TakeTourWrapper } from '~/@/map/ui/layer-theme/theme-button.style';
 import ThemeButtons from '~/@/map/ui/layer-theme/theme-buttons';
@@ -12,6 +12,7 @@ import {
   $isMenuOpen, $isSidebarCollapsed,
   $isTimeplayer,
   $sidebarHeight,
+  applyUrlParams,
   onClickSidebar,
   setSidebarHeight,
   toggleSidebar,
@@ -50,7 +51,12 @@ export default function Sidebar() {
   const schoolRoute = useRoute(mapSchools);
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed)
-  const isTimeplayer = useStore($isTimeplayer)
+  const isTimeplayer = useStore($isTimeplayer);
+
+  useEffect(() => {
+    applyUrlParams();
+  }, []);
+
   return (
     <MainSideBarContainer onClick={() => onClickSidebar()}
       $left={isSidebarCollapsed}

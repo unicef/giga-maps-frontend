@@ -16,6 +16,8 @@ import {
   $layerUtils,
   $schoolStats,
   $benchmarkNamesAllLayers,
+  triggerUpdateUrl,
+  $liveLayerLegendsStatus,
 } from '~/@/sidebar/sidebar.model';
 import { $country, $countryConnectivityNames } from '~/@/country/country.model';
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
@@ -51,6 +53,7 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const [realtimeCheckedStatus, setRealtimeCheckedStatus] = useState<CheckedStatus>({});
   const realtimeStatsFromStore = useStore($connectivityStats);
   const schoolRealTimeStats = useStore($schoolStats);
+  const liveLayerLegendsStatus = useStore($liveLayerLegendsStatus);
   const realtimeStats = realtimeStatsFromStore?.real_time_connected_schools ?? {} as defaultLegendValuesType;
   const bencharkmarkValue = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.rounded_benchmark_value;
   const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.display_unit;
@@ -79,16 +82,12 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
       default:
         console.log('Unknown key:', key);
     }
+    triggerUpdateUrl();
   };
 
   useEffect(() => {
-    setRealtimeCheckedStatus({
-      good: speedGood,
-      moderate: speedModerate,
-      bad: speedNoInternet,
-      unknown: speedUnknown
-    });
-  }, [speedGood, speedModerate, speedNoInternet, speedUnknown]);
+    setRealtimeCheckedStatus(liveLayerLegendsStatus);
+  }, []);
 
   return (
     <div className='school-status'>

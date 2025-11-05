@@ -13,6 +13,8 @@ import {
   $layerUtils,
   $connectivityBenchMark,
   $benchmarkNamesAllLayers,
+  triggerUpdateUrl,
+  $coverageStatusAll,
 } from '~/@/sidebar/sidebar.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle, LiveLayerBenchmark } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
@@ -39,6 +41,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
+  const coverageStatusAll = useStore($coverageStatusAll);
 
   const handleStaticLayerToggle = (key: string) => {
     const newStatus = !staticLayerCheckedStatus[key];
@@ -64,15 +67,11 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
       default:
         console.log('Unknown coverage key:', key);
     }
+    triggerUpdateUrl();
   };
 
   useEffect(() => {
-    setStaticLayerCheckedStatus({
-      'good': true,
-      'moderate': true,
-      'bad': true,
-      'unknown': true,
-    });
+    setStaticLayerCheckedStatus(coverageStatusAll);
   }, []);
 
   return (<div className='school-status'>

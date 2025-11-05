@@ -153,10 +153,9 @@ const activeFiltersListClock = guard({
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList }) => {
-    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!);
-    return null;
-  },
+  fn: ({ countryActiveFiltersList, activeFiltersList }) =>
+    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!),
+  target: router.navigate
 });
 
 $map.watch(zoomIn, (map: Map | null) => {

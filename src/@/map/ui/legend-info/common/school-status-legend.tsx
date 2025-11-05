@@ -5,7 +5,8 @@ import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-
 import {
   staticLegendsSelection,
   $layerUtils,
-  $staticLegendsSelected
+  $staticLegendsSelected,
+  triggerUpdateUrl
 } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
@@ -30,7 +31,6 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
   const staticLegends = useStore($staticLegendsSelected);
   const schoolStatusStats: any = globalStatsFromStore?.connected_schools;
 
-
   const handleSchoolStatusLayerChange = (key: string) => {
     const newStatus = !schoolStatusCheckedStatus[key];
     setSchoolStatusCheckedStatus(prevState => ({
@@ -51,6 +51,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
       default:
         console.log('Unknown key:', key);
     }
+    triggerUpdateUrl();
   };
 
   useEffect(() => {

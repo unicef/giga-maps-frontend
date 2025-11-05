@@ -6,12 +6,23 @@ export function buildFilterQueryFromSelections(
   selections: ActiveFilterListType[],
   filters: AdvanceFilterType[],
   prefix = "filter__",
-  multiValueDelimiter = "|" // join arrays with '|' so URL encodes to %7C
+  multiValueDelimiter = "|"
 ) {
-  const params = new URLSearchParams();
+  // Start from current query so we preserve non-filter params
+  const params = new URLSearchParams(window.location.search);
+
+  // 1) Delete any existing keys that belong to filter__* (clean stale filter keys)
+  for (const key of Array.from(params.keys())) {
+    if (key.startsWith(prefix) || key.startsWith(`${prefix}ignore_`)) {
+      params.delete(key);
+    }
+  }
+
+  // 2) Build a map of filters for lookup
   const filtersById = new Map<number, AdvanceFilterType>();
   filters.forEach((f) => filtersById.set(f.id, f));
 
+  // 3) Add new filter params (same logic as your original)
   for (const sel of selections) {
     if (!sel) continue;
     const id = sel.advance_filter_id;
@@ -94,8 +105,11 @@ export function buildFilterQueryFromSelections(
       if (value === "") continue;
       params.set(`${prefix}${colName}__${qFilter}`, value);
     }
-    // any other shapes (objects, arrays for non-multiselect, etc.) are intentionally ignored
   }
-  console.log('params', params.toString())
-  router.navigate(`${window.location.pathname}?${params.toString()}`);
+
+  // Build final url
+  const queryString = params.toString();
+  const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+  return newUrl;
 }
+

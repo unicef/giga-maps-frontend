@@ -39,6 +39,7 @@ import {
   $selectedLayerId,
   changeConnectivityBenchmark,
   checkConnectivityBenchmark,
+  clearUrlPreferredLayer,
   onSchoolUncheck,
   onSelectMainLayer,
   onSelectSchoolStatusLayer,
@@ -305,9 +306,10 @@ sample({
     if (!selectedLayerId && !schoolId) {
       currentSchoolLayer = SCHOOL_STATUS_LAYER.id
     }
-    if (isStatic && currentSchoolLayer) {
-      currentSchoolLayer = null;
-    }
+    // to resolve layers selection on page reload school + static
+    // if (isStatic && currentSchoolLayer) {
+    //   currentSchoolLayer = null;
+    // }
     return currentSchoolLayer;
   },
   target: onSelectSchoolStatusLayer
@@ -344,7 +346,7 @@ sample({
     return nextLayerId;
   },
   filter: ({ countryCode }) => !!countryCode,
-  target: onSelectMainLayer
+  target: [clearUrlPreferredLayer, onSelectMainLayer]
 })
 
 sample({

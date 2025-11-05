@@ -52,13 +52,28 @@ const FilterSelectedChips = () => {
     return selectedFields;
   }, [advanceFilterList, urlFieldList]);
 
+  const removeFiltersParamsFromUrl = () => {
+    if (typeof window === 'undefined') return;
+
+    const url = new URL(window.location.origin + location.pathname + location.search + location.hash);
+
+    // gather keys first to avoid mutation while iterating
+    const keysToRemove = Array.from(url.searchParams.keys()).filter(k => k.startsWith('filter__'));
+    if (keysToRemove.length === 0) return; // nothing to remove
+
+    keysToRemove.forEach(k => url.searchParams.delete(k));
+
+    // Use absolute URL to be safe
+    router.navigate(`${url.toString()}`)
+  }
+
   if (!selectedFilterChips.length) return null;
   return (<>
     <ChipsContainer>
       <ChipWrapper>
-        <FilterTag onClick={() => {
-          router.navigate(`${window.location.pathname}`)
-        }} filter type='high-contrast' renderIcon={() => null}>
+        <FilterTag
+          onClick={removeFiltersParamsFromUrl}
+          filter type='high-contrast' renderIcon={() => null}>
           Clear All
         </FilterTag>
       </ChipWrapper>
