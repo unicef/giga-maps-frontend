@@ -515,10 +515,15 @@ $showAdvancedFilter.reset([$countryCode, $admin1Code, $countrySearchString])
 
 type Layer = { id?: string | number; code?: string; name?: string } | null;
 
-let initialized = false;       // existing guard for applyUrlParams
-let urlWriteEnabled = false;   // NEW: prevents writer during init/hydration
+/**
+ * Guards for URL handling:
+ * - `initialized` prevents applying URL params more than once.
+ * - `urlWriteEnabled` prevents URL writes during initial hydration/apply.
+ */
+let initialized = false;
+let urlWriteEnabled = false;
 
-/* keep your sanitize */
+/** Sanitize a string for use in URL tokens (lowercase, alnum, dash, underscore). */
 function sanitize(str: string): string {
   return str
     .trim()
@@ -528,10 +533,16 @@ function sanitize(str: string): string {
     .replace(/^-|-$/g, '');
 }
 
-/* FLAG_META unchanged except formatting for readability */
-/* Add a legendSetter to each meta entry. legendSetter receives a Set<string> of normalized tokens.
-   clearOnAbsent controls whether we explicitly clear flags when the param is absent (default true).
-*/
+/**
+ * FLAG_META maps logical flags to:
+ * - a fieldName used in the combined $currentLayer output,
+ * - the urlParam and optional legendUrlParam names,
+ * - functions to get the actual layer and derive legends,
+ * - a legendSetter to apply legend tokens (Set<string>) to your stores/events,
+ * - clearOnAbsent controls whether to clear legend state when param is absent (default true).
+ *
+ * Keep legendSetter implementations aligned with your actual effector events/stores.
+ */
 const FLAG_META: Record<
   string,
   {
@@ -544,9 +555,8 @@ const FLAG_META: Record<
       coverageStatusAll: Record<string, boolean>;
       liveLayerLegendsStatus: Record<string, boolean>;
     }) => string[];
-    // NEW:
     legendSetter?: (tokens: Set<string>) => void;
-    clearOnAbsent?: boolean; // default true
+    clearOnAbsent?: boolean;
   }
 > = {
   isLive: {
@@ -588,17 +598,15 @@ const FLAG_META: Record<
     getLayer: () => (typeof SCHOOL_STATUS_LAYER !== 'undefined' ? (SCHOOL_STATUS_LAYER as Layer) : null),
     getLegends: ({ staticLegendsSelected }) => (Array.isArray(staticLegendsSelected) ? staticLegendsSelected.slice() : []),
     legendSetter: (set) => {
-      // staticLegendsSelection expects an array of tokens; keep normalization consistent
       staticLegendsSelection(Array.from(set));
     },
     clearOnAbsent: false,
   },
 };
 
-
 /**
  * Combine $currentLayer with all legend-related stores.
- * Add any stores you use for legend selections here.
+ * Add legend-related stores here so $currentLayer contains both selected layer and current legend state.
  */
 export const $currentLayer = combine(
   {
@@ -606,15 +614,11 @@ export const $currentLayer = combine(
     selectedId: $selectedLayerId,
     typeUtils: $currentLayerTypeUtils,
     // legend sources:
-    staticLegendsSelected: $staticLegendsSelected, // array
-    coverageStatusAll: $coverageStatusAll, // object with boolean flags
+    staticLegendsSelected: $staticLegendsSelected,
+    coverageStatusAll: $coverageStatusAll,
     liveLayerLegendsStatus: $liveLayerLegendsStatus,
     activeLayerByCountryCode: $activeLayerByCountryCode,
-    currentDefaultLayerIdForUI: $currentDefaultLayerIdForUI
-    // speedGood: $connectivitySpeedGood,
-    // speedModerate: $connectivitySpeedModerate,
-    // speedNoInternet: $connectivitySpeednoInternet,
-    // speedUnknown: $connectivitySpeedUnknown,
+    currentDefaultLayerIdForUI: $currentDefaultLayerIdForUI,
   },
   (payload): Record<string, any> => {
     const {
@@ -625,96 +629,71 @@ export const $currentLayer = combine(
       coverageStatusAll,
       liveLayerLegendsStatus,
       activeLayerByCountryCode,
-      currentDefaultLayerIdForUI
-      // speedGood,
-      // speedModerate,
-      // speedNoInternet,
-      // speedUnknown,
+      currentDefaultLayerIdForUI,
     } = payload as {
       layers: any[];
       selectedId: string | number | null;
       typeUtils: any;
       staticLegendsSelected: string[];
       coverageStatusAll: Record<string, boolean>;
+        liveLayerLegendsStatus: Record<string, boolean>;
       activeLayerByCountryCode: Record<string, boolean>;
-      liveLayerLegendsStatus: Record<string, boolean>;
-      currentDefaultLayerIdForUI: number | null
-      // speedGood: boolean;
-      // speedModerate: boolean;
-      // speedNoInternet: boolean;
-      // speedUnknown: boolean;
+        currentDefaultLayerIdForUI: number | null;
     };
 
     if (!typeUtils) return {};
 
-    // console.log("speedGood: ", speedGood, "speedModerate: ", speedModerate);
-
+    // find the selected layer object from the list
     const findLayer = (): Layer => {
       if (!selectedId || !Array.isArray(layers)) return null;
       return layers.find((l: any) => `${l?.id}` === `${selectedId}`) ?? null;
     };
     const found = findLayer();
 
-    console.log('on country change: ', found, selectedId);
-
     const result: Record<string, any> = {};
-    // const isLiveLayerEnabled = activeLayerByCountryCode[String(currentDefaultLayerIdForUI)];
-    // console.log("activeLayerByCountryCode[String(currentDefaultLayerIdForUI)]:", activeLayerByCountryCode[String(currentDefaultLayerIdForUI)]);
-    // decide if any flag is enabled on this typeUtils
-    const anyFlagEnabled = Object.keys(FLAG_META).some(flag => Boolean((typeUtils as any)[flag]));
 
-    Object.keys(FLAG_META).forEach(flag => {
-      // treat `isSchoolStatus` as enabled when *no* flags are enabled
+    // determine if any flag is explicitly enabled; use schoolStatus as default when none enabled
+    const anyFlagEnabled = Object.keys(FLAG_META).some((flag) => Boolean((typeUtils as any)[flag]));
+
+    Object.keys(FLAG_META).forEach((flag) => {
       const isEnabled = Boolean((typeUtils as any)[flag]) || (!anyFlagEnabled && flag === 'isSchoolStatus');
-
       if (!isEnabled) return;
 
       const meta = FLAG_META[flag];
-      console.log("[debug typeUtils]: ", flag, typeUtils, meta);
-      console.log("found: ", found);
 
-      // layer object for this flag
+      // set layer object for this flag
       result[meta.fieldName] = meta.getLayer(found);
 
-      // compute legends for this flag (if function provided)
+      // compute and attach legend tokens for URL writing if provider exists
       if (meta.getLegends) {
         const legends = meta.getLegends({
           staticLegendsSelected,
           coverageStatusAll,
           liveLayerLegendsStatus,
-          // ...other params as before
         }) || [];
-
-        // normalize legends to strings + sanitize lightly (we will sanitize for url as well)
         result[`${meta.fieldName}Legends`] = Array.isArray(legends) ? legends.map(String) : [];
       }
     });
 
-    console.log('setting layer 0', selectedId, currentDefaultLayerIdForUI, typeUtils, result, Object.keys(result).length)
-    if (Object.keys(result).length === 0) {
-    }
-    console.log("[debug result]: ", result);
-    // result['isLiveLayerEnabled'] = isLiveLayerEnabled;
     return result;
   }
 );
 
 /**
- * URL updater: writes both layer__... and layer__include_legend__... params.
+ * Event that accepts an object shaped like $currentLayer's output and writes URL params.
+ * The watcher will build and replace URL using history.replaceState.
  */
 const updateUrlWithLayers = createEvent<Record<string, any>>();
 
 updateUrlWithLayers.watch((layersObj) => {
   if (typeof window === 'undefined') return;
-  console.log("urlWriteEnabled:", urlWriteEnabled);
-  // url
-  if (!urlWriteEnabled) return; // skip writes during hydration/init
+  if (!urlWriteEnabled) return;
+
   try {
     const url = new URL(window.location.href);
     const params = url.searchParams;
 
     // Write layer__ params
-    console.log("setting layer 1: ", layersObj);
     Object.values(FLAG_META).forEach((meta) => {
       const layer = (layersObj as any)[meta.fieldName] as Layer | undefined;
       const key = meta.urlParam?.toLowerCase();
@@ -726,7 +705,6 @@ updateUrlWithLayers.watch((layersObj) => {
               ? layer.name
               : String(layer.id);
         params.set(key, `${String(layer.id)}_${sanitize(String(rawCode))}`);
-        console.log("setting layer 2: ", layersObj, key, `${String(layer.id)}_${sanitize(String(rawCode))}`);
       } else if (key) {
         params.delete(key);
       }
@@ -750,7 +728,7 @@ updateUrlWithLayers.watch((layersObj) => {
       }
     });
 
-    // global 'layer' flag (exists if any layer__ params exist)
+    // global 'layer' flag exists if any layer__ params present
     const hasAnyLayerParam = Array.from(params.keys()).some((k) => k.toLowerCase().startsWith('layer__'));
     if (hasAnyLayerParam) params.set('layer', 'true');
     else params.delete('layer');
@@ -759,11 +737,13 @@ updateUrlWithLayers.watch((layersObj) => {
     const currentUrl = window.location.pathname + window.location.search + window.location.hash;
     if (newUrl !== currentUrl) window.history.replaceState(null, '', newUrl);
   } catch (err) {
-    // swallow, optional dev logging
+    // swallow errors to avoid breaking the app flow
   }
 });
 
 export const triggerUpdateUrl = createEvent<void>();
+
+// Sample to trigger URL write when required. Keep onSelectMainLayer in the clock array if you want writes on main-layer selection.
 sample({
   source: $currentLayer,
   clock: [triggerUpdateUrl, onSelectMainLayer],
@@ -772,7 +752,7 @@ sample({
 
 /* --------------------- URL parsing & apply (refactored) --------------------- */
 
-/* small helpers */
+/* Parse "<id>_<raw>" into parts. If underscore missing, raw is empty string. */
 function parseLayerParamValue(value: string | null) {
   if (!value) return null;
   const idx = value.indexOf('_');
@@ -780,6 +760,7 @@ function parseLayerParamValue(value: string | null) {
   return { id: value.slice(0, idx), raw: value.slice(idx + 1) };
 }
 
+/* Convert "a,b,c" -> ['a','b','c'] (lowercased, trimmed). */
 function parseLegendParamValue(value: string | null) {
   if (!value) return [];
   return value
@@ -789,6 +770,7 @@ function parseLegendParamValue(value: string | null) {
     .map((s) => s.toLowerCase());
 }
 
+/* Read layer-related params from current URL when the global 'layer' flag is 'true'. */
 function readLayerParams(): Record<string, string> {
   if (typeof window === 'undefined') return {};
   const url = new URL(window.location.href);
@@ -803,33 +785,37 @@ function readLayerParams(): Record<string, string> {
   return out;
 }
 
-/* small util to turn a raw legend string into a Set of normalized tokens */
-/* helper to convert raw legend param string -> Set of normalized tokens */
+/* Convert raw legend param string -> Set of normalized tokens (underscores instead of dashes). */
 const tokensToSet = (raw?: string) => {
   if (!raw) return new Set<string>();
   return new Set(
     parseLegendParamValue(raw)
-      .map((t) => t.replace(/-/g, '_')) // normalize dashes to underscores
+      .map((t) => t.replace(/-/g, '_'))
       .map((t) => t.trim())
       .filter(Boolean)
   );
 };
 
+/**
+ * Apply URL params to app state once during initialization:
+ * - reads known layer and legend params,
+ * - dispatches existing effector events to set initial selection/legend state,
+ * - enables URL writer after initial hydration is complete.
+ *
+ * Call this once on app init (client-side) when effector stores/events are ready.
+ */
 export const applyUrlParams = () => {
-  console.log("initialized 1", initialized);
   if (initialized) return;
-  console.log("initialized 2", initialized);
   initialized = true;
 
   const layerParams = readLayerParams();
-  console.log("layerParams: ", layerParams);
   if (!layerParams || Object.keys(layerParams).length === 0) {
-    // optionally setUrlPreferredLayer(null);
+    // no params to apply — allow URL writer to run for future changes
     urlWriteEnabled = true;
     return;
   }
 
-  // quick helpers to extract known layer params (case-insensitive keys)
+  /* helper to read known params in a case-insensitive way */
   const getParam = (k: string) => layerParams[k.toLowerCase()] ?? null;
 
   const schoolRaw = getParam('layer__schoolstatus');
@@ -839,48 +825,44 @@ export const applyUrlParams = () => {
   const schoolId = schoolRaw ? Number(parseLayerParamValue(schoolRaw)?.id) : null;
   const staticId = staticRaw ? Number(parseLayerParamValue(staticRaw)?.id) : null;
   const liveId = liveRaw ? Number(parseLayerParamValue(liveRaw)?.id) : null;
-  console.log("schoolRaw: ", schoolRaw, schoolId, staticRaw, staticId, liveRaw, liveId);
 
-  // apply layers (existing functions kept)
-  console.log("schoool id: ", typeof schoolId === 'number', !Number.isNaN(schoolId), schoolId);
+  // Prefer live -> static for setting the preferred layer id for UI
+  setUrlPreferredLayer({
+    hasIdInUrl: String(layerParams['layer']) === 'true',
+    layerId: liveId ?? staticId,
+  });
+
+  // apply school status selection (send null if invalid)
   onSelectSchoolStatusLayer(typeof schoolId === 'number' && !Number.isNaN(schoolId) && schoolId !== 0 ? schoolId : null);
 
-
+  // decide preferred layer id and dispatch checks/selection
   const urlPreferredLayer = (typeof liveId === 'number' && !Number.isNaN(liveId) && liveId !== 0)
     ? liveId
     : (typeof staticId === 'number' && !Number.isNaN(staticId) && staticId !== 0)
       ? staticId
       : null;
 
-  console.table({ urlPreferredLayer, liveId, staticId });
   if (urlPreferredLayer) {
     checkConnectivityBenchmark(urlPreferredLayer);
     onSelectMainLayer(urlPreferredLayer);
   }
 
-  // setUrlPreferredLayer: prefer live then static for the layerId field (keep previous semantics)
-  setUrlPreferredLayer({
-    hasIdInUrl: String(layerParams['layer']) === 'true',
-    layerId: liveId ?? staticId,
-  });
-
-  /* iterate FLAG_META to apply legend setters in a unified way */
+  // apply legend setters (call with Set of tokens) or clear when absent (unless clearOnAbsent is false)
   Object.values(FLAG_META).forEach((meta) => {
     const key = (meta.legendUrlParam || '').toLowerCase();
     if (!key) return;
 
-    const raw = layerParams[key] ?? null; // note: layerParams keys stored lowercased in readLayerParams
+    const raw = layerParams[key] ?? null;
     if (raw) {
       const set = tokensToSet(raw as string);
       if (meta.legendSetter) meta.legendSetter(set);
     } else {
-      // absent: either clear or leave alone depending on clearOnAbsent (default true)
       if (meta.clearOnAbsent !== false && meta.legendSetter) {
-        // call legendSetter with empty set to clear
         meta.legendSetter(new Set());
       }
     }
   });
-  // enable URL writer now that initial state has been applied
+
+  // enable URL writer now that initial state is applied
   urlWriteEnabled = true;
 };

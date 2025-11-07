@@ -306,10 +306,9 @@ sample({
     if (!selectedLayerId && !schoolId) {
       currentSchoolLayer = SCHOOL_STATUS_LAYER.id
     }
-    // to resolve layers selection on page reload school + static
-    // if (isStatic && currentSchoolLayer) {
-    //   currentSchoolLayer = null;
-    // }
+    if (isStatic && currentSchoolLayer) {
+      currentSchoolLayer = null;
+    }
     return currentSchoolLayer;
   },
   target: onSelectSchoolStatusLayer
