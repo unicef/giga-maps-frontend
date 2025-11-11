@@ -194,6 +194,10 @@ export const defaultConnectivityStats = {
 export const defaultSchoolStatsTypes: SchoolStatsType[] = [
 ];
 
+export const extraMapPaintData = {
+  staticWithConnectivityStatusOpacity: .65,
+}
+
 export const mapPaintData = {
   connectivityStatus: {
     "circle-radius": [
@@ -228,7 +232,7 @@ export const mapPaintData = {
       // circle data push base on color scheme
 
     ],
-    "circle-opacity": 0.65,
+    "circle-opacity": 1,
   },
   connectivity: {
     "circle-radius": [
