@@ -36,6 +36,8 @@ export const SchoolName = styled.h6`
   max-width: 85%;
   margin-right: 1rem;
   text-transform: capitalize;
+  overflow-wrap: break-word;
+  word-break: break-word;
 `
 export const Label = styled.span<{ $color?: string, $size?: string, $textTransform?: string }>`
 color: ${props => props.$color || props.theme.titleDesc};
