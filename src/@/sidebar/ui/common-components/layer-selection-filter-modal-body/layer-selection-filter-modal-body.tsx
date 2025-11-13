@@ -4,7 +4,7 @@ import { imperativeHandle } from "~/lib/utils/react.util";
 
 import ConnectivityBenchmark from "./connectivity-benchmark.view";
 import LiveConnectivityType from "./live-connectivity-type.view";
-import { $currentLayerTypeUtils, triggerUpdateUrl } from "~/@/sidebar/sidebar.model";
+import { $currentLayerTypeUtils } from "~/@/sidebar/sidebar.model";
 import { useStore } from "effector-react";
 
 type RefType = { apply: () => void } | null;
@@ -17,7 +17,6 @@ export default forwardRef(function LayerSelectionFilterModalBody(_props, ref) {
   const handleApply = () => {
     liveConnectivityRef.current?.apply();
     connectvityBenchmarkRef.current?.apply();
-    triggerUpdateUrl();
   };
 
   imperativeHandle(ref, handleApply)

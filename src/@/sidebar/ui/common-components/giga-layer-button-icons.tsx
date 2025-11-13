@@ -6,7 +6,7 @@ import { useStore } from 'effector-react';
 import { useCallback } from 'react'
 
 import { CustomIcon } from '~/@/common/style/styled-component-style';
-import { $currentDefaultLayerIdForUI, $layerUtils, $schoolStatusSelectedLayer, checkConnectivityBenchmark, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection, triggerUpdateUrl } from '~/@/sidebar/sidebar.model';
+import { $currentDefaultLayerIdForUI, $layerUtils, $schoolStatusSelectedLayer, checkConnectivityBenchmark, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection } from '~/@/sidebar/sidebar.model';
 
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
 import GigaLayerButton from './giga-layer-button';
@@ -28,7 +28,6 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
       }
     }
     onSelectMainLayer(selectedId);
-    triggerUpdateUrl();
   }, [selectedLayerId]);
 
   const handleSchoolConnectivityClicked = useCallback((selectedId: number) => {
@@ -36,7 +35,6 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
     if (selectedLayerId) {
       onSelectSchoolStatusLayer(schoolStatusSelectedLayer ? null : selectedId);
       selectAllStaticLegendsSelection([]);
-      triggerUpdateUrl();
     }
   }, [selectedLayerId, schoolStatusSelectedLayer]);
 

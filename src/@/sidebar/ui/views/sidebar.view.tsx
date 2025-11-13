@@ -12,7 +12,6 @@ import {
   $isMenuOpen, $isSidebarCollapsed,
   $isTimeplayer,
   $sidebarHeight,
-  applyUrlParams,
   onClickSidebar,
   setSidebarHeight,
   toggleSidebar,
@@ -37,6 +36,7 @@ import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { useTranslation } from 'react-i18next';
 import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
+import { applyUrlParams } from '../../layerEffectors';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()

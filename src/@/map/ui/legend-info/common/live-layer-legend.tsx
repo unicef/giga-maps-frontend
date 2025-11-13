@@ -16,7 +16,6 @@ import {
   $layerUtils,
   $schoolStats,
   $benchmarkNamesAllLayers,
-  triggerUpdateUrl,
   $liveLayerLegendsStatus,
 } from '~/@/sidebar/sidebar.model';
 import { $country, $countryConnectivityNames } from '~/@/country/country.model';
@@ -82,7 +81,6 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
       default:
         console.log('Unknown key:', key);
     }
-    triggerUpdateUrl();
   };
 
   useEffect(() => {

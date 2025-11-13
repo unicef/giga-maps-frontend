@@ -6,7 +6,6 @@ import {
   staticLegendsSelection,
   $layerUtils,
   $staticLegendsSelected,
-  triggerUpdateUrl
 } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
@@ -51,7 +50,6 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
       default:
         console.log('Unknown key:', key);
     }
-    triggerUpdateUrl();
   };
 
   useEffect(() => {

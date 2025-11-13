@@ -13,7 +13,6 @@ import {
   $layerUtils,
   $connectivityBenchMark,
   $benchmarkNamesAllLayers,
-  triggerUpdateUrl,
   $coverageStatusAll,
 } from '~/@/sidebar/sidebar.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle, LiveLayerBenchmark } from '../legend-button.style';
@@ -67,7 +66,6 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
       default:
         console.log('Unknown coverage key:', key);
     }
-    triggerUpdateUrl();
   };
 
   useEffect(() => {
