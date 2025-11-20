@@ -2,7 +2,7 @@ import { combine, createEffect, guard, merge, sample } from 'effector';
 import { Map } from 'mapbox-gl';
 import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 
-import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList } from '~/@/country/country.model';
+import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
 import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
@@ -140,23 +140,23 @@ sample({
 const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
+  schoolFocusLatLng: $schoolFocusLatLng,
 });
 
-// guard: only run when both are available
+// guard: only run when both filters loaded AND no school is focused
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
   clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
-  filter: ({ countryActiveFiltersList, activeFiltersList }) =>
-    countryActiveFiltersList != null && activeFiltersList != null,
+  filter: ({ countryActiveFiltersList, activeFiltersList, schoolFocusLatLng }) =>
+    countryActiveFiltersList != null && activeFiltersList != null && schoolFocusLatLng === null,
 });
 
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList }) => {
-    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!);
-    return null;
-  },
+  fn: ({ countryActiveFiltersList, activeFiltersList }) =>
+    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!),
+  target: router.navigate
 });
 
 $map.watch(zoomIn, (map: Map | null) => {
