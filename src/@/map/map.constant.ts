@@ -124,7 +124,7 @@ export let stylePaintData: { [style in Style]: StylePaintData } = {
   accessible: {
     ...commonThemeStyle,
     connected: Colors.ACCESSIBILITY_DOTS_GREEN,
-    good: Colors.DARK_GREEN,
+    good: Colors.ACCESSIBILITY_DOTS_GREEN,
     moderate: Colors.ACCESSIBILITY_DOTS_YELLOW,
     bad: Colors.ACCESSIBILITY_DOTS_MAGENTA,
     not_connected: Colors.ACCESSIBILITY_DOTS_MAGENTA,
