@@ -792,7 +792,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
             aria-expanded={openAccordion === 'filters'}
           >
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <CountryListDefaultFilterTitle style={{ margin: 0 }}>Associated Giga filters</CountryListDefaultFilterTitle>
+              <CountryListDefaultFilterTitle style={{ margin: 0 }}>Default Giga filters</CountryListDefaultFilterTitle>
               <span>({selectedActiveFilters.length})</span>
             </div>
             <div>
