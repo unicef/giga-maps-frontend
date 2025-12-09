@@ -19,7 +19,7 @@ import {
   changeLayersFx, changeStyleFx,
   updateCoverageFilter
 } from '@/map/effects';
-import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
+import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers, $selectedSchoolIds } from '@/sidebar/init';
 
 import { languageStore } from '~/core/i18n/store';
 import { $theme } from '~/core/theme.model';
@@ -191,7 +191,8 @@ export const gigaLayerSource = combine({
   isMobile: $isMobile,
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
-  zoomState: $zoomState
+  zoomState: $zoomState,
+  schoolPageIds: $selectedSchoolIds
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
