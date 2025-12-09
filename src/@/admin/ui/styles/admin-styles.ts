@@ -1058,17 +1058,11 @@ export const AddEditForm = styled.div`
 
 // Assosiate Giga Filters
 export const CountryListDefaultFilterTitle = styled.h3`
-    padding: 1rem;
-    padding-bottom: 0;
     color: #000;
-    margin-top: 0.5rem;
     font-size: 1rem;
     font-weight: 500;
-    padding: 0rem 3rem;
     background-color: #f4f4f4;
     padding-block: 1.25rem;
-    margin-bottom: 0;
-    padding-bottom: 1.25rem;
     font-size: 1.25rem;
 `
 export const CountryListDefaultFilters = styled.div`

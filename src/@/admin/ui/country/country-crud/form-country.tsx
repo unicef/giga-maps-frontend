@@ -1,4 +1,4 @@
-import { Image, Search } from '@carbon/icons-react';
+import { Image, Search, ChevronDown, ChevronUp } from '@carbon/icons-react';
 import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, TextInput } from "@carbon/react";
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
@@ -48,6 +48,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     value: string;
   }>>({});
   const [isDefaultFilterValuesLoaded, setIsDefaultFilterValuesLoaded] = useState(false)
+  const [openAccordion, setOpenAccordion] = useState<'layers' | 'filters' | null>(null);
+
   const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
   const updateDefaultNationalBenchmark = (id: number, checked: boolean) => {
     if (checked) {
@@ -387,6 +389,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
 
   const defaultsReady = activeFilters.length > 0 && isDefaultFilterValuesLoaded;
 
+  const toggleAccordion = (which: 'layers' | 'filters') => {
+    setOpenAccordion(prev => (prev === which ? null : which));
+  }
+
   return (
     <Form
       id="formElem"
@@ -632,11 +638,32 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
 
         {selectedActiveLayers.length > 0 && (
           <CountryListDataLayer>
-            <h3>Associated Giga layers: </h3>
-            {
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => toggleAccordion('layers')}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { toggleAccordion('layers') } }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                padding: '0rem 3rem',
+              }}
+              aria-expanded={openAccordion === 'layers'}
+            >
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', padding: '1.25rem 0rem 1.25rem' }}>
+                <h3 style={{ margin: 0, padding: 0 }}>Associated Giga layers</h3>
+                <div>({selectedActiveLayers.length})</div>
+              </div>
+              <div>
+                {openAccordion === 'layers' ? <ChevronUp /> : <ChevronDown />}
+              </div>
+            </div>
+            {openAccordion === 'layers' &&
               filteredPublishDataLayerList.map((item: DataLayer) => (
                 selectedActiveLayers.some(layer => layer.id === item.id) && <React.Fragment key={item.id}>
-                  <div style={{ marginTop: '1rem', paddingLeft: '3rem', gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <div style={{ paddingLeft: '3rem', gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                     <p style={{ fontWeight: 'bold' }}>{item.name} ({item.type.toLowerCase()})</p>
                     {item.type === 'LIVE' &&
                       <RadioButton labelText="Select default layer" name={item.name} value={item.id} id={String(item.id)} checked={String(item.id) === String(defaultLayer)} onChange={() => setDefaultLayer(item.id)} />
@@ -743,13 +770,36 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                 </React.Fragment>
               ))
             }
-            <h4 />
           </CountryListDataLayer>
         )}
 
-        {defaultsReady && (
+        {defaultsReady &&
           <>
-            <CountryListDefaultFilterTitle>Associated Giga filters: </CountryListDefaultFilterTitle>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => toggleAccordion('filters')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { toggleAccordion('filters') } }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              padding: '0rem 3rem',
+              background: '#f4f4f4',
+              marginTop: '12px'
+            }}
+            aria-expanded={openAccordion === 'filters'}
+          >
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <CountryListDefaultFilterTitle style={{ margin: 0 }}>Default Giga filters</CountryListDefaultFilterTitle>
+              <span>({selectedActiveFilters.length})</span>
+            </div>
+            <div>
+              {openAccordion === 'filters' ? <ChevronUp /> : <ChevronDown />}
+            </div>
+          </div>
+          {openAccordion === 'filters' && (
             <CountryListDefaultFilters>
               {activeFilters.map(item => {
                 const Component = components?.[item.type] as React.JSXElementConstructor<any>;
@@ -771,9 +821,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                 );
               })}
             </CountryListDefaultFilters>
-          </>
-        )}
-
+          )}
+          </>}
       </CountryFormScroll>
       <BottomButtonWrapper>
         <Button
@@ -794,4 +843,4 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   )
 }
 
-export default FormCountry
+export default FormCountry;
