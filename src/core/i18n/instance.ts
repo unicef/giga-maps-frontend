@@ -15,8 +15,12 @@ i18next
     }, {} as any),
     supportedLngs: supportedLanguages,
     detection: {
-      order: ['localStorage', 'navigator'],
+      // Add querystring detection first to support URL param 'lng'
+      order: ['querystring', 'localStorage', 'navigator'],
+      lookupQuerystring: 'lng',
       excludeCacheFor: ['localStorage'],
+      // Cache the detected language in localStorage for persistence
+      caches: ['localStorage'],
     },
     fallbackLng: defaultLanguage,
     debug: false
