@@ -16,9 +16,9 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.15rem;
   color: ${(props) => props.theme.text};
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   svg {
     fill: ${(props) => props.theme.text};
   }
@@ -40,17 +40,21 @@ const Header = styled.div`
 const Chips = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.3rem;
 `;
 
 const SourceChip = styled(Chip) <{ $underline?: boolean }>`
   background: #2b2b2b;
   color: ${(props) => props.theme.grey60};
-  border-radius: 999px;
+  border-radius: 8px;
   padding: 0.35rem 0.75rem;
-  font-size: 0.95rem;
-  line-height: 1.25rem;
+  font-size: 0.70rem;
+  line-height: 1.4;
   text-decoration: ${(props) => (props.$underline ? 'underline' : 'none')};
+  white-space: normal;
+  word-break: break-word;
+  display: inline-block;
+  text-align: left;
 `;
 
 const ChipButton = styled.button`
@@ -60,16 +64,29 @@ const ChipButton = styled.button`
   margin: 0;
   color: inherit;
   cursor: pointer;
-  margin-bottom: 0.5rem;
 `;
 
 const replaceSourceName = (name?: string) => name?.replace(/Daily Check App/i, 'Giga Meter') ?? '';
+const isValidUrl = (str: string): boolean => {
+  const trimmed = str.trim();
+  // Check if it has a protocol (http://, https://, //, etc.)
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed) || trimmed.startsWith('//')) return true;
+  // Check if it contains at least one dot (for domain.tld pattern)
+  if (trimmed.includes('.')) return true;
+  return false;
+};
 const parseNameAndUrl = (raw: string): { name: string; url?: string } => {
   if (!raw) return { name: '' };
   const trimmed = raw.trim();
   const match = /^(.*?)\(([^)]+)\)\s*$/i.exec(trimmed);
   if (match) {
-    return { name: match[1].trim(), url: match[2].trim() };
+    const extractedUrl = match[2].trim();
+    // Only treat as URL if it looks like a valid URL
+    if (isValidUrl(extractedUrl)) {
+      return { name: match[1].trim(), url: extractedUrl };
+    }
+    // If not a valid URL, return the full text as name (keep parentheses content)
+    return { name: trimmed };
   }
   return { name: trimmed };
 }
@@ -130,7 +147,7 @@ const SchoolPopupDataSource = () => {
   return (
     <Container>
       <Header>
-        <DataBase />
+        <DataBase width={14} height={14} />
         <span>{t('data-source')}</span>
         <TooltipButton align="top" label={t('data-is-sourced-research-institutions')}>
           <button className="sb-tooltip-trigger" type="button">
