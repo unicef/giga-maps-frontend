@@ -252,6 +252,25 @@ export const hideLayer = (map: Map, id: string): void => {
   map.setLayoutProperty(id, 'visibility', 'none');
 }
 
+const circleConfig = (colorExpr: (string | (string | boolean | string[])[])[]) => {
+  const DUPLICATE_FLAG_PROP = 'has_multiple_school_on_same_lat_lng';
+  return {
+    "circle-color": [
+      'case',
+      ['==', ['get', DUPLICATE_FLAG_PROP], true],
+      '#A66CFF',
+      colorExpr
+    ],
+    "circle-stroke-color": '#fff',
+    "circle-stroke-width": [
+      'case',
+      ['==', ['get', DUPLICATE_FLAG_PROP], true],
+      1, // stroke width for duplicate halo
+      0  // no stroke for normal points (or set to small value if you want)
+    ]
+  }
+}
+
 const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string) => {
   return map.addLayer({
     minzoom: 0,
@@ -278,7 +297,7 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
   const paint = {
     ...mapPaintData.connectivityStatus,
     ...currentCountryPaintData?.connectivityStatus,
-    "circle-color": circleColor
+    ...circleConfig(circleColor),
   } as unknown as CirclePaint;
   createCircleLayer(map, {
     id,
@@ -299,37 +318,44 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
 const getConnectivityPaint = (colorsConnectivity: StylePaintData, isDynamicLayer: boolean) => {
   const countryCode = $countryCode.getState();
   const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
+
+  const innerMatch = [
+    'match',
+    ['get', isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.connectivity.key],
+    ConnectivityDistribution.good, colorsConnectivity.good,
+    ConnectivityDistribution.moderate, colorsConnectivity.moderate,
+    ConnectivityDistribution.bad, colorsConnectivity.bad,
+    ConnectivityDistribution.unknown, colorsConnectivity.unknown,
+    Colors.TRANSPARENT
+  ];
+
+  const originalCircleColorExpr = [
+    ...mapPaintData.connectivity["circle-color"],
+    innerMatch,
+    Colors.TRANSPARENT
+  ];
+
   return {
     ...mapPaintData.connectivity,
     ...currentCountryPaintData?.connectivity,
-    "circle-color": [
-      ...mapPaintData.connectivity["circle-color"],
-      [
-        "match",
-        ["get", isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.connectivity.key],
-        ConnectivityDistribution.good, colorsConnectivity.good,
-        ConnectivityDistribution.moderate, colorsConnectivity.moderate,
-        ConnectivityDistribution.bad, colorsConnectivity.bad,
-        ConnectivityDistribution.unknown, colorsConnectivity.unknown,
-        Colors.TRANSPARENT
-      ],
-      Colors.TRANSPARENT
-    ]
+    ...circleConfig(originalCircleColorExpr),
   } as unknown as CirclePaint;
 }
 
 export const getCoveragePaint = (colors: StylePaintData, isDynamicLayer: boolean) => {
+  const originalCircleColorExpr = [
+    ...mapPaintData.coverage["circle-color"],
+    ['get', isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.coverage.key],
+    ConnectivityDistribution.good, colors.good,
+    ConnectivityDistribution.moderate, colors.moderate,
+    ConnectivityDistribution.bad, colors.bad,
+    ConnectivityDistribution.unknown, colors.unknown,
+    colors.unknown  // Default
+  ];
+
   return {
     ...mapPaintData.coverage,
-    "circle-color": [
-      ...mapPaintData.coverage["circle-color"],
-      ["get", isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.coverage.key],
-      ConnectivityDistribution.good, colors.good,
-      ConnectivityDistribution.moderate, colors.moderate,
-      ConnectivityDistribution.bad, colors.bad,
-      ConnectivityDistribution.unknown, colors.unknown,
-      colors.unknown  // Default color for other cases
-    ]
+    ...circleConfig(originalCircleColorExpr),
   } as unknown as CirclePaint;
 }
 
