@@ -955,7 +955,7 @@ export const SchoolFormScroll = styled(Scroll)`
 max-height:calc(100vh - 11rem);`
 
 export const CountryFormScroll = styled(Scroll)`
-max-height:calc(100vh - 7.5rem);
+max-height:calc(100vh - 8.2rem);
 padding-bottom: 2rem;
 `
 export const AmenitiesContainer = styled.div`
