@@ -774,7 +774,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         )}
 
         {defaultsReady &&
-          <>
+          <div style={{ marginBottom: '1.2rem' }}>
           <div
             role="button"
             tabIndex={0}
@@ -822,7 +822,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               })}
             </CountryListDefaultFilters>
           )}
-          </>}
+          </div>}
       </CountryFormScroll>
       <BottomButtonWrapper>
         <Button
