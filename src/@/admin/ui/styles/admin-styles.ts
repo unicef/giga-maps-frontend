@@ -800,7 +800,7 @@ button{
 export const CountryListDataLayer = styled.div`
     background-color: #f4f4f4;
     margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.2rem;
 
 h3{
     padding:1.25rem 3rem .25rem;
