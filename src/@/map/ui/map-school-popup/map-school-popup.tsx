@@ -56,6 +56,7 @@ export const MapSchoolPopup = () => {
           staticValue,
           staticColor,
           schoolAtSameLocation,
+          schoolId
         } = getFeatureInfo(feature);
 
         const hasDublicateSchools = schoolAtSameLocation?.schoolIds.length > 0;
@@ -68,8 +69,7 @@ export const MapSchoolPopup = () => {
             <div className="school-popup-data">
               {(!isLoading && isClicked && hasDublicateSchools) ?
                 <DublicateSchoolPopup
-                  dublicateSchoolIdsCount={schoolAtSameLocation.count}
-                  schoolIds={schoolAtSameLocation.schoolIds}
+                  schoolIds={[schoolId, ...schoolAtSameLocation.schoolIds]}
                   countryCode={countryCode}
                   scrollableTargetId="parentPopupScrollContainer"
                   batchSize={10}

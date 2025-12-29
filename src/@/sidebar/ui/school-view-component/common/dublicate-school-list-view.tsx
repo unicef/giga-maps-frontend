@@ -49,14 +49,11 @@ export default function SidebarDublicateSchoolList({
   // derive duplicateIds from the first schoolClickData item (like your old logic)
   const duplicateIds: number[] = React.useMemo(() => {
     if (!selectedSchool) return [];
-    const ids = selectedSchool?.schools_at_same_location?.school_ids;
-    if (!Array.isArray(ids) || ids.length === 0) return [];
+    const ids = [selectedSchool.id, ...selectedSchool?.schools_at_same_location?.school_ids ?? []];
     return ids;
   }, [selectedSchool]);
 
   const totalIds = duplicateIds.length;
-  const totalDublicateSchoolIdsCount = useMemo(() => selectedSchool?.schools_at_same_location?.count, [selectedSchool])
-
   // local state: accumulated fetched schools (mapped SchoolStatsType objects)
   const [accumulatedSchools, setAccumulatedSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
   const nextIndexRef = useRef<number>(0); // pointer to next id index to request
@@ -189,11 +186,11 @@ export default function SidebarDublicateSchoolList({
   }
 
   // Render nothing if there's no duplicate ids
-  if (!duplicateIds || duplicateIds.length === 0) return null;
+  if (totalIds <= 1) return null;
 
   return (
     <SidebarDublicateSchoolWrapper>
-      <TotalCountLabel>{`(${totalDublicateSchoolIdsCount}) ${t('school-duplicates')}`}</TotalCountLabel>
+      <TotalCountLabel>{`(${totalIds}) ${t('school-duplicates')}`}</TotalCountLabel>
 
       <DublicateSchoolList>
         <InfiniteScroll
