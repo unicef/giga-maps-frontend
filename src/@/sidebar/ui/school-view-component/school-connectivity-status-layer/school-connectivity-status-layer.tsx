@@ -1,10 +1,8 @@
 import { useStore } from 'effector-react';
 
-import { $getSchoolParams } from '~/@/sidebar/init';
-
 import { useTranslation } from 'react-i18next';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { $schoolStats } from '~/@/sidebar/sidebar.model';
+import { $getSchoolParams, $schoolStats } from '~/@/sidebar/sidebar.model';
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import CommonUIOnlySchoolConnectivityLayer from '../common/common-ui-only-school-connectivity-layer';
 import SidebarDublicateSchoolList from '../common/dublicate-school-list-view';
