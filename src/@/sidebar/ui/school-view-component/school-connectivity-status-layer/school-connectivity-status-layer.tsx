@@ -1,13 +1,12 @@
 import { useStore } from 'effector-react';
+import { useTranslation } from 'react-i18next';
 
-import { $getSchoolParams } from '~/@/sidebar/init';
+import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { $getSchoolParams, $schoolStats } from '~/@/sidebar/sidebar.model';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import CommonUIOnlySchoolConnectivityLayer from '../common/common-ui-only-school-connectivity-layer';
 import MultiSchoolLayerView from '../common/multi-school-layer.view';
-import { $schoolStats } from '~/@/sidebar/sidebar.model';
-import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { useTranslation } from 'react-i18next';
 
 const SchoolStatsTypeus = () => {
   const { t } = useTranslation();

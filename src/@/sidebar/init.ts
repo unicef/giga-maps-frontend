@@ -21,6 +21,7 @@ import {
   $coverageUnknown,
   $currentDefaultLayerId,
   $currentLayerTypeUtils,
+  $getSchoolParams,
   $globalLayerId,
   $isCurrentLayerLive,
   $isSidebarCollapsed,
@@ -85,19 +86,6 @@ export const $coverageFilter = combine({
   bad: $coverageNoCoverage,
   unknown: $coverageUnknown,
 })
-
-export const $getSchoolParams = sample({
-  source: mapSchools.router.search,
-  fn: (searchParams) => {
-    const params = new URLSearchParams(searchParams)
-    return {
-      country: params.get('country'),
-      schoolIds: params.get('school_ids')?.split(',').map(Number)
-    }
-  }
-})
-
-export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
 
 const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (country, schoolParams, admin1Id) => ({
   countryId: country?.id,

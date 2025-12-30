@@ -21,11 +21,12 @@ import {
   changeCoverageNoCoverage,
   changeCoverageUnknown,
   staticLegendsSelection,
+  $selectedSchoolIds,
 } from './sidebar.model';
 import { ConnectivityStatusDistribution } from './sidebar.constant';
 import { URL_PARAM_KEYS, getUrlParams, parseBoolParam, parseNumberParam, setBoolParam, setNumberParam } from './url-params.util';
 import { fetchAdvanceFilterFx, fetchCountriesFx, fetchCountryFx, fetchLayerListFx } from '~/api/project-connect';
-import { $country } from '../country/country.model';
+import { $admin1Code, $country } from '../country/country.model';
 
 
 export const setAppSettled = createEvent<boolean>();
@@ -237,6 +238,8 @@ sample({
 sample({
   clock: merge([
     $country,
+    $admin1Code,
+    $selectedSchoolIds,
     $selectedLayerId,
     $schoolStatusSelectedLayer,
     $connectivitySpeedGood,

@@ -444,6 +444,18 @@ export const $timePlayerInfo = combine({
 export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
+export const $getSchoolParams = sample({
+  source: mapSchools.router.search,
+  fn: (searchParams) => {
+    const params = new URLSearchParams(searchParams)
+    return {
+      country: params.get('country'),
+      schoolIds: params.get('school_ids')?.split(',').map(Number)
+    }
+  }
+})
+
+export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
 
 // all reset model
 $staticLegendsSelected.reset([resetFilterModal, mapOverview.visible])
