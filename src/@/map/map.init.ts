@@ -1,9 +1,9 @@
 import { combine, createEffect, guard, merge, sample } from 'effector';
 import { Map } from 'mapbox-gl';
-import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 
-import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $admin1Data, $admin1Id, $country, $countryActiveFiltersList, $countryId, $countryMapping, $countrySearchString, $schoolFocusLatLng, countryReceived, setSchoolFocusLatLng } from '~/@/country/country.model';
+import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
+import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -13,16 +13,16 @@ import {
   fetchSchoolPopupDataFx,
   getBaseUrl,
 } from '~/api/project-connect';
+import { languageStore } from '~/core/i18n/store';
 import { $mapRoutes, map, mapCountry, mapOverview, router } from '~/core/routes';
+import { $theme } from '~/core/theme.model';
 
 import {
   changeLayersFx, changeStyleFx,
   updateCoverageFilter
 } from '@/map/effects';
-import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers, $selectedSchoolIds } from '@/sidebar/init';
+import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
-import { languageStore } from '~/core/i18n/store';
-import { $theme } from '~/core/theme.model';
 import { $isMobile } from '../admin/models/media-query';
 import { mapLabelLayerList } from '../country/country.constant';
 import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
@@ -32,8 +32,8 @@ import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPaus
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
-  $dublicateSchoolClickData,
   $advanceFilterList,
+  $dublicateSchoolClickData,
   $filterListMapping,
   $map,
   $multipleSchoolPopup,
@@ -155,7 +155,7 @@ sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
   fn: ({ countryActiveFiltersList, activeFiltersList }) =>
-    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!),
+    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList),
   target: router.navigate
 });
 
@@ -447,7 +447,7 @@ sample({
   source: combine({ map: $map, lng: languageStore.$language }),
   target: createEffect(({ map, lng }: { map: Map, lng: string }) => {
     if (!map || !lng) return;
-    for (let key in mapLabelLayerList) {
+    for (const key in mapLabelLayerList) {
       map.setLayoutProperty(mapLabelLayerList[key], 'text-field', [
         'get',
         `name_${lng}`
