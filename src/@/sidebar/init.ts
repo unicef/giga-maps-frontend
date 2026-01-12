@@ -274,7 +274,7 @@ sample({
     const { isStatic } = currentLayerTypeUtils;
 
     // On first load, if URL has school status layer param, use it
-    if (!isAppSettled && initialUrlParams.schoolStatusLayer !== null) {
+    if (!isAppSettled && (initialUrlParams.schoolStatusLayer || initialUrlParams.isSchoolStatusLayerNull)) {
       if (!isStatic) {
         return initialUrlParams.schoolStatusLayer;
       }
@@ -306,16 +306,16 @@ sample({
   }),
   fn: ({ layerUtils: { currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
     // If URL has layer param and it hasn't been applied yet, use URL value
-    if (!isAppSettled && initialUrlParams.layerId !== null) {
-      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId];
-      if (isUrlLayerActive) {
+    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
+      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
         return initialUrlParams.layerId;
       }
     }
     // Otherwise use default layer
     return currentDefaultLayerId;
   },
-  filter: ({ loadedLayersAndCountries }) => loadedLayersAndCountries,
+  filter: ({ loadedLayersAndCountries: isLoaded }) => isLoaded,
   target: onSelectMainLayer,
 });
 
@@ -330,9 +330,9 @@ sample({
   }),
   fn: ({ layerUtils: { selectedLayerId, currentLayerTypeUtils, isActiveCurrentLayer, currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
     // On first country code update, if URL has layer param, use it (if valid for country)
-    if (!isAppSettled && initialUrlParams.layerId !== null) {
-      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId];
-      if (isUrlLayerActive) {
+    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
+      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
         return initialUrlParams.layerId;
       }
     }
@@ -417,9 +417,9 @@ sample({
   target: publishLayersTranslationFx
 })
 
-// // reset legends
+// reset legends on country change
 sample({
-  clock: merge([$country, $admin1Code]),
+  clock: merge([$countryCode]),
   source: $isAppSettled,
   filter: (isAppSettled) => isAppSettled,
   target: [resetFilterModal, resetCoverageFilterSelection]

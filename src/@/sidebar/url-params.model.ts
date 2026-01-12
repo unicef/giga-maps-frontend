@@ -1,32 +1,34 @@
 import { combine, createEffect, createEvent, createStore, merge, restore, sample } from 'effector';
+
+import { fetchAdvanceFilterFx, fetchCountriesFx, fetchCountryFx, fetchLayerListFx } from '~/api/project-connect';
 import { $lng, onLanguageChange } from '~/core/i18n/store';
+
+import { $admin1Code, $country } from '../country/country.model';
+import { ConnectivityStatusDistribution } from './sidebar.constant';
 import {
-  $selectedLayerId,
-  $schoolStatusSelectedLayer,
   $connectivitySpeedGood,
   $connectivitySpeedModerate,
   $connectivitySpeednoInternet,
   $connectivitySpeedUnknown,
-  $coverage5g4g,
   $coverage3g2g,
+  $coverage5g4g,
   $coverageNoCoverage,
   $coverageUnknown,
+  $schoolStatusSelectedLayer,
+  $selectedLayerId,
+  $selectedSchoolIds,
   $staticLegendsSelected,
   changeConnectivitySpeedGood,
   changeConnectivitySpeedModerate,
   changeConnectivitySpeednoInternet,
   changeConnectivitySpeedUnknown,
-  changeCoverage5g4g,
   changeCoverage3g2g,
+  changeCoverage5g4g,
   changeCoverageNoCoverage,
   changeCoverageUnknown,
   staticLegendsSelection,
-  $selectedSchoolIds,
 } from './sidebar.model';
-import { ConnectivityStatusDistribution } from './sidebar.constant';
-import { URL_PARAM_KEYS, getUrlParams, parseBoolParam, parseNumberParam, setBoolParam, setNumberParam } from './url-params.util';
-import { fetchAdvanceFilterFx, fetchCountriesFx, fetchCountryFx, fetchLayerListFx } from '~/api/project-connect';
-import { $admin1Code, $country } from '../country/country.model';
+import { getUrlParams, parseBoolParam, parseNumberParam, setBoolParam, setNumberParam, URL_PARAM_KEYS } from './url-params.util';
 
 
 export const setAppSettled = createEvent<boolean>();
@@ -100,7 +102,9 @@ export const getInitialUrlParams = () => {
 
   return {
     layerId: parseNumberParam(params.get(URL_PARAM_KEYS.LAYER_ID)),
+    isLayerIdNull: params.get(URL_PARAM_KEYS.LAYER_ID) === 'null',
     schoolStatusLayer: parseNumberParam(params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER)),
+    isSchoolStatusLayerNull: params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER) === 'null',
     speedGood: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_GOOD), true),
     speedModerate: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_MODERATE), true),
     speedNoInternet: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_NO_INTERNET), true),
@@ -135,7 +139,6 @@ export const $urlTrackedParams = combine({
 
 // Effect to update URL params
 const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedParams.getState>) => {
-  if (typeof window === 'undefined') return;
 
   const url = new URL(window.location.href);
   const searchParams = url.searchParams;
@@ -160,8 +163,8 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
 
   // For other routes, update all params
   // Update layer params
-  setNumberParam(searchParams, URL_PARAM_KEYS.LAYER_ID, params.layerId);
-  setNumberParam(searchParams, URL_PARAM_KEYS.SCHOOL_STATUS_LAYER, params.schoolStatusLayer);
+  setNumberParam(searchParams, URL_PARAM_KEYS.LAYER_ID, params.layerId ?? 'null');
+  setNumberParam(searchParams, URL_PARAM_KEYS.SCHOOL_STATUS_LAYER, params.schoolStatusLayer ?? 'null');
 
   // Update connectivity speed params (only set if false)
   setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_GOOD, params.speedGood);
@@ -216,7 +219,7 @@ const applyUrlParamsToStoresFx = createEffect(() => {
 
   // Apply language param (i18next handles this via URL detection)
   if (params.language) {
-    onLanguageChange(params.language);
+    void onLanguageChange(params.language);
   }
 
   return params;

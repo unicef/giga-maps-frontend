@@ -49,7 +49,7 @@ export const setBoolParam = (searchParams: URLSearchParams, key: string, value: 
 };
 
 // Helper to set or delete URL param based on nullable number
-export const setNumberParam = (searchParams: URLSearchParams, key: string, value: number | null) => {
+export const setNumberParam = (searchParams: URLSearchParams, key: string, value: number | null | string) => {
   if (value !== null) {
     searchParams.set(key, String(value));
   } else {
