@@ -52,7 +52,7 @@ const EditDataSource = () => {
   }
 
   useEffect(() => {
-    getCountryDataSourceFx('?has_school_master_records=true&fields=id,name');
+    getCountryDataSourceFx('?has_school_master_records=true&fields=id,name&cache=false');
   }, [])
 
   useEffect(() => {
@@ -140,7 +140,7 @@ const EditDataSource = () => {
                     field.ordering ? <Link href="#" visited={!!orderingFields[field.ordering]} onClick={() => {
                       if (!orderingFields[field.ordering]) {
                         orderingFields[field.ordering] = `${field.ordering}`;
-                      } else if (orderingFields[field.ordering].startsWith('-')){
+                      } else if (orderingFields[field.ordering].startsWith('-')) {
                         orderingFields[field.ordering] = '';
                       } else {
                         orderingFields[field.ordering] = `-${field.ordering}`;
