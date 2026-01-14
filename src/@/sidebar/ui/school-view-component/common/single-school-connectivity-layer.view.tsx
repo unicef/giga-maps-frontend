@@ -25,6 +25,7 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   if (!schoolDetails?.is_rt_connected && schoolId) {
     return <CommonUIOnlySchoolConnectivityLayer schoolId={schoolId} />
   }
+
   return (
     <div>
       <Div $margin='0 1rem 0rem 1rem'>

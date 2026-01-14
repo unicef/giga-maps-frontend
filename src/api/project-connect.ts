@@ -12,7 +12,6 @@ import {
 } from '~/api/types';
 import { createRequestFx } from '~/lib/request-fx';
 import Controller from '~/lib/request-fx/types';
-import { withRetry } from '~/lib/utils/retry';
 
 import { apiBaseUrl, request } from './request-setup';
 
@@ -68,20 +67,10 @@ export const fetchDublicateSchoolPopupDataFx = createRequestFx(
  * This helps handle network issues, temporary server errors, and timeouts.
  */
 export const fetchGlobalStatsFx = createRequestFx(
-  async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => {
-    return withRetry(
-      () => request({
-        url: `api/statistics/global-stat/${query ?? ''}`,
-        signal: controller?.getSignal()
-      }),
-      {
-        maxAttempts: 3,
-        baseDelay: 1000, // 1 second
-        maxDelay: 5000,  // 5 seconds max
-        backoffFactor: 2
-      }
-    );
-  }
+  async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
+    url: `api/statistics/global-stat/${query ?? ''}`,
+    signal: controller?.getSignal()
+  })
 );
 
 export const fetchAdvanceFilterFx = createRequestFx(
