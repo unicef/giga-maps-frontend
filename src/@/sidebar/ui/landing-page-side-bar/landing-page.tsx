@@ -159,8 +159,9 @@ const LandingPage = () => {
         </LandingPageContentWrapper>
       </LandingPageScroll >
       {!isMobile && <ExploreMapButtonWrapper className='explore-countries-button'>
-        <Button 
+        <Button
           type="button"
+          size="lg"
           onClick={() => {
             onShowCountriesAdminList(true)
           }}
