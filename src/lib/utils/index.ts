@@ -1,6 +1,14 @@
 /* use this file to create global utils methods */
 
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
 import { defaultLanguage } from "~/core/i18n/constant";
+
+// shadcn utility function for merging Tailwind classes
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
 
 export const shuffleArray = (array: unknown[]): unknown[] => {

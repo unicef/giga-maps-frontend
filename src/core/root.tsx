@@ -1,4 +1,5 @@
 import '@carbon/styles/css/styles.css';
+import '~/styles/globals.css';
 
 import { Loading } from '@carbon/react';
 import { useStore } from 'effector-react';

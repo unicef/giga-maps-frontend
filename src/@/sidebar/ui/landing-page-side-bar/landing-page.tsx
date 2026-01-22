@@ -1,5 +1,6 @@
 import { ConnectionSignal, Information, Location, MagicWandFilled, NextOutline, Wifi } from '@carbon/icons-react'
-import { Button, Link, Tooltip } from '@carbon/react';
+import { Link, Tooltip } from '@carbon/react';
+import { Button } from '~/ui/components/shadcn/button';
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
@@ -158,12 +159,15 @@ const LandingPage = () => {
         </LandingPageContentWrapper>
       </LandingPageScroll >
       {!isMobile && <ExploreMapButtonWrapper className='explore-countries-button'>
-        <Button type="button"
+        <Button 
+          type="button"
           onClick={() => {
             onShowCountriesAdminList(true)
           }}
-          renderIcon={NextOutline} >
+          className="w-full justify-center"
+        >
           {t('explore-countries')}
+          <NextOutline className="ml-2 h-4 w-4" />
         </Button>
       </ExploreMapButtonWrapper>
       }
