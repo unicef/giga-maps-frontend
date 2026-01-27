@@ -3,7 +3,7 @@ import { VectorSource } from "mapbox-gl";
 import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
+import { animateCircles, animateSymbols, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
 import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from "../map.constant";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
@@ -76,9 +76,7 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
   };
   // create selected layer;
   if (isSourceAvailable && selectedLayerId) {
-    if (isLive) {
-      animateCircleHandler = animateCircles({ map, id: getMapId(selectedLayerId) });
-    }
+    // Create the layers FIRST before starting animations
     createSelectedLayer(map, {
       id: getMapId(selectedLayerId),
       isMobile,
@@ -88,10 +86,51 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
       mapRoute,
       options
     });
+
+    // THEN start animations after layers exist
+    if (isLive) {
+      // Determine which layer to animate based on current zoom
+      let previousZoom = map.getZoom();
+      const baseLayerId = getMapId(selectedLayerId);
+
+      // Start initial animation
+      if (previousZoom >= 8) {
+        // Animate symbol layer at high zoom
+        animateCircleHandler = animateSymbols({ map, id: `${baseLayerId}-symbol` });
+      } else {
+        // Animate circle layer at low zoom
+        animateCircleHandler = animateCircles({ map, id: `${baseLayerId}-circle` });
+      }
+
+      // Add zoom event listener to switch animations
+      const onZoomEnd = () => {
+        const newZoom = map.getZoom();
+        const crossedThreshold = (previousZoom < 8 && newZoom >= 8) || (previousZoom >= 8 && newZoom < 8);
+
+        if (crossedThreshold && isLive) {
+          // Cancel current animation
+          cancelAnimationFrame(animateCircleHandler.requestId);
+
+          // Start new animation for the appropriate layer
+          if (newZoom >= 8) {
+            animateCircleHandler = animateSymbols({ map, id: `${baseLayerId}-symbol` });
+          } else {
+            animateCircleHandler = animateCircles({ map, id: `${baseLayerId}-circle` });
+          }
+        }
+
+        // Update previous zoom for next comparison
+        previousZoom = newZoom;
+      };
+
+      map.on('zoomend', onZoomEnd);
+    }
   } else {
     // cancel animation;
     cancelAnimationFrame(animateCircleHandler.requestId);
-    hideLayer(map, getMapId(lastSelectedLayer.layerId))
+    const baseLayerId = getMapId(lastSelectedLayer.layerId);
+    hideLayer(map, `${baseLayerId}-circle`);
+    hideLayer(map, `${baseLayerId}-symbol`);
   }
 
   if (!mapRoute.map) return;

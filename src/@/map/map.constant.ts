@@ -18,6 +18,40 @@ export const COVERAGE_URL = 'api/locations/schools/tiles';
 export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
 export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
 
+// +
+// ➕
+// −
+// ✔
+// ✖
+// ★
+// ☆
+// ⚠
+// Solid (Filled)
+// ●
+// ⬤
+// ■
+// ▲
+// ▼
+// ◆
+// ▬
+// ⋅
+// Hollow (Outline)
+// ○
+// ◯
+// □
+// △
+// ▽
+// ◇
+// ▭
+// -
+// Symbol
+// ↑
+// ➤
+// ➔
+// ➢
+// Symbol used for plus sign markers on the map
+export const PLUS_SIGN_SYMBOL = '✚';
+
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
   dark: 'mapbox://styles/gigamapbox/clradfsin005z01pifl2j5tee',
