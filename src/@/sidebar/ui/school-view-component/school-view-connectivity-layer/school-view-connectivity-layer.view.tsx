@@ -7,6 +7,7 @@ import CurrentLayerNameIcon from '../../common-components/current-layer-name-Ico
 import SidebarDublicateSchoolList from '../common/dublicate-school-list-view';
 import MultiSchoolLayerView from '../common/multi-school-layer.view';
 import SingleSchoolConnnectivityLayer from '../common/single-school-connectivity-layer.view';
+import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 
 export default function SchoolViewConnectivityLayer() {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ export default function SchoolViewConnectivityLayer() {
         </>
       )}
       {isMoreThenOne && <MultiSchoolLayerView schoolLength={schoolIds.length} schoolLayerList={SchoolStatsTypes} />}
+      <FooterDataSourcePopUp size={25} isFooter={false} />
     </>
   );
 };

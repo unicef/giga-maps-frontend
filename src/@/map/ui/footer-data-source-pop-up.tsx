@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 
 const FooterContainer = styled.div`
   background: ${props => props.theme.main};
+  z-index: 2;
   @media (min-width: 768px) { /* Adjust 768px to your desktop breakpoint */
     position: sticky;
     bottom: 0;
@@ -23,7 +24,7 @@ const FooterContainer = styled.div`
 
 
 export const DataSourceHeader = styled.div`
-  margin-top: 1.5rem;
+  margin-top: 0rem;
   display: flex;
   align-items: center;
   width: calc(100% - 0.6rem);
