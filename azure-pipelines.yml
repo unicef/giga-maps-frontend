@@ -36,6 +36,7 @@ steps:
   - task: Bash@3
     displayName: Sonar Scan
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
