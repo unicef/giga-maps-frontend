@@ -1,11 +1,11 @@
-import { $notification } from '~/@/common/Toast/toast.model';
-import { $appConfigValues } from '~/@/admin/models/admin-model';
 import { createEvent, createStore, merge, restore, sample } from "effector";
-import { addFilterFx, editFilterFx, filterColumnListFx, getFilterChoicesFx, getFilterListFx, getFilterListIdFx, getFilterPublishedListFx } from "../effects/filter-fx";
-import { setPayload, setPayloadResults } from "~/lib/effector-kit";
-import { ColumnDBChoicesType, FilterConfiguration, FilterListType } from "../types/filter-list.type";
-import { FilterAllValueType, FilterValueType } from '../types/filter-list-type';
+import { $appConfigValues } from '~/@/admin/models/admin-model';
+import { $notification } from '~/@/common/Toast/toast.model';
 import { addAdminFilter, editAdminFilter } from '~/core/routes';
+import { setPayload, setPayloadResults } from "~/lib/effector-kit";
+import { addFilterFx, editFilterFx, filterColumnListFx, getFilterChoicesFx, getFilterListFx, getFilterListIdFx, getFilterListWithOptionsFx, getFilterPublishedListFx, getFiltersDefaultValuesFx } from "../effects/filter-fx";
+import { FilterAllValueType, FilterValueType } from '../types/filter-list-type';
+import { ColumnDBChoicesType, FilterConfiguration, FilterListType, FilterListWithOptionsTypes, FiltersDefaultValueType } from "../types/filter-list.type";
 
 const defaultFilterData = {
   code: '',
@@ -39,6 +39,9 @@ $filterColumnList.on(filterColumnListFx.doneData, setPayloadResults);
 
 export const $filterPublishedList = createStore<FilterListType[]>([]);
 $filterPublishedList.on(getFilterPublishedListFx.doneData, setPayloadResults);
+
+export const $filterListWithOptions = createStore<FilterListWithOptionsTypes[]>([]);
+$filterListWithOptions.on(getFilterListWithOptionsFx.doneData, setPayloadResults);
 
 export const onGetFilterList = createEvent<{ page: number; pageSize: number; }>();
 

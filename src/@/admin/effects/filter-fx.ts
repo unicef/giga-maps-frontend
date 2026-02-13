@@ -1,8 +1,8 @@
 import { createEffect } from "effector"
-import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 import { APIListType } from "~/api/types"
-import { ColumnDBChoicesType, FilterConfiguration, FilterListType } from "../types/filter-list.type"
+import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 import { FilterAllValueType } from "../types/filter-list-type"
+import { ColumnDBChoicesType, FilterConfiguration, FilterListType, FilterListWithOptionsTypes, FiltersDefaultValueType } from "../types/filter-list.type"
 
 export const getFilterListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number, search?: string }) => {
   const query = new URLSearchParams()
@@ -27,6 +27,12 @@ export const filterColumnListFx = createEffect(() => {
     url: `accounts/column_configurations/?is_filter_applicable=true`
   }) as Promise<APIListType<FilterConfiguration>>
 })
+
+export const getFilterListWithOptionsFx = createEffect((countryId: number) => {
+  return createRequestAuthFx({
+    url: `accounts/adv_filters/${countryId}/all/?expand=column_configuration`
+  }) as Promise<APIListType<FilterListWithOptionsTypes>>
+});
 
 export const deleteFilterFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
