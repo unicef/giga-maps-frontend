@@ -5,8 +5,7 @@ import { Map, MapEventType } from 'mapbox-gl';
 import { DEFAULT_SOURCE } from '../map.constant';
 import { useStore } from 'effector-react';
 import ProgressBar from './progress-bar';
-import { $selectedLayerId } from '~/@/sidebar/sidebar.model';
-import { $selectedSchoolIds } from '~/@/sidebar/init';
+import { $selectedLayerId, $selectedSchoolIds } from '~/@/sidebar/sidebar.model';
 
 
 const setMapLoadingState = createEvent<boolean>();
