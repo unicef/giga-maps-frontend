@@ -1,11 +1,20 @@
 import { GigaLayerFormType, LayerTypeChoices } from "../types/giga-layer.type";
 
+export const ENTITIES = {
+  HEALTH: 'health',
+  SCHOOL: 'school',
+} as const;
+
+export type Entity = typeof ENTITIES[keyof typeof ENTITIES];
+
 export enum DataSourceType {
+  HEALTH_MASTER = 'HEALTH_MASTER',
   SCHOOL_MASTER = 'SCHOOL_MASTER',
   DAILY_CHECK_APP = 'DAILY_CHECK_APP',
   QOS = 'QOS'
 }
 export const DataSourceName = {
+  [DataSourceType.HEALTH_MASTER]: 'Health master',
   [DataSourceType.SCHOOL_MASTER]: 'School master',
   [DataSourceType.DAILY_CHECK_APP]: 'Daily check app',
   [DataSourceType.QOS]: 'QOS'
@@ -22,8 +31,10 @@ export const GigaLayerNames = {
 }
 
 export const LayerDataSource = {
-  [LayerType.LIVE]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
-  [LayerType.STATIC]: [DataSourceType.SCHOOL_MASTER]
+  [`${ENTITIES.SCHOOL}_${LayerType.LIVE}`]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
+  [`${ENTITIES.HEALTH}_${LayerType.LIVE}`]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
+  [`${ENTITIES.SCHOOL}_${LayerType.STATIC}`]: [DataSourceType.SCHOOL_MASTER],
+  [`${ENTITIES.HEALTH}_${LayerType.STATIC}`]: [DataSourceType.HEALTH_MASTER],
 }
 
 export const defaultGigaLayerForm = {
@@ -32,6 +43,7 @@ export const defaultGigaLayerForm = {
   icon: '',
   description: '',
   type: undefined,
+  entityType: '',
   dataSource: [],
   sourceType: [],
   dataSourceColumn: null,

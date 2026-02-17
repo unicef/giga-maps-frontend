@@ -61,6 +61,9 @@ const ListGigaLayer = () => {
                   Unique Code
                 </TableHeader>
                 <TableHeader>
+                  Entity Type
+                </TableHeader>
+                <TableHeader>
                   Giga Layer Label
                 </TableHeader>
                 <TableHeader>
@@ -91,6 +94,9 @@ const ListGigaLayer = () => {
                     <TableRow key={item.id}>
                       <TableDataCell>
                         <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
+                      </TableDataCell>
+                      <TableDataCell>
+                        <span style={{ textTransform: 'capitalize' }}>{item.entity_type}</span>
                       </TableDataCell>
                       <TableDataCell>
                         <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>

@@ -17,3 +17,9 @@ export const getInvalidateCacheFx = createEffect((data: object) => {
     data
   }) as Promise<InvalidateCache>
 })
+
+export const getEntityTypesFx = createEffect(() => {
+  return createRequestAuthFx({
+    url: `/locations/entity-types/`,
+  }) as Promise<{ entity_type: string[] }>
+})

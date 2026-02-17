@@ -8,7 +8,7 @@ import { $userFullName } from '~/core/auth/models/auth.model';
 import { addAdminCountry, addAdminSchools, addCountryDailySummary, addCountrySummary, addSchoolDailySummary, addSchoolSummary, adminAboutUs, adminAlerts, adminApiKeys, adminCountry, adminFilterRoute, adminRoute, adminSchools, backgroundTask, backgroundTaskView, contactMessage, contactMessageView, dataSource, editAdminCountry, editAdminFilter, editAdminSchools, editCountryDailySummary, editCountrySummary, editRoles, editSchoolDailySummary, editSchoolSummary, gigaLayerRoute, recentActions, roleCreateRoute, router, userDetails, userList, userPermissions, userRoles } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
-import { getAppConfigValues } from '../../models/admin-model';
+import { getAppConfigValues, onGetEntityTypes } from '../../models/admin-model';
 import MainAboutUsView from '../about-us/main-about-us.view';
 import AdminApiKey from '../admin-api-keys';
 import ListAlertView from '../alerts/list-alert.view';
@@ -46,6 +46,10 @@ import AdminFilters from '../filters';
 
 const AdminPanelMainComponent = () => {
   const userName = useStore($userFullName);
+
+  useEffect(() => {
+    onGetEntityTypes();
+  }, [])
 
   useEffect(() => {
     getAppConfigValues();

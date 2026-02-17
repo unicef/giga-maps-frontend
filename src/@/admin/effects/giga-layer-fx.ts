@@ -7,7 +7,7 @@ import { DataLayer, DataSource, LayerStatusType, PreviewDataType } from "../type
 
 export const commonLayerListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number; search?: string }) => {
   return createRequestAuthFx({
-    url: `accounts/layers/?expand=created_by,last_modified_by,published_by&page_size=${pageSize}&page=${page}${search ? `&search=${search}` : ''}&ordering=-last_modified_at,name`
+    url: `accounts/v2/layers/?expand=created_by,last_modified_by,published_by&page_size=${pageSize}&page=${page}${search ? `&search=${search}` : ''}&ordering=-last_modified_at,name`
   }) as Promise<APIListType<DataLayer>>
 })
 
@@ -24,14 +24,14 @@ export const getDataLayerListFx = attach({
 
 export const getDataLayerByIdFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
-    url: `accounts/layers/?id=${id}&expand=created_by,last_modified_by,published_by`
+    url: `accounts/v2/layers/?id=${id}&expand=created_by,last_modified_by,published_by`
   }) as Promise<APIListType<DataLayer>>
 })
 
 export const createDataLayerFx = createEffect(({ body, isEditMode, params }: any) => {
   return createRequestAuthFx({
     method: isEditMode ? 'PUT' : 'POST',
-    url: `accounts/layers/${params.id ? params.id + '/' : ''}`,
+    url: `accounts/v2/layers/${params.id ? params.id + '/' : ''}`,
     data: body
   }) as Promise<DataLayer>
 })
@@ -46,7 +46,7 @@ export const publishDataLayerFx = createEffect(({ id, status }: { id: number, st
   return createRequestAuthFx({
     method: 'PUT',
     data: { status },
-    url: `accounts/layers/${id}/publish/`,
+    url: `accounts/v2/layers/${id}/publish/`,
   }) as Promise<DataLayer>
 })
 

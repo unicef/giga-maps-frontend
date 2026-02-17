@@ -24,6 +24,7 @@ export interface DataLayer {
   data_source_column: DataSourceColumn
   last_modified_by: LastModifiedBy
   created_by: CreatedBy
+  entity_type: string;
 }
 
 export enum LayerStatusType {
@@ -203,6 +204,7 @@ export type GigaLayerFormType = {
   globalBenchmark: DataLayer['global_benchmark'] | null,
   benchmarkConvertUnit: string,
   supportedFunctions: SupportedFunctionType | null,
+  entityType: string;
 }
 
 export type GigaLayerAllValueType = ValuesType<GigaLayerFormType>;
