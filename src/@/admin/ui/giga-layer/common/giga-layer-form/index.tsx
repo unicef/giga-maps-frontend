@@ -37,6 +37,7 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
         applicable_countries: countryList.filter((country) => formData.applicableCountries.includes(country.id)).map((item) => ({ name: item.code })),
         legend_configs: { ...defaultGigaLayerForm.legendConfigs, ...formData.legendConfigs },
         global_benchmark: { ...(formData.type === LayerTypeChoices.LIVE ? { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } : { benchmark_name: formData?.globalBenchmark?.benchmark_name ?? 'Global' }) },
+        entity_type: formData.entityType,
         ...(!layerItem?.status ? { status: LayerStatusType.DRAFT } : {}),
       }
 

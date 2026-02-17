@@ -123,7 +123,8 @@ sample({
       applicableCountries: layer.applicable_countries,
       globalBenchmark: layer?.global_benchmark,
       benchmarkConvertUnit: layer?.global_benchmark?.convert_unit,
-      legendConfigs: layer?.legend_configs
+      legendConfigs: layer?.legend_configs,
+      entityType: layer.entity_type,
     })
   },
   target: onSetGigaLayerForm
