@@ -94,6 +94,10 @@ const AdminViewLayer = () => {
             <LayerDetail>{layerItem.code}</LayerDetail>
           </LayerContentWrapper>
           <LayerContentWrapper>
+            <LayerLabel>Entity Type</LayerLabel>
+            <LayerDetail style={{ textTransform: 'capitalize' }}>{layerItem.entity_type}</LayerDetail>
+          </LayerContentWrapper>
+          <LayerContentWrapper>
             <LayerLabel>Layer Type</LayerLabel>
             <LayerDetail $textTransform='capitalize'>{layerItem.type?.toLowerCase()} layer</LayerDetail>
           </LayerContentWrapper>

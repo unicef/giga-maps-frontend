@@ -3,7 +3,7 @@ import { useStore } from "effector-react";
 import { useMemo } from "react";
 
 import { DataSourceName, LayerDataSource, LayerTypeNames } from "~/@/admin/constants/giga-layer.constant";
-import { $appConfigValues } from "~/@/admin/models/admin-model";
+import { $appConfigValues, $entityTypes } from "~/@/admin/models/admin-model";
 import { $apiSourceValues, $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model";
 import { DataSource } from "~/@/admin/types/giga-layer.type";
 import { $countryList } from "~/@/api-docs/models/explore-api.model";
@@ -16,6 +16,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
   const appConfigValues = useStore($appConfigValues)
   const countryList = useStore($countryList);
   const apiSourceValues = useStore($apiSourceValues)
+  const entityTypes = useStore($entityTypes);
   const apiSourceSelected = useMemo(() => {
     return apiSourceValues.filter((item) => formData?.dataSource.includes(item.id))
   }, [formData.dataSource, apiSourceValues])
@@ -31,14 +32,15 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
   }, [formData?.applicableCountries, countryList])
 
   const dataSourceList = useMemo(() => {
+    const entityType = formData.entityType;
     const type = formData.type;
-    if (!type) return [];
-    const source = LayerDataSource[type];
+    if (!type || !entityType) return [];
+    const source = LayerDataSource[`${entityType}_${type}`];
     return source.map((sourceName) => ({
       type: sourceName,
       name: DataSourceName[sourceName]
     }))
-  }, [formData.type])
+  }, [formData.type, formData.entityType])
   return <>
     <DataLayerFieldContainer>
       <InputLabel>
@@ -92,6 +94,24 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
         />
       </DataLayerNameField>
     </DataLayerFieldContainer>
+
+    <SelectLayerConfig
+      required
+      name='entityType'
+      labelText="Entity Type"
+      id={`entity-type`}
+      value={formData.entityType}
+      disabled={isEditMode}
+      onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
+      placeholder="Choose entity type">
+      <SelectItem value="" text="Choose entity type" />
+      {entityTypes &&
+        entityTypes.map((value) => (
+          <SelectItem key={value} value={value.toLowerCase()} text={value} />
+        ))
+      }
+    </SelectLayerConfig>
+
     <SelectLayerConfig
       required
       name='type'
