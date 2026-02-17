@@ -24,7 +24,6 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
   const isDefaultLayer = isEditMode && !layerItem?.created_by;
   let dataSourceColumn = formData.dataSourceColumn;
   const isLive = formData.type === LayerTypeChoices.LIVE;
-  console.log("formData: ", formData);
   const updateOrCreateLayer = async () => {
     try {
       const body = {
