@@ -245,3 +245,23 @@ interface Geopoint {
 export interface InvalidateCache {
   message: string
 }
+
+export interface Entities {
+  entity_types: string[];
+  school: EntityMeta;
+  health: EntityMeta;
+}
+
+export interface EntityMeta {
+  code: string;
+  name: string;
+  description: string;
+  display_order: number;
+  is_legacy: boolean;
+  extra_config: ExtraConfig;
+}
+
+export interface ExtraConfig {
+  tile_cache_prefix: string;
+  tile_master_data_table: string;
+}
