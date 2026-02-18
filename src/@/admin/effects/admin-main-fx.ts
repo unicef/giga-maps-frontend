@@ -20,6 +20,6 @@ export const getInvalidateCacheFx = createEffect((data: object) => {
 
 export const getEntityTypesFx = createEffect(() => {
   return createRequestAuthFx({
-    url: `/locations/entity-types/`,
+    url: `/v2/entities/entity-types/`,
   }) as Promise<{ entity_type: string[] }>
 })
