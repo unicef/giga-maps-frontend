@@ -2,6 +2,7 @@ import { Button } from '@carbon/react'
 import { useStore } from 'effector-react'
 import { useMemo, useState } from 'react'
 
+import { $entityTypes } from '~/@/admin/models/admin-model'
 import { $countryList } from '~/@/api-docs/models/explore-api.model'
 import { LinkGhost } from '~/@/common/style/styled-component-style'
 import { onCreateNotification } from '~/@/common/Toast/toast.model'
@@ -22,6 +23,7 @@ import { GigaLayerScroll, LayerContentWrapper, LayerDetail, LayerHeadingWrapper,
 
 const AdminViewLayer = () => {
   const countryList = useStore($countryList)
+  const entityTypes = useStore($entityTypes);
   const layerItem = useStore($currentGigaLayerItem)
   const [activeDeactiveId, setActiveDeactiveId] = useState<null | LayerStatusType>(null);
   const userPermission = useStore($userPermissions);
@@ -33,6 +35,10 @@ const AdminViewLayer = () => {
     if (!selectedCountries?.length || !countryList) return 'All countries';
     return countryList.filter((country) => selectedCountries.includes(country.id)).map((country) => (country.name)).join(', ')
   }, [countryList, layerItem])
+  const entityName = useMemo(() => {
+    if (!layerItem) return '';
+    return entityTypes.find((entity) => entity.id === layerItem.entity_type)?.name ?? layerItem.entity_type_name ?? layerItem.entity_type_code ?? String(layerItem.entity_type);
+  }, [entityTypes, layerItem])
   if (!layerItem) return null;
   const isDefaultLayer = !layerItem.created_by;
   const connectivityColors = stylePaintData.dark;
@@ -95,7 +101,7 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           <LayerContentWrapper>
             <LayerLabel>Entity Type</LayerLabel>
-            <LayerDetail style={{ textTransform: 'capitalize' }}>{layerItem.entity_type}</LayerDetail>
+            <LayerDetail>{entityName}</LayerDetail>
           </LayerContentWrapper>
           <LayerContentWrapper>
             <LayerLabel>Layer Type</LayerLabel>

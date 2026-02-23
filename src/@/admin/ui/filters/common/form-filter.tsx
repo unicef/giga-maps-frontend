@@ -1,17 +1,18 @@
-import { Form, Button, InlineNotification } from '@carbon/react';
-import { FormEvent, useEffect } from 'react'
+import { Button, Form, InlineNotification } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { ButtonWrapper, FilterFormScroll, FilterHeadingWrapper, FormFieldsContainer, FormFieldsWrapper, ViewFilterWrapper } from '../filter-list.styles';
-import { adminFilterRoute } from '~/core/routes';
-import { $filterValidationError, $formFilterData, onReloadFilterList, onSetFilterValidationError } from '~/@/admin/models/filter-list.model';
+import { FormEvent, useEffect } from 'react'
+
 import { addFilterFx, editFilterFx, filterColumnListFx } from '~/@/admin/effects/filter-fx';
-import FilterPlaceholderForm from './filter-placeholder';
-import FilterRangeFields from './filter-range-fields';
-import FilterDropdownFields from './filter-dropdown-filter';
-import FilterCommonFields from './filter-common-fields';
+import { $filterValidationError, $formFilterData, onReloadFilterList, onSetFilterValidationError } from '~/@/admin/models/filter-list.model';
 import { cleanOptionFields } from '~/@/admin/utils/filter-list.util';
 import { $userPermissions } from '~/core/auth/models';
-import { ActionButtonWrapper } from '../../styles/admin-styles';
+import { adminFilterRoute } from '~/core/routes';
+
+import { ButtonWrapper, FilterFormScroll, FilterHeadingWrapper, FormFieldsContainer, FormFieldsWrapper, ViewFilterWrapper } from '../filter-list.styles';
+import FilterCommonFields from './filter-common-fields';
+import FilterDropdownFields from './filter-dropdown-filter';
+import FilterPlaceholderForm from './filter-placeholder';
+import FilterRangeFields from './filter-range-fields';
 
 const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: number }) => {
   const formData = useStore($formFilterData);
@@ -20,7 +21,13 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const { name, code, type, query_param_filter, column_configuration, options, description } = formData;
+    const { name, code, type, query_param_filter: queryParamFilter, column_configuration: columnConfiguration, options, description, entity_type: entityType } = formData;
+    const entityTypeId = Number(entityType);
+    const columnConfigurationId = Number(columnConfiguration);
+    if (Number.isNaN(entityTypeId) || Number.isNaN(columnConfigurationId)) {
+      onSetFilterValidationError('Please choose a valid entity type and parameter.');
+      return;
+    }
     // check validation of choices
     if (options?.group_choices && options?.choices?.length) {
       if (!options?.choices?.every((item) => item?.label && item?.value)) {
@@ -37,10 +44,11 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
         name,
         code,
         type,
-        query_param_filter,
-        column_configuration,
+        query_param_filter: queryParamFilter,
+        column_configuration: columnConfigurationId,
         options: cleanOptionFields(options, type),
-        description
+        description,
+        entity_type: entityTypeId
       }
       if (isEditMode) {
         await editFilterFx({ id, body })
@@ -53,11 +61,11 @@ const AddEditFilterListForm = ({ isEditMode, id }: { isEditMode: boolean; id: nu
   }
 
   useEffect(() => {
-    filterColumnListFx();
+    void filterColumnListFx();
   }, [])
 
   return (
-    <Form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', color: 'white', height: 'inherit', justifyContent: 'space-between' }}>
+    <Form onSubmit={(event) => { void onSubmit(event) }} style={{ display: 'flex', flexDirection: 'column', color: 'white', height: 'inherit', justifyContent: 'space-between' }}>
       <FilterFormScroll>
         <ViewFilterWrapper>
           <FilterHeadingWrapper>

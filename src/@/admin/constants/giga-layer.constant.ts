@@ -1,11 +1,9 @@
 import { GigaLayerFormType, LayerTypeChoices } from "../types/giga-layer.type";
 
-export const ENTITIES = {
-  HEALTH: 'health',
-  SCHOOL: 'school',
-} as const;
-
-export type Entity = typeof ENTITIES[keyof typeof ENTITIES];
+export enum EntityCode {
+  SCHOOL = 'school',
+  HEALTH = 'health'
+}
 
 export enum DataSourceType {
   HEALTH_MASTER = 'HEALTH_MASTER',
@@ -20,21 +18,18 @@ export const DataSourceName = {
   [DataSourceType.QOS]: 'QOS'
 } as Record<string, string>;
 
-export enum LayerType {
-  LIVE = "LIVE",
-  STATIC = "STATIC"
-}
-
 export const GigaLayerNames = {
-  [LayerType.LIVE]: 'Live Connectivity',
-  [LayerType.STATIC]: 'Static'
+  [LayerTypeChoices.LIVE]: 'Live Connectivity',
+  [LayerTypeChoices.STATIC]: 'Static'
 }
 
-export const LayerDataSource = {
-  [`${ENTITIES.SCHOOL}_${LayerType.LIVE}`]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
-  [`${ENTITIES.HEALTH}_${LayerType.LIVE}`]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
-  [`${ENTITIES.SCHOOL}_${LayerType.STATIC}`]: [DataSourceType.SCHOOL_MASTER],
-  [`${ENTITIES.HEALTH}_${LayerType.STATIC}`]: [DataSourceType.HEALTH_MASTER],
+export type LayerDataSourceKey = `${EntityCode}_${LayerTypeChoices}`;
+
+export const LayerDataSourceByEntityCode: Record<LayerDataSourceKey, DataSourceType[]> = {
+  [`${EntityCode.SCHOOL}_${LayerTypeChoices.LIVE}`]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
+  [`${EntityCode.HEALTH}_${LayerTypeChoices.LIVE}`]: [DataSourceType.DAILY_CHECK_APP, DataSourceType.QOS],
+  [`${EntityCode.SCHOOL}_${LayerTypeChoices.STATIC}`]: [DataSourceType.SCHOOL_MASTER],
+  [`${EntityCode.HEALTH}_${LayerTypeChoices.STATIC}`]: [DataSourceType.HEALTH_MASTER],
 }
 
 export const defaultGigaLayerForm = {

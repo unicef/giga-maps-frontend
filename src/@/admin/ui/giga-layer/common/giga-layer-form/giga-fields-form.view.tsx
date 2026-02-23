@@ -2,10 +2,10 @@ import { SelectItem, TextInput } from "@carbon/react";
 import { useStore } from "effector-react";
 import { useMemo } from "react";
 
-import { DataSourceName, LayerDataSource, LayerTypeNames } from "~/@/admin/constants/giga-layer.constant";
+import { DataSourceName, EntityCode, LayerDataSourceByEntityCode, LayerDataSourceKey, LayerTypeNames } from "~/@/admin/constants/giga-layer.constant";
 import { $appConfigValues, $entityTypes } from "~/@/admin/models/admin-model";
 import { $apiSourceValues, $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model";
-import { DataSource, LayerTypeChoices } from "~/@/admin/types/giga-layer.type";
+import { ColumnConfig, DataSource, LayerTypeChoices, SourceTypeItem, SupportedFunctionType } from "~/@/admin/types/giga-layer.type";
 import { $countryList } from "~/@/api-docs/models/explore-api.model";
 import { CountryListType } from "~/@/api-docs/types/country-list.type";
 
@@ -20,14 +20,18 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
   const apiSourceSelected = useMemo(() => {
     return apiSourceValues.filter((item) => formData?.dataSource.includes(item.id))
   }, [formData.dataSource, apiSourceValues])
-  const parameters = useMemo(() => {
+  const parameters = useMemo<ColumnConfig[]>(() => {
     const list = apiSourceSelected
-      ?.flatMap(item => item.column_config).filter((item) => item.is_parameter) ?? [];
-    return Array.from(
-      list.reduce((map, obj) => map.set(obj.name, obj), new Map()).values());
+      .flatMap((item) => item.column_config)
+      .filter((item) => item.is_parameter);
+    const uniqueByName = new Map<string, ColumnConfig>();
+    list.forEach((item) => {
+      uniqueByName.set(item.name, item);
+    });
+    return Array.from(uniqueByName.values());
   }, [apiSourceSelected])
 
-  const supportedFunctions = useMemo(() => {
+  const supportedFunctions = useMemo<SupportedFunctionType[]>(() => {
     return parameters.find(item => item.name === formData?.dataSourceColumn?.name)?.supported_functions ?? [];
   }, [parameters, formData?.dataSourceColumn])
 
@@ -36,16 +40,23 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
     return countryList?.filter(item => formData?.applicableCountries.includes(item.id))
   }, [formData?.applicableCountries, countryList])
 
-  const dataSourceList = useMemo(() => {
-    const entityType = formData.entityType;
+  const dataSourceList = useMemo<SourceTypeItem[]>(() => {
     const type = formData.type;
+    const entityType = Number(formData.entityType);
     if (!type || !entityType) return [];
-    const source = LayerDataSource[`${entityType}_${type}`];
+
+    const selectedEntity = entityTypes.find((entity) => entity.id === entityType);
+    const normalized = `${selectedEntity?.code ?? ''} ${selectedEntity?.name ?? ''}`.toLowerCase();
+    const entityCode = normalized.includes(EntityCode.HEALTH) ? EntityCode.HEALTH : normalized.includes(EntityCode.SCHOOL) ? EntityCode.SCHOOL : null;
+    if (!entityCode) return [];
+
+    const key = `${entityCode}_${type}` as LayerDataSourceKey;
+    const source = LayerDataSourceByEntityCode[key] ?? [];
     return source.map((sourceName) => ({
       type: sourceName,
       name: DataSourceName[sourceName]
     }))
-  }, [formData.type, formData.entityType])
+  }, [entityTypes, formData.type, formData.entityType])
 
   const isLive = String(formData.type) === String(LayerTypeChoices.LIVE);
 
@@ -107,14 +118,14 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       name='entityType'
       labelText="Entity Type"
       id={`entity-type`}
-      value={formData.entityType}
+      value={String(formData.entityType)}
       disabled={isEditMode}
-      onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
+      onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value ? Number(e.target.value) : ''])}
       placeholder="Choose entity type">
       <SelectItem value="" text="Choose entity type" />
       {entityTypes &&
-        entityTypes.map((value) => (
-          <SelectItem key={value} value={value.toLowerCase()} text={value} />
+        entityTypes.map((entity) => (
+          <SelectItem key={entity.id} value={String(entity.id)} text={entity.name} />
         ))
       }
     </SelectLayerConfig>
@@ -130,7 +141,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       placeholder="Choose layer type">
       <SelectItem value="" text="Choose layer type" />
       {appConfigValues?.LAYER_TYPE_CHOICES &&
-        Object.entries(appConfigValues?.LAYER_TYPE_CHOICES).map(([value, text]) => (
+        Object.entries(appConfigValues?.LAYER_TYPE_CHOICES).map(([value]) => (
           <SelectItem key={value} value={value} text={LayerTypeNames[value]} />
         ))
       }
@@ -141,18 +152,17 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       label="Choose source type"
       titleText="Source Type"
       disabled={isDefaultLayer}
-      itemToString={(item) => item?.name}
-      itemToElement={(item) => (
+      itemToString={(item: SourceTypeItem | null) => item?.name ?? ''}
+      itemToElement={(item: SourceTypeItem | null) => (
         <span>
           {item?.name}
         </span>
       )}
       items={dataSourceList}
       id={`source-type`}
-      value={formData?.sourceType}
       placeholder="Select data source"
-      onChange={({ selectedItems }: { selectedItems: string[] }) => {
-        onUdpateGigaLayerForm(['sourceType', selectedItems])
+      onChange={({ selectedItems }: { selectedItems: SourceTypeItem[] }) => {
+        onUdpateGigaLayerForm(['sourceType', selectedItems ?? []])
       }}
       selectedItems={formData.sourceType}
     />
@@ -163,7 +173,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       items={apiSourceValues}
       ListBoxSize={"sm"}
       disabled={isDefaultLayer}
-      itemToString={(item: DataSource) => item?.name}
+      itemToString={(item: DataSource) => item?.name ?? ''}
       itemToElement={(item: DataSource) => (
         <span>
           {item?.name}

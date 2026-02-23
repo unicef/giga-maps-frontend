@@ -24,7 +24,9 @@ export interface DataLayer {
   data_source_column: DataSourceColumn
   last_modified_by: LastModifiedBy
   created_by: CreatedBy
-  entity_type: string;
+  entity_type: number;
+  entity_type_code?: string;
+  entity_type_name?: string;
 }
 
 export enum LayerStatusType {
@@ -76,9 +78,11 @@ export interface Headers {
 
 export interface ColumnConfig {
   name: string
+  alias?: string
   type: string
   on?: string
   unit?: string
+  is_parameter?: boolean;
   is_parameters: boolean;
   base_benchmark: number;
   display_unit: string;
@@ -162,6 +166,11 @@ export enum LayerTypeChoices {
   STATIC = "STATIC"
 }
 
+export type SourceTypeItem = {
+  type: string
+  name: string
+}
+
 export interface LayerCategoryChoices {
   CONNECTIVITY: string
   COVERAGE: string
@@ -192,7 +201,7 @@ export type LegendConfigType = Record<string, { values: string[], labels: string
 export type GigaLayerFormType = {
   legendConfigs: LegendConfigType;
   isReverse: boolean;
-  sourceType: DataSourceTypeChoices[];
+  sourceType: SourceTypeItem[];
   code: DataLayer['code'],
   name: DataLayer['name'],
   icon: string,
@@ -204,7 +213,7 @@ export type GigaLayerFormType = {
   globalBenchmark: DataLayer['global_benchmark'] | null,
   benchmarkConvertUnit: string,
   supportedFunctions: SupportedFunctionType | null,
-  entityType: string;
+  entityType: number | '';
 }
 
 export type GigaLayerAllValueType = ValuesType<GigaLayerFormType>;
@@ -258,12 +267,11 @@ export interface InvalidateCache {
 }
 
 export interface Entities {
-  entity_types: string[];
-  school: EntityMeta;
-  health: EntityMeta;
+  [key: string]: EntityMeta;
 }
 
 export interface EntityMeta {
+  id: number;
   code: string;
   name: string;
   description: string;

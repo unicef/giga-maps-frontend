@@ -10,3 +10,5 @@ export const checkForChangeFields = (currentData: any, oldData: any) => {
   })
   return newData;
 }
+
+export const capitalize = (s: string) => s ? s[0].toUpperCase() + s.slice(1) : "";
