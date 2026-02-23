@@ -2,7 +2,7 @@ import { createEffect } from "effector"
 
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 
-import { ApiConfig, InvalidateCache } from "../types/giga-layer.type"
+import { ApiConfig, Entities, InvalidateCache } from "../types/giga-layer.type"
 
 export const getAppConfigValuesFx = createEffect(() => {
   return createRequestAuthFx({
@@ -21,5 +21,5 @@ export const getInvalidateCacheFx = createEffect((data: object) => {
 export const getEntityTypesFx = createEffect(() => {
   return createRequestAuthFx({
     url: `/v2/entities/entity-types/`,
-  }) as Promise<{ entity_type: string[] }>
+  }) as Promise<Entities>
 })

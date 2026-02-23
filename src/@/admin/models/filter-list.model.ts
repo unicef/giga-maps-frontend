@@ -1,11 +1,13 @@
 import { createEvent, createStore, merge, restore, sample } from "effector";
+
 import { $appConfigValues } from '~/@/admin/models/admin-model';
 import { $notification } from '~/@/common/Toast/toast.model';
 import { addAdminFilter, editAdminFilter } from '~/core/routes';
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";
-import { addFilterFx, editFilterFx, filterColumnListFx, getFilterChoicesFx, getFilterListFx, getFilterListIdFx, getFilterListWithOptionsFx, getFilterPublishedListFx, getFiltersDefaultValuesFx } from "../effects/filter-fx";
+
+import { addFilterFx, editFilterFx, filterColumnListFx, getFilterChoicesFx, getFilterListFx, getFilterListIdFx, getFilterListWithOptionsFx, getFilterPublishedListFx } from "../effects/filter-fx";
+import { ColumnDBChoicesType, FilterConfiguration, FilterListType, FilterListWithOptionsTypes } from "../types/filter-list.type";
 import { FilterAllValueType, FilterValueType } from '../types/filter-list-type';
-import { ColumnDBChoicesType, FilterConfiguration, FilterListType, FilterListWithOptionsTypes, FiltersDefaultValueType } from "../types/filter-list.type";
 
 const defaultFilterData = {
   code: '',
@@ -18,7 +20,8 @@ const defaultFilterData = {
   options: {
     live_choices: true,
     range_auto_compute: true,
-  }
+  },
+  entity_type: '',
 }
 
 export const $filterListResponse = createStore<FilterListType[]>([]);
@@ -78,6 +81,10 @@ $formFilterData.on(onUdpateFilterForm, (state, payload: [string, FilterValueType
     state.query_param_filter = ''
   } else if (name === 'type') {
     state.query_param_filter = ''
+  } else if (name === 'entity_type') {
+    state.column_configuration = '';
+    state.type = '';
+    state.query_param_filter = '';
   }
   return {
     ...state,
@@ -108,7 +115,33 @@ sample({
 sample({
   clock: getFilterListIdFx.doneData,
   filter: (data) => !!data?.results?.[0],
-  fn: (data) => data.results[0],
+  fn: (data): FilterAllValueType => {
+    const filterData = data.results[0];
+    const columnConfigurationId = typeof filterData.column_configuration === 'number'
+      ? filterData.column_configuration
+      : filterData.column_configuration?.id ?? '';
+    const rawEntityType = filterData.entity_type;
+    const numericEntityType = Number(rawEntityType);
+    const entityTypeValue = rawEntityType === null || rawEntityType === undefined || rawEntityType === ''
+      ? ''
+      : Number.isNaN(numericEntityType)
+        ? String(rawEntityType)
+        : numericEntityType;
+    return {
+      code: filterData.code ?? '',
+      name: filterData.name ?? '',
+      column_configuration: columnConfigurationId,
+      type: filterData.type ?? '',
+      description: String(filterData.description ?? ''),
+      query_param_filter: filterData.query_param_filter ?? '',
+      entity_type: entityTypeValue,
+      options: {
+        live_choices: true,
+        range_auto_compute: true,
+        ...(filterData.options ?? {}),
+      },
+    };
+  },
   target: onSetFilterForm
 })
 

@@ -1,19 +1,22 @@
 import { Add } from '@carbon/icons-react';
 import { Button, Table, TableHeader, TableRow, TableToolbar, ToggletipButton } from '@carbon/react'
 import { useStore } from 'effector-react';
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
+import { $entityTypes } from '~/@/admin/models/admin-model';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import { StatusWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
 import { $userPermissions } from '~/core/auth/models';
 import { addGigaLayer, viewGigaLayer } from '~/core/routes';
 import { Link } from '~/lib/router';
+
 import { DataSourceStatusChoices, DataSourceStatusNames } from '../../constants/giga-layer.constant';
 import { $dataLayerListResponce, $dataListLayerCount, onGetDataLayerList } from '../../models/giga-layer.model';
+import { LayerTypeChoices } from '../../types/giga-layer.type';
 import PageTitleComponent from '../common-components/page-title-component'
 import Pagination from '../common-components/Pagination';
-import { AdminTableScroll, CountryListToggletip, CountryListToggletipContent, DataLayerActiveCountries, SearchContainer, TableDataBody, TableDataCell, TableDataHead, TableWrapper } from '../styles/admin-styles'
 import SearchToolbar from '../common-components/search-toolbar';
+import { AdminTableScroll, CountryListToggletip, CountryListToggletipContent, DataLayerActiveCountries, SearchContainer, TableDataBody, TableDataCell, TableDataHead, TableWrapper } from '../styles/admin-styles'
 
 const ListGigaLayer = () => {
   const dataLayerList = useStore($dataLayerListResponce)
@@ -21,6 +24,7 @@ const ListGigaLayer = () => {
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const [searchValue, setSearchValue] = useState('')
   const countryList = useStore($countryList)
+  const entityTypes = useStore($entityTypes);
   const userPermission = useStore($userPermissions);
   const isEditor = userPermission.CAN_ADD_DATA_LAYER;
   useEffect(() => {
@@ -31,6 +35,12 @@ const ListGigaLayer = () => {
     const activeCountries = countryList.filter(item => activeCountriesIds.includes(item.id));
     return activeCountries
   }
+  const entityNameById = useMemo(() => {
+    return entityTypes.reduce((acc, entity) => {
+      acc[entity.id] = entity.name;
+      return acc;
+    }, {} as Record<number, string>)
+  }, [entityTypes])
 
   return (
     <>
@@ -89,14 +99,14 @@ const ListGigaLayer = () => {
             <TableDataBody>
               {
                 dataLayerList?.map((item) => {
-                  if (!item.created_by && item.type === 'LIVE') return null;
+                  if (!item.created_by && item.type === LayerTypeChoices.LIVE) return null;
                   return (
                     <TableRow key={item.id}>
                       <TableDataCell>
                         <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
                       </TableDataCell>
                       <TableDataCell>
-                        <span style={{ textTransform: 'capitalize' }}>{item.entity_type}</span>
+                        <span>{entityNameById[item.entity_type] ?? item.entity_type_code ?? item.entity_type}</span>
                       </TableDataCell>
                       <TableDataCell>
                         <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
