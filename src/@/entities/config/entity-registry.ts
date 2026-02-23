@@ -1,0 +1,63 @@
+import type { EntityType } from '../types/base-entity.type';
+import type { EntityConfig } from './entity-config.types';
+
+/**
+ * Default entity registry — hardcoded fallback configuration.
+ *
+ * This is ONLY the default data. The live registry lives in the
+ * Effector store `$entityRegistry` in entity.model.ts.
+ *
+ * On app load:
+ * 1. Store initializes with these defaults
+ * 2. fetchEntityRegistryFx tries to load from API
+ * 3. API response merges with defaults via store update
+ * 4. If API fails, defaults remain
+ */
+export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
+  school: {
+    type: 'school',
+    displayName: 'Schools',
+    icon: 'Education',
+    markerType: 'circle',
+    colors: {
+      primary: '#0062FF',
+      connected: '#24A148',
+      not_connected: '#DA1E28',
+      unknown: '#8D8D8D',
+    },
+    useLegacyApi: true,
+    apiEndpoint: null,
+    fields: [
+      { name: 'education_level', label: 'Education Level', type: 'string', showInPopup: true, showInSidebar: true },
+      { name: 'school_type', label: 'School Type', type: 'string', showInPopup: true, showInSidebar: true },
+      { name: 'environment', label: 'Environment', type: 'string', showInPopup: false, showInSidebar: true },
+      { name: 'num_students', label: 'Students', type: 'number', showInPopup: true, showInSidebar: true },
+      { name: 'num_teachers', label: 'Teachers', type: 'number', showInPopup: false, showInSidebar: true },
+      { name: 'num_classroom', label: 'Classrooms', type: 'number', showInPopup: false, showInSidebar: true },
+      { name: 'connectivity_speed', label: 'Connectivity Speed', type: 'number', showInPopup: true, showInSidebar: true, unit: 'Mbps' },
+      { name: 'connectivity_latency', label: 'Latency', type: 'number', showInPopup: false, showInSidebar: true, unit: 'ms' },
+      { name: 'electricity_availability', label: 'Electricity', type: 'boolean', showInPopup: false, showInSidebar: true },
+    ],
+  },
+
+  health: {
+    type: 'health',
+    displayName: 'Health Facilities',
+    icon: 'Hospital',
+    markerType: 'symbol',
+    markerSymbol: '⚕',
+    colors: {
+      primary: '#0F62FE',
+      connected: '#198038',
+      not_connected: '#A2191F',
+      unknown: '#525252',
+    },
+    zoomLevels: {
+      circleMaxZoom: 7.99,
+      symbolMinZoom: 8,
+    },
+    useLegacyApi: false,
+    apiEndpoint: '/api/entities/health/',
+    fields: [],
+  },
+};

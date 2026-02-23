@@ -17,7 +17,7 @@ import {
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
+import { mapCountry, mapEntities, mapOverview, mapSchools, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
@@ -28,6 +28,8 @@ import TopSearchBar from '../common-components/top-search-bar';
 import GlobalAndCountryView from '../global-and-country-view-components';
 import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
+import EntityView from '~/@/entities/ui/entity-view';
+import { $entityPopupData } from '~/@/entities/models/entity.model';
 import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
 import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContainer, VerticalSliderButton, VerticalSliderButtonWrapper } from '../sidebar.style';
@@ -47,9 +49,11 @@ export default function Sidebar() {
   const sidebarHeight = useStore($sidebarHeight)
   const countryRoute = useRoute(mapCountry)
   const schoolRoute = useRoute(mapSchools);
+  const entityRoute = useRoute(mapEntities);
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed)
   const isTimeplayer = useStore($isTimeplayer)
+  const entityPopupData = useStore($entityPopupData)
   return (
     <MainSideBarContainer onClick={() => onClickSidebar()}
       $left={isSidebarCollapsed}
@@ -72,6 +76,8 @@ export default function Sidebar() {
             <LayerDetailContainer $height={isMobile && !sidebarHeight ? '0rem' : '6rem'}>
               {(countryRoute) && <GlobalAndCountryView />}
               {(schoolRoute) && <SchoolView />}
+              {(schoolRoute) && entityPopupData && <EntityView />}
+              {(entityRoute) && <EntityView />}
             </LayerDetailContainer>
           }
           {

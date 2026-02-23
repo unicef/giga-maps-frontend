@@ -17,6 +17,7 @@ import { changeCountryCode } from '~/@/country/country.model';
 import { TimeplayerContainer } from './timeplayer/timeplayer-container';
 import '~/core/i18n/instance';
 import TopLoader from './top-loader';
+import EntityTypeSelector from '~/@/entities/ui/entity-selector';
 
 const PopupContainer = styled.div`
   display: none;
@@ -43,6 +44,7 @@ const MapPage = () => {
           <Popup />
         </PopupContainer>
       </Main>
+      <EntityTypeSelector />
       <TopLoader />
       <Footer />
       {isProductTour && <ProductTour />}

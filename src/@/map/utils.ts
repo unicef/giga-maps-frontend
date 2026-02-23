@@ -246,7 +246,7 @@ export const hideLayer = (map: Map, id: string): void => {
   map.setLayoutProperty(id, 'visibility', 'none');
 }
 
-const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string) => {
+export const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string) => {
   return map.addLayer({
     minzoom: 0,
     ...options

@@ -5,6 +5,8 @@ import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 import { ChangeLayerOptions } from "../map.types";
 import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
 import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from "../map.constant";
+import { createActiveEntityLayers } from "~/@/entities/map/entity-layers";
+import { $activeEntityTypes } from "~/@/entities/models/entity.model";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
@@ -104,6 +106,18 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
       options: {
         'source-layer': "default"
       }, mapRoute
+    });
+  }
+
+  // create entity layers for active non-legacy entity types
+  if (isSourceAvailable) {
+    const activeEntityTypes = $activeEntityTypes.getState();
+    createActiveEntityLayers(map, {
+      activeEntityTypes,
+      paintData,
+      options: {
+        'source-layer': "default"
+      },
     });
   }
 
