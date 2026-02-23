@@ -33,6 +33,16 @@ export const Root = () => {
     appLoadEvent(true);
   }, []);
 
+  // Sync Effector theme → Tailwind CSS (data-theme + class on <html>)
+  useEffect(() => {
+    const root = document.documentElement;
+    // Set data-theme attribute for [data-theme="..."] selectors
+    root.setAttribute('data-theme', theme);
+    // Set class for .light / .accessible selectors
+    root.classList.remove('dark', 'light', 'accessible');
+    root.classList.add(theme);
+  }, [theme]);
+
   return (
     <Suspense fallback={<Loading withOverlay={true} />}>
       <ThemeProvider theme={themeData[theme]}>
