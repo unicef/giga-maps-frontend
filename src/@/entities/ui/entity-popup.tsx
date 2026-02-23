@@ -1,92 +1,15 @@
 import { LocationFilled } from '@carbon/icons-react';
-import { SkeletonText } from '@carbon/react';
-import { styled } from 'styled-components';
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
+import { Skeleton } from '~/components/ui/skeleton';
+import { Badge } from '~/components/ui/badge';
+import { Separator } from '~/components/ui/separator';
 import { $entityPopupData, $entityLoading } from '~/@/entities/models/entity.model';
 import { $entityRegistry } from '~/@/entities/models/entity.model';
 import type { EntityConfig, EntityFieldConfig } from '~/@/entities/config/entity-config.types';
 import type { BaseEntity } from '~/@/entities/types/base-entity.type';
-
-const PopupContainer = styled.div`
-  width: 250px;
-  border-radius: 2px;
-  background: ${props => props.theme.main};
-  padding: 16px;
-  box-shadow: 0 2px 3px 0 ${props => props.theme.main};
-`;
-
-const EntityName = styled.h6`
-  color: ${props => props.theme.text};
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.125rem;
-  letter-spacing: 0.01rem;
-  margin-bottom: 4px;
-`;
-
-const EntityTypeLabel = styled.span`
-  color: ${props => props.theme.titleDesc};
-  font-size: 0.65rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05rem;
-  opacity: 0.7;
-`;
-
-const FieldRow = styled.div`
-  display: flex;
-  align-items: baseline;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: ${props => props.theme.text};
-`;
-
-const FieldLabel = styled.span`
-  color: ${props => props.theme.titleDesc};
-  font-size: 0.7rem;
-  margin-right: 0.375rem;
-  min-width: 4rem;
-`;
-
-const FieldValue = styled.span`
-  color: ${props => props.theme.text};
-  font-size: 0.75rem;
-  font-weight: 500;
-`;
-
-const GeoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: 6px;
-  svg {
-    width: 0.75rem;
-    height: 0.75rem;
-    fill: ${props => props.theme.graphWeekMonthBorder};
-    margin-right: 0.25rem;
-  }
-`;
-
-const GeoLabel = styled.span`
-  color: ${props => props.theme.titleDesc};
-  font-size: 0.75rem;
-`;
-
-const StatusDot = styled.span<{ $color: string }>`
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: ${props => props.$color};
-  margin-right: 6px;
-`;
-
-const Divider = styled.hr`
-  border: none;
-  border-top: 1px solid ${props => props.theme.border};
-  margin: 0.5rem 0;
-`;
 
 const renderFieldValue = (field: EntityFieldConfig, entity: BaseEntity): string => {
   const value = (entity as any)[field.name];
@@ -100,7 +23,7 @@ const renderFieldValue = (field: EntityFieldConfig, entity: BaseEntity): string 
 
 /**
  * Entity popup — renders in the Mapbox popup DOM for non-legacy entities.
- * Uses the EntityConfig.fields to dynamically render field rows.
+ * Uses shadcn Card, Badge, Skeleton, and Separator components.
  */
 export default function EntityPopup() {
   const { t } = useTranslation();
@@ -110,11 +33,13 @@ export default function EntityPopup() {
 
   if (isLoading) {
     return (
-      <PopupContainer>
-        <SkeletonText heading width="80%" />
-        <SkeletonText width="60%" />
-        <SkeletonText width="40%" />
-      </PopupContainer>
+      <Card className="tw:w-[250px] tw:gap-3 tw:py-4 tw:shadow-md">
+        <CardContent>
+          <Skeleton className="tw:h-3 tw:w-4/5 tw:mb-2" />
+          <Skeleton className="tw:h-4 tw:w-3/5 tw:mb-2" />
+          <Skeleton className="tw:h-3 tw:w-2/5" />
+        </CardContent>
+      </Card>
     );
   }
 
@@ -128,27 +53,41 @@ export default function EntityPopup() {
   const coords = data.geopoint?.coordinates;
 
   return (
-    <PopupContainer className="entity-popup-container">
-      <EntityTypeLabel>{config.displayName}</EntityTypeLabel>
-      <EntityName>{data.name || `${config.displayName} #${data.id}`}</EntityName>
+    <Card className="entity-popup-container tw:w-[250px] tw:gap-3 tw:py-4 tw:shadow-md">
+      <CardHeader className="tw:gap-1 tw:pb-0">
+        <CardDescription className="tw:text-[0.65rem] tw:font-medium tw:uppercase tw:tracking-wider tw:opacity-70">
+          {config.displayName}
+        </CardDescription>
+        <CardTitle className="tw:text-sm tw:tracking-[0.01rem]">
+          {data.name || `${config.displayName} #${data.id}`}
+        </CardTitle>
+      </CardHeader>
 
-      {coords && (
-        <GeoWrapper>
-          <LocationFilled />
-          <GeoLabel>
-            {[...coords].reverse().map(c => c.toFixed(4)).join(', ')}
-          </GeoLabel>
-        </GeoWrapper>
-      )}
+      <CardContent className="tw:space-y-2">
+        {/* Coordinates */}
+        {coords && (
+          <div className="tw:flex tw:items-center tw:[&>svg]:size-3 tw:[&>svg]:fill-muted-foreground tw:[&>svg]:mr-1">
+            <LocationFilled />
+            <span className="tw:text-xs tw:text-muted-foreground">
+              {[...coords].reverse().map(c => c.toFixed(4)).join(', ')}
+            </span>
+          </div>
+        )}
 
-      {popupFields.length > 0 && <Divider />}
+        {/* Divider + Fields */}
+        {popupFields.length > 0 && <Separator />}
 
-      {popupFields.map(field => (
-        <FieldRow key={field.name}>
-          <FieldLabel>{field.label}:</FieldLabel>
-          <FieldValue>{renderFieldValue(field, data)}</FieldValue>
-        </FieldRow>
-      ))}
-    </PopupContainer>
+        {popupFields.map(field => (
+          <div key={field.name} className="tw:flex tw:items-baseline tw:text-xs">
+            <Badge variant="ghost" className="tw:text-[0.7rem] tw:text-muted-foreground tw:px-0 tw:min-w-16 tw:justify-start">
+              {field.label}:
+            </Badge>
+            <span className="tw:text-xs tw:font-medium tw:text-foreground">
+              {renderFieldValue(field, data)}
+            </span>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
   );
 }

@@ -1,9 +1,10 @@
 import { LocationFilled, InformationFilled } from '@carbon/icons-react';
-import { SkeletonText } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
-import { SidebarScroll } from '~/@/sidebar/ui/sidebar.style';
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
+import { Skeleton } from '~/components/ui/skeleton';
+import { Badge } from '~/components/ui/badge';
 import {
   $entityPopupData,
   $entityLoading,
@@ -11,18 +12,6 @@ import {
 } from '~/@/entities/models/entity.model';
 import type { EntityFieldConfig } from '~/@/entities/config/entity-config.types';
 import type { BaseEntity } from '~/@/entities/types/base-entity.type';
-
-import {
-  EntityViewContainer,
-  EntityViewHeader,
-  EntityTypeTag,
-  EntityName,
-  EntityFieldsGrid,
-  EntityFieldItem,
-  EntityInfoRow,
-  EntityEmptyState,
-  StatusDot,
-} from './entity-view.style';
 
 /**
  * Format a field value for display based on its config.
@@ -38,10 +27,8 @@ const formatFieldValue = (field: EntityFieldConfig, entity: BaseEntity): string 
 };
 
 /**
- * Entity sidebar view — renders detailed information for a selected entity.
- * 
- * Reads from `$entityPopupData` and `$selectedEntityConfig`.
- * Shows entity name, type badge, coordinates, and all sidebar-visible fields.
+ * Entity sidebar view — shows detailed information for a selected entity.
+ * Uses shadcn Card, Badge, and Skeleton components.
  */
 const EntityView = () => {
   const { t } = useTranslation();
@@ -51,25 +38,27 @@ const EntityView = () => {
 
   if (isLoading) {
     return (
-      <SidebarScroll>
-        <EntityViewContainer>
-          <SkeletonText heading width="70%" />
-          <SkeletonText width="50%" />
-          <SkeletonText width="60%" />
-          <SkeletonText width="40%" />
-        </EntityViewContainer>
-      </SidebarScroll>
+      <div className="tw:overflow-y-auto">
+        <Card className="tw:border-0 tw:shadow-none tw:gap-3">
+          <CardContent>
+            <Skeleton className="tw:h-5 tw:w-[70%] tw:mb-3" />
+            <Skeleton className="tw:h-3 tw:w-[50%] tw:mb-2" />
+            <Skeleton className="tw:h-3 tw:w-[60%] tw:mb-2" />
+            <Skeleton className="tw:h-3 tw:w-[40%]" />
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (!popupData?.data || !config) {
     return (
-      <SidebarScroll>
-        <EntityEmptyState>
+      <div className="tw:overflow-y-auto">
+        <div className="tw:flex tw:flex-col tw:items-center tw:justify-center tw:py-8 tw:px-4 tw:text-center tw:text-muted-foreground tw:text-[0.8125rem] tw:leading-5 tw:[&>svg]:size-8 tw:[&>svg]:mb-3 tw:[&>svg]:opacity-40">
           <InformationFilled />
           <span>{t('select-entity', 'Select an entity on the map to view details')}</span>
-        </EntityEmptyState>
-      </SidebarScroll>
+        </div>
+      </div>
     );
   }
 
@@ -78,50 +67,69 @@ const EntityView = () => {
   const coords = data.geopoint?.coordinates;
 
   return (
-    <SidebarScroll>
-      <EntityViewContainer>
-        {/* Header with entity type tag */}
-        <EntityViewHeader>
-          <EntityTypeTag $color={config.colors.primary}>
-            <StatusDot $color={config.colors.primary} />
+    <div className="tw:overflow-y-auto">
+      <Card className="tw:border-0 tw:shadow-none tw:gap-3">
+        <CardHeader className="tw:pb-0">
+          {/* Entity type badge */}
+          <Badge
+            variant="outline"
+            className="tw:text-[0.6875rem] tw:font-semibold tw:uppercase tw:tracking-[0.04em] tw:gap-1 tw:w-fit"
+            style={{
+              backgroundColor: `${config.colors.primary}20`,
+              color: config.colors.primary,
+              borderColor: `${config.colors.primary}40`,
+            }}
+          >
+            <span
+              className="tw:inline-block tw:size-2 tw:rounded-full tw:opacity-65"
+              style={{ backgroundColor: config.colors.primary }}
+            />
             {config.displayName}
-          </EntityTypeTag>
-        </EntityViewHeader>
+          </Badge>
 
-        {/* Entity name */}
-        <EntityName>
-          {data.name || `${config.displayName} #${data.id}`}
-        </EntityName>
+          {/* Entity name */}
+          <CardTitle className="tw:text-sm tw:tracking-[0.01rem] tw:break-words">
+            {data.name || `${config.displayName} #${data.id}`}
+          </CardTitle>
+        </CardHeader>
 
-        {/* Coordinates */}
-        {coords && (
-          <EntityInfoRow>
-            <LocationFilled />
-            <p>{[...coords].reverse().map(c => c.toFixed(4)).join(', ')}</p>
-          </EntityInfoRow>
-        )}
+        <CardContent className="tw:space-y-3">
+          {/* Coordinates */}
+          {coords && (
+            <div className="tw:flex tw:items-center tw:[&>svg]:size-3 tw:[&>svg]:fill-foreground tw:[&>svg]:mr-1">
+              <LocationFilled />
+              <p className="tw:text-xs tw:text-muted-foreground tw:capitalize">
+                {[...coords].reverse().map(c => c.toFixed(4)).join(', ')}
+              </p>
+            </div>
+          )}
 
-        {/* Entity ID */}
-        {data.external_id && (
-          <EntityInfoRow>
-            <InformationFilled />
-            <p>ID: {data.external_id}</p>
-          </EntityInfoRow>
-        )}
+          {/* Entity ID */}
+          {data.external_id && (
+            <div className="tw:flex tw:items-center tw:[&>svg]:size-3 tw:[&>svg]:fill-foreground tw:[&>svg]:mr-1">
+              <InformationFilled />
+              <p className="tw:text-xs tw:text-muted-foreground tw:capitalize">
+                ID: {data.external_id}
+              </p>
+            </div>
+          )}
 
-        {/* Fields grid */}
-        {sidebarFields.length > 0 && (
-          <EntityFieldsGrid>
-            {sidebarFields.map(field => (
-              <EntityFieldItem key={field.name}>
-                <p>{field.label}</p>
-                <span>{formatFieldValue(field, data)}</span>
-              </EntityFieldItem>
-            ))}
-          </EntityFieldsGrid>
-        )}
-      </EntityViewContainer>
-    </SidebarScroll>
+          {/* Fields grid */}
+          {sidebarFields.length > 0 && (
+            <div className="tw:grid tw:grid-cols-2 tw:w-full">
+              {sidebarFields.map(field => (
+                <div key={field.name} className="tw:py-3 tw:pr-2 tw:overflow-hidden tw:break-words">
+                  <p className="tw:text-xs tw:text-muted-foreground tw:mb-1">{field.label}</p>
+                  <span className="tw:block tw:text-sm tw:text-foreground tw:leading-[1.125rem]">
+                    {formatFieldValue(field, data)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
