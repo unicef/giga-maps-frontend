@@ -800,7 +800,7 @@ button{
 export const CountryListDataLayer = styled.div`
     background-color: #f4f4f4;
     margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.2rem;
 
 h3{
     padding:1.25rem 3rem .25rem;
@@ -955,7 +955,7 @@ export const SchoolFormScroll = styled(Scroll)`
 max-height:calc(100vh - 11rem);`
 
 export const CountryFormScroll = styled(Scroll)`
-max-height:calc(100vh - 7.5rem);
+max-height:calc(100vh - 8.2rem);
 padding-bottom: 2rem;
 `
 export const AmenitiesContainer = styled.div`
@@ -1058,17 +1058,11 @@ export const AddEditForm = styled.div`
 
 // Assosiate Giga Filters
 export const CountryListDefaultFilterTitle = styled.h3`
-    padding: 1rem;
-    padding-bottom: 0;
     color: #000;
-    margin-top: 0.5rem;
     font-size: 1rem;
     font-weight: 500;
-    padding: 0rem 3rem;
     background-color: #f4f4f4;
     padding-block: 1.25rem;
-    margin-bottom: 0;
-    padding-bottom: 1.25rem;
     font-size: 1.25rem;
 `
 export const CountryListDefaultFilters = styled.div`

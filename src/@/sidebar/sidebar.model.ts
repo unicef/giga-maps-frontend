@@ -1,4 +1,4 @@
-import { combine, createEvent, createStore, restore, sample } from 'effector';
+import { combine, createEffect, createEvent, createStore, merge, restore, sample } from 'effector';
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
@@ -19,6 +19,7 @@ import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
+import { $isAppSettled } from './url-params.model';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -298,7 +299,7 @@ $staticLegendsSelected.on(selectAllStaticLegendsSelection, (state) => {
   return [ConnectivityStatusDistribution.connected, ConnectivityStatusDistribution.notConnected, ConnectivityStatusDistribution.unknown]
 })
 
-export const resetCoverageFilterSelection = createEvent<number>();
+export const resetCoverageFilterSelection = createEvent();
 export const checkConnectivityBenchmark = createEvent<number>();
 
 export const changeCoverage5g4g = createEvent<boolean>();
@@ -448,20 +449,33 @@ export const $timePlayerInfo = combine({
 export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
+export const $getSchoolParams = sample({
+  source: mapSchools.router.search,
+  fn: (searchParams) => {
+    const params = new URLSearchParams(searchParams)
+    return {
+      country: params.get('country'),
+      schoolIds: params.get('school_ids')?.split(',').map(Number)
+    }
+  }
+})
+
+export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
+
 // all reset model
-$connectivityBenchMark.reset(resetFilterModal);
-$connectivitySpeedGood.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeedModerate.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeednoInternet.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeedUnknown.reset([resetFilterModal, router.historyUpdated]);
-$coverage5g4g.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverage3g2g.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverageNoCoverage.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverageUnknown.reset([$selectedLayerId, resetCoverageFilterSelection]);
+$staticLegendsSelected.reset([resetFilterModal, mapOverview.visible])
+$connectivityBenchMark.reset(resetFilterModal, mapOverview.visible);
+$connectivitySpeedGood.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeedModerate.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeednoInternet.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeedUnknown.reset([resetFilterModal, mapOverview.visible]);
+$coverage5g4g.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverage3g2g.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $potentialCoverageOpenStatus.reset(onSelectMainLayer);
 $schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
 $isMenuOpen.reset(router.historyUpdated)
-$staticLegendsSelected.reset(router.historyUpdated)
 // on history update, clear connectivity dates;
 $connectivityAvailability.reset(router.historyUpdated, $selectedLayerId);
 
