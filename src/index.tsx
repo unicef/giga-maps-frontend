@@ -1,3 +1,4 @@
+import './tailwind.css';
 import { attachLogger } from 'effector-logger';
 import React from 'react';
 import { createRoot } from 'react-dom/client';

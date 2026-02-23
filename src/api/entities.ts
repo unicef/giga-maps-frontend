@@ -1,5 +1,5 @@
 import { createRequestFx } from '~/lib/request-fx';
-import Controller from '~/lib/request-fx/types';
+import type { Controller } from '~/lib/request-fx/types';
 import { request } from './request-setup';
 import { $entityRegistry, mergeEntityRegistryFromApi } from '~/@/entities/models/entity.model';
 import type { BaseEntity } from '~/@/entities/types/base-entity.type';

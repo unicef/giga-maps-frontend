@@ -5,7 +5,7 @@ import { APIListType } from "~/api/types";
 import { ADMIN_UNKNOWN_TYPE, SEARCH_SCHOOL_RESULT_SIZE } from "./search-result.constant";
 import { CountryWithDistrictCount, SearchResultApi } from "./search-result.type";
 import { createRequestFx } from "~/lib/request-fx";
-import Controller from "~/lib/request-fx/types";
+import type { Controller } from "~/lib/request-fx/types";
 
 export const fetchCountriesWithDistrictFx = createRequestFx(
   (_?: unknown, controller?: Controller): Promise<Record<string, CountryWithDistrictCount>> => request({

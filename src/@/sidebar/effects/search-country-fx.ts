@@ -6,7 +6,7 @@ import { router } from "~/core/routes";
 import { ConnectivityConfig } from "../types";
 import { changeIsSearchFocused } from "../ui/common-components/top-search-bar/top-search-bar.model";
 import { createRequestFx } from "~/lib/request-fx";
-import Controller from "~/lib/request-fx/types";
+import type { Controller } from "~/lib/request-fx/types";
 
 export const applySearchFx = createEffect(({ schoolIds, countryCode }: { schoolIds: number[]; countryCode: string }) => {
   const queryParams = new URLSearchParams({

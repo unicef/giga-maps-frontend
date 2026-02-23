@@ -21,7 +21,16 @@ const config = {
     ...tsModuleNameMap,
   },
   transform: {
-    '^.+\\.tsx?$': 'babel-jest',
+    '^.+\\.tsx?$': ['babel-jest', {
+      presets: [
+        ['@babel/preset-env', { targets: { node: 'current' } }],
+        ['@babel/preset-react', { runtime: 'automatic' }],
+        ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
+      ],
+      plugins: [
+        ['babel-plugin-styled-components', { displayName: false, pure: true }],
+      ],
+    }],
     "^.+\\.js$": "babel-jest",
     '\\.(css|scss)$': '<rootDir>/__mocks__/transform.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
@@ -51,6 +60,15 @@ const config = {
     '!src/**/*.test.tsx',
     '!src/index.tsx',
   ],
+  globals: {
+    // Make import.meta.env available in tests
+    'import.meta': {
+      env: {
+        MODE: 'test',
+        VITE_ENV: 'test',
+      },
+    },
+  },
 };
 
 module.exports = config;

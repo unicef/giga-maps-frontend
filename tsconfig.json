@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "target": "es5",
+    "target": "ESNext",
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "commonjs",
+    "module": "ESNext",
     "allowJs": true,
     "checkJs": true,
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": true,
-    "moduleResolution": "node10",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -21,8 +20,9 @@
     "paths": {
       "~/*": ["src/*"],
       "@/*": ["src/@/*"]
-    }
+    },
+    "types": ["vite/client"]
   },
-  "include": ["./", ".*.js"],
-  "exclude": ["node_modules", "build", "webpack/*"]
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["node_modules", "build"]
 }

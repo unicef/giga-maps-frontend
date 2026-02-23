@@ -11,7 +11,7 @@ import {
   SchoolStatsType,
 } from '~/api/types';
 import { createRequestFx } from '~/lib/request-fx';
-import Controller from '~/lib/request-fx/types';
+import type { Controller } from '~/lib/request-fx/types';
 
 import { apiBaseUrl, request } from './request-setup';
 

@@ -59,7 +59,7 @@ export const MapSchoolPopup = () => {
           schoolAtSameLocation,
         } = getFeatureInfo(feature);
 
-        const hasDublicateSchools = schoolAtSameLocation.schoolIds.length > 0;
+        const hasDublicateSchools = schoolAtSameLocation?.schoolIds?.length > 0;
 
         return createPortal(
           isLoading && isClicked ? (
@@ -68,7 +68,7 @@ export const MapSchoolPopup = () => {
             <div className="school-popup-data">
               {(!isLoading && isClicked && hasDublicateSchools) ?
                 <DublicateSchoolPopup
-                  schoolIds={schoolAtSameLocation.schoolIds}
+                  schoolIds={schoolAtSameLocation?.schoolIds}
                   countryCode={countryCode}
                   scrollableTargetId="parentPopupScrollContainer"
                   batchSize={10}

@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 // Support imports
 import '@carbon/react';
 
@@ -30,19 +32,22 @@ declare module '*.svg' {
 }
 declare module '*.css';
 
-// global.d.ts
-declare namespace NodeJS {
-  interface Process {
-    env: {
-      API_MAPBOX_ACCESS_TOKEN: string;
-      API_BASE_URL: string;
-      NODE_ENV: string;
-      ENV: string;
-      WEBPACK_DEV_SERVER: string;
-      B2C_CLIENT_ID: string;
-    };
+// Vite environment variables
+interface ImportMetaEnv {
+  readonly VITE_API_MAPBOX_ACCESS_TOKEN: string;
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_B2C_CLIENT_ID: string;
+  readonly VITE_ENV: string;
+  readonly VITE_MATOMO_SITE_ID: string;
+  readonly VITE_GIGA_METER_API_HOST: string;
+  readonly VITE_AIRTABLE_API_KEY: string;
+  readonly VITE_RECAPTCHA_KEY: string;
+  readonly VITE_LOOMFLOW_API_KEY: string;
+  readonly MODE: string;
+}
 
-  }
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
 
 declare module 'webfontloader' {
@@ -99,4 +104,3 @@ declare module '@carbon/react' {
 
   export const OverflowMenu = React.FC<any>
 }
-

@@ -88,7 +88,7 @@ export const groupArray = <T>(arr: T[]) => arr.reduce((acc: T[][], value: T, i: 
   return acc
 }, []);
 
-export const isProd = process.env.NODE_ENV === 'production'
+export const isProd = import.meta.env.MODE === 'production'
 
 export const waitFor = (seconds = 0) => {
   return new Promise((resolve) => {

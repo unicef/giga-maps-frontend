@@ -1,0 +1,87 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
+
+export default defineConfig(({ mode }) => ({
+  plugins: [
+    tailwindcss(),
+    react({
+      babel: {
+        plugins: [
+          ['babel-plugin-styled-components', {
+            displayName: mode === 'development',
+            pure: true,
+          }],
+          ...(mode === 'development' || mode === 'test'
+            ? [['effector/babel-plugin', { addLoc: true, importName: ['effector', 'effector-logger'] }]]
+            : []),
+        ],
+      },
+    }),
+    svgr({
+      include: '**/*.svg',
+      svgrOptions: {
+        ref: true,
+        memo: true,
+        exportType: 'default',
+        svgoConfig: {
+          plugins: [
+            {
+              name: 'preset-default',
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
+            },
+          ],
+        },
+      },
+    }),
+    createHtmlPlugin({
+      minify: mode === 'production',
+      inject: {
+        data: {
+          matomoSiteId: process.env.VITE_MATOMO_SITE_ID ?? '0',
+        },
+      },
+    }),
+  ],
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src/@'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Silence deprecation warnings from Carbon's SCSS
+        silenceDeprecations: ['legacy-js-api'],
+      },
+    },
+  },
+  server: {
+    port: 9500,
+    open: true,
+    host: '0.0.0.0',
+  },
+  build: {
+    outDir: 'build',
+    sourcemap: mode === 'production' ? 'hidden' : true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
+  define: {
+    // Polyfill process.env.NODE_ENV for libraries that depend on it
+    'process.env.NODE_ENV': JSON.stringify(mode),
+  },
+}));

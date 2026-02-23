@@ -1,0 +1,11 @@
+@import "tailwindcss" prefix(tw);
+
+/*
+ * Tailwind CSS v4 configuration
+ * Using 'tw' prefix to avoid conflicts with Carbon Design System classes.
+ * Usage: tw:flex, tw:p-4, tw:text-white, etc.
+ */
+
+@theme {
+  /* Extend or override default theme values here */
+}

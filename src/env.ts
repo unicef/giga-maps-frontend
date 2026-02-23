@@ -1,6 +1,6 @@
 import { isProd } from './lib/utils/index';
-// See: https://www.npmjs.com/package/dotenv-webpack
-// You can reference vars from .env as "process.env.VAR_NAME" (no destructuring)
+// See: https://vitejs.dev/guide/env-and-mode
+// You can reference vars from .env as "import.meta.env.VITE_VAR_NAME"
 
 enum Enviroment {
   test = 'test',
@@ -10,20 +10,20 @@ enum Enviroment {
 }
 
 export const API_MAPBOX_ACCESS_TOKEN =
-  process.env.API_MAPBOX_ACCESS_TOKEN ?? '';
+  import.meta.env.VITE_API_MAPBOX_ACCESS_TOKEN ?? '';
 
 export const API_BASE_URL =
-  process.env.API_BASE_URL ?? 'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
+  'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
 
-export const GIGA_MERTER_API_HOST = process.env.GIGA_METER_API_HOST ?? 'https://uni-ooi-giga-meter-backend-dev.azurewebsites.net';
+export const GIGA_MERTER_API_HOST = import.meta.env.VITE_GIGA_METER_API_HOST ?? 'https://uni-ooi-giga-meter-backend-dev.azurewebsites.net';
 
-export const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY ?? '';
+export const AIRTABLE_API_KEY = import.meta.env.VITE_AIRTABLE_API_KEY ?? '';
 
-// export const RECAPTCHA_KEY = process.env.RECAPTCHA_KEY ?? '';
+// export const RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_KEY ?? '';
 
-export const B2C_CLIENT_ID = process.env.B2C_CLIENT_ID ?? ''
+export const B2C_CLIENT_ID = import.meta.env.VITE_B2C_CLIENT_ID ?? ''
 
-export const ENV = process.env.ENV;
+export const ENV = import.meta.env.VITE_ENV;
 
 export const isDevelopment = ENV === Enviroment.development;
 export const isStaging = ENV === Enviroment.staging;
