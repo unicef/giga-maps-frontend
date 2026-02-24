@@ -33,11 +33,11 @@ export default function EntityPopup() {
 
   if (isLoading) {
     return (
-      <Card className="tw:w-[250px] tw:gap-3 tw:py-4 tw:shadow-md">
+      <Card className="w-[250px] gap-3 py-4 shadow-md">
         <CardContent>
-          <Skeleton className="tw:h-3 tw:w-4/5 tw:mb-2" />
-          <Skeleton className="tw:h-4 tw:w-3/5 tw:mb-2" />
-          <Skeleton className="tw:h-3 tw:w-2/5" />
+          <Skeleton className="h-3 w-4/5 mb-2" />
+          <Skeleton className="h-4 w-3/5 mb-2" />
+          <Skeleton className="h-3 w-2/5" />
         </CardContent>
       </Card>
     );
@@ -53,22 +53,22 @@ export default function EntityPopup() {
   const coords = data.geopoint?.coordinates;
 
   return (
-    <Card className="entity-popup-container tw:w-[250px] tw:gap-3 tw:py-4 tw:shadow-md">
-      <CardHeader className="tw:gap-1 tw:pb-0">
-        <CardDescription className="tw:text-[0.65rem] tw:font-medium tw:uppercase tw:tracking-wider tw:opacity-70">
+    <Card className="entity-popup-container w-[250px] gap-3 py-4 shadow-md">
+      <CardHeader className="gap-1 pb-0">
+        <CardDescription className="text-[0.65rem] font-medium uppercase tracking-wider opacity-70">
           {config.displayName}
         </CardDescription>
-        <CardTitle className="tw:text-sm tw:tracking-[0.01rem]">
+        <CardTitle className="text-sm tracking-[0.01rem]">
           {data.name || `${config.displayName} #${data.id}`}
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="tw:space-y-2">
+      <CardContent className="space-y-2">
         {/* Coordinates */}
         {coords && (
-          <div className="tw:flex tw:items-center tw:[&>svg]:size-3 tw:[&>svg]:fill-muted-foreground tw:[&>svg]:mr-1">
+          <div className="flex items-center [&>svg]:size-3 [&>svg]:fill-muted-foreground [&>svg]:mr-1">
             <LocationFilled />
-            <span className="tw:text-xs tw:text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               {[...coords].reverse().map(c => c.toFixed(4)).join(', ')}
             </span>
           </div>
@@ -78,11 +78,11 @@ export default function EntityPopup() {
         {popupFields.length > 0 && <Separator />}
 
         {popupFields.map(field => (
-          <div key={field.name} className="tw:flex tw:items-baseline tw:text-xs">
-            <Badge variant="ghost" className="tw:text-[0.7rem] tw:text-muted-foreground tw:px-0 tw:min-w-16 tw:justify-start">
+          <div key={field.name} className="flex items-baseline text-xs">
+            <Badge variant="ghost" className="text-[0.7rem] text-muted-foreground px-0 min-w-16 justify-start">
               {field.label}:
             </Badge>
-            <span className="tw:text-xs tw:font-medium tw:text-foreground">
+            <span className="text-xs font-medium text-foreground">
               {renderFieldValue(field, data)}
             </span>
           </div>

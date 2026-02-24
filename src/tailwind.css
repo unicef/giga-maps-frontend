@@ -1,100 +1,192 @@
-@import "tailwindcss" prefix(tw);
+@import "tailwindcss";
 
 /*
- * Tailwind CSS v4 configuration
- * Using 'tw' prefix to avoid conflicts with Carbon Design System classes.
- * Usage: tw:flex, tw:p-4, tw:text-white, etc.
+ * Tailwind CSS v4 — shadcn/ui compatible theme
+ * Using 'tw' prefix to avoid conflicts with Carbon Design System.
  *
- * Theme colors are mapped from styled-components theme (theme.model.ts)
- * and global CSS vars (global-style.ts) using generic semantic names.
- * Dark theme is the default, .light and .accessible switch the palette.
+ * Color tokens follow the shadcn/ui naming convention so that any new
+ * shadcn component added via `npx shadcn add <name>` works out of the box.
+ *
+ * Mapped from styled-components theme (theme.model.ts) + global-style.ts.
+ * Dark is the default; .light / .accessible selectors override the values.
  */
 
-/* ── Base theme tokens (dark = default) ───────────────────────── */
-@theme {
-  /* — Surface / Background — */
-  --color-surface: #181818;
-  --color-surface-elevated: #383838;
-  --color-surface-subtle: #333333;
-  --color-surface-overlay: #353535;
-  --color-surface-highlight: #494949;
+/* ── CSS custom properties (dark = default) ─────────────────── */
+:root {
+  /* Core surfaces */
+  --giga-background: #181818;
+  --giga-foreground: #fff;
 
-  /* — Text — */
-  --color-on-surface: #fff;
-  --color-on-surface-muted: #9E9E9E;
-  --color-on-surface-subtle: #6F6F6F;
-  --color-on-surface-dim: #7E7E7E;
-  --color-on-surface-inverse: #222222;
+  /* Card */
+  --giga-card: #181818;
+  --giga-card-foreground: #fff;
 
-  /* — Brand / Accent — */
-  --color-brand: #277AFF;
+  /* Popover */
+  --giga-popover: #181818;
+  --giga-popover-foreground: #fff;
 
-  /* — Border / Divider — */
-  --color-border-default: #C8C8C8;
-  --color-border-subtle: #474747;
-  --color-border-input: #C7C7C7;
+  /* Primary (brand blue) */
+  --giga-primary: #277AFF;
+  --giga-primary-foreground: #fff;
 
-  /* — Status — */
-  --color-status-error: #F94B4B;
-  --color-status-success: #00A651;
-  --color-status-warning: #FAA61A;
-  --color-status-error-brand: #ED1C24;
-  --color-status-neutral: #A7A9AC;
+  /* Secondary */
+  --giga-secondary: #383838;
+  --giga-secondary-foreground: #fff;
 
-  /* — Interactive / Filter — */
-  --color-filter-text: #f5f5f5;
-  --color-filter-muted: #c0c0c0;
-  --color-icon-secondary: #fff;
-  --color-mapped: #C6C6C6;
+  /* Muted */
+  --giga-muted: #333333;
+  --giga-muted-foreground: #9E9E9E;
+
+  /* Accent */
+  --giga-accent: #383838;
+  --giga-accent-foreground: #fff;
+
+  /* Destructive */
+  --giga-destructive: #F94B4B;
+  --giga-destructive-foreground: #fff;
+
+  /* Border / Input / Ring */
+  --giga-border: #474747;
+  --giga-input: #C7C7C7;
+  --giga-ring: #277AFF;
+
+  /* ── Extended tokens (not standard shadcn, but useful) ──── */
+  --giga-surface-elevated: #383838;
+  --giga-surface-overlay: #353535;
+  --giga-surface-highlight: #494949;
+  --giga-on-surface-subtle: #6F6F6F;
+  --giga-on-surface-dim: #7E7E7E;
+
+  /* Status colors */
+  --giga-success: #00A651;
+  --giga-warning: #FAA61A;
+  --giga-error-brand: #ED1C24;
+  --giga-neutral: #A7A9AC;
+
+  /* Filter */
+  --giga-filter-text: #f5f5f5;
+  --giga-filter-muted: #c0c0c0;
+
+  /* Misc */
+  --giga-icon-secondary: #fff;
+  --giga-mapped: #C6C6C6;
 }
 
 /* ── Light theme overrides ──────────────────────────────────── */
 :root.light,
 [data-theme="light"] {
-  --color-surface: #fff;
-  --color-surface-elevated: #fff;
-  --color-surface-subtle: #f4f4f4;
-  --color-surface-overlay: #ededed;
-  --color-surface-highlight: #c1c1c1;
+  --giga-background: #fff;
+  --giga-foreground: #222222;
 
-  --color-on-surface: #222222;
-  --color-on-surface-muted: #474747;
-  --color-on-surface-subtle: #6F6F6F;
-  --color-on-surface-dim: #7E7E7E;
-  --color-on-surface-inverse: #fff;
+  --giga-card: #fff;
+  --giga-card-foreground: #222222;
 
-  --color-border-default: #E0E0E0;
-  --color-border-subtle: #b3abab;
-  --color-border-input: #C7C7C7;
+  --giga-popover: #fff;
+  --giga-popover-foreground: #222222;
 
-  --color-filter-text: #222222;
-  --color-filter-muted: #222222;
-  --color-icon-secondary: #595959;
+  --giga-primary-foreground: #fff;
 
-  --color-surface-elevated: #cdcdcd;
-  /* schoolListBack */
+  --giga-secondary: #cdcdcd;
+  --giga-secondary-foreground: #222222;
+
+  --giga-muted: #f4f4f4;
+  --giga-muted-foreground: #474747;
+
+  --giga-accent: #f4f4f4;
+  --giga-accent-foreground: #222222;
+
+  --giga-border: #E0E0E0;
+  --giga-input: #C7C7C7;
+
+  --giga-surface-elevated: #cdcdcd;
+  --giga-surface-overlay: #ededed;
+  --giga-surface-highlight: #c1c1c1;
+  --giga-on-surface-subtle: #6F6F6F;
+  --giga-on-surface-dim: #7E7E7E;
+
+  --giga-filter-text: #222222;
+  --giga-filter-muted: #222222;
+  --giga-icon-secondary: #595959;
 }
 
 /* ── Accessible theme overrides ──────────────────────────────── */
 :root.accessible,
 [data-theme="accessible"] {
-  --color-surface: #181818;
-  --color-surface-elevated: #383838;
-  --color-surface-subtle: #333333;
-  --color-surface-overlay: #353535;
-  --color-surface-highlight: #494949;
+  --giga-background: #181818;
+  --giga-foreground: #fff;
 
-  --color-on-surface: #fff;
-  --color-on-surface-muted: #9E9E9E;
-  --color-on-surface-subtle: #6F6F6F;
-  --color-on-surface-dim: #7E7E7E;
-  --color-on-surface-inverse: #222222;
+  --giga-card: #181818;
+  --giga-card-foreground: #fff;
 
-  --color-border-default: #E0E0E0;
-  --color-border-subtle: #474747;
-  --color-border-input: #C7C7C7;
+  --giga-popover: #181818;
+  --giga-popover-foreground: #fff;
 
-  --color-filter-text: #f5f5f5;
-  --color-filter-muted: #c0c0c0;
-  --color-icon-secondary: #fff;
+  --giga-secondary: #383838;
+  --giga-secondary-foreground: #fff;
+
+  --giga-muted: #333333;
+  --giga-muted-foreground: #9E9E9E;
+
+  --giga-accent: #383838;
+  --giga-accent-foreground: #fff;
+
+  --giga-border: #E0E0E0;
+  --giga-input: #C7C7C7;
+
+  --giga-surface-elevated: #383838;
+  --giga-surface-overlay: #353535;
+  --giga-surface-highlight: #494949;
+
+  --giga-filter-text: #f5f5f5;
+  --giga-filter-muted: #c0c0c0;
+  --giga-icon-secondary: #fff;
+}
+
+/* ── Tailwind @theme — references CSS vars for dynamic theming ── */
+@theme {
+  /* Standard shadcn/ui tokens */
+  --color-background: var(--giga-background);
+  --color-foreground: var(--giga-foreground);
+
+  --color-card: var(--giga-card);
+  --color-card-foreground: var(--giga-card-foreground);
+
+  --color-popover: var(--giga-popover);
+  --color-popover-foreground: var(--giga-popover-foreground);
+
+  --color-primary: var(--giga-primary);
+  --color-primary-foreground: var(--giga-primary-foreground);
+
+  --color-secondary: var(--giga-secondary);
+  --color-secondary-foreground: var(--giga-secondary-foreground);
+
+  --color-muted: var(--giga-muted);
+  --color-muted-foreground: var(--giga-muted-foreground);
+
+  --color-accent: var(--giga-accent);
+  --color-accent-foreground: var(--giga-accent-foreground);
+
+  --color-destructive: var(--giga-destructive);
+  --color-destructive-foreground: var(--giga-destructive-foreground);
+
+  --color-border: var(--giga-border);
+  --color-input: var(--giga-input);
+  --color-ring: var(--giga-ring);
+
+  /* Extended tokens */
+  --color-surface-elevated: var(--giga-surface-elevated);
+  --color-surface-overlay: var(--giga-surface-overlay);
+  --color-surface-highlight: var(--giga-surface-highlight);
+  --color-on-surface-subtle: var(--giga-on-surface-subtle);
+  --color-on-surface-dim: var(--giga-on-surface-dim);
+
+  --color-success: var(--giga-success);
+  --color-warning: var(--giga-warning);
+  --color-error-brand: var(--giga-error-brand);
+  --color-neutral: var(--giga-neutral);
+
+  --color-filter-text: var(--giga-filter-text);
+  --color-filter-muted: var(--giga-filter-muted);
+  --color-icon-secondary: var(--giga-icon-secondary);
+  --color-mapped: var(--giga-mapped);
 }

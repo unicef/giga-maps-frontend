@@ -38,13 +38,13 @@ const EntityView = () => {
 
   if (isLoading) {
     return (
-      <div className="tw:overflow-y-auto">
-        <Card className="tw:border-0 tw:shadow-none tw:gap-3">
+      <div className="overflow-y-auto">
+        <Card className="border-0 shadow-none gap-3">
           <CardContent>
-            <Skeleton className="tw:h-5 tw:w-[70%] tw:mb-3" />
-            <Skeleton className="tw:h-3 tw:w-[50%] tw:mb-2" />
-            <Skeleton className="tw:h-3 tw:w-[60%] tw:mb-2" />
-            <Skeleton className="tw:h-3 tw:w-[40%]" />
+            <Skeleton className="h-5 w-[70%] mb-3" />
+            <Skeleton className="h-3 w-[50%] mb-2" />
+            <Skeleton className="h-3 w-[60%] mb-2" />
+            <Skeleton className="h-3 w-[40%]" />
           </CardContent>
         </Card>
       </div>
@@ -53,8 +53,8 @@ const EntityView = () => {
 
   if (!popupData?.data || !config) {
     return (
-      <div className="tw:overflow-y-auto">
-        <div className="tw:flex tw:flex-col tw:items-center tw:justify-center tw:py-8 tw:px-4 tw:text-center tw:text-muted-foreground tw:text-[0.8125rem] tw:leading-5 tw:[&>svg]:size-8 tw:[&>svg]:mb-3 tw:[&>svg]:opacity-40">
+      <div className="overflow-y-auto">
+        <div className="flex flex-col items-center justify-center py-8 px-4 text-center text-muted-foreground text-[0.8125rem] leading-5 [&>svg]:size-8 [&>svg]:mb-3 [&>svg]:opacity-40">
           <InformationFilled />
           <span>{t('select-entity', 'Select an entity on the map to view details')}</span>
         </div>
@@ -67,13 +67,13 @@ const EntityView = () => {
   const coords = data.geopoint?.coordinates;
 
   return (
-    <div className="tw:overflow-y-auto">
-      <Card className="tw:border-0 tw:shadow-none tw:gap-3">
-        <CardHeader className="tw:pb-0">
+    <div className="overflow-y-auto">
+      <Card className="border-0 shadow-none gap-3">
+        <CardHeader className="pb-0">
           {/* Entity type badge */}
           <Badge
             variant="outline"
-            className="tw:text-[0.6875rem] tw:font-semibold tw:uppercase tw:tracking-[0.04em] tw:gap-1 tw:w-fit"
+            className="text-[0.6875rem] font-semibold uppercase tracking-[0.04em] gap-1 w-fit"
             style={{
               backgroundColor: `${config.colors.primary}20`,
               color: config.colors.primary,
@@ -81,24 +81,24 @@ const EntityView = () => {
             }}
           >
             <span
-              className="tw:inline-block tw:size-2 tw:rounded-full tw:opacity-65"
+              className="inline-block size-2 rounded-full opacity-65"
               style={{ backgroundColor: config.colors.primary }}
             />
             {config.displayName}
           </Badge>
 
           {/* Entity name */}
-          <CardTitle className="tw:text-sm tw:tracking-[0.01rem] tw:break-words">
+          <CardTitle className="text-sm tracking-[0.01rem] break-words">
             {data.name || `${config.displayName} #${data.id}`}
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="tw:space-y-3">
+        <CardContent className="space-y-3">
           {/* Coordinates */}
           {coords && (
-            <div className="tw:flex tw:items-center tw:[&>svg]:size-3 tw:[&>svg]:fill-foreground tw:[&>svg]:mr-1">
+            <div className="flex items-center [&>svg]:size-3 [&>svg]:fill-foreground [&>svg]:mr-1">
               <LocationFilled />
-              <p className="tw:text-xs tw:text-muted-foreground tw:capitalize">
+              <p className="text-xs text-muted-foreground capitalize">
                 {[...coords].reverse().map(c => c.toFixed(4)).join(', ')}
               </p>
             </div>
@@ -106,9 +106,9 @@ const EntityView = () => {
 
           {/* Entity ID */}
           {data.external_id && (
-            <div className="tw:flex tw:items-center tw:[&>svg]:size-3 tw:[&>svg]:fill-foreground tw:[&>svg]:mr-1">
+            <div className="flex items-center [&>svg]:size-3 [&>svg]:fill-foreground [&>svg]:mr-1">
               <InformationFilled />
-              <p className="tw:text-xs tw:text-muted-foreground tw:capitalize">
+              <p className="text-xs text-muted-foreground capitalize">
                 ID: {data.external_id}
               </p>
             </div>
@@ -116,11 +116,11 @@ const EntityView = () => {
 
           {/* Fields grid */}
           {sidebarFields.length > 0 && (
-            <div className="tw:grid tw:grid-cols-2 tw:w-full">
+            <div className="grid grid-cols-2 w-full">
               {sidebarFields.map(field => (
-                <div key={field.name} className="tw:py-3 tw:pr-2 tw:overflow-hidden tw:break-words">
-                  <p className="tw:text-xs tw:text-muted-foreground tw:mb-1">{field.label}</p>
-                  <span className="tw:block tw:text-sm tw:text-foreground tw:leading-[1.125rem]">
+                <div key={field.name} className="py-3 pr-2 overflow-hidden break-words">
+                  <p className="text-xs text-muted-foreground mb-1">{field.label}</p>
+                  <span className="block text-sm text-foreground leading-[1.125rem]">
                     {formatFieldValue(field, data)}
                   </span>
                 </div>
