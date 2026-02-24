@@ -1,24 +1,24 @@
-import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
+import i18next from 'i18next';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById, $admin1Id } from '~/@/country/country.model';
+import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
+import { $lng } from '~/core/i18n/store';
 import { mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
+import { evaluateExpression } from '~/lib/utils';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
+import { UNKNOWN } from '../map/map.types';
+import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
 import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
-import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
-import { evaluateExpression } from '~/lib/utils';
-import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
-import { UNKNOWN } from '../map/map.types';
-import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
-import { publishLayersTranslationFx } from './effects/all-translation-fx';
-import { $lng } from '~/core/i18n/store';
-import i18next from 'i18next';
+import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
+import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -298,7 +298,7 @@ $staticLegendsSelected.on(selectAllStaticLegendsSelection, (state) => {
   return [ConnectivityStatusDistribution.connected, ConnectivityStatusDistribution.notConnected, ConnectivityStatusDistribution.unknown]
 })
 
-export const resetCoverageFilterSelection = createEvent<number>();
+export const resetCoverageFilterSelection = createEvent();
 export const checkConnectivityBenchmark = createEvent<number>();
 
 export const changeCoverage5g4g = createEvent<boolean>();
@@ -444,20 +444,33 @@ export const $timePlayerInfo = combine({
 export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
+export const $getSchoolParams = sample({
+  source: mapSchools.router.search,
+  fn: (searchParams) => {
+    const params = new URLSearchParams(searchParams)
+    return {
+      country: params.get('country'),
+      schoolIds: params.get('school_ids')?.split(',').map(Number)
+    }
+  }
+})
+
+export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
+
 // all reset model
-$connectivityBenchMark.reset(resetFilterModal);
-$connectivitySpeedGood.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeedModerate.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeednoInternet.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeedUnknown.reset([resetFilterModal, router.historyUpdated]);
-$coverage5g4g.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverage3g2g.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverageNoCoverage.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverageUnknown.reset([$selectedLayerId, resetCoverageFilterSelection]);
+$staticLegendsSelected.reset([resetFilterModal, mapOverview.visible])
+$connectivityBenchMark.reset(resetFilterModal, mapOverview.visible);
+$connectivitySpeedGood.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeedModerate.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeednoInternet.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeedUnknown.reset([resetFilterModal, mapOverview.visible]);
+$coverage5g4g.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverage3g2g.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $potentialCoverageOpenStatus.reset(onSelectMainLayer);
 $schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
 $isMenuOpen.reset(router.historyUpdated)
-$staticLegendsSelected.reset(router.historyUpdated)
 // on history update, clear connectivity dates;
 $connectivityAvailability.reset(router.historyUpdated, $selectedLayerId);
 
