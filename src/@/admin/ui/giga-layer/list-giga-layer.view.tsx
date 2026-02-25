@@ -106,7 +106,7 @@ const ListGigaLayer = () => {
                         <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.code}</Link>
                       </TableDataCell>
                       <TableDataCell>
-                        <span>{entityNameById[item.entity_type] ?? item.entity_type_code ?? item.entity_type}</span>
+                        <span>{entityNameById[item.entity_type] ?? item.entity_type__code ?? item.entity_type}</span>
                       </TableDataCell>
                       <TableDataCell>
                         <Link to={viewGigaLayer} params={{ id: item.id }}>{item?.name} {!item.created_by && `(default)`}</Link>
