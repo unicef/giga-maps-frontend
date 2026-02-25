@@ -37,7 +37,7 @@ const AdminViewLayer = () => {
   }, [countryList, layerItem])
   const entityName = useMemo(() => {
     if (!layerItem) return '';
-    return entityTypes.find((entity) => entity.id === layerItem.entity_type)?.name ?? layerItem.entity_type_name ?? layerItem.entity_type_code ?? String(layerItem.entity_type);
+    return entityTypes.find((entity) => entity.id === layerItem.entity_type)?.name ?? layerItem.entity_type__code ?? String(layerItem.entity_type);
   }, [entityTypes, layerItem])
   if (!layerItem) return null;
   const isDefaultLayer = !layerItem.created_by;

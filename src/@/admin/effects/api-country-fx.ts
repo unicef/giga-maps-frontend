@@ -28,7 +28,7 @@ export const getCountrySummaryListFx = createEffect(({ page, pageSize, search, f
 
   const searchParam = search ? `&search=${search}` : '';
   url += searchParam;
-  
+
   return createRequestAuthFx({
     url: url
   }) as Promise<APIListType<CountrySummaryType>>
@@ -128,7 +128,7 @@ export const deleteCountryDailySummaryFx = createEffect(({ body, }: any) => {
 
 export const getPublishDataLayerListFx = createEffect(() => {
   return createRequestAuthFx({
-    url: `accounts/layers/?expand=created_by,last_modified_by,published_by&status=PUBLISHED`
+    url: `v2/entities/layers/?expand=created_by,last_modified_by,published_by&status=PUBLISHED`
   }) as Promise<APIListType<DataLayer>>
 })
 

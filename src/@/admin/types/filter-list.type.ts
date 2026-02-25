@@ -13,8 +13,7 @@ export interface FilterListType {
   published_by: null | { id: number; first_name: string }
   active_countries_list: number[]
   entity_type: number | string | null;
-  entity_type_code?: string;
-  entity_type_name?: string;
+  entity_type__code?: string;
 }
 
 export interface FilterListWithOptionsTypes
