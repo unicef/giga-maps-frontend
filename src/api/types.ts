@@ -178,6 +178,14 @@ export type AdminMetadataType = {
   centroid: number[]
   bbox: number[]
 }
+
+export type ActiveFilterListType = {
+  advance_filter_id: number,
+  is_default?: boolean,
+  default_filter_values?: {
+    values: string | boolean | { min: number, max: number, none_range: boolean } | string[]
+  }
+}
 export type Country = {
   id: number;
   name: string;
@@ -221,6 +229,7 @@ export type Country = {
   }[]
   admin_metadata: AdminMetadataType;
   admin1_metadata: AdminMetadataType[];
+  active_filters_list?: ActiveFilterListType[]
 };
 
 export type CountryWeeklyStats = {
@@ -314,6 +323,7 @@ export type APIListType<ResultType> = {
 
 
 export interface AdvanceFilterType {
+  id: number
   name: string
   type: string
   description: string
@@ -334,6 +344,7 @@ export interface AdvanceFilterType {
     }
   }
   query_param_filter: string
+  light?: boolean
 }
 
 export interface Choice {
