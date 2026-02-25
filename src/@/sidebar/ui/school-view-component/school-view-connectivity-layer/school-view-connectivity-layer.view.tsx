@@ -1,12 +1,11 @@
 import { useStore } from 'effector-react';
+import { useTranslation } from 'react-i18next';
 
-import { $getSchoolParams } from '~/@/sidebar/init';
+import { $getSchoolParams, $schoolStats } from '~/@/sidebar/sidebar.model';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
-import SingleSchoolConnnectivityLayer from '../common/single-school-connectivity-layer.view';
 import MultiSchoolLayerView from '../common/multi-school-layer.view';
-import { $schoolStats } from '~/@/sidebar/sidebar.model';
-import { useTranslation } from 'react-i18next';
+import SingleSchoolConnnectivityLayer from '../common/single-school-connectivity-layer.view';
 
 export default function SchoolViewConnectivityLayer() {
   const { t } = useTranslation();
