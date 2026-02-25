@@ -147,14 +147,14 @@ const ListFilterView = () => {
     const entityValue = item?.entity_type;
     const entityName = (() => {
       if (typeof entityValue === 'number') {
-        return entityNameById[entityValue] ?? item.entity_type_name ?? item.entity_type_code ?? String(entityValue);
+        return entityNameById[entityValue] ?? item.entity_type__code ?? String(entityValue);
       }
       if (typeof entityValue === 'string') {
         const numericEntityType = Number(entityValue);
         if (!Number.isNaN(numericEntityType)) {
-          return entityNameById[numericEntityType] ?? item.entity_type_name ?? item.entity_type_code ?? entityValue;
+          return entityNameById[numericEntityType] ?? item.entity_type__code ?? entityValue;
         }
-        return entityNameByCode[entityValue.toLowerCase()] ?? item.entity_type_name ?? item.entity_type_code ?? entityValue;
+        return entityNameByCode[entityValue.toLowerCase()] ?? item.entity_type__code ?? entityValue;
       }
       return '-';
     })();

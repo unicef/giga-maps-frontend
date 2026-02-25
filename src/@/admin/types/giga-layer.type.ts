@@ -24,8 +24,7 @@ export interface DataLayer {
   last_modified_by: LastModifiedBy
   created_by: CreatedBy
   entity_type: number;
-  entity_type_code?: string;
-  entity_type_name?: string;
+  entity_type__code?: string;
 }
 
 export enum LayerStatusType {
