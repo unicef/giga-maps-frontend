@@ -64,7 +64,9 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
 
   const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
   const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
-  const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : t.getState()('unknown');
+  const connectivityValue = isLiveNotUnknown
+    ? `${feature?.liveAvg ?? 0}${unit === '%' ? unit : ` ${unit}`}`
+    : t.getState()('unknown');
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
