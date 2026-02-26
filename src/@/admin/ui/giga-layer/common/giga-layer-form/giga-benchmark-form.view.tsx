@@ -8,7 +8,7 @@ import { DataLayerFieldContainer, DataLayerNameField, InputLabel, SelectLayerCon
 import { Div } from "~/@/common/style/styled-component-style";
 import { speedConverterUtil } from "~/lib/utils";
 
-const benchmarkUnitValues = ['bps', 'ms', 'mbps'];
+const benchmarkUnitValues = ['bps', 'ms', 'mbps', '%'];
 export default function GigaBenchmarkForm({ isDefaultLayer }: { readonly isDefaultLayer: boolean }) {
   const formData = useStore($formData);
 
