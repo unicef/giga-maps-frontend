@@ -247,6 +247,22 @@ sample({
   target: fetchSchoolPopupDataFx
 })
 
+// refetch open school popup data when user switches the live layer
+sample({
+  clock: $selectedLayerId,
+  source: combine({
+    info: sourceForInfo,
+    schoolClickedId: $schoolClickedId,
+  }),
+  filter: ({ info, schoolClickedId }) => !info.isMobile && !!schoolClickedId,
+  fn: ({ info, schoolClickedId }) => schoolInfoFn({
+    ...info,
+    isSchoolClicked: true,
+    schoolParams: { schoolIds: [Number(schoolClickedId)], country: null }
+  }),
+  target: fetchSchoolPopupDataFx
+})
+
 
 // change layer when open global view or close global view
 sample({
