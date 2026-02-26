@@ -168,7 +168,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === selectedLayerId)?.type);
   const startDate = format(interval.start, 'dd-MM-yyyy');
   const endDate = format(interval.end, 'dd-MM-yyyy');
-  let params = new URLSearchParams()
+  const params = new URLSearchParams()
   if (isLive) {
     params.set('start_date', startDate);
     params.set('end_date', endDate);
@@ -233,7 +233,7 @@ sample({
 
 const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const { query, id } = getCurrentQueryId(props);
-  let url = `api/accounts/layers/${id}/info/`
+  const url = `api/accounts/layers/${id}/info/`
   return {
     url,
     query
