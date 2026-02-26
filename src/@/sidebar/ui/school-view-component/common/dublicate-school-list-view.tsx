@@ -45,6 +45,10 @@ export default function SidebarDublicateSchoolList({
   const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';
+  const formatConnectivityValue = (value: number, valueUnit?: string) => {
+    if (!valueUnit) return String(value);
+    return valueUnit === '%' ? `${value}${valueUnit}` : `${value} ${valueUnit}`;
+  };
 
   // derive duplicateIds from the first schoolClickData item (like your old logic)
   const duplicateIds: number[] = React.useMemo(() => {
@@ -202,7 +206,7 @@ export default function SidebarDublicateSchoolList({
         >
           {accumulatedSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
-            const connectivityValue = isLiveNotUnknown ? `${s?.liveAvg ?? 0} ${unit}` : t('unknown');
+            const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(s?.liveAvg ?? 0, unit) : t('unknown');
             const staticValue = getStaticValue(s?.staticValue);
 
             const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
