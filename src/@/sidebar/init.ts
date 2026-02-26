@@ -1,5 +1,5 @@
 import { combine, createEffect, merge, sample } from 'effector';
-import { $activeSchoolPopup, $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
+import { $activeDublicateSchoolsPopup, $activeSchoolPopup, $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
 import { debounce, getInverted } from '~/lib/effector-kit';
 
 import {
@@ -32,7 +32,6 @@ import {
   $coverageUnknown,
   $currentDefaultLayerId,
   $currentLayerTypeUtils,
-  $getSchoolParams,
   $globalLayerId,
   $isCurrentLayerLive,
   $isSidebarCollapsed,
@@ -49,8 +48,6 @@ import {
   onSchoolUncheck,
   onSelectMainLayer,
   onSelectSchoolStatusLayer,
-  resetCoverageFilterSelection,
-  resetFilterModal,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchDublicateSchoolPopupDataFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
@@ -269,12 +266,48 @@ sample({
   target: fetchSchoolPopupDataFx
 });
 
+// refetch open school popup data when user switches the live layer
+sample({
+  clock: $selectedLayerId,
+  source: combine({
+    info: sourceForInfo,
+    activePopup: $activeSchoolPopup,
+    schoolClickedId: $schoolClickedId,
+  }),
+  filter: ({ info, schoolClickedId }) => !info.isMobile && !!schoolClickedId,
+  fn: ({ info, activePopup, schoolClickedId }) =>
+    schoolInfoFn({
+      ...info,
+      isSchoolClicked: true,
+      schoolParams: { schoolIds: [Number(schoolClickedId)], country: null },
+      allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
+    }),
+  target: fetchSchoolPopupDataFx
+});
+
 // Fetch dublicate school data
 sample({
   clock: setSchoolIdsOnPopupClickDot,
   source: sourceForInfo,
   filter: ({ isMobile }) => !isMobile,
   fn: (props, school) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: school?.ids, country: null }, allowDublicateSchoolIds: school?.allowDublicateSchoolIds ?? false }),
+  target: fetchDublicateSchoolPopupDataFx
+});
+
+// refetch open duplicate-school popup data when user switches the live layer
+sample({
+  clock: $selectedLayerId,
+  source: combine({
+    info: sourceForInfo,
+    duplicateSchoolPopup: $activeDublicateSchoolsPopup,
+  }),
+  filter: ({ info, duplicateSchoolPopup }) => !info.isMobile && !!duplicateSchoolPopup?.ids?.length,
+  fn: ({ info, duplicateSchoolPopup }) => schoolInfoFn({
+    ...info,
+    isSchoolClicked: true,
+    schoolParams: { schoolIds: duplicateSchoolPopup?.ids, country: null },
+    allowDublicateSchoolIds: duplicateSchoolPopup?.allowDublicateSchoolIds ?? false
+  }),
   target: fetchDublicateSchoolPopupDataFx
 });
 
