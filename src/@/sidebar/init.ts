@@ -32,6 +32,7 @@ import {
   $coverageUnknown,
   $currentDefaultLayerId,
   $currentLayerTypeUtils,
+  $getSchoolParams,
   $globalLayerId,
   $isCurrentLayerLive,
   $isSidebarCollapsed,
@@ -48,6 +49,8 @@ import {
   onSchoolUncheck,
   onSelectMainLayer,
   onSelectSchoolStatusLayer,
+  resetCoverageFilterSelection,
+  resetFilterModal,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchDublicateSchoolPopupDataFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
