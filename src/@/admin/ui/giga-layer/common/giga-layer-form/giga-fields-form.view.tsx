@@ -23,7 +23,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
   const parameters = useMemo<ColumnConfig[]>(() => {
     const list = apiSourceSelected
       .flatMap((item) => item.column_config)
-      .filter((item) => item.is_parameters);
+      .filter((item) => item.is_parameter);
     const uniqueByName = new Map<string, ColumnConfig>();
     list.forEach((item) => {
       uniqueByName.set(item.name, item);
