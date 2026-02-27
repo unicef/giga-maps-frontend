@@ -80,6 +80,7 @@ export interface ColumnConfig {
   type: string
   on?: string
   unit?: string
+  is_parameter: boolean
   is_parameters: boolean
 }
 
