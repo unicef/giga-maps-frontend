@@ -197,7 +197,7 @@ export const defaultSchoolStatsTypes: SchoolStatsType[] = [
 export const extraMapPaintData = {
   staticWithConnectivityStatusOpacity: .65,
 }
-
+const DUPLICATE_FLAG_PROP = 'has_multiple_school_on_same_lat_lng';
 export const mapPaintData = {
   connectivityStatus: {
     "circle-radius": [
@@ -215,7 +215,14 @@ export const mapPaintData = {
       // circle data push base on color scheme
     ],
     "circle-opacity": 1,
-    "circle-blur": 0
+    "circle-blur": 0,
+    "circle-stroke-color": '#fff',
+    "circle-stroke-width": [
+      'case',
+      ['==', ['get', DUPLICATE_FLAG_PROP], true],
+      1,
+      0
+    ]
   },
   coverage: {
     "circle-radius": [
