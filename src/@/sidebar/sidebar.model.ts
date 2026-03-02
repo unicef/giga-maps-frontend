@@ -1,4 +1,4 @@
-import { combine, createEffect, createEvent, createStore, merge, restore, sample } from 'effector';
+import { combine, createEvent, createStore, restore, sample } from 'effector';
 import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
@@ -19,7 +19,6 @@ import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
-import { $isAppSettled } from './url-params.model';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();

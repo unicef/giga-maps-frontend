@@ -60,7 +60,6 @@ export const MapSchoolPopup = () => {
         } = getFeatureInfo(feature);
 
         const hasDublicateSchools = schoolAtSameLocation?.schoolIds.length > 0;
-        const schoolName = feature?.name?.toLocaleLowerCase()?.replace(/,/g, ',\u200B')
 
         return createPortal(
           isLoading && isClicked ? (
@@ -77,7 +76,7 @@ export const MapSchoolPopup = () => {
                 <div className="map-popup-template">
                   <PopupTemplate>
                     <SchoolNameWrapper>
-                      <SchoolName className="map-school-name">{schoolName}</SchoolName>
+                      <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
                       <OSMLink
                         href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
                         target="_blank"
