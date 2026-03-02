@@ -1,4 +1,4 @@
-import { MagicWandFilled, ChevronDown, ChevronUp, ChevronRight } from '@carbon/icons-react'
+import { MagicWandFilled, ChevronDown, ChevronUp, ChevronRight, AccessibilityAlt } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { MouseEvent, } from 'react';
@@ -35,6 +35,7 @@ import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { useTranslation } from 'react-i18next';
 import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
+import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -103,6 +104,7 @@ export default function Sidebar() {
                 <MagicWandFilled />
               </IconButton>
             </ActiveButtonWrapper>}
+            <AccessibilityButton />
             {!sidebarHeight && <ThemeButtons />}
             <LegendButton />
           </TakeTourWrapper>

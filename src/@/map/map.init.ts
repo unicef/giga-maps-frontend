@@ -1,9 +1,6 @@
-import { combine, createEffect, guard, merge, sample } from 'effector';
-import { Map } from 'mapbox-gl';
-import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 
-import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
+import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -19,7 +16,7 @@ import {
   changeLayersFx, changeStyleFx,
   updateCoverageFilter
 } from '@/map/effects';
-import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers, $selectedSchoolIds } from '@/sidebar/init';
+import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
 import { languageStore } from '~/core/i18n/store';
 import { $theme } from '~/core/theme.model';
@@ -32,6 +29,7 @@ import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPaus
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
+  $advanceFilterList,
   $dublicateSchoolClickData,
   $filterListMapping,
   $map,
@@ -57,6 +55,9 @@ import {
 } from './map.model';
 import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
+import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
+import { sample, merge, createEffect, combine, guard } from 'effector';
+import { $isCheckedLastDate, $lastAvailableDates } from '../sidebar/history-graph.model';
 
 sample({
   source: $theme,
@@ -133,6 +134,28 @@ sample({
   clock: onStyleLoaded,
   fn: () => false,
   target: $reloadStyle
+});
+
+const $derivedCountryActiveFilterList = combine({
+  countryActiveFiltersList: $countryActiveFiltersList,
+  activeFiltersList: $advanceFilterList,
+  schoolFocusLatLng: $schoolFocusLatLng,
+});
+
+// guard: only run when both filters loaded AND no school is focused
+const activeFiltersListClock = guard({
+  source: $derivedCountryActiveFilterList,
+  clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
+  filter: ({ countryActiveFiltersList, activeFiltersList, schoolFocusLatLng }) =>
+    countryActiveFiltersList != null && activeFiltersList != null && schoolFocusLatLng === null,
+});
+
+sample({
+  source: $derivedCountryActiveFilterList,
+  clock: activeFiltersListClock,
+  fn: ({ countryActiveFiltersList, activeFiltersList }) =>
+    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!),
+  target: router.navigate
 });
 
 $map.watch(zoomIn, (map: Map | null) => {

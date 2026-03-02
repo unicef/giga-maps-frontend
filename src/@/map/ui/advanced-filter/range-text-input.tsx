@@ -1,13 +1,13 @@
-import { AdvanceFilterType } from "~/api/types";
-import { StyledCheckbox, StyledTextInputContainer, StyledTextInputWrapper } from "./filter-button.style";
+import { Information } from '@carbon/icons-react';
 import { FormLabel, TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
-import { evaluateExpression } from "~/lib/utils";
-import { TooltipStyle } from "~/@/common/style/styled-component-style";
-import { Information } from '@carbon/icons-react'
 import { useTranslation } from "react-i18next";
+import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { AdvanceFilterType } from "~/api/types";
+import { evaluateExpression } from "~/lib/utils";
+import { StyledCheckbox, StyledTextInputContainer, StyledTextInputWrapper } from "./filter-button.style";
 
-const RangeTextInput = ({ name, description, options, value: rangeValue, column_configuration: parameter, itemKey, onChange }: AdvanceFilterType & {
+const RangeTextInput = ({ name, description, options, value: rangeValue, column_configuration: parameter, itemKey, onChange, light = false }: AdvanceFilterType & {
   value: { none_range: boolean; value: string }; itemKey: string; onChange: (key: string, value: {
     none_range: boolean;
     value: string;
@@ -45,7 +45,7 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
           </TooltipStyle>}
         </>
       </FormLabel>
-      <StyledTextInputWrapper className="group-input">
+      <StyledTextInputWrapper className="group-input" light={light}>
         <TextInput
           type="number"
           size="sm"
@@ -111,7 +111,7 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
       }}
         checked={isNoneRange}
         id={`checkbox-${itemKey}`}
-        labelText={t('show-null-values')} style={{ padding: "0rem 1rem" }} />}
+        labelText={t('show-null-values', 'Show null values')} style={{ padding: "0rem 1rem" }} />}
     </StyledTextInputContainer>
   )
 }

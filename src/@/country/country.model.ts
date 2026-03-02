@@ -9,17 +9,17 @@ import { $isMobile } from '~/core/media-query';
 import { mapCountry, mapOverview, mapSchools } from '~/core/routes';
 import { setPayload } from '~/lib/effector-kit';
 
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 import { PointCoordinates } from "../../core/global-types";
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
+import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
+import { countryMapping } from './country.constant';
 import { getCountryAdminCode } from './country.utils';
 import { addCountriesFx, zoomToCountryFx } from './effects';
 import { createUpdateCountriesLayer } from './effects/create-update-countries-layer';
 import { getUserCurrentCountryISOFx } from './effects/detect-country-iso';
 import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from './effects/update-lookup-source-map';
-import { countryMapping } from './country.constant';
-import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
-import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
 
 export const onLoadPage = createEvent();
 export const changeCountryCode = createEvent<string>();
@@ -52,6 +52,7 @@ $countryMapping.on(fetchCountryFx.doneData, (_, payload) => {
 })
 
 export const $dataSource = $country.map((country) => country?.data_source ?? null);
+export const $countryActiveFiltersList = $country.map((country) => country?.active_filters_list ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
 export const $countryConnectivityNames = $country.map((country) => country?.benchmark_metadata?.benchmark_name ?? {});

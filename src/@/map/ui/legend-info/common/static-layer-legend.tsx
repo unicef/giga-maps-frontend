@@ -13,6 +13,10 @@ import {
   $layerUtils,
   $connectivityBenchMark,
   $benchmarkNamesAllLayers,
+  $coverage5g4g,
+  $coverage3g2g,
+  $coverageNoCoverage,
+  $coverageUnknown,
 } from '~/@/sidebar/sidebar.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle, LiveLayerBenchmark } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
@@ -40,6 +44,12 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
 
+  // Get coverage filter values from store (synced with URL params)
+  const coverage5g4g = useStore($coverage5g4g);
+  const coverage3g2g = useStore($coverage3g2g);
+  const coverageNoCoverage = useStore($coverageNoCoverage);
+  const coverageUnknown = useStore($coverageUnknown);
+
   const handleStaticLayerToggle = (key: string) => {
     const newStatus = !staticLayerCheckedStatus[key];
     setStaticLayerCheckedStatus(prevState => ({
@@ -66,14 +76,15 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
     }
   };
 
+  // Sync local checkbox state with store values (including URL params on first load)
   useEffect(() => {
     setStaticLayerCheckedStatus({
-      'good': true,
-      'moderate': true,
-      'bad': true,
-      'unknown': true,
+      'good': coverage5g4g,
+      'moderate': coverage3g2g,
+      'bad': coverageNoCoverage,
+      'unknown': coverageUnknown,
     });
-  }, []);
+  }, [coverage5g4g, coverage3g2g, coverageNoCoverage, coverageUnknown]);
 
   return (<div className='school-status'>
     <h3>{selectedLayerData?.name}</h3>

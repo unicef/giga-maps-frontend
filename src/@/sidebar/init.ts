@@ -26,6 +26,7 @@ import {
   $coverageUnknown,
   $currentDefaultLayerId,
   $currentLayerTypeUtils,
+  $getSchoolParams,
   $globalLayerId,
   $isCurrentLayerLive,
   $isSidebarCollapsed,
@@ -42,6 +43,8 @@ import {
   onSchoolUncheck,
   onSelectMainLayer,
   onSelectSchoolStatusLayer,
+  resetCoverageFilterSelection,
+  resetFilterModal,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchDublicateSchoolPopupDataFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
@@ -57,6 +60,7 @@ import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
 import { ConnectivityBenchMarks, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { isLiveLayer } from './sidebar.util';
+import { $initialUrlParams, $isAppSettled, initializeFromUrlParams } from './url-params.model';
 
 $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
@@ -83,19 +87,6 @@ export const $coverageFilter = combine({
   bad: $coverageNoCoverage,
   unknown: $coverageUnknown,
 })
-
-export const $getSchoolParams = sample({
-  source: mapSchools.router.search,
-  fn: (searchParams) => {
-    const params = new URLSearchParams(searchParams)
-    return {
-      country: params.get('country'),
-      schoolIds: params.get('school_ids')?.split(',').map(Number)
-    }
-  }
-})
-
-export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
 
 const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (country, schoolParams, admin1Id) => ({
   countryId: country?.id,
@@ -172,7 +163,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === selectedLayerId)?.type);
   const startDate = format(interval.start, 'dd-MM-yyyy');
   const endDate = format(interval.end, 'dd-MM-yyyy');
-  let params = new URLSearchParams()
+  const params = new URLSearchParams()
   if (isLive) {
     params.set('start_date', startDate);
     params.set('end_date', endDate);
@@ -237,7 +228,7 @@ sample({
 
 const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const { query, id } = getCurrentQueryId(props);
-  let url = `api/accounts/layers/${id}/info/`
+  const url = `api/accounts/layers/${id}/info/`
   return {
     url,
     query
@@ -333,10 +324,22 @@ sample({
 // update school layer when main layer changed
 sample({
   clock: $selectedLayerId,
-  source: combine({ schoolId: $schoolStatusSelectedLayer, layerUtils: $layerUtils }),
-  fn: ({ schoolId, layerUtils }) => {
+  source: combine({
+    schoolId: $schoolStatusSelectedLayer,
+    layerUtils: $layerUtils,
+    initialUrlParams: $initialUrlParams,
+    isAppSettled: $isAppSettled
+  }),
+  fn: ({ schoolId, layerUtils, initialUrlParams, isAppSettled }) => {
     const { selectedLayerId, currentLayerTypeUtils } = layerUtils;
     const { isStatic } = currentLayerTypeUtils;
+
+    // On first load, if URL has school status layer param, use it
+    if (!isAppSettled && (initialUrlParams.schoolStatusLayer || initialUrlParams.isSchoolStatusLayerNull)) {
+      if (!isStatic) {
+        return initialUrlParams.schoolStatusLayer;
+      }
+    }
     let currentSchoolLayer = schoolId
     if (!selectedLayerId && !schoolId) {
       currentSchoolLayer = SCHOOL_STATUS_LAYER.id
@@ -349,26 +352,52 @@ sample({
   target: onSelectSchoolStatusLayer
 })
 
-
 // set default layer on layers list load/change
 const loadedLayersAndCountries = combine($connectivityLayers, $countries, $currentDefaultLayerId, (layers, countries, currentDefaultLayerId) => {
   return (!!layers?.length && !!countries?.length && !!currentDefaultLayerId)
 });
+
 sample({
   clock: loadedLayersAndCountries,
-  source: combine({ layerUtils: $layerUtils, loadedLayersAndCountries }),
-  fn: ({ layerUtils: { currentDefaultLayerId } }, loadedLayersAndCountries) => {
+  source: combine({
+    layerUtils: $layerUtils,
+    loadedLayersAndCountries,
+    initialUrlParams: $initialUrlParams,
+    isAppSettled: $isAppSettled
+  }),
+  fn: ({ layerUtils: { currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
+    // If URL has layer param and it hasn't been applied yet, use URL value
+    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
+      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
+        return initialUrlParams.layerId;
+      }
+    }
+    // Otherwise use default layer
     return currentDefaultLayerId;
   },
-  filter: ({ loadedLayersAndCountries }) => loadedLayersAndCountries,
+  filter: ({ loadedLayersAndCountries: isLoaded }) => isLoaded,
   target: onSelectMainLayer,
-})
+});
 
-// remove connectivity layer on country change
+// On first country code update, preserve URL layer value if present
 sample({
   clock: merge([$countryCode]),
-  source: combine({ layerUtils: $layerUtils, countryCode: $countryCode }),
-  fn: ({ layerUtils: { selectedLayerId, currentLayerTypeUtils, isActiveCurrentLayer, currentDefaultLayerId } }) => {
+  source: combine({
+    layerUtils: $layerUtils,
+    countryCode: $countryCode,
+    initialUrlParams: $initialUrlParams,
+    isAppSettled: $isAppSettled
+  }),
+  fn: ({ layerUtils: { selectedLayerId, currentLayerTypeUtils, isActiveCurrentLayer, currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
+    // On first country code update, if URL has layer param, use it (if valid for country)
+    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
+      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
+        return initialUrlParams.layerId;
+      }
+    }
+    // Normal behavior for subsequent updates
     let nextLayerId = selectedLayerId;
     if (currentLayerTypeUtils.isLive && !isActiveCurrentLayer || currentLayerTypeUtils.isStatic && !isActiveCurrentLayer) {
       nextLayerId = null;
@@ -449,3 +478,13 @@ sample({
   target: publishLayersTranslationFx
 })
 
+// reset legends on country change
+sample({
+  clock: merge([$countryCode]),
+  source: $isAppSettled,
+  filter: (isAppSettled) => isAppSettled,
+  target: [resetFilterModal, resetCoverageFilterSelection]
+})
+// Initialize URL params on app start
+// This applies URL params to stores (connectivity speed, coverage filters, etc.)
+initializeFromUrlParams();
