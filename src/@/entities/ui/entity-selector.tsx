@@ -20,8 +20,8 @@ const iconMap: Record<string, ComponentType<{ size?: number; className?: string 
 };
 
 const base =
-  'rounded-lg px-5 py-2.5 text-sm font-semibold border-0 shadow-none focus-visible:ring-0';
-const active = 'bg-[#2979ff] text-white hover:bg-[#2979ff]/90';
+  'rounded-full px-5 py-2.5 text-sm font-semibold focus-visible:ring-0';
+const active = '';
 const inactive = 'bg-[#3a3a3a] text-gray-300 hover:bg-[#454545] hover:text-gray-200';
 
 /**
@@ -42,7 +42,7 @@ export default function EntityTypeSelector() {
   const allSelected = entityTypes.length === activeEntityTypes.length;
 
   return (
-    <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[3] flex items-center gap-2 rounded-xl bg-[#2b2b2b]/90 p-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.45)] backdrop-blur-md max-[768px]:top-auto max-[768px]:bottom-[33vh]">
+    <div className="fixed top-12 left-80  z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]">
       {/* ── All entities ── */}
       <Button
         variant="default"
