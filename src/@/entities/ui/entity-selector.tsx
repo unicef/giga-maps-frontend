@@ -1,5 +1,7 @@
+import { type ComponentType } from 'react';
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
+import { Education, Hospital } from '@carbon/icons-react';
 
 import { Button } from '~/components/ui/button';
 import {
@@ -11,9 +13,20 @@ import {
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 
+/** Map entity config `icon` strings → Carbon icon components */
+const iconMap: Record<string, ComponentType<{ size?: number; className?: string }>> = {
+  Education,
+  Hospital,
+};
+
+const base =
+  'rounded-lg px-5 py-2.5 text-sm font-semibold border-0 shadow-none focus-visible:ring-0';
+const active = 'bg-[#2979ff] text-white hover:bg-[#2979ff]/90';
+const inactive = 'bg-[#3a3a3a] text-gray-300 hover:bg-[#454545] hover:text-gray-200';
+
 /**
- * Entity type selector — floating pill bar with shadcn Button toggles.
- * Uses standard shadcn theme tokens (background, border, primary, etc.)
+ * Entity type selector — floating pill bar over the map.
+ * Matches the dark-container / blue-active / icon design.
  */
 export default function EntityTypeSelector() {
   const { t } = useTranslation();
@@ -29,32 +42,29 @@ export default function EntityTypeSelector() {
   const allSelected = entityTypes.length === activeEntityTypes.length;
 
   return (
-    <div className="fixed top-2 left-1/2 -translate-x-1/2 z-[3] flex items-center gap-1.5 py-1.5 px-2 bg-background rounded-full shadow-[0_2px_12px_rgba(0,0,0,0.3)] max-[768px]:top-auto max-[768px]:bottom-[33vh]">
-      {/* All entities button */}
+    <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[3] flex items-center gap-2 rounded-xl bg-[#2b2b2b]/90 p-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.45)] backdrop-blur-md max-[768px]:top-auto max-[768px]:bottom-[33vh]">
+      {/* ── All entities ── */}
       <Button
-        variant={allSelected ? 'default' : 'outline'}
-        size="sm"
-        className="rounded-full text-xs h-7 px-3.5 border-border font-medium"
+        variant="default"
+        className={`${base} ${allSelected ? active : inactive}`}
         onClick={() => selectAllEntityTypes()}
       >
         {t('all_entities', 'All entities')}
       </Button>
 
-      {/* Entity type buttons */}
+      {/* ── Per-entity buttons ── */}
       {entityTypes.map(([type, config]) => {
         const isActive = activeEntityTypes.includes(type as EntityType);
+        const Icon = iconMap[config.icon];
+
         return (
           <Button
             key={type}
-            variant={isActive ? 'default' : 'outline'}
-            size="sm"
-            className="rounded-full text-xs h-7 px-3.5 gap-1.5 border-border font-medium"
+            variant="default"
+            className={`${base} ${isActive ? active : inactive}`}
             onClick={() => toggleEntityType(type as EntityType)}
           >
-            <span
-              className="inline-block size-2.5 rounded-full shrink-0"
-              style={{ backgroundColor: config.colors.primary }}
-            />
+            {Icon && <Icon size={18} />}
             {config.displayName}
           </Button>
         );
