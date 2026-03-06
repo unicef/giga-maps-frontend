@@ -15,7 +15,7 @@ export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelect
   return { schoolLayerId, selectedLayerId, isLastSelectionChange };
 }
 
-export const createSourceForMapAndCountry = async ({ map, schoolAdminId, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data, isConnectivityStatus }: ChangeLayerOptions & { selectedLayerId: number | null; isConnectivityStatus?: boolean }) => {
+export const createSourceForMapAndCountry = async ({ map, schoolPageIds, schoolAdminId, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data, isConnectivityStatus }: ChangeLayerOptions & { selectedLayerId: number | null; isConnectivityStatus?: boolean }) => {
   if (!map) return;
   const sourceId = isConnectivityStatus ? CONNECTIVITY_STATUS_SOURCE : DEFAULT_SOURCE;
   if (!isConnectivityStatus) {
@@ -41,9 +41,9 @@ export const createSourceForMapAndCountry = async ({ map, schoolAdminId, country
   }
   let url = null;
   if (!isConnectivityStatus) {
-    url = generateLayerUrls({ layerId, connectivityBenchMark, layerUtils, connectivityFilter, mapRoute, country, admin1Id, countrySearch });
+    url = generateLayerUrls({ layerId, connectivityBenchMark, schoolPageIds, layerUtils, connectivityFilter, mapRoute, country, admin1Id, countrySearch });
   } else {
-    url = generateStaticLayerUrl({ mapRoute, country, admin1Id, countrySearch });
+    url = generateStaticLayerUrl({ mapRoute, country, schoolPageIds, admin1Id, countrySearch });
   }
   const options = {} as VectorSource;
   if (!!country) {

@@ -257,5 +257,10 @@
   "this-week": "This week",
   "this-month": "This month",
   "no-more-results": "No more results",
-  "int": "{{val, number}}"
+  "int": "{{val, number}}",
+  "disclaimer-text": "This map does not reflect a position by UNICEF on the legal status of any country or territory or the delimitation of any frontiers.",
+  "disclaimer": "Disclaimer",
+  "school-location-duplicates": "School location duplicates",
+  "school-duplicates": "School duplicates",
+  "of": "of"
 }

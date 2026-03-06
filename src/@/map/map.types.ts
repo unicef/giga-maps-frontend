@@ -46,3 +46,9 @@ export type SchoolMarker = {
   id: number;
   marker: Marker;
 }
+
+export type DuplicateSchoolsRequestPayload = {
+  ids: number[];
+  allowDublicateSchoolIds?: boolean;
+  requestId?: string;
+};

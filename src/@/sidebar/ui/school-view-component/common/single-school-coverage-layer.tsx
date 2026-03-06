@@ -5,11 +5,12 @@ import { Div } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
 import { $schoolStats } from '~/@/sidebar/sidebar.model';
 
+import { getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
 import { DateWeekWrapper } from '../../global-and-country-view-components/connectivity-layer/connectivity-layer.style';
-import { SchoolInformation } from './school-information.view';
 import { StatisticsStatusLg } from '../styles/school-information.style';
 import { SchoolInformationWrapper } from '../styles/school-view-style';
-import { getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
+import SidebarDublicateSchoolList from './dublicate-school-list-view';
+import { SchoolInformation } from './school-information.view';
 
 const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
   const schoolStats = useStore($schoolStats);
@@ -31,6 +32,7 @@ const SingleSchoolCoverageLayer = ({ schoolId }: { schoolId: number }) => {
       <SchoolInformationWrapper>
         <SchoolInformation schoolData={schoolDetails} />
       </SchoolInformationWrapper>
+      <SidebarDublicateSchoolList scrollableTargetId="school-sidebar-scroll" />
     </div>
   );
 }

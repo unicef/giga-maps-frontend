@@ -1,9 +1,6 @@
-import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
-import { combine, guard, merge, sample, createEffect, createStore } from 'effector';
-import { Map } from 'mapbox-gl';
 
 import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -21,12 +18,19 @@ import {
 } from '@/map/effects';
 import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
 
+import { languageStore } from '~/core/i18n/store';
+import { $theme } from '~/core/theme.model';
+import { $isMobile } from '../admin/models/media-query';
+import { mapLabelLayerList } from '../country/country.constant';
+import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { changeStaticLayerFx, updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
 import { addSchoolMarkers } from './effects/add-marker-fx';
+import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
   $advanceFilterList,
+  $dublicateSchoolClickData,
   $filterListMapping,
   $map,
   $multipleSchoolPopup,
@@ -51,13 +55,9 @@ import {
 } from './map.model';
 import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
-import { $theme } from '~/core/theme.model';
-import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
-import { $isMobile } from '../admin/models/media-query';
-import { $lng, languageStore } from '~/core/i18n/store';
-import { mapLabelLayerList } from '../country/country.constant';
-import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
+import { sample, merge, createEffect, combine, guard } from 'effector';
+import { $isCheckedLastDate, $lastAvailableDates } from '../sidebar/history-graph.model';
 
 sample({
   source: $theme,
@@ -190,7 +190,8 @@ export const gigaLayerSource = combine({
   isMobile: $isMobile,
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
-  zoomState: $zoomState
+  zoomState: $zoomState,
+  schoolPageIds: $selectedSchoolIds
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
@@ -334,6 +335,13 @@ sample({
 export const $schoolPopupConnectivityMap = $schoolClickData.map((data) => data?.length ? schoolStatsMap(data[0]) : null)
 export const $schoolPopupData = combine({
   feature: $schoolPopupConnectivityMap,
+  stylePaintData: $stylePaintData,
+  layerUtils: $layerUtils,
+})
+
+export const $dublicateSchoolPopupConnectivityMap = $dublicateSchoolClickData.map((data) => data?.length ? data.map(item => schoolStatsMap(item)) : null)
+export const $dublicateSchoolPopupData = combine({
+  feature: $dublicateSchoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
 })
