@@ -13,7 +13,7 @@ const SchoolView = () => {
   const defaultUIEnable = !selectedLayerId && schoolStatusSelectedLayer;
 
   return (
-    <SidebarScroll>
+    <SidebarScroll id="school-sidebar-scroll">
       {(defaultUIEnable) && <SchoolStatsTypeus />}
       {isLive && <SchoolViewConnectivityLayer />}
       {isStatic && <SchoolCoverageLayer />}

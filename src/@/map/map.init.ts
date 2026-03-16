@@ -1,9 +1,6 @@
-import { combine, guard, merge, sample, createEffect, createStore } from 'effector';
-import { Map } from 'mapbox-gl';
-import { $isCheckedLastDate, $lastAvailableDates } from '~/@/sidebar/history-graph.model';
 
 import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -34,6 +31,7 @@ import {
   $activeSchoolPopup,
   $dublicateSchoolClickData,
   $advanceFilterList,
+  $dublicateSchoolClickData,
   $filterListMapping,
   $map,
   $multipleSchoolPopup,
@@ -59,6 +57,8 @@ import {
 import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
+import { sample, merge, createEffect, combine, guard } from 'effector';
+import { $isCheckedLastDate, $lastAvailableDates } from '../sidebar/history-graph.model';
 
 sample({
   source: $theme,
@@ -191,7 +191,8 @@ export const gigaLayerSource = combine({
   isMobile: $isMobile,
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
-  zoomState: $zoomState
+  zoomState: $zoomState,
+  schoolPageIds: $selectedSchoolIds
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
@@ -335,6 +336,13 @@ sample({
 export const $schoolPopupConnectivityMap = $schoolClickData.map((data) => data?.length ? schoolStatsMap(data[0]) : null)
 export const $schoolPopupData = combine({
   feature: $schoolPopupConnectivityMap,
+  stylePaintData: $stylePaintData,
+  layerUtils: $layerUtils,
+})
+
+export const $dublicateSchoolPopupConnectivityMap = $dublicateSchoolClickData.map((data) => data?.length ? data.map(item => schoolStatsMap(item)) : null)
+export const $dublicateSchoolPopupData = combine({
+  feature: $dublicateSchoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
 })

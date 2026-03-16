@@ -7,7 +7,6 @@ import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot
 import { UNKNOWN } from '~/@/map/map.types';
 import { InnerCircle, InnerCircleConnectivity } from '~/@/map/ui/legend-info/legend-button.style';
 import DublicateSchoolLoader from '~/@/map/ui/map-school-popup/dublicate-school-popup-loader.view';
-import { getStaticValue } from '~/@/map/ui/map-school-popup/dublicate-school-popup.view';
 import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from '~/@/map/ui/map-school-popup/school-popup.style';
 import { $layerUtils, $schoolStats, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
@@ -15,7 +14,7 @@ import { SchoolStatsType } from '~/api/types';
 import { PointCoordinates } from '~/core/global-types';
 import { router } from '~/core/routes';
 import { ConnectivityStatusNames } from '../../global-and-country-view-components/container/layer-view.constant';
-import { DublicateSchoolList, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, SchoolName, SidebarDublicateSchoolWrapper, ToggleLink, TotalCountLabel } from './dublicate-school-list.styles';
+import { DublicateSchoolList, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, SchoolName, SidebarDublicateSchoolWrapper, ToggleLink, TotalCountLabel } from './dublicate-school-list.style';
 
 type Props = {
   scrollableTargetId: string; // id of scroll container owned by parent
@@ -46,17 +45,19 @@ export default function SidebarDublicateSchoolList({
   const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';
+  const formatConnectivityValue = (value: number, valueUnit?: string) => {
+    if (!valueUnit) return String(value);
+    return valueUnit === '%' ? `${value}${valueUnit}` : `${value} ${valueUnit}`;
+  };
 
   // derive duplicateIds from the first schoolClickData item (like your old logic)
   const duplicateIds: number[] = React.useMemo(() => {
     if (!selectedSchool) return [];
-    const ids = selectedSchool?.schools_at_same_location?.school_ids;
-    if (!Array.isArray(ids) || ids.length === 0) return [];
+    const ids = [selectedSchool.id, ...selectedSchool?.schools_at_same_location?.school_ids ?? []];
     return ids;
   }, [selectedSchool]);
 
   const totalIds = duplicateIds.length;
-
   // local state: accumulated fetched schools (mapped SchoolStatsType objects)
   const [accumulatedSchools, setAccumulatedSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
   const nextIndexRef = useRef<number>(0); // pointer to next id index to request
@@ -167,9 +168,8 @@ export default function SidebarDublicateSchoolList({
 
   // UI click: Show more (when infinite disabled)
   const handleShowMoreClick = () => {
-    // request next chunk; hide the show more button to allow infinite loading after this
-    requestIdsChunk(nextIndexRef.current, pageSize);
     setIsShowMoreButton(false);
+    loadMore();
   };
 
   const handleGoTop = () => {
@@ -179,14 +179,24 @@ export default function SidebarDublicateSchoolList({
     }
   };
 
+  function getStaticValue(staticValue: boolean | undefined | string | null) {
+    if (typeof staticValue === 'boolean') {
+      return staticValue ? 'yes' : 'no';
+    }
+    if (!staticValue || staticValue === 'unknown') {
+      return t('unknown');
+    }
+    return String(staticValue);
+  }
+
   // Render nothing if there's no duplicate ids
-  if (!duplicateIds || duplicateIds.length === 0) return null;
+  if (totalIds <= 1) return null;
 
   return (
     <SidebarDublicateSchoolWrapper>
       <TotalCountLabel>{`(${totalIds}) ${t('school-duplicates')}`}</TotalCountLabel>
 
-      <DublicateSchoolList id={scrollableTargetId}>
+      <DublicateSchoolList>
         <InfiniteScroll
           dataLength={accumulatedSchools.length}
           next={loadMore}
@@ -196,7 +206,7 @@ export default function SidebarDublicateSchoolList({
         >
           {accumulatedSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
-            const connectivityValue = isLiveNotUnknown ? `${s?.liveAvg ?? 0} ${unit}` : t('unknown');
+            const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(s?.liveAvg ?? 0, unit) : t('unknown');
             const staticValue = getStaticValue(s?.staticValue);
 
             const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
@@ -241,7 +251,7 @@ export default function SidebarDublicateSchoolList({
           })}
         </InfiniteScroll>
 
-        {isShowMoreButton && (
+        {totalIds > 5 && isShowMoreButton && (
           <ToggleLink onClick={() => handleShowMoreClick()} aria-label={t("show-more")} type="button">
             {t("show-more")}
           </ToggleLink>

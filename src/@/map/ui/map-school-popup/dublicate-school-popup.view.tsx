@@ -81,6 +81,10 @@ export default function DublicateSchoolPopup({
   const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';
+  const formatConnectivityValue = (value: number, valueUnit?: string) => {
+    if (!valueUnit) return String(value);
+    return valueUnit === '%' ? `${value}${valueUnit}` : `${value} ${valueUnit}`;
+  };
 
   useEffect(() => {
     mountedRef.current = true;
@@ -212,6 +216,16 @@ export default function DublicateSchoolPopup({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globalFetchStore, isPending]);
 
+  function getStaticValue(staticValue: boolean | undefined | string | null) {
+    if (typeof staticValue === 'boolean') {
+      return staticValue ? 'yes' : 'no';
+    }
+    if (!staticValue || staticValue === 'unknown') {
+      return t('unknown');
+    }
+    return String(staticValue);
+  }
+
   if (!schoolIds || schoolIds.length === 0) return null;
 
   const hasMore = visibleSchools.length < total;
@@ -219,8 +233,8 @@ export default function DublicateSchoolPopup({
   return (
     <DublicateSchoolListWrapper>
       <TotalCountLabel>
-        {`(${total}) ${t('school-location-duplicates')}`}{' '}
-        <Tooltip className='info-icon' align="top" label={`(${total}) ${t('school-location-duplicates')}`}>
+        {`(${schoolIds.length}) ${t('school-location-duplicates')}`}{' '}
+        <Tooltip className='info-icon' align="top" label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}>
           <button className="sb-tooltip-trigger" type="button">
             <Information size={16} color={'#7e7e7e'} style={{ verticalAlign: 'middle' }} />
           </button>
@@ -240,7 +254,7 @@ export default function DublicateSchoolPopup({
         >
           {visibleSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
-            const connectivityValue = isLiveNotUnknown ? `${s?.liveAvg ?? 0} ${unit}` : t('unknown');
+            const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(s?.liveAvg ?? 0, unit) : t('unknown');
             const staticValue = getStaticValue(s?.staticValue);
 
             const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
@@ -293,4 +307,4 @@ export default function DublicateSchoolPopup({
       </DublicateSchoolList>
     </DublicateSchoolListWrapper>
   );
-}
+};

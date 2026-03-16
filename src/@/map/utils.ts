@@ -36,8 +36,8 @@ export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
   if (!ids?.length) return;
   ids?.forEach((id) => {
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-    delete mapDotsClickIdsAndHandler[source][id];
-    resetDublicateSchoolClickData(); // Reset duplicate school list from popup on close
+    delete mapDotsClickIdsAndHandler?.[source]?.[id];
+    resetDublicateSchoolClickData();
   })
 }
 
@@ -145,7 +145,7 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
 
 export const getDynamicUrl = (layerId: string) => `api/accounts/layers/${layerId}/map`
 
-export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark"> & { isLive?: boolean }): string => {
+export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch, schoolPageIds }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark" | "schoolPageIds"> & { isLive?: boolean }): string => {
   const { isWeek, range } = connectivityFilter;
   const startDate = format(range.start, 'dd-MM-yyyy');
   const endDate = format(range.end, 'dd-MM-yyyy');
@@ -155,6 +155,9 @@ export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBe
   }
   if (mapRoute.country && countrySearch) {
     params += `&${countrySearch}`
+  }
+  if (schoolPageIds?.length === 1) {
+    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`
   }
   return params;
 }
@@ -168,20 +171,23 @@ export const getCountryParams = (country: boolean, countryId?: number, admin1Id?
   return params;
 }
 
-export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySearch }: Pick<ChangeLayerOptions, "mapRoute" | "country" | "countrySearch"> & { admin1Id?: number | null }) => {
+export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySearch, schoolPageIds }: Pick<ChangeLayerOptions, "mapRoute" | "country" | "countrySearch" | "schoolPageIds"> & { admin1Id?: number | null }) => {
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   let params = getBaseUrl(`${CONNECTIVITY_STATUS_URL}/?${countryParams}`);
   if (countrySearch) {
     params += `&${countrySearch}`
   }
+  if (schoolPageIds?.length === 1) {
+    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`
+  }
   return `${params}&z={z}&x={x}&y={y}.mvt`;
 }
-export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number | null }) => {
+export const generateLayerUrls = ({ layerId, connectivityBenchMark, schoolPageIds, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark" | "schoolPageIds"> & { layerId: number | null, admin1Id?: number | null }) => {
   let url = ''
   const { globalLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
-  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
+  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, schoolPageIds, connectivityBenchMark, countrySearch });
   if (globalLayerId === layerId || !layerId) {
     url = CONNECTIVITY_URL;
   } else {

@@ -16,7 +16,7 @@ import {
   filterListMapping,
   stylePaintData
 } from './map.constant';
-import { Center, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
+import { Center, DuplicateSchoolsRequestPayload, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
 
 export const $reloadStyle = createStore<boolean>(false);
 export const onReloadedMap = createEvent();
@@ -89,14 +89,8 @@ export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayer
 export const setPopupOnClickDot = createEvent<{ id: number; geopoint?: GeoJSONPoint | null; allowDublicateSchoolIds?: boolean; } | null>();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
-export type DuplicateRequestPayload = {
-  ids: number[];
-  allowDublicateSchoolIds?: boolean;
-  requestId?: string;
-};
-
-export const setSchoolIdsOnPopupClickDot = createEvent<DuplicateRequestPayload | null>();
-export const $activeDublicateSchoolsPopup = createStore<DuplicateRequestPayload | null>(null)
+export const setSchoolIdsOnPopupClickDot = createEvent<DuplicateSchoolsRequestPayload | null>();
+export const $activeDublicateSchoolsPopup = createStore<DuplicateSchoolsRequestPayload | null>(null)
   .on(setSchoolIdsOnPopupClickDot, (prev, next) => {
     return prev && next && prev.requestId === next.requestId ? prev : next;
   });
@@ -114,9 +108,8 @@ type SchoolClickupPopupType = {
   isClicked?: boolean;
 }
 
-export const $schoolClickedId = $activeSchoolPopup.map((data) => data);
+export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
 export const $dublicateSchoolsClickedId = $activeDublicateSchoolsPopup.map((data) => data);
-
 export const setSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
 export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setSchoolCLickupPopupDiv, null);
 

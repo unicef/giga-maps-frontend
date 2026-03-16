@@ -12,58 +12,6 @@ import { $schoolPopupData } from "../../map.init";
 import { $multipleSchoolPopup, $schoolClickedPopupDiv } from "../../map.model";
 import { UNKNOWN } from "../../map.types";
 
-export const mockSchoolIds = [
-  2289658,
-  2288310,
-  2286982,
-  3274717,
-  3274718,
-  3274719,
-  3274720,
-  3274721,
-  3274722,
-  3274723,
-  3274724,
-  3274726,
-  3274727,
-  3274728,
-  3274729,
-  3274730,
-  3274731,
-  3274732,
-  3274733,
-  3274734,
-  3274735,
-  3274746,
-  3274751,
-  3274752,
-  3274762,
-  3274763,
-  3274765,
-  3274780,
-  3274865,
-  3274866,
-  3274867,
-  3274868,
-  3274869,
-  3274870,
-  3274871,
-  3274872,
-  3274874,
-  3274875,
-  3274876,
-  3274877,
-  3274878,
-  3274879,
-  3274880,
-  3274881,
-  3274883,
-  3274884,
-  3274885,
-  3274887,
-  3274886,
-  3271187
-]
 
 const useSchoolPopupData = () => {
   const { t } = useTranslation();
@@ -88,6 +36,7 @@ const useSchoolPopupData = () => {
   const getFeatureInfo = (feature: any) => {
     const unit = global_benchmark?.convert_unit;
     const connectivityStatusValue = feature?.connectivityStatus;
+    const schoolId = feature?.id
     const connecitivityStatusColor = stylePaintData[feature?.connectivityStatus ?? UNKNOWN];
     const connecitivityColor = stylePaintData[feature?.connectivityType ?? UNKNOWN];
     const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
@@ -107,6 +56,7 @@ const useSchoolPopupData = () => {
 
     return {
       unit,
+      schoolId,
       connecitivityStatusColor,
       connecitivityColor,
       schoolCoords,

@@ -61,11 +61,6 @@ export const fetchDublicateSchoolPopupDataFx = createRequestFx(
     })
 );
 
-/**
- * Fetches global statistics with retry mechanism.
- * Will retry up to 3 times with exponential backoff (1s, 2s, 4s) on failure.
- * This helps handle network issues, temporary server errors, and timeouts.
- */
 export const fetchGlobalStatsFx = createRequestFx(
   async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
     url: `api/statistics/global-stat/${query ?? ''}`,
