@@ -29,7 +29,6 @@ import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPaus
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
-  $dublicateSchoolClickData,
   $advanceFilterList,
   $dublicateSchoolClickData,
   $filterListMapping,
@@ -351,13 +350,6 @@ sample({
   clock: merge([fetchSchoolPopupDataFx.doneData]),
   source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
   target: updateSchoolPopupFx
-})
-
-export const $dublicateSchoolPopupConnectivityMap = $dublicateSchoolClickData.map((data) => data?.length ? data.map(item => schoolStatsMap(item)) : null)
-export const $dublicateSchoolPopupData = combine({
-  feature: $dublicateSchoolPopupConnectivityMap,
-  stylePaintData: $stylePaintData,
-  layerUtils: $layerUtils,
 })
 
 sample({

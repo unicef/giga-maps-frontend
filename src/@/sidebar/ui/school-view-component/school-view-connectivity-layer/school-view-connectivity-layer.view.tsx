@@ -5,7 +5,6 @@ import CurrentLayerNameIcon from '../../common-components/current-layer-name-Ico
 import SidebarDublicateSchoolList from '../common/dublicate-school-list-view';
 import MultiSchoolLayerView from '../common/multi-school-layer.view';
 import SingleSchoolConnnectivityLayer from '../common/single-school-connectivity-layer.view';
-import SidebarDublicateSchoolList from '../common/dublicate-school-list-view';
 
 export default function SchoolViewConnectivityLayer() {
   const { t } = useTranslation();
