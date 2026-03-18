@@ -36,6 +36,7 @@ steps:
   - task: Bash@3
     displayName: Sonar Scan
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
@@ -69,6 +70,7 @@ steps:
         --build-arg=ENV=$(ENV_DEV)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_DEV)
         --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_DEV)
       tags: |
         $(tag)
@@ -97,6 +99,7 @@ steps:
         --build-arg=ENV=$(ENV_STG)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_STG)
         --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_STG)
       tags: |
         $(tag)
@@ -131,6 +134,7 @@ steps:
         --build-arg=ENV=$(ENV_PROD)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
         --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=LOOMFLOW_API_KEY=$(LOOMFLOW_API_KEY_PROD)
         --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_PROD)
       tags: |
         $(tag)

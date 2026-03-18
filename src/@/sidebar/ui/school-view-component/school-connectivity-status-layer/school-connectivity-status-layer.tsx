@@ -1,9 +1,8 @@
 import { useStore } from 'effector-react';
 
-import { $getSchoolParams, $schoolStats } from '~/@/sidebar/sidebar.model';
-
 import { useTranslation } from 'react-i18next';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { $getSchoolParams, $schoolStats } from '~/@/sidebar/sidebar.model';
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import CommonUIOnlySchoolConnectivityLayer from '../common/common-ui-only-school-connectivity-layer';
 import SidebarDublicateSchoolList from '../common/dublicate-school-list-view';
@@ -23,10 +22,19 @@ const SchoolStatsTypeus = () => {
           <SidebarDublicateSchoolList scrollableTargetId="school-sidebar-scroll" />
         </>
       )}
-      {!singleSchool && <MultiSchoolLayerView schoolLength={schoolIds?.length} schoolLayerList={SchoolStatsTypeus} />}
-      <FooterDataSourcePopUp showOldDataSource={true} size={25} isFooter={false} />
+      {!singleSchool && (
+        <MultiSchoolLayerView
+          schoolLength={schoolIds?.length}
+          schoolLayerList={SchoolStatsTypeus}
+        />
+      )}
+      <FooterDataSourcePopUp
+        showOldDataSource={true}
+        size={25}
+        isFooter={false}
+      />
     </>
   );
-}
+};
 
-export default SchoolStatsTypeus
+export default SchoolStatsTypeus;

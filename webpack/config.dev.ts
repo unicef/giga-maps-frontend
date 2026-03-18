@@ -28,6 +28,7 @@ const developmentPlugins = [
     template: paths.indexHtml,
     favicon: paths.favicon,
     matomoSiteId: parsed?.MATOMO_SITE_ID ?? 0,
+    loomflowApiKey: parsed?.LOOMFLOW_API_KEY ?? '',
   }),
 ];
 

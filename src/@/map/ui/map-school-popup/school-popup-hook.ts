@@ -33,6 +33,10 @@ const useSchoolPopupData = () => {
     intervalUnit,
     false
   );
+  const formatConnectivityValue = (value: number, unit?: string) => {
+    if (!unit) return String(value);
+    return unit === '%' ? `${value}${unit}` : `${value} ${unit}`;
+  };
   const getFeatureInfo = (feature: any) => {
     const unit = global_benchmark?.convert_unit;
     const connectivityStatusValue = feature?.connectivityStatus;
@@ -41,7 +45,7 @@ const useSchoolPopupData = () => {
     const connecitivityColor = stylePaintData[feature?.connectivityType ?? UNKNOWN];
     const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
     const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
-    const connectivityValue = isLiveNotUnknown ? `${feature?.liveAvg ?? 0} ${unit}` : t('unknown');
+    const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(feature?.liveAvg ?? 0, unit) : t('unknown');
     const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
     let staticValue = feature?.staticValue as boolean | undefined | string;
     const staticColor = stylePaintData[feature?.staticType ?? UNKNOWN]

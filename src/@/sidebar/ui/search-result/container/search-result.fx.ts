@@ -47,17 +47,15 @@ export const getSearchResultsFx = createRequestFx(
     countryId?: number;
     excludeCountryId?: boolean;
   }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
-    const splitQuery = query.split(" ");
-    if (query && splitQuery.length > 1) {
+
+    if (query && query.split(" ").length > 1) {
       query = `"${query}"`;
     }
 
     const selectFields = `fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name`;
     const orderingFields = `ordering=-row_score,country_name,name,admin1_name,admin2_name`;
-    let searchFields = `&search_fields=name,external_id,country_name`;
-    if (splitQuery.some(word => word.length >= 10)) {
-      searchFields += `,giga_id_school`;
-    }
+    const searchFields = `&search_fields=name,giga_id_school,external_id,country_name`;
+
     let countryFilter = '';
     if (excludeCountryId && countryId) {
       countryFilter = `&country_id__notexact=${countryId}`;

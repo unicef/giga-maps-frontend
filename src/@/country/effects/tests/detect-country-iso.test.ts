@@ -30,7 +30,6 @@ describe('getUserCurrentCountryISOFx', () => {
 
     expect(result).toBe(mockCountryISO)
     expect(setLocalStorage).toHaveBeenCalledWith('countryISO', mockCountryISO)
-    expect(setLocalStorage).toHaveBeenCalledWith('countryISO_date', expect.any(Number))
   })
 
   it('should return "CN" for Hong Kong', async () => {

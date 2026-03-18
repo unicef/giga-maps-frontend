@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { DataSourceName, LayerDataSource, LayerTypeNames } from "~/@/admin/constants/giga-layer.constant";
 import { $appConfigValues } from "~/@/admin/models/admin-model";
 import { $apiSourceValues, $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model";
-import { DataSource } from "~/@/admin/types/giga-layer.type";
+import { DataSource, LayerTypeChoices } from "~/@/admin/types/giga-layer.type";
 import { $countryList } from "~/@/api-docs/models/explore-api.model";
 import { CountryListType } from "~/@/api-docs/types/country-list.type";
 
@@ -25,6 +25,11 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
     return Array.from(
       list.reduce((map, obj) => map.set(obj.name, obj), new Map()).values());
   }, [apiSourceSelected])
+
+  const supportedFunctions = useMemo(() => {
+    return parameters.find(item => item.name === formData?.dataSourceColumn?.name)?.supported_functions ?? [];
+  }, [parameters, formData?.dataSourceColumn])
+
   const selectedCountries = useMemo(() => {
     if (!countryList || !formData?.applicableCountries) return [];
     return countryList?.filter(item => formData?.applicableCountries.includes(item.id))
@@ -39,6 +44,8 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       name: DataSourceName[sourceName]
     }))
   }, [formData.type])
+  const isLive = String(formData.type) === String(LayerTypeChoices.LIVE);
+
   return <>
     <DataLayerFieldContainer>
       <InputLabel>
@@ -87,7 +94,6 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
           id="layer-description"
           value={formData.description}
           onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value])}
-          required
           placeholder="Enter layer description"
         />
       </DataLayerNameField>
@@ -161,6 +167,18 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       <SelectItem value="" text="Select parameter" />
       {parameters?.map((parameter) => <SelectItem key={parameter?.name} value={parameter?.name} text={parameter?.alias} />)}
     </SelectLayerConfig>
+    {isLive && <SelectLayerConfig
+      name="supportedFunctions"
+      required
+      labelText="Parameter Aggregator Function"
+      id={`convert-function-select`}
+      value={formData.supportedFunctions?.name}
+      placeholder="Select Parameter Aggregator Function"
+      onChange={(e) => onUdpateGigaLayerForm([e.target.name, supportedFunctions?.find(item => e.target.value === item.name)])}
+    >
+      <SelectItem value="" text="Select Parameter Aggregator Function" />
+      {supportedFunctions?.map((item) => <SelectItem key={item?.name} value={item?.name} text={`${item?.verbose} ${item.description ? `(${item.description})` : ''}`} />)}
+    </SelectLayerConfig>}
     <MultiSelectLayerConfig
       required
       direction='top'

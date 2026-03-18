@@ -34,6 +34,7 @@ const productionPlugins = [
     template: paths.outputProd.index,
     favicon: paths.favicon,
     matomoSiteId: process.env?.MATOMO_SITE_ID ?? 0,
+    loomflowApiKey: process.env?.LOOMFLOW_API_KEY ?? '',
   }),
 ];
 

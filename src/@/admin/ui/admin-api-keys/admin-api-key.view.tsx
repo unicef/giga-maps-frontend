@@ -12,17 +12,18 @@ import PageTitleComponent from '../common-components/page-title-component';
 import Pagination from '../common-components/Pagination';
 import { ApiKeyRequestListScroll, DeleteConfirmation, ToolbarContent } from '../styles/admin-styles';
 import AdminApiKeyItem from './admin-api-key-item.view';
-import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import SearchToolbar from '../common-components/search-toolbar';
 import { TableToolbar } from '@carbon/react';
 import { IconButton } from '@carbon/react';
 import CountryFilterModal from '../common-components/country-filter-modal';
+import { getGigaMeterCategoryCountriesFx } from '~/@/api-docs/effects/api-keys-fx';
+import { $gigaMeterCategoryCountries } from '~/@/api-docs/models/api-keys.model';
 
 const AdminApiKey = () => {
+  const gigaMeterCategoryCountries = useStore($gigaMeterCategoryCountries)
   const { results: apiRequestList, count } = useStore($apiRequestListResponse) ?? {};
   const { page, pageSize } = useStore($apiRequestPageNo);
   const [apiKeyDeleteId, setApiKeyDeleteId] = useState<null | number>(null);
-  const countryList = useStore($countryList)
   const filterCountryList = useStore($countryApiKeyList)
   const [searchValue, setSearchValue] = useState('')
   const [showFilter, setShowFilter] = useState(false);
@@ -35,6 +36,7 @@ const AdminApiKey = () => {
   useEffect(() => {
     getCountryApiFx('?has_api_requests=true&fields=id,name')
     getApiCategoryFx()
+    getGigaMeterCategoryCountriesFx()
   }, [])
 
   useEffect(() => {
@@ -88,7 +90,10 @@ const AdminApiKey = () => {
                   User
                 </TableHeader>
                 <TableHeader>
-                  Country
+                  Requested Country
+                </TableHeader>
+                <TableHeader>
+                  Country access
                 </TableHeader>
                 <TableHeader>
                   Category
@@ -111,7 +116,7 @@ const AdminApiKey = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {apiRequestList?.map((item) => <AdminApiKeyItem refresh={getApiKeyRequest} key={item.id} item={item} setApiKeyDeleteId={setApiKeyDeleteId} countryLength={countryList?.length} />)}
+              {apiRequestList?.map((item) => <AdminApiKeyItem refresh={getApiKeyRequest} key={item.id} item={item} setApiKeyDeleteId={setApiKeyDeleteId} gigaMeterCategoryCountries={gigaMeterCategoryCountries} />)}
             </TableBody>
           </Table>
         </ApiKeysDataWrapper>

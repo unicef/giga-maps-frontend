@@ -2,7 +2,6 @@ import { useStore } from 'effector-react';
 
 import { Div } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
-import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { getLiveSchoolDetails } from '~/@/sidebar/school-view.utils';
 import { $isLoadingSchoolView, $schoolStats, $selectedLayerData } from '~/@/sidebar/sidebar.model';
 
@@ -25,7 +24,6 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   if (!schoolDetails?.is_rt_connected && schoolId) {
     return <CommonUIOnlySchoolConnectivityLayer schoolId={schoolId} />
   }
-
   return (
     <div>
       <Div $margin='0 1rem 0rem 1rem'>
@@ -39,7 +37,6 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
       <SchoolInformationWrapper>
         <SchoolInformation schoolData={schoolDetails} />
       </SchoolInformationWrapper>
-      <FooterDataSourcePopUp size={25} isFooter={false} />
     </div>
   );
 }

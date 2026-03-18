@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 
 const FooterContainer = styled.div`
   background: ${props => props.theme.main};
+  z-index: 2;
   @media (min-width: 768px) { /* Adjust 768px to your desktop breakpoint */
     position: sticky;
     bottom: 0;
@@ -23,7 +24,7 @@ const FooterContainer = styled.div`
 
 
 export const DataSourceHeader = styled.div`
-  margin-top: 1.5rem;
+  margin-top: 0rem;
   display: flex;
   align-items: center;
   width: calc(100% - 0.6rem);
@@ -114,26 +115,12 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
   const { t } = useTranslation();
   const { isSchoolStatus } = useStore($currentLayerTypeUtils)
   const currentDataSource = useStore($currentLayerCountryDataSource);
-  const isValidUrl = (str: string): boolean => {
-    const trimmed = str.trim();
-    // Check if it has a protocol (http://, https://, //, etc.)
-    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed) || trimmed.startsWith('//')) return true;
-    // Check if it contains at least one dot (for domain.tld pattern)
-    if (trimmed.includes('.')) return true;
-    return false;
-  };
   const parseNameAndUrl = (raw: string): { name: string; url?: string } => {
     if (!raw) return { name: '' };
     const trimmed = raw.trim();
     const match = /^(.*?)\(([^)]+)\)\s*$/i.exec(trimmed);
     if (match) {
-      const extractedUrl = match[2].trim();
-      // Only treat as URL if it looks like a valid URL
-      if (isValidUrl(extractedUrl)) {
-        return { name: match[1].trim(), url: extractedUrl };
-      }
-      // If not a valid URL, return the full text as name (keep parentheses content)
-      return { name: trimmed };
+      return { name: match[1].trim(), url: match[2].trim() };
     }
     return { name: trimmed };
   };
@@ -221,23 +208,18 @@ const FooterDataSourcePopUp = ({ size, isFooter = true, showOldDataSource = fals
               const isLast = index === dataSourceName?.length - 1;
               const { name, url } = parseNameAndUrl(dataSource);
               return (
-                <span key={dataSource}>
-                  <TooltipButton
-                    enterDelayMs={200}
-                    $hideLabel={!dataSourceDescription?.[index]}
-                    label={dataSourceDescription?.[index]}
-                    autoAlign={true}
-                    align="top-right"
-                  >
-                    <button
-                      data-has-url={url ? "true" : "false"}
-                      onClick={() => url && window.open(ensureAbsoluteUrl(url), '_blank', 'noopener,noreferrer')}
-                    >
-                      {name?.replace(/Daily Check App/i, "Giga Meter")}
-                    </button>
-                  </TooltipButton>
-                  {!isLast && `, `}
-                </span>
+                <TooltipButton
+                  enterDelayMs={200}
+                  $hideLabel={!dataSourceDescription?.[index]}
+                  label={dataSourceDescription?.[index]}
+                  key={dataSource}
+                  autoAlign={true}
+                  align="top-right"
+                >
+                  <button onClick={() => url && window.open(ensureAbsoluteUrl(url), '_blank', 'noopener,noreferrer')}>
+                    {name?.replace(/Daily Check App/i, "Giga Meter")} {!isLast && `, `}&nbsp;
+                  </button>
+                </TooltipButton>
               )
             })}
           </div>

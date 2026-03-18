@@ -290,7 +290,7 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
   });
 
   map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-  delete mapDotsClickIdsAndHandler[source][id];
+  delete mapDotsClickIdsAndHandler?.[source]?.[id];
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, CONNECTIVITY_STATUS_SOURCE);
   }
@@ -361,8 +361,9 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEF
   // create on click on dots;
   // clear click event before creating new layer;
 
-  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-  delete mapDotsClickIdsAndHandler[source][id];
+  map.off('click', id, mapDotsClickIdsAndHandler?.[source]?.[id]);
+  delete mapDotsClickIdsAndHandler?.[source]?.[id];
+  console.log('mapRoute.map', source, id);
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }

@@ -243,7 +243,8 @@ describe('createLineLayerForCountry', () => {
       addLayer: jest.fn(),
       setFilter: jest.fn(),
       showLayer: jest.fn(),
-      setLayoutProperty: jest.fn()
+      setLayoutProperty: jest.fn(),
+      setPaintProperty: jest.fn(),
     };
   });
 

@@ -1,6 +1,40 @@
+import { combine, createEffect, guard, merge, sample } from 'effector';
+import { Map } from 'mapbox-gl';
 
-import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
-import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import {
+  $admin1Data,
+  $admin1Id,
+  $country,
+  $countryActiveFiltersList,
+  $countryId,
+  $countryMapping,
+  $countrySearchString,
+  $schoolFocusLatLng,
+  countryReceived,
+  setSchoolFocusLatLng,
+} from '~/@/country/country.model';
+import {
+  $isCheckedLastDate,
+  $lastAvailableDates,
+} from '~/@/sidebar/history-graph.model';
+import {
+  $connectivityBenchMark,
+  $isLoadedTimePlayer,
+  $isLoadingTimeplayer,
+  $isPauseTimeplayer,
+  $isTimeplayer,
+  $layerUtils,
+  $schoolAdminId,
+  $schoolStatsMap,
+  $schoolStatusSelectedLayer,
+  $selectedLayerId,
+  $selectedSchoolIds,
+  $staticLegendsSelected,
+  $timePlayerInfo,
+  onLoadTimePlayerData,
+  onTimeoutTimePlayer,
+  schoolStatsMap,
+} from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -10,22 +44,48 @@ import {
   fetchSchoolPopupDataFx,
   getBaseUrl,
 } from '~/api/project-connect';
-import { $mapRoutes, map, mapCountry, mapOverview, router } from '~/core/routes';
+import { languageStore } from '~/core/i18n/store';
+import {
+  $mapRoutes,
+  map,
+  mapCountry,
+  mapOverview,
+  router,
+} from '~/core/routes';
+import { $theme } from '~/core/theme.model';
 
 import {
-  changeLayersFx, changeStyleFx,
-  updateCoverageFilter
+  changeLayersFx,
+  changeStyleFx,
+  updateCoverageFilter,
 } from '@/map/effects';
-import { $connectivityFilter, $connectivitySpeedFilter, $coverageFilter, $selectedLayers } from '@/sidebar/init';
+import {
+  $connectivityFilter,
+  $connectivitySpeedFilter,
+  $coverageFilter,
+  $selectedLayers,
+} from '@/sidebar/init';
 
-import { languageStore } from '~/core/i18n/store';
-import { $theme } from '~/core/theme.model';
 import { $isMobile } from '../admin/models/media-query';
 import { mapLabelLayerList } from '../country/country.constant';
-import { countryTranslationFx, filterTranslationFx } from '../sidebar/effects/all-translation-fx';
-import { changeStaticLayerFx, updateConnectivityFilter, updateConnectivityStatus } from './effects/add-layers-fx';
+import {
+  countryTranslationFx,
+  filterTranslationFx,
+} from '../sidebar/effects/all-translation-fx';
+import {
+  changeStaticLayerFx,
+  updateConnectivityFilter,
+  updateConnectivityStatus,
+} from './effects/add-layers-fx';
 import { addSchoolMarkers } from './effects/add-marker-fx';
-import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from './effects/time-player.fx';
+import {
+  clearTimeplayer,
+  nextTimePlayerIteration,
+  onLoadStartTimePlayer,
+  onPausePlayTimeplayerFx,
+  timePlayerFx,
+  timePlayerSourceFx,
+} from './effects/time-player.fx';
 import { stylePaintData } from './map.constant';
 import {
   $activeSchoolPopup,
@@ -53,11 +113,12 @@ import {
   zoomIn,
   zoomOut,
 } from './map.model';
-import { createLoadingPopupFx, navigateToSchool } from './popup/effects/create-school-popup-fx';
+import {
+  createLoadingPopupFx,
+  navigateToSchool,
+} from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
-import { sample, merge, createEffect, combine, guard } from 'effector';
-import { $isCheckedLastDate, $lastAvailableDates } from '../sidebar/history-graph.model';
 
 sample({
   source: $theme,
@@ -65,7 +126,7 @@ sample({
   target: $stylePaintData,
 });
 
-// on page load 
+// on page load
 sample({
   clock: merge([onLoadPage, map.visible]),
   source: $mapRoutes,
@@ -77,16 +138,26 @@ sample({
       void fetchLayerListFx();
       void fetchCountriesFx();
     }
-  })
-})
-
+  }),
+});
 
 // load global stats
 sample({
-  clock: merge([mapOverview.visible, mapCountry.visible, fetchCountryFx.doneData, $admin1Id, $countrySearchString]),
-  source: combine({ routes: $mapRoutes, country: $country, admin1Id: $admin1Id, countrySearchString: $countrySearchString }),
+  clock: merge([
+    mapOverview.visible,
+    mapCountry.visible,
+    fetchCountryFx.doneData,
+    $admin1Id,
+    $countrySearchString,
+  ]),
+  source: combine({
+    routes: $mapRoutes,
+    country: $country,
+    admin1Id: $admin1Id,
+    countrySearchString: $countrySearchString,
+  }),
   fn: ({ routes, country, admin1Id, countrySearchString }) => {
-    let query = ''
+    let query = '';
     if (routes.country) {
       const queryParts = [`country_id=${country?.id}`];
       if (admin1Id) {
@@ -97,13 +168,15 @@ sample({
       }
       query = `?${queryParts.join('&')}`;
     }
-    return { query }
+    return { query };
   },
   filter: ({ routes, country, admin1Id }) => {
-    return [routes.map || (routes.country && !!country) || admin1Id].some(Boolean)
+    return [routes.map || (routes.country && !!country) || admin1Id].some(
+      Boolean,
+    );
   },
-  target: fetchGlobalStatsFx
-})
+  target: fetchGlobalStatsFx,
+});
 
 sample({
   source: guard($map, { filter: Boolean }),
@@ -119,7 +192,7 @@ sample({
 sample({
   clock: changeStyle,
   fn: () => true,
-  target: $reloadStyle
+  target: $reloadStyle,
 });
 
 // set reload style true;
@@ -128,13 +201,18 @@ sample({
   source: $reloadStyle,
   filter: (reload: boolean) => reload,
   target: onReloadedMap,
-})
+});
 
 sample({
   clock: onStyleLoaded,
   fn: () => false,
-  target: $reloadStyle
+  target: $reloadStyle,
 });
+
+const hasFilterParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return Array.from(params.keys()).some((key) => key.startsWith('filter__'));
+};
 
 const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
@@ -142,20 +220,37 @@ const $derivedCountryActiveFilterList = combine({
   schoolFocusLatLng: $schoolFocusLatLng,
 });
 
-// guard: only run when both filters loaded AND no school is focused
+// guard: apply default country filters only when:
+// - filter data is loaded
+// - no school is focused
+// - URL has no existing filter params (to avoid overriding shared URLs)
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
   clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
-  filter: ({ countryActiveFiltersList, activeFiltersList, schoolFocusLatLng }) =>
-    countryActiveFiltersList != null && activeFiltersList != null && schoolFocusLatLng === null,
+  filter: ({
+    countryActiveFiltersList,
+    activeFiltersList,
+    schoolFocusLatLng,
+  }) => {
+    if (hasFilterParams()) return false; // 🚨 IMPORTANT FIX
+
+    return (
+      countryActiveFiltersList != null &&
+      activeFiltersList != null &&
+      schoolFocusLatLng === null
+    );
+  },
 });
 
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
   fn: ({ countryActiveFiltersList, activeFiltersList }) =>
-    buildFilterQueryFromSelections(countryActiveFiltersList!, activeFiltersList!),
-  target: router.navigate
+    buildFilterQueryFromSelections(
+      countryActiveFiltersList!,
+      activeFiltersList,
+    ),
+  target: router.navigate,
 });
 
 $map.watch(zoomIn, (map: Map | null) => {
@@ -191,36 +286,52 @@ export const gigaLayerSource = combine({
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
   zoomState: $zoomState,
-  schoolPageIds: $selectedSchoolIds
-})
+  schoolPageIds: $selectedSchoolIds,
+});
 
-const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-  ...source,
-  ...data
-})
+const combineGigaFn =
+  (data: { refresh?: boolean; timeout?: number }) =>
+  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+    ...source,
+    ...data,
+  });
 
-const mapLayerFilter = ({ isCheckedLastDate, mapRoute }: ReturnType<typeof gigaLayerSource.getState>) => {
+const mapLayerFilter = ({
+  isCheckedLastDate,
+  mapRoute,
+}: ReturnType<typeof gigaLayerSource.getState>) => {
   return true; //isCheckedLastDate || mapRoute.map;
-}
+};
 
 const timePlayerActive = sample({
   clock: $isTimeplayer,
-  filter: isActive => !isActive
+  filter: (isActive) => !isActive,
 });
 
 const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 // change giga layer on selection of layers
 
 sample({
-  clock: merge([$zoomState,
-    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
+  clock: merge([
+    $zoomState,
+    $mapRouteVisible,
+    $countrySearchString,
+    onReloadedMap,
+    $map,
+    countryReceived,
+    $admin1Id,
+    $schoolAdminId,
+    $schoolStatusSelectedLayer,
+    $schoolStatsMap,
+    timePlayerActive,
+  ]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: ({ map }) => {
     return !!map;
   },
-  target: changeStaticLayerFx
-})
+  target: changeStaticLayerFx,
+});
 
 sample({
   clock: merge([$selectedLayerId]),
@@ -228,7 +339,7 @@ sample({
   fn: combineGigaFn({}),
   filter: mapLayerFilter,
   target: changeLayersFx,
-})
+});
 // change giga layer update on connectivity filter
 sample({
   clock: merge([
@@ -242,21 +353,21 @@ sample({
     $connectivityBenchMark,
     $countrySearchString,
     timePlayerActive,
-    $zoomState
+    $zoomState,
   ]),
   source: gigaLayerSource,
   filter: mapLayerFilter,
   fn: combineGigaFn({ refresh: true }),
   target: changeLayersFx,
-})
+});
 
 // reset zoom state when map is loaded and map page is visible
 sample({
   clock: $map,
   source: mapOverview.visible,
   fn: () => 'end',
-  target: onZoomStateChange
-})
+  target: onZoomStateChange,
+});
 
 sample({
   clock: $connectivityFilter,
@@ -290,7 +401,7 @@ sample({
   }),
   fn: (source, lengendsSelected) => ({
     lengendsSelected,
-    ...source
+    ...source,
   }),
   target: updateConnectivityStatus,
 });
@@ -301,56 +412,64 @@ export const mapMarkerSource = combine({
   schoolMarkers: $schoolMarkers,
   multipleSchoolPopup: $multipleSchoolPopup,
   stylePaintData: $stylePaintData,
-  layerUtils: $layerUtils
-})
+  layerUtils: $layerUtils,
+});
 
 sample({
   clock: merge([$schoolStatsMap]),
   source: mapMarkerSource,
-  target: addSchoolMarkers
-})
-
+  target: addSchoolMarkers,
+});
 
 sample({
   clock: $schoolClickedId,
   source: combine({
     map: $map,
     schoolPopupInfo: $activeSchoolPopup,
-    isMobile: $isMobile
+    isMobile: $isMobile,
   }),
   filter: ({ isMobile }) => !isMobile,
-  target: createLoadingPopupFx
-})
+  target: createLoadingPopupFx,
+});
 
 sample({
   clock: $schoolClickedId,
   source: combine({
-    isMobile: $isMobile
+    isMobile: $isMobile,
   }),
   filter: ({ isMobile }, schoolId) => isMobile && schoolId,
   fn: (_, schoolId) => schoolId,
-  target: navigateToSchool
-})
+  target: navigateToSchool,
+});
 
-export const $schoolPopupConnectivityMap = $schoolClickData.map((data) => data?.length ? schoolStatsMap(data[0]) : null)
+export const $schoolPopupConnectivityMap = $schoolClickData.map((data) =>
+  data?.length ? schoolStatsMap(data[0]) : null,
+);
 export const $schoolPopupData = combine({
   feature: $schoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
-})
+});
 
-export const $dublicateSchoolPopupConnectivityMap = $dublicateSchoolClickData.map((data) => data?.length ? data.map(item => schoolStatsMap(item)) : null)
+export const $dublicateSchoolPopupConnectivityMap =
+  $dublicateSchoolClickData.map((data) =>
+    data?.length ? data.map((item) => schoolStatsMap(item)) : null,
+  );
 export const $dublicateSchoolPopupData = combine({
   feature: $dublicateSchoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
-})
+});
 
 sample({
   clock: merge([fetchSchoolPopupDataFx.doneData]),
-  source: combine({ popup: $popup, schoolPopupData: $schoolPopupData, country: $country }),
-  target: updateSchoolPopupFx
-})
+  source: combine({
+    popup: $popup,
+    schoolPopupData: $schoolPopupData,
+    country: $country,
+  }),
+  target: updateSchoolPopupFx,
+});
 
 sample({
   clock: merge([router.historyUpdated, $isTimeplayer]),
@@ -360,117 +479,128 @@ sample({
     if (popup) {
       popup.remove();
       onCreateSchoolPopup(null);
-      setSchoolCLickupPopupDiv(null)
+      setSchoolCLickupPopupDiv(null);
     }
-  }
-})
+  },
+});
 
 sample({
   source: $schoolStatsMap,
-  target: createEffect((schoolConnenctivity: ReturnType<typeof $schoolStatsMap.getState>) => {
-    if (schoolConnenctivity?.length === 1) {
-      setSchoolFocusLatLng(schoolConnenctivity[0].geopoint.coordinates)
-    }
-  })
-})
+  target: createEffect(
+    (schoolConnenctivity: ReturnType<typeof $schoolStatsMap.getState>) => {
+      if (schoolConnenctivity?.length === 1) {
+        setSchoolFocusLatLng(schoolConnenctivity[0].geopoint.coordinates);
+      }
+    },
+  ),
+});
 
 sample({
   clock: sample({
     clock: $isTimeplayer,
-    filter: Boolean
+    filter: Boolean,
   }),
-  source: combine({ country: $country, selectedLayerId: $selectedLayerId, map: $map }),
+  source: combine({
+    country: $country,
+    selectedLayerId: $selectedLayerId,
+    map: $map,
+  }),
   fn: ({ map, country, selectedLayerId }) => {
     const params = `country_id=${country?.id}&layer_id=${selectedLayerId}&start_year=2020`;
-    const url = getBaseUrl(`api/accounts/time-players/v2/?${params}&z={z}&x={x}&y={y}.mvt`)
+    const url = getBaseUrl(
+      `api/accounts/time-players/v2/?${params}&z={z}&x={x}&y={y}.mvt`,
+    );
     return { url, map };
   },
-  target: timePlayerSourceFx
-})
+  target: timePlayerSourceFx,
+});
 
-export const timePlayerData = combine({ map: $map, paintData: $stylePaintData, timeplayerInfo: $timePlayerInfo });
+export const timePlayerData = combine({
+  map: $map,
+  paintData: $stylePaintData,
+  timeplayerInfo: $timePlayerInfo,
+});
 sample({
   clock: timePlayerSourceFx.doneData,
   source: timePlayerData,
-  target: timePlayerFx
-})
+  target: timePlayerFx,
+});
 
 sample({
   clock: sample({
     clock: $isTimeplayer,
-    filter: (isTimeplayer) => !isTimeplayer
+    filter: (isTimeplayer) => !isTimeplayer,
   }),
   source: timePlayerData,
-  target: clearTimeplayer
-})
+  target: clearTimeplayer,
+});
 
 sample({
   clock: onLoadTimePlayerData,
   source: timePlayerData,
-  target: onLoadStartTimePlayer
-})
+  target: onLoadStartTimePlayer,
+});
 
 sample({
   clock: onLoadTimePlayerData,
-  target: $isLoadedTimePlayer
-})
+  target: $isLoadedTimePlayer,
+});
 
 sample({
   clock: onLoadTimePlayerData,
   fn: () => false,
-  target: $isLoadingTimeplayer
-})
+  target: $isLoadingTimeplayer,
+});
 
 sample({
   clock: onTimeoutTimePlayer,
   source: timePlayerData,
-  target: nextTimePlayerIteration
-})
+  target: nextTimePlayerIteration,
+});
 
 sample({
   clock: $isPauseTimeplayer,
-  target: onPausePlayTimeplayerFx
-})
-
+  target: onPausePlayTimeplayerFx,
+});
 
 // call filter api on country change
 sample({
   clock: $countryId,
   filter: (countryId) => !!countryId,
   fn: (countryId) => countryId ?? 0,
-  target: fetchAdvanceFilterFx
-})
+  target: fetchAdvanceFilterFx,
+});
 
 sample({
   clock: merge([languageStore.$language, $map]),
   source: combine({ map: $map, lng: languageStore.$language }),
-  target: createEffect(({ map, lng }: { map: Map, lng: string }) => {
+  target: createEffect(({ map, lng }: { map: Map; lng: string }) => {
     if (!map || !lng) return;
-    for (let key in mapLabelLayerList) {
+    for (const key in mapLabelLayerList) {
       map.setLayoutProperty(mapLabelLayerList[key], 'text-field', [
         'get',
-        `name_${lng}`
+        `name_${lng}`,
       ]);
     }
-  })
-})
+  }),
+});
 
 sample({
   clock: merge([$filterListMapping, languageStore.$language]),
   source: { mapping: $filterListMapping, lng: languageStore.$language },
   filter: ({ mapping, lng }) => {
-    return !!mapping?.length && !!lng
+    return !!mapping?.length && !!lng;
   },
-  target: filterTranslationFx
-})
+  target: filterTranslationFx,
+});
 
 sample({
   clock: merge([$countryMapping, languageStore.$language]),
   source: { mapping: $countryMapping, lng: languageStore.$language },
   filter: ({ mapping, lng }) => {
-    return !!mapping?.length && !!lng
+    return !!mapping?.length && !!lng;
   },
-  target: countryTranslationFx
-})
+  target: countryTranslationFx,
+});
 
 onLoadPage();
