@@ -3,7 +3,7 @@ import { createEffect } from 'effector';
 import { AddCountries } from '~/@/country/country.types';
 
 import { CountryAdminLevel } from '../country.constant';
-import { addAdminCountryLayerEvents, createFillLayerForCountry, createLineLayerForCountry, onChangeAdminBoundariesLayer, onChangeLabelLayer } from '../country.utils';
+import { addAdminCountryLayerEvents, applyWorldViewToLabels, createFillLayerForCountry, createLineLayerForCountry, onChangeAdminBoundariesLayer, onChangeLabelLayer } from '../country.utils';
 
 const createOrUpdateLayerForAdmin = (props: AddCountries & { level: CountryAdminLevel }) => {
   const { map, isTilesAndLables, isAdminBoundaries } = props;
@@ -25,5 +25,8 @@ export const createUpdateCountriesLayer = createEffect(
 
     // layer for country level 1
     createOrUpdateLayerForAdmin({ ...props, level: CountryAdminLevel.level1 });
+
+    // apply worldview filter to country labels so disputed territory labels respect the worldview
+    applyWorldViewToLabels(props.map, props.worldView);
   }
 );
