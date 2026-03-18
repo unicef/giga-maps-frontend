@@ -22,10 +22,19 @@ const SchoolStatsTypeus = () => {
           <SidebarDublicateSchoolList scrollableTargetId="school-sidebar-scroll" />
         </>
       )}
-      {!singleSchool && <MultiSchoolLayerView schoolLength={schoolIds?.length} schoolLayerList={SchoolStatsTypeus} />}
-      <FooterDataSourcePopUp showOldDataSource={true} size={25} isFooter={false} />
+      {!singleSchool && (
+        <MultiSchoolLayerView
+          schoolLength={schoolIds?.length}
+          schoolLayerList={SchoolStatsTypeus}
+        />
+      )}
+      <FooterDataSourcePopUp
+        showOldDataSource={true}
+        size={25}
+        isFooter={false}
+      />
     </>
   );
-}
+};
 
-export default SchoolStatsTypeus
+export default SchoolStatsTypeus;
