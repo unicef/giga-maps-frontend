@@ -68,7 +68,9 @@ steps:
         --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_DEV)
         --build-arg=ENV=$(ENV_DEV)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
-        --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=NOCODB_API_URL=$(NOCODB_API_URL_DEV)
+        --build-arg=NOCODB_API_TOKEN=$(NOCODB_API_TOKEN_DEV)
+        --build-arg=NOCODB_TABLE_ID=$(NOCODB_TABLE_ID_DEV)
         --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_DEV)
       tags: |
         $(tag)
@@ -96,7 +98,9 @@ steps:
         --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_STG)
         --build-arg=ENV=$(ENV_STG)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
-        --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=NOCODB_API_URL=$(NOCODB_API_URL_STG)
+        --build-arg=NOCODB_API_TOKEN=$(NOCODB_API_TOKEN_STG)
+        --build-arg=NOCODB_TABLE_ID=$(NOCODB_TABLE_ID_STG)
         --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_STG)
       tags: |
         $(tag)
@@ -130,7 +134,9 @@ steps:
         --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_PROD)
         --build-arg=ENV=$(ENV_PROD)
         --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
-        --build-arg=AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=NOCODB_API_URL=$(NOCODB_API_URL_PROD)
+        --build-arg=NOCODB_API_TOKEN=$(NOCODB_API_TOKEN_PROD)
+        --build-arg=NOCODB_TABLE_ID=$(NOCODB_TABLE_ID_PROD)
         --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_PROD)
       tags: |
         $(tag)
