@@ -1,4 +1,3 @@
-import { isProd } from './lib/utils/index';
 // See: https://www.npmjs.com/package/dotenv-webpack
 // You can reference vars from .env as "process.env.VAR_NAME" (no destructuring)
 
@@ -17,7 +16,9 @@ export const API_BASE_URL =
 
 export const GIGA_MERTER_API_HOST = process.env.GIGA_METER_API_HOST ?? 'https://uni-ooi-giga-meter-backend-dev.azurewebsites.net';
 
-export const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY ?? '';
+export const NOCODB_API_URL = process.env.NOCODB_API_URL ?? '';
+export const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN ?? '';
+export const NOCODB_TABLE_ID = process.env.NOCODB_TABLE_ID ?? '';
 
 // export const RECAPTCHA_KEY = process.env.RECAPTCHA_KEY ?? '';
 
