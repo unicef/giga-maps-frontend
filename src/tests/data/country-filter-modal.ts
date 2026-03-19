@@ -37,6 +37,10 @@ export const countryList = [
     "date_of_join": null,
     "schools_with_data_percentage": 0,
     "schools_total": 1733,
+    "entity_counts": {
+      "school": 1733,
+      "health": 0
+    },
     "connectivity_availability": "no_connectivity",
     "coverage_availability": "no_coverage"
   },
@@ -75,6 +79,10 @@ export const countryList = [
     "date_of_join": null,
     "schools_with_data_percentage": 0,
     "schools_total": 0,
+    "entity_counts": {
+      "school": 0,
+      "health": 0
+    },
     "connectivity_availability": "no_connectivity",
     "coverage_availability": "no_coverage"
   },
@@ -113,6 +121,10 @@ export const countryList = [
     "date_of_join": null,
     "schools_with_data_percentage": 0,
     "schools_total": 0,
+    "entity_counts": {
+      "school": 0,
+      "health": 0
+    },
     "connectivity_availability": "no_connectivity",
     "coverage_availability": "no_coverage"
   },
@@ -160,6 +172,10 @@ export const AdminCountryList = {
     "date_of_join": null,
     "schools_with_data_percentage": 0,
     "schools_total": 1733,
+    "entity_counts": {
+      "school": 1733,
+      "health": 0
+    },
     "connectivity_availability": "no_connectivity",
     "coverage_availability": "no_coverage"
   },
@@ -198,6 +214,10 @@ export const AdminCountryList = {
     "date_of_join": null,
     "schools_with_data_percentage": 0,
     "schools_total": 0,
+    "entity_counts": {
+      "school": 0,
+      "health": 0
+    },
     "connectivity_availability": "no_connectivity",
     "coverage_availability": "no_coverage"
   },
@@ -236,6 +256,10 @@ export const AdminCountryList = {
     "date_of_join": null,
     "schools_with_data_percentage": 0,
     "schools_total": 0,
+    "entity_counts": {
+      "school": 0,
+      "health": 0
+    },
     "connectivity_availability": "no_connectivity",
     "coverage_availability": "no_coverage"
   },]
@@ -253,6 +277,10 @@ export const adminCountrySummaryList = {
     "integration_status": 4,
     "connectivity_speed": null,
     "schools_total": 0,
+    "entity_counts": {
+      "school": 0,
+      "health": 0
+    },
     "schools_connected": 0,
     "schools_connectivity_unknown": 0,
     "schools_connectivity_no": 0,

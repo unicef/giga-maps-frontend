@@ -11,6 +11,10 @@ export interface CountryType {
   date_of_join?: any;
   schools_with_data_percentage?: any;
   schools_total: number;
+  entity_counts?: {
+    school?: number;
+    health?: number;
+  };
   connectivity_availability: string;
   coverage_availability: string;
   connectivity_benchmark?: any;
