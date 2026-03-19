@@ -147,11 +147,11 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
 }
 
 .c1 .cds--popover-content {
-  max-inline-size: 48rem;
+  max-inline-size: 38rem;
 }
 
 .c1 .cds--toggletip-content {
-  max-inline-size: 48rem;
+  max-inline-size: 38rem;
 }
 
 .c2 .cds--search-magnifier-icon {
@@ -166,7 +166,7 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
       class="action-button"
     >
       <span
-        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c1"
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--toggletip c1"
       >
         <button
           aria-controls="id-:r2:"
@@ -320,7 +320,7 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
               />
             </svg>
           </button>
@@ -611,7 +611,7 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
                 <div
                   class="cds--table-header-label"
                 >
-                  name
+                  Name
                 </div>
               </th>
               <th
@@ -901,7 +901,7 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>
@@ -959,7 +959,7 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>
@@ -1199,7 +1199,7 @@ exports[`Data source take a snapshot of EditDataSource 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
               />
             </svg>
           </button>

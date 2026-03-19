@@ -2,7 +2,45 @@
 
 exports[`AdvancedFilter should render Advance filter 1`] = `
 <DocumentFragment>
-  .c0 {
+  .c3 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c3 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c3 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c3 .cds--popover-content {
+  max-inline-size: 18rem;
+}
+
+.c6 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c6 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c6 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c6 .cds--popover-content {
+  max-inline-size: 12rem;
+}
+
+.c0 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,44 +130,6 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
 
 .c8 .cds--checkbox-label-text {
   font-size: 0.75rem;
-}
-
-.c3 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c3 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c3 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c3 .cds--popover-content {
-  max-inline-size: 18rem;
-}
-
-.c6 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c6 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c6 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c6 .cds--popover-content {
-  max-inline-size: 12rem;
 }
 
 @media (min-width:769px) {
@@ -312,7 +312,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -505,7 +505,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                     <title>
                       Open menu
@@ -617,7 +617,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -863,7 +863,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                     <title>
                       Open menu
@@ -1146,7 +1146,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                     <title>
                       Open menu
@@ -1346,7 +1346,45 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
 
 exports[`AdvancedFilter should render Advance filter 2`] = `
 <DocumentFragment>
-  .c0 {
+  .c3 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c3 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c3 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c3 .cds--popover-content {
+  max-inline-size: 18rem;
+}
+
+.c6 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c6 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c6 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c6 .cds--popover-content {
+  max-inline-size: 12rem;
+}
+
+.c0 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1436,44 +1474,6 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
 
 .c8 .cds--checkbox-label-text {
   font-size: 0.75rem;
-}
-
-.c3 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c3 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c3 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c3 .cds--popover-content {
-  max-inline-size: 18rem;
-}
-
-.c6 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c6 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c6 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c6 .cds--popover-content {
-  max-inline-size: 12rem;
 }
 
 @media (min-width:769px) {
@@ -1636,7 +1636,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                 >
                   <span
                     class="cds--list-box__label"
-                    id="multiselect-field-label-5"
+                    id="multiselect-field-label-7"
                   >
                     Select Building-id
                   </span>
@@ -1656,7 +1656,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -1849,7 +1849,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                     <title>
                       Open menu
@@ -1941,7 +1941,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                 >
                   <span
                     class="cds--list-box__label"
-                    id="multiselect-field-label-6"
+                    id="multiselect-field-label-8"
                   >
                     Select Coverage Type
                   </span>
@@ -1961,7 +1961,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -2207,7 +2207,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                     <title>
                       Open menu
@@ -2490,7 +2490,7 @@ exports[`AdvancedFilter should render Advance filter 2`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                     <title>
                       Open menu
@@ -2706,7 +2706,6 @@ exports[`AdvancedFilter should render Advance filter button  1`] = `
 
 .c0 {
   z-index: 99;
-  background: #181818;
   right: .5rem;
   border-radius: 62.5rem;
   display: flex;
@@ -2777,33 +2776,37 @@ exports[`AdvancedFilter should render Advance filter button  1`] = `
       class="cds--popover-container cds--popover--left c1 filter-popover-link"
     >
       <div
-        class="c2"
+        style="display: flex; flex-direction: row;"
       >
-        <button
-          align="left"
-          class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-          label="Filter"
-          tooltiptext="Filters"
-          type="button"
+        <div
+          class="c2"
         >
-          <svg
-            aria-hidden="true"
-            fill="#fff"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+          <button
+            align="left"
+            class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
+            label="Filter"
+            tooltiptext="Filters"
+            type="button"
           >
-            <path
-              d="M24 30v-4.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0v14.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v4.1s2 0 2 0zm-4-9c0-1.7 1.3-3 3-3s3 1.3 3 3c0 1.7-1.3 3-3 3s-3-1.3-3-3zM8 2v4.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v14.1s2 0 2 0v-14.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0zm4 9c0 1.7-1.3 3-3 3s-3-1.3-3-3 1.3-3 3-3 3 1.3 3 3z"
-            />
-          </svg>
-          <span>
-            Filters
-          </span>
-        </button>
+            <svg
+              aria-hidden="true"
+              fill="#fff"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M24 30v-4.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0v14.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v4.1s2 0 2 0zm-4-9c0-1.7 1.3-3 3-3s3 1.3 3 3c0 1.7-1.3 3-3 3s-3-1.3-3-3zM8 2v4.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v14.1s2 0 2 0v-14.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0zm4 9c0 1.7-1.3 3-3 3s-3-1.3-3-3 1.3-3 3-3 3 1.3 3 3z"
+              />
+            </svg>
+            <span>
+              Filters
+            </span>
+          </button>
+        </div>
       </div>
     </span>
   </div>
@@ -2813,6 +2816,25 @@ exports[`AdvancedFilter should render Advance filter button  1`] = `
 exports[`AdvancedFilter should render Advance filter button 1`] = `<DocumentFragment />`;
 
 exports[`RangeTextInput Component RangeTextInput input 1`] = `
+.c1 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c1 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c1 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c1 .cds--popover-content {
+  max-inline-size: 18rem;
+}
+
 .c0 {
   padding: 0.5rem 1rem;
 }
@@ -2838,25 +2860,6 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
 
 .c3 .cds--checkbox-label-text {
   font-size: 0.75rem;
-}
-
-.c1 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c1 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c1 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c1 .cds--popover-content {
-  max-inline-size: 18rem;
 }
 
 <div>
@@ -2931,8 +2934,8 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
             <input
               class="cds--text-input cds--text-input--sm cds--layout--size-sm"
               id="-min-input"
-              placeholder="Min(0)"
-              title="Min(0)"
+              placeholder="Min (0)"
+              title="Min (0)"
               type="number"
               value="15"
             />

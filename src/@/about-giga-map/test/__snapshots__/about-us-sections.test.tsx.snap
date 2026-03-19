@@ -486,7 +486,7 @@ exports[`CaseStudyCard renders FooterLinks and take a snapshop 1`] = `
           A United Nation's initiative
         </p>
         <p>
-          © 2024
+          © 2026
         </p>
         <p>
           <a
@@ -804,7 +804,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -843,7 +843,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -880,7 +880,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -919,7 +919,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -958,7 +958,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -1014,7 +1014,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M20 24L10 16 20 8z"
+                      d="M20 24 10 16 20 8z"
                     />
                   </svg>
                 </button>
@@ -1094,7 +1094,7 @@ exports[`CaseStudyCard renders FrequentlyAskedQuestions and take a snapshop 1`] 
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M12 8L22 16 12 24z"
+                      d="M12 8 22 16 12 24z"
                     />
                   </svg>
                 </button>
@@ -1296,7 +1296,7 @@ exports[`CaseStudyCard renders GetInTouch and take a snapshop 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -1313,7 +1313,7 @@ exports[`CaseStudyCard renders GetInTouch and take a snapshop 1`] = `
                 <p
                   class="form-title"
                 >
-                  Questions or clarifications? Get in touch with us
+                  Have a question or need clarification? Contact Giga.
                 </p>
                 <div
                   class="cds--form-item cds--text-input-wrapper"
@@ -1340,6 +1340,41 @@ exports[`CaseStudyCard renders GetInTouch and take a snapshop 1`] = `
                         name="full_name"
                         placeholder="John Doe"
                         title="John Doe"
+                        type="text"
+                        value=""
+                      />
+                      <span
+                        class="cds--text-input__counter-alert"
+                        role="alert"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="cds--form-item cds--text-input-wrapper"
+                >
+                  <div
+                    class="cds--text-input__label-wrapper"
+                  >
+                    <label
+                      class="cds--label"
+                      for="email"
+                    >
+                      Email
+                    </label>
+                  </div>
+                  <div
+                    class="cds--text-input__field-outer-wrapper"
+                  >
+                    <div
+                      class="cds--text-input__field-wrapper"
+                    >
+                      <input
+                        class="cds--text-input"
+                        id="email"
+                        name="email"
+                        placeholder="John@gmail.com"
+                        title="John@gmail.com"
                         type="text"
                         value=""
                       />
@@ -1456,7 +1491,7 @@ exports[`CaseStudyCard renders GetInTouch and take a snapshop 1`] = `
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                       </svg>
                     </div>

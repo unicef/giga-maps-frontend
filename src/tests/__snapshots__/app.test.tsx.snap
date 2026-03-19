@@ -2,7 +2,35 @@
 
 exports[`App App snapshot 1`] = `
 <DocumentFragment>
-  <div
+  @supports (-ms-overflow-style:none) {
+
+}
+
+@media screen and (-ms-high-contrast:active),(-ms-high-contrast:none) {
+
+}
+
+@media (max-width:768px) {
+
+}
+
+@media (max-width:768px) {
+
+}
+
+@media (max-width:768px) {
+
+}
+
+@media (max-width:768px) {
+
+}
+
+@media (max-width:768px) {
+
+}
+
+<div
     class="cds--loading-overlay"
   >
     <div

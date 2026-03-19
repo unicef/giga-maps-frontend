@@ -174,7 +174,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -211,7 +211,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -248,7 +248,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -285,7 +285,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -322,7 +322,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -359,7 +359,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -396,7 +396,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -433,7 +433,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -470,7 +470,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -507,7 +507,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -544,7 +544,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -581,7 +581,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -618,7 +618,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -655,7 +655,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -692,7 +692,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -729,7 +729,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -766,7 +766,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -803,7 +803,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -840,7 +840,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -877,7 +877,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           />
           <svg
             aria-hidden="true"
-            class="0 c8"
+            class="1 c8"
             fill="currentColor"
             focusable="false"
             height="16"
@@ -910,7 +910,7 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           Take the tour
         </a>
         <span>
-          &or;
+           or 
         </span>
         <a
           class="cds--link c12"

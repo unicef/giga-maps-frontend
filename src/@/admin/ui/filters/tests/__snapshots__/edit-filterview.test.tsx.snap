@@ -419,7 +419,7 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                   </svg>
                 </div>
@@ -467,7 +467,7 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                   </svg>
                 </div>
@@ -582,7 +582,7 @@ exports[`EditFilterList should call getFilterListIdFx with id when id is provide
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                   </svg>
                 </div>
@@ -861,7 +861,7 @@ exports[`EditFilterList should navigate to adminFilterRoute if id is not provide
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                   </svg>
                 </div>
@@ -909,7 +909,7 @@ exports[`EditFilterList should navigate to adminFilterRoute if id is not provide
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                   </svg>
                 </div>
@@ -1024,7 +1024,7 @@ exports[`EditFilterList should navigate to adminFilterRoute if id is not provide
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                     />
                   </svg>
                 </div>

@@ -2,7 +2,7 @@
 
 exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 <DocumentFragment>
-  .c38 {
+  .c39 {
   z-index: 1;
   background: #181818;
   border-radius: 62.5rem;
@@ -63,11 +63,11 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   border-bottom-left-radius: 62.5rem;
 }
 
-.c39 .cds--popover-content {
+.c40 .cds--popover-content {
   background: #181818;
 }
 
-.c39 .cds--popover-caret {
+.c40 .cds--popover-caret {
   background-color: #181818;
 }
 
@@ -128,36 +128,6 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   background: #fff!important;
 }
 
-.c40 .cds--btn--icon-only {
-  border-radius: 50%;
-  border: 1px solid #181818;
-  background: #181818;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAoBAMAAABzztUZAAAALVBMVEUkPRZwiitmeyhtbylccCZeZiViXCVSZCNwVCNWWSJKWiBHTyA+Uh07Rx0tQxkYQLqkAAADMUlEQVR42k2Qz2/aZhzG3+u0YSlts52XQKOiXYqTVm13KYWhsF3AGAY7bV7fiUW7IFuvcLLTuqpJTqW1kXF32Ebm5IVJnbYWwYt3mJK5MxDtMmXCNvJpPwr4b6hTUNtH73v5fF99nvd9AQCBh2CWx7smQrH4nR0cioIXocBXaklYStJ3tpv758DLBG5t8xrf3P9MEcPVV/nnmmgWDPZiDoWNOfMcf9sa7jfbqdVMWGDn3HFG1EMD4cO3yteXpHj67KzRl7je6K+CeLhQTjAXMuzyKX/D9WceFcA4YcXEA2aJXmNmGtdf7r9JhPmFsiLw9Nr1GdddClC2saLx0WIZ/7JMvz3j1p9uoDt4uqKVQjXh/mI6MvdMR2Cyg79bqcfWa/HcmcpSasYpd9JHRkzT0HqxdK2SYUtzTj3VNg4TQo6/cKVV5j6Jzns9z3sCH2hsVewVB6Vs5Vxi9qqpPRrKtaiwePyPon1Pp6PRucbSjMIfOeFSjrTqCsfFUvNvGCJx8/cCkiIf6Y/y3M115lROUZ65ZSbqyZgZ2XUO5NtFXDk97vOf3x2KKBHdo3c7ArxdqGV97me6d/UI4USQX4mq9xUpnLznY9d1J0dXDU1g+dL7PVWpyzk24+v99I0vzcNQsCnpYxXKcoYJnva6ni2KWyaK4f1fx/A9matm47P790UcniDhxyfe/5egLFXXQ881ExPj2OZBZzAdncDzytkqnwc+nRgDAxvxauPYdk7aCvw6y+WB6w9sG5kl/sxa09oaqoK8/eZqGlBefyj2kh2eX812HWJ1yxJzK86BY+qkHiLYzCEW9weWbpA6e3fxY+BNWjeUGl+KC/SnxCF6nygyd14GVKDDFOR8MIOYnbZOCLGIcJH+EFBTiV5TJVRo/pY82SCqPxFSkANgoixEpEzlHc+/rUUaDXIUTBXvAmp88wYtX65/4Fkj02o3iNhSvr2SAu50WWaZy5rqOY5fS+wEIT/lFQDGEGp7eYbojuXo1rjbbW3egxC44x82ujhd03Vdc/T//taNVlKCEQBeU9Qv7HRDf25xHn/Ta3QqsAjc1x352qOFB73RVAkTu79F2gcQwmc/QqX7OnX1VwAAAABJRU5ErkJggg==);
-}
-
-.c40 .cds--btn--primary:focus {
-  box-shadow: 0 0 0 1px #181818;
-}
-
-.c40 svg {
-  fill: #fff;
-}
-
-.c40 .cds--popover {
-  position: relative;
-  z-index: 6001;
-  top: -1rem;
-}
-
-.c40 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c40 .cds--popover-caret {
-  background: #fff!important;
-}
-
 .c42 .legend-info-popover-content {
   background: #181818;
   max-inline-size: fit-content;
@@ -180,19 +150,19 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 
 .c44 {
   display: flex;
-  background: #181818;
   padding: 1.2rem;
+  background-color: #181818;
 }
 
 .c44 .school-status {
-  min-width: 175px;
+  min-width: 210px;
 }
 
 .c44 .legend-value {
   margin-top: 1.1rem;
   margin-left: 0.6rem;
   color: grey;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
 }
 
 .c44 .legend-container {
@@ -810,12 +780,34 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   height: 100%;
 }
 
-.c0 .sidebar__expander>svg {
+.c0 .sidebar__expander {
+  cursor: pointer;
+  position: absolute;
+  bottom: 5.5rem;
+  left: 100%;
+  display: flex;
+  width: 16px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  background-color: #181818;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.c0 .sidebar__expander >svg {
+  fill: #fff;
+  transition: all .5s;
+  transform: rotate(180deg);
+  width: 1rem;
+  height: 1rem;
   color: #fff;
 }
 
 .c12 {
   height: calc(100% - 6rem);
+  background: #181818;
 }
 
 .c30 {
@@ -905,10 +897,8 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   margin: 0;
 }
 
-.c26 p span {
-  color: #9E9E9E;
+.c26 p .text {
   font-size: 0.875rem;
-  font-weight: 600;
   line-height: 1.25rem;
   margin-top: 0.25rem;
 }
@@ -926,7 +916,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 
 .c26 .cds--tooltip-content {
   width: 10rem;
-  max-height: 10rem;
+  max-height: 20rem;
 }
 
 .c27 {
@@ -962,9 +952,45 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
   height: 0.25rem;
 }
 
+.c38 {
+  margin-top: 0.5rem;
+}
+
+.c38 .cds--btn--icon-only {
+  border-radius: 50%;
+  padding: 4.5px;
+  border: 1px solid #181818;
+  background: #181818;
+}
+
+.c38 .cds--btn--primary:focus {
+  box-shadow: 0 0 0 1px #181818;
+}
+
+.c38 svg {
+  fill: #fff;
+  width: 20px;
+  height: 20px;
+}
+
+.c38 .cds--popover {
+  position: relative;
+  z-index: 6001;
+  top: -1rem;
+}
+
+.c38 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c38 .cds--popover-caret {
+  background: #fff!important;
+}
+
 @media (max-width:768px) {
-  .c38 {
-    bottom: calc(40vh + 0.5rem);
+  .c39 {
+    bottom: calc(32vh + 0.5rem);
   }
 }
 
@@ -976,7 +1002,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 
 @media (max-width:768px) {
   .c32 {
-    bottom: calc(40vh + 0.5rem);
+    bottom: calc(32vh + 0.5rem);
   }
 }
 
@@ -1045,9 +1071,8 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 
 @media (max-width:768px) {
   .c0 {
-    z-index: 1;
     width: 100%;
-    height: 40vh;
+    height: 32vh;
     top: unset;
     bottom: 0;
     position: fixed;
@@ -1061,7 +1086,6 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
 
 @media (min-width:769px) and (max-width:1584px) {
   .c0 {
-    transition: all 0.3s;
     position: fixed;
     top: 0rem;
     bottom: 5.3rem;
@@ -1069,64 +1093,16 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
     width: 288px;
     height: 96vh;
   }
-
-  .c0 .sidebar__expander {
-    cursor: pointer;
-    position: absolute;
-    top: 9.5rem;
-    left: 100%;
-    display: flex;
-    width: 16px;
-    height: 48px;
-    align-items: center;
-    justify-content: center;
-    background-color: #7E7E7E;
-    border: none;
-    outline: none;
-    padding: 0;
-  }
-
-  .c0 .sidebar__expander >svg {
-    fill: #fff;
-    transition: all .5s;
-    transform: rotate(180deg);
-    width: 1rem;
-    height: 1rem;
-  }
 }
 
 @media only screen and (min-width:1584px) {
   .c0 {
-    transition: all 0.3s;
     position: fixed;
     top: 0rem;
     bottom: 5.3rem;
     left: 0.5rem;
     width: 296px;
     height: 96vh;
-  }
-
-  .c0 .sidebar__expander {
-    cursor: pointer;
-    position: absolute;
-    top: 9.5rem;
-    left: 100%;
-    display: flex;
-    width: 16px;
-    height: 48px;
-    align-items: center;
-    justify-content: center;
-    background-color: #7E7E7E;
-    border: none;
-    outline: none;
-    padding: 0;
-  }
-
-  .c0 .sidebar__expander >svg {
-    transition: all .5s;
-    transform: rotate(180deg);
-    width: 1rem;
-    height: 1rem;
   }
 }
 
@@ -1200,6 +1176,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
           <a
             class="c4"
             href="/map"
+            target="_blank"
           >
             <img
               alt="Giga logo"
@@ -1360,7 +1337,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                   <title>
                     Open menu
@@ -1495,7 +1472,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
               />
             </svg>
           </button>
@@ -1619,7 +1596,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                        d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                       />
                     </svg>
                   </button>
@@ -1970,8 +1947,20 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 class="c26"
               >
                 <p>
-                  0 /6M 
-                  <span>
+                  <span
+                    data-title="0"
+                  >
+                    0
+                  </span>
+                  <span
+                    data-title="6,000,000"
+                  >
+                    /6M
+                  </span>
+                   
+                  <span
+                    class="text"
+                  >
                     schools location mapped
                   </span>
                 </p>
@@ -2054,8 +2043,15 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 class="c26"
               >
                 <p>
-                  0 
-                  <span>
+                  <span
+                    data-title="NaN"
+                  >
+                    0
+                  </span>
+                   
+                  <span
+                    class="text"
+                  >
                     schools connectivity status mapped
                   </span>
                 </p>
@@ -2098,7 +2094,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     <span
                       class="cds--popover-content cds--tooltip-content"
                     >
-                      'School connectivity status mapped using government data or a real-time measurement source.
+                      School connectivity status mapped using government data or a real-time measurement source.
                     </span>
                     <span
                       class="cds--popover-caret"
@@ -2109,10 +2105,14 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
               <div
                 class="c27"
               >
-                <p>
+                <p
+                  data-title="undefined"
+                >
                   across 0 countries
                 </p>
-                <span>
+                <span
+                  data-title="0"
+                >
                   0
                 </span>
               </div>
@@ -2152,8 +2152,15 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 class="c26"
               >
                 <p>
-                  0 
-                  <span>
+                  <span
+                    data-title="0"
+                  >
+                    0
+                  </span>
+                   
+                  <span
+                    class="text"
+                  >
                     schools with real-time data mapped
                   </span>
                 </p>
@@ -2207,10 +2214,14 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
               <div
                 class="c27"
               >
-                <p>
+                <p
+                  data-title="0"
+                >
                   across 0 countries
                 </p>
-                <span>
+                <span
+                  data-title="0"
+                >
                   0
                 </span>
               </div>
@@ -2272,7 +2283,20 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
           class="sidebar__expander"
           type="button"
         >
-          SvgUrl
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+            />
+          </svg>
         </button>
       </div>
       <div
@@ -2436,13 +2460,69 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
             </span>
           </div>
           <div
-            class="c38 theme-wrapper-popup"
+            class="c38"
           >
             <span
-              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c39 theme-layer-popover-link"
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
             >
               <div
-                class="c40"
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-labelledby="tooltip-:rq:"
+                  class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--secondary"
+                  data-testid="accessible-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M23 14L23 12 9 12 9 14 14 14 14 16.734 10.132 23.504 11.868 24.496 15.58 18 16.42 18 20.132 24.496 21.868 23.504 18 16.734 18 14 23 14z"
+                    />
+                    <circle
+                      cx="16"
+                      cy="9"
+                      r="2"
+                    />
+                    <path
+                      d="M16,30A14,14,0,1,1,30,16,14.0158,14.0158,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12.0137,12.0137,0,0,0,16,4Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-:rq:"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Accessible mode
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </div>
+          <div
+            class="c39 theme-wrapper-popup"
+          >
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c40 theme-layer-popover-link"
+            >
+              <div
+                class="c37"
               >
                 <span
                   class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
@@ -2451,25 +2531,25 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     class="cds--tooltip-trigger__wrapper"
                   >
                     <button
-                      aria-labelledby="tooltip-:rq:"
+                      aria-labelledby="tooltip-:rs:"
                       class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        fill="#fff"
+                        fill="currentColor"
                         focusable="false"
                         height="16"
                         preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        viewBox="0 0 16 16"
                         width="16"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M16,24a.9967.9967,0,0,1-.4741-.12l-13-7L3.4741,15.12,16,21.8643,28.5259,15.12l.9482,1.7607-13,7A.9967.9967,0,0,1,16,24Z"
+                          d="M13.5,8.4c0-0.1,0-0.3,0-0.4c0-0.1,0-0.3,0-0.4l1-0.8c0.4-0.3,0.4-0.9,0.2-1.3l-1.2-2C13.3,3.2,13,3,12.6,3 c-0.1,0-0.2,0-0.3,0.1l-1.2,0.4c-0.2-0.1-0.4-0.3-0.7-0.4l-0.3-1.3C10.1,1.3,9.7,1,9.2,1H6.8c-0.5,0-0.9,0.3-1,0.8L5.6,3.1 C5.3,3.2,5.1,3.3,4.9,3.4L3.7,3C3.6,3,3.5,3,3.4,3C3,3,2.7,3.2,2.5,3.5l-1.2,2C1.1,5.9,1.2,6.4,1.6,6.8l0.9,0.9c0,0.1,0,0.3,0,0.4 c0,0.1,0,0.3,0,0.4L1.6,9.2c-0.4,0.3-0.5,0.9-0.2,1.3l1.2,2C2.7,12.8,3,13,3.4,13c0.1,0,0.2,0,0.3-0.1l1.2-0.4 c0.2,0.1,0.4,0.3,0.7,0.4l0.3,1.3c0.1,0.5,0.5,0.8,1,0.8h2.4c0.5,0,0.9-0.3,1-0.8l0.3-1.3c0.2-0.1,0.4-0.2,0.7-0.4l1.2,0.4 c0.1,0,0.2,0.1,0.3,0.1c0.4,0,0.7-0.2,0.9-0.5l1.1-2c0.2-0.4,0.2-0.9-0.2-1.3L13.5,8.4z M12.6,12l-1.7-0.6c-0.4,0.3-0.9,0.6-1.4,0.8 L9.2,14H6.8l-0.4-1.8c-0.5-0.2-0.9-0.5-1.4-0.8L3.4,12l-1.2-2l1.4-1.2c-0.1-0.5-0.1-1.1,0-1.6L2.2,6l1.2-2l1.7,0.6 C5.5,4.2,6,4,6.5,3.8L6.8,2h2.4l0.4,1.8c0.5,0.2,0.9,0.5,1.4,0.8L12.6,4l1.2,2l-1.4,1.2c0.1,0.5,0.1,1.1,0,1.6l1.4,1.2L12.6,12z"
                         />
                         <path
-                          d="M16 30a.9967.9967 0 01-.4741-.12l-13-7L3.4741 21.12 16 27.8643 28.5259 21.12l.9482 1.7607-13 7A.9967.9967 0 0116 30zM16 18a.9967.9967 0 01-.4741-.12l-13-7a1 1 0 010-1.7607l13-7a.9982.9982 0 01.9482 0l13 7a1 1 0 010 1.7607l-13 7A.9967.9967 0 0116 18zM5.1094 10L16 15.8643 26.8906 10 16 4.1358z"
+                          d="M8,11c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3C11,9.6,9.7,11,8,11C8,11,8,11,8,11z M8,6C6.9,6,6,6.8,6,7.9C6,7.9,6,8,6,8 c0,1.1,0.8,2,1.9,2c0,0,0.1,0,0.1,0c1.1,0,2-0.8,2-1.9c0,0,0-0.1,0-0.1C10,6.9,9.2,6,8,6C8.1,6,8,6,8,6z"
                         />
                       </svg>
                     </button>
@@ -2477,7 +2557,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   <span
                     aria-hidden="true"
                     class="cds--popover"
-                    id="tooltip-:rq:"
+                    id="tooltip-:rs:"
                     role="tooltip"
                   >
                     <span
@@ -2498,6 +2578,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
           >
             <span
               class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--open cds--popover--left-bottom c42 legend-info-popover-link"
+              themestate="dark"
             >
               <div
                 class="c37 contras legend-open-button"
@@ -2509,7 +2590,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                     class="cds--tooltip-trigger__wrapper"
                   >
                     <button
-                      aria-labelledby="tooltip-:rs:"
+                      aria-labelledby="tooltip-:ru:"
                       class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
                       type="button"
                     >
@@ -2535,7 +2616,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   <span
                     aria-hidden="true"
                     class="cds--popover"
-                    id="tooltip-:rs:"
+                    id="tooltip-:ru:"
                     role="tooltip"
                   >
                     <span
@@ -2560,6 +2641,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                   />
                   <div
                     class="c44"
+                    themestate="dark"
                   >
                     <div
                       class="school-status"
@@ -2610,7 +2692,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                             <p
                               class="label"
                             >
-                              Not connected
+                              Not Connected
                             </p>
                           </div>
                         </div>

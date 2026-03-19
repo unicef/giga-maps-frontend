@@ -148,6 +148,13 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   align-items: center;
 }
 
+.c11 .privacy {
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  color: #277AFF;
+  text-decoration: underline;
+}
+
 .c9 {
   bottom: 0;
   left: 0;
@@ -286,6 +293,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
             <a
               class="c5"
               href="/map"
+              target="_blank"
             >
               <img
                 alt="Giga logo"
@@ -445,7 +453,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                   <title>
                     Open menu
@@ -468,7 +476,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
             class="c11"
           >
             <p>
-              © 2024  
+              © 2026  
               <a
                 class="giga-logo"
                 href="https://www.unicef.org/innovation/giga"
@@ -590,11 +598,11 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   fill: #fff;
 }
 
-.c6 {
+.c5 {
   height: 3rem;
 }
 
-.c6 button {
+.c5 button {
   height: 2.75rem!important;
   flex: 1!important;
   box-shadow: none!important;
@@ -624,27 +632,6 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
 
 .c4 >.explore-text-input {
   margin-top: 0.5rem;
-}
-
-.c5 {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.c5 >p {
-  color: var(--text-text-primary,#161616);
-  font-family: Open Sans;
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.25rem;
-  letter-spacing: 0.01rem;
-}
-
-.c5 >button {
-  margin-left: 0.5rem;
 }
 
 @media (max-width:768px) {
@@ -703,7 +690,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -714,16 +701,33 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
             <p
               class="c3"
             >
-              Enter API key to view documentation for  API
+              An API key is required to view the documentation for the  API. Your existing API keys can be found in your  
+              <a
+                href="/docs/api-keys"
+                rel="noopener noreferrer"
+                style="color: rgb(15, 98, 254);"
+                target="_blank"
+              >
+                 Giga Maps Dashboard
+              </a>
+              .
             </p>
+            <div
+              style="height: 1rem;"
+            />
+             If you have not yet been provided an API key, please  
+            <a
+              href="#"
+              style="color: rgb(15, 98, 254); cursor: pointer;"
+            >
+              request one
+            </a>
+            .
+            <br />
+            <p />
             <div
               class="c4"
             >
-              <div
-                class="explore-api-text"
-              >
-                api_key
-              </div>
               <div
                 class="explore-text-input"
               >
@@ -757,22 +761,22 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
                 </div>
               </div>
             </div>
-            <div
-              class="c5"
+            <br />
+            <p
+              class="c3"
             >
-              <p>
-                Don’t have one? 
-              </p>
-              <button
-                class="cds--btn cds--btn--ghost"
-                type="button"
+               If you would like more information about Giga Maps APIs, please contact us at   
+              <a
+                href="mailto:gigamaps@unicef.org"
+                style="color: rgb(15, 98, 254);"
               >
-                Request API Key
-              </button>
-            </div>
+                 gigamaps@unicef.org
+              </a>
+              .
+            </p>
           </div>
           <div
-            class="cds--modal-footer c6 cds--btn-set"
+            class="cds--modal-footer c5 cds--btn-set"
           >
             <button
               class="cds--btn cds--btn--secondary"
@@ -906,7 +910,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -1099,7 +1103,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
               />
             </svg>
           </button>
@@ -1329,7 +1333,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -1580,7 +1584,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
