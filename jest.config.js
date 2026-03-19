@@ -29,6 +29,7 @@ const config = {
       ],
       plugins: [
         ['babel-plugin-styled-components', { displayName: false, pure: true }],
+        'babel-plugin-transform-vite-meta-env',
       ],
     }],
     "^.+\\.js$": "babel-jest",

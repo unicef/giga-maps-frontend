@@ -72,12 +72,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'build',
     sourcemap: mode === 'production' ? 'hidden' : true,
+    cssMinify: 'esbuild',
     rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-        },
-      },
+      output: {},
     },
   },
   define: {
