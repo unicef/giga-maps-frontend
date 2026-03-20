@@ -2,7 +2,10 @@ import { Information } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react'
 import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { $countryId } from '~/@/country/country.model';
 import { $isProductTour, $selectedLayerId, $showAdvancedFilter, $showLegend, $showThemeLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
 import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
 import { $isMobile } from '~/core/media-query';
@@ -10,14 +13,16 @@ import { debounce } from '~/lib/effector-kit';
 
 import { ActiveButtonWrapper, LegendWrapper } from "./legend-button.style";
 import LegendPopup from "./legend-popup";
-import { $country, $countryId } from '~/@/country/country.model';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 sample({
   clock: merge([debounce($selectedLayerId, { timeout: 0 }), $countryId, $showThemeLayer, $showAdvancedFilter]),
-  source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
-  fn: () => true,
+  source: combine({
+    isMobile: $isMobile,
+    showAdvancedFilter: $showAdvancedFilter,
+    showThemeLayer: $showThemeLayer,
+    showLegend: $showLegend,
+  }),
+  fn: ({ showLegend }) => showLegend,
   filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
     if (showAdvancedFilter || showThemeLayer) return false;
     return !isMobile
@@ -35,7 +40,9 @@ const LegendButton = () => {
 
   // default hidden from mobile screen;
   useEffect(() => {
-    isMobile && onShowLegend(false)
+    if (isMobile) {
+      onShowLegend(false);
+    }
   }, [isMobile])
   return (
     <LegendWrapper className="lengend-container">
@@ -51,7 +58,7 @@ const LegendButton = () => {
         </ActiveButtonWrapper>
       </LegendPopup>
       {showLegend && isMobile && <ClickAnywhere
-        classList={['lengend-container']}
+        classList={['lengend-container', 'legend-info-popover-link']}
         trigger={showLegend}
         outsideClick={() => {
           if (!isProductTour) {

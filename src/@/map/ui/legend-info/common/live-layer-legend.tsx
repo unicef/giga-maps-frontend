@@ -1,38 +1,54 @@
+import { ChevronUp, Information } from "@carbon/icons-react";
 import { Checkbox } from "@carbon/react";
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
+
+import { TooltipButton } from "~/@/common/style/styled-component-style";
+import { $country, $countryConnectivityNames } from '~/@/country/country.model';
+import { $stylePaintData } from "~/@/map/map.model";
+import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
+  $benchmarkmarkUtils,
+  $benchmarkNamesAllLayers,
+  $connectivityBenchMark,
   $connectivitySpeedGood,
   $connectivitySpeedModerate,
   $connectivitySpeednoInternet,
   $connectivitySpeedUnknown,
   $connectivityStats,
+  $layerUtils,
+  $schoolStats,
   changeConnectivitySpeedGood,
   changeConnectivitySpeedModerate,
   changeConnectivitySpeednoInternet,
   changeConnectivitySpeedUnknown,
-  $connectivityBenchMark,
-  $benchmarkmarkUtils,
-  $layerUtils,
-  $schoolStats,
-  $benchmarkNamesAllLayers,
 } from '~/@/sidebar/sidebar.model';
-import { $country, $countryConnectivityNames } from '~/@/country/country.model';
-import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
-import { CheckBoxContainer, CircleWrapper, InnerCircle, InnerCircleConnectivity, LiveLayerBenchmark } from '../legend-button.style';
-import { formatNumber } from '~/lib/utils';
-import { $stylePaintData } from "~/@/map/map.model";
 import { defaultLegendValuesType } from "~/api/types";
-import { TooltipButton } from "~/@/common/style/styled-component-style";
-import { $mapRoutes } from "~/core/routes";
 import { $lng } from "~/core/i18n/store";
-import { useTranslation } from "react-i18next";
+import { $mapRoutes } from "~/core/routes";
+import { formatNumber } from '~/lib/utils';
+
+import {
+  CheckBoxContainer,
+  CircleWrapper,
+  InnerCircle,
+  InnerCircleConnectivity,
+  LegendBenchmarkButton,
+  LegendBenchmarkStack,
+  LiveLayerBenchmark} from '../legend-button.style';
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
-const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+const LiveLayerLegend = ({
+  markerShape = "circle",
+  shouldShowControls
+}: {
+  markerShape?: "circle" | "square";
+  shouldShowControls: boolean;
+}) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
   const { schools } = useStore($mapRoutes);
@@ -56,6 +72,7 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
   const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.display_unit;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
+  const [showBenchmarks, setShowBenchmarks] = useState(false);
   const handleRealtimeLayerChange = (key: string) => {
     const newStatus = !realtimeCheckedStatus[key];
     setRealtimeCheckedStatus(prevState => ({
@@ -77,7 +94,7 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
         changeConnectivitySpeedUnknown(newStatus);
         break;
       default:
-        console.log('Unknown key:', key);
+        break;
     }
   };
 
@@ -90,22 +107,46 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
     });
   }, [speedGood, speedModerate, speedNoInternet, speedUnknown]);
 
+  useEffect(() => {
+    if (!shouldShowControls) {
+      setShowBenchmarks(false);
+    }
+  }, [shouldShowControls]);
+
+  const currentBenchmarkName = isNational
+    ? countryConnectivityNames?.[selectedLayerId as number] ?? t('national-benchmark')
+    : benchmarkNames[selectedLayerId ?? ""] ?? t('global-benchmark');
+  const alternateBenchmarkLabel = isNational
+    ? t('legend-global-benchmark-value', { value: '50Mbps' })
+    : t('legend-national-benchmark-value', { value: '10Mbps' });
+  const currentBenchmarkLabel = bencharkmarkValue && unitLabel
+    ? `${currentBenchmarkName}: ${bencharkmarkValue}${unitLabel}`
+    : currentBenchmarkName;
+
   return (
     <div className='school-status'>
-      <h3>{selectedLayerData?.name}</h3>
-      <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
-        <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-          {isNational ? <LiveLayerBenchmark>
-            {countryConnectivityNames?.[selectedLayerId as number] ?? t('national-benchmark')} - {bencharkmarkValue}&nbsp;{unitLabel}
-          </LiveLayerBenchmark> : <LiveLayerBenchmark>
-            {benchmarkNames[selectedLayerId ?? ""] ?? t('global-benchmark')} - {bencharkmarkValue}&nbsp;{unitLabel}
-          </LiveLayerBenchmark>}
-        </button>
-      </TooltipButton>
+      <div className='legend-section-header legend-section-header--stacked'>
+        <div className="legend-section-heading">
+          <h3>{selectedLayerData?.name}</h3>
+          <TooltipButton align='top' label={t('internet-quality')}>
+            <button type="button">
+              <Information size={12} />
+            </button>
+          </TooltipButton>
+        </div>
+      </div>
       {
         legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
           const logicLabel = `${(benchmarkLogic && key) != "unknown" ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
           const toolTiplabel = tooltip ? tooltip : logicLabel;
+          const displayLabel = selectedLayerData?.name?.toLowerCase().includes('download')
+            ? ({
+              good: t('high'),
+              moderate: t('moderate'),
+              bad: t('low'),
+              unknown: t('unknown'),
+            }[key] ?? label)
+            : label;
           return (
             <div key={key}>
               <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
@@ -119,14 +160,14 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
                       </Checkbox></CheckBoxContainer>}
 
                       <div key={key} className='real-time-connetivity-info'>
-                        <CircleWrapper>
-                          <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
-                          <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
+                        <CircleWrapper $large $shape={markerShape}>
+                          <InnerCircleConnectivity $backColor={legends.colors[key]} $large $shape={markerShape} className="outer-circle" />
+                          <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} $shape={markerShape} />
                         </CircleWrapper>
-                        <p className="label">{label}</p>
+                        <p className="label">{displayLabel}</p>
                       </div>
                     </div>
-                    {shouldShowControls && key === 'bad' ? <div className='legend-value' data-title={t('int', { val: realtimeStats?.['no_internet'] ?? 0 })}>{formatNumber(realtimeStats?.['no_internet'] ?? 0, lng)}</div> : shouldShowControls && <div className='legend-value' data-title={t('int', { val: realtimeStats?.[key] ?? 0 })}>{formatNumber(realtimeStats?.[key] ?? 0, lng)}</div>}
+                    {shouldShowControls && key === 'bad' ? <div className='legend-value' data-title={t('int', { val: realtimeStats?.no_internet ?? 0 })}>{formatNumber(realtimeStats?.no_internet ?? 0, lng)}</div> : shouldShowControls && <div className='legend-value' data-title={t('int', { val: realtimeStats?.[key] ?? 0 })}>{formatNumber(realtimeStats?.[key] ?? 0, lng)}</div>}
                   </div>
                 </button>
               </TooltipButton>
@@ -134,6 +175,23 @@ const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }
           )
         }
         )}
+      <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
+        {shouldShowControls ? (
+          <LegendBenchmarkStack $interactive>
+            <LegendBenchmarkButton onClick={() => setShowBenchmarks(prev => !prev)} type="button">
+              <span>{currentBenchmarkLabel}</span>
+              <ChevronUp size={12} />
+            </LegendBenchmarkButton>
+            {showBenchmarks && (
+              <LegendBenchmarkButton $muted onClick={() => setShowBenchmarks(false)} type="button">
+                <span>{alternateBenchmarkLabel}</span>
+              </LegendBenchmarkButton>
+            )}
+          </LegendBenchmarkStack>
+        ) : (
+          <LiveLayerBenchmark>{currentBenchmarkLabel}</LiveLayerBenchmark>
+        )}
+      </TooltipButton>
     </div>
   )
 }
