@@ -7,32 +7,32 @@ export const TopMenuWrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  gap: 0.25rem;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem 0.125rem;
 
-/* .cds--btn--ghost:hover {
-    background-color: transparent;
-}
-.cds--btn--ghost {
-  color: transparent;
-}
-.cds--btn--ghost:focus {
-    border-color: unset;
-    box-shadow: unset;
-} */
+  .cds--btn--icon-only {
+    min-inline-size: 2rem;
+    min-block-size: 2rem;
+    padding: 0;
+  }
 
-/* .cds--btn--ghost:hover, .cds--btn--ghost:active {
-    color: transparent;
-}
-  .sidebar-menuIcon{
-    left: -0.8rem !important;
-    
-    >svg {
-      fill: #F5F5F5;
-    }
-  } */
-   .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
+  .sidebar-menuIcon {
+    margin-right: 0;
+    align-items: center;
+  }
+
+  .cds--btn--ghost,
+  .cds--btn--ghost:hover,
+  .cds--btn--ghost:active,
+  .cds--btn--ghost:focus {
+    background: transparent;
+  }
+
+  .cds--tooltip-content {
+    background: ${props => props.theme.text} !important;
+    color: ${props => props.theme.main}!important;
+  }
   .cds--popover-caret{
     background: ${props => props.theme.text};
   }
@@ -40,30 +40,36 @@ export const TopMenuWrapper = styled.div`
 
 export const LogoName = styled(Link)`
   display: flex;
-  color: ${props => props.theme.text};
-  font-size: 1rem;
-  font-weight: bolder;
-  /* margin-left: -1rem; */
-  img {
-    height: 1rem;
-    width: 4.75rem;
-    margin-top: 0.3125rem;
+  align-items: center;
+  color: #f4f4f4;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.5rem;
+  text-decoration: none;
+  outline: none;
+  box-shadow: none;
+
+  &:visited,
+  &:hover,
+  &:focus,
+  &:active {
+    color: #f4f4f4;
+    text-decoration: none;
+    outline: none;
+    box-shadow: none;
   }
 `
 
 export const HamburgerWrapper = styled.div`
-display:flex;
-align-items:center;
-justify-content:space-between;
-width: 100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width: 100%;
+  background: #161616;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
   svg{
-    fill:${props => props.theme.text} !important;
+    fill:#f4f4f4 !important;
   }
-@media (max-width: 768px) {
-  position:fixed;
-  top:0;
-  background:${props => props.theme.main};
-  padding: 0 0.5rem;
-}
 `

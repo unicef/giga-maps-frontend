@@ -2,32 +2,50 @@ import { IconButton, Search } from '@carbon/react';
 import styled, { css } from 'styled-components';
 
 export const SearchContainer = styled(Search) <{ $isMobile: boolean }>`
-/* .cds--search-input:focus{
-  outline:none;
-} */
+  width: 100%;
+
+  .cds--search {
+    display: flex;
+    align-items: center;
+    min-block-size: 2.625rem;
+    background: #f4f4f4;
+    border-radius: 0 0.5rem 0.5rem 0;
+    overflow: hidden;
+  }
 
 input{
-border-bottom: 1px solid ${props => props.theme.main};
-background: ${props => props.theme.main};
-color: ${props => props.theme.text};
+border-bottom: none;
+background: #f4f4f4;
+color: #161616;
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0 !important;
+  padding-left: 2.875rem !important;
+  text-align: left;
 }
 input::placeholder{
   color: #6F6F6F;
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
+  text-align: left;
 }
 .cds--search-magnifier{
+  left: 0.875rem;
+  z-index: 1;
+  color: #161616;
   svg{
-    fill:${props => props.theme.text};
+    fill:#161616 !important;
+    width: 1rem;
+    height: 1rem;
   }
 }
 .cds--search-close{
+  color: #161616;
   svg{
-    fill:${props => props.theme.text};
+    fill:#161616 !important;
   }
   :hover{
     background: transparent;
@@ -42,6 +60,9 @@ input::placeholder{
 .cds--search-close:hover, .cds--search-button:hover {
   background-color:  transparent;
 }
+.cds--search-magnifier {
+  background: #f4f4f4;
+}
 .cds--search-close
 button{
   :hover{
@@ -49,11 +70,6 @@ button{
   }
 }
 ${props => props.$isMobile && css`
-  /* .cds--search { */
-    position: fixed;
-    top: 0;
-    left: 0;
-  /* } */
   .cds--search-close--hidden {
     opacity: 1;
     visibility: visible;
@@ -64,39 +80,34 @@ ${props => props.$isMobile && css`
 
 export const SearchWrapper = styled.div`
 display:flex;
-/* flex-direction: row-reverse; */
 align-items:center;
-height:3.1rem;
+gap: 0;
+padding: 0.5rem 0.875rem 0;
+background: #161616;
 
 .cds--btn--primary:hover{
-    background-color: ${props => props.theme.main} !important; 
+    background-color: #f4f4f4 !important; 
   }
 
-  .cds--tooltip-content {
+ .cds--tooltip-content {
   background: ${props => props.theme.text} !important;
   color: ${props => props.theme.main}!important;
 }
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
+ .cds--popover-caret{
+   background: ${props => props.theme.text};
   }
   
 .search-icon{
-  margin-right: 0.5rem;
   height: 1rem;
   width: 1rem;
-  fill:#fff;
+  fill:#f4f4f4;
+  flex-shrink: 0;
 }
 svg{
-    fill:${props => props.theme.text} !important ;
+    fill:#f4f4f4 !important ;
   }
 @media (max-width:768px){
-  position: fixed;
-  /* width: calc(100% - 2rem); */
-  width: auto;
-  top: 0rem;
-  z-index: 2;
-  right: 0;
-  flex-direction: row-reverse;
+  width: 100%;
 }
 
 `
@@ -109,30 +120,43 @@ export const BackButton = styled.div`
     padding-left:0.5rem;
     `
 export const CountrySearchIcon = styled(IconButton)`
+background: #dfdfdf;
+border-radius: 0.5rem 0 0 0.5rem;
+overflow: hidden;
 
-/* background: #277AFF; */
-background: ${props => props.theme.main};
-.cds--btn--primary:hover{
-    background-color: ${props => props.theme.main} !important; 
-  }
-  .cds--btn--primary:active {
-    background-color: ${props => props.theme.main} !important;
+.cds--popover,
+.cds--tooltip-content,
+.cds--popover-caret {
+  display: none !important;
+}
+
+.cds--btn,
+.cds--btn--primary,
+.cds--btn--primary:hover,
+.cds--btn--primary:active,
+.cds--btn--primary:focus,
+.cds--btn--primary:focus-visible {
+  background: #dfdfdf;
+  border-radius: 0.5rem 0 0 0.5rem;
+  box-shadow: none;
+  outline: none;
+}
+
+.cds--btn::before {
+  display: none;
+}
+
+.cds--btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  min-inline-size: 3.25rem;
+  min-block-size: 2.625rem;
+  padding-inline: 0.625rem;
 }
 
 svg{
-  margin-right: 0.20rem;
-  fill:${props => props.theme.text};
-}
-
-@media (max-width:768px){
-  background: ${props => props.theme.main};
-
-  .cds--btn--primary:hover{
-    background-color: ${props => props.theme.main} !important; 
-  }
-  .cds--btn--primary:active {
-    background-color: ${props => props.theme.main} !important;
-}
-
+  fill:#161616 !important;
 }
 `

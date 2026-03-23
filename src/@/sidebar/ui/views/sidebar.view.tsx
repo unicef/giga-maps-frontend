@@ -1,13 +1,19 @@
-import { MagicWandFilled, ChevronDown, ChevronUp, ChevronRight, AccessibilityAlt } from '@carbon/icons-react'
+import { ChevronDown, ChevronRight, ChevronUp, MagicWandFilled } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { MouseEvent, } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { $entityPopupData } from '~/@/entities/models/entity.model';
+import EntityView from '~/@/entities/ui/entity-view';
+import FilterButton from '~/@/map/ui/advanced-filter/filter';
+import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 import { BroadcastButton, TakeTourWrapper } from '~/@/map/ui/layer-theme/theme-button.style';
 import ThemeButtons from '~/@/map/ui/layer-theme/theme-buttons';
 import ZoomButtons from '~/@/map/ui/layer-theme/zoom-buttons';
 import LegendButton from '~/@/map/ui/legend-info/legend-button';
 import { ActiveButtonWrapper } from '~/@/map/ui/legend-info/legend-button.style';
+import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import {
   $isMenuOpen, $isSidebarCollapsed,
   $isTimeplayer,
@@ -22,22 +28,16 @@ import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
 import CommonComponentGigaLayer from '../common-components/common-component-gigalayer';
+import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
 import SidebarMenuList from '../common-components/sidebar-menu-list';
 import TopSearchBar from '../common-components/top-search-bar';
 import GlobalAndCountryView from '../global-and-country-view-components';
 import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
-import EntityView from '~/@/entities/ui/entity-view';
-import { $entityPopupData } from '~/@/entities/models/entity.model';
 import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
-import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContainer, VerticalSliderButton, VerticalSliderButtonWrapper } from '../sidebar.style';
-import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
-import FilterButton from '~/@/map/ui/advanced-filter/filter';
-import { useTranslation } from 'react-i18next';
-import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
-import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
+import { MainSideBarContainer, MapButtonWrapper, SearchAreaWrapper, SidePanelContainer, SubContainer, VerticalSliderButtonWrapper } from '../sidebar.style';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -69,8 +69,10 @@ export default function Sidebar() {
         }
         <SideInfoPanelHeaderLogoAndMenuButton />
         {isMenuOpen && <SidebarMenuList />}
-        {!(isMobile && isMenuOpen) && <TopSearchBar />}
-        <SearchResult />
+        {!(isMobile && isMenuOpen) && <SearchAreaWrapper>
+          <TopSearchBar />
+          <SearchResult />
+        </SearchAreaWrapper>}
         <SubContainer>
           <BreadcrumbInfo />
           {mapRoute ? <LandingPage /> :

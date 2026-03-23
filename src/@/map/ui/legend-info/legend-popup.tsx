@@ -17,7 +17,6 @@ import SchoolStatusLegend from "./common/school-status-legend";
 import StaticLayerLegend from "./common/static-layer-legend";
 import {
   CustomeLegendPopover,
-  LegendCollapsedHeader,
   LegendCollapsedView,
   LegendContentTab,
   LegendContentTabs,
@@ -28,6 +27,7 @@ import {
   LegendMetricWrapper,
   LegendSummaryBar,
   LegendSummaryBlock,
+  LegendSummaryBody,
   LegendSummaryLabel,
   LegendSummaryLabels,
   LegendToggleButton
@@ -61,12 +61,12 @@ const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setO
   const shouldShowControls = !mapLevel.map && !mapLevel.schools;
   const themeState = useStore($theme);
   const paintData = useStore($stylePaintData);
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState<LegendTab>(getDefaultLegendTab(entityRouteParam));
 
   useEffect(() => {
     if (!open) {
-      setCollapsed(true);
+      setCollapsed(false);
       setActiveTab(getDefaultLegendTab(entityRouteParam));
     }
   }, [entityRouteParam, open]);
@@ -116,87 +116,89 @@ const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setO
     <LegendCollapsedView data-testid="legend-collapsed-view" themeState={themeState}>
       {shouldShowStatusSummary ? (
         <LegendSummaryBlock>
-          <LegendCollapsedHeader>
-          <LegendSummaryLabels>
+          <LegendSummaryBody>
+            <LegendSummaryLabels>
               {schoolSummaryItems.map(({ key, label }) => (
                 <LegendSummaryLabel key={key} title={label}>
                   {label}
                 </LegendSummaryLabel>
               ))}
             </LegendSummaryLabels>
-            <LegendToggleButton
-              aria-label={t("expand-legend")}
-              data-testid="legend-expand-button"
-              onClick={(event) => {
-                event.stopPropagation();
-                setCollapsed(false);
-              }}
-              type="button"
-            >
-              <Maximize size={14} />
-            </LegendToggleButton>
-          </LegendCollapsedHeader>
-          <LegendSummaryBar>
-            {schoolSummaryItems.map(({ color, key, label }) => (
-              <span
-                aria-hidden="true"
-                className="legend-summary-bar__segment"
-                key={key}
-                style={{ background: color }}
-                title={label}
-              />
-            ))}
-          </LegendSummaryBar>
+            <LegendSummaryBar>
+              {schoolSummaryItems.map(({ color, key, label }) => (
+                <span
+                  aria-hidden="true"
+                  className="legend-summary-bar__segment"
+                  key={key}
+                  style={{ background: color }}
+                  title={label}
+                />
+              ))}
+            </LegendSummaryBar>
+          </LegendSummaryBody>
+          <LegendToggleButton
+            aria-label={t("expand-legend")}
+            data-testid="legend-expand-button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setCollapsed(false);
+            }}
+            type="button"
+          >
+            <Maximize size={14} />
+          </LegendToggleButton>
         </LegendSummaryBlock>
       ) : shouldShowMetricSummary ? (
         <LegendSummaryBlock>
-          <LegendCollapsedHeader>
-          <LegendMetricWrapper>
+          <LegendSummaryBody>
+            <LegendMetricWrapper>
               <LegendMetricTitle>{activeMetricTitle}</LegendMetricTitle>
               <LegendMetricMeta>{t("internet-quality")}</LegendMetricMeta>
             </LegendMetricWrapper>
-            <LegendToggleButton
-              aria-label={t("expand-legend")}
-              data-testid="legend-expand-button"
-              onClick={(event) => {
-                event.stopPropagation();
-                setCollapsed(false);
-              }}
-              type="button"
-            >
-              <Maximize size={14} />
-            </LegendToggleButton>
-          </LegendCollapsedHeader>
-          <LegendSummaryBar>
-            {activeLayerSummaryItems.map(({ color, key, label }) => (
-              <span
-                aria-hidden="true"
-                className={metricSegmentClassName}
-                key={key}
-                style={getMetricSegmentStyle(color)}
-                title={label}
-              />
-            ))}
-          </LegendSummaryBar>
+            <LegendSummaryBar>
+              {activeLayerSummaryItems.map(({ color, key, label }) => (
+                <span
+                  aria-hidden="true"
+                  className={metricSegmentClassName}
+                  key={key}
+                  style={getMetricSegmentStyle(color)}
+                  title={label}
+                />
+              ))}
+            </LegendSummaryBar>
+          </LegendSummaryBody>
+          <LegendToggleButton
+            aria-label={t("expand-legend")}
+            data-testid="legend-expand-button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setCollapsed(false);
+            }}
+            type="button"
+          >
+            <Maximize size={14} />
+          </LegendToggleButton>
         </LegendSummaryBlock>
       ) : null}
       {shouldShowStatusSummary && shouldShowMetricSummary && (
         <LegendSummaryBlock>
-          <LegendMetricWrapper>
-            <LegendMetricTitle>{activeMetricTitle}</LegendMetricTitle>
-            <LegendMetricMeta>{t("internet-quality")}</LegendMetricMeta>
-          </LegendMetricWrapper>
-          <LegendSummaryBar>
-            {activeLayerSummaryItems.map(({ color, key, label }) => (
-              <span
-                aria-hidden="true"
-                className={metricSegmentClassName}
-                key={key}
-                style={getMetricSegmentStyle(color)}
-                title={label}
-              />
-            ))}
-          </LegendSummaryBar>
+          <LegendSummaryBody>
+            <LegendMetricWrapper>
+              <LegendMetricTitle>{activeMetricTitle}</LegendMetricTitle>
+              <LegendMetricMeta>{t("internet-quality")}</LegendMetricMeta>
+            </LegendMetricWrapper>
+            <LegendSummaryBar>
+              {activeLayerSummaryItems.map(({ color, key, label }) => (
+                <span
+                  aria-hidden="true"
+                  className={metricSegmentClassName}
+                  key={key}
+                  style={getMetricSegmentStyle(color)}
+                  title={label}
+                />
+              ))}
+            </LegendSummaryBar>
+          </LegendSummaryBody>
         </LegendSummaryBlock>
       )}
     </LegendCollapsedView>
@@ -241,7 +243,7 @@ const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setO
       className="legend-info-popover-link"
     >
       {children}
-      <PopoverContent className={`legend-info-popover-content${renderedSectionCount === 1 ? " legend-info-popover-content--single" : ""}`}>
+      <PopoverContent className={`legend-info-popover-content${!collapsed && renderedSectionCount === 1 ? " legend-info-popover-content--single" : ""}`}>
         {legendContent}
       </PopoverContent >
     </CustomeLegendPopover >

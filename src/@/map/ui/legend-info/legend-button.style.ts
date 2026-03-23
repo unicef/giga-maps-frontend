@@ -226,12 +226,11 @@ export const LegendCollapsedView = styled.div<ActiveTheme>`
   }
 `
 
-export const LegendCollapsedHeader = styled.div`
+export const LegendSummaryBlock = styled.div`
   align-items: flex-start;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: space-between;
-  width: 100%;
+  column-gap: 0.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
 
   ${LegendToggleButton} {
     height: 1rem;
@@ -240,21 +239,23 @@ export const LegendCollapsedHeader = styled.div`
   }
 `
 
-export const LegendSummaryBlock = styled.div`
+export const LegendSummaryBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
+  width: 100%;
 `
 
 export const LegendSummaryLabels = styled.div`
   display: flex;
   flex: 1 1 auto;
-  gap: 0.5rem;
+  gap: 0;
   min-width: 0;
   width: 100%;
 
   @media (max-width: 768px) {
-    gap: 0.375rem;
+    gap: 0;
   }
 `
 
@@ -265,12 +266,22 @@ export const LegendSummaryLabel = styled.span`
   line-height: 1.25rem;
   min-width: 0;
   overflow: hidden;
+  padding-right: 0.5rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &:last-child {
+    padding-right: 0;
+  }
 
   @media (max-width: 768px) {
     font-size: 0.75rem;
     line-height: 1.125rem;
+    padding-right: 0.375rem;
+
+    &:last-child {
+      padding-right: 0;
+    }
   }
 `
 

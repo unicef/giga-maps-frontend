@@ -1,6 +1,7 @@
-import { ChevronDown, Earth, Search } from '@carbon/icons-react'
+import { ChevronDown, ChevronUp, Earth } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { $isMobile } from '~/core/media-query';
 import { getVoid } from '~/lib/effector-kit';
@@ -8,7 +9,6 @@ import { getInputValue } from '~/lib/event-reducers';
 
 import { $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
 import { CountrySearchIcon, SearchContainer, SearchWrapper } from './top-search-bar.style';
-import { useTranslation } from 'react-i18next';
 
 
 const onChange = changeSearchText.prepend(getInputValue);
@@ -18,7 +18,6 @@ const TopSearchBar = () => {
   const searchText = useStore($searchInput);
   const showCountries = useStore($showCountries)
   const isMobile = useStore($isMobile)
-  const [mobileSearch, setMobileSearch] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
@@ -30,10 +29,7 @@ const TopSearchBar = () => {
     // If the related target is not inside search results and not the search input itself
     if (searchResults && !searchResults.contains(relatedTarget) &&
       searchContainerRef.current && !searchContainerRef.current.contains(relatedTarget)) {
-      setTimeout(() => changeIsSearchFocused(false), 300);
-      if (isMobile) {
-        setMobileSearch(false);
-      }
+      setTimeout(() => changeIsSearchFocused(false), 0);
     }
   }
   return (
@@ -49,15 +45,9 @@ const TopSearchBar = () => {
         kind="primary"
       >
         <Earth />
-        <ChevronDown />
+        {showCountries ? <ChevronUp /> : <ChevronDown />}
       </CountrySearchIcon>
-      {isMobile && !mobileSearch ? (
-        <Search
-          className='search-icon'
-          onClick={() => { setMobileSearch(true); }}
-        />
-      ) : null}
-      {(isMobile && mobileSearch || !isMobile) && <SearchContainer
+      <SearchContainer
         size="lg"
         placeholder={t("search-country-region-school-id")}
         labelText="Search"
@@ -74,9 +64,8 @@ const TopSearchBar = () => {
         $isMobile={isMobile}
         onClear={() => {
           onClear();
-          isMobile && setMobileSearch(false);
         }}
-      />}
+      />
     </SearchWrapper >
   );
 };

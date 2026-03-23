@@ -15,41 +15,43 @@ const ButtonBase = styled.button`
 export const SearchResultWrapper = styled.div`
     background: ${props => props.theme.main};
     position: absolute;
-    width: 100%;
-    padding-top: 0.5rem;
-    height: calc(100% - 6rem);
-    z-index: 5;
-    top:6rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    z-index: 13;
+    top: 100%;
+    max-height: 80vh;
+    border: 1px solid ${props => props.theme.titleBlue};
+    border-radius: 0 0 0.5rem 0.5rem;
     box-shadow:#212020 0px 14px 40px 0px;
-    max-height: 31.25rem;
+    overflow: hidden;
 
     @media (max-width:768px){
-      position: fixed;
-      top: 3.1rem;
-      height: calc(100% - 3rem);
-      z-index: 11;
+      max-height: 80vh;
     }
 `
 
 export const SearchListWrapper = styled.div`
-background: ${props => props.theme.main};
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 6rem);
-    z-index: 5;
-    top:6rem;
+  background: ${props => props.theme.main};
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  width: auto;
+  z-index: 13;
+  top: 100%;
+  max-height: 80vh;
+  border: 1px solid ${props => props.theme.titleBlue};
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow:#212020 0px 14px 40px 0px;
+  overflow: hidden;
 
-    @media (max-width:768px){
-      position: fixed;
-    top: 3.1rem;
-    height: calc(100% - 3rem);
-    z-index: 11;
-    }
+  @media (max-width:768px){
+    max-height: 80vh;
+  }
 `
 export const SearchResultScroll = styled(Scroll)`
-background: ${props => props.theme.main};
-height: calc(100% - 4rem);
-
+  background: ${props => props.theme.main};
+  max-height: calc(80vh - 4.5rem);
 `
 export const SearchTopHead = styled.span`
   display: flex;

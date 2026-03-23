@@ -4,16 +4,11 @@ import { IconButton } from '@carbon/react';
 import { mapOverview } from '~/core/routes';
 
 import { HamburgerWrapper, LogoName, TopMenuWrapper } from './top-menu-bar.style';
-import logo from '~/assets/images/giga-logo.png';
-import whiteLogo from '~/assets/images/white-logo-small.png';
-import { $theme, ThemeType } from '~/core/theme.model';
-import { useStore } from 'effector-react';
 
 const TopMenuBar = ({
   isMenuOpen = false,
   onClickMenu = () => { }
 }: { isMenuOpen?: boolean; onClickMenu?: () => void; }) => {
-  const isLight = useStore($theme) === ThemeType.light;
   return (
     <HamburgerWrapper>
       <TopMenuWrapper>
@@ -30,8 +25,8 @@ const TopMenuBar = ({
         >
           {isMenuOpen ? <Close size={20} /> : <Menu size={20} />}
         </IconButton>
-        <LogoName to={mapOverview} target="_blank">
-          <img src={isLight ? whiteLogo : logo} alt="Giga logo" />
+        <LogoName to={mapOverview}>
+          ATLAS
         </LogoName>
       </TopMenuWrapper>
     </HamburgerWrapper >

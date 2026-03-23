@@ -68,11 +68,11 @@ max-height: ${(props) => props.$height ? "calc(100vh - 29rem)" : ""} ;
 `
 
 export const SidebarScroll = styled(Scroll)`
-    height: 100%;
+    height: auto;
 `
 
 export const HashtagIcon = styled(Hashtag)`
-  fill: ${props => props.theme.text};
+  fill: #f4f4f4;
   margin-right: 0.325rem;
 `
 
@@ -82,9 +82,22 @@ export const SidePanelContainer = styled.div`
   flex-direction: column;
   height: inherit;
   width: inherit;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #161616;
+  border: 1px solid #393939;
+  border-radius: 0.875rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+
   .cds--tooltip-content{
     font-size: 0.8rem;
     margin-left: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
   }
 `
 export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolean }>`
@@ -112,20 +125,20 @@ export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolea
 
   @media (min-width: 769px) and (max-width: 1584px) {
     position: fixed;
-    top: 0rem;
-    bottom: 5.3rem;
+    top: 0.5rem;
+    bottom: 1.8rem;
     left: ${props => props.$left ? "-17rem" : "0.5rem"};
     width: 288px ;
-    height: 96vh;
+    height: auto;
   }
 
   @media only screen and (min-width: 1584px) {
     position: fixed;
-    top: 0rem;
-    bottom: 5.3rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
     left: ${props => props.$left ? "-18.2rem" : "0.5rem"};
     width: 296px ;
-    height: 96vh;
+    height: auto;
   }
 
  .sidebar__expander {
@@ -176,11 +189,16 @@ cursor: pointer;
 `
 
 export const SubContainer = styled.div`
-height:calc(100% - 6rem);
-background: ${props => props.theme.main} ;
-@media (max-width:768px){
-  height:calc(100%);
-}
+  flex: 1 1 auto;
+  min-height: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+`
+
+export const SearchAreaWrapper = styled.div`
+  position: relative;
+  z-index: 12;
 `
 
 export const MapButtonWrapper = styled.div<{ $hide?: boolean }>`

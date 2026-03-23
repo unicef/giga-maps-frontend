@@ -128,12 +128,13 @@ const LiveLayerLegend = ({
       <div className='legend-section-header legend-section-header--stacked'>
         <div className="legend-section-heading">
           <h3>{selectedLayerData?.name}</h3>
-          <TooltipButton align='top' label={t('internet-quality')}>
+          <TooltipButton align='top' $hideLabel={!selectedLayerData?.description} label={selectedLayerData?.description ?? ""}>
             <button type="button">
               <Information size={12} />
             </button>
           </TooltipButton>
         </div>
+        <p className='legend-section-meta'>{t('internet-quality')}</p>
       </div>
       {
         legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
