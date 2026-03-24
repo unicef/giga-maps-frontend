@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronUp, Earth } from '@carbon/icons-react'
+import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +8,7 @@ import { $isMobile } from '~/core/media-query';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
 
-import { $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
+import { $isActiveSearchBar, $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
 import { CountrySearchIcon, SearchContainer, SearchWrapper } from './top-search-bar.style';
 
 
@@ -16,6 +17,7 @@ const onClear = clearSearchText.prepend(getVoid);
 
 const TopSearchBar = () => {
   const searchText = useStore($searchInput);
+  const isActiveSearchBar = useStore($isActiveSearchBar);
   const showCountries = useStore($showCountries)
   const isMobile = useStore($isMobile)
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -34,19 +36,24 @@ const TopSearchBar = () => {
   }
   return (
     <SearchWrapper className="top-search-bar" ref={searchContainerRef}>
-      <CountrySearchIcon
+      <Tooltip
         align={'bottom-left'}
         label={t('country-list')}
-        className='main-search-list'
-        onClick={() => {
-          onShowCountriesAdminList(!showCountries)
-        }}
-        size="lg"
-        kind="primary"
       >
-        <Earth />
-        {showCountries ? <ChevronUp /> : <ChevronDown />}
-      </CountrySearchIcon>
+        <CountrySearchIcon
+          $active={showCountries}
+          aria-expanded={showCountries}
+          aria-label={t('country-list')}
+          className='main-search-list'
+          onClick={() => {
+            onShowCountriesAdminList(!showCountries)
+          }}
+          type="button"
+        >
+          <Earth />
+          {showCountries ? <ChevronUp /> : <ChevronDown />}
+        </CountrySearchIcon>
+      </Tooltip>
       <SearchContainer
         size="lg"
         placeholder={t("search-country-region-school-id")}
@@ -61,6 +68,7 @@ const TopSearchBar = () => {
         onBlur={onBlurSearch}
         value={searchText}
         className={"sidebar-searchbox"}
+        $active={isActiveSearchBar}
         $isMobile={isMobile}
         onClear={() => {
           onClear();
