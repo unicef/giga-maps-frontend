@@ -4,26 +4,25 @@
  * Wires entity Effector effects to app lifecycle events.
  * This file is imported by core/init.ts so it runs on app startup.
  */
-import { sample, merge, guard } from 'effector';
+// Import route model to activate URL → store sync on page load
+import './models/entity-route.model';
 
+import { guard, merge, sample } from 'effector';
+
+import { $map, $stylePaintData, onLoadPage } from '~/@/map/map.model';
 import { fetchEntityPopupDataFx, fetchEntityRegistryFx } from '~/api/entities';
+import { map, mapEntities } from '~/core/routes';
+
+import { createActiveEntityLayers } from './map/entity-layers';
 import {
   $activeEntityTypes,
   $entityPopupData,
-  setEntityPopupData,
   setEntityLoading,
+  setEntityPopupData,
 } from './models/entity.model';
 import { $getEntityParams } from './models/entity-route.model';
-import { onLoadPage } from '~/@/map/map.model';
-import { map, mapEntities } from '~/core/routes';
-import { $map } from '~/@/map/map.model';
-import { $stylePaintData } from '~/@/map/map.model';
-import { createActiveEntityLayers } from './map/entity-layers';
-import { updateEntityUrlParam } from './utils/entity-navigation';
 import type { EntityType } from './types/base-entity.type';
-
-// Import route model to activate URL → store sync on page load
-import './models/entity-route.model';
+import { updateEntityUrlParam } from './utils/entity-navigation';
 
 /**
  * On app load: fetch entity registry from API.

@@ -24,6 +24,7 @@ export interface EntityFieldConfig {
  * - 'symbol': Icon/symbol markers (used by new entities)
  */
 export type MarkerType = 'circle' | 'symbol';
+export type EntityLegendShape = 'circle' | 'square';
 
 /**
  * Entity configuration defining visual, API, and field settings.
@@ -41,6 +42,8 @@ export interface EntityConfig {
   markerType: MarkerType;
   /** Symbol character (only used when markerType is 'symbol') */
   markerSymbol?: string;
+  /** Legend/entity chip shape configuration used in UI components */
+  legendShape: EntityLegendShape;
 
   /** Color configuration for connectivity status */
   colors: {

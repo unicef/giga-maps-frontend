@@ -1,7 +1,7 @@
 import { createEvent, createStore, restore } from 'effector';
 
-import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
-import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
+import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx, normalizeSchoolGlobalStats } from '~/api/project-connect';
+import { AdvanceFilterType, EntitiesGlobalStatsResponse, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
@@ -63,8 +63,10 @@ onEnableNavigateByAdminLevel.watch((value) => {
 export const $stylePaintData = createStore<StylePaintData>(
   stylePaintData[defaultStyle]
 );
+export const $globalStatsByEntity = createStore<EntitiesGlobalStatsResponse>({});
+$globalStatsByEntity.on(fetchGlobalStatsFx.doneData, setPayload);
 export const $globalStats = createStore<GlobalStats>(defaultGlobalStats);
-$globalStats.on(fetchGlobalStatsFx.doneData, setPayload);
+$globalStats.on(fetchGlobalStatsFx.doneData, (_, payload) => normalizeSchoolGlobalStats(payload));
 
 export const $pending = createStore<boolean>(false);
 export const $loader = createStore<Marker | null>(null);

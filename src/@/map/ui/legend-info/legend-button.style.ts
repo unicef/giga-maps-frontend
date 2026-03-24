@@ -1,6 +1,7 @@
 import { Popover } from "@carbon/react";
 import styled, { css, DefaultTheme, keyframes } from "styled-components";
 
+import type { EntityLegendShape } from "~/@/entities/config/entity-config.types";
 import { ThemeType } from "~/core/theme.model";
 
 type ActiveTheme = {
@@ -485,7 +486,7 @@ export const LegendContentWrapper = styled.div<ActiveTheme>`
   }
 
 `
-export const CircleWrapper = styled.div<{ $shape?: "circle" | "square"; $large?: boolean }>`
+export const CircleWrapper = styled.div<{ $shape?: EntityLegendShape; $large?: boolean }>`
   position: relative;
   width: ${props => props.$large ? "1rem" : "0.625rem"};
   height: ${props => props.$large ? "1rem" : "0.625rem"};
@@ -495,7 +496,7 @@ export const CircleWrapper = styled.div<{ $shape?: "circle" | "square"; $large?:
   flex-shrink: 0;
   overflow: visible;
 `
-export const InnerCircle = styled.div<{ $backColor?: string; $margin?: string, $large?: boolean; $shape?: "circle" | "square" }>`
+export const InnerCircle = styled.div<{ $backColor?: string; $margin?: string, $large?: boolean; $shape?: EntityLegendShape }>`
 min-width: 0.625rem;
 min-height: 0.625rem;
 max-width: 0.625rem;
@@ -507,7 +508,7 @@ position: relative;
 z-index: 2;
 `
 
-export const InnerCircleConnectivity = styled.div<{ $backColor?: string; $shape?: "circle" | "square"; $large?: boolean }>`
+export const InnerCircleConnectivity = styled.div<{ $backColor?: string; $shape?: EntityLegendShape; $large?: boolean }>`
 width: ${props => props.$large ? "0.875rem" : "0.625rem"};
 min-height: ${props => props.$large ? "0.875rem" : "0.625rem"};
 background: ${(prop) => prop.$backColor};

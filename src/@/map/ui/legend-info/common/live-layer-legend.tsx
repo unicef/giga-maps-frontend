@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { TooltipButton } from "~/@/common/style/styled-component-style";
 import { $country, $countryConnectivityNames } from '~/@/country/country.model';
+import type { EntityLegendShape } from "~/@/entities/config/entity-config.types";
 import { $stylePaintData } from "~/@/map/map.model";
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
@@ -46,7 +47,7 @@ const LiveLayerLegend = ({
   markerShape = "circle",
   shouldShowControls
 }: {
-  markerShape?: "circle" | "square";
+  markerShape?: EntityLegendShape;
   shouldShowControls: boolean;
 }) => {
   const lng = useStore($lng);

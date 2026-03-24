@@ -43,9 +43,9 @@ export const EntityCardPanel = styled.div<{ $open: boolean }>`
     opacity 180ms ease;
 `
 
-export const EntityCardPanelInner = styled.div`
+export const EntityCardPanelInner = styled.div<{ $open: boolean }>`
   min-height: 0;
-  overflow: hidden;
+  overflow: ${props => props.$open ? 'visible' : 'hidden'};
 `
 
 export const EntityCardHeader = styled.button`

@@ -2,7 +2,6 @@ import { Information } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react'
 import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $countryId } from '~/@/country/country.model';
@@ -17,15 +16,14 @@ import LegendPopup from "./legend-popup";
 sample({
   clock: merge([debounce($selectedLayerId, { timeout: 0 }), $countryId, $showThemeLayer, $showAdvancedFilter]),
   source: combine({
-    isMobile: $isMobile,
     showAdvancedFilter: $showAdvancedFilter,
     showThemeLayer: $showThemeLayer,
     showLegend: $showLegend,
   }),
   fn: ({ showLegend }) => showLegend,
-  filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
+  filter: ({ showAdvancedFilter, showThemeLayer }) => {
     if (showAdvancedFilter || showThemeLayer) return false;
-    return !isMobile
+    return true
   },
   target: onShowLegend,
 })
@@ -37,13 +35,6 @@ const LegendButton = () => {
   const toggleShowLegend = () => {
     onShowLegend(!showLegend);
   };
-
-  // default hidden from mobile screen;
-  useEffect(() => {
-    if (isMobile) {
-      onShowLegend(false);
-    }
-  }, [isMobile])
   return (
     <LegendWrapper className="lengend-container">
       <LegendPopup open={showLegend} setOpen={onShowLegend}>

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Div, TooltipButton } from "~/@/common/style/styled-component-style";
 import { $country, $countryConnectivityNames } from "~/@/country/country.model";
+import type { EntityLegendShape } from "~/@/entities/config/entity-config.types";
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
 import {
   $benchmarkNamesAllLayers,
@@ -40,7 +41,7 @@ const StaticLayerLegend = ({
   markerShape = "circle",
   shouldShowControls
 }: {
-  markerShape?: "circle" | "square";
+  markerShape?: EntityLegendShape;
   shouldShowControls: boolean;
 }) => {
   const lng = useStore($lng);

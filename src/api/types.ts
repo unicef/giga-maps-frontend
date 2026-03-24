@@ -18,10 +18,35 @@ export type GlobalStats = {
   schools_with_connectivity_status_mapped: number;
 }
 
+export type EntityGlobalStats = {
+  no_of_countries: number;
+  countries_with_connectivity_status_mapped: number;
+  connectivity_global_benchmark: {
+    value: number;
+    unit: string;
+  };
+  connected_entities?: {
+    connected: number;
+    not_connected: number;
+    unknown: number;
+  };
+  connected_schools?: {
+    connected: number;
+    not_connected: number;
+    unknown: number;
+  };
+  entities_total?: number;
+  entities_with_connectivity_status_mapped?: number;
+  schools_connected?: number;
+  schools_with_connectivity_status_mapped?: number;
+};
+
+export type EntitiesGlobalStatsResponse = Partial<Record<"school" | "health", EntityGlobalStats>>;
+
 export type GraphData = {
   group: string;
   key: string;
-  value: number;
+  value: number | null;
 }
 export type defaultLegendValuesType = {
   good: number;
@@ -45,10 +70,37 @@ export type ConnectivityStat = {
     benchmark_value: string;
     parameter_column_unit: string;
     round_unit_value: string;
-    rounded_benchmark_value: string;
+    rounded_benchmark_value: number | string;
     display_unit: string;
+    convert_unit?: string;
   }
 };
+
+export type EntityConnectivityStat = {
+  benchmark_metadata: {
+    base_benchmark: string;
+    benchmark_unit: string;
+    benchmark_value: string;
+    parameter_column_unit: string;
+    round_unit_value: string;
+    rounded_benchmark_value: number | string;
+    convert_unit?: string;
+    display_unit: string;
+  };
+  countries_with_realtime_data: number;
+  entity_with_realtime_data?: number;
+  graph_data: GraphData[];
+  is_data_synced: boolean;
+  live_avg: number;
+  live_avg_connectivity: string;
+  no_of_entities_measure?: number;
+  no_of_schools_measure?: number;
+  real_time_connected_entities?: defaultLegendValuesType;
+  real_time_connected_schools?: defaultLegendValuesType;
+  school_with_realtime_data?: number;
+};
+
+export type EntitiesConnectivityStatsResponse = Partial<Record<"school" | "health", EntityConnectivityStat>>;
 export type SchoolInfoStats = {
   num_students: number;
   num_teachers: number;

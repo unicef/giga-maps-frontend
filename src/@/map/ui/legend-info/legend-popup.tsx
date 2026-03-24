@@ -4,11 +4,12 @@ import { useStore } from "effector-react";
 import { CSSProperties, PropsWithChildren, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { $entityRouteParam } from "~/@/entities/models/entity-route.model";
+import { $activeEntityTypes, $entityConfigMap, $selectedEntityType, changeSelectedEntityType } from "~/@/entities/models/entity.model";
 import { $stylePaintData } from "~/@/map/map.model";
 import { ConnectivityStatusDistribution } from "~/@/sidebar/sidebar.constant";
 import { $layerUtils } from "~/@/sidebar/sidebar.model";
 import { ConnectivityStatusNames } from "~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant";
+import { $isMobile } from "~/core/media-query";
 import { $mapRoutes } from "~/core/routes";
 import { $theme } from "~/core/theme.model";
 
@@ -46,6 +47,8 @@ const getDefaultLegendTab = (entityTypes: string[]): LegendTab =>
     ? "health-centers"
     : "schools";
 
+const getDefaultCollapsedState = (isMobile: boolean) => isMobile;
+
 const schoolSummaryOrder = [
   ConnectivityStatusDistribution.unknown,
   ConnectivityStatusDistribution.notConnected,
@@ -54,28 +57,23 @@ const schoolSummaryOrder = [
 
 const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setOpen: (open: boolean) => void, }>) => {
   const { t } = useTranslation();
-  const entityRouteParam = useStore($entityRouteParam);
+  const activeEntityTypes = useStore($activeEntityTypes);
+  const entityConfigMap = useStore($entityConfigMap);
+  const selectedEntityType = useStore($selectedEntityType);
   const { currentLayerLegends, currentLayerTypeUtils, selectedLayerData } = useStore($layerUtils);
   const { isStatic, isLive, isSchoolStatus } = currentLayerTypeUtils;
+  const isMobile = useStore($isMobile);
   const mapLevel = useStore($mapRoutes);
   const shouldShowControls = !mapLevel.map && !mapLevel.schools;
   const themeState = useStore($theme);
   const paintData = useStore($stylePaintData);
-  const [collapsed, setCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState<LegendTab>(getDefaultLegendTab(entityRouteParam));
+  const [collapsed, setCollapsed] = useState(getDefaultCollapsedState(isMobile));
 
   useEffect(() => {
     if (!open) {
-      setCollapsed(false);
-      setActiveTab(getDefaultLegendTab(entityRouteParam));
+      setCollapsed(getDefaultCollapsedState(isMobile));
     }
-  }, [entityRouteParam, open]);
-
-  useEffect(() => {
-    if (open) {
-      setActiveTab(getDefaultLegendTab(entityRouteParam));
-    }
-  }, [entityRouteParam, open]);
+  }, [isMobile, open]);
 
   const schoolSummaryItems: LegendSummaryItem[] = schoolSummaryOrder.map((key) => ({
     color: paintData[key],
@@ -101,6 +99,11 @@ const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setO
     ? selectedLayerData?.name ?? t("average-download-speed")
     : t("average-download-speed");
   const shouldShowStatusSummary = isSchoolStatus;
+  const effectiveSelectedEntityType = activeEntityTypes.includes(selectedEntityType)
+    ? selectedEntityType
+    : activeEntityTypes[0] ?? "school";
+  const showSchoolTab = activeEntityTypes.includes("school");
+  const showHealthTab = activeEntityTypes.includes("health");
   const metricSegmentClassName = `legend-summary-bar__segment legend-summary-bar__segment--spaced${isLive ? " legend-summary-bar__segment--live" : ""}`;
   const getMetricSegmentStyle = (color: string): CSSProperties => isLive
     ? {
@@ -109,8 +112,11 @@ const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setO
     }
     : { background: color };
 
+  const activeTab: LegendTab = showHealthTab && effectiveSelectedEntityType === "health"
+    ? "health-centers"
+    : getDefaultLegendTab(activeEntityTypes);
   const isHealthSelected = activeTab === "health-centers";
-  const markerShape = isHealthSelected ? "square" : "circle";
+  const markerShape = entityConfigMap[effectiveSelectedEntityType]?.legendShape ?? "circle";
   const renderedSectionCount = Number(isSchoolStatus) + Number(isLive) + Number(isStatic);
   const legendContent = collapsed ? (
     <LegendCollapsedView data-testid="legend-collapsed-view" themeState={themeState}>
@@ -206,14 +212,18 @@ const LegendPopup = ({ open, children }: PropsWithChildren<{ open: boolean, setO
     <>
       <LegendHeaderWrapper themeState={themeState}>
         <LegendContentTabs>
-          <LegendContentTab $active={!isHealthSelected} data-shape="circle" onClick={(event) => {
-            event.stopPropagation();
-            setActiveTab("schools");
-          }}>{t("schools")}</LegendContentTab>
-          <LegendContentTab $active={isHealthSelected} data-shape="square" onClick={(event) => {
-            event.stopPropagation();
-            setActiveTab("health-centers");
-          }}>{t("health-centers")}</LegendContentTab>
+          {showSchoolTab && (
+            <LegendContentTab $active={!isHealthSelected} data-shape="circle" onClick={(event) => {
+              event.stopPropagation();
+              changeSelectedEntityType("school");
+            }}>{t("schools")}</LegendContentTab>
+          )}
+          {showHealthTab && (
+            <LegendContentTab $active={isHealthSelected} data-shape="square" onClick={(event) => {
+              event.stopPropagation();
+              changeSelectedEntityType("health");
+            }}>{t("health-centers")}</LegendContentTab>
+          )}
         </LegendContentTabs>
         <LegendToggleButton
           aria-label={t("collapse-legend")}

@@ -1,17 +1,16 @@
 import { combine, createEvent, createStore, restore, sample } from 'effector';
-import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
+import i18next from 'i18next';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
-import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
-import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
+import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx, normalizeSchoolConnectivityStats } from '~/api/project-connect';
+import { ConnectivityStat, CountryBasic, EntitiesConnectivityStatsResponse, SchoolStatsType } from '~/api/types';
+import { $lng } from '~/core/i18n/store';
 import { mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
-
-import i18next from 'i18next';
-import { $lng } from '~/core/i18n/store';
 import { evaluateExpression } from '~/lib/utils';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+
 import { UNKNOWN } from '../map/map.types';
 import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
@@ -19,6 +18,7 @@ import { getSchoolAvailableDates } from './effects/search-country-fx';
 import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { isLiveLayer, isStaticLayer } from './sidebar.util';
 import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
+import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -36,8 +36,10 @@ export const $connectivityBenchMark = restore(changeConnectivityBenchmark, Conne
 
 export const $isMapTab = createStore(true);
 
+export const $connectivityStatsByEntity = createStore<EntitiesConnectivityStatsResponse>({});
+$connectivityStatsByEntity.on(fetchConnectivityLayerFx.doneData, setPayload);
 export const $connectivityStats = createStore<ConnectivityStat | null>(null);
-$connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
+$connectivityStats.on(fetchConnectivityLayerFx.doneData, (_, payload) => normalizeSchoolConnectivityStats(payload));
 $connectivityStats.on(fetchCountryLiveLayerInfo.doneData, setPayload);
 
 export const $coverageStats = createStore<CoverageStat | null>(null);

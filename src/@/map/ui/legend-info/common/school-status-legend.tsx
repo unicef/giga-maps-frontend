@@ -4,6 +4,7 @@ import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 
+import type { EntityLegendShape } from "~/@/entities/config/entity-config.types";
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
@@ -24,7 +25,7 @@ const SchoolStatusLegend = ({
   markerShape = "circle",
   shouldShowControls
 }: {
-  markerShape?: "circle" | "square";
+  markerShape?: EntityLegendShape;
   shouldShowControls: boolean;
 }) => {
   const { t } = useTranslation();

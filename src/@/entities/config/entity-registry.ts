@@ -19,6 +19,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     displayName: 'Schools',
     icon: 'Education',
     markerType: 'circle',
+    legendShape: 'circle',
     colors: {
       primary: '#0062FF',
       connected: '#24A148',
@@ -45,6 +46,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     displayName: 'Health Facilities',
     icon: 'Hospital',
     markerType: 'symbol',
+    legendShape: 'square',
     markerSymbol: '⚕',
     colors: {
       primary: '#0F62FE',
@@ -61,3 +63,4 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     fields: [],
   },
 };
+
