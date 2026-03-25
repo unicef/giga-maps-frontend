@@ -74,13 +74,22 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const onApply = async (e: MouseEvent) => {
     e.preventDefault();
     const prefix = 'filter__';
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(window.location.search);
+    for (const key of Array.from(params.keys())) {
+      if (key.startsWith(prefix)) {
+        params.delete(key);
+      }
+    }
+
     for (const [key, value] of Object.entries(selectedFields)) {
       if (value) {
         if (typeof value === 'object') {
           const { none_range, value: rangeValue } = value;
           if (none_range) {
-            params.set(`${prefix}${key.replace('__range', '__none_range')}`, String(rangeValue) || "null,null");
+            params.set(
+              `${prefix}${key.replace('__range', '__none_range')}`,
+              String(rangeValue) || "null,null"
+            );
           } else if (rangeValue) {
             params.set(`${prefix}${key}`, String(rangeValue));
           }
@@ -92,6 +101,20 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     router.navigate(`${window.location.pathname}?${params.toString()}`);
     setOpen(false);
   }
+
+  const onReset = async (e: MouseEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams(window.location.search);
+    for (const key of Array.from(params.keys())) {
+      if (key.startsWith('filter__')) {
+        params.delete(key);
+      }
+    }
+
+    router.navigate(`${window.location.pathname}?${params.toString()}`);
+    setOpen(false)
+  }
+
   // const items = ['All data layers']
   if (!isReady) return null;
   return (
@@ -128,9 +151,8 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           <Button
             type="reset"
             kind="secondary"
-            onClick={() => {
-              router.navigate(`${window.location.pathname}`);
-              setOpen(false)
+            onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
+              void onReset(event);
             }}>
             {t('reset')}
           </Button>
