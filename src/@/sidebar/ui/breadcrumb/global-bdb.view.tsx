@@ -18,8 +18,7 @@ const GlobalBDB = () => {
 
   return (<div className="sidebar-worldview-global-indication">
     <div className="sidebar-worldview-global-indication-text-and-contries">
-      <span className="sidebar-worldview-globalText">{t('worldwide')}</span>
-      <span className="sidebar-worldview-contriesText">{`${noOfCounties} ${t('countries')}`}</span>
+      <span className="sidebar-worldview-contriesText">{t('countries-and-territories', { count: noOfCounties })}</span>
     </div>
     {/* <Tooltip align="bottom" label="worldwide information for register countries" className='side-info-panel-infomartion-of-worldwideview'>
       <button>
