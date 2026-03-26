@@ -43,47 +43,6 @@ const legendPanelChrome = css<LegendThemeProps>`
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 `;
 
-export const LegendWrapper = styled.div`
-    
-    background: ${props => props.theme.main};
-    margin-top:0.5rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    height:2rem;
-    width:2rem;
-`
-
-export const ActiveButtonWrapper = styled.div<{ $backgroundImage?: string; $iconColor?: string }>`
-  .cds--btn--icon-only{ 
-    border-radius: 50%;
-    border: 1px solid ${props => props.theme.main};
-    background: ${props => props.theme.main};
-    ${props => props.$backgroundImage && css`
-      background-image: url(${props.$backgroundImage});
-    `}
-  }
-  .cds--btn--primary:focus {
-    box-shadow: 0 0 0 1px ${props => props.theme.main};
-  }
-  svg{
-    fill: ${props => props.$iconColor ?? props.theme.text};
-  }
-  .cds--popover{
-position:relative;
-z-index:6001;
-top:-1rem;
-  }
-.cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text} !important;
-  }
-
-`
 export const CustomeLegendPopover = styled(Popover) <ActiveTheme>`
 .cds--popover {
   z-index: 6002;

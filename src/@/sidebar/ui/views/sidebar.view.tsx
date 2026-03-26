@@ -1,8 +1,6 @@
-import { ChevronDown, ChevronRight, ChevronUp, MagicWandFilled } from '@carbon/icons-react'
-import { IconButton } from '@carbon/react';
+import { ChevronDown, ChevronRight, ChevronUp } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
 import { MouseEvent, } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { $entityPopupData } from '~/@/entities/models/entity.model';
 import EntityView from '~/@/entities/ui/entity-view';
@@ -12,7 +10,6 @@ import { BroadcastButton, TakeTourWrapper } from '~/@/map/ui/layer-theme/theme-b
 import ThemeButtons from '~/@/map/ui/layer-theme/theme-buttons';
 import ZoomButtons from '~/@/map/ui/layer-theme/zoom-buttons';
 import LegendButton from '~/@/map/ui/legend-info/legend-button';
-import { ActiveButtonWrapper } from '~/@/map/ui/legend-info/legend-button.style';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import {
   $isMenuOpen, $isSidebarCollapsed,
@@ -23,7 +20,7 @@ import {
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapEntities, mapOverview, mapSchools, router } from '~/core/routes';
+import { mapCountry, mapEntities, mapOverview, mapSchools } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
@@ -44,7 +41,6 @@ const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
 );
 
 export default function Sidebar() {
-  const { t } = useTranslation();
   const isMenuOpen = useStore($isMenuOpen);
   const isMobile = useStore($isMobile)
   const sidebarHeight = useStore($sidebarHeight)
@@ -101,17 +97,6 @@ export default function Sidebar() {
           <TakeTourWrapper $bottom={sidebarHeight} >
             {!isMobile && <ZoomButtons />}
             {!sidebarHeight && <TimeplayerButton />}
-            {!sidebarHeight && <ActiveButtonWrapper>
-              <IconButton
-                data-testid="tour-button"
-                align="left"
-                id='tour-button'
-                size="sm"
-                label={t("tour")}
-                onClick={() => router.navigate(`/map?popover=tour`)}>
-                <MagicWandFilled />
-              </IconButton>
-            </ActiveButtonWrapper>}
             <AccessibilityButton />
             {!sidebarHeight && <ThemeButtons />}
             <LegendButton />

@@ -41,20 +41,21 @@ export const TopMenuWrapper = styled.div`
 export const LogoName = styled(Link)`
   display: flex;
   align-items: center;
-  color: #f4f4f4;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1.5rem;
   text-decoration: none;
   outline: none;
   box-shadow: none;
+  min-height: 0.7rem;
+
+  img {
+    display: block;
+    height: 100%;
+    width: auto;
+  }
 
   &:visited,
   &:hover,
   &:focus,
   &:active {
-    color: #f4f4f4;
     text-decoration: none;
     outline: none;
     box-shadow: none;

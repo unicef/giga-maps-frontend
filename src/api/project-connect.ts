@@ -29,36 +29,6 @@ const ensureCacheParam = (query = ''): string => {
   return nextQuery ? `?${nextQuery}` : '';
 };
 
-export const normalizeSchoolGlobalStats = (response: EntitiesGlobalStatsResponse): GlobalStats => {
-  const school = response.school!;
-
-  return {
-    no_of_countries: school.no_of_countries,
-    schools_connected: school.schools_connected!,
-    countries_with_connectivity_status_mapped: school.countries_with_connectivity_status_mapped,
-    schools_with_connectivity_status_mapped: school.schools_with_connectivity_status_mapped!,
-    connectivity_global_benchmark: school.connectivity_global_benchmark,
-    connected_schools: school.connected_schools!,
-  };
-};
-
-export const normalizeSchoolConnectivityStats = (response: EntitiesConnectivityStatsResponse): ConnectivityStat => {
-  const school = response.school!;
-
-  return {
-    live_avg: school.live_avg,
-    no_of_schools_measure: school.no_of_schools_measure!,
-    school_with_realtime_data: school.school_with_realtime_data!,
-    is_data_synced: school.is_data_synced,
-    real_time_connected_schools: school.real_time_connected_schools!,
-    graph_data: school.graph_data,
-    live_avg_connectivity: school.live_avg_connectivity,
-    countries_with_realtime_data: school.countries_with_realtime_data,
-    benchmark_metadata: school.benchmark_metadata,
-  };
-};
-
-
 export const getDatasetUrl = (countryCode: string): string =>
   `${apiBaseUrl}api/locations/countries/${encodeURIComponent(countryCode)}/schools/export-csv-schools/`;
 
@@ -105,6 +75,13 @@ export const fetchDublicateSchoolPopupDataFx = createRequestFx(
 );
 
 export const fetchGlobalStatsFx = createRequestFx(
+  async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
+    url: `api/statistics/global-stat/${query ?? ''}`,
+    signal: controller?.getSignal()
+  })
+);
+
+export const fetchEntityGlobalStatsFx = createRequestFx(
   async ({ query = '' }, controller?: Controller): Promise<EntitiesGlobalStatsResponse> => request({
     url: `api/v2/entities/global-stat/${query ?? ''}`,
     signal: controller?.getSignal()
@@ -137,6 +114,19 @@ export const fetchCountryLiveLayerInfo = createEffect(
 );
 
 export const fetchConnectivityLayerFx = createEffect(
+  async ({
+    query
+  }: {
+    query: string;
+  },
+  ): Promise<ConnectivityStat> => {
+    return fetchLayerInfoFx(
+      `api/statistics/connectivity/${query}`
+    ) as Promise<ConnectivityStat>
+  }
+);
+
+export const fetchEntitiesConnectivityStatsFx = createEffect(
   async ({
     query
   }: {

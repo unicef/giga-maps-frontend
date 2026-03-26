@@ -22,7 +22,7 @@ export const SearchResultWrapper = styled.div`
     top: 100%;
     max-height: 80vh;
     border: 1px solid ${props => props.theme.titleBlue};
-    border-radius: 0 0 0.5rem 0.5rem;
+    border-radius: 0.5rem;
     box-shadow:#212020 0px 14px 40px 0px;
     overflow: hidden;
 
@@ -41,7 +41,7 @@ export const SearchListWrapper = styled.div`
   top: 100%;
   max-height: 80vh;
   border: 1px solid ${props => props.theme.titleBlue};
-  border-radius: 0 0 0.5rem 0.5rem;
+  border-radius: 0.5rem;
   box-shadow:#212020 0px 14px 40px 0px;
   overflow: hidden;
 
@@ -56,19 +56,20 @@ export const SearchResultScroll = styled(Scroll)`
 export const SearchTopHead = styled.span`
   display: flex;
   align-items: center;
-  height: 2rem;
-  padding: 1rem 1rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 1rem;
   background: ${props => props.theme.schoolListBack};
   color: ${props => props.theme.grey60};
   font-size: 0.75rem;
+  border-radius: 0.5rem 0.5rem 0 0;
 `
 export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $justify?: string; $gap?: number; $history?: ReturnType<typeof css> }>`
-   padding: 1rem;
+   padding: 0.875rem 1rem;
    justify-content: ${props => props.$justify ?? 'space-between'};
    align-items: center;
    display: flex;
-   width: calc(100% - 1rem);
-   margin-left: .5rem;
+   width: 100%;
+   margin-left: 0;
       ${props => props.$nested && css`
     padding: 0.5rem;
     padding-left: 1.7rem; 
@@ -87,6 +88,10 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
 
    .type-name {
     display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.125rem;
+    margin-top: 0.125rem;
    }
    .highlight {
     color: var(--primary-blue)
@@ -117,6 +122,7 @@ export const DistictWrapper = styled.div`
 export const LeftItem = styled.h4<{ $recent?: boolean; $bold?: boolean; $highlight?: boolean; $fullWidth?: boolean }>`
   color:  ${props => props.$highlight ? props.theme.titleBlue : props.theme.text};
   font-size: 0.875rem;
+  line-height: 1.25rem;
   position: relative;
   ${props => !props.$fullWidth && css`
     max-width: 8rem;
@@ -153,6 +159,7 @@ color:  ${({ $secondary, $highlight }) => {
     }
   }}; 
 font-size: 0.75rem;
+line-height: 1rem;
 text-transform: capitalize;
   margin-right: 0.25rem;
   max-width: 6rem;
@@ -476,7 +483,7 @@ export const RecentlyViewedIcon = styled(RecentlyViewed) <{ $highlight?: boolean
 `
 
 export const SearchHistoryWrapper = styled.div`
-  margin-left: 1rem;
+  margin-left: 0;
 `
 
 export const SearchHistoryStyle = css`

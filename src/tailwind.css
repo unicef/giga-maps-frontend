@@ -190,3 +190,15 @@
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
 }
+
+@keyframes legend-connectivity-glow {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+
+  to {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}

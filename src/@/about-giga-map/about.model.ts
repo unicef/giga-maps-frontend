@@ -1,7 +1,7 @@
 import { format } from "date-fns"
 import { attach, createEffect, createEvent, createStore, restore, sample } from "effector"
 
-import { fetchConnectivityLayerFx, fetchGlobalStatsFx, normalizeSchoolConnectivityStats, normalizeSchoolGlobalStats } from "~/api/project-connect"
+import { fetchConnectivityLayerFx, fetchGlobalStatsFx } from "~/api/project-connect"
 import { request } from "~/api/request-setup"
 import { ConnectivityStat, GlobalStats } from "~/api/types"
 import { setPayload } from "~/lib/effector-kit"
@@ -43,10 +43,10 @@ export const setActiveNav = createEvent<string>();
 export const $activeNav = restore(setActiveNav, '')
 
 export const $aboutGlobalStats = createStore<GlobalStats | null>(null);
-$aboutGlobalStats.on(fetchGlobalStatsFx.doneData, (_, payload) => normalizeSchoolGlobalStats(payload));
+$aboutGlobalStats.on(fetchGlobalStatsFx.doneData, setPayload);
 
 export const $aboutConnectivityStats = createStore<ConnectivityStat | null>(null);
-$aboutConnectivityStats.on(connectivityStatsFx.doneData, (_, payload) => normalizeSchoolConnectivityStats(payload));
+$aboutConnectivityStats.on(connectivityStatsFx.doneData, setPayload);
 
 export const $aboutUsContent = createStore<AboutType[] | null>(null)
 $aboutUsContent.on(getAboutUsContentFx.doneData, (_, payload) => {

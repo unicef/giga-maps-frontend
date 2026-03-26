@@ -1,25 +1,17 @@
-import { formatNumber } from '~/lib/utils';
-
-import {
-  BarChartWrapper,
-  CustomTooltip,
-  TooltipButton,
-} from '../styles/landing-page-style';
 import { useStore } from 'effector-react';
-import { $lng } from '~/core/i18n/store';
+import { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
+import { $lng } from '~/core/i18n/store';
+import { formatNumber } from '~/lib/utils';
 
 const BarChart = ({
-  type,
-  tooltipAlign,
   total,
   categories,
   categoryColors,
   categoryValues,
 }: {
-  type: string,
-  tooltipAlign: string,
   total: number,
   categories: string[],
   categoryColors: string[],
@@ -27,39 +19,60 @@ const BarChart = ({
 }) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
-  const calculateFlexGrow = (value: number) => {
-    if (value === 0) {
-      return 0
+  const safeCategories = categories ?? [];
+  const segments = safeCategories.reduce<Array<{
+    color?: string;
+    key: string;
+    tooltipLabel: string;
+    widthPercent: number;
+  }>>((acc, category, index) => {
+    const categoryValue = Number(categoryValues[index] ?? 0);
+
+    if (!total || categoryValue <= 0) {
+      return acc;
     }
-    return (value / total).toFixed(2);
-  };
+
+    const widthPercent = (categoryValue / total) * 100;
+    const categoryLabel = category ?? '';
+
+    acc.push({
+      color: categoryColors[index],
+      key: `${categoryLabel || 'category'}-${index}`,
+      tooltipLabel: `${formatNumber(categoryValue, lng)} ${t(categoryLabel)}`,
+      widthPercent,
+    });
+
+    return acc;
+  }, []);
 
   return (
-    <BarChartWrapper>
-      {categories?.map((category, index) => (
-        calculateFlexGrow(categoryValues[index]) !== 0 &&
-        <CustomTooltip
-          align="top-left"
-          autoAlign={category?.length - 1 === index}
-          key={`${category.length}-${index}`}
-          flexgrow={calculateFlexGrow(categoryValues[index])}
-          backgroundcolor={categoryColors[index]}
-          label={
-            type === "schools-connectivity" ?
-              <span dangerouslySetInnerHTML={{ __html: t("format-schools-mapped-with-category-status", { value: `<span data-title="${t('int', { val: categoryValues[index] })}">${formatNumber(categoryValues[index], lng)}</span>`, category: t(category), interpolation: { escapeValue: false } }) }} />
-              : <span dangerouslySetInnerHTML={{ __html: t("schools-with-connection-this-week", { value: `<span data-title="${t('int', { val: categoryValues[index] })}">${formatNumber(categoryValues[index], lng)}</span>`, category: t(category), interpolation: { escapeValue: false } }) }} />
-          }
-        >
-          <TooltipButton
-            className="sb-tooltip-trigger"
-            backgroundcolor={categoryColors[index]}
-            type="button"
-          ></TooltipButton>
-        </CustomTooltip>
-      ))
-      }
-    </BarChartWrapper >
-  )
-}
+    <TooltipProvider>
+      <div className="mt-2 flex h-1 max-w-full overflow-hidden rounded-sm">
+        {segments.map((segment) => (
+          <Tooltip key={segment.key}>
+            <TooltipTrigger asChild>
+              <button
+                aria-label={segment.tooltipLabel}
+                className="block h-full cursor-pointer border-0 p-0"
+                style={{
+                  backgroundColor: segment.color,
+                  width: `${segment.widthPercent}%`,
+                } as CSSProperties}
+                type="button"
+              />
+            </TooltipTrigger>
+            <TooltipContent
+              className="!z-[7000] !max-w-none !whitespace-nowrap !rounded-[2px] !border !border-[#6f6f6f] !bg-[#393939] !px-2 !py-1 !text-[12px] !leading-4 !text-[#f4f4f4] !shadow-none [&_[data-slot=tooltip-arrow]]:!hidden"
+              side="top"
+              sideOffset={8}
+            >
+              {segment.tooltipLabel}
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </div>
+    </TooltipProvider>
+  );
+};
 
 export default BarChart;

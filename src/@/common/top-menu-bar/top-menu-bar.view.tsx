@@ -1,6 +1,7 @@
 import { Close, Menu } from '@carbon/icons-react';
 import { IconButton } from '@carbon/react';
 
+import AtlasLogo from '~/assets/images/atlas-logo.png';
 import { mapOverview } from '~/core/routes';
 
 import { HamburgerWrapper, LogoName, TopMenuWrapper } from './top-menu-bar.style';
@@ -26,7 +27,7 @@ const TopMenuBar = ({
           {isMenuOpen ? <Close size={20} /> : <Menu size={20} />}
         </IconButton>
         <LogoName to={mapOverview}>
-          ATLAS
+          <img alt="Atlas" src={AtlasLogo} />
         </LogoName>
       </TopMenuWrapper>
     </HamburgerWrapper >

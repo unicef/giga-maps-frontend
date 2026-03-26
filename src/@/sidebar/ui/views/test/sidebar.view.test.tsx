@@ -4,7 +4,7 @@ import { createEvent } from 'effector';
 
 import { onChangeMenu, onSelectMainLayer } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapOverview, router } from '~/core/routes';
+import { mapCountry, mapOverview } from '~/core/routes';
 import { testWrapper } from '~/tests/jest-wrapper';
 
 import Sidebar from '../sidebar.view';
@@ -52,22 +52,14 @@ describe('Sidebar', () => {
     expect(window.location.pathname).toBe('/map/country/br')
   })
 
-  test('open tour pop up', async () => {
-    router.navigate('/map');
-    const { getByTestId } = render(testWrapper(<Sidebar />))
-    const tourButton = getByTestId('tour-button')
-    await fireEvent.click(tourButton)
-    expect(window.location.search).toBe('?popover=tour');
-  })
-
   test("Render in mobile view", async () => {
     onChangeMenu(false)
     setMobileView(true)
     const { container } = render(testWrapper(<Sidebar />))
     const sliderButton = container.querySelector('#mobile-view-slider')
     await fireEvent.click(sliderButton as Element)
-    const tourButton = container.querySelector('#tour-button')
-    expect(tourButton).toBeNull();
+    const accessibleButton = container.querySelector('[data-testid=\"accessible-button\"]')
+    expect(accessibleButton).toBeInTheDocument();
   })
 
   test("Render global view", async () => {

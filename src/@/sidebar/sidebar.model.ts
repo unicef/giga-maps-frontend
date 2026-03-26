@@ -3,7 +3,7 @@ import i18next from 'i18next';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
-import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx, normalizeSchoolConnectivityStats } from '~/api/project-connect';
+import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchEntitiesConnectivityStatsFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, EntitiesConnectivityStatsResponse, SchoolStatsType } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
 import { mapOverview, mapSchools, router } from '~/core/routes';
@@ -37,9 +37,9 @@ export const $connectivityBenchMark = restore(changeConnectivityBenchmark, Conne
 export const $isMapTab = createStore(true);
 
 export const $connectivityStatsByEntity = createStore<EntitiesConnectivityStatsResponse>({});
-$connectivityStatsByEntity.on(fetchConnectivityLayerFx.doneData, setPayload);
+$connectivityStatsByEntity.on(fetchEntitiesConnectivityStatsFx.doneData, setPayload);
 export const $connectivityStats = createStore<ConnectivityStat | null>(null);
-$connectivityStats.on(fetchConnectivityLayerFx.doneData, (_, payload) => normalizeSchoolConnectivityStats(payload));
+$connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
 $connectivityStats.on(fetchCountryLiveLayerInfo.doneData, setPayload);
 
 export const $coverageStats = createStore<CoverageStat | null>(null);

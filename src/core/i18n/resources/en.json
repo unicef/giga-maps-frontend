@@ -271,14 +271,6 @@
   "school-location-duplicates": "School location duplicates",
   "school-duplicates": "School duplicates",
   "of": "of",
-  "locations-mapped": "Locations mapped",
-  "connected-schools-title": "Connected Schools",
-  "connected-health-centers-title": "Connected Health centers",
-  "reporting-internet-quality": "Reporting internet quality",
   "estimated": "estimated",
-  "across-no-countries-and-territories": "across {{count}} countries & territories",
-  "health-centers-title": "Health Centers",
-  "health-centers-locations-mapped-tooltip": "Health center locations mapped from currently available datasets.",
-  "health-centers-connectivity-status-tooltip": "Health centers with mapped connectivity status.",
-  "health-centers-reporting-internet-quality-tooltip": "Health centers reporting internet quality."
+  "across-no-countries-and-territories": "across {{count}} countries & territories"
 }

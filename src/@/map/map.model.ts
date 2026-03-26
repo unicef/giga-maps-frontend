@@ -1,6 +1,6 @@
 import { createEvent, createStore, restore } from 'effector';
 
-import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx, normalizeSchoolGlobalStats } from '~/api/project-connect';
+import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchEntityGlobalStatsFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { AdvanceFilterType, EntitiesGlobalStatsResponse, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
@@ -64,9 +64,9 @@ export const $stylePaintData = createStore<StylePaintData>(
   stylePaintData[defaultStyle]
 );
 export const $globalStatsByEntity = createStore<EntitiesGlobalStatsResponse>({});
-$globalStatsByEntity.on(fetchGlobalStatsFx.doneData, setPayload);
+$globalStatsByEntity.on(fetchEntityGlobalStatsFx.doneData, setPayload);
 export const $globalStats = createStore<GlobalStats>(defaultGlobalStats);
-$globalStats.on(fetchGlobalStatsFx.doneData, (_, payload) => normalizeSchoolGlobalStats(payload));
+$globalStats.on(fetchGlobalStatsFx.doneData, setPayload);
 
 export const $pending = createStore<boolean>(false);
 export const $loader = createStore<Marker | null>(null);

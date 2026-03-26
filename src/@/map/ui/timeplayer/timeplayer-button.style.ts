@@ -1,17 +1,5 @@
 import { styled } from "styled-components";
 
-export const TimeplayerWrapper = styled.div`
-    background: ${props => props.theme.main};
-    margin-top:0.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    height:2rem;
-    width:2rem;
-`
-
 export const ShowCurrentYear = styled.div<{ $isMobile: boolean }>`
     color: ${props => props.theme.text};
     position: absolute;

@@ -1,11 +1,10 @@
 import { combine, createEvent, createStore } from 'effector';
 
-import type { EntityType } from '../types/base-entity.type';
-import type { BaseEntity, EntityStatistics } from '../types/base-entity.type';
+import { setPayload } from '~/lib/effector-kit';
+
 import type { EntityConfig } from '../config/entity-config.types';
 import { DEFAULT_ENTITY_REGISTRY } from '../config/entity-registry';
-import { ENTITY_TYPES } from '../types/entity-types';
-import { setPayload } from '~/lib/effector-kit';
+import type { BaseEntity, EntityStatistics, EntityType } from '../types/base-entity.type';
 
 /**
  * Entity system Effector stores.
@@ -58,7 +57,7 @@ $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
 
 /** All registered entity type keys */
 export const $registeredEntityTypes = $entityRegistry.map(
-  registry => Object.keys(registry) as string[]
+  registry => Object.keys(registry)
 );
 
 /** Get config for a specific entity type (use with combine or .map) */
@@ -156,5 +155,5 @@ export const $activeEntityConfigs = combine(
   $activeEntityTypes,
   (registry, activeTypes) => activeTypes
     .map(type => registry[type])
-    .filter(Boolean) as EntityConfig[]
+    .filter((config): config is EntityConfig => Boolean(config))
 );
