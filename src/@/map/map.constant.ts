@@ -50,7 +50,7 @@ export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity
 // ➔
 // ➢
 // Symbol used for plus sign markers on the map
-export const PLUS_SIGN_SYMBOL = '✚';
+export const PLUS_SIGN_SYMBOL = '■';
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
