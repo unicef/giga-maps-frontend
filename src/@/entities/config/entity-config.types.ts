@@ -35,8 +35,6 @@ export interface EntityLegendConfig {
   metricTitle: string;
   statusTitle: string;
   tabLabel: string;
-  useIconForRows?: boolean;
-  useIconForTab?: boolean;
 }
 
 export interface EntitySidebarConfig {
@@ -71,7 +69,7 @@ export interface EntityConfig {
   type: EntityType;
   /** Human-readable display name */
   displayName: string;
-  /** Carbon Design System icon name */
+  /** Optional icon metadata kept for future use */
   icon: string;
 
   /** Map marker configuration */

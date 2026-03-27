@@ -4,15 +4,12 @@ import type { CSSProperties } from 'react';
 import { $entityConfigMap } from '~/@/entities/models/entity.model';
 import { cn } from '~/lib/cn';
 
-import { getEntityIconComponent } from './entity-icon-map';
-
 type EntityLegendIndicatorProps = {
   className?: string;
   color: string;
   entityType: string;
   glowColor?: string;
   size?: number;
-  useIcon?: boolean;
 };
 
 const EntityLegendIndicator = ({
@@ -21,12 +18,10 @@ const EntityLegendIndicator = ({
   entityType,
   glowColor,
   size = 8,
-  useIcon = false,
 }: EntityLegendIndicatorProps) => {
   const entityConfigMap = useStore($entityConfigMap);
   const config = entityConfigMap[entityType];
   const shape = config?.legendShape ?? 'circle';
-  const Icon = useIcon ? getEntityIconComponent(config?.icon) : undefined;
   const outerSize = glowColor ? size + 4 : size;
   const containerSize = glowColor ? outerSize : size;
 
@@ -36,10 +31,6 @@ const EntityLegendIndicator = ({
   } as CSSProperties;
 
   const renderGlyph = (glyphSize: number, glyphColor: string) => {
-    if (Icon) {
-      return <Icon className="!block" size={glyphSize} style={{ color: glyphColor }} />;
-    }
-
     return (
       <span
         className={cn('!block !shrink-0', shape === 'square' ? '!rounded-none' : '!rounded-full')}

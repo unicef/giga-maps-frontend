@@ -25,8 +25,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       metricTitle: 'Average download speed',
       statusTitle: 'Connectivity status',
       tabLabel: 'Schools',
-      useIconForRows: false,
-      useIconForTab: false,
     },
     sidebar: {
       badge: 'GigaMaps',
@@ -81,8 +79,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       metricTitle: 'Average download speed',
       statusTitle: 'Connectivity status',
       tabLabel: 'Health centers',
-      useIconForRows: false,
-      useIconForTab: false,
     },
     markerSymbol: '?',
     sidebar: {

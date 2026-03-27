@@ -67,7 +67,6 @@ export default function EntityTypeSelector() {
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
               size={8}
-              useIcon={false}
             />
             {config.displayName}
           </Button>
