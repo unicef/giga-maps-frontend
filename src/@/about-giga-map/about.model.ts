@@ -5,14 +5,14 @@ import { fetchConnectivityLayerFx, fetchGlobalStatsFx } from "~/api/project-conn
 import { request } from "~/api/request-setup"
 import { ConnectivityStat, GlobalStats } from "~/api/types"
 import { setPayload } from "~/lib/effector-kit"
-import { Json } from "~/lib/request/types"
 import { formatNumber } from "~/lib/utils"
 
-import { $notification } from "../common/Toast/toast.model"
 import { stylePaintData } from "../map/map.constant"
-import { defaultInterval } from "../sidebar/sidebar.constant"
+import { defaultInterval, Layers } from "../sidebar/sidebar.constant"
 import { ConnectivityDistributionNames, ConnectivityStatusNames } from "../sidebar/ui/global-and-country-view-components/container/layer-view.constant"
 import { AboutType } from "./about.type"
+import { Json } from "~/lib/request/types"
+import { $notification } from "../common/Toast/toast.model"
 
 export const getAboutUsContentFx = createEffect(() => {
   return request({
@@ -33,9 +33,9 @@ export const connectivityStatsFx = attach({
   mapParams: () => {
     const startDate = format(defaultInterval().start, 'dd-MM-yyyy');
     const endDate = format(defaultInterval().end, 'dd-MM-yyyy');
-    const params = { start_date: startDate, end_date: endDate, benchmark: 'global', is_weekly: "true" };
+    const params = { startDate, endDate, layer: Layers.download, is_weekly: "true" };
     const query = '?' + new URLSearchParams(params).toString();
-    return { query };
+    return { query, id: null };
   },
 })
 
