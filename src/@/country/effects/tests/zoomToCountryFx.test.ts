@@ -9,6 +9,7 @@ describe('zoomToCountryFx', () => {
     map = {
       flyTo: jest.fn(),
       fitBounds: jest.fn(),
+      getZoom: jest.fn(),
     }
   })
 
@@ -19,12 +20,25 @@ describe('zoomToCountryFx', () => {
 
   test('should zoom to school focus when provided', async () => {
     const schoolFocusLatLng = [10, 20]
+    map.getZoom.mockReturnValue(7)
     const result = await zoomToCountryFx({ map, schoolFocusLatLng, levelsCode: ['US'] } as any)
     expect(map.flyTo).toHaveBeenCalledWith({
       center: schoolFocusLatLng,
       zoom: 10,
+      offset: [0, -180],
     })
     expect(result).toBe(schoolFocusLatLng.toString())
+  })
+
+  test('should keep current zoom when already above school focus zoom', async () => {
+    const schoolFocusLatLng = [10, 20]
+    map.getZoom.mockReturnValue(13)
+    await zoomToCountryFx({ map, schoolFocusLatLng, levelsCode: ['US'] } as any)
+    expect(map.flyTo).toHaveBeenCalledWith({
+      center: schoolFocusLatLng,
+      zoom: 13,
+      offset: [0, -180],
+    })
   })
 
   test('should return zoomedCountryCode when it matches adminCode', async () => {
