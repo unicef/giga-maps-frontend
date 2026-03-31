@@ -76,7 +76,7 @@ const LandingPage = () => {
                 </SchoolNumberWrapper>
                 <MappedInfoWrapper>
                   <p>
-                    {t('across-no-countries', { count: globalstats?.no_of_countries ?? 0 })}
+                    {t('across-no-countries-and-territories', { count: globalstats?.no_of_countries ?? 0 })}
                   </p>
                 </MappedInfoWrapper>
               </>}
