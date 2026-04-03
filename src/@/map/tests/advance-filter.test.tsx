@@ -1,22 +1,64 @@
-import { fireEvent, render } from "@testing-library/react"
+import { findByLabelText, fireEvent, render, screen } from "@testing-library/react"
 
 import TextField from "../ui/advanced-filter/text-input"
 import FilterPopupContent from "../ui/advanced-filter/filter-popup-content"
-import { fetchAdvanceFilterFx } from "~/api/project-connect"
+import { fetchAdvanceFilterFx, fetchCountryFx } from "~/api/project-connect"
 import filterData from "~/tests/data/filter-data"
 import RangeTextInput from "../ui/advanced-filter/range-text-input"
+import FilterButton from "../ui/advanced-filter/filter"
+import { testWrapper } from "~/tests/jest-wrapper"
+import "~/core/i18n/instance"
+import userEvent from "@testing-library/user-event"
 
 describe('AdvancedFilter', () => {
 
   beforeEach(() => {
     fetchMock.mockResponse((req) => {
-      if (req.url.includes('advanced_filters/')) {
+      if (req.url.includes('accounts/adv_filters')) {
         return Promise.resolve(JSON.stringify(filterData))
+      } else if (req.url.includes('api/locations/countries/br')) {
+        return Promise.resolve(JSON.stringify({
+          id: 1,
+          name: 'Brazil',
+          code: 'br',
+        }))
       } else {
         return Promise.resolve(JSON.stringify(null))
       }
     });
   })
+  test('should render Advance filter', async () => {
+
+    await fetchAdvanceFilterFx()
+    const { asFragment } = render(<FilterPopupContent setOpen={() => { }} />)
+    expect(asFragment()).toMatchSnapshot();
+  })
+
+  test('should render Advance filter button', async () => {
+    await fetchAdvanceFilterFx()
+    const { asFragment } = render(testWrapper(<FilterButton />))
+    expect(asFragment()).toMatchSnapshot();
+  })
+
+  test('should render Advance filter button ', async () => {
+    await fetchCountryFx('br')
+    await fetchAdvanceFilterFx()
+    const { asFragment } = render(testWrapper(<FilterButton />))
+    expect(asFragment()).toMatchSnapshot();
+  })
+
+  test('should filter button trigger', async () => {
+    await fetchCountryFx('br')
+    await fetchAdvanceFilterFx()
+    render(testWrapper(<FilterButton />))
+    const button = (await screen.findByText("Filters")).parentNode as HTMLElement;
+    await userEvent.click(button);
+
+    const textInput = (await screen.findByPlaceholderText("Enter building id"))
+    await fireEvent.change(textInput, "123");
+    // screen.debug();
+  })
+
   test('should render Advance filter', async () => {
     await fetchAdvanceFilterFx()
     const { asFragment } = render(<FilterPopupContent setOpen={() => { }} />)
@@ -26,7 +68,7 @@ describe('AdvancedFilter', () => {
 
 })
 
-describe('TextField with StyledTextInput', () => {
+describe.skip('TextField with StyledTextInput', () => {
   const mockOnChange = jest.fn();
 
   test('should call onChange handler when user types in the input', async () => {

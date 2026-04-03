@@ -52,6 +52,15 @@ export const fetchSchoolPopupDataFx = createRequestFx(
     })
 );
 
+// Fetch dublicate school info by IDs
+export const fetchDublicateSchoolPopupDataFx = createRequestFx(
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+    request({
+      url: `${url}${query}`,
+      signal: controller?.getSignal()
+    })
+);
+
 export const fetchGlobalStatsFx = createRequestFx(
   async ({ query = '' }, controller?: Controller): Promise<GlobalStats> => request({
     url: `api/statistics/global-stat/${query ?? ''}`,
@@ -100,15 +109,6 @@ export const fetchConnectivityLayerFx = createEffect(
 export const fetchCountryStaticLayerInfo = createEffect(
   async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
     fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`)
-);
-
-export const fetchCoverageLayerFx = createRequestFx(
-  async ({ query }: { query: string },
-  ): Promise<CoverageStat> => {
-    return fetchLayerInfoFx(
-      `api/statistics/coverage/${query}`,
-    )
-  }
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(

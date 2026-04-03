@@ -12,6 +12,7 @@ import LiveAverage from '../../global-and-country-view-components/connectivity-l
 import { SchoolInformationWrapper } from '../styles/school-view-style';
 import { SchoolInformation } from './school-information.view';
 import { HistoryGraphAccordian } from '../../common-components/history-graph';
+import CommonUIOnlySchoolConnectivityLayer from './common-ui-only-school-connectivity-layer';
 
 const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   const isLoading = useStore($isLoadingSchoolView);
@@ -20,6 +21,11 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   const schoolDetails = SchoolStatsTypes?.find((info) => info.id === schoolId);
   const stylePaintData = useStore($stylePaintData);
   const { value, color } = getLiveSchoolDetails({ schoolDetails, stylePaintData })
+
+  if (!schoolDetails?.is_rt_connected && schoolId) {
+    return <CommonUIOnlySchoolConnectivityLayer schoolId={schoolId} />
+  }
+
   return (
     <div>
       <Div $margin='0 1rem 0rem 1rem'>

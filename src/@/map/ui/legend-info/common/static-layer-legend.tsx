@@ -13,22 +13,29 @@ import {
   $layerUtils,
   $connectivityBenchMark,
   $benchmarkNamesAllLayers,
+  $coverage5g4g,
+  $coverage3g2g,
+  $coverageNoCoverage,
+  $coverageUnknown,
 } from '~/@/sidebar/sidebar.model';
 import { CheckBoxContainer, CircleWrapper, InnerCircle, LiveLayerBenchmark } from '../legend-button.style';
 import { formatNumber } from '~/lib/utils';
 import { Div, TooltipButton } from "~/@/common/style/styled-component-style";
 import { ConnectivityBenchMarks, ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
 import { $country, $countryConnectivityNames } from "~/@/country/country.model";
+import { $lng } from "~/core/i18n/store";
+import { useTranslation } from "react-i18next";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
 const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+  const lng = useStore($lng);
+  const { t } = useTranslation();
   const countryConnectivityNames = useStore($countryConnectivityNames);
   const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
   const { currentLayerLegends: legends, selectedLayerData, selectedLayerId, coverageLayerId } = useStore($layerUtils);
-  const isCoverage = selectedLayerId === coverageLayerId;
   const coverageStats: any = useStore($coverageStats);
   const connectivityBenchMark = useStore($connectivityBenchMark)
   const countryObj = useStore($country);
@@ -36,6 +43,12 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
+
+  // Get coverage filter values from store (synced with URL params)
+  const coverage5g4g = useStore($coverage5g4g);
+  const coverage3g2g = useStore($coverage3g2g);
+  const coverageNoCoverage = useStore($coverageNoCoverage);
+  const coverageUnknown = useStore($coverageUnknown);
 
   const handleStaticLayerToggle = (key: string) => {
     const newStatus = !staticLayerCheckedStatus[key];
@@ -63,14 +76,15 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
     }
   };
 
+  // Sync local checkbox state with store values (including URL params on first load)
   useEffect(() => {
     setStaticLayerCheckedStatus({
-      'good': true,
-      'moderate': true,
-      'bad': true,
-      'unknown': true,
+      'good': coverage5g4g,
+      'moderate': coverage3g2g,
+      'bad': coverageNoCoverage,
+      'unknown': coverageUnknown,
     });
-  }, []);
+  }, [coverage5g4g, coverage3g2g, coverageNoCoverage, coverageUnknown]);
 
   return (<div className='school-status'>
     <h3>{selectedLayerData?.name}</h3>
@@ -93,8 +107,8 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
         const toolTiplabel = logicLabel;
         return (
           (coverageStats?.connected_schools &&
-            (isCoverage ? CoverageKeyMapping[key] : label) in coverageStats.connected_schools &&
-            coverageStats.connected_schools[isCoverage ? CoverageKeyMapping[key] : label] > 0)
+            (label) in coverageStats.connected_schools &&
+            coverageStats.connected_schools[label] > 0)
             ? <Div key={key}>
               <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
                 <button>
@@ -118,7 +132,7 @@ const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean
                       </div>
                     </div>
                     {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value'>{formatNumber(coverageStats?.connected_schools[isCoverage ? CoverageKeyMapping[key] : label])}</div>
+                      <div className='legend-value' data-title={t('int', { val: coverageStats?.connected_schools[label] })}>{formatNumber(coverageStats?.connected_schools[label], lng)}</div>
                     )}
                   </div>
                 </button>

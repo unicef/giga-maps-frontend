@@ -6,21 +6,26 @@ import { useStore } from 'effector-react';
 import { useCallback } from 'react'
 
 import { CustomIcon } from '~/@/common/style/styled-component-style';
-import { $layerUtils, $schoolStatusSelectedLayer, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection } from '~/@/sidebar/sidebar.model';
+import { $layerUtils, $schoolStatusSelectedLayer, checkConnectivityBenchmark, onSelectMainLayer, onSelectSchoolStatusLayer, resetCoverageFilterSelection, selectAllStaticLegendsSelection } from '~/@/sidebar/sidebar.model';
 
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
 import GigaLayerButton from './giga-layer-button';
 import { GigaLayerText, SidePanelLayerWrapper } from './styles/giga-layer.style';
+import { useTranslation } from 'react-i18next';
 
 
 const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
-  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, coverageLayerData, staticPopupActiveLayer, activeLayerByCountryCode } = useStore($layerUtils);
+  const { t } = useTranslation();
+  const { currentDefaultLayerId, selectedLayerId, staticLayers, currentLayerTypeUtils, staticPopupActiveLayer, activeLayerByCountryCode } = useStore($layerUtils);
   const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
   const { isLive, isSchoolStatus } = currentLayerTypeUtils;
   const updateLayer = useCallback((prevSelectedId: number | null) => {
     let selectedId = null;
     if (selectedLayerId !== prevSelectedId) {
       selectedId = prevSelectedId
+      if (selectedId) {
+        checkConnectivityBenchmark(selectedId);
+      }
     }
     onSelectMainLayer(selectedId);
   }, [selectedLayerId]);
@@ -34,10 +39,10 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
   }, [selectedLayerId, schoolStatusSelectedLayer]);
   return (
     <>
-      {popup && <GigaLayerText>Giga Layers</GigaLayerText>}
+      {popup && <GigaLayerText>{t('giga-layers')}</GigaLayerText>}
       <SidePanelLayerWrapper $wrap={popup}>
         <GigaLayerButton
-          label="School status"
+          label={t("school-status")}
           popup={popup}
           isActive={isSchoolStatus}
           icon={<Account className='layer-icon' />}
@@ -46,7 +51,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           }}
         />
         <GigaLayerButton
-          label="Real-time Connectivity"
+          label={t("real-time-connectivity")}
           disabled={!(activeLayerByCountryCode[String(currentDefaultLayerId)])}
           popup={popup}
           isActive={isLive}
@@ -60,7 +65,7 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           }}
         />
         <GigaLayerButton
-          label={staticPopupActiveLayer?.name ?? "Cellular Coverage"}
+          label={staticPopupActiveLayer?.name ?? t("cellular-coverage")}
           popup={popup}
           disabled={!staticPopupActiveLayer || !activeLayerByCountryCode[String(staticPopupActiveLayer?.id)]}
           isActive={staticPopupActiveLayer?.id === selectedLayerId}
@@ -80,10 +85,8 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
           isActive={layer.id === selectedLayerId}
           icon={<CustomIcon dangerouslySetInnerHTML={{ __html: layer.icon }} />}
           onClick={() => {
-            if (coverageLayerData) {
-              updateLayer(layer.id);
-              resetCoverageFilterSelection()
-            }
+            updateLayer(layer.id);
+            resetCoverageFilterSelection()
           }}
         />))}
       </SidePanelLayerWrapper>

@@ -8,7 +8,7 @@ export const PropmptWrapper = styled.div<{ $style?: string; }>`
   ${props => props.$style}
 `
 export type PromptActionableType = { $style?: string, onActionDone?: () => void } & Partial<ActionableNotificationProps>
-export default function PromptActionable({ $style, ...otherProps }: PromptActionableType) {
+export default function PromptActionable({ $style, onActionButtonClick, onActionDone, ...otherProps }: PromptActionableType) {
   return (
     <PropmptWrapper $style={$style}>
       <ActionableNotification
@@ -21,8 +21,8 @@ export default function PromptActionable({ $style, ...otherProps }: PromptAction
         actionButtonLabel="Yes"
         {...otherProps}
         onActionButtonClick={() => {
-          void otherProps?.onActionButtonClick?.()
-          void otherProps?.onActionDone?.()
+          onActionButtonClick?.()
+          onActionDone?.()
         }}
       // onActionButtonClick={() => void deleteFilterData(apiKeyDeleteId)}
       // onClose={() => setApiKeyDeleteId(null)}

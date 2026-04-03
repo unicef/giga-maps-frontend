@@ -199,7 +199,6 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             <button
               aria-labelledby="tooltip-:r1g:"
               class="cds--btn--icon-only cds--btn cds--btn--secondary"
-              tooltiptext="Search"
               type="submit"
             >
               <svg

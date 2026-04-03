@@ -3,13 +3,20 @@ import { Expression } from 'mapbox-gl';
 import { GlobalStats, SchoolStatsType } from '~/api/types';
 import { getLocalStorage } from '~/lib/utils';
 
-import { Center, Style, StylePaintData, Zoom } from './map.types';
+import { Center, Style, StylePaintData } from './map.types';
 
-export const defaultZoom: Zoom = 2;
+export const defaultZoom = 2;
+export const maxZoom = 24;
 export const defaultCenter: Center = [-40, -14];
 export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
 export const MAP_SAMPLING = 300000;
+export const SCHOOL_LAYER_ID = 10001
+export const DEFAULT_SOURCE = 'map-data-source';
+export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
+export const COVERAGE_URL = 'api/locations/schools/tiles';
+export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
+export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
@@ -50,7 +57,11 @@ export const Colors = {
   MAGENTA_DARK: "#aa5aa1",
   BRIGHT_ORANGE: '#f5793a',
   SOFT_BLUE: "#85c0f9",
-  TRANSPARENT: 'transparent'
+  TRANSPARENT: 'transparent',
+  ACCESSIBILITY_DOTS_GREEN: '#0CFC92',
+  ACCESSIBILITY_DOTS_YELLOW: '#FBFF05',
+  ACCESSIBILITY_DOTS_MAGENTA: '#E13DF0',
+  ACCESSIBILITY_DOTS_GRAY: '#ABABAB',
 }
 
 const mapCountryOpacity = {
@@ -112,12 +123,12 @@ export let stylePaintData: { [style in Style]: StylePaintData } = {
   },
   accessible: {
     ...commonThemeStyle,
-    connected: Colors.DARK_GREEN,
-    good: Colors.DARK_GREEN,
-    moderate: Colors.YELLOW,
-    bad: Colors.ORANGE_RED,
-    not_connected: Colors.ORANGE_RED,
-    unknown: Colors.PINK,
+    connected: Colors.ACCESSIBILITY_DOTS_GREEN,
+    good: Colors.ACCESSIBILITY_DOTS_GREEN,
+    moderate: Colors.ACCESSIBILITY_DOTS_YELLOW,
+    bad: Colors.ACCESSIBILITY_DOTS_MAGENTA,
+    not_connected: Colors.ACCESSIBILITY_DOTS_MAGENTA,
+    unknown: Colors.ACCESSIBILITY_DOTS_GRAY,
   },
 };
 
@@ -130,7 +141,7 @@ export const getDefaultCountryOpacity = (
 ): Expression => [
     'case',
     ['boolean', ['feature-state', 'hover'], false],
-    mapCountryOpacity.hover,
+    mapCountryOpacity.active,
     mapCountryOpacity.active,
   ];
 
@@ -183,6 +194,10 @@ export const defaultConnectivityStats = {
 export const defaultSchoolStatsTypes: SchoolStatsType[] = [
 ];
 
+export const extraMapPaintData = {
+  staticWithConnectivityStatusOpacity: .65,
+}
+
 export const mapPaintData = {
   connectivityStatus: {
     "circle-radius": [
@@ -217,7 +232,7 @@ export const mapPaintData = {
       // circle data push base on color scheme
 
     ],
-    "circle-opacity": 0.65,
+    "circle-opacity": 1,
   },
   connectivity: {
     "circle-radius": [
@@ -267,7 +282,6 @@ export const matchConnectivityCase = {
 }
 
 export const defaultGigaLayers = {
-  schoolId: 0, // require for on/off
   layerId: 0 // require for on/off
 }
 export const animateCircleConfig = {
@@ -277,5 +291,106 @@ export const animateCircleConfig = {
   startRadiusPortion: 2,
   maxRadius: 12,
   opacityMax: 1,
-  opacityMin: 0.2
+  opacityMin: 0.2,
+  zoomDivisible: []
 }
+
+export const filterListMapping = [
+  'filterList.*.description',
+  'filterList.*.name',
+  'filterList.*.options.choices.*.label',
+  'filterList.*.options.placeholder',
+  // 'filterList.*.options.active_range.min_place_holder',
+  // 'filterList.*.options.active_range.max_place_holder',
+]
+
+export const CountryPaintData = {
+  "lk": {
+    connectivityStatus: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.1,
+        2, 0.5,
+        4, 1,
+        6, 1.4,
+        8, 1.8,
+        10, 4
+      ]
+    },
+    coverage: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.2,
+        2, 0.85,
+        4, 1.275,
+        5, 1.66,
+        8, 4,
+        10, 5.32
+      ]
+    },
+    connectivity: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.3,
+        2, 0.85,
+        4, 1.275,
+        8, 4,
+        10, 5.32
+      ],
+    },
+    animatedCircle: {
+      zoomDivisible: [
+        [0, 2.9],
+        [2, 2.5],
+        [4, 2.2],
+        [6, 2],
+        [8, 1.2]
+      ] as [number, number][]
+    }
+  },
+  "uz": {
+    connectivityStatus: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.1,
+        2, 0.5,
+        4, 1,
+        6, 1.4,
+        8, 1.8,
+        10, 4
+      ]
+    },
+    coverage: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.2,
+        2, 0.85,
+        4, 1.275,
+        5, 1.66,
+        8, 4,
+        10, 5.32
+      ]
+    },
+    connectivity: {
+      "circle-radius": [
+        "interpolate", ["linear"], ["zoom"],
+        0, 0.3,
+        2, 0.85,
+        4, 1.275,
+        8, 4,
+        10, 5.32
+      ],
+    },
+    animatedCircle: {
+      zoomDivisible: [
+        [0, 2.9],
+        [2, 2.5],
+        [4, 2.2],
+        [6, 2],
+        [8, 1.2]
+      ] as [number, number][]
+    }
+  }
+} as const;
+
+export const MaxAllowedDublicateSchoolIds = 500;

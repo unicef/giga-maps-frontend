@@ -21,7 +21,7 @@ const handleLoginRedirect = async (msalInstance: PublicClientApplication) => {
       msalInstance.setActiveAccount(resp.account);
     } else {
       // need to call getAccount here?
-      const currentAccounts = msalInstance.getAllAccounts();
+      const currentAccounts = msalInstance?.getAllAccounts();
       const activeAccount = currentAccounts[0];
       msalInstance.setActiveAccount(activeAccount);
     }
@@ -36,8 +36,8 @@ const acquireAuthToken = async (msalInstance: PublicClientApplication) => {
   let authToken = null;
   try {
     const accessTokenResponse = await msalInstance
-      ?.acquireTokenSilent(accessTokenRequest(account))
-    authToken = accessTokenResponse.accessToken;
+      ?.acquireTokenSilent?.(accessTokenRequest(account))
+    authToken = accessTokenResponse?.accessToken;
 
   } catch (e) {
     console.log(e);
@@ -48,7 +48,7 @@ const acquireAuthToken = async (msalInstance: PublicClientApplication) => {
 
 const setAccountListener = async (msalInstance: PublicClientApplication) => {
   msalInstance.addEventCallback((event: EventMessage) => {
-    console.log(event, 'listeners');
+    // console.log(event, 'listeners');
     if (
       (event.eventType === EventType.LOGIN_SUCCESS ||
         event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS) && event.payload

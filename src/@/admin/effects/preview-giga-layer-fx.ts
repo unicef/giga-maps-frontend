@@ -1,8 +1,8 @@
 import { createEffect } from "effector";
 import { Map } from "mapbox-gl";
 
-import { LayerDataProps, stylePaintData } from "~/@/map/map.constant";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, defaultSource, deleteSourceAndLayers } from "~/@/map/utils";
+import { DEFAULT_SOURCE, LayerDataProps, stylePaintData } from "~/@/map/map.constant";
+import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, deleteSourceAndLayers } from "~/@/map/utils";
 import { Layers, SCHOOL_STATUS_LAYER } from "~/@/sidebar/sidebar.constant";
 
 import { DataLayer, PreviewDataType } from "../types/giga-layer.type";
@@ -32,7 +32,7 @@ const getSchoolsGeoJson = (data: PreviewDataType['map']) => {
 }
 
 export const plotMapData = ({ map, mapData, currentLayerItem }: { map: Map; mapData: PreviewDataType['map'], currentLayerItem: DataLayer }) => {
-  if (checkSourceAvailable(map, defaultSource)) return null;
+  if (checkSourceAvailable(map, DEFAULT_SOURCE)) return null;
   createSchoolSource({ map, schoolData: getSchoolsGeoJson(mapData) });
   const isLive = !!isLiveLayer(currentLayerItem.type);
 
@@ -69,6 +69,6 @@ export const previewDataLayerFx = createEffect(({ map, mapData, currentLayerItem
 
 export const clearAdminMapData = createEffect(({ map }: { map: Map }) => {
   clearTimeout(adminAnimateCircleHandler.requestId);
-  deleteSourceAndLayers({ map, sourceId: defaultSource });
+  deleteSourceAndLayers({ map, sourceId: DEFAULT_SOURCE });
   changeAdminMap(null);
 });

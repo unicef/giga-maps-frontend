@@ -1,3 +1,5 @@
+import { ActiveFilterListType } from "~/api/types"
+
 export interface FilterListType {
   id: number
   code: string
@@ -12,8 +14,24 @@ export interface FilterListType {
   active_countries_list: number[]
 }
 
+export interface FilterListWithOptionsTypes
+  extends Omit<
+    FilterListType,
+    'code' | 'status' | 'published_by' | 'active_countries_list'
+  > {
+  options: FilterOptionsField & Omit<ActiveFilterListType, 'advance_filter_id'>;
+}
+
+export interface ColumnDBChoicesType {
+  values: {
+    label: string
+    value: string
+  }[]
+}
+
 export interface FilterOptionsField {
   live_choices?: boolean
+  group_choices?: boolean
   choices?: { label: string; value: string }[]
   placeholder?: string
   range_auto_compute?: boolean
@@ -56,3 +74,7 @@ export enum FilterStatusType {
   PUBLISHED = 'PUBLISHED',
   DISABLED = 'DISABLED'
 }
+
+export type FiltersDefaultValueType = {
+  active_filters_list: ActiveFilterListType[]
+};

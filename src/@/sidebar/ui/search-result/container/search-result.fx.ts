@@ -34,14 +34,40 @@ export const fetchSchoolListFx = createRequestFx(
 )
 
 export const getSearchResultsFx = createRequestFx(
-  async ({ query, limit = SEARCH_SCHOOL_RESULT_SIZE }: { query: string; limit?: number; }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
+  async ({
+    query,
+    limit = SEARCH_SCHOOL_RESULT_SIZE,
+    countryId,
+    page = 0,
+    excludeCountryId = false
+  }: {
+    query: string;
+    page?: number;
+    limit?: number;
+    countryId?: number;
+    excludeCountryId?: boolean;
+  }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
+    const splitQuery = query.split(" ");
+    if (query && splitQuery.length > 1) {
+      query = `"${query}"`;
+    }
 
-    if (query && query.split(" ").length > 1) {
-      query = `"${query}"`
+    const selectFields = `fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name`;
+    const orderingFields = `ordering=-row_score,country_name,name,admin1_name,admin2_name`;
+    let searchFields = `&search_fields=name,external_id,country_name`;
+    if (splitQuery.some(word => word.length >= 10)) {
+      searchFields += `,giga_id_school`;
+    }
+    let countryFilter = '';
+    if (excludeCountryId && countryId) {
+      countryFilter = `&country_id__notexact=${countryId}`;
+    } else if (countryId) {
+      countryFilter = `&country_id__exact=${countryId}`;
     }
 
     return request({
-      url: `api/locations/gsearch/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,giga_id_school,external_id&ordering=country_name,admin1_name,admin2_name,name&page=0&page_size=${limit}&q=${query}*&search_fields=name,giga_id_school,external_id`,
+      url: `api/locations/gsearch/?${selectFields}&${orderingFields}&page=${page}&page_size=${limit}&q=${query}*${searchFields}${countryFilter}`,
       signal: controller?.getSignal(),
     })
-  });
+  }
+);

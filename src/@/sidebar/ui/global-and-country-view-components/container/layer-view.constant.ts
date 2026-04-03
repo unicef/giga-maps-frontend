@@ -15,11 +15,11 @@ export const LayerConnectivityUnit = {
 
 export const LayerDistributionUnit = [ConnectivityDistribution.good, ConnectivityDistribution.moderate, ConnectivityDistribution.bad, ConnectivityDistribution.unknown]
 export const ConnectivityDistributionNames = {
-  [ConnectivityDistribution.good]: "Good",
-  [ConnectivityDistribution.moderate]: "Moderate",
-  [ConnectivityDistribution.noInternet]: "Bad",
-  [ConnectivityDistribution.bad]: "Bad",
-  [ConnectivityDistribution.unknown]: "Unknown",
+  [ConnectivityDistribution.good]: "good",
+  [ConnectivityDistribution.moderate]: "moderate",
+  [ConnectivityDistribution.noInternet]: "bad",
+  [ConnectivityDistribution.bad]: "bad",
+  [ConnectivityDistribution.unknown]: "unknown",
 } as Record<string, string>
 
 export const ConnectivityColorNames = {
@@ -30,9 +30,9 @@ export const ConnectivityColorNames = {
 }
 
 export const ConnectivityStatusNames = {
-  [ConnectivityStatusDistribution.connected]: "Connected",
-  [ConnectivityStatusDistribution.notConnected]: "Not connected",
-  [ConnectivityStatusDistribution.unknown]: "Unknown",
+  [ConnectivityStatusDistribution.connected]: "connected",
+  [ConnectivityStatusDistribution.notConnected]: "not-connected",
+  [ConnectivityStatusDistribution.unknown]: "unknown",
 } as Record<string, string>
 
 export const ConnectivityStatusColorNames = {

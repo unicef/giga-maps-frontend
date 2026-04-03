@@ -11,8 +11,9 @@ import { $country, $countrySearchParams } from "~/@/country/country.model";
 import RangeTextInput from './range-text-input';
 import { router } from "~/core/routes";
 import { $isMobile } from "~/core/media-query";
+import { useTranslation } from "react-i18next";
 
-const components = {
+export const components = {
   'DROPDOWN': SingleDropdown,
   'DROPDOWN_MULTISELECT': MultiSelectDropdown,
   'RANGE': RangeTextInput,
@@ -22,6 +23,7 @@ const components = {
 
 
 const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
+  const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
   const isMobile = useStore($isMobile);
   const advanceFilterList = useStore($advanceFilterList);
@@ -32,8 +34,13 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   }>>({})
   const country = useStore($country);
 
-  const onChange = (key: string, value: string) => {
-    setSelectedFields({ ...selectedFields, [key]: value })
+  // multiple key value pair
+  const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
+    setSelectedFields({
+      ...selectedFields,
+      [key]: value,
+      ...multiKeyValues
+    })
   }
 
   useEffect(() => {
@@ -43,7 +50,9 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     }>;
     advanceFilterList?.forEach(item => {
       const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
-      const field = urlFieldList[item.column_configuration.name];
+      const field = urlFieldList[itemKey];
+      const extraItemKey = `ignore_${itemKey}`;
+      const extraField = urlFieldList[extraItemKey];
       if (field) {
         const isRange = field.filter.includes('range');
         const isNone = field.filter.includes('none');
@@ -54,6 +63,9 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       } else {
         selectedFields[`${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
+      if (extraField) {
+        selectedFields[`${extraItemKey}`] = extraField.value
+      }
     })
     setSelectedFields(selectedFields)
     setIsReady(true)
@@ -61,31 +73,55 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
 
   const onApply = async (e: MouseEvent) => {
     e.preventDefault();
-    const params = new URLSearchParams();
+    const prefix = 'filter__';
+    const params = new URLSearchParams(window.location.search);
+    for (const key of Array.from(params.keys())) {
+      if (key.startsWith(prefix)) {
+        params.delete(key);
+      }
+    }
+
     for (const [key, value] of Object.entries(selectedFields)) {
       if (value) {
         if (typeof value === 'object') {
           const { none_range, value: rangeValue } = value;
           if (none_range) {
-            params.set(`filter__${key.replace('__range', '__none_range')}`, String(rangeValue) || "null,null");
+            params.set(
+              `${prefix}${key.replace('__range', '__none_range')}`,
+              String(rangeValue) || "null,null"
+            );
           } else if (rangeValue) {
-            params.set(`filter__${key}`, String(rangeValue));
+            params.set(`${prefix}${key}`, String(rangeValue));
           }
         } else {
-          params.set(`filter__${key}`, String(value));
+          params.set(`${prefix}${key}`, String(value));
         }
       }
     }
     router.navigate(`${window.location.pathname}?${params.toString()}`);
     setOpen(false);
   }
+
+  const onReset = async (e: MouseEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams(window.location.search);
+    for (const key of Array.from(params.keys())) {
+      if (key.startsWith('filter__')) {
+        params.delete(key);
+      }
+    }
+
+    router.navigate(`${window.location.pathname}?${params.toString()}`);
+    setOpen(false)
+  }
+
   // const items = ['All data layers']
   if (!isReady) return null;
   return (
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          Filter Schools by
+          {t('filter-schools-by')}
         </h3>
         <IconButton
           size="md"
@@ -104,8 +140,10 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
             const Component = components[item.type] as React.JSXElementConstructor<any>;
             if (!Component) return null;
             const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
+            const extraItemKey = `ignore_${itemKey}`;
+            const extraValue = selectedFields[extraItemKey];
             return (
-              <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} onChange={onChange} />
+              <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
             )
           })}
         </ScrollableContainer>
@@ -113,16 +151,15 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           <Button
             type="reset"
             kind="secondary"
-            onClick={() => {
-              router.navigate(`${window.location.pathname}`);
-              setOpen(false)
+            onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
+              void onReset(event);
             }}>
-            Reset
+            {t('reset')}
           </Button>
           <Button
             type="submit"
             onClick={(e) => { void onApply(e) }}>
-            Apply
+            {t('apply')}
           </Button>
         </FilterActionButtonWrapper>
       </Form>

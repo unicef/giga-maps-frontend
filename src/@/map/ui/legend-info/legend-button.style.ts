@@ -1,6 +1,10 @@
 import { Popover, } from "@carbon/react";
 import { css, styled } from "styled-components";
+import { ThemeType } from "~/core/theme.model";
 
+type ActiveTheme = {
+  themeState: ThemeType;
+};
 
 export const LegendWrapper = styled.div`
     
@@ -43,7 +47,7 @@ top:-1rem;
   }
 
 `
-export const CustomeLegendPopover = styled(Popover)`
+export const CustomeLegendPopover = styled(Popover) <ActiveTheme>`
 .legend-info-popover-content{
   background:${props => props.theme.main};
   max-inline-size: fit-content;
@@ -52,9 +56,13 @@ export const CustomeLegendPopover = styled(Popover)`
     width: calc(100vw - 3rem);
   }
 }
-.cds--popover-caret{
-        background: ${props => props.theme.main};
-      }
+
+.cds--popover-caret {
+    background: ${({ theme, themeState }) =>
+    themeState === ThemeType.accessible
+      ? 'rgb(77 81 88)'
+      : theme.main};
+  }
 `
 
 export const LegendHeaderWrapper = styled.div`
@@ -67,51 +75,54 @@ export const LegendHeaderWrapper = styled.div`
     }
 `
 
-export const LegendContentWrapper = styled.div`
-    display: flex;
-    background:${props => props.theme.main};
-    padding:1.2rem;
-    
+export const LegendContentWrapper = styled.div<ActiveTheme>`
+  display: flex;
+  padding: 1.2rem;
+
+  background-color: ${({ themeState, theme }) =>
+    themeState === ThemeType.accessible
+      ? 'rgb(100 105 115 / 0.7)'
+      : theme.main};
 
     .school-status{
-      min-width: 175px;
-    }
-    .legend-value {
-      margin-top: 1.1rem;
-      margin-left: 0.6rem;
-      color: grey;
-      font-size: 0.7rem;
-    }
-    .legend-container {
+    min-width: 210px;
+  }
+  .legend-value {
+    margin-top: 1.1rem;
+    margin-left: 0.6rem;
+    color: grey;
+    font-size: 0.875rem;
+  }
+  .legend-container {
       display:flex;
-      align-items: center;
-      
+    align-items: center;
+
     }
-    .checkbox-with-label {
+  .checkbox-with-label {
       display:flex;
-      align-items: center;
-    }
+    align-items: center;
+  }
       h3{
         color: ${props => props.theme.text};
-        font-size: 0.875rem;
-        font-weight: 400;
-        line-height: 1.25rem;
-      }
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+  }
 
       .conneted-info,.real-time-connetivity-info{
-        position: relative;
+    position: relative;
         display :flex;
-        margin-top: 1rem;
-        align-items: center;
-        .label {
-          margin-left: 0.3rem;
-          color:  ${props => props.theme.text};
-          font-size: 0.75rem;
-          font-weight: 400;
-          line-height: 1.125rem;
+    margin-top: 1rem;
+    align-items: center;
+    .label {
+      margin-left: 0.3rem;
+      color: ${({ theme }) => theme.text};
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.125rem;
           text-wrap: nowrap;
-        }
-      }
+    }
+  }
 
 `
 export const CircleWrapper = styled.div`

@@ -1,13 +1,14 @@
-import { $countryCode } from '~/@/country/country.model';
+import { $countryCode, $countrySearchParams } from '~/@/country/country.model';
 import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl";
 
 import { mapCountry } from "~/core/routes";
 
-import { Colors, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
-import { checkSourceAvailable, filterCountry, findLayer, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
+import { Colors, CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
+import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
+import { $isNavigateByAdminLevel } from '../map/map.model';
 
 export const getAdminCountrySource = (level: CountryAdminLevel) => `${AdminSourcePrefix}${level}`;
 export const getAdminCountryLayerFill = (level: CountryAdminLevel) => `${AdminLayerFillPrefix}${level}`;
@@ -15,7 +16,8 @@ export const getAdminCountryLayerLine = (level: CountryAdminLevel) => `${AdminLa
 
 export const getCurrentCountrySearchPath = (countryCode: string) => {
   const currentCountryCode = $countryCode.getState();
-  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase()) {
+  const { selectedCount } = $countrySearchParams.getState();
+  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase() && selectedCount >= 1) {
     return window.location.search;
   }
 }
@@ -160,7 +162,7 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
   const layerName = getAdminCountryLayerFill(level);
   map.on('click', (event: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(event.point, {
-      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler)],
+      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length || features.length && features[0].layer.id !== layerName && CountryAdminLevel.level0 !== level) return;
     const feature = findLayer(features, layerName);
@@ -169,6 +171,9 @@ export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map,
     if (level === CountryAdminLevel.level1) {
       const admin1 = feature.state.giga_id_admin;
       if (admin1) {
+        if (!$isNavigateByAdminLevel.getState()) {
+          return;
+        }
         if (!isMobile) {
           setCountryBound(map, admin1, feature.state.bbox)
         }
@@ -236,6 +241,29 @@ export const onChangeLabelLayer = (map: Map, showLabels: boolean) => {
     allLabelLayers.forEach((layerId) => {
       hideLayer(map, layerId)
     })
+  }
+}
+
+export const applyWorldViewToLabels = (map: Map, worldView: string) => {
+  const countryLabelLayer = mapLabelLayerList.countryLabel;
+  if (!map.getLayer(countryLabelLayer)) return;
+  const existingFilter = map.getFilter(countryLabelLayer);
+  const worldviewFilter = wvFilter(worldView);
+  if (existingFilter) {
+    // If already has a worldview filter applied by us, replace the top-level "all" filter
+    // Otherwise, wrap existing filter with worldview filter
+    if (Array.isArray(existingFilter) && existingFilter[0] === 'all' &&
+      existingFilter.some((f: unknown) => Array.isArray(f) && f[0] === 'any' && JSON.stringify(f).includes('worldview'))) {
+      // Replace the existing worldview portion
+      const nonWorldviewFilters = existingFilter.filter((f: unknown) =>
+        !(Array.isArray(f) && f[0] === 'any' && JSON.stringify(f).includes('worldview'))
+      );
+      map.setFilter(countryLabelLayer, [...nonWorldviewFilters, worldviewFilter]);
+    } else {
+      map.setFilter(countryLabelLayer, ['all', existingFilter, worldviewFilter]);
+    }
+  } else {
+    map.setFilter(countryLabelLayer, worldviewFilter);
   }
 }
 

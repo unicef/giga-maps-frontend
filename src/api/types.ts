@@ -9,11 +9,13 @@ export type GlobalStats = {
     value: number;
     unit: string;
   };
+  countries_with_connectivity_status_mapped: number;
   connected_schools: {
     connected: number;
     not_connected: number;
     unknown: number;
   };
+  schools_with_connectivity_status_mapped: number;
 }
 
 export type GraphData = {
@@ -36,6 +38,7 @@ export type ConnectivityStat = {
   real_time_connected_schools: defaultLegendValuesType;
   graph_data: GraphData[];
   live_avg_connectivity: string;
+  countries_with_realtime_data: number;
   benchmark_metadata: {
     base_benchmark: string;
     benchmark_unit: string;
@@ -115,6 +118,10 @@ export type SchoolStatsType = {
     rounded_benchmark_value: string;
     display_unit: string;
     convert_unit: string;
+  },
+  schools_at_same_location?: {
+    count: number,
+    school_ids: number[]
   }
 };
 
@@ -175,6 +182,14 @@ export type AdminMetadataType = {
   centroid: number[]
   bbox: number[]
 }
+
+export type ActiveFilterListType = {
+  advance_filter_id: number,
+  is_default?: boolean,
+  default_filter_values?: {
+    values: string | boolean | { min: number, max: number, none_range: boolean } | string[]
+  }
+}
 export type Country = {
   id: number;
   name: string;
@@ -185,7 +200,7 @@ export type Country = {
   data_source: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
-  geometry: GeoJSONGeometry;
+  country_disclaimer: string;
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
@@ -218,6 +233,7 @@ export type Country = {
   }[]
   admin_metadata: AdminMetadataType;
   admin1_metadata: AdminMetadataType[];
+  active_filters_list?: ActiveFilterListType[]
 };
 
 export type CountryWeeklyStats = {
@@ -243,7 +259,6 @@ export type CountryWeeklyStats = {
 export type CountryGeometry = {
   id: number;
   code: string;
-  geometry_simplified: GeoJSONGeometry;
 };
 
 export type SchoolSimplified = {
@@ -312,12 +327,14 @@ export type APIListType<ResultType> = {
 
 
 export interface AdvanceFilterType {
+  id: number
   name: string
   type: string
   description: string
   column_configuration: ColumnConfiguration
   options?: {
     choices?: Choice[]
+    group_choices?: boolean;
     placeholder?: string;
     minPlaceholder?: string;
     maxPlaceholder?: string;
@@ -331,6 +348,7 @@ export interface AdvanceFilterType {
     }
   }
   query_param_filter: string
+  light?: boolean
 }
 
 export interface Choice {

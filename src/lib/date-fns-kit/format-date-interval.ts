@@ -1,6 +1,6 @@
 import { format, Interval } from 'date-fns';
 
-import { formatWeekInterval } from '~/core/formatters';
+import { formatMonthInterval, formatWeekInterval } from '~/core/formatters';
 
 import { IntervalUnit } from './types';
 
@@ -19,7 +19,7 @@ export const formatDateInterval = (
     case IntervalUnit.month:
       return isCurrentInterval
         ? 'this month'
-        : format(interval.start, 'MMM yyyy');
+        : formatMonthInterval(interval);
     default:
       throw new Error('Unknown interval unit!');
   }

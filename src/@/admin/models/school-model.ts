@@ -3,15 +3,22 @@ import { createGate } from "effector-react";
 
 import { $notification } from "~/@/common/Toast/toast.model";
 import { APIListType } from "~/api/types";
-import { addAdminSchools, addSchoolDailySummary, addSchoolSummary, editAdminSchools } from "~/core/routes";
+import { addAdminSchools, addSchoolDailySummary, addSchoolSummary, adminSchools, editAdminSchools } from "~/core/routes";
 import { setPayload, setPayloadResults } from "~/lib/effector-kit";
 
 import { defaultSchoolDailyForm, defaultSchoolForm, defaultSchoolSummaryForm } from "../constants/school.constant";
 import { deleteSchoolDailyFx, deleteSchoolFx, deleteSchoolSummaryFx, getAdmin1ListFx, getAdmin2ListFx, getCsvImportListFx, getSchoolDailyIdFx, getSchoolDailyListFx, getSchoolIdFx, getSchoolListFx, getSchoolSummaryIdFx, getSchoolSummaryListFx, importCsvFx } from "../effects/api-school-fx";
 import { AdminType, CsvImport, SchoolDailyType, SchoolSummaryType, SchoolType } from "../types/school.type";
 
+const getDefaultSchoolTab = () => {
+  const schoolRouteParams = adminSchools.router.search.getState();
+  const params = new URLSearchParams(schoolRouteParams ?? '')
+  const tab = params.get('tab');
+  return Number(tab) ?? 0
+}
+
 export const onChangeAdminSchoolTab = createEvent<number>();
-export const $adminSchoolTab = createStore(0)
+export const $adminSchoolTab = createStore(getDefaultSchoolTab())
 $adminSchoolTab.on(onChangeAdminSchoolTab, setPayload);
 
 

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`User role should render component 1`] = `[Function]`;
+exports[`Admin Filter should render component 1`] = `[Function]`;
 
-exports[`User role should render component 2`] = `[Function]`;
+exports[`Admin Filter should render component 2`] = `[Function]`;
 
-exports[`User role should render component 3`] = `[Function]`;
+exports[`Admin Filter should render component 3`] = `[Function]`;

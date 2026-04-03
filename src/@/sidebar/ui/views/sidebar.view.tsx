@@ -1,4 +1,4 @@
-import { MagicWandFilled } from '@carbon/icons-react'
+import { MagicWandFilled, ChevronDown, ChevronUp, ChevronRight, AccessibilityAlt } from '@carbon/icons-react'
 import { IconButton } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { MouseEvent, } from 'react';
@@ -20,7 +20,6 @@ import { $isMobile } from '~/core/media-query';
 import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
-import Chevron from '../../../../assets/images/chevron.svg';
 import BreadcrumbInfo from '../breadcrumb';
 import CommonComponentGigaLayer from '../common-components/common-component-gigalayer';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
@@ -34,13 +33,16 @@ import { LayerDetailContainer } from '../search-result/styles/search-result-styl
 import { MainSideBarContainer, MapButtonWrapper, SidePanelContainer, SubContainer, VerticalSliderButton, VerticalSliderButtonWrapper } from '../sidebar.style';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
+import { useTranslation } from 'react-i18next';
+import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
+import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
 );
 
 export default function Sidebar() {
-
+  const { t } = useTranslation();
   const isMenuOpen = useStore($isMenuOpen);
   const isMobile = useStore($isMobile)
   const sidebarHeight = useStore($sidebarHeight)
@@ -57,7 +59,8 @@ export default function Sidebar() {
         {
           isMobile &&
           <VerticalSliderButtonWrapper id='mobile-view-slider' onClick={() => setSidebarHeight(!sidebarHeight)}>
-            <VerticalSliderButton />
+            {/* <VerticalSliderButton /> */}
+            {sidebarHeight ? <ChevronDown /> : <ChevronUp />}
           </VerticalSliderButtonWrapper>
         }
         <SideInfoPanelHeaderLogoAndMenuButton />
@@ -67,7 +70,7 @@ export default function Sidebar() {
         <SubContainer>
           <BreadcrumbInfo />
           {mapRoute ? <LandingPage /> :
-            <LayerDetailContainer>
+            <LayerDetailContainer $height={isMobile && !sidebarHeight ? '0rem' : '6rem'}>
               {(countryRoute) && <GlobalAndCountryView />}
               {(schoolRoute) && <SchoolView />}
             </LayerDetailContainer>
@@ -80,7 +83,7 @@ export default function Sidebar() {
             type="button"
             onClick={onToggleSidebar}
           >
-            <Chevron alt="Expand/collapse sidebar" />
+            <ChevronRight />
           </button>
         </SubContainer>
         <MapButtonWrapper $hide={isTimeplayer}>
@@ -96,16 +99,18 @@ export default function Sidebar() {
                 align="left"
                 id='tour-button'
                 size="sm"
-                label="Tour"
+                label={t("tour")}
                 onClick={() => router.navigate(`/map?popover=tour`)}>
                 <MagicWandFilled />
               </IconButton>
             </ActiveButtonWrapper>}
+            <AccessibilityButton />
             {!sidebarHeight && <ThemeButtons />}
             <LegendButton />
           </TakeTourWrapper>
 
         </MapButtonWrapper>
+        <CountryDisclaimerNotification />
       </SidePanelContainer >
     </MainSideBarContainer>
   )

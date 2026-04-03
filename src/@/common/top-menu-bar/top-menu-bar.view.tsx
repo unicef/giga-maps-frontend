@@ -30,7 +30,7 @@ const TopMenuBar = ({
         >
           {isMenuOpen ? <Close size={20} /> : <Menu size={20} />}
         </IconButton>
-        <LogoName to={mapOverview}>
+        <LogoName to={mapOverview} target="_blank">
           <img src={isLight ? whiteLogo : logo} alt="Giga logo" />
         </LogoName>
       </TopMenuWrapper>

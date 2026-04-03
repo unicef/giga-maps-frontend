@@ -1,20 +1,24 @@
-import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 import { combine, createEvent, createStore, restore, sample } from 'effector';
+import { ConnectivityDistributionNames, getConnectivityLogicalValues, LayerDistributionUnit } from './ui/global-and-country-view-components/container/layer-view.constant';
 
-import { $country, $countryBenchmark, $countryCode, $countryIdToCode, $countrySearchString, $admin1Code, $countryConnectivityNames, $countryActiveLayersDataById } from '~/@/country/country.model';
+import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
 import { $stylePaintData } from '~/@/map/map.model';
-import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchCoverageLayerFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
+import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, SchoolStatsType } from '~/api/types';
 import { mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
-import { getSchoolAvailableDates } from './effects/search-country-fx';
-import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, SCHOOL_STATUS_LAYER } from './sidebar.constant';
-import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
-import { isLiveLayer, isStaticLayer } from './sidebar.util';
+import i18next from 'i18next';
+import { $lng } from '~/core/i18n/store';
 import { evaluateExpression } from '~/lib/utils';
-import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
+import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 import { UNKNOWN } from '../map/map.types';
+import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
+import { publishLayersTranslationFx } from './effects/all-translation-fx';
+import { getSchoolAvailableDates } from './effects/search-country-fx';
+import { ConnectivityBenchMarks, ConnectivityDistribution, ConnectivityStatusDistribution, getDefaultFormula, Layers, multiSchoolSelection, publishLayersListMapping, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import { isLiveLayer, isStaticLayer } from './sidebar.util';
+import { ConnectivityConfig, CoverageStat, LayerType, LayerTypeChoices, MultischoolSelectionStats, SelectedSchool } from './types';
 
 export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
@@ -37,7 +41,6 @@ $connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
 $connectivityStats.on(fetchCountryLiveLayerInfo.doneData, setPayload);
 
 export const $coverageStats = createStore<CoverageStat | null>(null);
-$coverageStats.on(fetchCoverageLayerFx.doneData, setPayload);
 $coverageStats.on(fetchCountryStaticLayerInfo.doneData, setPayload);
 
 export const onChangeMenu = createEvent<boolean>();
@@ -63,6 +66,19 @@ $connectivitySpeedUnknown.on(changeConnectivitySpeedUnknown, setPayload);
 // layer model 
 export const $layersList = createStore<LayerType[]>([]);
 $layersList.on(fetchLayerListFx.doneData, setPayloadResults)
+$layersList.on(publishLayersTranslationFx.doneData, (state, payload) => {
+  const { data } = payload as { data: Record<string, string> }
+  const list = reconstructJson(data, { layersList: state }).layersList as LayerType[];
+  return list.map((item) => ({ ...item, legend_configs: { ...item.legend_configs } }))
+})
+export const $layersListMapping = createStore<[string, string][]>([]);
+$layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
+  const list = Object.entries(extractDataWithMapping({ layersList: payload.results }, publishLayersListMapping)).filter(([_key, value]) => !!value);
+  return list;
+})
+
+
+export const $layerListTranslated = createStore<LayerType[]>([]);
 
 export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
 export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
@@ -72,14 +88,12 @@ export const $schoolStatusSelectedLayer = restore(onSelectSchoolStatusLayer, SCH
 
 export const onSelectMainLayer = createEvent<number | null>();
 export const $selectedLayerId = restore(onSelectMainLayer, null);
-export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) ?? null);
+export const $globalLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) ?? null);
+export const $globalLayerId = $globalLayerData.map(layer => layer?.id ?? null);
+export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
 export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
-export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && !layer.created_by) ?? null);
+export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
 export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id ?? null);
-export const $downloadDynamicLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
-export const $downloadDynamicLayerId = $downloadDynamicLayerData.map(layer => layer?.id ?? null);
-export const $coverageDynamicLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
-export const $coverageDynamicLayerId = $coverageDynamicLayerData.map(layer => layer?.id ?? null);
 
 export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (layers, countryIdToCode) => {
   const list = {} as Record<string, { activeCountries: string[] }>
@@ -101,12 +115,12 @@ export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (l
   };
 })
 
-export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $downloadLayerId, (countryCode, activeLayers, downloadLayerId) => {
-  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? $downloadDynamicLayerId;
+export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $globalLayerId, (countryCode, activeLayers, globalLayerId) => {
+  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? globalLayerId;
   return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : null;
 })
 export const $isActiveCurrentLayer = combine($activeLayerByCountries, $selectedLayerId, $countryCode, (activeLayers, selectedId, countryCode) => {
-  return !!selectedId && activeLayers.list[selectedId]?.activeCountries.includes(countryCode.toLowerCase())
+  return !!selectedId && activeLayers.list[selectedId]?.activeCountries?.includes(countryCode.toLowerCase())
 })
 
 export const $activeLayerByCountryCode = combine($layersList, $activeLayerByCountries, $countryCode, (layers, activeLayers, countryCode) => {
@@ -145,7 +159,8 @@ export const $currentLayerLegends = combine({
   stylePaintData: $stylePaintData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
   countryActiveLayersDataById: $countryActiveLayersDataById,
-  connectivityBenchmark: $connectivityBenchMark
+  connectivityBenchmark: $connectivityBenchMark,
+  lng: $lng
 }, ({ selectedLayerData, currentLayerTypeUtils, stylePaintData, connectivityBenchmark, countryActiveLayersDataById }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -164,7 +179,7 @@ export const $currentLayerLegends = combine({
   if (currentLayerTypeUtils.isLive && !Object.values(apiLegends || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
-      label: ConnectivityDistributionNames[key],
+      label: i18next.t(ConnectivityDistributionNames[key]),
     }));
   } else {
     const reverseMapping = {} as Record<string, string>
@@ -206,7 +221,7 @@ export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData
 
 export const $isNationalBenchmark = $benchmarkmarkUtils.map(({ isNational }) => isNational);
 
-export const $staticPopupActiveLayer = combine($activeLayerByCountryCode, $staticLayers, $coverageDynamicLayerData, (activeLayerByCountryCode, staticLayers, coverageDynamicLayerData) => {
+export const $staticPopupActiveLayer = combine($activeLayerByCountryCode, $staticLayers, $coverageLayerData, (activeLayerByCountryCode, staticLayers, coverageDynamicLayerData) => {
   if (activeLayerByCountryCode[coverageDynamicLayerData?.id ?? ""]) return coverageDynamicLayerData;
   if (staticLayers?.length > 0) {
     return staticLayers.find(item => activeLayerByCountryCode[item?.id ?? ""]) ?? null;
@@ -220,22 +235,20 @@ export const $isSchoolBenchmark = combine($selectedLayerData, $connectivityBench
   if (conntectivityBenchmark === ConnectivityBenchMarks.global) {
     return selectedLayer?.global_benchmark.value.startsWith('SQL:')
   } else if (conntectivityBenchmark === ConnectivityBenchMarks.national) {
-    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""].startsWith('SQL:')
+    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""]?.startsWith('SQL:')
   }
 })
-// $isSchoolBenchmark.watch((data) => console.log('is school benchmark', data));
+
 export const $layerUtils = combine({
   layers: $layersList,
   liveLayers: $connectivityLayers,
   staticLayers: $staticLayers,
   selectedLayerId: $selectedLayerId,
   selectedLayerData: $selectedLayerData,
+  globalLayerId: $globalLayerId,
+  globalLayerData: $globalLayerData,
   downloadLayerId: $downloadLayerId,
   downloadLayerData: $downloadLayerData,
-  downloadDynamicLayerId: $downloadDynamicLayerId,
-  downloadDynamicLayerData: $downloadDynamicLayerData,
-  coverageDynamicLayerId: $coverageDynamicLayerId,
-  coverageDynamicLayerData: $coverageDynamicLayerData,
   coverageLayerId: $coverageLayerId,
   coverageLayerData: $coverageLayerData,
   currentLayerTypeUtils: $currentLayerTypeUtils,
@@ -266,9 +279,6 @@ $staticLegendsSelected.on(staticLegendsSelection, (state, payload) => {
   const isButtonSelected = state.includes(payload);
   if (isButtonSelected) {
     // If the button is already selected, remove it from the selected buttons i.e unselect it
-    if (payload === '') {
-      return [];
-    }
     return state.filter((id) => id !== payload);
   }
   // If the button is not selected, check if the maximum limit of 3 buttons is reached
@@ -289,6 +299,7 @@ $staticLegendsSelected.on(selectAllStaticLegendsSelection, (state) => {
 })
 
 export const resetCoverageFilterSelection = createEvent();
+export const checkConnectivityBenchmark = createEvent<number>();
 
 export const changeCoverage5g4g = createEvent<boolean>();
 export const $coverage5g4g = restore(changeCoverage5g4g, true)
@@ -348,7 +359,11 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
   id: school?.id,
   externalId: school?.external_id,
-  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`
+  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
+  schoolAtSameLocation: {
+    count: school.schools_at_same_location?.count,
+    schoolIds: school.schools_at_same_location?.school_ids,
+  }
 })
 export const $schoolStatsMap = $schoolStats.map((schools) => {
   return schools?.map(schoolStatsMap) ?? null;
@@ -433,20 +448,33 @@ export const $timePlayerInfo = combine({
 export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
+export const $getSchoolParams = sample({
+  source: mapSchools.router.search,
+  fn: (searchParams) => {
+    const params = new URLSearchParams(searchParams)
+    return {
+      country: params.get('country'),
+      schoolIds: params.get('school_ids')?.split(',').map(Number)
+    }
+  }
+})
+
+export const $selectedSchoolIds = $getSchoolParams.map((data) => data?.schoolIds ?? null);
+
 // all reset model
-$connectivityBenchMark.reset(resetFilterModal);
-$connectivitySpeedGood.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeedModerate.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeednoInternet.reset([resetFilterModal, router.historyUpdated]);
-$connectivitySpeedUnknown.reset([resetFilterModal, router.historyUpdated]);
-$coverage5g4g.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverage3g2g.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverageNoCoverage.reset([$selectedLayerId, resetCoverageFilterSelection]);
-$coverageUnknown.reset([$selectedLayerId, resetCoverageFilterSelection]);
+$staticLegendsSelected.reset([resetFilterModal, mapOverview.visible])
+$connectivityBenchMark.reset(resetFilterModal, mapOverview.visible);
+$connectivitySpeedGood.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeedModerate.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeednoInternet.reset([resetFilterModal, mapOverview.visible]);
+$connectivitySpeedUnknown.reset([resetFilterModal, mapOverview.visible]);
+$coverage5g4g.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverage3g2g.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
+$coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $potentialCoverageOpenStatus.reset(onSelectMainLayer);
 $schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
 $isMenuOpen.reset(router.historyUpdated)
-$staticLegendsSelected.reset(router.historyUpdated)
 // on history update, clear connectivity dates;
 $connectivityAvailability.reset(router.historyUpdated, $selectedLayerId);
 

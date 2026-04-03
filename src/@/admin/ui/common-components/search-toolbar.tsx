@@ -45,7 +45,6 @@ export default function SearchToolbar({ onSearchChange, ...otherProps }: SearchT
       renderIcon={Search}
       tooltipAlignment="center"
       tooltipPosition="bottom"
-      tooltipText="Search"
       iconDescription="Search"
       label="Search"
     />

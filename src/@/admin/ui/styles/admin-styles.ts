@@ -442,7 +442,7 @@ margin-top: 1.5rem;
 }
 
 `
-export const MultiSelectLayerConfig = styled(MultiSelect)`
+export const MultiSelectLayerConfig = styled(MultiSelect) <{ $isDark?: boolean }>`
 /* margin-top: 1.5rem; */
 #aggregate-on-select,#apiSource-select,#parameter-select,#country-select{
     background-color: #FAFAFA;
@@ -450,6 +450,25 @@ export const MultiSelectLayerConfig = styled(MultiSelect)`
     button{
     border-bottom: 1px solid var(--cds-border-strong);
 }
+    .cds--multi-select {
+    ${({ $isDark }) => $isDark && css`
+    background-color: #333333;
+    `}
+    .cds--list-box__label {
+        ${({ $isDark }) => $isDark && css`
+        color: #FAFAFA;
+        `}
+    }
+        .cds--list-box__menu-icon svg {
+        ${({ $isDark }) => $isDark && css`
+        fill: #FAFAFA;
+        `}
+        }
+        .cds--tag {
+            ${({ $isDark }) => $isDark && css`
+            background-color: #000;
+            `}
+    } 
 
 `
 
@@ -779,14 +798,17 @@ button{
 `
 
 export const CountryListDataLayer = styled.div`
+    background-color: #f4f4f4;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
 
 h3{
-    padding:1rem;
-    padding-bottom:0;
+    padding:1.25rem 3rem .25rem;
 color: #000;
 margin:0;
 font-size: 1rem;
 font-weight: 500;
+font-size: 1.25rem;
 }
 h4{
 padding-left:3rem;
@@ -933,7 +955,8 @@ export const SchoolFormScroll = styled(Scroll)`
 max-height:calc(100vh - 11rem);`
 
 export const CountryFormScroll = styled(Scroll)`
-max-height:calc(100vh - 7.5rem);
+max-height:calc(100vh - 8.2rem);
+padding-bottom: 2rem;
 `
 export const AmenitiesContainer = styled.div`
 display:flex;
@@ -1031,4 +1054,37 @@ export const AddFilterContainer = styled.div`
 export const AddEditForm = styled.div`
     display: flex;
     padding: 1rem 0rem;
+`
+
+// Assosiate Giga Filters
+export const CountryListDefaultFilterTitle = styled.h3`
+    color: #000;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #f4f4f4;
+    padding-block: 1.25rem;
+    font-size: 1.25rem;
+`
+export const CountryListDefaultFilters = styled.div`
+    background-color: #f4f4f4;
+    padding-block: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0rem 3rem;
+    row-gap: 2rem;
+    column-gap: 3rem;
+    padding-bottom: 2rem;
+
+    & > div {
+        padding: 0;
+    }
+ 
+    .cds--list-box--lg, .cds--text-input {
+        block-size: 2.5rem;
+        background-color: #fff;
+    }
+    .cds--label,
+    .cds--checkbox-label-text {
+        color: inherit !important;
+    }
 `

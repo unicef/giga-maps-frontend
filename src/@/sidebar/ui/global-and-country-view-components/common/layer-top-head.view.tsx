@@ -6,18 +6,19 @@ import { PropsWithChildren } from 'react';
 import { $selectedLayerId } from '~/@/sidebar/sidebar.model';
 
 import { LayerHeader } from "../styles/layer-view-common.style";
+import { useTranslation } from 'react-i18next';
 
 export default function LayerTopHead(
   { label, children, disabled = true, onClickSetting, hideSetting }:
     PropsWithChildren<{ label: string; disabled?: boolean; onClickSetting?: () => void, hideSetting?: boolean; }>) {
-
+  const { t } = useTranslation();
   const selectedLayerId = useStore($selectedLayerId);
 
   return <LayerHeader>
     {!hideSetting && <IconButton
       align={'bottom-right'}
       className="filter-icon-button"
-      label='Data layer selection'
+      label={t('data-layer-selection')}
       size="sm"
       kind="ghost"
       onClick={() => {

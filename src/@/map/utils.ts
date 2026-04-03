@@ -2,13 +2,14 @@ import { format } from "date-fns";
 import { CircleLayer, CirclePaint, Map, MapboxGeoJSONFeature, MapLayerMouseEvent, VectorSource } from "mapbox-gl";
 
 import { getBaseUrl } from "~/api/project-connect";
-import { GeoJSONFeatureCollection, GeoJSONPoint } from '~/core/global-types';
+import { GeoJSONFeatureCollection, GeoJSONPoint, PointCoordinates } from '~/core/global-types';
 
-import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, defaultWorldView, LayerDataProps, mapPaintData } from "./map.constant";
-import { setPopupOnClickDot } from "./map.model";
-import { ChangeLayerOptions, StylePaintData } from "./map.types";
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
+import { $countryCode, setSchoolFocusLatLng } from "../country/country.model";
+import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
+import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
+import { $schoolClickedId, resetDublicateSchoolClickData, setPopupOnClickDot } from "./map.model";
+import { ChangeLayerOptions, StylePaintData } from "./map.types";
 
 interface CreateSourceType {
   source?: string;
@@ -22,43 +23,77 @@ export const isDefaultStyle = (style: string) => {
   return gigaThemeList.includes(style as ThemeType)
 };
 
-export const mapDotsClickIdsAndHandler: Record<string, (event: MapLayerMouseEvent) => void> = {};
+export const mapDotsClickIdsAndHandler = {
+  [CONNECTIVITY_STATUS_SOURCE]: {},
+  [DEFAULT_SOURCE]: {}
+} as Record<string, Record<string, (event: MapLayerMouseEvent) => void>>;
 
 export const isConnectivity = (id: string) => id === `${Layers.connectivity}_layer`;
 export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
 
-export const removePreviewsMapClickHandlers = (map: Map) => {
-  const ids = Object.keys(mapDotsClickIdsAndHandler);
-  ids.forEach((id) => {
-    map.off('click', id, mapDotsClickIdsAndHandler[id]);
-    delete mapDotsClickIdsAndHandler[id];
+export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
+  const ids = Object.keys(mapDotsClickIdsAndHandler[source]);
+  if (!ids?.length) return;
+  ids?.forEach((id) => {
+    map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+    delete mapDotsClickIdsAndHandler?.[source]?.[id];
+    resetDublicateSchoolClickData();
   })
 }
 
-export const onClickOnSchoolDots = (map: Map, id: string) => {
-  mapDotsClickIdsAndHandler[id] = (e: MapLayerMouseEvent) => {
+export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
+  mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(e.point, {
-      layers: [...Object.keys(mapDotsClickIdsAndHandler)],
+      layers: [...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
     });
     if (!features.length) return;
+    const ids = new Set(features.map((feature) => {
+      return feature.layer.id;
+    }));
+    if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
+      return;
+    }
     const feature = features[0];
-
-    if (feature.layer.id === id && feature.properties) {
+    const feature2 = features[1];
+    if ($schoolClickedId.getState() === feature?.properties?.id) {
+      setPopupOnClickDot(null)
+      return;
+    }
+    const schoolId = feature?.properties?.id ?? feature2?.properties?.id;
+    if (feature?.layer?.id?.includes('_layer') && schoolId) {
+      console.log("schoolId", schoolId, feature.geometry)
+      setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
       setPopupOnClickDot({
-        id: feature?.properties?.id || 0,
-        geopoint: feature.geometry as GeoJSONPoint
+        id: schoolId,
+        geopoint: feature.geometry as GeoJSONPoint,
+        allowDublicateSchoolIds: true
       });
     }
   }
-  map.on('click', id, mapDotsClickIdsAndHandler[id]);
+  map.on('click', id, mapDotsClickIdsAndHandler[source][id]);
+}
+
+const getZoomDivisible = (zoom: number, zoomDivisible?: [number, number][]): number => {
+  if (!zoomDivisible?.length) return zoom;
+  const divisibleValue = getInterpolatedValue(zoomDivisible, zoom);
+  return divisibleValue ? zoom / divisibleValue : zoom;
+}
+
+const getAnimateConfig = () => {
+  const countryAnimatedCircle = CountryPaintData[$countryCode.getState()?.toLowerCase() as keyof typeof CountryPaintData]?.animatedCircle;
+  return {
+    ...animateCircleConfig,
+    ...countryAnimatedCircle
+  }
 }
 
 const setCurrentRadius = () => {
   let lastZoom = 0;
   let radiusValue = [0, 0];
-  const { maxRadius, maxRadiusPortion, startRadiusPortion } = animateCircleConfig;
+  const { maxRadius, maxRadiusPortion, startRadiusPortion, zoomDivisible } = getAnimateConfig();
   return (currentZoom: number) => {
-    currentZoom = Math.min(currentZoom, maxRadius);
+    const value = getZoomDivisible(currentZoom, zoomDivisible);
+    currentZoom = Math.min(value, maxRadius);
     if (currentZoom === lastZoom) {
       return radiusValue;
     }
@@ -107,12 +142,10 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
   return animationFrameData;
 }
 
-export const defaultSource = 'map-data-source';
-export const coverageUrl = 'api/locations/schools/tiles';
-export const connectivityUrl = 'api/locations/schools/tiles/connectivity';
+
 export const getDynamicUrl = (layerId: string) => `api/accounts/layers/${layerId}/map`
 
-export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark"> & { isLive?: boolean }): string => {
+export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch, schoolPageIds }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark" | "schoolPageIds"> & { isLive?: boolean }): string => {
   const { isWeek, range } = connectivityFilter;
   const startDate = format(range.start, 'dd-MM-yyyy');
   const endDate = format(range.end, 'dd-MM-yyyy');
@@ -123,8 +156,12 @@ export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBe
   if (mapRoute.country && countrySearch) {
     params += `&${countrySearch}`
   }
+  if (schoolPageIds?.length === 1) {
+    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`
+  }
   return params;
 }
+
 
 export const getCountryParams = (country: boolean, countryId?: number, admin1Id?: number | null) => {
   let params = country && countryId ? `country_id=${countryId}` : ''
@@ -134,16 +171,25 @@ export const getCountryParams = (country: boolean, countryId?: number, admin1Id?
   return params;
 }
 
-export const generateLayerUrls = ({ layerId, connectivityBenchMark, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark"> & { layerId: number | null, admin1Id?: number | null }) => {
+export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySearch, schoolPageIds }: Pick<ChangeLayerOptions, "mapRoute" | "country" | "countrySearch" | "schoolPageIds"> & { admin1Id?: number | null }) => {
+  const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
+  let params = getBaseUrl(`${CONNECTIVITY_STATUS_URL}/?${countryParams}`);
+  if (countrySearch) {
+    params += `&${countrySearch}`
+  }
+  if (schoolPageIds?.length === 1) {
+    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`
+  }
+  return `${params}&z={z}&x={x}&y={y}.mvt`;
+}
+export const generateLayerUrls = ({ layerId, connectivityBenchMark, schoolPageIds, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark" | "schoolPageIds"> & { layerId: number | null, admin1Id?: number | null }) => {
   let url = ''
-  const { downloadLayerId, coverageLayerId } = layerUtils;
+  const { globalLayerId } = layerUtils;
   const { isLive } = layerUtils.currentLayerTypeUtils;
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
-  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, connectivityBenchMark, countrySearch });
-  if (downloadLayerId === layerId || !layerId) {
-    url = connectivityUrl;
-  } else if (layerId === coverageLayerId) {
-    url = coverageUrl
+  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, schoolPageIds, connectivityBenchMark, countrySearch });
+  if (globalLayerId === layerId || !layerId) {
+    url = CONNECTIVITY_URL;
   } else {
     url = getDynamicUrl(String(layerId))
   }
@@ -155,25 +201,25 @@ export const getMapId = (id: number | null, prefix = ''): string => {
   return '';
 }
 
-export const createSource = ({ map, source = defaultSource, url }: CreateSourceType, options: VectorSource): void => {
+export const createSource = ({ map, source = DEFAULT_SOURCE, url }: CreateSourceType, options: VectorSource): void => {
   map.addSource(source, {
     tiles: [url],
     minzoom: 0,
-    maxzoom: 8,
+    maxzoom: 18,
     ...options,
     type: "vector",
   });
 }
 
-export const createSchoolSource = ({ map, source = defaultSource, schoolData }: CreateSourceType) => {
+export const createSchoolSource = ({ map, source = DEFAULT_SOURCE, schoolData }: CreateSourceType) => {
   map.addSource(source, {
     type: 'geojson',
     data: schoolData as unknown as GeoJSON.FeatureCollection,
   });
 }
 
-export const getAllSourceLayers = (map: Map, sourceId = defaultSource) => {
-  const layersFromSource = map.getStyle().layers.filter(layer => layer.source === sourceId);
+export const getAllSourceLayers = (map: Map, sourceId = DEFAULT_SOURCE) => {
+  const layersFromSource = map.getStyle().layers.filter((layer: any) => layer.source === sourceId);
   return layersFromSource
 }
 
@@ -182,7 +228,10 @@ export const checkSourceAvailable = (map: Map, sourceId: string): boolean => {
   return !!sources && !!sources[sourceId];
 }
 
-export const deleteSourceAndLayers = ({ map, sourceId = defaultSource }: { map: Map, sourceId?: string }): void => {
+export const deleteSourceAndLayers = ({ map, sourceId = DEFAULT_SOURCE }: { map: Map, sourceId?: string }): void => {
+  // remove click handlers
+  removePreviewsMapClickHandlers(map, sourceId);
+
   if (!checkSourceAvailable(map, sourceId)) return;
   const { layers } = map.getStyle();
   layers?.forEach((layer) => {
@@ -210,7 +259,7 @@ const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string)
   }, layerBefore && map.getLayer(layerBefore) ? layerBefore : '');
 }
 
-export const createSchoolLayer = (map: Map, { id, source = defaultSource, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
+export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
   if (map.getLayer(id)) {
     showLayer(map, id);
     return;
@@ -224,11 +273,13 @@ export const createSchoolLayer = (map: Map, { id, source = defaultSource, paintD
     ConnectivityStatusDistribution.unknown, connectivityStatusColors.unknown,
     connectivityStatusColors.unknown
   ];
+  const countryCode = $countryCode.getState();
+  const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
   const paint = {
     ...mapPaintData.connectivityStatus,
+    ...currentCountryPaintData?.connectivityStatus,
     "circle-color": circleColor
   } as unknown as CirclePaint;
-
   createCircleLayer(map, {
     id,
     type: "circle",
@@ -238,14 +289,19 @@ export const createSchoolLayer = (map: Map, { id, source = defaultSource, paintD
     ...options
   });
 
+  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+  delete mapDotsClickIdsAndHandler[source][id];
   if (!mapRoute.map) {
-    onClickOnSchoolDots(map, id);
+    onClickOnSchoolDots(map, id, CONNECTIVITY_STATUS_SOURCE);
   }
 }
 
 const getConnectivityPaint = (colorsConnectivity: StylePaintData, isDynamicLayer: boolean) => {
+  const countryCode = $countryCode.getState();
+  const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
   return {
     ...mapPaintData.connectivity,
+    ...currentCountryPaintData?.connectivity,
     "circle-color": [
       ...mapPaintData.connectivity["circle-color"],
       [
@@ -287,7 +343,7 @@ const getPaintData = ({ isLive, paintData, isDynamicLayer }: { isLive?: boolean;
 
 }
 
-export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = defaultSource, paintData, mapRoute, options, isLive, isMobile }: { id: string; isDynamicLayer: boolean; isLive?: boolean; source?: string; paintData: StylePaintData; options: Record<string, string>, isMobile: boolean; mapRoute: ChangeLayerOptions["mapRoute"] }): void => {
+export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEFAULT_SOURCE, paintData, mapRoute, options, isLive, isMobile }: { id: string; isDynamicLayer: boolean; isLive?: boolean; source?: string; paintData: StylePaintData; options: Record<string, string>, isMobile: boolean; mapRoute: ChangeLayerOptions["mapRoute"] }): void => {
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
     return;
@@ -301,14 +357,14 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = def
     minzoom: 0,
     paint,
     ...options
-  }, getMapId(SCHOOL_STATUS_LAYER.id));
+  }, getMapId(SCHOOL_LAYER_ID));
   // create on click on dots;
   // clear click event before creating new layer;
 
-  map.off('click', id, mapDotsClickIdsAndHandler[id]);
-  delete mapDotsClickIdsAndHandler[id];
+  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+  delete mapDotsClickIdsAndHandler[source][id];
   if (!mapRoute.map) {
-    onClickOnSchoolDots(map, id);
+    onClickOnSchoolDots(map, id, source);
   }
 
 }
@@ -386,4 +442,28 @@ export const matchAdminFilter = (code: string, state: string, color: string) => 
 
 export const findLayer = (features: MapboxGeoJSONFeature[], id: string) => {
   return features.find((feature => feature.layer.id === id))
+}
+
+export const getInterpolatedValue = (stops: [number, number][], zoom: number): number | undefined => {
+  const len = stops.length;
+
+  if (len === 0) throw new Error("Stops array cannot be empty");
+
+  // If zoom is before the first stop, return the first value
+  if (zoom <= stops[0][0]) return stops[0][1];
+
+  // If zoom is after the last stop, return the last value
+  if (zoom >= stops[len - 1][0]) return stops[len - 1][1];
+
+  // Find the zoom interval the current zoom falls into
+  for (let i = 0; i < len - 1; i++) {
+    const [z1, v1] = stops[i];
+    const [z2, v2] = stops[i + 1];
+
+    if (zoom === z1) return v1;
+    if (zoom > z1 && zoom < z2) {
+      const t = (zoom - z1) / (z2 - z1); // linear interpolation factor
+      return v1 + t * (v2 - v1);
+    }
+  }
 }

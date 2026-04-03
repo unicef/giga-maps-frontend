@@ -9,6 +9,7 @@ import { $currentExpandCountry, $searchSchoolIds, setSearchCountryExpand } from 
 import { CountryWithDistrictCount } from "../container/search-result.type";
 import { ChevronDownIcon, ChevronUpIcon, Dot, LeftItem, LinkItem, RightItem, SearchItem } from "../styles/search-result-style"
 import { SearchDistrict } from "./search-district-view"
+import { useTranslation } from "react-i18next";
 
 
 export const expandCountry = (countryId: string, isExpanded: boolean) => {
@@ -18,7 +19,7 @@ export const expandCountry = (countryId: string, isExpanded: boolean) => {
 export const SearchCountry = ({ countryData }: { countryData: CountryWithDistrictCount }) => {
   const countryId = useStore($currentExpandCountry);
   const isSchoolsSelected = useStore($searchSchoolIds).size > 0;
-
+  const { t } = useTranslation();
   const { country_id: id, integration_status: integrationStatus, country_name: name, admin1_count: districtCount, data, country_code: code }
     = countryData;
   const districtsList = useMemo(() => Object.values(data), [data]);
@@ -31,7 +32,7 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
         <LeftItem $bold={isExpanded}>
           <Dot $color={CountryIntegrationStatusColor[integrationStatus]} style={{ left: '-1.2rem', top: '0.5rem', position: 'absolute' }} />
           <Link to={mapCountry} params={{ code: code.toLowerCase() }}>
-            {name}
+            {t(name)}
           </Link>
           {isExpanded && isSchoolsSelected && <Dot />}
         </LeftItem>

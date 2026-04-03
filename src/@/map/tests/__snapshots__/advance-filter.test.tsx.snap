@@ -21,18 +21,115 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
   fill: !important;
 }
 
-.c2 {
+.c9 {
   width: 100%;
 }
 
-.c2 button {
+.c9 button {
   width: 50%;
   padding-right: 0;
+}
+
+.c5 {
+  padding: 0.5rem 1rem;
+}
+
+.c5 .cds--list-box__field {
+  border-bottom: 1px solid;
+}
+
+.c5 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
+  color: #222;
 }
 
 .c1 {
   height: calc(100vh - 9.9rem);
   padding-bottom: 2rem;
+}
+
+.c7 {
+  padding: 0.5rem 1rem;
+}
+
+.c7 .group-input {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0;
+}
+
+.c7 .cds--label {
+  margin-bottom: 0.5rem;
+}
+
+.c2 {
+  padding: 0.5rem 1rem;
+}
+
+.c2 .cds--list-box__field--wrapper {
+  border-bottom: 1px solid var(--cds-border-strong);
+}
+
+.c2 .cds--list-box--expanded.cds--list-box--lg .cds--list-box__menu {
+  max-block-size: 20rem;
+}
+
+.c2 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
+  color: #222;
+}
+
+.c2 .cds--checkbox-label-text {
+  font-size: 0.75rem;
+}
+
+.c4 {
+  padding: 0.5rem 1rem;
+}
+
+.c8 {
+  margin: 0.5rem 0;
+}
+
+.c8 .cds--checkbox-label-text {
+  font-size: 0.75rem;
+}
+
+.c3 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c3 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c3 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c3 .cds--popover-content {
+  max-inline-size: 18rem;
+}
+
+.c6 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c6 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c6 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c6 .cds--popover-content {
+  max-inline-size: 12rem;
 }
 
 @media (min-width:769px) {
@@ -42,7 +139,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
 }
 
 @media (max-width:768px) {
-  .c2 {
+  .c9 {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -120,6 +217,1088 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
           class="scrollbar-container c1 ps"
         >
           <div
+            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r2:-toggle-button"
+              id="downshift-:r2:-label"
+            >
+              Building-id
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r3:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r3:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Test filter
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--multi-select cds--list-box cds--list-box--lg"
+              id="mutli-select-dropdown-building_id_govt"
+            >
+              <div
+                class="cds--list-box__field--wrapper"
+              >
+                <button
+                  aria-activedescendant=""
+                  aria-controls="downshift-:r2:-menu"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-:r2:-label"
+                  class="cds--list-box__field"
+                  id="downshift-:r2:-toggle-button"
+                  role="combobox"
+                  tabindex="0"
+                  type="button"
+                >
+                  <span
+                    class="cds--list-box__label"
+                    id="multiselect-field-label-1"
+                  >
+                    Select Building-id
+                  </span>
+                  <div
+                    class="cds--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+              <ul
+                aria-labelledby="downshift-:r2:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r2:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c4"
+          >
+            <div
+              class="cds--form-item cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              >
+                <label
+                  class="cds--label"
+                  for="text-input-1"
+                >
+                  Building Id
+                  <span
+                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+                  >
+                    <div
+                      class="cds--tooltip-trigger__wrapper"
+                    >
+                      <button
+                        aria-labelledby="tooltip-:r4:"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                          />
+                          <path
+                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <span
+                      aria-hidden="true"
+                      class="cds--popover"
+                      id="tooltip-:r4:"
+                      role="tooltip"
+                    >
+                      <span
+                        class="cds--popover-content cds--tooltip-content"
+                      >
+                        building id
+                      </span>
+                      <span
+                        class="cds--popover-caret"
+                      />
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                    id="text-input-1"
+                    placeholder="Enter building id"
+                    title="Enter building id"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r5:-toggle-button"
+              id="downshift-:r5:-label"
+            >
+              Computer availability
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r6:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r6:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Enter no.
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
+              id="dropdown-computer_availability"
+            >
+              <button
+                aria-activedescendant=""
+                aria-controls="downshift-:r5:-menu"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-:r5:-label"
+                class="cds--list-box__field"
+                id="downshift-:r5:-toggle-button"
+                role="combobox"
+                tabindex="0"
+                title="All"
+                type="button"
+              >
+                <span
+                  class="cds--list-box__label"
+                >
+                  All
+                </span>
+                <div
+                  class="cds--list-box__menu-icon"
+                >
+                  <svg
+                    aria-label="Open menu"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    name="chevron--down"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                    <title>
+                      Open menu
+                    </title>
+                  </svg>
+                </div>
+              </button>
+              <ul
+                aria-labelledby="downshift-:r5:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r5:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r7:-toggle-button"
+              id="downshift-:r7:-label"
+            >
+              Coverage Type
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r8:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r8:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Coverage Type
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--multi-select cds--list-box cds--list-box--lg"
+              id="mutli-select-dropdown-coverage_type"
+            >
+              <div
+                class="cds--list-box__field--wrapper"
+              >
+                <button
+                  aria-activedescendant=""
+                  aria-controls="downshift-:r7:-menu"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-:r7:-label"
+                  class="cds--list-box__field"
+                  id="downshift-:r7:-toggle-button"
+                  role="combobox"
+                  tabindex="0"
+                  type="button"
+                >
+                  <span
+                    class="cds--list-box__label"
+                    id="multiselect-field-label-2"
+                  >
+                    Select Coverage Type
+                  </span>
+                  <div
+                    class="cds--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+              <ul
+                aria-labelledby="downshift-:r7:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r7:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c7"
+          >
+            <label
+              class="cds--label cds--label--no-margin"
+            >
+              Equipment's count
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r9:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r9:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Filter to check the equipment's count
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="c4 group-input"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_robotic_equipment-min-input"
+                      placeholder="min(30)"
+                      title="min(30)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_robotic_equipment-max-input"
+                      placeholder="max(100)"
+                      title="max(100)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item cds--checkbox-wrapper c8"
+            >
+              <input
+                class="cds--checkbox"
+                id="checkbox-num_robotic_equipment__range"
+                style="padding: 0rem 1rem;"
+                type="checkbox"
+              />
+              <label
+                class="cds--checkbox-label"
+                for="checkbox-num_robotic_equipment__range"
+                title=""
+              >
+                <span
+                  class="cds--checkbox-label-text"
+                >
+                  Show null values
+                </span>
+              </label>
+              <div
+                class="cds--checkbox__validation-msg"
+              />
+            </div>
+          </div>
+          <div
+            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:ra:-toggle-button"
+              id="downshift-:ra:-label"
+            >
+              Maps views - Grouped
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:rb:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:rb:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Describes the views of maps
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
+              id="dropdown-coverage_type"
+            >
+              <button
+                aria-activedescendant=""
+                aria-controls="downshift-:ra:-menu"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-:ra:-label"
+                class="cds--list-box__field"
+                id="downshift-:ra:-toggle-button"
+                role="combobox"
+                tabindex="0"
+                title="All"
+                type="button"
+              >
+                <span
+                  class="cds--list-box__label"
+                >
+                  All
+                </span>
+                <div
+                  class="cds--list-box__menu-icon"
+                >
+                  <svg
+                    aria-label="Open menu"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    name="chevron--down"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                    <title>
+                      Open menu
+                    </title>
+                  </svg>
+                </div>
+              </button>
+              <ul
+                aria-labelledby="downshift-:ra:-label"
+                class="cds--list-box__menu"
+                id="downshift-:ra:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c7"
+          >
+            <label
+              class="cds--label cds--label--no-margin"
+            >
+              No of Computer
+            </label>
+            <div
+              class="c4 group-input"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_computers-min-input"
+                      placeholder="Min (0)"
+                      title="Min (0)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_computers-max-input"
+                      placeholder="Max (1450)"
+                      title="Max (1450)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item cds--checkbox-wrapper c8"
+            >
+              <input
+                class="cds--checkbox"
+                id="checkbox-num_computers__range"
+                style="padding: 0rem 1rem;"
+                type="checkbox"
+              />
+              <label
+                class="cds--checkbox-label"
+                for="checkbox-num_computers__range"
+                title=""
+              >
+                <span
+                  class="cds--checkbox-label-text"
+                >
+                  Show null values
+                </span>
+              </label>
+              <div
+                class="cds--checkbox__validation-msg"
+              />
+            </div>
+          </div>
+          <div
+            class="c4"
+          >
+            <div
+              class="cds--form-item cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              >
+                <label
+                  class="cds--label"
+                  for="text-input-1"
+                >
+                  Region
+                  <span
+                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+                  >
+                    <div
+                      class="cds--tooltip-trigger__wrapper"
+                    >
+                      <button
+                        aria-labelledby="tooltip-:rc:"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                          />
+                          <path
+                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <span
+                      aria-hidden="true"
+                      class="cds--popover"
+                      id="tooltip-:rc:"
+                      role="tooltip"
+                    >
+                      <span
+                        class="cds--popover-content cds--tooltip-content"
+                      >
+                        Enter region
+                      </span>
+                      <span
+                        class="cds--popover-caret"
+                      />
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                    id="text-input-1"
+                    placeholder="Enter region"
+                    title="Enter region"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:rd:-toggle-button"
+              id="downshift-:rd:-label"
+            >
+              School area type - Org
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:re:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:re:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Urban or rural region in which school is located.
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
+              id="dropdown-environment"
+            >
+              <button
+                aria-activedescendant=""
+                aria-controls="downshift-:rd:-menu"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-:rd:-label"
+                class="cds--list-box__field"
+                id="downshift-:rd:-toggle-button"
+                role="combobox"
+                tabindex="0"
+                title="All"
+                type="button"
+              >
+                <span
+                  class="cds--list-box__label"
+                >
+                  All
+                </span>
+                <div
+                  class="cds--list-box__menu-icon"
+                >
+                  <svg
+                    aria-label="Open menu"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    name="chevron--down"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                    <title>
+                      Open menu
+                    </title>
+                  </svg>
+                </div>
+              </button>
+              <ul
+                aria-labelledby="downshift-:rd:-label"
+                class="cds--list-box__menu"
+                id="downshift-:rd:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c7"
+          >
+            <label
+              class="cds--label cds--label--no-margin"
+            >
+              Test Filter NG-001
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:rf:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:rf:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Updating the filter for testing purposes
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="c4 group-input"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="connectivity_speed-min-input"
+                      placeholder="Min (35)"
+                      title="Min (35)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="connectivity_speed-max-input"
+                      placeholder="Max (36)"
+                      title="Max (36)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item cds--checkbox-wrapper c8"
+            >
+              <input
+                class="cds--checkbox"
+                id="checkbox-connectivity_speed__range"
+                style="padding: 0rem 1rem;"
+                type="checkbox"
+              />
+              <label
+                class="cds--checkbox-label"
+                for="checkbox-connectivity_speed__range"
+                title=""
+              >
+                <span
+                  class="cds--checkbox-label-text"
+                >
+                  Show null values
+                </span>
+              </label>
+              <div
+                class="cds--checkbox__validation-msg"
+              />
+            </div>
+          </div>
+          <div
             class="ps__rail-x"
             style="left: 0px; top: 0px;"
           >
@@ -141,7 +1320,7 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
           </div>
         </div>
         <div
-          class="c2"
+          class="c9"
         >
           <button
             class="cds--btn cds--btn--secondary"
@@ -164,6 +1343,1474 @@ exports[`AdvancedFilter should render Advance filter 1`] = `
   </span>
 </DocumentFragment>
 `;
+
+exports[`AdvancedFilter should render Advance filter 2`] = `
+<DocumentFragment>
+  .c0 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.c0 >h3 {
+  font-family: Open Sans;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem;
+}
+
+.c0 button svg {
+  fill: !important;
+}
+
+.c9 {
+  width: 100%;
+}
+
+.c9 button {
+  width: 50%;
+  padding-right: 0;
+}
+
+.c5 {
+  padding: 0.5rem 1rem;
+}
+
+.c5 .cds--list-box__field {
+  border-bottom: 1px solid;
+}
+
+.c5 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
+  color: #222;
+}
+
+.c1 {
+  height: calc(100vh - 9.9rem);
+  padding-bottom: 2rem;
+}
+
+.c7 {
+  padding: 0.5rem 1rem;
+}
+
+.c7 .group-input {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0;
+}
+
+.c7 .cds--label {
+  margin-bottom: 0.5rem;
+}
+
+.c2 {
+  padding: 0.5rem 1rem;
+}
+
+.c2 .cds--list-box__field--wrapper {
+  border-bottom: 1px solid var(--cds-border-strong);
+}
+
+.c2 .cds--list-box--expanded.cds--list-box--lg .cds--list-box__menu {
+  max-block-size: 20rem;
+}
+
+.c2 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
+  color: #222;
+}
+
+.c2 .cds--checkbox-label-text {
+  font-size: 0.75rem;
+}
+
+.c4 {
+  padding: 0.5rem 1rem;
+}
+
+.c8 {
+  margin: 0.5rem 0;
+}
+
+.c8 .cds--checkbox-label-text {
+  font-size: 0.75rem;
+}
+
+.c3 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c3 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c3 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c3 .cds--popover-content {
+  max-inline-size: 18rem;
+}
+
+.c6 button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+.c6 .cds--popover-content {
+  background: #181818!important;
+}
+
+.c6 svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.c6 .cds--popover-content {
+  max-inline-size: 12rem;
+}
+
+@media (min-width:769px) {
+  .c0 {
+    min-width: 18rem;
+  }
+}
+
+@media (max-width:768px) {
+  .c9 {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+@media (max-width:768px) {
+  .c1 {
+    max-height: calc(100vh - 13rem);
+  }
+}
+
+<span
+    class="cds--popover"
+  >
+    <span
+      class="cds--popover-content filter-popover-content"
+    >
+      <div
+        class="c0"
+      >
+        <h3>
+          Filter Schools by
+        </h3>
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
+        >
+          <div
+            class="cds--tooltip-trigger__wrapper"
+          >
+            <button
+              aria-labelledby="tooltip-:r16:"
+              class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
+              data-testid="filter-close"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="18"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-:r16:"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Close
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+      </div>
+      <form
+        aria-label="filter-form"
+        class="cds--form"
+      >
+        <div
+          class="scrollbar-container c1 ps"
+        >
+          <div
+            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r18:-toggle-button"
+              id="downshift-:r18:-label"
+            >
+              Building-id
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r19:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r19:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Test filter
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--multi-select cds--list-box cds--list-box--lg"
+              id="mutli-select-dropdown-building_id_govt"
+            >
+              <div
+                class="cds--list-box__field--wrapper"
+              >
+                <button
+                  aria-activedescendant=""
+                  aria-controls="downshift-:r18:-menu"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-:r18:-label"
+                  class="cds--list-box__field"
+                  id="downshift-:r18:-toggle-button"
+                  role="combobox"
+                  tabindex="0"
+                  type="button"
+                >
+                  <span
+                    class="cds--list-box__label"
+                    id="multiselect-field-label-5"
+                  >
+                    Select Building-id
+                  </span>
+                  <div
+                    class="cds--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+              <ul
+                aria-labelledby="downshift-:r18:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r18:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c4"
+          >
+            <div
+              class="cds--form-item cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              >
+                <label
+                  class="cds--label"
+                  for="text-input-1"
+                >
+                  Building Id
+                  <span
+                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+                  >
+                    <div
+                      class="cds--tooltip-trigger__wrapper"
+                    >
+                      <button
+                        aria-labelledby="tooltip-:r1a:"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                          />
+                          <path
+                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <span
+                      aria-hidden="true"
+                      class="cds--popover"
+                      id="tooltip-:r1a:"
+                      role="tooltip"
+                    >
+                      <span
+                        class="cds--popover-content cds--tooltip-content"
+                      >
+                        building id
+                      </span>
+                      <span
+                        class="cds--popover-caret"
+                      />
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                    id="text-input-1"
+                    placeholder="Enter building id"
+                    title="Enter building id"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r1b:-toggle-button"
+              id="downshift-:r1b:-label"
+            >
+              Computer availability
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r1c:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r1c:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Enter no.
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
+              id="dropdown-computer_availability"
+            >
+              <button
+                aria-activedescendant=""
+                aria-controls="downshift-:r1b:-menu"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-:r1b:-label"
+                class="cds--list-box__field"
+                id="downshift-:r1b:-toggle-button"
+                role="combobox"
+                tabindex="0"
+                title="All"
+                type="button"
+              >
+                <span
+                  class="cds--list-box__label"
+                >
+                  All
+                </span>
+                <div
+                  class="cds--list-box__menu-icon"
+                >
+                  <svg
+                    aria-label="Open menu"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    name="chevron--down"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                    <title>
+                      Open menu
+                    </title>
+                  </svg>
+                </div>
+              </button>
+              <ul
+                aria-labelledby="downshift-:r1b:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r1b:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r1d:-toggle-button"
+              id="downshift-:r1d:-label"
+            >
+              Coverage Type
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r1e:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r1e:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Coverage Type
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--multi-select cds--list-box cds--list-box--lg"
+              id="mutli-select-dropdown-coverage_type"
+            >
+              <div
+                class="cds--list-box__field--wrapper"
+              >
+                <button
+                  aria-activedescendant=""
+                  aria-controls="downshift-:r1d:-menu"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-:r1d:-label"
+                  class="cds--list-box__field"
+                  id="downshift-:r1d:-toggle-button"
+                  role="combobox"
+                  tabindex="0"
+                  type="button"
+                >
+                  <span
+                    class="cds--list-box__label"
+                    id="multiselect-field-label-6"
+                  >
+                    Select Coverage Type
+                  </span>
+                  <div
+                    class="cds--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+              <ul
+                aria-labelledby="downshift-:r1d:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r1d:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c7"
+          >
+            <label
+              class="cds--label cds--label--no-margin"
+            >
+              Equipment's count
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r1f:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r1f:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Filter to check the equipment's count
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="c4 group-input"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_robotic_equipment-min-input"
+                      placeholder="min(30)"
+                      title="min(30)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_robotic_equipment-max-input"
+                      placeholder="max(100)"
+                      title="max(100)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item cds--checkbox-wrapper c8"
+            >
+              <input
+                class="cds--checkbox"
+                id="checkbox-num_robotic_equipment__range"
+                style="padding: 0rem 1rem;"
+                type="checkbox"
+              />
+              <label
+                class="cds--checkbox-label"
+                for="checkbox-num_robotic_equipment__range"
+                title=""
+              >
+                <span
+                  class="cds--checkbox-label-text"
+                >
+                  Show null values
+                </span>
+              </label>
+              <div
+                class="cds--checkbox__validation-msg"
+              />
+            </div>
+          </div>
+          <div
+            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r1g:-toggle-button"
+              id="downshift-:r1g:-label"
+            >
+              Maps views - Grouped
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r1h:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r1h:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Describes the views of maps
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
+              id="dropdown-coverage_type"
+            >
+              <button
+                aria-activedescendant=""
+                aria-controls="downshift-:r1g:-menu"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-:r1g:-label"
+                class="cds--list-box__field"
+                id="downshift-:r1g:-toggle-button"
+                role="combobox"
+                tabindex="0"
+                title="All"
+                type="button"
+              >
+                <span
+                  class="cds--list-box__label"
+                >
+                  All
+                </span>
+                <div
+                  class="cds--list-box__menu-icon"
+                >
+                  <svg
+                    aria-label="Open menu"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    name="chevron--down"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                    <title>
+                      Open menu
+                    </title>
+                  </svg>
+                </div>
+              </button>
+              <ul
+                aria-labelledby="downshift-:r1g:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r1g:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c7"
+          >
+            <label
+              class="cds--label cds--label--no-margin"
+            >
+              No of Computer
+            </label>
+            <div
+              class="c4 group-input"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_computers-min-input"
+                      placeholder="Min (0)"
+                      title="Min (0)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="num_computers-max-input"
+                      placeholder="Max (1450)"
+                      title="Max (1450)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item cds--checkbox-wrapper c8"
+            >
+              <input
+                class="cds--checkbox"
+                id="checkbox-num_computers__range"
+                style="padding: 0rem 1rem;"
+                type="checkbox"
+              />
+              <label
+                class="cds--checkbox-label"
+                for="checkbox-num_computers__range"
+                title=""
+              >
+                <span
+                  class="cds--checkbox-label-text"
+                >
+                  Show null values
+                </span>
+              </label>
+              <div
+                class="cds--checkbox__validation-msg"
+              />
+            </div>
+          </div>
+          <div
+            class="c4"
+          >
+            <div
+              class="cds--form-item cds--text-input-wrapper"
+            >
+              <div
+                class="cds--text-input__label-wrapper"
+              >
+                <label
+                  class="cds--label"
+                  for="text-input-1"
+                >
+                  Region
+                  <span
+                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+                  >
+                    <div
+                      class="cds--tooltip-trigger__wrapper"
+                    >
+                      <button
+                        aria-labelledby="tooltip-:r1i:"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                          />
+                          <path
+                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <span
+                      aria-hidden="true"
+                      class="cds--popover"
+                      id="tooltip-:r1i:"
+                      role="tooltip"
+                    >
+                      <span
+                        class="cds--popover-content cds--tooltip-content"
+                      >
+                        Enter region
+                      </span>
+                      <span
+                        class="cds--popover-caret"
+                      />
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div
+                class="cds--text-input__field-outer-wrapper"
+              >
+                <div
+                  class="cds--text-input__field-wrapper"
+                >
+                  <input
+                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                    id="text-input-1"
+                    placeholder="Enter region"
+                    title="Enter region"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="cds--text-input__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
+          >
+            <label
+              class="cds--label"
+              for="downshift-:r1j:-toggle-button"
+              id="downshift-:r1j:-label"
+            >
+              School area type - Org
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r1k:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r1k:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Urban or rural region in which school is located.
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
+              id="dropdown-environment"
+            >
+              <button
+                aria-activedescendant=""
+                aria-controls="downshift-:r1j:-menu"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-labelledby="downshift-:r1j:-label"
+                class="cds--list-box__field"
+                id="downshift-:r1j:-toggle-button"
+                role="combobox"
+                tabindex="0"
+                title="All"
+                type="button"
+              >
+                <span
+                  class="cds--list-box__label"
+                >
+                  All
+                </span>
+                <div
+                  class="cds--list-box__menu-icon"
+                >
+                  <svg
+                    aria-label="Open menu"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    name="chevron--down"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                    <title>
+                      Open menu
+                    </title>
+                  </svg>
+                </div>
+              </button>
+              <ul
+                aria-labelledby="downshift-:r1j:-label"
+                class="cds--list-box__menu"
+                id="downshift-:r1j:-menu"
+                role="listbox"
+              />
+            </div>
+          </div>
+          <div
+            class="c7"
+          >
+            <label
+              class="cds--label cds--label--no-margin"
+            >
+              Test Filter NG-001
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
+              >
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-labelledby="tooltip-:r1l:"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+                      />
+                      <path
+                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-:r1l:"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Updating the filter for testing purposes
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </label>
+            <div
+              class="c4 group-input"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="connectivity_speed-min-input"
+                      placeholder="Min (35)"
+                      title="Min (35)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                />
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
+                      id="connectivity_speed-max-input"
+                      placeholder="Max (36)"
+                      title="Max (36)"
+                      type="number"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--form-item cds--checkbox-wrapper c8"
+            >
+              <input
+                class="cds--checkbox"
+                id="checkbox-connectivity_speed__range"
+                style="padding: 0rem 1rem;"
+                type="checkbox"
+              />
+              <label
+                class="cds--checkbox-label"
+                for="checkbox-connectivity_speed__range"
+                title=""
+              >
+                <span
+                  class="cds--checkbox-label-text"
+                >
+                  Show null values
+                </span>
+              </label>
+              <div
+                class="cds--checkbox__validation-msg"
+              />
+            </div>
+          </div>
+          <div
+            class="ps__rail-x"
+            style="left: 0px; top: 0px;"
+          >
+            <div
+              class="ps__thumb-x"
+              style="left: 0px; width: 0px;"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="ps__rail-y"
+            style="top: 0px; left: 0px;"
+          >
+            <div
+              class="ps__thumb-y"
+              style="top: 0px; height: 0px;"
+              tabindex="0"
+            />
+          </div>
+        </div>
+        <div
+          class="c9"
+        >
+          <button
+            class="cds--btn cds--btn--secondary"
+            type="reset"
+          >
+            Reset
+          </button>
+          <button
+            class="cds--btn cds--btn--primary"
+            type="submit"
+          >
+            Apply
+          </button>
+        </div>
+      </form>
+    </span>
+    <span
+      class="cds--popover-caret"
+    />
+  </span>
+</DocumentFragment>
+`;
+
+exports[`AdvancedFilter should render Advance filter button  1`] = `
+<DocumentFragment>
+  .c1 .cds--popover>.filter-popover-content {
+  background: #181818;
+  height: calc(100vh - 2.3rem);
+  transform: none;
+  top: -1rem;
+  position: fixed;
+  right: 0;
+  width: 18rem;
+}
+
+.c1 .cds--popover .cds--popover-caret {
+  display: none;
+}
+
+.c0 {
+  z-index: 99;
+  background: #181818;
+  right: .5rem;
+  border-radius: 62.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.c2 {
+  position: relative;
+}
+
+.c2 .cds--btn:not(.cds--btn--disabled) {
+  background: #474747;
+  border-radius: 1.875rem;
+  padding: 0.3rem 0.8rem;
+}
+
+.c2 .cds--btn svg {
+  transform: rotate(90deg);
+  margin-right: 0.325rem;
+  margin-top: 0.0625rem;
+}
+
+.c2 .cds--btn--primary:focus {
+  box-shadow: 0 0 0 1px #181818;
+}
+
+.c2 svg {
+  fill: #fff;
+}
+
+.c2 .cds--popover {
+  position: relative;
+  z-index: 6001;
+  top: -1rem;
+}
+
+.c2 .cds--tooltip-content {
+  background: #fff!important;
+  color: #181818!important;
+}
+
+.c2 .cds--popover-caret {
+  background: #fff!important;
+}
+
+.c2 .cds--btn--primary:focus {
+  border-color: #181818;
+}
+
+@media (max-width:768px) {
+  .c1 .cds--popover>.filter-popover-content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-inline-size: none;
+    height: 100%;
+  }
+}
+
+<div
+    class="c0 filter-wrapper-popup"
+  >
+    <span
+      class="cds--popover-container cds--popover--left c1 filter-popover-link"
+    >
+      <div
+        class="c2"
+      >
+        <button
+          align="left"
+          class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
+          label="Filter"
+          tooltiptext="Filters"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            fill="#fff"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M24 30v-4.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0v14.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v4.1s2 0 2 0zm-4-9c0-1.7 1.3-3 3-3s3 1.3 3 3c0 1.7-1.3 3-3 3s-3-1.3-3-3zM8 2v4.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v14.1s2 0 2 0v-14.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0zm4 9c0 1.7-1.3 3-3 3s-3-1.3-3-3 1.3-3 3-3 3 1.3 3 3z"
+            />
+          </svg>
+          <span>
+            Filters
+          </span>
+        </button>
+      </div>
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AdvancedFilter should render Advance filter button 1`] = `<DocumentFragment />`;
 
 exports[`RangeTextInput Component RangeTextInput input 1`] = `
 .c0 {
@@ -227,7 +2874,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-labelledby="tooltip-:r4:"
+            aria-labelledby="tooltip-:r1o:"
             type="button"
           >
             <svg
@@ -252,7 +2899,7 @@ exports[`RangeTextInput Component RangeTextInput input 1`] = `
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-:r4:"
+          id="tooltip-:r1o:"
           role="tooltip"
         >
           <span

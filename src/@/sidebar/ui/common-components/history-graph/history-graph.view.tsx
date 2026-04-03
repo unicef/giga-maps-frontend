@@ -19,8 +19,10 @@ import { useRoute } from "~/lib/router";
 import { BarChartScrollable, HistoryGraphWrapper, PanExpander } from "./history-graph.style";
 import HistoryButtons from "./history-buttons.view";
 import { LoadingText } from "~/@/common/style/styled-component-style";
+import { useTranslation } from "react-i18next";
 
 const HistoryGraph = ({ schoolData, isLoading }: { schoolData?: SchoolStatsType; isLoading?: boolean }) => {
+  const { t } = useTranslation();
   const intervalUnit = useStore($historyIntervalUnit);
   const connectivityStats = useStore($connectivityStats);
   const schoolView = useRoute(mapSchools);
@@ -70,6 +72,7 @@ const HistoryGraph = ({ schoolData, isLoading }: { schoolData?: SchoolStatsType;
         scaleType: "linear",
         thresholds: [
           {
+            label: t('threshold'),
             value: globalBenchmark,
             fillColor: "#6AC276",
             valueFormatter: (value: number) => `${value} ${unit}`

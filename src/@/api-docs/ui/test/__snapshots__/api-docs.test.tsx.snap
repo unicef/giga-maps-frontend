@@ -76,7 +76,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   background-color: #181818!important;
 }
 
-.c9 {
+.c10 {
   position: fixed;
   bottom: 0;
   padding: 1rem;
@@ -84,22 +84,22 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   align-items: center;
 }
 
-.c9 .link {
+.c10 .link {
   font-size: 0.75rem;
   margin-left: 0.75rem;
   text-transform: none;
 }
 
-.c9 a {
+.c10 a {
   margin-left: .5rem;
 }
 
-.c9 p {
+.c10 p {
   font-size: 0.75rem;
   color: #fff;
 }
 
-.c9 svg {
+.c10 svg {
   fill: #fff;
 }
 
@@ -143,9 +143,48 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   fill: #fff!important;
 }
 
-.c10 {
+.c11 {
   display: flex;
   align-items: center;
+}
+
+.c9 {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.c9 .cds--list-box__field {
+  background: #333333;
+}
+
+.c9 .cds--list-box__label {
+  color: #c0c0c0;
+}
+
+.c9 .cds--list-box__menu-icon svg {
+  fill: #fff;
+}
+
+.c9 .cds--list-box__label {
+  color: #f5f5f5;
+}
+
+.c9 .cds--label {
+  color: #c0c0c0;
+}
+
+.c9 .cds--list-box__menu {
+  background: #333333;
+}
+
+.c9 .cds--list-box__menu-item__option {
+  color: #c0c0c0;
+}
+
+.c9 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
+  color: #222;
 }
 
 .c1 {
@@ -166,7 +205,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
   flex-direction: row;
 }
 
-.c11 {
+.c12 {
   width: calc(100vw - 17rem);
   padding-bottom: 0.3rem;
 }
@@ -329,7 +368,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
               <span
                 class="cds--side-nav__link-text"
               >
-                About Giga maps
+                About Giga Maps
               </span>
             </a>
           </li>
@@ -368,10 +407,65 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
           </li>
         </ul>
         <div
-          class="c9 hello"
+          class="cds--dropdown__wrapper cds--list-box__wrapper c9"
         >
           <div
-            class="c10"
+            class="cds--dropdown cds--list-box"
+            id="language"
+          >
+            <button
+              aria-activedescendant=""
+              aria-controls="downshift-:r2:-menu"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="downshift-:r2:-label"
+              class="cds--list-box__field"
+              id="downshift-:r2:-toggle-button"
+              role="combobox"
+              tabindex="0"
+              title=""
+              type="button"
+            >
+              <span
+                class="cds--list-box__label"
+              />
+              <div
+                class="cds--list-box__menu-icon"
+              >
+                <svg
+                  aria-label="Open menu"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  name="chevron--down"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                  <title>
+                    Open menu
+                  </title>
+                </svg>
+              </div>
+            </button>
+            <ul
+              aria-labelledby="downshift-:r2:-label"
+              class="cds--list-box__menu"
+              id="downshift-:r2:-menu"
+              role="listbox"
+            />
+          </div>
+        </div>
+        <div
+          class="c10"
+        >
+          <div
+            class="c11"
           >
             <p>
               © 2024  
@@ -404,7 +498,7 @@ exports[`ApiDocs renders ApiDocsMain and take a snapshop 1`] = `
       </div>
     </div>
     <div
-      class="scrollbar-container c11 ps"
+      class="scrollbar-container c12 ps"
     >
       <div
         class="ps__rail-x"

@@ -1,6 +1,7 @@
-import { Dropdown, Popover, MultiSelect, Checkbox } from "@carbon/react";
+import { Checkbox, Dropdown, MultiSelect, Popover } from "@carbon/react";
 import { styled } from "styled-components";
 import { Scroll } from "~/@/scroll";
+import { css } from "styled-components";
 
 export const FilterPopover = styled(Popover)`
     /* position: absolute; */
@@ -33,7 +34,7 @@ export const FilterPopover = styled(Popover)`
 
 export const FilterWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
   z-index: 99;
-  background: ${props => props.theme.main};
+  // background: ${props => props.theme.main};
   right: .5rem;
   border-radius: 62.5rem;
   display: flex;
@@ -122,23 +123,27 @@ export const FilterActionButtonWrapper = styled.div`
   }
 `
 
-export const StyledDropdownSingleSelect = styled(Dropdown)`
+export const StyledDropdownSingleSelect = styled(Dropdown) <{ light?: boolean, theme: any }>`
   padding: 0.5rem 1rem;
-  .cds--list-box__field{
-    background: ${props => props.theme.grey80};
-    border-bottom: 1px solid ${props => props.theme.text};
-  }
+  ${({ light, theme }) =>
+    !light &&
+    css`
+
+      .cds--list-box__field {
+        background: ${theme.grey80};
+        border-bottom: 1px solid ${theme.text};
+      }
 
   .cds--list-box__label{
     color: ${props => props.theme.filterGrey};
-  }
+      }
 
   .cds--list-box__menu-icon{
     svg{
       fill:${props => props.theme.text};
-    }
-  }
-  
+        }
+      }
+
   // Style for the titleText
   .cds--list-box__label {
     color: ${props => props.theme.filterText}; 
@@ -146,21 +151,23 @@ export const StyledDropdownSingleSelect = styled(Dropdown)`
 
   .cds--label{
     color: ${props => props.theme.filterGrey}
-  }
+      }
 
   .cds--list-box__menu{
     background: ${props => props.theme.grey80};
-  }
+      }
 
   .cds--list-box__menu-item__option{
     color: ${props => props.theme.filterGrey}
-  }
+      }
 
-  .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
+      .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
     background: ${props => props.theme.grey90};
-    color: #222;
-  }
-`
+        color: #222;
+      }
+    `}
+`;
+
 
 export const ScrollableContainer = styled(Scroll)`
   height: calc(100vh - 9.9rem);
@@ -174,8 +181,11 @@ export const StyledApplyFilter = styled.div`
   display: flex;
   flex-direction: column;
 `
-export const StyledApplyFilterDropdown = styled(Dropdown)`
+export const StyledApplyFilterDropdown = styled(Dropdown) <{ light?: boolean, theme: any }>`
   padding: 1rem;
+  ${({ light, theme }) =>
+    !light &&
+    css`
   .cds--label{
     color: ${props => props.theme.filterGrey}; 
   }
@@ -197,7 +207,8 @@ export const StyledApplyFilterDropdown = styled(Dropdown)`
   button {
     width: 100%;
   }
-`
+ `}
+`;
 
 export const StyledTextInputContainer = styled.div`
   padding: 0.5rem 1rem;
@@ -214,8 +225,11 @@ export const StyledTextInputContainer = styled.div`
   }
 `
 
-export const StyledMultiSelectFilterConfig = styled(MultiSelect)`
+export const StyledMultiSelectFilterConfig = styled(MultiSelect) <{ light?: boolean, theme: any }>`
   padding: 0.5rem 1rem;
+  ${({ light, theme }) =>
+    !light &&
+    css`
 
   .cds--multi-select .cds--list-box__field--wrapper {
     background-color: ${props => props.theme.grey80};
@@ -267,10 +281,14 @@ export const StyledMultiSelectFilterConfig = styled(MultiSelect)`
     border-block-color: ${props => props.theme.main};
     border-inline-color: ${props => props.theme.main};
   }
-`
+ `}
+`;
 
-export const StyledTextInputWrapper = styled.div`
+export const StyledTextInputWrapper = styled.div <{ light?: boolean, theme: any }>`
   padding: 0.5rem 1rem;
+  ${({ light, theme }) =>
+    !light &&
+    css`
   input::placeholder{
     color: ${props => props.theme.filterText}
   }
@@ -286,7 +304,8 @@ export const StyledTextInputWrapper = styled.div`
   .cds--text-input{
     color: ${props => props.theme.filterText}
   }
-`
+ `}
+`;
 
 export const StyledCheckbox = styled(Checkbox)`
   margin: 0.5rem 0;
@@ -309,10 +328,11 @@ export const StyledCheckbox = styled(Checkbox)`
 
 export const FilterTagContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 1.5rem;
+  padding: 2rem 1rem 0.5rem 1rem;
+  // align-items: center;
+  // justify-content: center;
+  // position: fixed;
+  // bottom: 1.5rem;
   left: 0;
   right: 0;
   z-index: 1;

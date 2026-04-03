@@ -64,7 +64,7 @@ export const Text = styled.p<{ $size?: number; $weight?: number; $transform?: st
   `}
 `
 
-export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: string; $width?: string; $height?: string; }>`
+export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: string; $width?: string; $height?: string; $style?: string }>`
 
   ${props => props.$padding && css`
     padding: ${props.$padding};
@@ -86,6 +86,10 @@ export const Div = styled.div<{ $padding?: string; $margin?: string; $flex?: str
     display: flex;
     align-items: ${props.$flex};
     justify-items: ${props.$flex};
+  `}
+
+  ${props => props.$style && css`
+    ${props.$style}
   `}
 `
 
