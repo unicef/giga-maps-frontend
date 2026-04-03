@@ -257,5 +257,8 @@
   "this-week": "Esta semana",
   "this-month": "Este mês",
   "no-more-results": "Não há mais resultados",
-  "int": "{{val, number}}"
+  "int": "{{val, number}}",
+  "school-location-duplicates": "Duplicados de localização da escola",
+  "school-duplicates": "Escolas duplicadas",
+  "of": "de"
 }
