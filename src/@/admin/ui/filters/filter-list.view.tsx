@@ -1,3 +1,4 @@
+import { Add, Edit } from '@carbon/icons-react';
 import {
   Button,
   DataTable,
@@ -11,33 +12,36 @@ import {
   TableToolbar,
   ToggletipButton,
 } from '@carbon/react';
+import { useStore } from 'effector-react';
+import { useEffect, useMemo, useState } from 'react';
+
+import { $countryList } from '~/@/api-docs/models/explore-api.model';
+import { StatusWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
+import { Div, EmptyList } from '~/@/common/style/styled-component-style';
+import { $userPermissions } from '~/core/auth/models';
+import { addAdminFilter, adminFilterRoute, editAdminFilter } from '~/core/routes';
+import { Link } from '~/lib/router';
+
+import { deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from '../../effects/filter-fx';
+import { $entityTypes } from '../../models/admin-model';
+import { $filterListCount, $filterListResponse, $filterStatusChoices, $filterTypeChoices, $reloadFiler } from '../../models/filter-list.model';
+import { FilterListType, FilterStatusType } from '../../types/filter-list.type';
+import { FilterStatusColors, getFilterStatus, getFilterType } from '../../utils/filter-list.util';
 import PageTitleComponent from '../common-components/page-title-component';
+import Pagination from '../common-components/Pagination';
+import PromptActionable, { PromptActionableType } from '../common-components/prompt-actionable';
+import SearchToolbar from '../common-components/search-toolbar';
 import {
   CountryListToggletip,
   CountryListToggletipContent,
   DataLayerActiveCountries,
   DataTableContainer, TableDataBody, TableDataHead, TableWrapper, ToolbarContent,
 } from '../styles/admin-styles'
-import { Add, Edit } from '@carbon/icons-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useStore } from 'effector-react';
-import { $filterListCount, $filterListResponse, $filterStatusChoices, $filterTypeChoices, $reloadFiler } from '../../models/filter-list.model';
-import { deleteFilterFx, editFilterFx, getFilterListFx, publishFilterFx } from '../../effects/filter-fx';
-import { addAdminFilter, adminFilterRoute, editAdminFilter } from '~/core/routes';
-import { Link } from '~/lib/router';
-import { Div, EmptyList } from '~/@/common/style/styled-component-style';
 import { FilterScroll } from './filter-list.styles';
-import Pagination from '../common-components/Pagination';
-import { $countryList } from '~/@/api-docs/models/explore-api.model';
-import { FilterListType, FilterStatusType } from '../../types/filter-list.type';
-import { StatusWrapper } from '~/@/api-docs/ui/components/api-keys-right-section/api-keys-right.side.style';
-import { FilterStatusColors, getFilterStatus, getFilterType } from '../../utils/filter-list.util';
-import PromptActionable, { PromptActionableType } from '../common-components/prompt-actionable';
-import SearchToolbar from '../common-components/search-toolbar';
-import { $userPermissions } from '~/core/auth/models';
 
 const headers = [
   { key: 'code', header: 'Code' },
+  { key: 'entity_type', header: 'Entity Type' },
   { key: 'name', header: 'Filter name' },
   { key: 'parameter', header: 'Parameter' },
   { key: 'type', header: 'Filter type' },
@@ -59,9 +63,22 @@ const ListFilterView = () => {
   const { statusChoices } = useStore($filterStatusChoices)
   const [{ page, pageSize }, setPageAndSize] = useState({ page: 1, pageSize: 20 });
   const countryList = useStore($countryList);
+  const entityTypes = useStore($entityTypes);
   const reloadFilter = useStore($reloadFiler);
   const onViewPage = useStore(adminFilterRoute.visible);
-  const reloadApiCall = async () => {
+  const entityNameById = useMemo(() => {
+    return entityTypes.reduce((acc, entity) => {
+      acc[entity.id] = entity.name;
+      return acc;
+    }, {} as Record<number, string>)
+  }, [entityTypes])
+  const entityNameByCode = useMemo(() => {
+    return entityTypes.reduce((acc, entity) => {
+      acc[entity.code.toLowerCase()] = entity.name;
+      return acc;
+    }, {} as Record<string, string>)
+  }, [entityTypes])
+  const reloadApiCall = () => {
     void getFilterListFx({ page, pageSize, search });
   }
 
@@ -102,7 +119,7 @@ const ListFilterView = () => {
 
   const getCountryName = (activeCountriesIds: number[]) => {
     const activeCountries = countryList?.filter(item => activeCountriesIds.includes(item.id));
-    let countries = activeCountries?.map(item => item.name).join(", ") ?? 'All countries';
+    const countries = activeCountries?.map(item => item.name).join(", ") ?? 'All countries';
     if (!activeCountriesIds?.length) return '-';
     return <>
       {activeCountriesIds?.length > 0 ? activeCountriesIds.length : countryList?.length}
@@ -124,11 +141,29 @@ const ListFilterView = () => {
 
   const rows = useMemo(() => filterList?.map((item) => {
     const { inDraft, isActivated, isDisabled } = getFilterStatus(item.status);
+    const columnLabel = typeof item.column_configuration === 'number'
+      ? '-'
+      : item?.column_configuration?.label ?? item?.column_configuration?.name ?? '-';
+    const entityValue = item?.entity_type;
+    const entityName = (() => {
+      if (typeof entityValue === 'number') {
+        return entityNameById[entityValue] ?? item.entity_type__code ?? String(entityValue);
+      }
+      if (typeof entityValue === 'string') {
+        const numericEntityType = Number(entityValue);
+        if (!Number.isNaN(numericEntityType)) {
+          return entityNameById[numericEntityType] ?? item.entity_type__code ?? entityValue;
+        }
+        return entityNameByCode[entityValue.toLowerCase()] ?? item.entity_type__code ?? entityValue;
+      }
+      return '-';
+    })();
     return ({
       ...item,
+      entity_type: entityName,
       type: typeChoices[item.type],
       options: showOptions(item),
-      parameter: item?.column_configuration?.label,
+      parameter: columnLabel,
       countries: getCountryName(item?.active_countries_list),
       publisher: item?.published_by?.first_name,
       status: <>
@@ -153,27 +188,27 @@ const ListFilterView = () => {
             setPromptData({
               kind: "warning",
               title: "Are you sure you want to activate this filter?",
-              onActionButtonClick: () => publishFilter(item.id ?? 0)
+              onActionButtonClick: () => { void publishFilter(item.id ?? 0) }
             })
           }} />}
           {isActivated && <OverflowMenuItem disabled={!permissions.CAN_VIEW_ADVANCE_FILTER} itemText="Deactivate" onClick={() => {
             setPromptData({
               kind: "warning",
               title: "Are you sure you want to deactivate this filter?",
-              onActionButtonClick: () => updateFilter(item.id ?? 0, { status: FilterStatusType.DISABLED })
+              onActionButtonClick: () => { void updateFilter(item.id ?? 0, { status: FilterStatusType.DISABLED }) }
             })
           }} />}
           {(inDraft || isDisabled) && <OverflowMenuItem disabled={!permissions.CAN_VIEW_ADVANCE_FILTER} hasDivider isDelete itemText="Delete" onClick={() => {
             setPromptData({
               kind: "error",
               title: "Are you sure you want to delete this filter?",
-              onActionButtonClick: () => deleteFilterData(item.id ?? 0)
+              onActionButtonClick: () => { void deleteFilterData(item.id ?? 0) }
             })
           }} />}
         </OverflowMenu>
       </Div>
     })
-  }), [filterList]);
+  }), [entityNameByCode, entityNameById, filterList, permissions.CAN_UPDATE_ADVANCE_FILTER, permissions.CAN_VIEW_ADVANCE_FILTER, statusChoices, typeChoices]);
 
   useEffect(() => {
     if (onViewPage) {
@@ -195,8 +230,8 @@ const ListFilterView = () => {
       }
       <DataTable rows={rows} headers={headers} >
         {({
-          rows,
-          headers,
+          rows: tableRows,
+          headers: tableHeaders,
           getTableProps,
           getRowProps,
           getToolbarProps
@@ -221,13 +256,13 @@ const ListFilterView = () => {
                 <Table {...getTableProps()} aria-label="sample table">
                   <TableDataHead>
                     <TableRow>
-                      {headers.map((header, i) => <TableHeader key={i} >
+                      {tableHeaders.map((header, i) => <TableHeader key={i} >
                         {header.header}
                       </TableHeader>)}
                     </TableRow>
                   </TableDataHead>
                   <TableDataBody>
-                    {rows.map((row) =>
+                    {tableRows.map((row) =>
                       <TableRow {...getRowProps({ row })} key={row.id}>
                         {row.cells.map((cell) =>
                           <TableCell key={cell.id}>{cell.value}</TableCell>
@@ -236,7 +271,7 @@ const ListFilterView = () => {
                     )}
                   </TableDataBody>
                 </Table>
-                {!rows.length && !loading && <EmptyList $color="#000">No data found</EmptyList>}
+                {!tableRows.length && !loading && <EmptyList $color="#000">No data found</EmptyList>}
               </TableWrapper>
             </FilterScroll>
           </DataTableContainer>;

@@ -1,6 +1,7 @@
 import { combine, createEvent, createStore, merge, sample } from "effector";
 
 import { getCountryList } from "~/@/api-docs/models/explore-api.model";
+import { $adminMap } from "~/@/common/admin-map-preview/admin-map.model";
 import { addGigaLayer, editGigaLayer, viewGigaLayer } from "~/core/routes";
 import { setPayload, setPayloadFirst, setPayloadResults } from "~/lib/effector-kit";
 
@@ -8,7 +9,6 @@ import { DataSourceName, defaultGigaLayerForm } from "../constants/giga-layer.co
 import { cacheDataLayerListFx, createDataLayerFx, getApiSourceValuesFx, getDataLayerByIdFx, getDataLayerListFx, getDataPreviewFx } from "../effects/giga-layer-fx";
 import { clearAdminMapData, previewDataLayerFx } from "../effects/preview-giga-layer-fx";
 import { DataLayer, DataSource, GigaLayerAllValueType, PreviewDataType } from "../types/giga-layer.type";
-import { $adminMap } from "~/@/common/admin-map-preview/admin-map.model";
 
 const onLoadPage = createEvent(); // one time call;
 
@@ -34,7 +34,7 @@ export const $formData = createStore(defaultGigaLayerForm);
 $formData.on(onUdpateGigaLayerForm, (state, payload: [string, GigaLayerAllValueType]) => {
   const [name, value] = payload;
   let resetStates;
-  if (name === 'type') {
+  if (name === 'type' || name === 'entityType') {
     resetStates = {
       sourceType: [],
       dataSource: [],
@@ -123,7 +123,8 @@ sample({
       applicableCountries: layer.applicable_countries,
       globalBenchmark: layer?.global_benchmark,
       benchmarkConvertUnit: layer?.global_benchmark?.convert_unit,
-      legendConfigs: layer?.legend_configs
+      legendConfigs: layer?.legend_configs,
+      entityType: layer.entity_type,
     })
   },
   target: onSetGigaLayerForm
