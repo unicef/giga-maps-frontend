@@ -136,18 +136,33 @@ sample({
   target: $reloadStyle
 });
 
+const hasFilterParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return Array.from(params.keys()).some(key => key.startsWith('filter__'));
+};
+
 const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
 });
 
-// guard: only run when both filters loaded AND no school is focused
+// guard: apply default country filters only when:
+// - filter data is loaded
+// - no school is focused
+// - URL has no existing filter params (to avoid overriding shared URLs)
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
   clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
-  filter: ({ countryActiveFiltersList, activeFiltersList, schoolFocusLatLng }) =>
-    countryActiveFiltersList != null && activeFiltersList != null && schoolFocusLatLng === null,
+  filter: ({ countryActiveFiltersList, activeFiltersList, schoolFocusLatLng }) => {
+    if (hasFilterParams()) return false; // 🚨 IMPORTANT FIX
+
+    return (
+      countryActiveFiltersList != null &&
+      activeFiltersList != null &&
+      schoolFocusLatLng === null
+    );
+  },
 });
 
 sample({
