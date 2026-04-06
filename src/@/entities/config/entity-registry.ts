@@ -19,7 +19,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     displayName: 'Schools',
     icon: 'Education',
     markerType: 'circle',
-    legendShape: 'circle',
+    symbol: '●',
     legend: {
       metricSubtitle: 'Internet quality',
       metricTitle: 'Average download speed',
@@ -73,7 +73,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     displayName: 'Health Facilities',
     icon: 'Hospital',
     markerType: 'symbol',
-    legendShape: 'square',
+    symbol: '■',
     legend: {
       metricSubtitle: 'Internet quality',
       metricTitle: 'Average download speed',

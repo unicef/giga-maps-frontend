@@ -76,8 +76,8 @@ export interface EntityConfig {
   markerType: MarkerType;
   /** Symbol character (only used when markerType is 'symbol') */
   markerSymbol?: string;
-  /** Legend/entity chip shape configuration used in UI components */
-  legendShape: EntityLegendShape;
+  /** Legend/entity chip shape symbol (e.g. ●, ■) */
+  symbol: string;
   /** Legend labels and indicator behavior */
   legend: EntityLegendConfig;
   /** Sidebar/accordion labels and auxiliary UI behavior */

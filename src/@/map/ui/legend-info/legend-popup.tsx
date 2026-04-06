@@ -236,7 +236,6 @@ const LegendPopup = ({
                 <EntityLegendIndicator
                   color={isActive ? 'var(--legend-text)' : 'var(--legend-muted)'}
                   entityType={entityType}
-                  size={8}
                 />
                 <span>{config.legend.tabLabel}</span>
                 <span

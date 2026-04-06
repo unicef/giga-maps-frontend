@@ -12,9 +12,9 @@ import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { Button } from '~/components/ui/button';
 
-const base = 'rounded-full px-5 py-2.5 text-sm font-semibold focus-visible:ring-0';
+const base = 'px-5 py-2.5';
 const active = '';
-const inactive = 'bg-[#3a3a3a] text-gray-300 hover:bg-[#454545] hover:text-gray-200';
+const inactive = 'bg-background text-foreground hover:bg-background/80 hover:text-foreground';
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -44,9 +44,10 @@ export default function EntityTypeSelector() {
   };
 
   return (
-    <div className="fixed top-12 left-80 z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]">
+    <div className="fixed top-2 left-80 z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]">
       <Button
         variant="default"
+        size="lg"
         className={`${base} ${allSelected ? active : inactive}`}
         onClick={handleSelectAll}
       >
@@ -60,13 +61,13 @@ export default function EntityTypeSelector() {
           <Button
             key={type}
             variant="default"
+            size="lg"
             className={`${base} ${isActive ? active : inactive}`}
             onClick={() => handleEntityClick(type as EntityType)}
           >
             <EntityLegendIndicator
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
-              size={8}
             />
             {config.displayName}
           </Button>

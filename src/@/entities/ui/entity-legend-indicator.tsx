@@ -12,17 +12,88 @@ type EntityLegendIndicatorProps = {
   size?: number;
 };
 
+type GlyphOffset = {
+  x: number;
+  y: number;
+};
+
+const FALLBACK_FONT_FAMILY = '"Open Sans", sans-serif';
+const glyphOffsetCache = new Map<string, GlyphOffset>();
+
+let measurementContext: CanvasRenderingContext2D | null | undefined;
+let measurementFontFamily: string | undefined;
+
+const getMeasurementContext = () => {
+  if (measurementContext !== undefined) {
+    return measurementContext;
+  }
+
+  if (typeof document === 'undefined') {
+    measurementContext = null;
+    return measurementContext;
+  }
+
+  measurementContext = document.createElement('canvas').getContext('2d');
+
+  return measurementContext;
+};
+
+const getMeasurementFontFamily = () => {
+  if (measurementFontFamily) {
+    return measurementFontFamily;
+  }
+
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.body) {
+    measurementFontFamily = FALLBACK_FONT_FAMILY;
+    return measurementFontFamily;
+  }
+
+  measurementFontFamily = window.getComputedStyle(document.body).fontFamily || FALLBACK_FONT_FAMILY;
+
+  return measurementFontFamily;
+};
+
+const getGlyphOffset = (symbol: string, glyphSize: number): GlyphOffset => {
+  const context = getMeasurementContext();
+  const fontFamily = getMeasurementFontFamily();
+  const cacheKey = `${fontFamily}:${glyphSize}:${symbol}`;
+  const cachedOffset = glyphOffsetCache.get(cacheKey);
+
+  if (cachedOffset) {
+    return cachedOffset;
+  }
+
+  if (!context) {
+    const fallbackOffset = { x: 0, y: 0 };
+    glyphOffsetCache.set(cacheKey, fallbackOffset);
+    return fallbackOffset;
+  }
+
+  context.font = `${glyphSize}px ${fontFamily}`;
+
+  const metrics = context.measureText(symbol);
+  const glyphOffset = {
+    x: (metrics.actualBoundingBoxLeft - metrics.actualBoundingBoxRight) / 2,
+    y: (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2,
+  };
+
+  glyphOffsetCache.set(cacheKey, glyphOffset);
+
+  return glyphOffset;
+};
+
 const EntityLegendIndicator = ({
   className,
   color,
   entityType,
   glowColor,
-  size = 8,
+  size = 16,
 }: EntityLegendIndicatorProps) => {
   const entityConfigMap = useStore($entityConfigMap);
   const config = entityConfigMap[entityType];
-  const shape = config?.legendShape ?? 'circle';
-  const outerSize = glowColor ? size + 4 : size;
+  const symbol = config?.symbol ?? '●';
+
+  const outerSize = glowColor ? size + 16 : size;
   const containerSize = glowColor ? outerSize : size;
 
   const containerStyle = {
@@ -30,21 +101,39 @@ const EntityLegendIndicator = ({
     width: `${containerSize}px`,
   } as CSSProperties;
 
-  const renderGlyph = (glyphSize: number, glyphColor: string) => {
+  const renderGlyph = (glyphSize: number, glyphColor: string, extraClass: string = '') => {
+    const glyphOffset = getGlyphOffset(symbol, glyphSize);
+    const fontFamily = getMeasurementFontFamily();
+
     return (
-      <span
-        className={cn('!block !shrink-0', shape === 'square' ? '!rounded-none' : '!rounded-full')}
+      <svg
+        className={cn('!block !shrink-0 !overflow-visible', extraClass)}
+        focusable="false"
         style={{
-          background: glyphColor,
           height: `${glyphSize}px`,
           width: `${glyphSize}px`,
         }}
-      />
+        viewBox={`0 0 ${glyphSize} ${glyphSize}`}
+      >
+        <text
+          fill={glyphColor}
+          fontFamily={fontFamily}
+          fontSize={glyphSize}
+          textAnchor="start"
+          x={(glyphSize / 2) + glyphOffset.x}
+          y={(glyphSize / 2) + glyphOffset.y}
+        >
+          {symbol}
+        </text>
+      </svg>
     );
   };
 
   return (
-    <span className={cn('!relative !inline-flex !shrink-0 !items-center !justify-center !overflow-visible', className)} style={containerStyle}>
+    <span
+      className={cn('!relative !inline-flex !shrink-0 !items-center !justify-center !overflow-visible', className)}
+      style={containerStyle}
+    >
       {glowColor ? (
         <span
           aria-hidden="true"
