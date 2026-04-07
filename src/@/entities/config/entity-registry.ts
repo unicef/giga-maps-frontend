@@ -18,6 +18,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     type: 'school',
     displayName: 'Schools',
     icon: 'Education',
+    visible: true,
     markerType: 'circle',
     symbol: '●',
     legend: {
@@ -70,8 +71,9 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
 
   health: {
     type: 'health',
-    displayName: 'Health Facilities',
+    displayName: 'Health centers',
     icon: 'Hospital',
+    visible: true,
     markerType: 'symbol',
     symbol: '■',
     legend: {
@@ -92,7 +94,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       reportingDetailTranslationKey: 'across-no-countries',
       reportingLabel: 'Reporting internet quality',
       reportingTooltip: 'Health centers reporting internet quality.',
-      title: 'Health Centers',
+      title: 'Health centers',
     },
     stats: {
       connectedGroupKey: 'connected_entities',

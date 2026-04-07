@@ -110,16 +110,16 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
   }
 
   // create entity layers for active non-legacy entity types
-  if (isSourceAvailable) {
-    const activeEntityTypes = $activeEntityTypes.getState();
-    createActiveEntityLayers(map, {
-      activeEntityTypes,
-      paintData,
-      options: {
-        'source-layer': "default"
-      },
-    });
-  }
+  // if (isSourceAvailable) {
+  //   const activeEntityTypes = $activeEntityTypes.getState();
+  //   createActiveEntityLayers(map, {
+  //     activeEntityTypes,
+  //     paintData,
+  //     options: {
+  //       'source-layer': "default"
+  //     },
+  //   });
+  // }
 
 }
 

@@ -16,9 +16,12 @@ export const URL_PARAM_KEYS = {
   SS_CONNECTED: 'ssC',
   SS_NOT_CONNECTED: 'ssN',
   SS_UNKNOWN: 'ssU',
+  ENTITY: 'entity',
   LANGUAGE: 'lng',
 } as const;
 
+import { $entityRegistry } from '../entities/models/entity.model';
+import type { EntityType } from '../entities/types/base-entity.type';
 
 // Helper to parse URL params
 export const getUrlParams = (): URLSearchParams => {
@@ -37,7 +40,6 @@ export const parseNumberParam = (value: string | null): number | null => {
   const num = parseInt(value, 10);
   return isNaN(num) ? null : num;
 };
-
 
 // Helper to set or delete URL param based on boolean value (false = set, true = delete)
 export const setBoolParam = (searchParams: URLSearchParams, key: string, value: boolean) => {

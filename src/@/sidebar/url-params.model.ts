@@ -4,6 +4,8 @@ import { fetchAdvanceFilterFx, fetchCountriesFx, fetchCountryFx, fetchLayerListF
 import { $lng, onLanguageChange } from '~/core/i18n/store';
 
 import { $admin1Code, $country } from '../country/country.model';
+import { $activeEntityTypes, $entityRegistry, changeActiveEntityTypes } from '../entities/models/entity.model';
+import type { EntityType } from '../entities/types/base-entity.type';
 import { ConnectivityStatusDistribution } from './sidebar.constant';
 import {
   $connectivitySpeedGood,
@@ -72,6 +74,7 @@ export const getInitialUrlParams = () => {
     return {
       layerId: null,
       schoolStatusLayer: null,
+      entityTypes: [], // Default to empty (all entities)
       speedGood: true,
       speedModerate: true,
       speedNoInternet: true,
@@ -105,6 +108,7 @@ export const getInitialUrlParams = () => {
     isLayerIdNull: params.get(URL_PARAM_KEYS.LAYER_ID) === 'null',
     schoolStatusLayer: parseNumberParam(params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER)),
     isSchoolStatusLayerNull: params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER) === 'null',
+    entityTypes: params.get(URL_PARAM_KEYS.ENTITY)?.split(',').filter(Boolean) ?? [],
     speedGood: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_GOOD), true),
     speedModerate: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_MODERATE), true),
     speedNoInternet: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_NO_INTERNET), true),
@@ -125,6 +129,7 @@ export const $initialUrlParams = createStore(getInitialUrlParams());
 export const $urlTrackedParams = combine({
   layerId: $selectedLayerId,
   schoolStatusLayer: $schoolStatusSelectedLayer,
+  entityTypes: $activeEntityTypes,
   speedGood: $connectivitySpeedGood,
   speedModerate: $connectivitySpeedModerate,
   speedNoInternet: $connectivitySpeednoInternet,
@@ -143,11 +148,22 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
   const url = new URL(window.location.href);
   const searchParams = url.searchParams;
 
-  // On /map overview route, only keep language param
+  // On /map overview route, only keep language and entity params
   if (isMapOverviewRoute()) {
-    // Clear all params except language
-    const keysToDelete = Array.from(searchParams.keys()).filter(key => key !== URL_PARAM_KEYS.LANGUAGE);
+    // Clear all params except language and entity
+    const keysToDelete = Array.from(searchParams.keys()).filter(key =>
+      key !== URL_PARAM_KEYS.LANGUAGE && key !== URL_PARAM_KEYS.ENTITY
+    );
     keysToDelete.forEach(key => searchParams.delete(key));
+
+    // Update entity param if not all entities selected
+    const allEntityTypes = Object.keys($entityRegistry.getState()) as EntityType[];
+    const isAllEntitiesSelected = params.entityTypes.length === allEntityTypes.length || params.entityTypes.length === 0;
+    if (!isAllEntitiesSelected && params.entityTypes.length > 0) {
+      searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
+    } else {
+      searchParams.delete(URL_PARAM_KEYS.ENTITY);
+    }
 
     // Update language if needed
     if (params.language && params.language !== 'en') {
@@ -183,6 +199,15 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
   setBoolParam(searchParams, URL_PARAM_KEYS.SS_NOT_CONNECTED, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.notConnected));
   setBoolParam(searchParams, URL_PARAM_KEYS.SS_UNKNOWN, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.unknown));
 
+  // Update entity types param (set if not all entities selected - empty means all selected)
+  const allEntityTypes = Object.keys($entityRegistry.getState()) as EntityType[];
+  const isAllEntitiesSelected = params.entityTypes.length === allEntityTypes.length || params.entityTypes.length === 0;
+  if (!isAllEntitiesSelected && params.entityTypes.length > 0) {
+    searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
+  } else {
+    searchParams.delete(URL_PARAM_KEYS.ENTITY);
+  }
+
   // Update language param (only set if not default)
   if (params.language && params.language !== 'en') {
     searchParams.set(URL_PARAM_KEYS.LANGUAGE, params.language);
@@ -201,6 +226,11 @@ export const initializeFromUrlParams = createEvent();
 // Effect to apply URL params to stores
 const applyUrlParamsToStoresFx = createEffect(() => {
   const params = getInitialUrlParams();
+
+  // Apply entity types from URL (if any specified)
+  if (params.entityTypes.length > 0) {
+    changeActiveEntityTypes(params.entityTypes as EntityType[]);
+  }
 
   // Apply connectivity speed params (always apply to sync with URL)
   changeConnectivitySpeedGood(params.speedGood);
@@ -245,6 +275,7 @@ sample({
     $selectedSchoolIds,
     $selectedLayerId,
     $schoolStatusSelectedLayer,
+    $activeEntityTypes,
     $connectivitySpeedGood,
     $connectivitySpeedModerate,
     $connectivitySpeednoInternet,
@@ -263,5 +294,17 @@ sample({
   filter: ({ consumed }) => consumed,
   fn: ({ params }) => params,
   target: updateUrlParamsFx,
+});
+
+// Entity URL param handling - read from URL on initial load
+export const $entityParamFromUrl = $initialUrlParams.map((params) => params.entityTypes ?? []);
+
+// Event to set active entity types from URL (avoiding circular updates)
+export const setActiveEntityTypesFromUrl = createEvent<EntityType[]>();
+
+// Apply entity types from URL to store on initialization
+sample({
+  clock: setActiveEntityTypesFromUrl,
+  target: changeActiveEntityTypes,
 });
 

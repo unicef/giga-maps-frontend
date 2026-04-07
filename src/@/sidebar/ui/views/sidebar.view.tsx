@@ -21,7 +21,7 @@ import {
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapEntities, mapOverview, mapSchools } from '~/core/routes';
+import { entityView, mapCountry, mapOverview, mapSchools } from '~/core/routes';
 import { cn } from '~/lib/cn';
 import { useRoute } from '~/lib/router';
 
@@ -47,7 +47,7 @@ export default function Sidebar() {
   const sidebarHeight = useStore($sidebarHeight)
   const countryRoute = useRoute(mapCountry)
   const schoolRoute = useRoute(mapSchools);
-  const entityRoute = useRoute(mapEntities);
+  const entityRoute = useRoute(entityView);
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed)
   const isTimeplayer = useStore($isTimeplayer)

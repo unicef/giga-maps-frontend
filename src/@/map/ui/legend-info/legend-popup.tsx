@@ -4,7 +4,7 @@ import { CSSProperties, PropsWithChildren, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
 
-import { $activeEntityTypes, $entityConfigMap } from '~/@/entities/models/entity.model';
+import { $activeEntityTypes, $entityConfigMap, $entityTypesFiltered } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
@@ -44,6 +44,7 @@ const LegendPopup = ({
   const { t } = useTranslation();
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityConfigMap = useStore($entityConfigMap);
+  const entityTypesFiltered = useStore($entityTypesFiltered);
   const { currentLayerLegends, currentLayerTypeUtils, selectedLayerData } = useStore($layerUtils);
   const { isStatic, isLive, isSchoolStatus } = currentLayerTypeUtils;
   const isMobile = useStore($isMobile);
@@ -52,10 +53,10 @@ const LegendPopup = ({
   const themeState = useStore($theme);
   const theme = useTheme();
   const paintData = useStore($stylePaintData);
-  const visibleLegendEntityTypes = useMemo(
-    () => activeEntityTypes.filter((type): type is EntityType => Boolean(entityConfigMap[type])),
-    [activeEntityTypes, entityConfigMap]
-  );
+  const visibleLegendEntityTypes = useMemo(() => {
+    // Filter to only types that are both active AND visible in config, maintain registry order
+    return entityTypesFiltered.filter((type) => activeEntityTypes.includes(type));
+  }, [activeEntityTypes, entityTypesFiltered]);
   const [collapsed, setCollapsed] = useState(() => getDefaultCollapsedState(isMobile));
   const [activeTab, setActiveTab] = useState<EntityType>(() => getDefaultLegendTab(visibleLegendEntityTypes));
 

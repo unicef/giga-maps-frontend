@@ -94,7 +94,7 @@ const LegendBenchmarkDropdown = ({
         style={{ borderColor, color: subtleColor }}
         title={title}
       >
-        {triggerLabel}
+        {triggerLabel} benchmark 30Mbps
       </div>
     );
   }
