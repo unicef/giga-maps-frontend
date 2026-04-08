@@ -50,19 +50,19 @@ a{
   text-decoration:none;
 }
 
-@keyframes pulse {
-	0% {
-		transform: scale(0.85);
-	}
+// @keyframes pulse {
+// 	0% {
+// 		transform: scale(0.85);
+// 	}
 
-	70% {
-		transform: scale(1.2);
-	}
+// 	70% {
+// 		transform: scale(1.2);
+// 	}
 
-	100% {
-		transform: scale(0.85);
-	}
-}
+// 	100% {
+// 		transform: scale(0.85);
+// 	}
+// }
 
  @keyframes glowly {
    from {

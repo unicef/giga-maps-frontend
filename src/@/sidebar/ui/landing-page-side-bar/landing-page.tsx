@@ -1,8 +1,7 @@
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
-import { CSSProperties, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from 'styled-components';
 
 import { $activeEntityTypes, $entityConfigMap, $entityTypesFiltered, $selectedEntityType, changeSelectedEntityType } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
@@ -10,16 +9,16 @@ import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
 import { fetchEntitiesConnectivityStatsFx, fetchEntityGlobalStatsFx } from '~/api/project-connect';
 import { defaultLanguage } from '~/core/i18n/constant';
 import { $lng } from '~/core/i18n/store';
+import { Accordion } from '~/components/ui/accordion';
 import { Scroll } from '@/scroll';
 
 import { defaultInterval } from '../../sidebar.constant';
 import { $connectivityStatsByEntity } from '../../sidebar.model';
+import ShareURLModal from '../common-components/share-url-modal';
 import EntitySummaryCard from './entity-summary-card';
 import LandingPageHeader from './landing-page-header';
 import type { EntityCardData } from './landing-page.types';
 import { buildEntityCard } from './landing-page.utils';
-import ShareURLModal from '../common-components/share-url-modal';
-import { Accordion } from '~/components/ui/accordion';
 
 const LandingPage = () => {
   const globalStatsByEntity = useStore($globalStatsByEntity);
@@ -28,25 +27,13 @@ const LandingPage = () => {
   const stylePaintData = useStore($stylePaintData);
   const isLoadingGlobalStats = useStore(fetchEntityGlobalStatsFx.pending);
   const isLoadingConnectivityStats = useStore(fetchEntitiesConnectivityStatsFx.pending);
-  const theme = useTheme();
   const { t } = useTranslation();
   const lng = useStore($lng) ?? defaultLanguage;
   const activeEntityTypes = useStore($activeEntityTypes);
-  const selectedEntityType = useStore($selectedEntityType);
   const entityTypesFiltered = useStore($entityTypesFiltered);
   const visibleEntityTypes = entityTypesFiltered.filter((type) => activeEntityTypes.includes(type));
-  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>(
-  );
+  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>();
   const [shareModalOpen, setShareModalOpen] = useState(false);
-
-  const panelStyle = {
-    '--lp-surface': theme.main,
-    '--lp-border': theme.schoolListBack,
-    '--lp-text': theme.text,
-    '--lp-muted': theme.titleDesc,
-    '--lp-icon-muted': theme.grey60,
-    '--lp-skeleton': theme.skeleton,
-  } as CSSProperties;
 
   const isLoading = isLoadingGlobalStats || isLoadingConnectivityStats;
 
@@ -97,8 +84,8 @@ const LandingPage = () => {
 
   return (
     <>
-      <Scroll className="h-auto max-h-none bg-[color:var(--lp-surface)]" style={panelStyle}>
-        <div className="!w-full !bg-[color:var(--lp-surface)] !px-3.5 !py-2.5">
+      <Scroll className="!h-auto !max-h-none !bg-background">
+        <div className="!w-full !bg-background !px-3.5 !py-2.5">
           <LandingPageHeader
             onShareClicked={handleShareClicked}
             subtitle={t('an-open-live-global-map-of-schools-and-their-connectivity')}

@@ -1,6 +1,7 @@
-import { Tooltip as CarbonTooltip } from '@carbon/react';
 import { ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
+import { Skeleton } from '~/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
@@ -16,23 +17,27 @@ const InfoTooltip = ({ content }: { content?: string }) => {
   if (!content) return null;
 
   return (
-    <CarbonTooltip align="top" label={content}>
-      <button className="sb-tooltip-trigger !inline-flex !items-center !justify-center !border-0 !bg-transparent !p-0 !text-[color:var(--lp-icon-muted)]" type="button">
-        <Info size={12} />
-      </button>
-    </CarbonTooltip>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            aria-label={content}
+            className="!inline-flex !items-center !justify-center !border-0 !bg-transparent !p-0 !text-on-surface-dim"
+            type="button"
+          >
+            <Info size={12} />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={6}>
+          {content}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
-const LoadingLine = ({ width }: { width: string }) => (
-  <div
-    className="h-4 animate-pulse rounded-sm bg-[color:var(--lp-skeleton)]"
-    style={{ width }}
-  />
-);
-
 const MetricDivider = () => (
-  <div className="h-px w-full bg-[color:var(--lp-border)]" />
+  <div className="!h-px !w-full !bg-secondary" />
 );
 
 type EntitySummaryCardProps = {
@@ -46,26 +51,26 @@ type EntitySummaryCardProps = {
 const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: EntitySummaryCardProps) => {
   return (
     <AccordionItem
-      className="!overflow-visible !rounded-lg !border !border-[color:var(--lp-border)] !bg-[color:var(--lp-surface)]"
+      className="!overflow-visible !rounded-lg !border !border-secondary !bg-background"
       value={card.value}
     >
-      <AccordionTrigger className="!px-3.5 !py-3 !text-[color:var(--lp-text)] [&[data-state=open]]:!pb-3 [&[data-state=open]]:!pt-3">
+      <AccordionTrigger className="!px-3.5 !py-3 !text-foreground [&[data-state=open]]:!pb-3 [&[data-state=open]]:!pt-3">
         <div className="!flex !min-w-0 !items-center !gap-2.5">
           {card.badge ? (
-            <span className="!inline-flex !shrink-0 !items-center !justify-center !rounded-full !bg-[#0f62fe] !px-2 !py-1 !text-[10px] !font-semibold !leading-none !text-[#f4f4f4]">
+            <span className="!inline-flex !shrink-0 !items-center !justify-center !rounded-full !bg-primary !px-2 !py-1 !text-[10px] !font-semibold !leading-none !text-primary-foreground">
               {card.badge}
             </span>
           ) : null}
-          <div className="!min-w-0 !text-left !text-[15px] !font-semibold !leading-[18px] !text-[color:var(--lp-text)]">{card.title}</div>
+          <div className="!min-w-0 !text-left !text-[15px] !font-semibold !leading-[18px] !text-foreground">{card.title}</div>
         </div>
         {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
       </AccordionTrigger>
 
       {isLoading ? (
         <div className="!space-y-3 !px-4 !pb-3">
-          <LoadingLine width="80%" />
-          <LoadingLine width="70%" />
-          <LoadingLine width="60%" />
+          <Skeleton className="!h-4 !w-4/5 !rounded-sm" />
+          <Skeleton className="!h-4 !w-[70%] !rounded-sm" />
+          <Skeleton className="!h-4 !w-[60%] !rounded-sm" />
         </div>
       ) : null}
 
@@ -75,10 +80,10 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
             <div key={row.label}>
               {index > 0 ? <MetricDivider /> : null}
               <div className="!grid !grid-cols-[auto_1fr] !items-center !gap-x-3 !py-2.5">
-                <span className="!shrink-0 !text-lg !font-semibold !leading-[22px] !text-[color:var(--lp-text)]" data-title={t('int', { val: row.value })}>
+                <span className="!shrink-0 !text-lg !font-semibold !leading-[22px] !text-foreground" data-title={t('int', { val: row.value })}>
                   {formatNumber(row.value, lng)}
                 </span>
-                <span className="!min-w-0 !text-right !text-xs !leading-4 !text-[color:var(--lp-muted)]">{row.label}</span>
+                <span className="!min-w-0 !text-right !text-xs !leading-4 !text-muted-foreground">{row.label}</span>
               </div>
             </div>
           ))}
@@ -94,15 +99,15 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
               <div key={metric.label}>
                 {index > 0 ? <MetricDivider /> : null}
                 <div className="!py-3.5">
-                  <div className="!flex !items-center !gap-1.5 !text-xs !leading-5 !text-[color:var(--lp-muted)]">
+                  <div className="!flex !items-center !gap-1.5 !text-xs !leading-5 !text-muted-foreground">
                     <span>{metric.label}</span>
                     <InfoTooltip content={metric.tooltip} />
                   </div>
-                  <div className="!mt-2 !text-[22px] !font-medium !leading-[26px] !text-[color:var(--lp-text)]" data-title={t('int', { val: metric.value })}>
+                  <div className="!mt-2 !text-[22px] !font-medium !leading-[26px] !text-foreground" data-title={t('int', { val: metric.value })}>
                     {formatNumber(metric.value, lng)}
-                    {metric.estimate ? <span className="!ml-1.5 !text-[11px] !font-medium !leading-[14px] !text-[#a8a8a8]">{metric.estimate}</span> : null}
+                    {metric.estimate ? <span className="!ml-1.5 !text-[11px] !font-medium !leading-[14px] !text-on-surface-dim">{metric.estimate}</span> : null}
                   </div>
-                  <p className="!m-0 !mt-1 !text-[11px] !leading-[14px] !text-[#a8a8a8]">{metric.detail}</p>
+                  <p className="!m-0 !mt-1 !text-[11px] !leading-[14px] !text-on-surface-dim">{metric.detail}</p>
                   {hasVisibleBarData(bar) && bar ? (
                     <div className="!mt-3">
                       <BarChart
@@ -121,7 +126,7 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
       </AccordionContent>
 
       {!isLoading && card.showFooter ? (
-        <div className="!flex !items-center !justify-center !gap-3 !rounded-b-lg !bg-[#0f62fe] !px-3.5 !py-[0.35rem] !text-[#f4f4f4] [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
+        <div className="!flex !items-center !justify-center !gap-3 !rounded-b-lg !bg-primary !px-3.5 !py-[0.35rem] !text-primary-foreground [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-primary-foreground [&_svg_g]:!fill-primary-foreground [&_svg_path]:!fill-primary-foreground [&_svg_polygon]:!fill-primary-foreground [&_svg_rect]:!fill-primary-foreground">
           {card.footerLogoVariant === 'school' ? (
             <div className="!inline-flex !items-center !justify-center !text-xs !font-semibold !leading-4">
               <SchoolAccordionFooterLogo />
