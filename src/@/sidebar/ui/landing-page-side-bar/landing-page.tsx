@@ -100,7 +100,7 @@ const LandingPage = () => {
                 </SchoolNumberWrapper>
                 <MappedInfoWrapper>
                   <p data-title={`${globalstats?.countries_with_connectivity_status_mapped}`}>
-                    {t('across-no-countries', { count: globalstats?.countries_with_connectivity_status_mapped ?? 0 })}
+                    {t('across-no-countries-and-territories', { count: globalstats?.countries_with_connectivity_status_mapped ?? 0 })}
                   </p>
                   <span data-title={t('int', { val: globalstats?.schools_with_connectivity_status_mapped ?? 0 })}>
                     {formatNumber(globalstats?.schools_with_connectivity_status_mapped ?? 0, lng)}
@@ -134,7 +134,7 @@ const LandingPage = () => {
               </SchoolNumberWrapper>
               <MappedInfoWrapper>
                 <p data-title={t('int', { val: connectivityStats?.countries_with_realtime_data ?? 0 })}>
-                  {t('across-no-countries', { count: connectivityStats?.countries_with_realtime_data ?? 0 })}
+                  {t('across-no-countries-and-territories', { count: connectivityStats?.countries_with_realtime_data ?? 0 })}
                 </p>
                 <span data-title={t('int', { val: connectivityStats?.no_of_schools_measure ?? 0 })}>
                   {formatNumber(connectivityStats?.no_of_schools_measure, lng)}
