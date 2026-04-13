@@ -77,7 +77,10 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
   // create selected layer;
   if (isSourceAvailable && selectedLayerId) {
     if (isLive) {
+      cancelAnimationFrame(animateCircleHandler.requestId);
       animateCircleHandler = animateCircles({ map, id: getMapId(selectedLayerId) });
+    } else {
+      cancelAnimationFrame(animateCircleHandler.requestId);
     }
     createSelectedLayer(map, {
       id: getMapId(selectedLayerId),
