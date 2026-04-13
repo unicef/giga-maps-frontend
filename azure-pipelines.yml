@@ -35,7 +35,7 @@ steps:
   # Sonar Scan
   - task: Bash@3
     displayName: Sonar Scan
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/entity-development-base')
     inputs:
       targetType: 'inline'
       script: |
