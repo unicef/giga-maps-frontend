@@ -303,7 +303,8 @@ export const animateCircleConfig = {
   startRadiusPortion: 2,
   maxRadius: 12,
   opacityMax: 1,
-  opacityMin: 0.2,
+  // Keep pulse visible without revealing underlying unknown (blue) dots.
+  opacityMin: 0.65,
   zoomDivisible: []
 }
 
