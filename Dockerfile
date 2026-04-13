@@ -1,5 +1,5 @@
 # Stage 1
-FROM node:22.2.0 AS s1
+FROM node:22.12.0 AS s1
 WORKDIR /proco
 COPY package.json ./
 RUN yarn install
@@ -33,7 +33,7 @@ RUN yarn build
 FROM nginx:1.24 AS s2
 
 # ssh
-ENV SSH_PASSWD "root:Docker!"
+ENV SSH_PASSWD="root:Docker!"
 RUN apt-get update \
         && apt-get install -y --no-install-recommends dialog \
         && apt-get update \
