@@ -1,6 +1,7 @@
 trigger:
   branches:
     include:
+      - entity-development-base
       - develop
       - staging
   tags:
