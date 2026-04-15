@@ -199,7 +199,10 @@ export const mapPaintData = {
       4, 1.5,
       5, 2,
       8, 3,
-      10, 4
+      10, 4,
+      14, 7,
+      18, 11,
+      24, 18
     ],
     "circle-color": [
       "match",
@@ -217,7 +220,10 @@ export const mapPaintData = {
       4, 1.975,
       5, 2.66,
       8, 4,
-      10, 5.32
+      10, 5.32,
+      14, 8.5,
+      18, 13,
+      24, 20
     ],
     "circle-color": [
       "match",
@@ -234,7 +240,10 @@ export const mapPaintData = {
       4, 4,
       5, 5,
       8, 10,
-      10, 12
+      10, 12,
+      14, 18,
+      18, 26,
+      24, 36
     ],
     "circle-color": [
       'case',
@@ -250,7 +259,10 @@ export const mapPaintData = {
       4, 1,
       5, 1.5,
       8, 6,
-      10, 8
+      10, 8,
+      14, 12,
+      18, 18,
+      24, 26
     ],
   }
 }
@@ -283,7 +295,8 @@ export const animateCircleConfig = {
   startRadiusPortion: 2,
   maxRadius: 12,
   opacityMax: 1,
-  opacityMin: 0.2,
+  // Keep pulse visible without revealing underlying unknown (blue) dots.
+  opacityMin: 0.65,
   zoomDivisible: []
 }
 
@@ -306,7 +319,10 @@ export const CountryPaintData = {
         4, 1,
         6, 1.4,
         8, 1.8,
-        10, 4
+        10, 4,
+        14, 6.5,
+        18, 9.5,
+        24, 15
       ]
     },
     coverage: {
@@ -317,7 +333,10 @@ export const CountryPaintData = {
         4, 1.275,
         5, 1.66,
         8, 4,
-        10, 5.32
+        10, 5.32,
+        14, 8.2,
+        18, 12,
+        24, 18
       ]
     },
     connectivity: {
@@ -327,7 +346,10 @@ export const CountryPaintData = {
         2, 0.85,
         4, 1.275,
         8, 4,
-        10, 5.32
+        10, 5.32,
+        14, 8.2,
+        18, 12,
+        24, 18
       ],
     },
     animatedCircle: {
