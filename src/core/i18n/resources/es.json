@@ -5,7 +5,7 @@
   "take-the-tour": "Realizar el recorrido",
   "schools-location-mapped": "ubicación de las escuelas mapeada",
   "across-no-countries": "a través de {{count}} países",
-  "across-no-countries-and-territories": "a través de {{count}} países y territorios",
+  "across-no-countries-and-territories": "en {{count}} países y territorios",
   "countries": "países",
   "countries-and-territories": "{{count}} países y territorios",
   "schools-connectivity-status-mapped": "estado de conectividad de las escuelas mapeado",
