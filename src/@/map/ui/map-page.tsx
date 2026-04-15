@@ -44,7 +44,7 @@ const MapPage = () => {
           <Popup />
         </PopupContainer>
       </Main>
-      <EntityTypeSelector />
+      {/* <EntityTypeSelector /> */}
       <TopLoader />
       <Footer />
       {isProductTour && <ProductTour />}
