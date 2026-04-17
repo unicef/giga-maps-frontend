@@ -1,11 +1,10 @@
 import { combine, createEvent, createStore } from 'effector';
 
-import type { EntityType } from '../types/base-entity.type';
-import type { BaseEntity, EntityStatistics } from '../types/base-entity.type';
+import { setPayload } from '~/lib/effector-kit';
+
 import type { EntityConfig } from '../config/entity-config.types';
 import { DEFAULT_ENTITY_REGISTRY } from '../config/entity-registry';
-import { ENTITY_TYPES } from '../types/entity-types';
-import { setPayload } from '~/lib/effector-kit';
+import type { BaseEntity, EntityStatistics, EntityType } from '../types/base-entity.type';
 
 /**
  * Entity system Effector stores.
@@ -26,6 +25,19 @@ export const updateEntityRegistry = createEvent<Record<string, EntityConfig>>();
 export const mergeEntityRegistryFromApi = createEvent<Partial<Record<string, Partial<EntityConfig>>>>();
 
 export const $entityRegistry = createStore<Record<string, EntityConfig>>({ ...DEFAULT_ENTITY_REGISTRY });
+
+/** Registry filtered to only active entities (from config.active flag), in registry order */
+export const $entityRegistryFiltered = $entityRegistry.map((registry) => {
+  const entries = Object.entries(registry).filter(([, config]) => config.visible);
+  return Object.fromEntries(entries) as Record<EntityType, EntityConfig>;
+});
+
+/** Active entity types in registry order (based on config.active flag) */
+export const $entityTypesFiltered = $entityRegistry.map((registry) => {
+  return Object.entries(registry)
+    .filter(([, config]) => config.visible)
+    .map(([type]) => type as EntityType);
+});
 
 // Full replacement (e.g., reset)
 $entityRegistry.on(updateEntityRegistry, (_, payload) => payload);
@@ -58,7 +70,7 @@ $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
 
 /** All registered entity type keys */
 export const $registeredEntityTypes = $entityRegistry.map(
-  registry => Object.keys(registry) as string[]
+  registry => Object.keys(registry)
 );
 
 /** Get config for a specific entity type (use with combine or .map) */
@@ -74,13 +86,14 @@ export const $entityConfigMap = $entityRegistry;
  */
 export const changeActiveEntityTypes = createEvent<EntityType[]>();
 export const setActiveEntityTypes = changeActiveEntityTypes; // alias for route model sync
-export const $activeEntityTypes = createStore<EntityType[]>(['school']);
+export const $activeEntityTypes = createStore<EntityType[]>(['health', 'school']);
 $activeEntityTypes.on(changeActiveEntityTypes, setPayload);
 
 /**
  * Toggle a single entity type on/off in the active list.
  */
 export const toggleEntityType = createEvent<EntityType>();
+
 $activeEntityTypes.on(toggleEntityType, (current, entityType) => {
   if (current.includes(entityType)) {
     if (current.length <= 1) return current;
@@ -156,5 +169,6 @@ export const $activeEntityConfigs = combine(
   $activeEntityTypes,
   (registry, activeTypes) => activeTypes
     .map(type => registry[type])
-    .filter(Boolean) as EntityConfig[]
+    .filter((config): config is EntityConfig => Boolean(config))
 );
+

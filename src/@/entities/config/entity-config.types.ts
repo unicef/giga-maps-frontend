@@ -24,6 +24,41 @@ export interface EntityFieldConfig {
  * - 'symbol': Icon/symbol markers (used by new entities)
  */
 export type MarkerType = 'circle' | 'symbol';
+export type EntityLegendShape = 'circle' | 'square';
+export type EntityMappedCountKey = 'entities_connected' | 'entities_total';
+export type EntityConnectedGroupKey = 'connected_entities';
+export type EntityMeasureCountKey = 'no_of_entities_measure';
+export type EntityRealtimeGroupKey = 'real_time_connected_entities';
+
+export interface EntityLegendConfig {
+  metricSubtitle: string;
+  metricTitle: string;
+  statusTitle: string;
+  tabLabel: string;
+}
+
+export interface EntitySidebarConfig {
+  badge?: string;
+  connectedDetailTranslationKey: string;
+  connectedLabel: string;
+  connectedTooltip: string;
+  estimatedTotalInMillions?: number;
+  footerLogoVariant?: 'default' | 'none' | 'school';
+  locationsMappedLabel: string;
+  locationsMappedTooltip: string;
+  mappedDetailTranslationKey: string;
+  reportingDetailTranslationKey: string;
+  reportingLabel: string;
+  reportingTooltip: string;
+  title: string;
+}
+
+export interface EntityStatsConfig {
+  connectedGroupKey: EntityConnectedGroupKey;
+  mappedCountKey: EntityMappedCountKey;
+  measureCountKey: EntityMeasureCountKey;
+  realtimeGroupKey: EntityRealtimeGroupKey;
+}
 
 /**
  * Entity configuration defining visual, API, and field settings.
@@ -34,13 +69,24 @@ export interface EntityConfig {
   type: EntityType;
   /** Human-readable display name */
   displayName: string;
-  /** Carbon Design System icon name */
+  /** Optional icon metadata kept for future use */
   icon: string;
+
+  /** Whether this entity is active/visible in the UI */
+  active: boolean;
 
   /** Map marker configuration */
   markerType: MarkerType;
   /** Symbol character (only used when markerType is 'symbol') */
   markerSymbol?: string;
+  /** Legend/entity chip shape symbol (e.g. ●, ■) */
+  symbol: string;
+  /** Legend labels and indicator behavior */
+  legend: EntityLegendConfig;
+  /** Sidebar/accordion labels and auxiliary UI behavior */
+  sidebar: EntitySidebarConfig;
+  /** API field mappings for sidebar/global entity cards */
+  stats: EntityStatsConfig;
 
   /** Color configuration for connectivity status */
   colors: {

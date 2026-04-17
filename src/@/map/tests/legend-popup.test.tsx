@@ -1,10 +1,13 @@
-import { render } from "@testing-library/react"
-import { testWrapper } from "~/tests/jest-wrapper"
-import LegendPopup from "../ui/legend-info/legend-popup"
 import "~/core/i18n/instance"
-import { fetchMockResponse } from "~/tests/fetchMock"
-import { fetchLayerListFx } from "~/api/project-connect"
+
+import { render } from "@testing-library/react"
+
 import { onSelectMainLayer } from "~/@/sidebar/sidebar.model"
+import { fetchLayerListFx } from "~/api/project-connect"
+import { fetchMockResponse } from "~/tests/fetchMock"
+import { testWrapper } from "~/tests/jest-wrapper"
+
+import LegendPopup from "../ui/legend-info/legend-popup"
 
 describe('LegendPopup', () => {
   beforeEach(() => {
@@ -12,44 +15,79 @@ describe('LegendPopup', () => {
 
   })
 
-  test('renders with school status legend', () => {
-    const { container } = render(testWrapper(
+  test('renders with school status legend in collapsed view by default', () => {
+    const { container, getByTestId } = render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
     expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
+    expect(getByTestId('legend-collapsed-view')).toBeInTheDocument()
+    expect(container).toHaveTextContent('Average download speed')
+    expect(getByTestId('legend-expand-button')).toBeInTheDocument()
   })
 
-  test('renders with live layer legend', async () => {
-    await fetchLayerListFx();
-    await onSelectMainLayer(8);
-    const { container } = render(testWrapper(
+  test('renders with live layer legend', () => {
+    void fetchLayerListFx();
+    onSelectMainLayer(8);
+    const { container, getByTestId } = render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
     expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
+    getByTestId('legend-expand-button').click()
+    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
   })
 
-  test('renders with static layer legend', async () => {
-    await fetchLayerListFx();
-    await onSelectMainLayer(7);
-    const { container } = render(testWrapper(
+  test('renders with static layer legend', () => {
+    void fetchLayerListFx();
+    onSelectMainLayer(7);
+    const { container, getByTestId } = render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
     expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
+    getByTestId('legend-expand-button').click()
+    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
   })
 
-  test('handles shouldShowControls when map level is true', () => {
-    const { container } = render(testWrapper(
+  test('switches between collapsed and expanded legend views', () => {
+    const { getByTestId } = render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
-    expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
+    getByTestId('legend-expand-button').click()
+    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
+    getByTestId('legend-collapse-button').click()
+    expect(getByTestId('legend-collapsed-view')).toBeInTheDocument()
+  })
+
+  test('resets to collapsed view after closing and reopening', () => {
+    const { getByTestId, rerender } = render(testWrapper(
+      <LegendPopup open={true} setOpen={() => { }}>
+        <div>Test Content</div>
+      </LegendPopup>
+    ))
+
+    getByTestId('legend-expand-button').click()
+    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
+
+    rerender(testWrapper(
+      <LegendPopup open={false} setOpen={() => { }}>
+        <div>Test Content</div>
+      </LegendPopup>
+    ))
+
+    rerender(testWrapper(
+      <LegendPopup open={true} setOpen={() => { }}>
+        <div>Test Content</div>
+      </LegendPopup>
+    ))
+
+    expect(getByTestId('legend-collapsed-view')).toBeInTheDocument()
   })
 
   test('renders children content', () => {

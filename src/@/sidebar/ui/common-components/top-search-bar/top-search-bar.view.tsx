@@ -1,14 +1,21 @@
-import { ChevronDown, Earth, Search } from '@carbon/icons-react'
+import { ChevronDown, ChevronUp, Close, Earth, Search } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
-import { useRef, useState } from 'react';
+import { type CSSProperties, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import FooterTourContact from '~/@/sidebar/ui/common-components/footer-tour-contact.view';
+import { SearchCountryList } from '~/@/sidebar/ui/search-result/search-country-list';
+import SearchSchoolPanel from '~/@/sidebar/ui/search-result/search-country-list/search-school-panel-view';
+import { SearchResultScroll } from '~/@/sidebar/ui/search-result/styles/search-result-style';
+import { Input } from '~/components/ui/input';
+import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { $isMobile } from '~/core/media-query';
+import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
 
-import { $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
-import { CountrySearchIcon, SearchContainer, SearchWrapper } from './top-search-bar.style';
-import { useTranslation } from 'react-i18next';
+import { $isActiveSearchBar, $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
 
 
 const onChange = changeSearchText.prepend(getInputValue);
@@ -16,11 +23,27 @@ const onClear = clearSearchText.prepend(getVoid);
 
 const TopSearchBar = () => {
   const searchText = useStore($searchInput);
+  const isActiveSearchBar = useStore($isActiveSearchBar);
   const showCountries = useStore($showCountries)
   const isMobile = useStore($isMobile)
-  const [mobileSearch, setMobileSearch] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const searchShellRef = useRef<HTMLDivElement>(null);
+  const [dropdownWidth, setDropdownWidth] = useState(0);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const updateWidth = () => {
+      const shellWidth = searchShellRef.current?.offsetWidth ?? 0;
+      setDropdownWidth(shellWidth);
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+
+    return () => {
+      window.removeEventListener('resize', updateWidth);
+    };
+  }, []);
 
   const onBlurSearch = (e: React.FocusEvent<HTMLInputElement>) => {
     // Check if the newly focused element is inside our search results
@@ -30,54 +53,111 @@ const TopSearchBar = () => {
     // If the related target is not inside search results and not the search input itself
     if (searchResults && !searchResults.contains(relatedTarget) &&
       searchContainerRef.current && !searchContainerRef.current.contains(relatedTarget)) {
-      setTimeout(() => changeIsSearchFocused(false), 300);
-      if (isMobile) {
-        setMobileSearch(false);
-      }
+      setTimeout(() => changeIsSearchFocused(false), 0);
     }
   }
+
+  const dropdownButton = (
+    <button
+      aria-expanded={showCountries}
+      aria-label={t('country-list')}
+      className={cn(
+        'main-search-list !relative !z-[1] !flex !h-12 !w-14 !shrink-0 !items-center !justify-center !gap-0.5 !rounded-l-lg !border-0 !bg-[#e8e8e8] !px-2.5 !py-0 !shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:!outline-none',
+        'after:!absolute after:!right-0 after:!top-1/2 after:!h-6 after:!w-px after:!-translate-y-1/2 after:!bg-[#c6c6c6]'
+      )}
+      onClick={() => {
+        changeIsSearchFocused(false)
+        onShowCountriesAdminList(!showCountries)
+      }}
+      style={{ '--country-trigger-border': showCountries ? '#0f62fe' : '#c6c6c6' } as CSSProperties}
+      type="button"
+    >
+      <Earth size={16} className="!fill-[#161616]" />
+      {showCountries ? <ChevronUp size={16} className="!fill-[#161616]" /> : <ChevronDown size={16} className="!fill-[#161616]" />}
+    </button>
+  );
+
   return (
-    <SearchWrapper className="top-search-bar" ref={searchContainerRef}>
-      <CountrySearchIcon
-        align={'bottom-left'}
-        label={t('country-list')}
-        className='main-search-list'
-        onClick={() => {
-          onShowCountriesAdminList(!showCountries)
-        }}
-        size="lg"
-        kind="primary"
-      >
-        <Earth />
-        <ChevronDown />
-      </CountrySearchIcon>
-      {isMobile && !mobileSearch ? (
-        <Search
-          className='search-icon'
-          onClick={() => { setMobileSearch(true); }}
-        />
-      ) : null}
-      {(isMobile && mobileSearch || !isMobile) && <SearchContainer
-        size="lg"
-        placeholder={t("search-country-region-school-id")}
-        labelText="Search"
-        closeButtonLabelText={t("clear-search-input")}
-        id="main-search-bar"
-        autoFocus={isMobile}
-        onChange={onChange}
-        onFocus={() => {
-          changeIsSearchFocused(true);
-        }}
-        onBlur={onBlurSearch}
-        value={searchText}
-        className={"sidebar-searchbox"}
-        $isMobile={isMobile}
-        onClear={() => {
-          onClear();
-          isMobile && setMobileSearch(false);
-        }}
-      />}
-    </SearchWrapper >
+    <div
+      className={cn(
+        'top-search-bar !flex !h-12 !items-center !gap-0 !bg-transparent !px-3.5',
+        'max-md:!w-full',
+      )}
+      ref={searchContainerRef}
+    >
+      <Popover open={showCountries} onOpenChange={onShowCountriesAdminList}>
+        <PopoverAnchor asChild>
+          <div className="!flex !min-w-0 !flex-1 !items-center !gap-0" ref={searchShellRef}>
+            <TooltipProvider>
+              {showCountries ? dropdownButton : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {dropdownButton}
+                  </TooltipTrigger>
+                <TooltipContent
+                  className="!z-[60] !rounded !bg-[#f4f4f4] !px-3 !py-1.5 !text-xs !text-[#161616]"
+                  side="bottom"
+                  sideOffset={4}
+                >
+                  {t('country-list')}
+                </TooltipContent>
+                </Tooltip>
+              )}
+            </TooltipProvider>
+            <div
+              className="sidebar-searchbox !relative !min-w-0 !flex-1 !rounded-r-lg !bg-[#f4f4f4] !shadow-[inset_0_0_0_1px_var(--search-shell-border)]"
+              style={{ '--search-shell-border': isActiveSearchBar ? '#0f62fe' : '#c6c6c6' } as CSSProperties}
+            >
+              <Search size={16} className="!pointer-events-none !absolute !left-3.5 !top-1/2 !z-[1] !-translate-y-1/2 !fill-[#161616]" />
+              <Input
+                aria-label={t('search-country-region-school-id')}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoFocus={isMobile}
+                autoCorrect="off"
+                spellCheck={false}
+                className="!h-12 !border-0 !bg-transparent !px-11 !pr-11 !text-[0.9375rem] !font-normal !leading-5 !text-[#161616] !shadow-none placeholder:!text-[12px] placeholder:!font-normal placeholder:!leading-5 placeholder:!text-[#8d8d8d] focus-visible:!ring-0 focus-visible:!ring-offset-0"
+                id="main-search-bar"
+                inputMode="search"
+                onBlur={onBlurSearch}
+                onChange={onChange}
+                onFocus={() => {
+                  onShowCountriesAdminList(false);
+                  changeIsSearchFocused(true);
+                }}
+                placeholder={t("search-country-region-school-id")}
+                value={searchText}
+              />
+              <button
+                aria-label={t('clear-search-input')}
+                className={cn(
+                  '!absolute !right-0 !top-0 !inline-flex !h-12 !w-11 !items-center !justify-center !rounded-r-lg !border-0 !bg-transparent !p-0 !text-[#6f6f6f] focus:!outline-none',
+                  !searchText && '!pointer-events-none !opacity-0',
+                  isMobile && '!opacity-100'
+                )}
+                onClick={onClear}
+                type="button"
+              >
+                <Close size={16} className="!fill-current" />
+              </button>
+            </div>
+          </div>
+        </PopoverAnchor>
+        <PopoverContent
+          align="start"
+          className="!z-[60] !rounded-lg !border !border-[#0f62fe] !bg-[#161616] !p-0 !shadow-[0_14px_40px_0_#212020]"
+          side="bottom"
+          sideOffset={2}
+          style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}
+        >
+          <SearchResultScroll className="search-container !max-h-[calc(80vh-4.5rem)] !bg-[#161616]">
+            <SearchCountryList />
+          </SearchResultScroll>
+          <FooterTourContact message={t("not-the-results-you-expected")} />
+          <SearchSchoolPanel />
+        </PopoverContent>
+      </Popover>
+    </div >
   );
 };
 

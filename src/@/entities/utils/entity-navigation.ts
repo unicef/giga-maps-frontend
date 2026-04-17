@@ -18,15 +18,14 @@ export const buildEntityUrl = (
 };
 
 /**
- * Navigate to a specific non-school entity using /map/entities.
+ * Navigate to a specific entity detail view using /map/view.
  */
 export const navigateToEntity = (
   entityType: EntityType,
-  entityId: number | string,
   country: string
 ): void => {
   router.navigate(
-    `/map/entities?entity=${entityType}&entity_id=${entityId}&country=${country.toLowerCase()}`
+    `/map/view?entity=${entityType}&country=${country.toLowerCase()}`
   );
 };
 
@@ -40,19 +39,4 @@ export const navigateToSchool = (
   router.navigate(
     `/map/schools?country=${country.toLowerCase()}&school_ids=${schoolId}`
   );
-};
-
-/**
- * Update the ?entity= query param in the current URL without changing the path.
- * Uses history.replace to avoid extra history entries.
- */
-export const updateEntityUrlParam = (entityTypes: string[]): void => {
-  const url = new URL(window.location.href);
-  if (entityTypes.length > 0) {
-    url.searchParams.set('entity', entityTypes.join(','));
-  } else {
-    url.searchParams.delete('entity');
-  }
-  const newPath = url.pathname + url.search;
-  router.history.replace(newPath);
 };

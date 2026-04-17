@@ -26,7 +26,7 @@
   --giga-popover-foreground: #fff;
 
   /* Primary (brand blue) */
-  --giga-primary: #277AFF;
+  --giga-primary: #005BED;
   --giga-primary-foreground: #fff;
 
   /* Secondary */
@@ -38,7 +38,7 @@
   --giga-muted-foreground: #9E9E9E;
 
   /* Accent */
-  --giga-accent: #383838;
+  --giga-accent: #005BED;
   --giga-accent-foreground: #fff;
 
   /* Destructive */
@@ -48,7 +48,7 @@
   /* Border / Input / Ring */
   --giga-border: #474747;
   --giga-input: #C7C7C7;
-  --giga-ring: #277AFF;
+  --giga-ring: #005BED;
 
   /* ── Extended tokens (not standard shadcn, but useful) ──── */
   --giga-surface-elevated: #383838;
@@ -92,7 +92,7 @@
   --giga-muted: #f4f4f4;
   --giga-muted-foreground: #474747;
 
-  --giga-accent: #f4f4f4;
+  --giga-accent: #005BED;
   --giga-accent-foreground: #222222;
 
   --giga-border: #E0E0E0;
@@ -189,4 +189,16 @@
   --color-filter-muted: var(--giga-filter-muted);
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
+}
+
+@keyframes legend-connectivity-glow {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+
+  to {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
 }

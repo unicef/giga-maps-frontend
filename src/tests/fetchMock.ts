@@ -2,8 +2,8 @@ import { dataLayerlistMock, singleLayerMock } from "./data/admin-data-layer"
 import apiConfigData from "./data/api-config-data"
 import connectivityConfigData from "./data/connectivity-config-data"
 import connectivityStatsData from "./data/connectivity-stats.data"
-import { countryList } from "./data/country-filter-modal"
 import countrySingleData from "./data/country.single.data"
+import { countryList } from "./data/country-filter-modal"
 import dataSourcesData from "./data/data-sources-data"
 import filterAdminData from "./data/filter-admin-data"
 import filterColumnconfigurationData from "./data/filter-columnconfiguration.data"
@@ -13,6 +13,48 @@ import globalStatusData from "./data/globalStatus.data"
 import layersData from "./data/layers-data"
 import liveInfoData from "./data/live-info.data"
 import schoolMasterData from "./data/school-master-data"
+
+const healthGlobalStatsData = {
+  no_of_countries: 0,
+  countries_with_connectivity_status_mapped: 0,
+  entities_total: 0,
+  entities_with_connectivity_status_mapped: 0,
+  connectivity_global_benchmark: {
+    value: 20000000,
+    unit: "bps",
+  },
+  connected_entities: {
+    connected: 0,
+    not_connected: 0,
+    unknown: 0,
+  },
+}
+
+const healthConnectivityStatsData = {
+  live_avg: 0,
+  live_avg_connectivity: "unknown",
+  no_of_entities_measure: 0,
+  entity_with_realtime_data: 0,
+  countries_with_realtime_data: 0,
+  real_time_connected_entities: {
+    good: 0,
+    moderate: 0,
+    no_internet: 0,
+    unknown: 0,
+  },
+  graph_data: [],
+  is_data_synced: true,
+  benchmark_metadata: {
+    benchmark_value: "20000000",
+    benchmark_unit: "bps",
+    base_benchmark: "1000000",
+    parameter_column_unit: "bps",
+    round_unit_value: "{val} / (1000 * 1000)",
+    rounded_benchmark_value: 20,
+    convert_unit: "mbps",
+    display_unit: "Mbps"
+  }
+}
 
 export const fetchMockResponse = (req: any, fallback?: any) => {
   if (req.url.includes('api/accounts/layers/PUBLISHED')) {
@@ -31,8 +73,11 @@ export const fetchMockResponse = (req: any, fallback?: any) => {
     return Promise.resolve(JSON.stringify(countryList))
   } else if (req.url.includes('/sources/school_master')) {
     return Promise.resolve(JSON.stringify(schoolMasterData));
-  } else if (req.url.includes('statistics/global-stat/')) {
-    return Promise.resolve(JSON.stringify(globalStatusData))
+  } else if (req.url.includes('api/v2/entities/global-stat/')) {
+    return Promise.resolve(JSON.stringify({
+      school: globalStatusData,
+      health: healthGlobalStatsData,
+    }))
   } else if (req.url.includes('accounts/adv_filters/?page_size')) {
     return Promise.resolve(JSON.stringify(filterAdminData))
   } else if (req.url.includes("accounts/adv_filters/?id=")) {
@@ -43,8 +88,11 @@ export const fetchMockResponse = (req: any, fallback?: any) => {
     return Promise.resolve(JSON.stringify({ results: dataLayerlistMock, count: 2 }))
   } else if (req.url.includes('/statistics/connectivityconfigs/')) {
     return Promise.resolve(JSON.stringify(connectivityConfigData))
-  } else if (req.url.includes('api/statistics/connectivity/?start_date')) {
-    return Promise.resolve(JSON.stringify(connectivityStatsData))
+  } else if (req.url.includes('api/v2/entities/connectivity-stat/?start_date')) {
+    return Promise.resolve(JSON.stringify({
+      school: connectivityStatsData,
+      health: healthConnectivityStatsData,
+    }))
   } else if (req.url.includes('/info/') && req.url.includes('?start_date')) {
     return Promise.resolve(JSON.stringify(liveInfoData))
   } else if (req.url.includes('accounts/column_configurations/')) {

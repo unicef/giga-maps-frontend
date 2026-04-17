@@ -12,8 +12,7 @@ enum Enviroment {
 export const API_MAPBOX_ACCESS_TOKEN =
   import.meta.env.VITE_API_MAPBOX_ACCESS_TOKEN ?? '';
 
-export const API_BASE_URL =
-  'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://uni-ooi-giga-maps-backend-dev.azurewebsites.net/';
 
 export const GIGA_MERTER_API_HOST = import.meta.env.VITE_GIGA_METER_API_HOST ?? 'https://uni-ooi-giga-meter-backend-dev.azurewebsites.net';
 

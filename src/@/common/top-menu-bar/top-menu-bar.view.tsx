@@ -1,22 +1,23 @@
 import { Close, Menu } from '@carbon/icons-react';
 import { IconButton } from '@carbon/react';
+import { useTheme } from 'styled-components';
 
+import AtlasLogo from '~/assets/images/atlas-logo.png';
 import { mapOverview } from '~/core/routes';
-
-import { HamburgerWrapper, LogoName, TopMenuWrapper } from './top-menu-bar.style';
-import logo from '~/assets/images/giga-logo.png';
-import whiteLogo from '~/assets/images/white-logo-small.png';
-import { $theme, ThemeType } from '~/core/theme.model';
-import { useStore } from 'effector-react';
+import { Link } from '~/lib/router';
 
 const TopMenuBar = ({
   isMenuOpen = false,
   onClickMenu = () => { }
 }: { isMenuOpen?: boolean; onClickMenu?: () => void; }) => {
-  const isLight = useStore($theme) === ThemeType.light;
+  const theme = useTheme();
+
   return (
-    <HamburgerWrapper>
-      <TopMenuWrapper>
+    <div
+      className="flex w-full items-center justify-between border-b border-white/8 bg-[#161616] [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current [&_svg]:!fill-[#f4f4f4]"
+      style={{ color: theme.text }}
+    >
+      <div className="flex h-11 w-full items-center justify-start gap-2 !px-3.5 py-0">
         <IconButton
           label={isMenuOpen ? "Close" : "Menu"}
           onClick={() => {
@@ -30,11 +31,14 @@ const TopMenuBar = ({
         >
           {isMenuOpen ? <Close size={20} /> : <Menu size={20} />}
         </IconButton>
-        <LogoName to={mapOverview} target="_blank">
-          <img src={isLight ? whiteLogo : logo} alt="Giga logo" />
-        </LogoName>
-      </TopMenuWrapper>
-    </HamburgerWrapper >
+        <Link
+          className="flex h-5 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
+          to={mapOverview}
+        >
+          <img alt="Atlas" className="block h-auto !w-[48px]" src={AtlasLogo} />
+        </Link>
+      </div>
+    </div>
   )
 }
 

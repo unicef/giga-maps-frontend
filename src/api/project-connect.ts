@@ -2,11 +2,13 @@ import { createEffect } from 'effector';
 
 import { CoverageStat, LayerType } from '~/@/sidebar/types';
 import {
-  APIListType,
   AdvanceFilterType,
+  APIListType,
   ConnectivityStat,
   Country,
   CountryBasic,
+  EntitiesConnectivityStatsResponse,
+  EntitiesGlobalStatsResponse,
   GlobalStats,
   SchoolStatsType,
 } from '~/api/types';
@@ -15,6 +17,17 @@ import type { Controller } from '~/lib/request-fx/types';
 
 import { apiBaseUrl, request } from './request-setup';
 
+const ensureCacheParam = (query = ''): string => {
+  const normalized = query.startsWith('?') ? query.slice(1) : query;
+  const params = new URLSearchParams(normalized);
+
+  if (!params.has('cache')) {
+    params.set('cache', 'False');
+  }
+
+  const nextQuery = params.toString();
+  return nextQuery ? `?${nextQuery}` : '';
+};
 
 export const getDatasetUrl = (countryCode: string): string =>
   `${apiBaseUrl}api/locations/countries/${encodeURIComponent(countryCode)}/schools/export-csv-schools/`;
@@ -68,6 +81,13 @@ export const fetchGlobalStatsFx = createRequestFx(
   })
 );
 
+export const fetchEntityGlobalStatsFx = createRequestFx(
+  async ({ query = '' }, controller?: Controller): Promise<EntitiesGlobalStatsResponse> => request({
+    url: `api/v2/entities/global-stat/${query ?? ''}`,
+    signal: controller?.getSignal()
+  })
+);
+
 export const fetchAdvanceFilterFx = createRequestFx(
   async (countryId: number, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
     url: `api/accounts/adv_filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
@@ -76,8 +96,8 @@ export const fetchAdvanceFilterFx = createRequestFx(
 );
 
 export const fetchLayerInfoFx = createRequestFx(
-  async (url: string, controller?: Controller): Promise<any> =>
-    request({
+  async (url: string, controller?: Controller): Promise<unknown> =>
+    request<unknown>({
       url,
       signal: controller?.getSignal()
     })
@@ -85,12 +105,12 @@ export const fetchLayerInfoFx = createRequestFx(
 
 export const fetchSchoolLayerInfoFx = createEffect(
   async ({ query, url }: { query: string; url: string }): Promise<SchoolStatsType[]> =>
-    fetchLayerInfoFx(`${url}${query}`)
+    fetchLayerInfoFx(`${url}${query}`) as Promise<SchoolStatsType[]>
 );
 
 export const fetchCountryLiveLayerInfo = createEffect(
   async ({ query, id }: { query: string; id: number | null }): Promise<ConnectivityStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`)
+    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
 );
 
 export const fetchConnectivityLayerFx = createEffect(
@@ -102,18 +122,31 @@ export const fetchConnectivityLayerFx = createEffect(
   ): Promise<ConnectivityStat> => {
     return fetchLayerInfoFx(
       `api/statistics/connectivity/${query}`
-    )
+    ) as Promise<ConnectivityStat>
+  }
+);
+
+export const fetchEntitiesConnectivityStatsFx = createEffect(
+  async ({
+    query
+  }: {
+    query: string;
+  },
+  ): Promise<EntitiesConnectivityStatsResponse> => {
+    return fetchLayerInfoFx(
+      `api/v2/entities/connectivity-stat/${ensureCacheParam(query)}`
+    ) as Promise<EntitiesConnectivityStatsResponse>
   }
 );
 
 export const fetchCountryStaticLayerInfo = createEffect(
   async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`)
+    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<CoverageStat>
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(
-  async (query: string, controller?: Controller): Promise<any[]> => {
-    return request({
+  async (query: string, controller?: Controller): Promise<unknown[]> => {
+    return request<unknown[]>({
       url: `/api/statistics/time-players/${query}`,
       signal: controller?.getSignal(),
     })

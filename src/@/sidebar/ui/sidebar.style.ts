@@ -1,6 +1,6 @@
 import { Hashtag } from '@carbon/icons-react'
 import { Accordion } from "@carbon/react";
-import { css, styled } from "styled-components";
+import { styled } from "styled-components";
 
 import { Scroll } from '@/scroll';
 
@@ -68,7 +68,7 @@ max-height: ${(props) => props.$height ? "calc(100vh - 29rem)" : ""} ;
 `
 
 export const SidebarScroll = styled(Scroll)`
-    height: 100%;
+    height: auto;
 `
 
 export const HashtagIcon = styled(Hashtag)`
@@ -76,96 +76,6 @@ export const HashtagIcon = styled(Hashtag)`
   margin-right: 0.325rem;
 `
 
-
-export const SidePanelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: inherit;
-  width: inherit;
-  .cds--tooltip-content{
-    font-size: 0.8rem;
-    margin-left: 0.5rem;
-  }
-`
-export const MainSideBarContainer = styled.div<{ $height: boolean, $left: boolean }>`
-  transition: all 0.3s;
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: ${props => props.$height ? "60vh" : "32vh"} ;
-    top: unset;
-    bottom: ${props => props.$left ? "-24vh" : "0"};
-    position: fixed;
-
-    .sidebar__expander {
-      display: none;
-      cursor: pointer;
-    }
-  }
-
-  @media (min-width: 769px) and (max-width: 1584px) {
-    position: fixed;
-    top: 0rem;
-    bottom: 5.3rem;
-    left: ${props => props.$left ? "-17rem" : "0.5rem"};
-    width: 288px ;
-    height: 96vh;
-  }
-
-  @media only screen and (min-width: 1584px) {
-    position: fixed;
-    top: 0rem;
-    bottom: 5.3rem;
-    left: ${props => props.$left ? "-18.2rem" : "0.5rem"};
-    width: 296px ;
-    height: 96vh;
-  }
-
- .sidebar__expander {
-    cursor: pointer;
-    position: absolute;
-    bottom: 5.5rem;
-    left: 100%;
-    display: flex;
-    width: 16px;
-    height: 48px;
-    align-items: center;
-    justify-content: center;
-    background-color: ${props => props.theme.main};
-    border: none;
-    outline: none;
-    padding: 0;
-
-    >svg {
-      fill:#fff;
-      transition: all .5s;
-      transform: ${props => props.$left ? 'rotate(0deg)' : 'rotate(180deg)'};
-      width: 1rem;
-      height: 1rem;
-      color: ${props => props.theme.text};
-    }
-  }
-`
-
-export const VerticalSliderButtonWrapper = styled.div`
-padding: 0.6rem;
-display: flex;
-align-items: center;
-justify-content: center;
-width: 100%;
-margin-bottom: -0.0625rem; 
-background:${props => props.theme.main};
-svg {
-  fill: ${props => props.theme.text};  
-}
-`
 
 export const VerticalSliderButton = styled.div`
 width: 56px;
@@ -175,19 +85,3 @@ background: #ECECEC;
 cursor: pointer;
 `
 
-export const SubContainer = styled.div`
-height:calc(100% - 6rem);
-background: ${props => props.theme.main} ;
-@media (max-width:768px){
-  height:calc(100%);
-}
-`
-
-export const MapButtonWrapper = styled.div<{ $hide?: boolean }>`
-  position: relative;
-  transition: all .5s;
-  ${props => props.$hide && css`
-    transform: translateX(-100%);
-  `};
-  z-index: 10;
-`

@@ -2,7 +2,7 @@ import type { EntityType } from '../types/base-entity.type';
 import type { EntityConfig } from './entity-config.types';
 
 /**
- * Default entity registry — hardcoded fallback configuration.
+ * Default entity registry - hardcoded fallback configuration.
  *
  * This is ONLY the default data. The live registry lives in the
  * Effector store `$entityRegistry` in entity.model.ts.
@@ -18,7 +18,36 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     type: 'school',
     displayName: 'Schools',
     icon: 'Education',
+    visible: true,
     markerType: 'circle',
+    symbol: '●',
+    legend: {
+      metricSubtitle: 'Internet quality',
+      metricTitle: 'Average download speed',
+      statusTitle: 'Connectivity status',
+      tabLabel: 'Schools',
+    },
+    sidebar: {
+      badge: 'GigaMaps',
+      connectedDetailTranslationKey: 'across-no-countries',
+      connectedLabel: 'Connected Schools',
+      connectedTooltip: 'School connectivity status mapped using government data or a real-time measurement source.',
+      estimatedTotalInMillions: 6,
+      footerLogoVariant: 'school',
+      locationsMappedLabel: 'Locations mapped',
+      locationsMappedTooltip: 'School geolocations mapped using government, Giga’s AI model and supplemental open data.',
+      mappedDetailTranslationKey: 'across-no-countries-and-territories',
+      reportingDetailTranslationKey: 'across-no-countries',
+      reportingLabel: 'Reporting internet quality',
+      reportingTooltip: 'Schools with periodical in-school internet measurements from software and hardware-based solutions.',
+      title: 'Schools',
+    },
+    stats: {
+      connectedGroupKey: 'connected_entities',
+      mappedCountKey: 'entities_connected',
+      measureCountKey: 'no_of_entities_measure',
+      realtimeGroupKey: 'real_time_connected_entities',
+    },
     colors: {
       primary: '#0062FF',
       connected: '#24A148',
@@ -42,10 +71,37 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
 
   health: {
     type: 'health',
-    displayName: 'Health Facilities',
+    displayName: 'Health centers',
     icon: 'Hospital',
+    visible: true,
     markerType: 'symbol',
-    markerSymbol: '⚕',
+    symbol: '■',
+    legend: {
+      metricSubtitle: 'Internet quality',
+      metricTitle: 'Average download speed',
+      statusTitle: 'Connectivity status',
+      tabLabel: 'Health centers',
+    },
+    markerSymbol: '?',
+    sidebar: {
+      connectedDetailTranslationKey: 'across-no-countries',
+      connectedLabel: 'Connected Health centers',
+      connectedTooltip: 'Health centers with mapped connectivity status.',
+      footerLogoVariant: 'none',
+      locationsMappedLabel: 'Locations mapped',
+      locationsMappedTooltip: 'Health center locations mapped from currently available datasets.',
+      mappedDetailTranslationKey: 'across-no-countries',
+      reportingDetailTranslationKey: 'across-no-countries',
+      reportingLabel: 'Reporting internet quality',
+      reportingTooltip: 'Health centers reporting internet quality.',
+      title: 'Health centers',
+    },
+    stats: {
+      connectedGroupKey: 'connected_entities',
+      mappedCountKey: 'entities_total',
+      measureCountKey: 'no_of_entities_measure',
+      realtimeGroupKey: 'real_time_connected_entities',
+    },
     colors: {
       primary: '#0F62FE',
       connected: '#198038',

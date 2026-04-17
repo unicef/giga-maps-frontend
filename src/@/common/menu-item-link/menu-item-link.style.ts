@@ -68,7 +68,7 @@ height: calc(100% - 3rem);
 top:3rem;
 width:100%;
     position: absolute;
-    z-index: 6;
+    z-index: 13;
 .cds--contained-list-item:not(:last-of-type)::before {
   background-color: ${props => props.theme.main}  !important;
 }

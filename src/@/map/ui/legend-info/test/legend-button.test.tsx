@@ -1,18 +1,27 @@
 import { describe, expect, test } from '@jest/globals';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { $showLegend, onSelectMainLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
+
 import LegendButton from '../legend-button';
-import { $showLegend, onShowLegend } from '~/@/sidebar/sidebar.model';
 
 describe('LegendButton', () => {
   test('renders legend button in desktop view', () => {
     render(<LegendButton />);
-    expect(screen.getByText('legend')).toBeInTheDocument();
+    expect(document.body).toHaveTextContent('legend');
   });
 
   test('toggles legend visibility on button click', async () => {
     render(<LegendButton />);
-    const button = screen.getByText('legend');
+    const button = document.querySelector('button[aria-label="legend"]');
+
+    expect(button).toBeInTheDocument();
+
+    if (!button) {
+      throw new Error('Legend button is missing');
+    }
+
     await userEvent.click(button);
     expect($showLegend.getState()).toBe(true);
 
@@ -45,6 +54,22 @@ describe('LegendButton', () => {
     render(<LegendButton />);
 
     await userEvent.click(document.body);
+    expect($showLegend.getState()).toBe(false);
+  });
+
+  test('preserves legend open state while switching layers', async () => {
+    global.innerWidth = 1200;
+    window.dispatchEvent(new Event('resize'));
+    onShowLegend(true);
+    render(<LegendButton />);
+
+    onSelectMainLayer(123);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect($showLegend.getState()).toBe(true);
+
+    onShowLegend(false);
+    onSelectMainLayer(456);
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect($showLegend.getState()).toBe(false);
   });
 });

@@ -1,16 +1,12 @@
 import { describe } from '@jest/globals';
 import { createEvent } from 'effector';
 
-import { $isMobile } from '~/core/media-query';
-
-import layers from '~/tests/data/layers-data';
-import globalStatusData from '~/tests/data/globalStatus.data';
 import { changeCountryCode } from '~/@/country/country.model';
-import { testWrapper } from '~/tests/jest-wrapper';
-import Sidebar from '../sidebar.view';
-import { render } from '@testing-library/react';
 import { fetchLayerListFx } from '~/api/project-connect';
+import { $isMobile } from '~/core/media-query';
 import { router } from '~/core/routes';
+import globalStatusData from '~/tests/data/globalStatus.data';
+import layers from '~/tests/data/layers-data';
 
 const setMobileView = createEvent<boolean>()
 $isMobile.on(setMobileView, (_, payload) => payload)
@@ -21,8 +17,25 @@ describe('Sidebar Init', () => {
     fetchMock.mockResponse((req) => {
       if (req.url.includes('api/accounts/layers')) {
         return Promise.resolve(JSON.stringify(layers))
-      } else if (req.url.includes('statistics/global-stat/')) {
-        return Promise.resolve(JSON.stringify(globalStatusData))
+      } else if (req.url.includes('api/v2/entities/global-stat/')) {
+        return Promise.resolve(JSON.stringify({
+          school: globalStatusData,
+          health: {
+            no_of_countries: 0,
+            countries_with_connectivity_status_mapped: 0,
+            entities_total: 0,
+            entities_with_connectivity_status_mapped: 0,
+            connectivity_global_benchmark: {
+              value: 20000000,
+              unit: 'bps',
+            },
+            connected_entities: {
+              connected: 0,
+              not_connected: 0,
+              unknown: 0,
+            },
+          },
+        }))
       } else if (req.url.includes('api/locations/countries/br'))
         return Promise.resolve(JSON.stringify({
           id: 1,
@@ -32,10 +45,10 @@ describe('Sidebar Init', () => {
     });
   })
 
-  test('sample: [countryIdAndSchoolIds, $isCurrentLayerLive]]', async () => {
+  test('sample: [countryIdAndSchoolIds, $isCurrentLayerLive]]', () => {
     changeCountryCode('br')
-    await fetchLayerListFx()
-    await router.navigate('/map/schools?country=br&school_ids=46313,1212');
+    void fetchLayerListFx()
+    router.navigate('/map/schools?country=br&school_ids=46313,1212');
     expect(window.location.pathname).toBe('/map/schools');
   })
 

@@ -1,24 +1,33 @@
-import { Checkbox } from "@carbon/react";
+import { Information } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
-import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
-import {
-  staticLegendsSelection,
-  $layerUtils,
-  $staticLegendsSelected
-} from '~/@/sidebar/sidebar.model';
-import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
+import { useTranslation } from 'react-i18next';
+
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
-import { CheckBoxContainer, CircleWrapper, InnerCircle } from '../legend-button.style';
+import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
+import {
+  $layerUtils,
+  $staticLegendsSelected,
+  staticLegendsSelection,
+} from '~/@/sidebar/sidebar.model';
+import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
+import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
-import { useTranslation } from "react-i18next";
-import { $lng } from "~/core/i18n/store";
 
 interface CheckedStatus {
   [key: string]: boolean;
 }
 
-const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+const SchoolStatusLegend = ({
+  entityType,
+  shouldShowControls,
+  statusTitle,
+}: {
+  entityType: string;
+  shouldShowControls: boolean;
+  statusTitle: string;
+}) => {
   const { t } = useTranslation();
   const lng = useStore($lng);
   const paintData = useStore($stylePaintData);
@@ -26,16 +35,15 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
   const { isSchoolStatus } = currentLayerTypeUtils;
   const [schoolStatusCheckedStatus, setSchoolStatusCheckedStatus] = useState<CheckedStatus>({});
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
-  const globalStatsFromStore = useStore($globalStats)
+  const globalStatsFromStore = useStore($globalStats);
   const staticLegends = useStore($staticLegendsSelected);
-  const schoolStatusStats: any = globalStatsFromStore?.connected_schools;
-
+  const schoolStatusStats = globalStatsFromStore?.connected_schools as Record<string, number> | undefined;
 
   const handleSchoolStatusLayerChange = (key: string) => {
     const newStatus = !schoolStatusCheckedStatus[key];
-    setSchoolStatusCheckedStatus(prevState => ({
+    setSchoolStatusCheckedStatus((prevState) => ({
       ...prevState,
-      [key]: newStatus
+      [key]: newStatus,
     }));
 
     switch (key) {
@@ -49,7 +57,7 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
         staticLegendsSelection(unknown);
         break;
       default:
-        console.log('Unknown key:', key);
+        break;
     }
   };
 
@@ -59,34 +67,41 @@ const SchoolStatusLegend = ({ shouldShowControls }: { shouldShowControls: boolea
       not_connected: staticLegends.includes(notConnected),
       unknown: staticLegends.includes(unknown),
     });
-  }, [staticLegends]);
+  }, [connected, notConnected, staticLegends, unknown]);
 
   if (!isSchoolStatus) return null;
-  return (<div className='school-status'>
-    <h3>{t('school-status')}</h3>
-    {
-      Object.values(ConnectivityStatusDistribution).map((key, index) => (
-        <div className='legend-container' key={`${key}`}>
-          <div className='checkbox-with-label'>
-            {shouldShowControls && <CheckBoxContainer><Checkbox id={`school-status-${key}`}
-              labelText={''}
-              checked={schoolStatusCheckedStatus[key]}
-              onChange={() => handleSchoolStatusLayerChange(key)} >
 
-            </Checkbox></CheckBoxContainer>}
-            <div key={`${key}${index}`} className='conneted-info'>
-              <CircleWrapper>
-                <InnerCircle $backColor={paintData[key]} />
-              </CircleWrapper>
-              <p className="label">{t(ConnectivityStatusNames[key])}</p>
+  return (
+    <div className="!flex !min-w-0 !flex-1 !basis-[calc(50%-0.5rem)] !flex-col !self-start max-[560px]:!basis-full max-[560px]:!min-w-full">
+      <div className="!mb-1 !flex !items-center !gap-1.5 !text-[color:var(--legend-muted)]">
+        <div className="!text-sm !font-normal !leading-5">{statusTitle}</div>
+        <Information size={12} />
+      </div>
+      {Object.values(ConnectivityStatusDistribution).map((key) => (
+        <div className="!mt-3 !flex !w-full !items-center !justify-between" key={key}>
+          <div className="!flex !min-w-0 !items-center">
+            {shouldShowControls ? (
+              <input
+                checked={Boolean(schoolStatusCheckedStatus[key])}
+                className="!mr-2 !h-4 !w-4 !cursor-pointer !rounded-sm !border !border-[color:var(--legend-checkbox-border)] accent-white"
+                onChange={() => handleSchoolStatusLayerChange(key)}
+                type="checkbox"
+              />
+            ) : null}
+            <div className="!flex !min-w-0 !items-center !gap-2">
+              <EntityLegendIndicator color={paintData[key]} entityType={entityType} />
+              <span className="!text-sm !font-normal !leading-5 !text-[color:var(--legend-text)]">{t(ConnectivityStatusNames[key])}</span>
             </div>
           </div>
-          {shouldShowControls && <div className='legend-value' data-title={t('int', { val: schoolStatusStats[key] })}>{formatNumber(schoolStatusStats[key], lng)}</div>}
+          {shouldShowControls ? (
+            <div className="!ml-1.5 !block !min-w-0 !text-left !text-sm !leading-5 !text-[color:var(--legend-muted)]" data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}>
+              {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
+            </div>
+          ) : null}
         </div>
-      )
-      )}
-  </div>
-  )
-}
+      ))}
+    </div>
+  );
+};
 
-export default SchoolStatusLegend
+export default SchoolStatusLegend;

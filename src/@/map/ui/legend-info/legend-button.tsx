@@ -1,65 +1,56 @@
-import { Information } from '@carbon/icons-react'
-import { IconButton } from '@carbon/react'
-import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
-
-import { $isProductTour, $selectedLayerId, $showAdvancedFilter, $showLegend, $showThemeLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
-import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
-import { $isMobile } from '~/core/media-query';
-import { debounce } from '~/lib/effector-kit';
-
-import { ActiveButtonWrapper, LegendWrapper } from "./legend-button.style";
-import LegendPopup from "./legend-popup";
-import { $country, $countryId } from '~/@/country/country.model';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-sample({
-  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $countryId, $showThemeLayer, $showAdvancedFilter]),
-  source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
-  fn: () => true,
-  filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
-    if (showAdvancedFilter || showThemeLayer) return false;
-    return !isMobile
-  },
-  target: onShowLegend,
-})
+import { $isProductTour, $showLegend, onShowLegend } from '~/@/sidebar/sidebar.model';
+
+import MapControlButton from '../layer-theme/map-control-button';
+import LegendPopup from './legend-popup';
+
+const LegendControlIcon = () => (
+  <svg
+    aria-hidden="true"
+    className="!block"
+    fill="none"
+    height="16"
+    viewBox="0 0 16 16"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M4 4H12" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+    <path d="M4 8H12" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+    <path d="M4 12H12" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+    <rect fill="currentColor" height="2.4" rx="0.5" width="2.4" x="2" y="2.8" />
+    <path d="M10.4 6.8L12 9.4H8.8L10.4 6.8Z" fill="currentColor" />
+    <rect fill="currentColor" height="2.4" rx="0.5" width="2.4" x="2" y="10.8" />
+  </svg>
+);
+
 const LegendButton = () => {
   const { t } = useTranslation();
   const showLegend = useStore($showLegend);
-  const isMobile = useStore($isMobile);
   const isProductTour = useStore($isProductTour);
-  const toggleShowLegend = () => {
-    onShowLegend(!showLegend);
+  const handleLegendOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen && isProductTour) {
+      return;
+    }
+
+    onShowLegend(nextOpen);
   };
 
-  // default hidden from mobile screen;
-  useEffect(() => {
-    isMobile && onShowLegend(false)
-  }, [isMobile])
   return (
-    <LegendWrapper className="lengend-container">
-      <LegendPopup open={showLegend} setOpen={onShowLegend}>
-        <ActiveButtonWrapper className='contras legend-open-button' onClick={toggleShowLegend}>
-          <IconButton
-            align="left"
-            size="sm"
-            label={t("legend")}
-            onClick={toggleShowLegend}>
-            <Information />
-          </IconButton>
-        </ActiveButtonWrapper>
+    <div className="lengend-container">
+      <LegendPopup open={showLegend}>
+        <MapControlButton
+          active={showLegend}
+          aria-label={t('legend')}
+          className="legend-open-button"
+          onClick={() => handleLegendOpenChange(!showLegend)}
+          label={t('legend')}
+        >
+          <LegendControlIcon />
+        </MapControlButton>
       </LegendPopup>
-      {showLegend && isMobile && <ClickAnywhere
-        classList={['lengend-container']}
-        trigger={showLegend}
-        outsideClick={() => {
-          if (!isProductTour) {
-            onShowLegend(false)
-          }
-        }}
-      />}
-    </LegendWrapper >
+    </div>
   )
 }
 

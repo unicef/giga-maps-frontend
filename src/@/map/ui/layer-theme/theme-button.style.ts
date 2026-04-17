@@ -1,61 +1,5 @@
-import { Checkbox, CheckboxGroup, IconButton, Popover, RadioButton, RadioButtonGroup } from "@carbon/react";
+import { Checkbox, CheckboxGroup, Popover, RadioButton, RadioButtonGroup } from "@carbon/react";
 import { styled } from "styled-components";
-
-export const ThemeWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
-    z-index: ${(props) => (props.$zIndex)};
-    background: ${props => props.theme.main};
-    border-radius: 62.5rem;
-    margin-top:0.5rem;
-    @media (max-width:768px){
-        bottom:${(props) => props.$bottom ? "calc(60vh + 0.5rem)" : "calc(32vh + 0.5rem)"}
-    }
-`
-export const ZoomButtonWrapper = styled.div`
-    z-index: 1;
-    margin-bottom:.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .cds--popover{
-    position:relative;
-    z-index:6001;
-    top:-1rem;
-  }
-  .cds--tooltip-content {
-      background: ${props => props.theme.text} !important;
-      color: ${props => props.theme.main}!important;
-    }
-    .cds--btn:not(.cds--btn--disabled) {
-    background: ${props => props.theme.main};
-  }
-`
-
-export const ButtonWrapper = styled(IconButton)`
-    width: 100%;
-    background: ${props => props.theme.main};
-    min-height: 1.3rem;
-    max-height: 1.3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.7rem;
-    width: 1.5rem;
-    cursor:pointer;
-    svg{
-        fill:${props => props.theme.text} !important;
-    }
-    .cds--popover-caret{
-        background: ${props => props.theme.text};
-    }
-`
-export const ButtonWrapperUp = styled(ButtonWrapper)`
-    border-top-right-radius: 62.5rem;
-    border-top-left-radius: 62.5rem;
-`
-export const ButtonWrapperDown = styled(ButtonWrapper)`
-    border-bottom-right-radius: 62.5rem;
-    border-bottom-left-radius: 62.5rem;
-`
 
 export const CustomePopover = styled(Popover)`
     .cds--popover-content{
@@ -196,6 +140,9 @@ z-index: 1;
 position:fixed;
 right:.5rem;
 bottom:2.5rem;
+display:flex;
+flex-direction:column;
+align-items:center;
 
  @media (max-width:768px){
      bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(32vh + 0.5rem)"};

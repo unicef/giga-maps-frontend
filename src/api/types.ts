@@ -18,12 +18,35 @@ export type GlobalStats = {
   schools_with_connectivity_status_mapped: number;
 }
 
+export type EntityStatsResponseKey = 'school' | 'health';
+export type EntityConnectivityBenchmark = {
+  value: number;
+  unit: string;
+};
+export type EntityConnectedEntitiesGroup = {
+  connected: number;
+  not_connected: number;
+  unknown: number;
+};
+
+export type EntityGlobalStats = {
+  no_of_countries: number;
+  countries_with_connectivity_status_mapped: number;
+  connectivity_global_benchmark: EntityConnectivityBenchmark;
+  connected_entities: EntityConnectedEntitiesGroup;
+  entities_connected?: number;
+  entities_total?: number;
+  entities_with_connectivity_status_mapped?: number;
+};
+
+export type EntitiesGlobalStatsResponse = Partial<Record<EntityStatsResponseKey, EntityGlobalStats>>;
+
 export type GraphData = {
   group: string;
   key: string;
-  value: number;
+  value: number | null;
 }
-export type defaultLegendValuesType = {
+export type DefaultLegendValuesType = {
   good: number;
   moderate: number;
   no_internet: number;
@@ -35,7 +58,7 @@ export type ConnectivityStat = {
   no_of_schools_measure: number;
   school_with_realtime_data: number;
   is_data_synced: boolean;
-  real_time_connected_schools: defaultLegendValuesType;
+  real_time_connected_schools: DefaultLegendValuesType;
   graph_data: GraphData[];
   live_avg_connectivity: string;
   countries_with_realtime_data: number;
@@ -45,10 +68,25 @@ export type ConnectivityStat = {
     benchmark_value: string;
     parameter_column_unit: string;
     round_unit_value: string;
-    rounded_benchmark_value: string;
+    rounded_benchmark_value: number | string;
     display_unit: string;
+    convert_unit?: string;
   }
 };
+
+export type EntityConnectivityStat = {
+  benchmark_metadata: ConnectivityStat['benchmark_metadata'];
+  countries_with_realtime_data: number;
+  entity_with_realtime_data: number;
+  graph_data: GraphData[];
+  is_data_synced: boolean;
+  live_avg: number;
+  live_avg_connectivity: string;
+  no_of_entities_measure: number;
+  real_time_connected_entities: DefaultLegendValuesType;
+};
+
+export type EntitiesConnectivityStatsResponse = Partial<Record<EntityStatsResponseKey, EntityConnectivityStat>>;
 export type SchoolInfoStats = {
   num_students: number;
   num_teachers: number;
