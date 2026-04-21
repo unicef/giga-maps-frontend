@@ -8,7 +8,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "npm run build && npx serve -s build -l 9510",
+    "serve": "npm run build && npx serve -s bulild -l 9510",
     "ts": "tsc -p tsconfig.json",
     "ts-files": "tsc --listFiles -p tsconfig.json",
     "ts-coverage": "shx mkdir -p .coverage/typescript && typescript-coverage-report -s -t 98 -o .coverage/typescript",

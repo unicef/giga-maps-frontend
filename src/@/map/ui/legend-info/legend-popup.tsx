@@ -1,4 +1,3 @@
-import { Maximize, Minimize } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
 import { CSSProperties, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +20,8 @@ import { cn } from '~/lib/cn';
 import LiveLayerLegend from './common/live-layer-legend';
 import SchoolStatusLegend from './common/school-status-legend';
 import StaticLayerLegend from './common/static-layer-legend';
+import { Maximize2, Minimize2 } from 'lucide-react';
+import { Button } from '~/components/ui/button';
 
 type LegendSummaryItem = {
   color: string;
@@ -82,13 +83,11 @@ const LegendPopup = ({
   }, [visibleLegendEntityTypes]);
 
   const activeLegendConfig = entityConfigMap[activeTab] ?? entityConfigMap[visibleLegendEntityTypes[0] ?? 'school'];
-  const legendMetricTitle = isStatic
-    ? selectedLayerData?.name ?? t('coverage-data')
-    : activeLegendConfig?.legend.metricTitle ?? t('average-download-speed');
+  const legendMetricTitle = t('internet-quality')
   const legendMetricSubtitle = isStatic
-    ? ''
-    : activeLegendConfig?.legend.metricSubtitle ?? t('internet-quality');
-  const legendStatusTitle = activeLegendConfig?.legend.statusTitle ?? t('connectivity-status');
+    ? selectedLayerData?.name ?? t('coverage-data')
+    : selectedLayerData?.name ?? t('average-download-speed');
+  const legendStatusTitle = t('connectivity-status');
 
   const schoolSummaryItems: LegendSummaryItem[] = schoolSummaryOrder.map((key) => ({
     color: paintData[key],
@@ -115,34 +114,34 @@ const LegendPopup = ({
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected as string];
 
   const renderMetricSummary = () => (
-    <div className="!grid !grid-cols-[minmax(0,1fr)_auto] !items-start !gap-x-2">
-      <div className="!flex !min-w-0 !w-full !flex-col !gap-1">
-        <div className="!flex !items-center !justify-between !gap-3">
-          <span className="!text-sm !leading-5 !text-[color:var(--legend-text)] max-md:!text-xs max-md:!leading-[1.125rem]">{legendMetricTitle}</span>
-          <span className="!text-xs !leading-[1.125rem] !text-[color:var(--legend-subtle)]">{legendMetricSubtitle}</span>
+    <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
+      <div className="flex! min-w-0! w-full! flex-col! gap-1!">
+        <div className="flex! items-center! justify-between! gap-3!">
+          <span className="text-sm! leading-5! text-(--legend-text)! max-md:text-xs! max-md:leading-4.5!">{legendMetricTitle}</span>
+          <span className="text-xs! leading-4.5! text-(--legend-subtle)!">{legendMetricSubtitle}</span>
         </div>
-        <div className="!flex !h-1 !w-full !gap-0 !overflow-hidden !rounded-full">
+        <div className="flex! h-1! w-full! gap-0! overflow-hidden! rounded-full!">
           {activeLayerSummaryItems.map(({ color, key, label }) => (
             isLive ? (
               <span
                 aria-hidden="true"
-                className="!relative !block !min-w-0 !flex-1 !overflow-hidden !rounded-full !bg-transparent !mr-1.5 last:!mr-0"
+                className="relative! block! min-w-0! flex-1! overflow-hidden! rounded-full! bg-transparent! mr-1.5! last:mr-0!"
                 key={key}
                 title={label}
               >
                 <span
-                  className="!absolute !inset-px !rounded-full"
+                  className="absolute! inset-px! rounded-full!"
                   style={{ background: liveMetricFill }}
                 />
                 <span
-                  className="!absolute !inset-0 !rounded-full !border"
+                  className="absolute! inset-0! rounded-full! border!"
                   style={{ borderColor: color }}
                 />
               </span>
             ) : (
               <span
                 aria-hidden="true"
-                className="!block !min-w-0 !flex-1 !overflow-hidden !rounded-full"
+                className="block! min-w-0! flex-1! overflow-hidden! rounded-full!"
                 key={key}
                 style={{ background: color }}
                 title={label}
@@ -152,39 +151,40 @@ const LegendPopup = ({
         </div>
       </div>
       {!shouldShowStatusSummary ? (
-        <button
-          className="!inline-flex !h-4 !w-4 !shrink-0 !items-center !justify-center !rounded-full !border-0 !bg-transparent !p-0 !text-[color:var(--legend-text)] hover:!bg-white/8"
+        <Button
+          className="absolute! top-1! right-1!"
           aria-label={t('expand-legend')}
           data-testid="legend-expand-button"
           onClick={(event) => {
             event.stopPropagation();
             setCollapsed(false);
           }}
-          type="button"
+          size="icon"
+          variant="icon"
         >
-          <Maximize size={14} />
-        </button>
+          <Maximize2 size={14} />
+        </Button>
       ) : null}
     </div>
   );
 
   const collapsedContent = (
-    <div className="!flex !flex-col !gap-2.5 !bg-[color:var(--legend-surface)] !px-3.5 !py-3 max-md:!gap-2 max-md:!px-3 max-md:!py-2.5" data-testid="legend-collapsed-view">
+    <div className="flex! flex-col! gap-2.5! bg-(--legend-surface)! px-3.5! py-3! max-md:gap-2! max-md:px-3! max-md:py-2.5!" data-testid="legend-collapsed-view">
       {shouldShowStatusSummary ? (
-        <div className="!grid !grid-cols-[minmax(0,1fr)_auto] !items-start !gap-x-2">
-          <div className="!flex !min-w-0 !w-full !flex-col !gap-1">
-            <div className="!flex !min-w-0 !w-full !gap-0">
+        <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
+          <div className="flex! min-w-0! w-full! flex-col! gap-1!">
+            <div className="flex! min-w-0! w-full! gap-0!">
               {schoolSummaryItems.map(({ key, label }) => (
-                <span className="!min-w-0 !flex-1 !overflow-hidden !pr-2 !text-sm !leading-5 !text-[color:var(--legend-muted)] text-ellipsis whitespace-nowrap last:!pr-0 max-md:!pr-1.5 max-md:!text-xs max-md:!leading-[1.125rem]" key={key} title={label}>
+                <span className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-(--legend-muted)! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!" key={key} title={label}>
                   {label}
                 </span>
               ))}
             </div>
-            <div className="!flex !h-1 !w-full !overflow-hidden !rounded-full">
+            <div className="flex! h-1! w-full! overflow-hidden! rounded-full!">
               {schoolSummaryItems.map(({ color, key, label }) => (
                 <span
                   aria-hidden="true"
-                  className="!block !min-w-0 !flex-1"
+                  className="block! min-w-0! flex-1!"
                   key={key}
                   style={{ background: color }}
                   title={label}
@@ -193,17 +193,18 @@ const LegendPopup = ({
             </div>
           </div>
           <CollapsibleTrigger asChild>
-            <button
-              className="!inline-flex !h-4 !w-4 !shrink-0 !items-center !justify-center !rounded-full !border-0 !bg-transparent !p-0 !text-[color:var(--legend-text)] hover:!bg-white/8"
+            <Button
+              className="absolute! top-1! right-1!"
               aria-label={t('expand-legend')}
               data-testid="legend-expand-button"
               onClick={(event) => {
                 event.stopPropagation();
               }}
-              type="button"
+              size="icon"
+              variant="icon"
             >
-              <Maximize size={14} />
-            </button>
+              <Maximize2 size={14} />
+            </Button>
           </CollapsibleTrigger>
         </div>
       ) : shouldShowMetricSummary ? renderMetricSummary() : null}
@@ -213,8 +214,8 @@ const LegendPopup = ({
 
   const expandedContent = (
     <>
-      <div className="!flex !items-center !justify-between !gap-3 !bg-[color:var(--legend-surface)] !px-3.5 !pt-3 max-md:!gap-2 max-md:!px-3 max-md:!pt-2.5">
-        <div className="!flex !min-w-0 !items-center !gap-4 max-md:!gap-3">
+      <div className="flex! items-center! justify-between! gap-3! bg-(--legend-surface)! px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
+        <div className="flex! min-w-0! items-center! gap-2! max-md:gap-3!">
           {visibleLegendEntityTypes.map((entityType) => {
             const config = entityConfigMap[entityType];
             if (!config) return null;
@@ -224,8 +225,8 @@ const LegendPopup = ({
             return (
               <button
                 className={cn(
-                  '!relative !inline-flex !cursor-pointer !items-center !gap-2 !border-0 !bg-transparent !p-0 !pb-2.5 !text-sm !leading-5',
-                  isActive ? '!text-[color:var(--legend-text)]' : '!text-[color:var(--legend-muted)] !opacity-[0.78]'
+                  'relative! inline-flex! cursor-pointer! items-center! gap-1! border-0! bg-transparent! pb-2.5! px-3! text-sm! leading-5!',
+                  isActive ? 'text-(--legend-text)!' : 'text-(--legend-muted)! opacity-[0.78]!'
                 )}
                 key={entityType}
                 onClick={(event) => {
@@ -238,11 +239,11 @@ const LegendPopup = ({
                   color={isActive ? 'var(--legend-text)' : 'var(--legend-muted)'}
                   entityType={entityType}
                 />
-                <span>{config.legend.tabLabel}</span>
+                <span>{config.displayName}</span>
                 <span
                   className={cn(
-                    '!absolute !bottom-0 !left-0 !right-0 !h-0.5 !rounded-full',
-                    isActive ? '!bg-[color:var(--legend-accent)]' : '!bg-transparent'
+                    'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',
+                    isActive ? 'bg-(--legend-accent)!' : 'bg-transparent!'
                   )}
                 />
               </button>
@@ -250,20 +251,22 @@ const LegendPopup = ({
           })}
         </div>
         <CollapsibleTrigger asChild>
-          <button
-            className="!inline-flex !h-7 !w-7 !shrink-0 !items-center !justify-center !rounded-full !border-0 !bg-transparent !p-0 !text-[color:var(--legend-text)] hover:!bg-white/8"
+          <Button
+            className="absolute! top-1! right-1!"
+            variant="icon"
             aria-label={t('collapse-legend')}
+            size="icon"
             data-testid="legend-collapse-button"
             onClick={(event) => {
               event.stopPropagation();
             }}
             type="button"
           >
-            <Minimize size={14} />
-          </button>
+            <Minimize2 size={14} />
+          </Button>
         </CollapsibleTrigger>
       </div>
-      <div className="!flex !flex-wrap !gap-4 !bg-[color:var(--legend-surface)] !p-3.5 max-md:!max-h-[min(24rem,calc(100vh-10rem))] max-md:!overflow-y-auto max-md:!gap-3.5 max-md:!p-3" data-testid="legend-expanded-view">
+      <div className="flex! flex-wrap! gap-4! bg-(--legend-surface)! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!" data-testid="legend-expanded-view">
         {isSchoolStatus ? (
           <SchoolStatusLegend
             entityType={activeTab}
@@ -294,18 +297,18 @@ const LegendPopup = ({
   return (
     <Popover modal={false} open={open}>
       <PopoverAnchor asChild>
-        <div className="legend-info-popover-link !relative !inline-flex" style={legendStyle}>
+        <div className="legend-info-popover-link relative! inline-flex!" style={legendStyle}>
           {children}
         </div>
       </PopoverAnchor>
       <PopoverContent
         align="end"
         className={cn(
-          '!z-[6002] !overflow-visible !rounded-md !border !border-[color:var(--legend-border)] !bg-[color:var(--legend-surface)] !p-0 !shadow-[0_1px_2px_0_rgb(0_0_0_/_0.05)]',
-          '!w-[min(28.125rem,calc(100vw-1rem))] !max-w-[min(28.125rem,calc(100vw-1rem))]',
-          'max-md:!w-[min(25rem,calc(100vw-1rem))] max-md:!max-w-[min(25rem,calc(100vw-1rem))]',
-          'max-[560px]:!w-[min(18.5rem,calc(100vw-1rem))] max-[560px]:!max-w-[min(18.5rem,calc(100vw-1rem))]',
-          !collapsed && renderedSectionCount === 1 && '!w-[min(22rem,calc(100vw-1rem))] !max-w-[min(22rem,calc(100vw-1rem))] max-[560px]:!w-[min(18.5rem,calc(100vw-1rem))] max-[560px]:!max-w-[min(18.5rem,calc(100vw-1rem))]'
+          'z-6002! overflow-visible! rounded-md! border! border-(--legend-border)! bg-(--legend-surface)! p-0! shadow-xs!',
+          'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
+          'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
+          'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
+          !collapsed && renderedSectionCount === 1 && 'w-[min(22rem,calc(100vw-1rem))]! max-w-[min(22rem,calc(100vw-1rem))]! max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!'
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
@@ -322,7 +325,7 @@ const LegendPopup = ({
           open={!collapsed}
         >
           {collapsed ? collapsedContent : null}
-          <CollapsibleContent forceMount className={cn(collapsed && '!hidden')}>
+          <CollapsibleContent forceMount className={cn(collapsed && 'hidden!')}>
             {expandedContent}
           </CollapsibleContent>
         </Collapsible>

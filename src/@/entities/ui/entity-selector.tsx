@@ -12,7 +12,7 @@ import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { Button } from '~/components/ui/button';
 
-const base = 'px-5 py-2.5';
+const base = 'px-4 py-2 rounded-lg border border-border';
 const active = '';
 const inactive = 'bg-background text-foreground hover:bg-background/80 hover:text-foreground';
 

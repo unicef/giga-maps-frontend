@@ -1,4 +1,3 @@
-import { Information } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +27,7 @@ import { $mapRoutes } from '~/core/routes';
 import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
+import { Info } from 'lucide-react';
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -105,17 +105,17 @@ const LiveLayerLegend = ({
     : undefined;
 
   return (
-    <div className="!flex !min-w-0 !flex-1 !basis-[calc(50%-0.5rem)] !flex-col !self-start max-[560px]:!basis-full max-[560px]:!min-w-full">
-      <div className="!mb-1 !flex !flex-col !items-start !gap-0.5">
-        <div className="!flex !items-center !gap-1.5">
-          <div className="!text-sm !font-normal !leading-5 !text-[color:var(--legend-muted)]">{metricTitle}</div>
+    <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start! max-[560px]:basis-full! max-[560px]:min-w-full!">
+      <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
+        <div className="flex! items-center! gap-1.5!">
+          <div className="text-sm! font-normal! leading-5! text-(--legend-muted)!">{metricTitle}</div>
           {selectedLayerData?.description ? (
-            <button className="!inline-flex !items-center !justify-center !border-0 !bg-transparent !p-0 !text-[color:var(--legend-muted)]" title={selectedLayerData.description} type="button">
-              <Information size={12} />
+            <button className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-(--legend-muted)!" title={selectedLayerData.description} type="button">
+              <Info size={12} />
             </button>
           ) : null}
         </div>
-        <div className="!text-xs !leading-[1.125rem] !text-[color:var(--legend-subtle)]">{metricSubtitle}</div>
+        <div className="text-xs! leading-4.5! text-(--legend-subtle)!">{metricSubtitle}</div>
       </div>
       {legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
         const logicLabel = `${(benchmarkLogic && key) !== 'unknown' ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
@@ -125,28 +125,28 @@ const LiveLayerLegend = ({
           : label;
 
         return (
-          <button className="!mt-3 !flex !w-full !items-center !justify-between !border-0 !bg-transparent !p-0 !text-left" key={key} title={tooltipLabel} type="button">
-            <div className="!flex !min-w-0 !items-center">
+          <button className="mt-1! flex! w-full! items-center! justify-between! border-0! bg-transparent! p-0! text-left!" key={key} title={tooltipLabel} type="button">
+            <div className="flex! min-w-0! items-center!">
               {shouldShowControls ? (
                 <input
                   checked={Boolean(realtimeCheckedStatus[key])}
-                  className="!mr-2 !h-4 !w-4 !cursor-pointer !rounded-sm !border !border-[color:var(--legend-checkbox-border)] accent-white"
+                  className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-(--legend-checkbox-border)! accent-white!"
                   onChange={() => handleRealtimeLayerChange(key)}
                   type="checkbox"
                 />
               ) : null}
-              <div className="!flex !min-w-0 !items-center !gap-2">
+              <div className="flex! min-w-0! items-center! gap-2!">
                 <EntityLegendIndicator
                   color={paintData[ConnectivityStatusDistribution.connected as string]}
                   entityType={entityType}
                   glowColor={legends.colors[key]}
                 />
-                <span className="!text-sm !font-normal !leading-5 !text-[color:var(--legend-text)]">{displayLabel}</span>
+                <span className="text-sm! font-normal! leading-5! text-(--legend-text)!">{displayLabel}</span>
               </div>
             </div>
             {shouldShowControls ? (
               <div
-                className="!ml-1.5 !block !min-w-0 !text-left !text-sm !leading-5 !text-[color:var(--legend-muted)]"
+                className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-(--legend-muted)!"
                 data-title={t('int', { val: key === 'bad' ? realtimeStats?.no_internet ?? 0 : realtimeStats?.[key] ?? 0 })}
               >
                 {formatNumber(key === 'bad' ? realtimeStats?.no_internet ?? 0 : realtimeStats?.[key] ?? 0, lng)}

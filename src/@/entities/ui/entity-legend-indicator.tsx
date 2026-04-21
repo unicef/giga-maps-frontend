@@ -107,7 +107,7 @@ const EntityLegendIndicator = ({
 
     return (
       <svg
-        className={cn('!block !shrink-0 !overflow-visible', extraClass)}
+        className={cn('block! shrink-0! overflow-visible!', extraClass)}
         focusable="false"
         style={{
           height: `${glyphSize}px`,
@@ -131,18 +131,18 @@ const EntityLegendIndicator = ({
 
   return (
     <span
-      className={cn('!relative !inline-flex !shrink-0 !items-center !justify-center !overflow-visible', className)}
+      className={cn('relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible!', className)}
       style={containerStyle}
     >
       {glowColor ? (
         <span
           aria-hidden="true"
-          className="!absolute !left-1/2 !top-1/2 !z-0 !pointer-events-none ![animation:legend-connectivity-glow_1.2s_infinite_alternate_0.2s]"
+          className="absolute! left-1/2! top-1/2! z-0! pointer-events-none! animate-[legend-connectivity-glow_1.2s_infinite_alternate_0.2s]"
         >
           {renderGlyph(outerSize, glowColor)}
         </span>
       ) : null}
-      <span className="!relative !z-[1] !inline-flex !items-center !justify-center">
+      <span className="relative! z-1! inline-flex! items-center! justify-center!">
         {renderGlyph(size, color)}
       </span>
     </span>

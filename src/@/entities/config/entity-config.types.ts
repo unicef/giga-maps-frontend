@@ -117,4 +117,6 @@ export interface EntityConfig {
 
   /** Fields to display in entity popups and sidebar */
   fields: EntityFieldConfig[];
+
+  visible: boolean;
 }
