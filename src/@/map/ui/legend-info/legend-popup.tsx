@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import { CSSProperties, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from 'styled-components';
+
 
 import { $activeEntityTypes, $entityConfigMap, $entityTypesFiltered } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
@@ -14,7 +14,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/component
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes } from '~/core/routes';
-import { $theme, ThemeType } from '~/core/theme.model';
+
 import { cn } from '~/lib/cn';
 
 import LiveLayerLegend from './common/live-layer-legend';
@@ -51,8 +51,7 @@ const LegendPopup = ({
   const isMobile = useStore($isMobile);
   const mapLevel = useStore($mapRoutes);
   const shouldShowControls = !mapLevel.map && !mapLevel.schools;
-  const themeState = useStore($theme);
-  const theme = useTheme();
+
   const paintData = useStore($stylePaintData);
   const visibleLegendEntityTypes = useMemo(() => {
     // Filter to only types that are both active AND visible in config, maintain registry order
@@ -61,20 +60,7 @@ const LegendPopup = ({
   const [collapsed, setCollapsed] = useState(() => getDefaultCollapsedState(isMobile));
   const [activeTab, setActiveTab] = useState<EntityType>(() => getDefaultLegendTab(visibleLegendEntityTypes));
 
-  const legendSurface = themeState === ThemeType.light ? theme.main : '#161616';
-  const legendBorder = themeState === ThemeType.light ? '#d9d9d9' : '#393939';
-  const legendMuted = themeState === ThemeType.light ? theme.titleDesc : '#9e9e9e';
-  const legendText = themeState === ThemeType.light ? theme.text : '#ececec';
-  const legendStyle = {
-    '--legend-surface': legendSurface,
-    '--legend-border': legendBorder,
-    '--legend-muted': legendMuted,
-    '--legend-text': legendText,
-    '--legend-subtle': theme.grey60,
-    '--legend-accent': theme.titleBlue,
-    '--legend-benchmark-border': theme.grey80,
-    '--legend-checkbox-border': theme.grey80,
-  } as CSSProperties;
+
 
   useEffect(() => {
     if (!visibleLegendEntityTypes.length) return;
@@ -117,8 +103,8 @@ const LegendPopup = ({
     <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
       <div className="flex! min-w-0! w-full! flex-col! gap-1!">
         <div className="flex! items-center! justify-between! gap-3!">
-          <span className="text-sm! leading-5! text-(--legend-text)! max-md:text-xs! max-md:leading-4.5!">{legendMetricTitle}</span>
-          <span className="text-xs! leading-4.5! text-(--legend-subtle)!">{legendMetricSubtitle}</span>
+          <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">{legendMetricTitle}</span>
+          <span className="text-xs! leading-4.5! text-muted-foreground!">{legendMetricSubtitle}</span>
         </div>
         <div className="flex! h-1! w-full! gap-0! overflow-hidden! rounded-full!">
           {activeLayerSummaryItems.map(({ color, key, label }) => (
@@ -169,13 +155,13 @@ const LegendPopup = ({
   );
 
   const collapsedContent = (
-    <div className="flex! flex-col! gap-2.5! bg-(--legend-surface)! px-3.5! py-3! max-md:gap-2! max-md:px-3! max-md:py-2.5!" data-testid="legend-collapsed-view">
+    <div className="flex! flex-col! gap-2.5! bg-popover! px-3.5! py-3! max-md:gap-2! max-md:px-3! max-md:py-2.5!" data-testid="legend-collapsed-view">
       {shouldShowStatusSummary ? (
         <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
           <div className="flex! min-w-0! w-full! flex-col! gap-1!">
             <div className="flex! min-w-0! w-full! gap-0!">
               {schoolSummaryItems.map(({ key, label }) => (
-                <span className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-(--legend-muted)! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!" key={key} title={label}>
+                <span className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-muted-foreground! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!" key={key} title={label}>
                   {label}
                 </span>
               ))}
@@ -214,7 +200,7 @@ const LegendPopup = ({
 
   const expandedContent = (
     <>
-      <div className="flex! items-center! justify-between! gap-3! bg-(--legend-surface)! px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
+      <div className="flex! items-center! justify-between! gap-3! bg-popover! px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
         <div className="flex! min-w-0! items-center! gap-2! max-md:gap-3!">
           {visibleLegendEntityTypes.map((entityType) => {
             const config = entityConfigMap[entityType];
@@ -226,7 +212,7 @@ const LegendPopup = ({
               <button
                 className={cn(
                   'relative! inline-flex! cursor-pointer! items-center! gap-1! border-0! bg-transparent! pb-2.5! px-3! text-sm! leading-5!',
-                  isActive ? 'text-(--legend-text)!' : 'text-(--legend-muted)! opacity-[0.78]!'
+                  isActive ? 'text-foreground!' : 'text-muted-foreground! opacity-[0.78]!'
                 )}
                 key={entityType}
                 onClick={(event) => {
@@ -236,14 +222,14 @@ const LegendPopup = ({
                 type="button"
               >
                 <EntityLegendIndicator
-                  color={isActive ? 'var(--legend-text)' : 'var(--legend-muted)'}
+                  color={isActive ? 'var(--color-foreground)' : 'var(--color-muted-foreground)'}
                   entityType={entityType}
                 />
                 <span>{config.displayName}</span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',
-                    isActive ? 'bg-(--legend-accent)!' : 'bg-transparent!'
+                    isActive ? 'bg-primary!' : 'bg-transparent!'
                   )}
                 />
               </button>
@@ -266,7 +252,7 @@ const LegendPopup = ({
           </Button>
         </CollapsibleTrigger>
       </div>
-      <div className="flex! flex-wrap! gap-4! bg-(--legend-surface)! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!" data-testid="legend-expanded-view">
+      <div className="flex! flex-wrap! gap-4! bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!" data-testid="legend-expanded-view">
         {isSchoolStatus ? (
           <SchoolStatusLegend
             entityType={activeTab}
@@ -297,14 +283,14 @@ const LegendPopup = ({
   return (
     <Popover modal={false} open={open}>
       <PopoverAnchor asChild>
-        <div className="legend-info-popover-link relative! inline-flex!" style={legendStyle}>
+        <div className="legend-info-popover-link relative! inline-flex!">
           {children}
         </div>
       </PopoverAnchor>
       <PopoverContent
         align="end"
         className={cn(
-          'z-6002! overflow-visible! rounded-md! border! border-(--legend-border)! bg-(--legend-surface)! p-0! shadow-xs!',
+          'z-6002! overflow-visible! rounded-md! border! border-border! bg-popover! p-0! shadow-xs!',
           'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
           'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
           'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
@@ -316,7 +302,7 @@ const LegendPopup = ({
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="left"
         sideOffset={12}
-        style={legendStyle}
+
       >
         <Collapsible
           onOpenChange={(nextOpen) => {

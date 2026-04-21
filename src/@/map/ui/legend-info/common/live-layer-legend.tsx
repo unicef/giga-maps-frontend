@@ -108,14 +108,14 @@ const LiveLayerLegend = ({
     <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start! max-[560px]:basis-full! max-[560px]:min-w-full!">
       <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
         <div className="flex! items-center! gap-1.5!">
-          <div className="text-sm! font-normal! leading-5! text-(--legend-muted)!">{metricTitle}</div>
+          <div className="text-sm! font-normal! leading-5! text-muted-foreground!">{metricTitle}</div>
           {selectedLayerData?.description ? (
-            <button className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-(--legend-muted)!" title={selectedLayerData.description} type="button">
+            <button className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-muted-foreground!" title={selectedLayerData.description} type="button">
               <Info size={12} />
             </button>
           ) : null}
         </div>
-        <div className="text-xs! leading-4.5! text-(--legend-subtle)!">{metricSubtitle}</div>
+        <div className="text-xs! leading-4.5! text-muted-foreground!">{metricSubtitle}</div>
       </div>
       {legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
         const logicLabel = `${(benchmarkLogic && key) !== 'unknown' ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
@@ -130,7 +130,7 @@ const LiveLayerLegend = ({
               {shouldShowControls ? (
                 <input
                   checked={Boolean(realtimeCheckedStatus[key])}
-                  className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-(--legend-checkbox-border)! accent-white!"
+                  className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
                   onChange={() => handleRealtimeLayerChange(key)}
                   type="checkbox"
                 />
@@ -141,12 +141,12 @@ const LiveLayerLegend = ({
                   entityType={entityType}
                   glowColor={legends.colors[key]}
                 />
-                <span className="text-sm! font-normal! leading-5! text-(--legend-text)!">{displayLabel}</span>
+                <span className="text-sm! font-normal! leading-5! text-foreground!">{displayLabel}</span>
               </div>
             </div>
             {shouldShowControls ? (
               <div
-                className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-(--legend-muted)!"
+                className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
                 data-title={t('int', { val: key === 'bad' ? realtimeStats?.no_internet ?? 0 : realtimeStats?.[key] ?? 0 })}
               >
                 {formatNumber(key === 'bad' ? realtimeStats?.no_internet ?? 0 : realtimeStats?.[key] ?? 0, lng)}
