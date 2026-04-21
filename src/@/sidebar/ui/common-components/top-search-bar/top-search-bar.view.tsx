@@ -79,7 +79,7 @@ const TopSearchBar = () => {
   return (
     <div
       className={cn(
-        'top-search-bar flex! h-12! items-center! gap-0! bg-transparent! px-3.5!',
+        'top-search-bar mt-2! flex! h-12! items-center! gap-0! bg-transparent! px-3.5!',
         'max-md:w-full!',
       )}
       ref={searchContainerRef}
@@ -94,7 +94,6 @@ const TopSearchBar = () => {
                     {dropdownButton}
                   </TooltipTrigger>
                   <TooltipContent
-                    // className="z-[60] rounded bg-[#f4f4f4]! px-3! py-1.5! text-xs! text-[#161616]!"
                     side="bottom"
                     sideOffset={4}
                   >

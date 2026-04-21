@@ -1,6 +1,7 @@
-import { Tooltip as CarbonTooltip } from '@carbon/react';
 import { ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
+import { Skeleton } from '~/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
@@ -18,16 +19,27 @@ const InfoTooltip = ({ content }: { content?: string }) => {
   if (!content) return null;
 
   return (
-    <CarbonTooltip align="top" label={content}>
-      <button className="sb-tooltip-trigger !inline-flex !items-center !justify-center !border-0 !bg-transparent !p-0 !text-muted-foreground" type="button">
-        <Info size={12} />
-      </button>
-    </CarbonTooltip>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            aria-label={content}
+            className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-on-surface-dim!"
+            type="button"
+          >
+            <Info size={12} />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={6}>
+          {content}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
 const MetricDivider = () => (
-  <div className="h-px w-full bg-border" />
+  <div className="h-px! w-full! bg-border!" />
 );
 
 type EntitySummaryCardProps = {
@@ -58,9 +70,9 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
 
       {isLoading ? (
         <div className="space-y-3! px-4! pb-3!">
-          <Skeleton className="h-4! w-80!" />
-          <Skeleton className="h-4! w-70!" />
-          <Skeleton className="h-4! w-60!" />
+          <Skeleton className="h-4! w-80! rounded-sm!" />
+          <Skeleton className="h-4! w-70! rounded-sm!" />
+          <Skeleton className="h-4! w-60! rounded-sm!" />
         </div>
       ) : null}
 
@@ -77,7 +89,7 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
               </div>
             </div>
           ))}
-        </div>
+        </div >
       ) : null}
 
       <AccordionContent className={cn((!expanded || isLoading) && 'hidden!')}>
@@ -112,8 +124,8 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
               </div>
             );
           })}
-        </div>
-      </AccordionContent>
+        </div >
+      </AccordionContent >
 
       {!isLoading && card.showFooter ? (
         <div className="flex! items-center! justify-center! gap-3! rounded-b-lg! bg-[#0f62fe]! px-3.5! py-[0.35rem]! text-[#f4f4f4]! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
