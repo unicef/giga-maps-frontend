@@ -84,22 +84,22 @@ const LandingPage = () => {
 
   return (
     <>
-      <Scroll className="!h-auto !max-h-none !bg-background">
-        <div className="!w-full !bg-background !px-3.5 !py-2.5">
+      <Scroll className="h-auto! max-h-none!">
+        <div className="w-full! px-3.5! py-2.5!">
           <LandingPageHeader
             onShareClicked={handleShareClicked}
             subtitle={t('an-open-live-global-map-of-schools-and-their-connectivity')}
             title={t('global-connectivity-map-for-children')}
           />
 
-          <div className="!mt-4 !flex !flex-col !gap-3">
+          <div className="mt-4! flex! flex-col! gap-3!">
             <Accordion
               collapsible
               onValueChange={handleAccordionChange}
               type="single"
               value={activeAccordion ?? undefined}
             >
-              <div className="!flex !flex-col !gap-3">
+              <div className="flex! flex-col! gap-3!">
                 {entityCards.map((card) => (
                   <EntitySummaryCard
                     card={card}

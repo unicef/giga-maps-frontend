@@ -28,11 +28,11 @@ function AccordionTrigger({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
   return (
-    <AccordionPrimitive.Header data-slot="accordion-header" className="!flex">
+    <AccordionPrimitive.Header data-slot="accordion-header" className="flex!">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "!flex !w-full !items-center !justify-between !gap-3 !border-0 !bg-transparent !outline-none",
+          "flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none!",
           className
         )}
         {...props}

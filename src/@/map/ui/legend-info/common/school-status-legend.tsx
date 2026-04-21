@@ -1,5 +1,5 @@
-import { Information } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
+import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -72,29 +72,29 @@ const SchoolStatusLegend = ({
   if (!isSchoolStatus) return null;
 
   return (
-    <div className="!flex !min-w-0 !flex-1 !basis-[calc(50%-0.5rem)] !flex-col !self-start max-[560px]:!basis-full max-[560px]:!min-w-full">
-      <div className="!mb-1 !flex !items-center !gap-1.5 !text-[color:var(--legend-muted)]">
-        <div className="!text-sm !font-normal !leading-5">{statusTitle}</div>
-        <Information size={12} />
+    <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start max-[560px]:basis-full max-[560px]:min-w-full">
+      <div className="mb-1! flex! items-center! gap-1.5! text-muted-foreground!">
+        <div className="text-sm! font-normal! leading-5!">{statusTitle}</div>
+        <Info size={12} />
       </div>
       {Object.values(ConnectivityStatusDistribution).map((key) => (
-        <div className="!mt-3 !flex !w-full !items-center !justify-between" key={key}>
-          <div className="!flex !min-w-0 !items-center">
+        <div className="mt-3! flex! w-full! items-center! justify-between!" key={key}>
+          <div className="flex! min-w-0! items-center!">
             {shouldShowControls ? (
               <input
                 checked={Boolean(schoolStatusCheckedStatus[key])}
-                className="!mr-2 !h-4 !w-4 !cursor-pointer !rounded-sm !border !border-[color:var(--legend-checkbox-border)] accent-white"
+                className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
                 onChange={() => handleSchoolStatusLayerChange(key)}
                 type="checkbox"
               />
             ) : null}
-            <div className="!flex !min-w-0 !items-center !gap-2">
+            <div className="flex! min-w-0! items-center! gap-2!">
               <EntityLegendIndicator color={paintData[key]} entityType={entityType} />
-              <span className="!text-sm !font-normal !leading-5 !text-[color:var(--legend-text)]">{t(ConnectivityStatusNames[key])}</span>
+              <span className="text-sm! font-normal! leading-5! text-foreground!">{t(ConnectivityStatusNames[key])}</span>
             </div>
           </div>
           {shouldShowControls ? (
-            <div className="!ml-1.5 !block !min-w-0 !text-left !text-sm !leading-5 !text-[color:var(--legend-muted)]" data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}>
+            <div className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!" data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}>
               {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
             </div>
           ) : null}

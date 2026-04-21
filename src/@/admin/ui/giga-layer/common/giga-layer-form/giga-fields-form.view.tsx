@@ -30,6 +30,11 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
     });
     return Array.from(uniqueByName.values());
   }, [apiSourceSelected])
+
+  const supportedFunctions = useMemo(() => {
+    return parameters.find(item => item.name === formData?.dataSourceColumn?.name)?.supported_functions ?? [];
+  }, [parameters, formData?.dataSourceColumn])
+
   const selectedCountries = useMemo(() => {
     if (!countryList || !formData?.applicableCountries) return [];
     return countryList?.filter(item => formData?.applicableCountries.includes(item.id))
@@ -52,6 +57,9 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       name: DataSourceName[sourceName]
     }))
   }, [entityTypes, formData.type, formData.entityType])
+
+  const isLive = String(formData.type) === String(LayerTypeChoices.LIVE);
+
   return <>
     <DataLayerFieldContainer>
       <InputLabel>
@@ -191,6 +199,18 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       <SelectItem value="" text="Select parameter" />
       {parameters?.map((parameter) => <SelectItem key={parameter?.name} value={parameter?.name} text={parameter?.alias} />)}
     </SelectLayerConfig>
+    {isLive && <SelectLayerConfig
+      name="supportedFunctions"
+      required
+      labelText="Parameter Aggregator Function"
+      id={`convert-function-select`}
+      value={formData.supportedFunctions?.name}
+      placeholder="Select Parameter Aggregator Function"
+      onChange={(e) => onUdpateGigaLayerForm([e.target.name, supportedFunctions?.find(item => e.target.value === item.name)])}
+    >
+      <SelectItem value="" text="Select Parameter Aggregator Function" />
+      {supportedFunctions?.map((item) => <SelectItem key={item?.name} value={item?.name} text={`${item?.verbose} ${item.description ? `(${item.description})` : ''}`} />)}
+    </SelectLayerConfig>}
     <MultiSelectLayerConfig
       required
       direction='top'

@@ -244,6 +244,29 @@ export const onChangeLabelLayer = (map: Map, showLabels: boolean) => {
   }
 }
 
+export const applyWorldViewToLabels = (map: Map, worldView: string) => {
+  const countryLabelLayer = mapLabelLayerList.countryLabel;
+  if (!map.getLayer(countryLabelLayer)) return;
+  const existingFilter = map.getFilter(countryLabelLayer);
+  const worldviewFilter = wvFilter(worldView);
+  if (existingFilter) {
+    // If already has a worldview filter applied by us, replace the top-level "all" filter
+    // Otherwise, wrap existing filter with worldview filter
+    if (Array.isArray(existingFilter) && existingFilter[0] === 'all' &&
+      existingFilter.some((f: unknown) => Array.isArray(f) && f[0] === 'any' && JSON.stringify(f).includes('worldview'))) {
+      // Replace the existing worldview portion
+      const nonWorldviewFilters = existingFilter.filter((f: unknown) =>
+        !(Array.isArray(f) && f[0] === 'any' && JSON.stringify(f).includes('worldview'))
+      );
+      map.setFilter(countryLabelLayer, [...nonWorldviewFilters, worldviewFilter]);
+    } else {
+      map.setFilter(countryLabelLayer, ['all', existingFilter, worldviewFilter]);
+    }
+  } else {
+    map.setFilter(countryLabelLayer, worldviewFilter);
+  }
+}
+
 export const onChangeAdminBoundariesLayer = (map: Map, showAdmin: boolean) => {
   const allAdminBoundaries = Object.values(mapAdminLayerList);
   if (showAdmin) {

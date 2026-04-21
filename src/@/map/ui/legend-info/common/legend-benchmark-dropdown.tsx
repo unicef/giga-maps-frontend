@@ -1,9 +1,7 @@
-import { ChevronDown } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
+import { ChevronDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from 'styled-components';
-
 import {
   $countryActiveLayersDataById,
   $countryBenchmark,
@@ -17,7 +15,6 @@ import {
   changeConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
-import { $theme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 
 type LegendBenchmarkDropdownProps = {
@@ -29,7 +26,7 @@ type LegendBenchmarkDropdownProps = {
 const SelectedOptionIcon = () => (
   <svg
     aria-hidden="true"
-    className="!block"
+    className="block!"
     fill="none"
     height="12"
     viewBox="0 0 12 12"
@@ -46,8 +43,6 @@ const LegendBenchmarkDropdown = ({
   valueLabel,
 }: LegendBenchmarkDropdownProps) => {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const themeState = useStore($theme);
   const { selectedLayerId } = useStore($layerUtils);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
   const connectivityBenchMark = useStore($connectivityBenchMark);
@@ -75,11 +70,7 @@ const LegendBenchmarkDropdown = ({
     : ConnectivityBenchMarks.global;
   const selectedLabel = selectedValue === ConnectivityBenchMarks.national ? nationalLabel : globalLabel;
   const triggerLabel = valueLabel ? `${selectedLabel}: ${valueLabel}` : selectedLabel;
-  const surfaceColor = themeState === ThemeType.light ? theme.main : '#161616';
-  const textColor = themeState === ThemeType.light ? theme.text : '#ececec';
-  const subtleColor = theme.grey60;
-  const borderColor = theme.grey80;
-  const selectedBackground = themeState === ThemeType.light ? '#f4f4f4' : 'rgba(255, 255, 255, 0.08)';
+
 
   const handleSelect = (nextValue: ConnectivityBenchMarks, disabled: boolean) => {
     if (disabled) return;
@@ -90,8 +81,7 @@ const LegendBenchmarkDropdown = ({
   if (!interactive) {
     return (
       <div
-        className="!mt-2.5 !inline-flex !max-w-full !rounded-md !border !border-[color:var(--legend-benchmark-border)] !px-2.5 !py-0.5 !text-left !text-xs !leading-[1.125rem] !text-[color:var(--legend-muted)] !whitespace-nowrap"
-        style={{ borderColor, color: subtleColor }}
+        className="mt-1! inline-flex! max-w-full! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground! whitespace-nowrap!"
         title={title}
       >
         {triggerLabel} benchmark 30Mbps
@@ -102,32 +92,26 @@ const LegendBenchmarkDropdown = ({
   return (
     <Popover modal={false} onOpenChange={setOpen} open={open}>
       <PopoverAnchor asChild>
-        <div className="!relative !mt-3 !inline-flex !max-w-full !flex-col !items-start !gap-1.5">
+        <div className="relative! mt-3! inline-flex! max-w-full! flex-col! items-start! gap-1.5!">
           <button
-            className="!inline-flex !max-w-full !items-center !justify-between !gap-1.5 !rounded-md !border !border-[color:var(--legend-benchmark-border)] !bg-transparent !px-2.5 !py-[0.3125rem] !text-xs !leading-[1.125rem] !text-[color:var(--legend-text)]"
+            className="inline-flex! max-w-full! items-center! justify-between! gap-1.5! rounded-md! border! border-border! bg-transparent! px-2.5! py-0.5! text-xs! leading-4.5! text-foreground!"
             onClick={() => setOpen((current) => !current)}
-            style={{ borderColor, color: textColor }}
             title={title}
             type="button"
           >
-            <span className="!truncate !whitespace-nowrap">{triggerLabel}</span>
+            <span className="truncate! whitespace-nowrap!">{triggerLabel}</span>
             <ChevronDown size={12} />
           </button>
         </div>
       </PopoverAnchor>
       <PopoverContent
         align="start"
-        className="!z-[6004] !w-[min(16rem,calc(100vw-2rem))] !rounded-md !border !p-1 !shadow-[0_8px_24px_0_rgb(0_0_0_/_0.22)]"
+        className="z-6004! w-[min(16rem,calc(100vw-2rem))]! rounded-md! border! border-border! bg-popover! p-1! shadow-[0_8px_24px_0_rgb(0_0_0/0.22)]!"
         side="top"
         sideOffset={6}
-        style={{
-          backgroundColor: surfaceColor,
-          borderColor,
-        }}
       >
         <div
-          className="!flex !flex-col !gap-1 !rounded-[calc(0.375rem-2px)]"
-          style={{ backgroundColor: surfaceColor }}
+          className="flex! flex-col! gap-1! rounded-[calc(0.375rem-2px)]! bg-transparent!"
         >
           {options.map((option) => {
             const isSelected = selectedValue === option.value;
@@ -135,22 +119,18 @@ const LegendBenchmarkDropdown = ({
             return (
               <button
                 className={cn(
-                  '!flex !w-full !items-center !justify-between !gap-2 !rounded-md !border-0 !px-2.5 !py-2 !text-left !text-xs !leading-[1.125rem]',
+                  'flex! w-full! items-center! justify-between! gap-2! rounded-md! border-0! px-2.5! py-2! text-left! text-xs! leading-4.5!',
                   option.disabled
-                    ? '!cursor-not-allowed !opacity-55'
-                    : '!cursor-pointer hover:!bg-white/8'
+                    ? 'cursor-not-allowed! opacity-55! text-muted-foreground!'
+                    : cn('cursor-pointer! hover:bg-white/8!', isSelected ? 'bg-accent! text-accent-foreground!' : 'text-foreground!')
                 )}
                 disabled={option.disabled}
                 key={option.value}
                 onClick={() => handleSelect(option.value, option.disabled)}
-                style={{
-                  backgroundColor: isSelected && !option.disabled ? selectedBackground : surfaceColor,
-                  color: option.disabled ? subtleColor : textColor,
-                }}
                 type="button"
               >
-                <span className="!min-w-0 !truncate">{option.label}</span>
-                {isSelected ? <SelectedOptionIcon /> : <span className="!h-3 !w-3" />}
+                <span className="min-w-0! truncate!">{option.label}</span>
+                {isSelected ? <SelectedOptionIcon /> : <span className="h-3! w-3!" />}
               </button>
             );
           })}

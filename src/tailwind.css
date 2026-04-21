@@ -14,7 +14,7 @@
 /* ── CSS custom properties (dark = default) ─────────────────── */
 :root {
   /* Core surfaces */
-  --giga-background: #181818;
+  --giga-background: #161616;
   --giga-foreground: #fff;
 
   /* Card */
@@ -46,7 +46,7 @@
   --giga-destructive-foreground: #fff;
 
   /* Border / Input / Ring */
-  --giga-border: #474747;
+  --giga-border: #393939;
   --giga-input: #C7C7C7;
   --giga-ring: #005BED;
 

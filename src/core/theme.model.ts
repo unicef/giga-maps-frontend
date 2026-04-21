@@ -1,3 +1,5 @@
+/* this is depricated theme model file, for new changes use taildwind css*/
+
 import { createEvent, restore } from "effector";
 
 declare module 'styled-components' {

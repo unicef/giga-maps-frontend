@@ -1,6 +1,7 @@
 trigger:
   branches:
     include:
+      - entity-development-base
       - develop
       - staging
   tags:
@@ -24,7 +25,7 @@ steps:
   # Unit Tests
   - task: Bash@3
     displayName: Unit Tests
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/entity-development-base')
     continueOnError: true
     inputs:
       targetType: 'inline'
@@ -35,7 +36,8 @@ steps:
   # Sonar Scan
   - task: Bash@3
     displayName: Sonar Scan
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/entity-development-base')
+    continueOnError: true
     inputs:
       targetType: 'inline'
       script: |

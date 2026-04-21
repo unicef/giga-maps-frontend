@@ -21,12 +21,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     visible: true,
     markerType: 'circle',
     symbol: '●',
-    legend: {
-      metricSubtitle: 'Internet quality',
-      metricTitle: 'Average download speed',
-      statusTitle: 'Connectivity status',
-      tabLabel: 'Schools',
-    },
     sidebar: {
       badge: 'GigaMaps',
       connectedDetailTranslationKey: 'across-no-countries',
@@ -76,12 +70,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     visible: true,
     markerType: 'symbol',
     symbol: '■',
-    legend: {
-      metricSubtitle: 'Internet quality',
-      metricTitle: 'Average download speed',
-      statusTitle: 'Connectivity status',
-      tabLabel: 'Health centers',
-    },
     markerSymbol: '?',
     sidebar: {
       connectedDetailTranslationKey: 'across-no-countries',
