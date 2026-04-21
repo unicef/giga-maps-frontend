@@ -1,8 +1,5 @@
-import { ChevronDown, ChevronRight, ChevronUp } from '@carbon/icons-react'
 import { useStore } from 'effector-react';
-import { MouseEvent, } from 'react';
-import { useTheme } from 'styled-components';
-
+import { MouseEvent } from 'react';
 import { $entityPopupData } from '~/@/entities/models/entity.model';
 import EntityView from '~/@/entities/ui/entity-view';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
@@ -36,6 +33,7 @@ import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
+import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -51,12 +49,11 @@ export default function Sidebar() {
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed)
   const isTimeplayer = useStore($isTimeplayer)
-  const entityPopupData = useStore($entityPopupData)
-  const theme = useTheme();
+  const entityPopupData = useStore($entityPopupData);
   return (
     <div
       className={cn(
-        'relative z-[2] flex h-full w-full shrink-0 transition-all duration-300',
+        'relative z-2 flex w-full shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)]',
         isMobile
           ? cn(
             'fixed inset-x-0',
@@ -65,7 +62,7 @@ export default function Sidebar() {
           )
           : cn(
             'fixed top-2',
-            isSidebarCollapsed ? 'left-[-17rem] min-[1584px]:left-[-18.2rem]' : 'left-2',
+            isSidebarCollapsed ? '-left-68 min-[1584px]:left-[-18.2rem]' : 'left-2',
             'bottom-[1.8rem] min-[1584px]:bottom-2',
             'w-[288px] min-[1584px]:w-[296px]'
           )
@@ -73,27 +70,26 @@ export default function Sidebar() {
       onClick={() => onClickSidebar()}
     >
       <div
-        className="sidebar flex h-inherit w-inherit flex-col overflow-y-auto overflow-x-hidden rounded-[0.875rem] border border-[#393939] bg-[#161616] shadow-[0_12px_32px_rgba(0,0,0,0.28)] max-md:rounded-none max-md:border-none max-md:shadow-none [&_.cds--tooltip-content]:!ml-2 [&_.cds--tooltip-content]:!text-[0.8rem]"
+        className="sidebar flex h-inherit w-inherit flex-col overflow-y-auto overflow-x-hidden rounded-[0.875rem]! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
       >
         {
           isMobile &&
           <div
-            className="mb-[-0.0625rem] flex w-full items-center justify-center p-[0.6rem]"
+            className="-mb-0.25 flex w-full items-center justify-center p-[0.6rem] bg-background"
             id='mobile-view-slider'
             onClick={() => setSidebarHeight(!sidebarHeight)}
-            style={{ background: theme.main }}
           >
             {/* <VerticalSliderButton /> */}
-            {sidebarHeight ? <ChevronDown style={{ fill: theme.text }} /> : <ChevronUp style={{ fill: theme.text }} />}
+            {sidebarHeight ? <ChevronDown className="text-foreground" /> : <ChevronUp className="text-foreground" />}
           </div>
         }
         <SideInfoPanelHeaderLogoAndMenuButton />
         {isMenuOpen && <SidebarMenuList />}
-        {!(isMobile && isMenuOpen) && <div className="relative z-[12]">
+        {!(isMobile && isMenuOpen) && <div className="relative z-12">
           <TopSearchBar />
           <SearchResult />
         </div>}
-        <div className="flex min-h-0 flex-1 flex-col bg-transparent">
+        <div className="flex min-h-0 flex-1 flex-col">
           <BreadcrumbInfo />
           {mapRoute ? <LandingPage /> :
             <LayerDetailContainer $height={isMobile && !sidebarHeight ? '0rem' : '6rem'}>
@@ -108,16 +104,14 @@ export default function Sidebar() {
           }
           <button
             className={cn(
-              'sidebar__expander absolute bottom-[5.5rem] left-full flex h-12 w-4 items-center justify-center border-0 p-0 outline-none max-md:hidden',
-              'cursor-pointer'
+              'sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border-0 p-0 outline-none max-md:hidden',
+              'cursor-pointer bg-background'
             )}
             type="button"
             onClick={onToggleSidebar}
-            style={{ backgroundColor: theme.main }}
           >
             <ChevronRight
-              className={cn('h-4 w-4 transition-all duration-500', isSidebarCollapsed ? 'rotate-0' : 'rotate-180')}
-              style={{ fill: '#fff', color: theme.text }}
+              className={cn('transition-all duration-500 text-foreground', isSidebarCollapsed ? 'rotate-0' : 'rotate-180')}
             />
           </button>
         </div>

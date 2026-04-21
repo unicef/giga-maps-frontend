@@ -5,9 +5,11 @@ import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
 import SchoolAccordionFooterLogo from '~/assets/images/school-accordion-footer-logo.svg';
+import GigaMapsLogo from '~/assets/images/giga-logo.png';
 
 import BarChart from './common/bar-chart';
 import type { CardBarData, EntityCardData, LandingPageTranslationFn } from './landing-page.types';
+import { Skeleton } from '~/components/ui/skeleton';
 
 const hasVisibleBarData = (bar?: CardBarData) =>
   Boolean(bar?.total) && Boolean(bar?.values.some((value) => Number(value) > 0));
@@ -17,22 +19,15 @@ const InfoTooltip = ({ content }: { content?: string }) => {
 
   return (
     <CarbonTooltip align="top" label={content}>
-      <button className="sb-tooltip-trigger !inline-flex !items-center !justify-center !border-0 !bg-transparent !p-0 !text-[color:var(--lp-icon-muted)]" type="button">
+      <button className="sb-tooltip-trigger !inline-flex !items-center !justify-center !border-0 !bg-transparent !p-0 !text-muted-foreground" type="button">
         <Info size={12} />
       </button>
     </CarbonTooltip>
   );
 };
 
-const LoadingLine = ({ width }: { width: string }) => (
-  <div
-    className="h-4 animate-pulse rounded-sm bg-[color:var(--lp-skeleton)]"
-    style={{ width }}
-  />
-);
-
 const MetricDivider = () => (
-  <div className="h-px w-full bg-[color:var(--lp-border)]" />
+  <div className="h-px w-full bg-border" />
 );
 
 type EntitySummaryCardProps = {
@@ -46,65 +41,65 @@ type EntitySummaryCardProps = {
 const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: EntitySummaryCardProps) => {
   return (
     <AccordionItem
-      className="!overflow-visible !rounded-lg !border !border-[color:var(--lp-border)] !bg-[color:var(--lp-surface)]"
+      className="overflow-visible! rounded-lg! border! border-border!"
       value={card.value}
     >
-      <AccordionTrigger className="!px-3.5 !py-3 !text-[color:var(--lp-text)] [&[data-state=open]]:!pb-3 [&[data-state=open]]:!pt-3">
-        <div className="!flex !min-w-0 !items-center !gap-2.5">
+      <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!">
+        <div className="flex! min-w-0! items-center! gap-2.5!">
           {card.badge ? (
-            <span className="!inline-flex !shrink-0 !items-center !justify-center !rounded-full !bg-[#0f62fe] !px-2 !py-1 !text-[10px] !font-semibold !leading-none !text-[#f4f4f4]">
-              {card.badge}
+            <span className="inline-flex! shrink-0! items-center! justify-center! rounded-full! bg-[#0f62fe]! px-2! py-1! text-[10px]! font-semibold! leading-none! text-[#f4f4f4]">
+              <img alt="GigaMaps" className="block h-auto w-[48px]!" src={GigaMapsLogo} />
             </span>
           ) : null}
-          <div className="!min-w-0 !text-left !text-[15px] !font-semibold !leading-[18px] !text-[color:var(--lp-text)]">{card.title}</div>
+          <div className="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground">{card.title}</div>
         </div>
         {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
       </AccordionTrigger>
 
       {isLoading ? (
-        <div className="!space-y-3 !px-4 !pb-3">
-          <LoadingLine width="80%" />
-          <LoadingLine width="70%" />
-          <LoadingLine width="60%" />
+        <div className="space-y-3! px-4! pb-3!">
+          <Skeleton className="h-4! w-80!" />
+          <Skeleton className="h-4! w-70!" />
+          <Skeleton className="h-4! w-60!" />
         </div>
       ) : null}
 
       {!isLoading && !expanded ? (
-        <div className="!px-3.5 !pb-2">
+        <div className="px-3.5! pb-2!">
           {card.collapsedRows.map((row, index) => (
             <div key={row.label}>
               {index > 0 ? <MetricDivider /> : null}
-              <div className="!grid !grid-cols-[auto_1fr] !items-center !gap-x-3 !py-2.5">
-                <span className="!shrink-0 !text-lg !font-semibold !leading-[22px] !text-[color:var(--lp-text)]" data-title={t('int', { val: row.value })}>
+              <div className="grid! grid-cols-[auto_1fr]! items-center! gap-x-3! py-2.5!">
+                <span className="shrink-0! text-lg! font-semibold! leading-[22px]! text-foreground" data-title={t('int', { val: row.value })}>
                   {formatNumber(row.value, lng)}
                 </span>
-                <span className="!min-w-0 !text-right !text-xs !leading-4 !text-[color:var(--lp-muted)]">{row.label}</span>
+                <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">{row.label}</span>
               </div>
             </div>
           ))}
         </div>
       ) : null}
 
-      <AccordionContent className={cn((!expanded || isLoading) && '!hidden')}>
-        <div className="!px-3.5 !pb-2.5">
+      <AccordionContent className={cn((!expanded || isLoading) && 'hidden!')}>
+        <div className="px-3.5! pb-2.5!">
           {card.expandedMetrics.map((metric, index) => {
             const bar = metric.bar;
 
             return (
               <div key={metric.label}>
                 {index > 0 ? <MetricDivider /> : null}
-                <div className="!py-3.5">
-                  <div className="!flex !items-center !gap-1.5 !text-xs !leading-5 !text-[color:var(--lp-muted)]">
+                <div className="py-3.5!">
+                  <div className="flex! items-center! gap-1.5! text-xs! leading-5! text-muted-foreground">
                     <span>{metric.label}</span>
                     <InfoTooltip content={metric.tooltip} />
                   </div>
-                  <div className="!mt-2 !text-[22px] !font-medium !leading-[26px] !text-[color:var(--lp-text)]" data-title={t('int', { val: metric.value })}>
+                  <div className="mt-2! text-[22px]! font-medium! leading-[26px]! text-foreground" data-title={t('int', { val: metric.value })}>
                     {formatNumber(metric.value, lng)}
-                    {metric.estimate ? <span className="!ml-1.5 !text-[11px] !font-medium !leading-[14px] !text-[#a8a8a8]">{metric.estimate}</span> : null}
+                    {metric.estimate ? <span className="ml-1.5! text-[11px]! font-medium! leading-[14px]! text-[#a8a8a8]">{metric.estimate}</span> : null}
                   </div>
-                  <p className="!m-0 !mt-1 !text-[11px] !leading-[14px] !text-[#a8a8a8]">{metric.detail}</p>
+                  <p className="m-0! mt-1! text-[11px]! leading-[14px]! text-[#a8a8a8]">{metric.detail}</p>
                   {hasVisibleBarData(bar) && bar ? (
-                    <div className="!mt-3">
+                    <div className="mt-3!">
                       <BarChart
                         categories={bar.labels}
                         categoryColors={bar.colors}
@@ -121,9 +116,9 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
       </AccordionContent>
 
       {!isLoading && card.showFooter ? (
-        <div className="!flex !items-center !justify-center !gap-3 !rounded-b-lg !bg-[#0f62fe] !px-3.5 !py-[0.35rem] !text-[#f4f4f4] [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
+        <div className="flex! items-center! justify-center! gap-3! rounded-b-lg! bg-[#0f62fe]! px-3.5! py-[0.35rem]! text-[#f4f4f4]! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
           {card.footerLogoVariant === 'school' ? (
-            <div className="!inline-flex !items-center !justify-center !text-xs !font-semibold !leading-4">
+            <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
               <SchoolAccordionFooterLogo />
             </div>
           ) : null}
