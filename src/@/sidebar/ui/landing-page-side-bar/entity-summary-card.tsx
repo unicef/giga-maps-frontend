@@ -10,7 +10,6 @@ import GigaMapsLogo from '~/assets/images/giga-logo.png';
 
 import BarChart from './common/bar-chart';
 import type { CardBarData, EntityCardData, LandingPageTranslationFn } from './landing-page.types';
-import { Skeleton } from '~/components/ui/skeleton';
 
 const hasVisibleBarData = (bar?: CardBarData) =>
   Boolean(bar?.total) && Boolean(bar?.values.some((value) => Number(value) > 0));
