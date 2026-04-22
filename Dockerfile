@@ -1,8 +1,8 @@
 # Stage 1
 FROM node:22.2.0 AS s1
 WORKDIR /proco
-COPY package.json ./
-RUN yarn install
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
 COPY . .
 
 ARG RECAPTCHA_KEY
@@ -27,7 +27,7 @@ RUN echo $RECAPTCHA_KEY \
         && echo $API_BASE_URL \
         && echo $B2C_CLIENT_ID
 
-RUN yarn build
+RUN npm run build
 
 # Stage 2
 FROM nginx:1.24 AS s2
