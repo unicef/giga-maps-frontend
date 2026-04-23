@@ -1,4 +1,4 @@
-import type { EntityType } from '../types/base-entity.type';
+import { EntityType } from '../types/base-entity.type';
 import type { EntityConfig } from './entity-config.types';
 
 /**
@@ -14,8 +14,8 @@ import type { EntityConfig } from './entity-config.types';
  * 4. If API fails, defaults remain
  */
 export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
-  school: {
-    type: 'school',
+  [EntityType.SCHOOL]: {
+    type: EntityType.SCHOOL,
     displayName: 'Schools',
     icon: 'Education',
     visible: true,
@@ -63,8 +63,8 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     ],
   },
 
-  health: {
-    type: 'health',
+  [EntityType.HEALTH]: {
+    type: EntityType.HEALTH,
     displayName: 'Health centers',
     icon: 'Hospital',
     visible: true,

@@ -3,7 +3,8 @@
  */
 import type { SchoolEntityType } from './school-entity.type';
 import type { HealthFacilityType } from './health-entity.type';
-import type { BaseEntity, EntityType } from './base-entity.type';
+import { EntityType } from './base-entity.type';
+import type { BaseEntity } from './base-entity.type';
 
 /**
  * Discriminated union of all concrete entity types.
@@ -15,7 +16,7 @@ export type AnyEntityType = SchoolEntityType | HealthFacilityType;
  * Array of all supported entity type strings.
  * Used for iteration and validation.
  */
-export const ENTITY_TYPES: EntityType[] = ['school', 'health'];
+export const ENTITY_TYPES: EntityType[] = [EntityType.SCHOOL, EntityType.HEALTH];
 
 /**
  * Check if a string is a valid entity type.
@@ -25,7 +26,8 @@ export const isValidEntityType = (type: string): type is EntityType => {
 };
 
 // Re-export for convenience
-export type { EntityType, BaseEntity };
+export { EntityType };
+export type { BaseEntity };
 export type { SchoolEntityType } from './school-entity.type';
 export type { SchoolStatistics } from './school-entity.type';
 export type { HealthFacilityType } from './health-entity.type';

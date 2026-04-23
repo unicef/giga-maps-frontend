@@ -1,4 +1,4 @@
-import type { BaseEntity, EntityType } from '../types/base-entity.type';
+import { BaseEntity, EntityType } from '../types/base-entity.type';
 import type { SchoolEntityType } from '../types/school-entity.type';
 import type { HealthFacilityType } from '../types/health-entity.type';
 import type { AnyEntityType } from '../types/entity-types';
@@ -27,14 +27,14 @@ export const isBaseEntity = (data: unknown): data is BaseEntity => {
  * Check if an entity is a School entity.
  */
 export const isSchoolEntity = (entity: BaseEntity): entity is SchoolEntityType => {
-  return entity.entity_type === 'school';
+  return entity.entity_type === EntityType.SCHOOL;
 };
 
 /**
  * Check if an entity is a Health Facility entity.
  */
 export const isHealthEntity = (entity: BaseEntity): entity is HealthFacilityType => {
-  return entity.entity_type === 'health';
+  return entity.entity_type === EntityType.HEALTH;
 };
 
 /**

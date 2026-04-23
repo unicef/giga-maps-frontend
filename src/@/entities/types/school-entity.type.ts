@@ -1,4 +1,4 @@
-import { BaseEntity } from './base-entity.type';
+import { BaseEntity, EntityType } from './base-entity.type';
 
 /**
  * School entity type extending BaseEntity.
@@ -6,7 +6,7 @@ import { BaseEntity } from './base-entity.type';
  * Schools use legacy APIs (useLegacyApi: true in registry).
  */
 export interface SchoolEntityType extends BaseEntity {
-  entity_type: 'school';
+  entity_type: EntityType.SCHOOL;
   education_level?: string;
   school_type?: string;
   giga_id_school?: string;

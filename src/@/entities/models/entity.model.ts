@@ -4,7 +4,7 @@ import { setPayload } from '~/lib/effector-kit';
 
 import type { EntityConfig } from '../config/entity-config.types';
 import { DEFAULT_ENTITY_REGISTRY } from '../config/entity-registry';
-import type { BaseEntity, EntityStatistics, EntityType } from '../types/base-entity.type';
+import { BaseEntity, EntityStatistics, EntityType } from '../types/base-entity.type';
 
 /**
  * Entity system Effector stores.
@@ -86,7 +86,7 @@ export const $entityConfigMap = $entityRegistry;
  */
 export const changeActiveEntityTypes = createEvent<EntityType[]>();
 export const setActiveEntityTypes = changeActiveEntityTypes; // alias for route model sync
-export const $activeEntityTypes = createStore<EntityType[]>(['health', 'school']);
+export const $activeEntityTypes = createStore<EntityType[]>([EntityType.HEALTH, EntityType.SCHOOL]);
 $activeEntityTypes.on(changeActiveEntityTypes, setPayload);
 
 /**
@@ -116,26 +116,9 @@ $activeEntityTypes.on(selectAllEntityTypes, () => {
 // ─────────────────────────────────────────────────
 
 export const changeSelectedEntityType = createEvent<EntityType>();
-export const $selectedEntityType = createStore<EntityType>('school');
+export const $selectedEntityType = createStore<EntityType>(EntityType.SCHOOL);
 $selectedEntityType.on(changeSelectedEntityType, setPayload);
 
-// ─────────────────────────────────────────────────
-// Entity popup data (for new entities only)
-// ─────────────────────────────────────────────────
-
-/**
- * Data store for new entity popup (health, postoffice, etc.).
- * Schools use their existing $schoolClickData in map.model.ts.
- */
-export type EntityPopupData = {
-  entityType: EntityType;
-  data: BaseEntity | null;
-  statistics?: EntityStatistics;
-} | null;
-
-export const setEntityPopupData = createEvent<EntityPopupData>();
-export const $entityPopupData = createStore<EntityPopupData>(null);
-$entityPopupData.on(setEntityPopupData, setPayload);
 
 // ─────────────────────────────────────────────────
 // Loading state
@@ -157,8 +140,8 @@ export const $selectedEntityConfig = combine(
 );
 
 /** Check if a specific entity type is active on the map */
-export const $isSchoolActive = $activeEntityTypes.map(types => types.includes('school'));
-export const $isHealthActive = $activeEntityTypes.map(types => types.includes('health'));
+export const $isSchoolActive = $activeEntityTypes.map(types => types.includes(EntityType.SCHOOL));
+export const $isHealthActive = $activeEntityTypes.map(types => types.includes(EntityType.HEALTH));
 
 /** Check if we're in multi-entity view mode */
 export const $isMultiEntityView = $activeEntityTypes.map(types => types.length > 1);
