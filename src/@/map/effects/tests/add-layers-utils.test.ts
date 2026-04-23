@@ -1,7 +1,8 @@
 import { Map, VectorSource } from 'mapbox-gl';
 import { getSchoolsGeoJson } from '~/@/country/lib/get-schools-geojson';
 import { deleteSourceAndLayers, createSource, createSchoolSource, createSelectedLayer, animateCircles } from '../../utils';
-import { getLayerIdsAndLastChange, createSourceForMapAndCountry, createSourceForSchool, createAndUpdateMapLayer } from '../add-layers-utils';
+import { getLayerIdsAndLastChange, createSourceForMapAndCountry, createAndUpdateMapLayer } from '../add-layers-utils';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 
 // Mock dependencies
 jest.mock('../../utils', () => ({
@@ -9,14 +10,17 @@ jest.mock('../../utils', () => ({
   createSource: jest.fn(),
   createSchoolSource: jest.fn(),
   createSelectedLayer: jest.fn(),
+  createSchoolLayer: jest.fn(),
   animateCircles: jest.fn(() => ({ requestId: 123 })),
   checkSourceAvailable: jest.fn(() => true),
   getMapId: jest.fn(id => `layer-${id}`),
   filterConnectivityList: jest.fn(),
   filterCoverageList: jest.fn(),
   generateLayerUrls: jest.fn(),
+  generateStaticLayerUrl: jest.fn(),
   hideLayer: jest.fn(),
   removePreviewsMapClickHandlers: jest.fn(),
+  filterSchoolStatus: jest.fn(),
 }));
 
 jest.mock('~/@/country/lib/get-schools-geojson', () => ({
@@ -86,7 +90,7 @@ describe('add-layers-utils', () => {
         admin1Data: null
       });
 
-      expect(deleteSourceAndLayers).toHaveBeenCalledWith({ map: mockMap });
+      expect(deleteSourceAndLayers).toHaveBeenCalledWith({ map: mockMap, sourceId: 'map-data-source' });
       expect(createSource).toHaveBeenCalled();
     });
 
@@ -109,40 +113,6 @@ describe('add-layers-utils', () => {
     });
   });
 
-  describe('createSourceForSchool', () => {
-    it('should create school source with correct data', () => {
-      const schoolStats = [{ id: 1, data: 'test' }];
-      const mockSchoolData = { type: 'FeatureCollection', features: [] };
-      (getSchoolsGeoJson as jest.Mock).mockReturnValue(mockSchoolData);
-
-      createSourceForSchool({
-        map: mockMap,
-        layerUtils: {},
-        schoolStats,
-        selectedLayerId: 1,
-        lastSelectedLayer: { layerId: null }
-      });
-
-      expect(deleteSourceAndLayers).toHaveBeenCalledWith({ map: mockMap });
-      expect(createSchoolSource).toHaveBeenCalledWith({
-        map: mockMap,
-        schoolData: mockSchoolData
-      });
-    });
-
-    it('should handle empty school stats', () => {
-      createSourceForSchool({
-        map: mockMap,
-        layerUtils: {},
-        schoolStats: [],
-        selectedLayerId: 1,
-        lastSelectedLayer: { layerId: null }
-      });
-
-      expect(createSchoolSource).not.toHaveBeenCalled();
-    });
-  });
-
   describe('createAndUpdateMapLayer', () => {
     it('should create layer with correct options for live data', () => {
       createAndUpdateMapLayer({
@@ -160,11 +130,39 @@ describe('add-layers-utils', () => {
         schoolLayerId: null,
         lastSelectedLayer: { layerId: null },
         schoolLegends: [],
-        isMobile: false
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL],
+        entityRegistry: {},
       });
 
       expect(createSelectedLayer).toHaveBeenCalled();
       expect(animateCircles).toHaveBeenCalled();
+    });
+
+    it('should create layers for multiple entity types', () => {
+      createAndUpdateMapLayer({
+        map: mockMap,
+        mapRoute: { map: true },
+        connectivitySpeedFilter: [],
+        coverageFilter: [],
+        layerUtils: {
+          currentLayerTypeUtils: { isLive: false },
+          downloadLayerId: 'download',
+          coverageLayerId: 'coverage',
+          globalLayerId: 1,
+        },
+        selectedLayerId: 1,
+        paintData: {},
+        schoolLayerId: null,
+        lastSelectedLayer: { layerId: null },
+        schoolLegends: [],
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
+        entityRegistry: {},
+      });
+
+      // Should create selected layer for each entity type
+      expect(createSelectedLayer).toHaveBeenCalledTimes(2);
     });
 
     it('should handle undefined map gracefully', () => {
@@ -183,7 +181,9 @@ describe('add-layers-utils', () => {
         schoolLayerId: null,
         lastSelectedLayer: { layerId: null },
         schoolLegends: [],
-        isMobile: false
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL],
+        entityRegistry: {},
       });
 
       expect(createSelectedLayer).not.toHaveBeenCalled();

@@ -15,8 +15,24 @@ export const SCHOOL_LAYER_ID = 10001
 export const DEFAULT_SOURCE = 'map-data-source';
 export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
 export const COVERAGE_URL = 'api/locations/schools/tiles';
-export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
+export const CONNECTIVITY_URL = 'api/v2/entities/tiles/connectivity';
 export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
+
+/** Source-layer names returned by the v2 tiles API */
+export const SOURCE_LAYER_SCHOOLS = 'schools';
+export const SOURCE_LAYER_ENTITIES = 'entities';
+
+/** Get the correct source-layer name based on entity type */
+export const getSourceLayerName = (entityType: string): string =>
+  entityType === 'school' ? SOURCE_LAYER_SCHOOLS : SOURCE_LAYER_ENTITIES;
+
+/** Generate a unique Mapbox layer ID for entity status dots */
+export const getEntityStatusLayerId = (entityType: string): string =>
+  `entity-status-${entityType}`;
+
+/** Generate a unique Mapbox layer ID for entity selected/metric layer */
+export const getEntitySelectedLayerId = (entityType: string, layerId: number | null): string =>
+  `entity-selected-${entityType}-${layerId}`;
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',

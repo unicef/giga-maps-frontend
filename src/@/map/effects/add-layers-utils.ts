@@ -3,12 +3,14 @@ import { VectorSource } from "mapbox-gl";
 import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
-import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from "../map.constant";
-import { createActiveEntityLayers } from "~/@/entities/map/entity-layers";
-import { $activeEntityTypes } from "~/@/entities/models/entity.model";
+import { animateCircles, checkSourceAvailable, createSchoolLayer, createEntitySymbolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID, getSourceLayerName, getEntityStatusLayerId, getEntitySelectedLayerId, SOURCE_LAYER_SCHOOLS } from "../map.constant";
+import { EntityType } from "~/@/entities/types/base-entity.type";
+import type { EntityConfig } from "~/@/entities/config/entity-config.types";
 
-let animateCircleHandler = { requestId: 0 }; // to clear animation;
+/** Per-entity animation handlers (supports simultaneous animations for multiple entity types) */
+let animateCircleHandlers: Record<string, { requestId: number }> = {};
+
 const ignoreCountriesForBounds = ['fj']
 export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelectedLayer }: Pick<ChangeLayerOptions, "selectedLayerIds" | "refresh" | "lastSelectedLayer">) => {
   const { schoolId: schoolLayerId, selectedId: selectedLayerId } = selectedLayerIds;
@@ -21,8 +23,8 @@ export const createSourceForMapAndCountry = async ({ map, schoolPageIds, schoolA
   if (!map) return;
   const sourceId = isConnectivityStatus ? CONNECTIVITY_STATUS_SOURCE : DEFAULT_SOURCE;
   if (!isConnectivityStatus) {
-    // cancel animation;
-    cancelAnimationFrame(animateCircleHandler.requestId)
+    // cancel all entity animations;
+    cancelAnimation();
   }
   // delete existing source;
   deleteSourceAndLayers({ map, sourceId });
@@ -66,68 +68,96 @@ export const createSourceForMapAndCountry = async ({ map, schoolPageIds, schoolA
 }
 
 
-export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter, coverageFilter, layerUtils, selectedLayerId, paintData, schoolLayerId, lastSelectedLayer, schoolLegends, isMobile }: ChangeLayerOptions & { selectedLayerId: number | null; schoolLayerId: number | null; }) => {
+export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter, coverageFilter, layerUtils, selectedLayerId, paintData, schoolLayerId, lastSelectedLayer, schoolLegends, isMobile, activeEntityTypes, entityRegistry }: ChangeLayerOptions & { selectedLayerId: number | null; schoolLayerId: number | null; }) => {
   if (!map) return;
   const { currentLayerTypeUtils, globalLayerId } = layerUtils;
   const { isLive } = currentLayerTypeUtils;
   const isDynamicLayer = !(selectedLayerId === globalLayerId);
   const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
-  const options: Record<string, any> = {
-    filter: isLive ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer) : filterCoverageList(coverageFilter, isDynamicLayer),
-    'source-layer': "default"
-  };
-  // create selected layer;
+
+  // Cancel all previous entity animations
+  cancelAnimation();
+
+  // Determine active entity types (fallback to school-only for backward compat)
+  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+
+  // --- Selected layer (connectivity/coverage) per entity type ---
   if (isSourceAvailable && selectedLayerId) {
-    if (isLive) {
-      animateCircleHandler = animateCircles({ map, id: getMapId(selectedLayerId) });
+    for (const entityType of entityTypes) {
+      const sourceLayer = getSourceLayerName(entityType);
+      const layerIdStr = getEntitySelectedLayerId(entityType, selectedLayerId);
+      const options: Record<string, any> = {
+        filter: isLive
+          ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer)
+          : filterCoverageList(coverageFilter, isDynamicLayer),
+        'source-layer': sourceLayer,
+      };
+
+      if (isLive) {
+        animateCircleHandlers[entityType] = animateCircles({ map, id: layerIdStr });
+      }
+
+      createSelectedLayer(map, {
+        id: layerIdStr,
+        isMobile,
+        isLive,
+        isDynamicLayer,
+        paintData,
+        mapRoute,
+        options,
+      });
     }
-    createSelectedLayer(map, {
-      id: getMapId(selectedLayerId),
-      isMobile,
-      isLive,
-      isDynamicLayer,
-      paintData,
-      mapRoute,
-      options
-    });
   } else {
-    // cancel animation;
-    cancelAnimationFrame(animateCircleHandler.requestId);
-    hideLayer(map, getMapId(lastSelectedLayer.layerId))
+    // hide previous selected layers for all entity types
+    for (const entityType of entityTypes) {
+      hideLayer(map, getEntitySelectedLayerId(entityType, lastSelectedLayer.layerId));
+    }
   }
 
   if (!mapRoute.map) return;
-  // create school layer;
+
+  // --- Status layer (connectivity_status dots) per entity type in global view ---
   if (isSourceAvailable) {
-    createSchoolLayer(map, {
-      id: getMapId(SCHOOL_LAYER_ID),
-      paintData,
-      isMobile,
-      options: {
-        'source-layer': "default"
-      }, mapRoute
-    });
+    for (const entityType of entityTypes) {
+      const sourceLayer = getSourceLayerName(entityType);
+      const statusLayerId = getEntityStatusLayerId(entityType);
+      const config = entityRegistry?.[entityType] as EntityConfig | undefined;
+      const markerType = config?.markerType ?? 'circle';
+
+      if (markerType === 'circle') {
+        // Circle marker (school / legacy) — fast circle layer
+        createSchoolLayer(map, {
+          id: statusLayerId,
+          paintData,
+          isMobile,
+          options: {
+            'source-layer': sourceLayer,
+          },
+          mapRoute,
+        });
+      } else {
+        // Symbol marker (health, etc.) — text-based symbol layer
+        const symbol = config?.symbol ?? '■';
+        createEntitySymbolLayer(map, {
+          id: statusLayerId,
+          symbol,
+          paintData,
+          isMobile,
+          options: {
+            'source-layer': sourceLayer,
+          },
+          mapRoute,
+        });
+      }
+    }
   }
-
-  // create entity layers for active non-legacy entity types
-  // if (isSourceAvailable) {
-  //   const activeEntityTypes = $activeEntityTypes.getState();
-  //   createActiveEntityLayers(map, {
-  //     activeEntityTypes,
-  //     paintData,
-  //     options: {
-  //       'source-layer': "default"
-  //     },
-  //   });
-  // }
-
 }
 
 export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintData, selectedLayerIds, schoolLegends, isMobile }: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
   const { schoolId: schoolLayerId } = selectedLayerIds;
   const isSourceAvailable = checkSourceAvailable(map, CONNECTIVITY_STATUS_SOURCE);
-  // create school layer;
+  // create school layer (country view — uses legacy source-layer "default");
   if (isSourceAvailable && schoolLayerId) {
     createSchoolLayer(map, {
       source: CONNECTIVITY_STATUS_SOURCE,
@@ -145,9 +175,12 @@ export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintDat
 }
 
 export const cancelAnimation = () => {
-  cancelAnimationFrame(animateCircleHandler.requestId)
+  Object.values(animateCircleHandlers).forEach(handler => {
+    cancelAnimationFrame(handler.requestId);
+  });
+  animateCircleHandlers = {};
 }
 
-export const setAnimationHandler = (handler: { requestId: number }) => {
-  animateCircleHandler = handler;
+export const setAnimationHandler = (entityType: string, handler: { requestId: number }) => {
+  animateCircleHandlers[entityType] = handler;
 }

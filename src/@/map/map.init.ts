@@ -1,5 +1,6 @@
 
 import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
+import { $activeEntityTypes, $entityRegistry } from '~/@/entities/models/entity.model';
 import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
@@ -206,7 +207,9 @@ export const gigaLayerSource = combine({
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
   zoomState: $zoomState,
-  schoolPageIds: $selectedSchoolIds
+  schoolPageIds: $selectedSchoolIds,
+  activeEntityTypes: $activeEntityTypes,
+  entityRegistry: $entityRegistry,
 })
 
 const combineGigaFn = (data: { refresh?: boolean; timeout?: number; }) => (source: ReturnType<typeof gigaLayerSource.getState>) => ({
@@ -228,7 +231,7 @@ const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 
 sample({
   clock: merge([$zoomState,
-    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive]),
+    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive, $activeEntityTypes]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: ({ map }) => {
@@ -257,7 +260,8 @@ sample({
     $connectivityBenchMark,
     $countrySearchString,
     timePlayerActive,
-    $zoomState
+    $zoomState,
+    $activeEntityTypes
   ]),
   source: gigaLayerSource,
   filter: mapLayerFilter,
@@ -302,6 +306,7 @@ sample({
   source: combine({
     map: $map,
     lastSelectedLayer: $selectedGigaLayers,
+    activeEntityTypes: $activeEntityTypes,
   }),
   fn: (source, lengendsSelected) => ({
     lengendsSelected,

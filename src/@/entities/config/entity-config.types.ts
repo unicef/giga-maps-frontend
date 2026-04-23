@@ -81,8 +81,6 @@ export interface EntityConfig {
   markerSymbol?: string;
   /** Legend/entity chip shape symbol (e.g. ●, ■) */
   symbol: string;
-  /** Legend labels and indicator behavior */
-  legend: EntityLegendConfig;
   /** Sidebar/accordion labels and auxiliary UI behavior */
   sidebar: EntitySidebarConfig;
   /** API field mappings for sidebar/global entity cards */
