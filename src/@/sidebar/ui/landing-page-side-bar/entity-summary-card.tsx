@@ -69,9 +69,9 @@ const EntitySummaryCard = ({ card, expanded, isLoading = false, lng, t }: Entity
 
       {isLoading ? (
         <div className="space-y-3! px-4! pb-3!">
-          <Skeleton className="h-4! w-80! rounded-sm!" />
-          <Skeleton className="h-4! w-70! rounded-sm!" />
-          <Skeleton className="h-4! w-60! rounded-sm!" />
+          <Skeleton className="h-4! w-full! rounded-sm!" />
+          <Skeleton className="h-4! w-full! rounded-sm!" />
+          <Skeleton className="h-4! w-full! rounded-sm!" />
         </div>
       ) : null}
 
