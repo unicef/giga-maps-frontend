@@ -114,10 +114,7 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
   const getMaxRadius = setCurrentRadius();
   function animateFrame(time: number) {
     if (!map.getLayer(layer)) {
-      // During zoom/source refresh, the layer can be recreated briefly.
-      // Keep the loop alive so pulsing resumes as soon as the layer exists again.
-      animationFrameData.requestId = requestAnimationFrame(animateFrame);
-      return;
+      return; // reset value if require;
     }
     const zoom = Number(map.getZoom().toFixed(1));
     const [startRadius, maxRadius] = getMaxRadius(zoom);
