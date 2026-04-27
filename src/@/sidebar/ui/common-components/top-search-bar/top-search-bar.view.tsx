@@ -16,6 +16,7 @@ import { getInputValue } from '~/lib/event-reducers';
 
 import { $isActiveSearchBar, $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
 import { ChevronDown, ChevronUp, Cross, Earth, Search, X } from 'lucide-react';
+import { Button } from '~/components/ui/button';
 
 
 const onChange = changeSearchText.prepend(getInputValue);
@@ -50,9 +51,10 @@ const TopSearchBar = () => {
     const relatedTarget = e.relatedTarget as HTMLElement;
     const searchResults = document.querySelector('.search-results-container');
 
-    // If the related target is not inside search results and not the search input itself
-    if (searchResults && !searchResults.contains(relatedTarget) &&
-      searchContainerRef.current && !searchContainerRef.current.contains(relatedTarget)) {
+    const isInsideResults = searchResults?.contains(relatedTarget) || searchResults?.matches(':hover');
+    const isInsideContainer = searchContainerRef.current?.contains(relatedTarget);
+
+    if (!isInsideResults && !isInsideContainer) {
       setTimeout(() => changeIsSearchFocused(false), 0);
     }
   }
@@ -126,24 +128,26 @@ const TopSearchBar = () => {
                 placeholder={t("search-country-region-school-id")}
                 value={searchText}
               />
-              <button
-                aria-label={t('clear-search-input')}
+              <Button
+                aria-label={t('clear-search')}
+                variant={'icon'}
                 className={cn(
-                  'absolute! right-0! top-0! inline-flex! h-12! w-11! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! p-0! text-[#6f6f6f]! focus:outline-none!',
-                  !searchText && 'pointer-events-none! opacity-0!',
-                  isMobile && 'opacity-100!'
+                  'main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0!',
+                  !searchText && 'hidden!'
                 )}
-                onClick={onClear}
-                type="button"
+                onClick={() => {
+                  onClear();
+                  changeIsSearchFocused(false);
+                }}
               >
                 <X size={16} className="fill-current" />
-              </button>
+              </Button>
             </div>
           </div>
         </PopoverAnchor>
         <PopoverContent
           align="start"
-          className="z-60 rounded-lg border border-[#0f62fe] bg-[#161616] p-0 shadow-xs"
+          className="z-60 rounded-lg border border-primary bg-[#161616] p-0 shadow-xs"
           side="bottom"
           sideOffset={2}
           style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}

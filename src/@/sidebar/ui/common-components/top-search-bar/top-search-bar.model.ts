@@ -12,7 +12,7 @@ export const $isSearchFocused = restore(changeIsSearchFocused, false);
 
 export const changeSearchText = createEvent<string>();
 export const clearSearchText = createEvent();
-export const $searchInput = restore(changeSearchText, '');
+export const $searchInput = restore(changeSearchText, '').reset(clearSearchText);
 export const $hasSearchInput = $searchInput.map(text => text?.length >= maxTextCount);
 
 export const $isActiveSearchBar = combine([$hasSearchInput, $isSearchFocused], (allInput) => allInput.some((input) => Boolean(input)))

@@ -18,17 +18,8 @@ export default function SearchResult() {
   const { t } = useTranslation();
   return (
     <>
-      {isSearchFocus && hasSearchInput && (
-        <ClickAnywhere
-          classList={['top-search-bar', 'search-results-container', 'search-container', 'main-search-list', 'sidebar-searchbox']}
-          outsideClick={() => {
-            changeIsSearchFocused(false);
-          }}
-          trigger={isSearchFocus && hasSearchInput}
-        />
-      )}
       {isSearchFocus && hasSearchInput &&
-        <SearchResultWrapper>
+        <SearchResultWrapper className='search-results-container'>
           <SearchResultList />
           <FooterTourContact message={t("not-the-results-you-expected")} />
         </SearchResultWrapper>

@@ -7,7 +7,7 @@ import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { getId, getLocalStorage, setLocalStorage } from "~/lib/utils";
 
 import { applySearchFx } from "../../../effects/search-country-fx";
-import { $hasSearchInput, $isSearchFocused, $searchInput, $showCountries, changeSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
+import { $hasSearchInput, $isSearchFocused, $searchInput, $showCountries, changeSearchText, clearSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
 import { MAX_SEARCH_HISTORY, SCHOOL_LIST_SEARCH_LENGTH, SEARCH_ADMIN_SIZE, SEARCH_COUNTRY_SIZE, SEARCH_DATA_TYPE, STORE_SEARCH_HISTORY } from "./search-result.constant";
 import { fetchCountriesWithDistrictFx, fetchSchoolListFx, getSearchResultsFx } from "./search-result.fx";
 import { CountryWithDistrictCount, SearchResultApi, SearchResultCollection, SearchType } from "./search-result.type";
@@ -308,8 +308,8 @@ $searchAdminLevel2.reset($showCountries, $currentExpandCountry, $searchAdminLeve
 
 $searchSchoolSelectedList.reset([resetSchoolSelection, $currentExpandCountry]);
 
-$searchResultResponse.reset($query);
-$hasMoreResults.reset($query);
+$searchResultResponse.reset($query, clearSearchText);
+$hasMoreResults.reset($query, clearSearchText);
 // search on get all country list
 
 $searchSchoolList.on(fetchSchoolListFx.doneData, setPayload)
