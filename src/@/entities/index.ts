@@ -5,7 +5,8 @@
  */
 
 // Types
-export type { EntityType, BaseEntity, EntityStatistics, EntityInfoType } from './types/base-entity.type';
+export { EntityType } from './types/base-entity.type';
+export type { BaseEntity, EntityStatistics, EntityInfoType } from './types/base-entity.type';
 export type { AnyEntityType } from './types/entity-types';
 export type { SchoolEntityType, SchoolStatistics } from './types/school-entity.type';
 export type { HealthFacilityType } from './types/health-entity.type';
@@ -51,8 +52,6 @@ export {
   changeSelectedEntityType,
   $selectedEntityConfig,
   // Popup data
-  $entityPopupData,
-  setEntityPopupData,
   // Loading
   $entityLoading,
   setEntityLoading,
@@ -62,4 +61,3 @@ export {
   $isMultiEntityView,
   $activeEntityConfigs,
 } from './models/entity.model';
-export type { EntityPopupData } from './models/entity.model';

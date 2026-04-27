@@ -17,7 +17,8 @@ import {
 } from '@/map/utils';
 
 import { cancelAnimation, createAndUpdateConnectiivtyStatusLayer, createAndUpdateMapLayer, createSourceForMapAndCountry, getLayerIdsAndLastChange } from './add-layers-utils';
-import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from '../map.constant';
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID, getEntityStatusLayerId } from '../map.constant';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 
 const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> => {
   if (!props.map) { return };
@@ -97,12 +98,16 @@ export const updateConnectivityFilter = createEffect(({ map, layerUtils, connect
   }
 })
 
-export const updateConnectivityStatus = createEffect(({ map, lengendsSelected }: UpdateConnectivityType & { lengendsSelected: string[] }) => {
+export const updateConnectivityStatus = createEffect(({ map, lengendsSelected, activeEntityTypes }: UpdateConnectivityType & { lengendsSelected: string[]; activeEntityTypes?: string[] }) => {
   if (!map) return;
-  const layer = map.getLayer(getMapId(SCHOOL_LAYER_ID));
-  if (layer) {
-    const filter = filterSchoolStatus(lengendsSelected);
-    map.setFilter(getMapId(SCHOOL_LAYER_ID), filter);
+  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+  for (const entityType of entityTypes) {
+    const layerId = getEntityStatusLayerId(entityType);
+    const layer = map.getLayer(layerId);
+    if (layer) {
+      const filter = filterSchoolStatus(lengendsSelected);
+      map.setFilter(layerId, filter);
+    }
   }
 })
 

@@ -5,7 +5,10 @@ import { GraphData } from '~/api/types';
  * Supported entity types in the system.
  * 'school' uses legacy APIs, all others use new generic entity APIs.
  */
-export type EntityType = 'school' | 'health';
+export enum EntityType {
+  SCHOOL = 'school',
+  HEALTH = 'health',
+}
 
 /**
  * Base entity interface shared by all entity types.

@@ -1,7 +1,5 @@
 import { useStore } from 'effector-react';
 import { MouseEvent } from 'react';
-import { $entityPopupData } from '~/@/entities/models/entity.model';
-import EntityView from '~/@/entities/ui/entity-view';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 import { BroadcastButton, TakeTourWrapper } from '~/@/map/ui/layer-theme/theme-button.style';
@@ -49,7 +47,6 @@ export default function Sidebar() {
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed)
   const isTimeplayer = useStore($isTimeplayer)
-  const entityPopupData = useStore($entityPopupData);
   return (
     <div
       className={cn(
@@ -95,8 +92,6 @@ export default function Sidebar() {
             <LayerDetailContainer $height={isMobile && !sidebarHeight ? '0rem' : '6rem'}>
               {(countryRoute) && <GlobalAndCountryView />}
               {(schoolRoute) && <SchoolView />}
-              {(schoolRoute) && entityPopupData && <EntityView />}
-              {(entityRoute) && <EntityView />}
             </LayerDetailContainer>
           }
           {

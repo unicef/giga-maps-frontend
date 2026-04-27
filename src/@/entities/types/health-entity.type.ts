@@ -1,4 +1,4 @@
-import { BaseEntity } from './base-entity.type';
+import { BaseEntity, EntityType } from './base-entity.type';
 
 /**
  * Health facility entity type extending BaseEntity.
@@ -9,7 +9,7 @@ import { BaseEntity } from './base-entity.type';
  * via the entity registry's field configuration.
  */
 export interface HealthFacilityType extends BaseEntity {
-  entity_type: 'health';
+  entity_type: EntityType.HEALTH;
   /** Additional entity-specific fields come from backend — accessed dynamically */
   [key: string]: unknown;
 }

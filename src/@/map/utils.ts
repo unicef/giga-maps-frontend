@@ -296,6 +296,65 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
   }
 }
 
+/**
+ * Create a symbol layer for non-circle entity types (health, etc.)
+ * Uses text-field with a unicode symbol character (e.g. ■) from entity registry.
+ * Colors are driven by connectivity_status, matching the same logic as createSchoolLayer.
+ */
+export const createEntitySymbolLayer = (map: Map, { id, symbol, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; symbol: string; source?: string; paintData: StylePaintData; options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute']; isMobile: boolean }): void => {
+  if (map.getLayer(id)) {
+    showLayer(map, id);
+    return;
+  }
+
+  const connectivityStatusColors = paintData;
+  // Build text-color expression matching the same connectivity_status logic as circle-color
+  const textColor = [
+    ...mapPaintData.connectivityStatus["circle-color"],
+    ConnectivityStatusDistribution.connected, connectivityStatusColors.connected,
+    ConnectivityStatusDistribution.notConnected, connectivityStatusColors.not_connected,
+    ConnectivityStatusDistribution.unknown, connectivityStatusColors.unknown,
+    connectivityStatusColors.unknown
+  ];
+
+  const { 'source-layer': sourceLayer, filter: layerFilter, ...restOptions } = options;
+
+  map.addLayer({
+    id,
+    type: 'symbol',
+    source,
+    minzoom: 0,
+    layout: {
+      'text-field': symbol,
+      'text-size': [
+        'interpolate', ['linear'], ['zoom'],
+        0, 4,
+        2, 6,
+        4, 8,
+        5, 10,
+        8, 14,
+        10, 18
+      ],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+    },
+    paint: {
+      'text-color': textColor as any,
+      'text-opacity': 1,
+    },
+    ...(sourceLayer ? { 'source-layer': sourceLayer } : {}),
+    ...(layerFilter ? { filter: layerFilter } : {}),
+  });
+
+  map.off('click', id, mapDotsClickIdsAndHandler[source]?.[id]);
+  if (mapDotsClickIdsAndHandler[source]) {
+    delete mapDotsClickIdsAndHandler[source][id];
+  }
+  if (!mapRoute.map) {
+    onClickOnSchoolDots(map, id, source);
+  }
+}
+
 const getConnectivityPaint = (colorsConnectivity: StylePaintData, isDynamicLayer: boolean) => {
   const countryCode = $countryCode.getState();
   const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
