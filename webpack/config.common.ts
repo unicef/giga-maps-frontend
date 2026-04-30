@@ -2,15 +2,12 @@ import './types';
 
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import webpack from 'webpack';
-import WebpackBar from 'webpackbar';
 
 import * as paths from './paths';
 import { Configuration } from 'webpack';
 
 // Common plugins
-export const commonPlugins = [
-  new WebpackBar(),
-];
+export const commonPlugins = [];
 
 export const resolvePlugins = [
   // Get aliases from tsconfig.json
