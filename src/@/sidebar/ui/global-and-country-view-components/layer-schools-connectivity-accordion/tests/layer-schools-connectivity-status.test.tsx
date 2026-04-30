@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import LayerSchoolsConnectivityStatus from '../layer-schools-connectivity-status.view';
 
 describe('Layer schools connectivity status', () => {
@@ -8,3 +8,4 @@ describe('Layer schools connectivity status', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

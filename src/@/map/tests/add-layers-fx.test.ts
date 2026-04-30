@@ -2,12 +2,12 @@ import { changeLayersFx } from '../effects/add-layers-fx';
 import { clearMapDataFx } from '../effects/add-layers-fx';
 import { updateConnectivityFilter } from '../effects/add-layers-fx';
 
-jest.mock('../utils')
+vi.mock('../utils')
 describe('changeLayersFx', () => {
   let map: any;
   beforeEach(() => {
     map = {
-      getStyle: jest.fn(),
+      getStyle: vi.fn(),
     }
   });
 
@@ -48,7 +48,7 @@ describe('clearMapDataFx', () => {
   let map: any;
   beforeEach(() => {
     map = {
-      removeSource: jest.fn(),
+      removeSource: vi.fn(),
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
@@ -86,8 +86,8 @@ describe('updateCoverageFilter', () => {
 
   it('should set filter on map layer if static layer', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn()
     };
     const layerUtils = {
       selectedLayerId: 1,
@@ -111,8 +111,8 @@ describe('updateCoverageFilter', () => {
 
   it('should not set filter if not static layer', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn()
     };
     const layerUtils = {
       selectedLayerId: 1,
@@ -151,8 +151,8 @@ describe('updateConnectivityFilter', () => {
 
   it('should set filter on live layer if map and layer provided', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn()
     };
     const layerUtils = {
       selectedLayerId: 1,
@@ -180,8 +180,8 @@ describe('updateConnectivityFilter', () => {
 
   it('should not set filter on static layer', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn()
     };
     const layerUtils = {
       selectedLayerId: 1,
@@ -214,8 +214,8 @@ describe('updateConnectivityFilter', () => {
 
   it('updateConnectivityFilter: should set correct filter if live layer', async () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn()
     };
 
     const layerUtils = {
@@ -245,8 +245,8 @@ describe('updateConnectivityFilter', () => {
 
   it('updateConnectivityFilter: should not set filter if layer is not live', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn()
     };
 
     const layerUtils = {

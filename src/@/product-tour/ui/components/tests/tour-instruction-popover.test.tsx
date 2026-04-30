@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import TourInstructionPopover from '../modal/tour-instruction-popover';
 
 describe('Layer schools connectivity status', () => {
@@ -88,3 +88,4 @@ describe('TourInstructionPopover', () => {
     expect(getByText('skip-tour')).toBeInTheDocument();
   });
 });
+

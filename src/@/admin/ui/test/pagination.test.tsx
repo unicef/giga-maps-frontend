@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Pagination from '../common-components/Pagination';
 
 describe('Pagination Component', () => {
-  const setPageMock = jest.fn();
+  const setPageMock = vi.fn();
 
   const renderComponent = (props = {}) => {
     return render(
@@ -47,3 +47,4 @@ describe('Pagination Component', () => {
     expect(setPageMock).toHaveBeenCalledWith({ page: 1, pageSize: 50 });
   });
 });
+

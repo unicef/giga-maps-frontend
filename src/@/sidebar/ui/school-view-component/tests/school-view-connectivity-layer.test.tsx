@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import SchoolViewConnectivityLayer from '../school-view-connectivity-layer/school-view-connectivity-layer.view';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import { router } from '~/core/routes';
 import "~/core/i18n/instance"
 

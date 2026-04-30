@@ -2,12 +2,12 @@ import { createUpdateCountriesLayer } from '../create-update-countries-layer'
 import { CountryAdminLevel } from '../../country.constant'
 import * as countryUtils from '../../country.utils'
 
-jest.mock('../../country.utils', () => ({
-  createFillLayerForCountry: jest.fn(),
-  createLineLayerForCountry: jest.fn(),
-  addAdminCountryLayerEvents: jest.fn(),
-  onChangeLabelLayer: jest.fn(),
-  onChangeAdminBoundariesLayer: jest.fn(),
+vi.mock('../../country.utils', () => ({
+  createFillLayerForCountry: vi.fn(),
+  createLineLayerForCountry: vi.fn(),
+  addAdminCountryLayerEvents: vi.fn(),
+  onChangeLabelLayer: vi.fn(),
+  onChangeAdminBoundariesLayer: vi.fn(),
 }))
 
 describe('createUpdateCountriesLayer', () => {
@@ -24,7 +24,7 @@ describe('createUpdateCountriesLayer', () => {
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should not call any functions if map is not provided', async () => {
@@ -38,7 +38,7 @@ describe('createUpdateCountriesLayer', () => {
   })
 
   it('should call functions for both admin levels when map is provided', async () => {
-    (countryUtils.createFillLayerForCountry as jest.Mock).mockReturnValue({ isLayerCreated: true })
+    (countryUtils.createFillLayerForCountry as vi.Mock).mockReturnValue({ isLayerCreated: true })
 
     await createUpdateCountriesLayer(mockProps)
 
@@ -53,7 +53,7 @@ describe('createUpdateCountriesLayer', () => {
   })
 
   it('should not call addAdminCountryLayerEvents if isLayerCreated is false', async () => {
-    (countryUtils.createFillLayerForCountry as jest.Mock).mockReturnValue({ isLayerCreated: false })
+    (countryUtils.createFillLayerForCountry as vi.Mock).mockReturnValue({ isLayerCreated: false })
 
     await createUpdateCountriesLayer(mockProps)
 
@@ -72,3 +72,4 @@ describe('createUpdateCountriesLayer', () => {
     expect(countryUtils.onChangeAdminBoundariesLayer).toHaveBeenCalledWith(mockMap, true)
   })
 })
+

@@ -3,7 +3,7 @@ import { getRoleByIdFx, updateRoleFx } from '~/@/admin/effects/user-management-f
 import { $formData } from '~/@/admin/models/giga-layer.model';
 import { $roleByIdResponse, reloadRolesList } from '~/@/admin/models/user-management.model';
 import { editRoles, userRoles } from '~/core/routes';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import EditRole from '../edit-role.view';
 import { fetchMockResponse } from '~/tests/fetchMock';
 
@@ -61,3 +61,4 @@ describe('EditRole', () => {
     expect(editRoles.visible.getState()).toBe(true)
   });
 });
+

@@ -1,4 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Layer realtime connected school > should render component 1`] = `[Function]`;
+
+exports[`Layer realtime connected school > should render component 2`] = `[Function]`;
 
 exports[`Layer realtime connected school should render component 1`] = `[Function]`;
 

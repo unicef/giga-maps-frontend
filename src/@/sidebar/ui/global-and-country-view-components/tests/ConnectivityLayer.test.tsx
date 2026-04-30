@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import ConnectivityLayer from '../connectivity-layer/connectivity-layer.view';
-jest.mock('@carbon/charts-react', () => ({
-  SimpleBarChart: jest.fn().mockReturnValue(null),
+vi.mock('@carbon/charts-react', () => ({
+  SimpleBarChart: vi.fn().mockReturnValue(null),
 }))
 
 
@@ -14,3 +14,5 @@ describe('ConnectivityLayer', () => {
   });
 
 });
+
+

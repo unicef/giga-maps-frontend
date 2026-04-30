@@ -5,7 +5,7 @@ import { render } from "@testing-library/react"
 import { onSelectMainLayer } from "~/@/sidebar/sidebar.model"
 import { fetchLayerListFx } from "~/api/project-connect"
 import { fetchMockResponse } from "~/tests/fetchMock"
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import LegendPopup from "../ui/legend-info/legend-popup"
 
@@ -99,3 +99,4 @@ describe('LegendPopup', () => {
     expect(getByText('Child Content')).toBeInTheDocument()
   })
 })
+

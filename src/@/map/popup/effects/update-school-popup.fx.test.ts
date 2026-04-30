@@ -6,7 +6,7 @@ describe('updateSchoolPopupFx', () => {
     const result = await updateSchoolPopupFx({
       country: null,
       popup: {
-        setDOMContent: jest.fn()
+        setDOMContent: vi.fn()
       },
       schoolPopupData: {
         id: '1',
@@ -17,7 +17,7 @@ describe('updateSchoolPopupFx', () => {
   });
 
   it('should set popup content using createAndSetPopupTemplate', async () => {
-    const setDOMContent = jest.fn();
+    const setDOMContent = vi.fn();
     document.body.innerHTML = '<div class="map-popup-template"></div>';
     const result = await updateSchoolPopupFx({
       country: { code: 'US' },
@@ -33,7 +33,7 @@ describe('updateSchoolPopupFx', () => {
   });
 
   it('should handle errors', async () => {
-    const setDOMContent = jest.fn().mockImplementation(() => {
+    const setDOMContent = vi.fn().mockImplementation(() => {
       throw new Error('Test error');
     });
 
@@ -52,3 +52,4 @@ describe('updateSchoolPopupFx', () => {
   });
 
 });
+

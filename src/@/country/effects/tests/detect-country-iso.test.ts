@@ -4,16 +4,16 @@ import { setLocalStorage } from '~/lib/utils'
 import { mapboxWorldviewsBoundaries } from '../../country.constant'
 
 
-jest.mock('~/lib/utils')
+vi.mock('~/lib/utils')
 
 describe('getUserCurrentCountryISOFx', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
-    global.fetch = jest.fn()
+    vi.resetAllMocks()
+    global.fetch = vi.fn()
   })
 
   it('should return defaultWorldView when fetch fails', async () => {
-    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
+    (global.fetch as vi.Mock).mockRejectedValue(new Error('Network error'))
 
     const result = await getUserCurrentCountryISOFx()
 
@@ -22,8 +22,8 @@ describe('getUserCurrentCountryISOFx', () => {
 
   it('should return country ISO when it is in mapboxWorldviewsBoundaries', async () => {
     const mockCountryISO = mapboxWorldviewsBoundaries[0];
-    (global.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue(mockCountryISO),
+    (global.fetch as vi.Mock).mockResolvedValue({
+      text: vi.fn().mockResolvedValue(mockCountryISO),
     })
 
     const result = await getUserCurrentCountryISOFx()
@@ -34,8 +34,8 @@ describe('getUserCurrentCountryISOFx', () => {
   })
 
   it('should return "CN" for Hong Kong', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue('HK'),
+    (global.fetch as vi.Mock).mockResolvedValue({
+      text: vi.fn().mockResolvedValue('HK'),
     })
 
     const result = await getUserCurrentCountryISOFx()
@@ -45,8 +45,8 @@ describe('getUserCurrentCountryISOFx', () => {
   })
 
   it('should return "CN" for Macau', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue('MO'),
+    (global.fetch as vi.Mock).mockResolvedValue({
+      text: vi.fn().mockResolvedValue('MO'),
     })
 
     const result = await getUserCurrentCountryISOFx()
@@ -56,8 +56,8 @@ describe('getUserCurrentCountryISOFx', () => {
   })
 
   it('should return defaultWorldView for country not in mapboxWorldviewsBoundaries', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue('XX'),
+    (global.fetch as vi.Mock).mockResolvedValue({
+      text: vi.fn().mockResolvedValue('XX'),
     })
 
     const result = await getUserCurrentCountryISOFx()
@@ -67,3 +67,4 @@ describe('getUserCurrentCountryISOFx', () => {
   })
 
 })
+

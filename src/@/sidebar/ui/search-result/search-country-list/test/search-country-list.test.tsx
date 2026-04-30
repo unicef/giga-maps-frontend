@@ -1,4 +1,3 @@
-import { describe, expect, jest, test } from '@jest/globals';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import { createEvent } from 'effector';
@@ -65,7 +64,7 @@ describe('SearchCountryList', () => {
   });
 
   test('renders SearchSchoolListPanel with loading state', () => {
-    const spy = jest.spyOn(fetchSchoolListFx.pending, 'getState');
+    const spy = vi.spyOn(fetchSchoolListFx.pending, 'getState');
     spy.mockReturnValue(true);
     void waitFor(() => {
       render(<SearchSchoolListPanel />);
@@ -384,3 +383,4 @@ describe('SearchCountryList', () => {
     })
   })
 })
+

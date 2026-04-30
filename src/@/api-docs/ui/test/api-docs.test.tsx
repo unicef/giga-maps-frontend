@@ -1,4 +1,3 @@
-import { describe, test, } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createEvent } from 'effector';
 
@@ -6,7 +5,7 @@ import { onChangeMenu } from '~/@/sidebar/sidebar.model';
 import { $loggedInUser } from '~/core/auth/models';
 import { loggedInUser } from '~/tests/data/admin-main-data';
 import { apiList } from '~/tests/data/explore-apis-list';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 
 import { $exploreApiData } from '../../models/explore-api.model';
 import ApiInfo from '../components/api-info/api-info.view';
@@ -48,7 +47,7 @@ describe('ApiDocs', () => {
 
   // test('Render ExploreApiRightSection by click on side panel', () => {
   //   setApiList(apiList)
-  //   const handleClick = jest.fn()
+  //   const handleClick = vi.fn()
   //   const { container } = render(testWrapper(<ApiDocsMain onClick={handleClick} />))
   //   const exploreApiButton = container.querySelector('#explore-api')
   //   fireEvent.click(exploreApiButton)
@@ -72,3 +71,5 @@ describe('ApiDocs', () => {
   })
 
 })
+
+

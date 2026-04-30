@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import LayerRealtimeConnectedSchools from '../layer-realtime-connected-schools.view';
 
 describe('Layer realtime connected school', () => {
@@ -15,3 +15,4 @@ describe('Layer realtime connected school', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

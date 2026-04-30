@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { createEvent } from "effector";
 
 import { mockSchoolDailtSummary, mockSchoolSummaryList } from "~/tests/data/school-list";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { $schoolDailyListAdmin, $schoolSummaryListAdmin } from "../../models/school-model";
 import MainAdminSchoolView from "../schools/main-admin-school-view";
@@ -23,7 +23,7 @@ $schoolDailyListAdmin.on(setSchoolDailyListAdmin, (_, payload) => payload)
 
 describe("School daily Summary Crud Tab", () => {
   test('change tab by click', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<MainAdminSchoolView onClick={handleClick} />));
     const button = getByTestId('admin-School Daily Connectivity Summary-tab');
     fireEvent.click(button);
@@ -31,7 +31,7 @@ describe("School daily Summary Crud Tab", () => {
 
   test("Select school daily summary and delete", () => {
     setSchoolDailyListAdmin(mockSchoolDailtSummary)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchoolDailyConnectivitySummary onClick={handleClick} />));
     const checkboxes = container.querySelectorAll('.cds--checkbox');
     if (checkboxes.length > 0) {
@@ -48,7 +48,7 @@ describe("School daily Summary Crud Tab", () => {
 
   test("render edit EditSchoolDailySummary by click on edit , and field and sumbit", () => {
     setSchoolDailyListAdmin(mockSchoolDailtSummary)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchoolDailyConnectivitySummary onClick={handleClick} />));
     const button = container.querySelector(`#admin-edit-School-daily-summary-${mockSchoolDailtSummary.results[0]?.id}`);
     fireEvent.click(button)
@@ -77,3 +77,4 @@ describe("School daily Summary Crud Tab", () => {
   })
 
 })
+

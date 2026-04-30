@@ -1,4 +1,3 @@
-import { describe, expect, test } from '@jest/globals';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -73,3 +72,4 @@ describe('LegendButton', () => {
     expect($showLegend.getState()).toBe(false);
   });
 });
+

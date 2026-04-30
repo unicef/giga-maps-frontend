@@ -3,8 +3,8 @@ import { addCountriesFx } from '../add-countries-fx';
 import { createSourceForAdminCountry } from '../../country.utils'
 import { DEFAULT_SOURCE } from '~/@/map/map.constant';
 
-jest.mock('../../country.utils', () => ({
-  createSourceForAdminCountry: jest.fn(),
+vi.mock('../../country.utils', () => ({
+  createSourceForAdminCountry: vi.fn(),
 }))
 
 
@@ -13,7 +13,7 @@ describe('addCountriesFx', () => {
 
   beforeEach(() => {
     map = {
-      addSource: jest.fn(),
+      addSource: vi.fn(),
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
@@ -35,3 +35,4 @@ describe('addCountriesFx', () => {
     expect(createSourceForAdminCountry).toHaveBeenCalledTimes(2)
   })
 })
+

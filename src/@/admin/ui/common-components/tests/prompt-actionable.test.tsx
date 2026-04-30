@@ -2,8 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import PromptActionable from "../prompt-actionable";
 
 describe('PromptActionable Component', () => {
-  const mockOnActionDone = jest.fn();
-  const mockOnActionButtonClick = jest.fn();
+  const mockOnActionDone = vi.fn();
+  const mockOnActionButtonClick = vi.fn();
 
   const defaultProps: PromptActionableType = {
     $style: 'background-color: red;',

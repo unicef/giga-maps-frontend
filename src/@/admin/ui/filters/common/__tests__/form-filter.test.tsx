@@ -1,4 +1,3 @@
-import { describe, expect, test, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useStore } from 'effector-react';
 import AddEditFilterListForm from '../form-filter';
@@ -8,8 +7,8 @@ import { fetchMockResponse } from '~/tests/fetchMock';
 import filterColumnconfigurationData from '~/tests/data/filter-columnconfiguration.data';
 
 
-jest.mock('effector-react', () => ({
-  useStore: jest.fn(),
+vi.mock('effector-react', () => ({
+  useStore: vi.fn(),
 }));
 
 
@@ -92,3 +91,5 @@ describe('AddEditFilterListForm', () => {
 
   });
 });
+
+

@@ -1,4 +1,3 @@
-import { describe, expect, test, } from '@jest/globals';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 
@@ -7,7 +6,7 @@ import SearchResult from '..';
 import { getSearchResultsFx } from '../container/search-result.fx';
 import SearchResultList from '../views/search-result.list.view';
 import { SearchResultWrapper } from '../styles/search-result-style';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import "~/core/i18n/instance"
 
 describe('SearchResultList', () => {
@@ -81,7 +80,7 @@ describe('SearchResultList', () => {
 
   test('renders SearchResultList with loading state', async () => {
     changeIsSearchFocused(true);
-    const spy = jest.spyOn(getSearchResultsFx.pending, 'getState');
+    const spy = vi.spyOn(getSearchResultsFx.pending, 'getState');
     spy.mockReturnValue(true);
     await render(<SearchResultList />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
@@ -101,3 +100,5 @@ describe('SearchResultList', () => {
     expect(asFragment).toMatchSnapshot();
   });
 })
+
+

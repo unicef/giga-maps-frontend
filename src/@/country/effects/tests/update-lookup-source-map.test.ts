@@ -2,18 +2,18 @@ import { Map } from 'mapbox-gl'
 import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from '../update-lookup-source-map'
 import { Country, CountryBasic } from '~/api/types'
 
-jest.mock('../../country.model')
+vi.mock('../../country.model')
 
 describe('updateLookupSourceForAdmin0', () => {
-  let map: jest.Mocked<Map>
+  let map: vi.Mocked<Map>
   let countries: CountryBasic[]
 
   beforeEach(() => {
     map = {
-      getSource: jest.fn(),
-      addSource: jest.fn(),
-      removeSource: jest.fn(),
-      setFeatureState: jest.fn(),
+      getSource: vi.fn(),
+      addSource: vi.fn(),
+      removeSource: vi.fn(),
+      setFeatureState: vi.fn(),
     } as any
 
     countries = [
@@ -43,15 +43,15 @@ describe('updateLookupSourceForAdmin0', () => {
 })
 
 describe('updateLookupSourceForAdmin1', () => {
-  let map: jest.Mocked<Map>
+  let map: vi.Mocked<Map>
   let admin1List: Country['admin1_metadata']
 
   beforeEach(() => {
     map = {
-      getSource: jest.fn(),
-      addSource: jest.fn(),
-      removeSource: jest.fn(),
-      setFeatureState: jest.fn(),
+      getSource: vi.fn(),
+      addSource: vi.fn(),
+      removeSource: vi.fn(),
+      setFeatureState: vi.fn(),
     } as any
 
     admin1List = [
@@ -80,3 +80,4 @@ describe('updateLookupSourceForAdmin1', () => {
     expect(map.setFeatureState).toHaveBeenCalled();
   })
 })
+

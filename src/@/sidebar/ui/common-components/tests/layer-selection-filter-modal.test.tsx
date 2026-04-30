@@ -1,19 +1,19 @@
 import { fireEvent, render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import LayerSelectionFilterModal from '../layer-selection-filter-modal';
 
 describe('Layer selection filter modal', () => {
   it('should render component', () => {
-    const setOpen = jest.fn();
+    const setOpen = vi.fn();
     const { asFragment } = render(testWrapper(<LayerSelectionFilterModal open={true} setOpen={setOpen} />));
     expect(asFragment).toMatchSnapshot();
   });
 });
 describe('Layer selection filter modal', () => {
-  const mockSetOpen = jest.fn();
+  const mockSetOpen = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should close modal when clicking close button in header', () => {
@@ -43,3 +43,5 @@ describe('Layer selection filter modal', () => {
     expect(container.querySelector('LayerSelectionFilterModalBody')).toBeFalsy();
   });
 });
+
+

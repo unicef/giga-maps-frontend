@@ -3,7 +3,7 @@ import { createEvent } from "effector";
 
 import { $apiRequestListResponse } from "../../models/api-request-model";
 import AdminApiKey from "../admin-api-keys/admin-api-key.view";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 import adminApiKeyListData from '~/tests/data/admin-api-key-list';
 
 const setApiRequestResonse = createEvent();

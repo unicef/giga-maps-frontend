@@ -1,4 +1,3 @@
-import { describe, expect, test } from '@jest/globals';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createEvent } from 'effector';
@@ -105,3 +104,4 @@ describe('FilterDropdownFields', () => {
     expect(screen.queryByText('Add Choices')).not.toBeInTheDocument();
   });
 });
+

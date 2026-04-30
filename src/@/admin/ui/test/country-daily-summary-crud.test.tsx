@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { createEvent } from "effector";
 
 import { testCountryDailyList } from "~/tests/data/country-filter-modal";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { $countryDailySummaryList, } from "../../models/country-model";
 import AddCountryDailySummary from "../country/country-daily-connectivity-summary-crud/add-country-daily-summary";
@@ -19,7 +19,7 @@ $countryDailySummaryList.on(setCountryDailySummaryList, (_, payload) => payload)
 describe("Country Crud Tab", () => {
   test("Select CountryDailySummary and delete and verify", () => {
     setCountryDailySummaryList(testCountryDailyList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container, getByTestId } = render(testWrapper(<ListCountryDailySummary onClick={handleClick} />));
     const checkboxes = container.querySelectorAll('.cds--checkbox');
     if (checkboxes.length > 0) {
@@ -36,7 +36,7 @@ describe("Country Crud Tab", () => {
 
   test("render  EditCountryDailySummary by click on edit , and field and sumbit", () => {
     setCountryDailySummaryList(testCountryDailyList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<ListCountryDailySummary onClick={handleClick} />));
     const button = getByTestId(`edit-country-daily-summary-${testCountryDailyList.results[0]?.id}`);
     fireEvent.click(button)
@@ -45,9 +45,9 @@ describe("Country Crud Tab", () => {
   })
 
   test("render form of EditCountryDailySummary edit and submit by editing country field", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container, getByTestId } = render(<EditCountryDailySummary onClick={handleClick} />)
-    //const { container, getByTestId } = render(<FormCountryDailySummary isEdit={true} formData={{}} onUdpateForm={jest.fn} onSubmit={jest.fn} />);
+    //const { container, getByTestId } = render(<FormCountryDailySummary isEdit={true} formData={{}} onUdpateForm={vi.fn} onSubmit={vi.fn} />);
     const connectivitySpeed = container.querySelector('#connectivity-speed');
     fireEvent.change(connectivitySpeed, { target: { value: '10' } });
     expect(connectivitySpeed.value).toBe('10');
@@ -64,9 +64,9 @@ describe("Country Crud Tab", () => {
   })
 
   test("Render AddCountryDailySummary", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container, getByTestId } = render(<AddCountryDailySummary onClick={handleClick} />)
-    //const { container, getByTestId } = render(<FormCountryDailySummary isEdit={true} formData={{}} onUdpateForm={jest.fn} onSubmit={jest.fn} />);
+    //const { container, getByTestId } = render(<FormCountryDailySummary isEdit={true} formData={{}} onUdpateForm={vi.fn} onSubmit={vi.fn} />);
 
     const connectivitySpeed = container.querySelector('#connectivity-speed');
     fireEvent.change(connectivitySpeed, { target: { value: '10' } });
@@ -83,3 +83,4 @@ describe("Country Crud Tab", () => {
     fireEvent.submit(form)
   })
 })
+

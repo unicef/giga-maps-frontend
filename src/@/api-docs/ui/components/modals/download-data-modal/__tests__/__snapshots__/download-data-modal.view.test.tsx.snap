@@ -1,4 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DownloadDataModalView > renders Modal component 1`] = `[Function]`;
+
+exports[`DownloadDataModalView > renders Modal component with show popup 1`] = `[Function]`;
 
 exports[`DownloadDataModalView renders Modal component 1`] = `[Function]`;
 

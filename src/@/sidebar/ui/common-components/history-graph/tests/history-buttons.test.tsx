@@ -4,7 +4,7 @@ import "~/core/i18n/instance"
 
 describe('Layer schools connectivity status', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders "Weekly" and "Monthly" buttons correctly', () => {
@@ -28,3 +28,4 @@ describe('Layer schools connectivity status', () => {
     expect(monthlyButton).toMatchSnapshot();
   });
 });
+

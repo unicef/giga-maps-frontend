@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import SchoolCoverageLayer from '../school-coverage-layer/school-coverage-layer';
 import { router } from '~/core/routes';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import "~/core/i18n/instance"
 
 describe('SchoolCoverageLayer', () => {
@@ -19,3 +19,4 @@ describe('SchoolCoverageLayer', () => {
     expect(getAllByText(/Data layer selection/i)).toBeTruthy();
   });
 });
+

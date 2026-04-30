@@ -68,7 +68,7 @@ describe('Data source', () => {
       item={{ id: 1 }}
       fieldName={""}
       updatedData={{}}
-      handleInputChange={jest.fn()}
+      handleInputChange={vi.fn()}
       isEditable={true}
       readOnly={true}
     />)

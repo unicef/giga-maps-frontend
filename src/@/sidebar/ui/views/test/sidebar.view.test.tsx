@@ -1,11 +1,10 @@
-import { describe, test, } from '@jest/globals';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createEvent } from 'effector';
 
 import { onChangeMenu, onSelectMainLayer } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapOverview } from '~/core/routes';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { mapCountry, mapOverview, router } from '~/core/routes';
+import { testWrapper } from '~/tests/test-wrapper';
 
 import Sidebar from '../sidebar.view';
 import { fetchMockResponse } from '~/tests/fetchMock';
@@ -17,8 +16,8 @@ $isMobile.on(setMobileView, (_, payload) => payload)
 
 import { SimpleBarChart } from "@carbon/charts-react";
 
-jest.mock('@carbon/charts-react', () => ({
-  SimpleBarChart: jest.fn().mockReturnValue(null),
+vi.mock('@carbon/charts-react', () => ({
+  SimpleBarChart: vi.fn().mockReturnValue(null),
 }));
 
 describe('Sidebar', () => {
@@ -85,3 +84,6 @@ describe('Sidebar', () => {
   })
 
 })
+
+
+

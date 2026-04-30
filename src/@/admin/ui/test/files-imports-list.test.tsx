@@ -14,7 +14,7 @@ describe(("FilesImportsList"), () => {
   test("Render FilesImportsList", () => {
     setImportCsvList(fileImportList)
 
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(<FilesImportsList onClick={handleClick} />);
     const importCsv = container.querySelector('#admin-import-csv');
     fireEvent.click(importCsv)

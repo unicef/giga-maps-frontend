@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { createEvent } from "effector";
 
 import { contactMessageList } from "~/tests/data/contact-message-list";
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 
 import { $constactMessageList } from "../../models/contact-message.model";
 import AdminContactMessage from "../contact-message/list-contact-message";
@@ -26,7 +26,7 @@ describe('UserDetailsComponent', () => {
 
   test("render ViewContactMessage by click on view icon", () => {
     setConstactMessageList(contactMessageList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<AdminContactMessage onClick={handleClick} />));
     const button = getByTestId(`contact-message-view-${contactMessageList.results[0]?.id}`);
     fireEvent.click(button);
@@ -37,3 +37,4 @@ describe('UserDetailsComponent', () => {
     })
   })
 })
+

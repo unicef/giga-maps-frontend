@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import { MonthSlider } from '../month-slider';
 
 describe('Month slider', () => {
@@ -8,3 +8,4 @@ describe('Month slider', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

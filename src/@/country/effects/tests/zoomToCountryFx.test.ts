@@ -7,8 +7,8 @@ describe('zoomToCountryFx', () => {
 
   beforeEach(() => {
     map = {
-      flyTo: jest.fn(),
-      fitBounds: jest.fn(),
+      flyTo: vi.fn(),
+      fitBounds: vi.fn(),
     }
   })
 
@@ -68,3 +68,4 @@ describe('zoomToCountryFx', () => {
     expect(result).toBe(zoomedCountryCode)
   })
 })
+

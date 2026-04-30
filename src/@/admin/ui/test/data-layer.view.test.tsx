@@ -4,7 +4,7 @@ import { createEvent } from "effector";
 import { $loggedInUser } from "~/core/auth/models";
 import { currentLayerMockWithDraftStaus, currentLayerMockWithReadyToPublishStaus, dataLayerlistMock, singleLayerMock } from "~/tests/data/admin-data-layer";
 import { loggedInUser } from "~/tests/data/admin-main-data";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { getDataPreviewFx } from "../../effects/giga-layer-fx";
 import { $currentGigaLayerItem, $dataLayerListResponce, $previewData, resetPreviewData } from "../../models/giga-layer.model";
@@ -82,7 +82,7 @@ describe('DataLayerMainView', () => {
 
   test("render with getDataPreviewFx is in pending state", () => {
     resetPreviewData();
-    const spy = jest.spyOn(getDataPreviewFx.pending, 'getState');
+    const spy = vi.spyOn(getDataPreviewFx.pending, 'getState');
     spy.mockReturnValue(true);
     void waitFor(() => {
       render(<PreviewGigaLayer isPreviewAvailable={true} />);
@@ -100,7 +100,7 @@ describe('DataLayerMainView', () => {
     const { getByTestId } = render(testWrapper(<PreviewGigaLayer isPreviewAvailable={true} />));
     const button = getByTestId('data-layer-preview');
     fireEvent.click(button);
-    const spy = jest.spyOn(getDataPreviewFx.pending, 'getState');
+    const spy = vi.spyOn(getDataPreviewFx.pending, 'getState');
     spy.mockReturnValue(true);
     render(<PreviewGigaLayer isPreviewAvailable={true} />);
     // expect(screen.getByText('Loading data...')).toBeInTheDocument();
@@ -118,7 +118,7 @@ describe('DataLayerMainView', () => {
   test("click on publish button ", () => {
     setLoggedInUser(loggedInUser as any)
     setCurrentGigaLayerItem(currentLayerMockWithReadyToPublishStaus as any)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<AdminViewLayer />));
     const button = getByTestId('giga-layer-publish');
     fireEvent.click(button);
@@ -214,3 +214,4 @@ describe('DataLayerMainView', () => {
     await fireEvent.click(submit)
   })
 })
+

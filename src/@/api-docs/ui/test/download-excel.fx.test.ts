@@ -1,4 +1,3 @@
-import { describe, test, } from '@jest/globals';
 import { downloadExcelFx } from '../../effects/download-excel.fx';
 
 describe('downloadExcelFx', () => {
@@ -18,11 +17,11 @@ describe('downloadExcelFx', () => {
       }
     };
 
-    const createObjectURLMock = jest.fn();
+    const createObjectURLMock = vi.fn();
     window.URL.createObjectURL = createObjectURLMock.mockReturnValue('exampleURL');
 
-    const createElementMock = jest.spyOn(document, 'createElement');
-    const clickMock = jest.spyOn(HTMLElement.prototype, 'click');
+    const createElementMock = vi.spyOn(document, 'createElement');
+    const clickMock = vi.spyOn(HTMLElement.prototype, 'click');
 
     await downloadExcelFx({ params, result });
 
@@ -30,6 +29,8 @@ describe('downloadExcelFx', () => {
     expect(createElementMock).toHaveBeenCalledWith('a');
     expect(clickMock).toHaveBeenCalled();
 
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 });
+
+

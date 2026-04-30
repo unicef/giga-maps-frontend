@@ -5,41 +5,41 @@ import { getLayerIdsAndLastChange, createSourceForMapAndCountry, createAndUpdate
 import { EntityType } from '~/@/entities/types/base-entity.type';
 
 // Mock dependencies
-jest.mock('../../utils', () => ({
-  deleteSourceAndLayers: jest.fn(),
-  createSource: jest.fn(),
-  createSchoolSource: jest.fn(),
-  createSelectedLayer: jest.fn(),
-  createSchoolLayer: jest.fn(),
-  animateCircles: jest.fn(() => ({ requestId: 123 })),
-  checkSourceAvailable: jest.fn(() => true),
-  getMapId: jest.fn(id => `layer-${id}`),
-  filterConnectivityList: jest.fn(),
-  filterCoverageList: jest.fn(),
-  generateLayerUrls: jest.fn(),
-  generateStaticLayerUrl: jest.fn(),
-  hideLayer: jest.fn(),
-  removePreviewsMapClickHandlers: jest.fn(),
-  filterSchoolStatus: jest.fn(),
+vi.mock('../../utils', () => ({
+  deleteSourceAndLayers: vi.fn(),
+  createSource: vi.fn(),
+  createSchoolSource: vi.fn(),
+  createSelectedLayer: vi.fn(),
+  createSchoolLayer: vi.fn(),
+  animateCircles: vi.fn(() => ({ requestId: 123 })),
+  checkSourceAvailable: vi.fn(() => true),
+  getMapId: vi.fn(id => `layer-${id}`),
+  filterConnectivityList: vi.fn(),
+  filterCoverageList: vi.fn(),
+  generateLayerUrls: vi.fn(),
+  generateStaticLayerUrl: vi.fn(),
+  hideLayer: vi.fn(),
+  removePreviewsMapClickHandlers: vi.fn(),
+  filterSchoolStatus: vi.fn(),
 }));
 
-jest.mock('~/@/country/lib/get-schools-geojson', () => ({
-  getSchoolsGeoJson: jest.fn(),
+vi.mock('~/@/country/lib/get-schools-geojson', () => ({
+  getSchoolsGeoJson: vi.fn(),
 }));
 
 describe('add-layers-utils', () => {
-  let mockMap: jest.Mocked<Map>;
+  let mockMap: vi.Mocked<Map>;
 
   beforeEach(() => {
     mockMap = {
-      addSource: jest.fn(),
-      removeLayer: jest.fn(),
-      removeSource: jest.fn(),
-      getSource: jest.fn(),
-      off: jest.fn(),
+      addSource: vi.fn(),
+      removeLayer: vi.fn(),
+      removeSource: vi.fn(),
+      getSource: vi.fn(),
+      off: vi.fn(),
     } as any;
 
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getLayerIdsAndLastChange', () => {
@@ -191,3 +191,4 @@ describe('add-layers-utils', () => {
     });
   });
 });
+

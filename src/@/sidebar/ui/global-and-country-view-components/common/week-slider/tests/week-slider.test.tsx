@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import WeekSlider from '../week-slider.view';
 
 describe('Week slider', () => {
@@ -8,3 +8,4 @@ describe('Week slider', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

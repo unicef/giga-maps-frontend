@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import CoverageLayer from '../coverage-layer/coverage-layer';
 describe('CoverageLayer', () => {
 
@@ -16,3 +16,4 @@ describe('CoverageLayer', () => {
   // });
 
 });
+

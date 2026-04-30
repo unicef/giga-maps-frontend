@@ -1,4 +1,3 @@
-import { describe, expect, test } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -6,7 +5,7 @@ import MultiSchoolCommonAccodion from '../multi-school-common-accodion.view';
 import { fetchMockResponse } from '~/tests/fetchMock';
 import { fetchLayerListFx } from '~/api/project-connect';
 import { onSelectMainLayer } from '~/@/sidebar/sidebar.model';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 
 const mockSchoolDetails = {
   id: '1234',
@@ -27,7 +26,7 @@ describe('MultiSchoolCommonAccodion', () => {
   });
 
   test('renders school name and external ID', async () => {
-    render(<MultiSchoolCommonAccodion schoolDetails={mockSchoolDetails} isOpen={false} onToggle={jest.fn()} />);
+    render(<MultiSchoolCommonAccodion schoolDetails={mockSchoolDetails} isOpen={false} onToggle={vi.fn()} />);
 
     expect(screen.getByText('Test School')).toBeInTheDocument();
     expect(screen.getByText('ABC123')).toBeInTheDocument();
@@ -73,7 +72,7 @@ describe('MultiSchoolCommonAccodion', () => {
 
   test('toggles accordion on click', async () => {
     const user = userEvent.setup();
-    const onToggle = jest.fn();
+    const onToggle = vi.fn();
     render(testWrapper(<MultiSchoolCommonAccodion schoolDetails={mockSchoolDetails} isOpen={false} onToggle={onToggle} />));
 
     const accordionTitle = screen.getByText('Test School');
@@ -82,3 +81,6 @@ describe('MultiSchoolCommonAccodion', () => {
     expect(onToggle).toHaveBeenCalled();
   });
 });
+
+
+

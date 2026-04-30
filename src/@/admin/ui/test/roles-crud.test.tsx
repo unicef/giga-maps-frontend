@@ -6,7 +6,7 @@ import { $admin1Code } from "~/@/country/country.model";
 import { $loggedInUser } from "~/core/auth/models";
 import { loggedInUser } from "~/tests/data/admin-main-data";
 import { mockedRoleListResponse } from "~/tests/data/admin-role-data";
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 
 import { $roleListResponse } from "../../models/user-management.model";
 import CreateRole from "../roles-crud/create-role.view";
@@ -44,7 +44,7 @@ describe("RoleList", () => {
     setLoggedInUser(loggedInUser);
     setAdmin1('AF')
     setRoleListResponse(mockedRoleListResponse)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<RolesList />));
     const button = getByTestId('admin-role-edit');
     fireEvent.click(button);
@@ -62,4 +62,6 @@ describe("RoleList", () => {
     expect(screen.getByText('Create Role')).toBeInTheDocument();
   });
 })
+
+
 

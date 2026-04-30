@@ -27,8 +27,8 @@ describe('getCoveragePaint', () => {
 describe('createSchoolSource', () => {
   it('should add the correct source to the map', () => {
     const map = {
-      addLayer: jest.fn(),
-      addSource: jest.fn(),
+      addLayer: vi.fn(),
+      addSource: vi.fn(),
     } as any;
     const source = 'test-source';
     const schoolData = {
@@ -49,12 +49,12 @@ describe('createSchoolSource', () => {
 describe('createSelectedLayer', () => {
   it('should create the correct layer on the map', () => {
     const map = {
-      addLayer: jest.fn(),
-      addSource: jest.fn(),
-      setLayoutProperty: jest.fn(),
-      off: jest.fn(),
-      getLayer: jest.fn(),
-      on: jest.fn(),
+      addLayer: vi.fn(),
+      addSource: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      off: vi.fn(),
+      getLayer: vi.fn(),
+      on: vi.fn(),
     } as any;
     const id = 'test-layer';
     const isDynamicLayer = true;

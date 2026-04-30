@@ -11,7 +11,7 @@ describe('TopMenuBar component', () => {
   });
 
   it('toggles menu state when clicked', () => {
-    const mockOnClickMenu = jest.fn();
+    const mockOnClickMenu = vi.fn();
     const { getByLabelText } = render(<TopMenuBar onClickMenu={mockOnClickMenu} />);
 
     const button = getByLabelText('Menu')

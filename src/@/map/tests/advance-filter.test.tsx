@@ -6,7 +6,7 @@ import { fetchAdvanceFilterFx, fetchCountryFx } from "~/api/project-connect"
 import filterData from "~/tests/data/filter-data"
 import RangeTextInput from "../ui/advanced-filter/range-text-input"
 import FilterButton from "../ui/advanced-filter/filter"
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 import "~/core/i18n/instance"
 import userEvent from "@testing-library/user-event"
 
@@ -69,7 +69,7 @@ describe('AdvancedFilter', () => {
 })
 
 describe.skip('TextField with StyledTextInput', () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   test('should call onChange handler when user types in the input', async () => {
     const { getByPlaceholderText } = render(<TextField
@@ -122,7 +122,7 @@ describe('RangeTextInput Component', () => {
       value: "15,20",
     },
     itemKey: 'num_computers__range',
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     description: 'test range input',
   };
 
@@ -198,3 +198,5 @@ describe('RangeTextInput Component', () => {
   });
 
 });
+
+

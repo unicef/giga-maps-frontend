@@ -1,3 +1,5 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Layer selection filter modal > should render component 1`] = `[Function]`;
 
 exports[`Layer selection filter modal should render component 1`] = `[Function]`;

@@ -1,4 +1,3 @@
-import { describe } from '@jest/globals';
 import { createEvent } from 'effector';
 
 import { changeCountryCode } from '~/@/country/country.model';
@@ -53,3 +52,4 @@ describe('Sidebar Init', () => {
   })
 
 })
+

@@ -58,7 +58,7 @@ describe('addLayerUtils', () => {
 
   it('createSourceForMapAndCountry: should create source with bounds when country and admin1Data provided', () => {
     const map = {
-      addSource: jest.fn(),
+      addSource: vi.fn(),
       getStyle: () => ({
         sources: {}
       })
@@ -123,8 +123,8 @@ describe('addLayerUtils', () => {
 
   it('should delete existing sources and layers', () => {
     const map = {
-      addSource: jest.fn(),
-      createSource: jest.fn(),
+      addSource: vi.fn(),
+      createSource: vi.fn(),
       getStyle: () => ({
         sources: {}
       })
@@ -156,11 +156,11 @@ describe('addLayerUtils', () => {
 
   it('createAndUpdateMapLayers: should called map create layer', () => {
     const map = {
-      addLayer: jest.fn(),
+      addLayer: vi.fn(),
       getStyle: () => ({
         sources: {}
       }),
-      getLayer: jest.fn(() => false)
+      getLayer: vi.fn(() => false)
     }
     createAndUpdateMapLayer({
       map,

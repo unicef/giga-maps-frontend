@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
@@ -80,5 +81,21 @@ export default defineConfig(({ mode }) => ({
   define: {
     // Polyfill process.env.NODE_ENV for libraries that depend on it
     'process.env.NODE_ENV': JSON.stringify(mode),
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/tests/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'src/assets/*',
+        'src/lib/**/*',
+        '**/*.test.ts',
+        '**/*.test.tsx',
+        'src/index.tsx',
+      ],
+    },
   },
 }));

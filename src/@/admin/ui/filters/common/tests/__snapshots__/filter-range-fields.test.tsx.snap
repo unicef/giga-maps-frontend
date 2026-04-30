@@ -1,4 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FilterRangeFields > renders FilterRangeFields and take a snapshop 1`] = `<DocumentFragment />`;
 
 exports[`FilterRangeFields renders FilterCommonFields and take a snapshop, edit mode true 1`] = `
 <DocumentFragment>

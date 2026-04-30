@@ -13,7 +13,7 @@ describe('AlertModalWithButton', () => {
         primaryButtonText: 'Confirm',
         secondaryButtonText: 'Cancel'
       }}
-      confirm={jest.fn()}
+      confirm={vi.fn()}
     />);
 
     const button = screen.getByText('Test Button');
@@ -27,7 +27,7 @@ describe('AlertModalWithButton', () => {
   });
 
   test('calls confirm function when primary button clicked', async () => {
-    const confirmMock = jest.fn();
+    const confirmMock = vi.fn();
 
     render(<AlertModalWithButton
       buttonProps={{ title: 'Test Button' }}
@@ -58,7 +58,7 @@ describe('AlertModalWithButton', () => {
         primaryButtonText: 'Confirm',
         secondaryButtonText: 'Cancel'
       }}
-      confirm={jest.fn()}
+      confirm={vi.fn()}
     />);
 
     const button = screen.getByText('Test Button');
@@ -80,7 +80,7 @@ describe('AlertModalWithButton', () => {
         primaryButtonText: 'Confirm',
         secondaryButtonText: 'Cancel'
       }}
-      confirm={jest.fn()}
+      confirm={vi.fn()}
     />);
 
     const button = screen.getByRole('button');
@@ -89,3 +89,4 @@ describe('AlertModalWithButton', () => {
   })
 
 });
+

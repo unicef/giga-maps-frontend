@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import CommonUIOnlySchoolConnectivityLayer from '../common-ui-only-school-connectivity-layer';
 
 describe('CommonUIOnlySchoolConnectivityLayer component', () => {
