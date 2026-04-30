@@ -37,12 +37,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       reportingTooltip: 'Schools with periodical in-school internet measurements from software and hardware-based solutions.',
       title: 'Schools',
     },
-    stats: {
-      connectedGroupKey: 'connected_entities',
-      mappedCountKey: 'entities_connected',
-      measureCountKey: 'no_of_entities_measure',
-      realtimeGroupKey: 'real_time_connected_entities',
-    },
     colors: {
       primary: '#0062FF',
       connected: '#24A148',
@@ -84,12 +78,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       reportingLabel: 'Reporting internet quality',
       reportingTooltip: 'Health centers reporting internet quality.',
       title: 'Health centers',
-    },
-    stats: {
-      connectedGroupKey: 'connected_entities',
-      mappedCountKey: 'entities_total',
-      measureCountKey: 'no_of_entities_measure',
-      realtimeGroupKey: 'real_time_connected_entities',
     },
     colors: {
       primary: '#0F62FE',

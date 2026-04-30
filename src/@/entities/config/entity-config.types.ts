@@ -25,7 +25,7 @@ export interface EntityFieldConfig {
  */
 export type MarkerType = 'circle' | 'symbol';
 export type EntityLegendShape = 'circle' | 'square';
-export type EntityMappedCountKey = 'entities_connected' | 'entities_total';
+export type EntityMappedCountKey = 'entities_connected';
 export type EntityConnectedGroupKey = 'connected_entities';
 export type EntityMeasureCountKey = 'no_of_entities_measure';
 export type EntityRealtimeGroupKey = 'real_time_connected_entities';
@@ -83,9 +83,6 @@ export interface EntityConfig {
   symbol: string;
   /** Sidebar/accordion labels and auxiliary UI behavior */
   sidebar: EntitySidebarConfig;
-  /** API field mappings for sidebar/global entity cards */
-  stats: EntityStatsConfig;
-
   /** Color configuration for connectivity status */
   colors: {
     primary: string;

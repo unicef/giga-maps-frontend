@@ -6,6 +6,7 @@ import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
   fetchCountryFx,
+  fetchEntityGlobalStatsFx,
   fetchGlobalStatsFx,
   fetchLayerListFx,
   fetchSchoolPopupDataFx,
@@ -72,7 +73,7 @@ sample({
   source: $mapRoutes,
   target: createEffect((routes: ReturnType<typeof $mapRoutes.getState>) => {
     if (routes.map) {
-      void fetchGlobalStatsFx({});
+      void fetchEntityGlobalStatsFx({});
     }
     if (routes.map || routes.country || routes.schools) {
       void fetchLayerListFx();
@@ -103,7 +104,7 @@ sample({
   filter: ({ routes, country, admin1Id }) => {
     return [routes.map || (routes.country && !!country) || admin1Id].some(Boolean)
   },
-  target: fetchGlobalStatsFx
+  target: [fetchGlobalStatsFx, fetchEntityGlobalStatsFx]
 })
 
 sample({

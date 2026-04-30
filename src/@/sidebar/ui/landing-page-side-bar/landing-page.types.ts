@@ -21,11 +21,21 @@ export type CardMetric = {
 export type EntityCardData = {
   badge?: string;
   collapsedRows: { label: string; value: number }[];
-  expandedMetrics: CardMetric[];
   footerLogoVariant?: 'default' | 'none' | 'school';
   showFooter?: boolean;
   title: string;
   value: EntityType;
+};
+
+export type EntityCardContentData = {
+  metrics: CardMetric[];
+  title: string;
+  value: EntityType;
+};
+
+export type EntitySummaryCardData = {
+  accordionContent: EntityCardContentData;
+  accordionItem: EntityCardData;
 };
 
 export type LandingPageTranslationFn = (key: string, options?: Record<string, unknown>) => string;
