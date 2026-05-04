@@ -25,6 +25,7 @@ export type EntityCardData = {
   showFooter?: boolean;
   title: string;
   value: EntityType;
+  t: LandingPageTranslationFn;
 };
 
 export type EntityCardContentData = {

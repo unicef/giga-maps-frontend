@@ -1,7 +1,8 @@
 {
   "worldwide": "Em todo o mundo",
   "global-school-connectivity-map": "Mapa global de conectividade escolar",
-  "an-open-live-global-map-of-schools-and-their-connectivity": "Um mapa global aberto e ao vivo de escolas e sua conectividade",
+  "global-connectivity-map-for-children": "Mapa global de conectividade para crianças",
+  "an-open-live-global-map-of-mapped-entities-and-their-connectivity": "Um mapa global aberto e ao vivo de entidades mapeadas e sua conectividade",
   "take-the-tour": "Faça o tour",
   "schools-location-mapped": "localização das escolas mapeada",
   "across-no-countries": "em {{count}} países",
@@ -120,6 +121,7 @@
   "unknown": "Desconhecido",
   "connected": "Conectado",
   "not-connected": "Não Conectado",
+  "internet-quality": "Qualidade da Internet",
   "national-benchmark": "Referência Nacional",
   "global-benchmark": "Referência Global",
   "doesnt-match-any-criteria": "Não corresponde a nenhum critério",
@@ -260,5 +262,14 @@
   "int": "{{val, number}}",
   "school-location-duplicates": "Duplicados de localização da escola",
   "school-duplicates": "Escolas duplicadas",
-  "of": "de"
+  "of": "de",
+  "estimated": "Estimado",
+  "across-no-countries-and-territories": "a través de {{count}} países y territorios",
+  "locations-mapped": "Ubicaciones mapeadas",
+  "reporting-internet-quality": "Reporte de Calidad de Internet",
+  "health-centers": "Centros de salud",
+  "all-entities": "Todas las entidades",
+  "with-mapped-connectivity-status-tooltip": "{{entity}} con estado de conectividad mapeado.",
+  "locations-mapped-from-datasets-tooltip": "{{entity}} ubicaciones mapeadas a partir de conjuntos de datos disponibles actualmente.",
+  "reporting-internet-quality-tooltip": "{{entity}} reportando calidad de Internet."
 }

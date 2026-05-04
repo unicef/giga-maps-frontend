@@ -2,7 +2,7 @@
   "worldwide": "Worldwide",
   "global-school-connectivity-map": "Global School connectivity map",
   "global-connectivity-map-for-children": "Global connectivity map for children",
-  "an-open-live-global-map-of-schools-and-their-connectivity": "An open & live global map of schools and their connectivity",
+  "an-open-live-global-map-of-mapped-entities-and-their-connectivity": "An open & live global map of mapped entities and their connectivity",
   "take-the-tour": "Take the tour",
   "schools-location-mapped": "schools location mapped",
   "across-no-countries": "across {{count}} countries",
@@ -270,5 +270,12 @@
   "school-duplicates": "School duplicates",
   "of": "of",
   "estimated": "estimated",
-  "across-no-countries-and-territories": "across {{count}} countries & territories"
+  "across-no-countries-and-territories": "across {{count}} countries & territories",
+  "locations-mapped": "Locations mapped",
+  "reporting-internet-quality": "Reporting Internet Quality",
+  "health-centers": "Health centers",
+  "all-entities": "All entities",
+  "with-mapped-connectivity-status-tooltip": "{{entity}} with mapped connectivity status.",
+  "locations-mapped-from-datasets-tooltip": "{{entity}} locations mapped from currently available datasets.",
+  "reporting-internet-quality-tooltip": "{{entity}} reporting internet quality."
 }

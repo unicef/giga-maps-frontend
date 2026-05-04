@@ -25,7 +25,7 @@ export interface EntityFieldConfig {
  */
 export type MarkerType = 'circle' | 'symbol';
 export type EntityLegendShape = 'circle' | 'square';
-export type EntityMappedCountKey = 'entities_connected';
+export type EntityMappedCountKey = 'entities_connected' | 'entities_total';
 export type EntityConnectedGroupKey = 'connected_entities';
 export type EntityMeasureCountKey = 'no_of_entities_measure';
 export type EntityRealtimeGroupKey = 'real_time_connected_entities';
@@ -39,18 +39,8 @@ export interface EntityLegendConfig {
 
 export interface EntitySidebarConfig {
   badge?: string;
-  connectedDetailTranslationKey: string;
-  connectedLabel: string;
-  connectedTooltip: string;
   estimatedTotalInMillions?: number;
   footerLogoVariant?: 'default' | 'none' | 'school';
-  locationsMappedLabel: string;
-  locationsMappedTooltip: string;
-  mappedDetailTranslationKey: string;
-  reportingDetailTranslationKey: string;
-  reportingLabel: string;
-  reportingTooltip: string;
-  title: string;
 }
 
 export interface EntityStatsConfig {
@@ -69,6 +59,8 @@ export interface EntityConfig {
   type: EntityType;
   /** Human-readable display name */
   displayName: string;
+  /** URL slug for routing and API endpoints */
+  slug: string;
   /** Optional icon metadata kept for future use */
   icon: string;
 

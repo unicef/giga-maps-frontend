@@ -38,8 +38,8 @@ const LandingPage = () => {
         <div className="w-full! px-3.5! py-2.5!">
           <LandingPageHeader
             onShareClicked={handleShareClicked}
-            subtitle={t('an-open-live-global-map-of-schools-and-their-connectivity')}
-            title={t('global-connectivity-map-for-children')}
+            subtitle={'an-open-live-global-map-of-mapped-entities-and-their-connectivity'}
+            title={'global-connectivity-map-for-children'}
           />
 
           <EntitySummaryAccordion

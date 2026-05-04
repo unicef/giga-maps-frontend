@@ -225,7 +225,7 @@ const LegendPopup = ({
                   color={isActive ? 'var(--color-foreground)' : 'var(--color-muted-foreground)'}
                   entityType={entityType}
                 />
-                <span>{config.displayName}</span>
+                <span>{t(config.slug)}</span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',

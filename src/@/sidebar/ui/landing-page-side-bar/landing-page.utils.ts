@@ -38,25 +38,26 @@ export const buildEntityCard = ({
   config,
   entityType,
   globalStats,
+  t,
 }: BuildEntityCardArgs): EntityCardData | null => {
   if (!config) return null;
 
   const entityGlobalStats = globalStats as LandingPageEntityStats | undefined;
   const connectedGroup = entityGlobalStats?.['connected_entities'] as LandingPageStatsGroup;
-  const mappedValue = Number(entityGlobalStats?.['entities_connected'] ?? 0);
+  const mappedValue = Number(entityGlobalStats?.['entities_connected'] ?? entityGlobalStats?.['entities_total'] ?? 0);
   const measureValue = Number(connectivityStats?.['no_of_entities_measure'] ?? 0);
   const connectedValue = Number(connectedGroup?.connected ?? 0);
 
   return {
     badge: config.sidebar.badge,
     collapsedRows: [
-      { label: config.sidebar.locationsMappedLabel, value: mappedValue },
-      { label: config.sidebar.connectedLabel, value: connectedValue },
-      { label: config.sidebar.reportingLabel, value: measureValue },
+      { label: t('locations-mapped'), value: mappedValue },
+      { label: `${t('connected')} ${t(config.slug)}`, value: connectedValue },
+      { label: t('reporting-internet-quality'), value: measureValue },
     ],
     footerLogoVariant: config.sidebar.footerLogoVariant ?? 'default',
     showFooter: config.sidebar.footerLogoVariant === 'school',
-    title: config.sidebar.title,
+    title: t(config.slug),
     value: entityType,
   };
 };
@@ -75,27 +76,27 @@ export const buildEntityCardContent = ({
   const entityGlobalStats = globalStats as LandingPageEntityStats | undefined;
   const connectedGroup = entityGlobalStats?.['connected_entities'] as LandingPageStatsGroup;
   const connectivityGroup = connectivityStats?.['real_time_connected_entities'] as LandingPageStatsGroup;
-  const mappedValue = Number(entityGlobalStats?.['entities_connected'] ?? 0);
+  const mappedValue = Number(entityGlobalStats?.['entities_connected'] ?? entityGlobalStats?.['entities_total'] ?? 0);
   const measureValue = Number(connectivityStats?.['no_of_entities_measure'] ?? 0);
   const connectedValue = Number(connectedGroup?.connected ?? 0);
   const estimate = config.sidebar.estimatedTotalInMillions
     ? `/${config.sidebar.estimatedTotalInMillions}${LanguageSuffixes[lng].million}`
     : undefined;
-  const entityLabel = config.sidebar.title;
+  const entityLabel = t(config.slug);
 
   return {
     metrics: [
       {
-        detail: t(config.sidebar.mappedDetailTranslationKey, { count: entityGlobalStats?.no_of_countries ?? 0 }),
+        detail: t('across-no-countries', { count: entityGlobalStats?.no_of_countries ?? 0 }),
         estimate: estimate ? `${estimate} ${t('estimated')}` : undefined,
-        label: config.sidebar.locationsMappedLabel,
-        tooltip: config.sidebar.locationsMappedTooltip,
+        label: t('locations-mapped'),
+        tooltip: t('locations-mapped-from-datasets-tooltip', { entity: entityLabel }),
         value: mappedValue,
       },
       {
-        detail: t(config.sidebar.connectedDetailTranslationKey, { count: entityGlobalStats?.countries_with_connectivity_status_mapped ?? 0 }),
-        label: config.sidebar.connectedLabel,
-        tooltip: config.sidebar.connectedTooltip,
+        detail: t('across-no-countries', { count: entityGlobalStats?.countries_with_connectivity_status_mapped ?? 0 }),
+        label: `${t('connected')} ${t(config.slug)}`,
+        tooltip: t('with-mapped-connectivity-status-tooltip', { entity: entityLabel }),
         value: connectedValue,
       },
       {
@@ -117,13 +118,13 @@ export const buildEntityCardContent = ({
             connectivityGroup?.unknown ?? 0,
           ],
         },
-        detail: t(config.sidebar.reportingDetailTranslationKey, { count: connectivityStats?.countries_with_realtime_data ?? 0 }),
-        label: config.sidebar.reportingLabel,
-        tooltip: config.sidebar.reportingTooltip,
+        detail: t('across-no-countries', { count: connectivityStats?.countries_with_realtime_data ?? 0 }),
+        label: t('reporting-internet-quality'),
+        tooltip: t('reporting-internet-quality-tooltip', { entity: entityLabel }),
         value: measureValue,
       },
     ],
-    title: config.sidebar.title,
+    title: t(config.slug),
     value: entityType,
   };
 };

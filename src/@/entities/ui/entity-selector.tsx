@@ -51,7 +51,7 @@ export default function EntityTypeSelector() {
         className={`${base} ${allSelected ? active : inactive}`}
         onClick={handleSelectAll}
       >
-        {t('all_entities', 'All entities')}
+        {t('all-entities', 'All entities')}
       </Button>
 
       {entityTypes.map(([type, config]) => {
@@ -69,7 +69,7 @@ export default function EntityTypeSelector() {
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
             />
-            {config.displayName}
+            {t(config.slug)}
           </Button>
         );
       })}
