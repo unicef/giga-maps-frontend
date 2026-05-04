@@ -51,3 +51,29 @@ vi.mock('mapbox-gl/dist/mapbox-gl', () => ({
 }));
 
 window.URL.createObjectURL = function () {};
+
+// webfontloader mock
+vi.mock('webfontloader', () => ({
+  default: {
+    load: vi.fn(),
+  },
+  load: vi.fn(),
+}));
+
+// Scroll effects mocks
+vi.mock('~/@/scroll', () => ({
+  scrollToHashFx: {
+    use: vi.fn(),
+    done: { watch: vi.fn() },
+    fail: { watch: vi.fn() },
+    pending: { watch: vi.fn() },
+  },
+  instantScrollFx: {
+    use: vi.fn(),
+  },
+}));
+
+afterEach(() => {
+  vi.clearAllMocks();
+  vi.useRealTimers();
+});

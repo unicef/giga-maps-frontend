@@ -73,9 +73,6 @@ describe('timePlayerFx', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
-    mockTimeout = vi.fn();
-    global.setTimeout = mockTimeout;
-
     map = {
       addLayer: vi.fn(),
       isSourceLoaded: vi.fn(),
@@ -248,9 +245,7 @@ describe('clearTimeplayer', () => {
   let mockClearTimeout: vi.Mock;
 
   beforeEach(() => {
-    mockClearTimeout = vi.fn();
-    global.clearTimeout = mockClearTimeout;
-
+    vi.spyOn(global, 'clearTimeout');
     map = {
       off: vi.fn(),
     } as any;
@@ -262,14 +257,14 @@ describe('clearTimeplayer', () => {
     clearTimeplayer({ map: null });
 
     expect(map.off).not.toHaveBeenCalled();
-    expect(mockClearTimeout).not.toHaveBeenCalled();
+    expect(clearTimeout).not.toHaveBeenCalled();
     expect(onToggleTimeplayer).not.toHaveBeenCalled();
   });
 
   it('should clear all timeouts and remove event listener', () => {
     clearTimeplayer({ map });
 
-    expect(mockClearTimeout).toHaveBeenCalledTimes(2);
+    expect(clearTimeout).toHaveBeenCalledTimes(2);
   });
 
   it('should disable timeplayer', () => {
@@ -285,7 +280,7 @@ describe('clearTimeplayer', () => {
       executionOrder.push('removeListener');
     });
 
-    mockClearTimeout.mockImplementation(() => {
+    vi.mocked(clearTimeout).mockImplementation(() => {
       executionOrder.push('clearTimeout');
     });
 
@@ -308,11 +303,10 @@ describe('onPausePlayTimeplayerFx', () => {
   let mockRunIntervalCheck: vi.Mock;
 
   beforeEach(() => {
-    mockClearTimeout = vi.fn();
+    vi.spyOn(global, 'clearTimeout');
     mockRunIntervalCheck = vi.fn();
-    global.clearTimeout = mockClearTimeout;
     global.runIntervalCheck = mockRunIntervalCheck;
-    global.interval = 123;
+    global.interval = 123 as any;
   });
 
   it('should clear timeout when paused', () => {
@@ -325,13 +319,13 @@ describe('onPausePlayTimeplayerFx', () => {
     onPausePlayTimeplayerFx(false);
     onPausePlayTimeplayerFx(true);
 
-    expect(mockClearTimeout).toHaveBeenCalledTimes(2);
+    expect(clearTimeout).toHaveBeenCalledTimes(2);
   });
 
   it('should handle undefined interval', () => {
     global.interval = undefined;
     onPausePlayTimeplayerFx(true);
-    expect(mockClearTimeout).toHaveBeenCalledWith(undefined);
+    expect(clearTimeout).toHaveBeenCalledWith(undefined);
   });
 });
 

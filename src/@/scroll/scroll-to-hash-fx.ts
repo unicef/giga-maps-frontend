@@ -9,7 +9,13 @@ const getElementYPosition = (element: Element): number => {
 
 const nextTick = async () => new Promise((resolve) => setTimeout(resolve, 200));
 
-const scrollToHash = async (hash: string) => {
+const MAX_RECURSION_DEPTH = 10;
+
+const scrollToHash = async (hash: string, depth = 0) => {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn('scrollToHash: Maximum recursion depth reached');
+    return;
+  }
   const element = document.querySelector(hash);
   if (!element) return;
   const positionY = getElementYPosition(element);
@@ -17,14 +23,14 @@ const scrollToHash = async (hash: string) => {
   await nextTick();
   const nextPositionY = getElementYPosition(element);
 
-  if (nextPositionY === positionY) {
+  if (Math.abs(nextPositionY - positionY) < 1) {
     window.scrollTo({
       top: positionY,
       left: 0,
       behavior: 'smooth',
     });
   } else {
-    await scrollToHash(hash);
+    await scrollToHash(hash, depth + 1);
   }
 };
 

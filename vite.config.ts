@@ -86,6 +86,16 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/tests/setup.ts'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleThread: true,
+      },
+    },
+    testTimeout: 10000,
+    hookTimeout: 10000,
+    teardownTimeout: 1000,
+    css: false,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

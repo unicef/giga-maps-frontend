@@ -90,7 +90,7 @@ export const $schoolStatusSelectedLayer = restore(onSelectSchoolStatusLayer, SCH
 
 export const onSelectMainLayer = createEvent<number | null>();
 export const $selectedLayerId = restore(onSelectMainLayer, null);
-export const $globalLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by) ?? null);
+export const $globalLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by && layer.code === 'DOWNLOAD') ?? null);
 export const $globalLayerId = $globalLayerData.map(layer => layer?.id ?? null);
 export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
 export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
