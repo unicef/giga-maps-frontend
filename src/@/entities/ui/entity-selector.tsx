@@ -68,6 +68,7 @@ export default function EntityTypeSelector() {
             <EntityLegendIndicator
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
+              size={20}
             />
             {t(config.slug)}
           </Button>

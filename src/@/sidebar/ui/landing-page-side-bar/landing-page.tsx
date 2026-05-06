@@ -35,7 +35,7 @@ const LandingPage = () => {
   return (
     <>
       <Scroll className="h-auto! max-h-none!">
-        <div className="w-full! px-3.5! py-2.5!">
+        <div className="w-full! px-3.5! pt-4! pb-2.5!">
           <LandingPageHeader
             onShareClicked={handleShareClicked}
             subtitle={'an-open-live-global-map-of-mapped-entities-and-their-connectivity'}
