@@ -131,7 +131,7 @@ const EntityLegendIndicator = ({
 
   return (
     <span
-      className={cn('relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible!', className)}
+      className={cn('relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-[-4px]!', className)}
       style={containerStyle}
     >
       {glowColor ? (

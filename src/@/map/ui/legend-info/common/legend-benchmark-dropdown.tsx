@@ -54,7 +54,7 @@ const LegendBenchmarkDropdown = ({
   const layerId = selectedLayerId ?? 0;
   const currentLegendConfig = (countryActiveLayersDataById[layerId]?.legend_configs ?? {}) as Record<string, unknown>;
   const isCountryNationalBenchmark = !!countryBenchmark[layerId] || Object.keys(currentLegendConfig).length > 0;
-  const globalLabel = benchmarkNames[layerId] ?? t('global');
+  const globalLabel = benchmarkNames[layerId] ?? t('global-benchmark');
   const nationalLabel = countryConnectivityNames?.[layerId] ?? t('national');
 
   const options = useMemo(
@@ -84,7 +84,7 @@ const LegendBenchmarkDropdown = ({
         className="mt-1! inline-flex! max-w-full! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground! whitespace-nowrap!"
         title={title}
       >
-        {triggerLabel} benchmark 30Mbps
+        {triggerLabel} 20Mbps
       </div>
     );
   }

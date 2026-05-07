@@ -23,12 +23,13 @@ const LandingPageHeader = ({ onShareClicked, subtitle, title }: LandingPageHeade
             <TooltipTrigger asChild>
               <Button
                 aria-label={t('share-content')}
-                className="-mt-0.5! h-8! w-8! rounded-md! bg-transparent! p-0! text-foreground! hover:bg-accent/30! hover:text-foreground!"
                 onClick={onShareClicked}
                 type="button"
-                variant="ghost"
+                variant="icon"
+                size="icon"
+                className="text-foreground!"
               >
-                <Share2 size={16} />
+                <Share2 className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={6}>

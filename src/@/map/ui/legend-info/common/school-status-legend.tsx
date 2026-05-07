@@ -75,7 +75,7 @@ const SchoolStatusLegend = ({
     <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start max-[560px]:basis-full max-[560px]:min-w-full">
       <div className="mb-1! flex! items-center! gap-1.5! text-muted-foreground!">
         <div className="text-sm! font-normal! leading-5!">{statusTitle}</div>
-        <Info size={12} />
+        {/* <Info size={12} /> */}
       </div>
       {Object.values(ConnectivityStatusDistribution).map((key) => (
         <div className="mt-3! flex! w-full! items-center! justify-between!" key={key}>
