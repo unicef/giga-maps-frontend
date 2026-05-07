@@ -81,10 +81,10 @@ const LegendBenchmarkDropdown = ({
   if (!interactive) {
     return (
       <div
-        className="mt-1! inline-flex! max-w-full! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground! whitespace-nowrap!"
+        className="mt-1! inline-flex! max-w-full! items-center! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground!"
         title={title}
       >
-        {triggerLabel} 20Mbps
+        <span className="truncate!" title={`${triggerLabel} 20Mbps`}>{triggerLabel} 20Mbps</span>
       </div>
     );
   }
@@ -99,7 +99,7 @@ const LegendBenchmarkDropdown = ({
             title={title}
             type="button"
           >
-            <span className="truncate! whitespace-nowrap!">{triggerLabel}</span>
+            <span className="min-w-0! truncate!" title={triggerLabel}>{triggerLabel}</span>
             <ChevronDown size={12} />
           </button>
         </div>
