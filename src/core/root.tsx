@@ -26,7 +26,10 @@ export const Root = () => {
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ['Open Sans:100,200,300,400,500,600,700,800,900&display=swap'],
+        families: [
+          'Open Sans:100,200,300,400,500,600,700,800,900',
+          'Manrope:200',
+        ],
       },
     });
     // trigger set app load flag
