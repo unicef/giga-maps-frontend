@@ -29,6 +29,7 @@ const LegendButton = () => {
   const { t } = useTranslation();
   const showLegend = useStore($showLegend);
   const isProductTour = useStore($isProductTour);
+
   const handleLegendOpenChange = (nextOpen: boolean) => {
     if (!nextOpen && isProductTour) {
       return;
@@ -38,14 +39,14 @@ const LegendButton = () => {
   };
 
   return (
-    <div className="lengend-container">
+    <div className="relative! legend-container">
       <LegendPopup open={showLegend}>
         <MapControlButton
           active={showLegend}
           aria-label={t('legend')}
           className="legend-open-button"
-          onClick={() => handleLegendOpenChange(!showLegend)}
           label={t('legend')}
+          onClick={() => handleLegendOpenChange(!showLegend)}
         >
           <LegendControlIcon />
         </MapControlButton>
@@ -54,4 +55,4 @@ const LegendButton = () => {
   )
 }
 
-export default LegendButton
+export default LegendButton;

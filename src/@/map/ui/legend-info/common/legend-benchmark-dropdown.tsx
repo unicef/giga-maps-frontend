@@ -16,6 +16,7 @@ import {
 } from '~/@/sidebar/sidebar.model';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { cn } from '~/lib/cn';
+import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
 
 type LegendBenchmarkDropdownProps = {
   interactive: boolean;
@@ -80,12 +81,19 @@ const LegendBenchmarkDropdown = ({
 
   if (!interactive) {
     return (
-      <div
-        className="mt-1! inline-flex! max-w-full! items-center! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground!"
-        title={title}
-      >
-        <span className="truncate!" title={`${triggerLabel} 20Mbps`}>{triggerLabel} 20Mbps</span>
-      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div
+            className="mt-1! inline-flex! max-w-full! items-center! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground!"
+          >
+            <span className="truncate!">{triggerLabel} 20Mbps</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={4}>
+          {triggerLabel} 20Mbps
+          {title ? ` - ${title}` : ''}
+        </TooltipContent>
+      </Tooltip>
     );
   }
 
@@ -93,15 +101,24 @@ const LegendBenchmarkDropdown = ({
     <Popover modal={false} onOpenChange={setOpen} open={open}>
       <PopoverAnchor asChild>
         <div className="relative! mt-3! inline-flex! max-w-full! flex-col! items-start! gap-1.5!">
-          <button
-            className="inline-flex! max-w-full! items-center! justify-between! gap-1.5! rounded-md! border! border-border! bg-transparent! px-2.5! py-0.5! text-xs! leading-4.5! text-foreground!"
-            onClick={() => setOpen((current) => !current)}
-            title={title}
-            type="button"
-          >
-            <span className="min-w-0! truncate!" title={triggerLabel}>{triggerLabel}</span>
-            <ChevronDown size={12} />
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className="inline-flex! max-w-full! items-center! justify-between! gap-1.5! rounded-md! border! border-border! bg-transparent! px-2.5! py-0.5! text-xs! leading-4.5! text-foreground!"
+                onClick={() => setOpen((current) => !current)}
+                type="button"
+              >
+                <span className="min-w-0! truncate!">{triggerLabel}</span>
+                <ChevronDown size={12} />
+              </button>
+            </TooltipTrigger>
+            {!open && (
+              <TooltipContent side="top" sideOffset={4}>
+                {triggerLabel}
+                {title ? ` - ${title}` : ''}
+              </TooltipContent>
+            )}
+          </Tooltip>
         </div>
       </PopoverAnchor>
       <PopoverContent

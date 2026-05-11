@@ -1,4 +1,4 @@
-import { Play } from '@carbon/icons-react'
+import { Play } from 'lucide-react';
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +25,7 @@ const TimeplayerButton = () => {
       label={t('timeplayer')}
       onClick={() => onToggleTimeplayer(!isTimePlayer)}
     >
-      <Play size={16} />
+      <Play className="size-4" />
     </MapControlButton>
   )
 }
