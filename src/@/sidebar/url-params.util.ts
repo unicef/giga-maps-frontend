@@ -18,6 +18,7 @@ export const URL_PARAM_KEYS = {
   SS_UNKNOWN: 'ssU',
   ENTITY: 'entity',
   LANGUAGE: 'lng',
+  GLOBAL: 'g',
 } as const;
 
 import { $entityRegistry } from '../entities/models/entity.model';

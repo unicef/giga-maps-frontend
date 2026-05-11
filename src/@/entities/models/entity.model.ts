@@ -119,6 +119,23 @@ export const changeSelectedEntityType = createEvent<EntityType>();
 export const $selectedEntityType = createStore<EntityType>(EntityType.SCHOOL);
 $selectedEntityType.on(changeSelectedEntityType, setPayload);
 
+// ─────────────────────────────────────────────────
+// Global Mode (Selection state)
+// ─────────────────────────────────────────────────
+
+/**
+ * Tracks if the user is in "Global" selection mode (clicked "All Entities").
+ * In this mode, individual button highlights are suppressed.
+ */
+export const $isGlobalMode = createStore<boolean>(true);
+export const setGlobalMode = createEvent<boolean>();
+
+$isGlobalMode
+  .on(setGlobalMode, (_, payload) => payload)
+  .on(selectAllEntityTypes, () => true)
+  .on(changeActiveEntityTypes, () => false)
+  .on(toggleEntityType, () => false);
+
 
 // ─────────────────────────────────────────────────
 // Loading state

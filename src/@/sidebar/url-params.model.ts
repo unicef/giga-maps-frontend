@@ -4,7 +4,7 @@ import { fetchAdvanceFilterFx, fetchCountriesFx, fetchCountryFx, fetchLayerListF
 import { $lng, onLanguageChange } from '~/core/i18n/store';
 
 import { $admin1Code, $country } from '../country/country.model';
-import { $activeEntityTypes, $entityRegistry, changeActiveEntityTypes } from '../entities/models/entity.model';
+import { $activeEntityTypes, $entityRegistry, $isGlobalMode, changeActiveEntityTypes, setGlobalMode } from '../entities/models/entity.model';
 import type { EntityType } from '../entities/types/base-entity.type';
 import { ConnectivityStatusDistribution } from './sidebar.constant';
 import {
@@ -75,6 +75,7 @@ export const getInitialUrlParams = () => {
       layerId: null,
       schoolStatusLayer: null,
       entityTypes: [], // Default to empty (all entities)
+      isGlobal: true,
       speedGood: true,
       speedModerate: true,
       speedNoInternet: true,
@@ -109,6 +110,7 @@ export const getInitialUrlParams = () => {
     schoolStatusLayer: parseNumberParam(params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER)),
     isSchoolStatusLayerNull: params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER) === 'null',
     entityTypes: params.get(URL_PARAM_KEYS.ENTITY)?.split(',').filter(Boolean) ?? [],
+    isGlobal: parseBoolParam(params.get(URL_PARAM_KEYS.GLOBAL), true),
     speedGood: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_GOOD), true),
     speedModerate: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_MODERATE), true),
     speedNoInternet: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_NO_INTERNET), true),
@@ -130,6 +132,7 @@ export const $urlTrackedParams = combine({
   layerId: $selectedLayerId,
   schoolStatusLayer: $schoolStatusSelectedLayer,
   entityTypes: $activeEntityTypes,
+  isGlobal: $isGlobalMode,
   speedGood: $connectivitySpeedGood,
   speedModerate: $connectivitySpeedModerate,
   speedNoInternet: $connectivitySpeednoInternet,
@@ -156,13 +159,13 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
     );
     keysToDelete.forEach(key => searchParams.delete(key));
 
-    // Update entity param if not all entities selected
-    const allEntityTypes = Object.keys($entityRegistry.getState()) as EntityType[];
-    const isAllEntitiesSelected = params.entityTypes.length === allEntityTypes.length || params.entityTypes.length === 0;
-    if (!isAllEntitiesSelected && params.entityTypes.length > 0) {
-      searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
-    } else {
+    // Update entity and global params
+    if (params.isGlobal) {
       searchParams.delete(URL_PARAM_KEYS.ENTITY);
+      searchParams.delete(URL_PARAM_KEYS.GLOBAL);
+    } else {
+      searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
+      searchParams.set(URL_PARAM_KEYS.GLOBAL, '0');
     }
 
     // Update language if needed
@@ -199,13 +202,13 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
   setBoolParam(searchParams, URL_PARAM_KEYS.SS_NOT_CONNECTED, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.notConnected));
   setBoolParam(searchParams, URL_PARAM_KEYS.SS_UNKNOWN, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.unknown));
 
-  // Update entity types param (set if not all entities selected - empty means all selected)
-  const allEntityTypes = Object.keys($entityRegistry.getState()) as EntityType[];
-  const isAllEntitiesSelected = params.entityTypes.length === allEntityTypes.length || params.entityTypes.length === 0;
-  if (!isAllEntitiesSelected && params.entityTypes.length > 0) {
-    searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
-  } else {
+  // Update entity and global params
+  if (params.isGlobal) {
     searchParams.delete(URL_PARAM_KEYS.ENTITY);
+    searchParams.delete(URL_PARAM_KEYS.GLOBAL);
+  } else {
+    searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
+    searchParams.set(URL_PARAM_KEYS.GLOBAL, '0');
   }
 
   // Update language param (only set if not default)
@@ -231,6 +234,9 @@ const applyUrlParamsToStoresFx = createEffect(() => {
   if (params.entityTypes.length > 0) {
     changeActiveEntityTypes(params.entityTypes as EntityType[]);
   }
+
+  // Apply global mode
+  setGlobalMode(params.isGlobal);
 
   // Apply connectivity speed params (always apply to sync with URL)
   changeConnectivitySpeedGood(params.speedGood);
@@ -276,6 +282,7 @@ sample({
     $selectedLayerId,
     $schoolStatusSelectedLayer,
     $activeEntityTypes,
+    $isGlobalMode,
     $connectivitySpeedGood,
     $connectivitySpeedModerate,
     $connectivitySpeednoInternet,
