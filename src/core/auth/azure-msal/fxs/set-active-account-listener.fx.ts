@@ -40,7 +40,8 @@ const acquireAuthToken = async (msalInstance: PublicClientApplication) => {
     authToken = accessTokenResponse?.accessToken;
 
   } catch (e) {
-    console.log(e);
+    console.log('account details', account)
+    console.log('token error', e);
   }
 
   return authToken;
@@ -73,9 +74,9 @@ export const setUpActiveAccountFx = createEffect(async (msalInstance: PublicClie
 
   await handleLoginRedirect(msalInstance);
 
-  void acquireAuthToken(msalInstance);
+  const authToken = await acquireAuthToken(msalInstance);
   const account = msalInstance.getActiveAccount();
-  if (!account) {
+  if (!account || !authToken) {
     clearLoginProcessing(false);
   }
 })
