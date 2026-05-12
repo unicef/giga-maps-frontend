@@ -189,6 +189,8 @@
   --color-filter-muted: var(--giga-filter-muted);
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
+
+  --font-manrope: "Manrope", sans-serif;
 }
 
 @keyframes legend-connectivity-glow {

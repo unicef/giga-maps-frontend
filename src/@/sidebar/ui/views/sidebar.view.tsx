@@ -68,7 +68,7 @@ export default function Sidebar() {
       onClick={() => onClickSidebar()}
     >
       <div
-        className="sidebar flex h-inherit w-inherit flex-col overflow-y-auto overflow-x-hidden rounded-[0.875rem]! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
+        className="sidebar flex h-inherit w-inherit flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
       >
         {
           isMobile &&

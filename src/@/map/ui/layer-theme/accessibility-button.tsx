@@ -1,4 +1,4 @@
-import { AccessibilityAlt } from '@carbon/icons-react'
+import { PersonStanding } from 'lucide-react';
 import { useStore } from 'effector-react';
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,7 @@ export const AccessibilityButton = () => {
 
   return (
     <MapControlButton
+      active={theme === ThemeType.accessible}
       aria-label={t('accessible-mode')}
       data-testid="accessible-button"
       label={t('accessible-mode')}
@@ -45,7 +46,7 @@ export const AccessibilityButton = () => {
         void onApply();
       }}
     >
-      <AccessibilityAlt size={16} />
+      <PersonStanding className="size-4" />
     </MapControlButton>
   )
 }

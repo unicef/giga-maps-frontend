@@ -1,4 +1,4 @@
-import { Settings } from '@carbon/icons-react'
+import { Settings } from 'lucide-react';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,14 +26,14 @@ const ThemeButtons = () => {
 
   return (
     <>
-      <div className={cn('theme-wrapper-popup !relative !overflow-visible')}>
+      <div className={cn('theme-wrapper-popup relative! overflow-visible!')}>
         <ThemePopup open={isOpen} setOpen={onShowThemeLayer}>
           <MapControlButton
             aria-label={t('theme-layers')}
             label={t('theme-layers')}
             onClick={openLayerTheme}
           >
-            <Settings size={16} />
+            <Settings className="size-4" />
           </MapControlButton>
         </ThemePopup>
       </div>

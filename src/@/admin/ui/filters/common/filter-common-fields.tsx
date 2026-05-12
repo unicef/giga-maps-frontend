@@ -74,7 +74,7 @@ const FilterCommonFields = ({ isEditMode }: { isEditMode: boolean }) => {
       value={formData?.code}
       onChange={(e) => onUdpateFilterForm([e.target.name, e.target.value])}
       required
-      placeholder="Enter layer unique code"
+      placeholder="Enter unique code"
     />
     <SelectDropdown
       required

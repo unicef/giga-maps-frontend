@@ -22,6 +22,7 @@ export const URL_PARAM_KEYS = {
   SS_UNKNOWN: 'ssU',
   ENTITY: 'entity',
   LANGUAGE: 'lng',
+  GLOBAL: 'g',
 } as const;
 
 // Helper to parse URL params

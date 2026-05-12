@@ -83,9 +83,9 @@ exports[`FilterRangeFields renders FilterCommonFields and take a snapshop, edit 
           disabled=""
           id="layer-code"
           name="code"
-          placeholder="Enter layer unique code"
+          placeholder="Enter unique code"
           required=""
-          title="Enter layer unique code"
+          title="Enter unique code"
           type="text"
         />
         <span

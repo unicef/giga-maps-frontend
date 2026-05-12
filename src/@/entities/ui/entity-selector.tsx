@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 import {
   $activeEntityTypes,
   $entityRegistry,
+  $isGlobalMode,
   changeActiveEntityTypes,
   changeSelectedEntityType,
   selectAllEntityTypes,
+  toggleEntityType,
 } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
@@ -18,7 +20,6 @@ const inactive = 'bg-background text-foreground hover:bg-background/80 hover:tex
 
 /**
  * Entity type selector - floating pill bar over the map.
- * Matches the dark-container / blue-active / icon design.
  */
 export default function EntityTypeSelector() {
   const { t } = useTranslation();
@@ -31,17 +32,24 @@ export default function EntityTypeSelector() {
     return null;
   }
 
-  const registeredEntityTypes = entityTypes.map(([type]) => type as EntityType);
-  const allSelected = activeEntityTypes.length === registeredEntityTypes.length;
+  const isGlobalMode = useStore($isGlobalMode);
+  const allSelected = isGlobalMode;
 
   const handleSelectAll = () => {
     selectAllEntityTypes();
   };
 
-  const handleEntityClick = (entityType: EntityType) => {
-    debugger;
-    changeActiveEntityTypes([entityType]);
-    changeSelectedEntityType(entityType);
+  const handleEntityClick = (entityType: EntityType, event: React.MouseEvent) => {
+    if (isGlobalMode) {
+      // If we're in global mode, the first click (even with shift) starts a manual selection with this entity
+      changeActiveEntityTypes([entityType]);
+      changeSelectedEntityType(entityType);
+    } else if (event.shiftKey) {
+      toggleEntityType(entityType);
+    } else {
+      changeActiveEntityTypes([entityType]);
+      changeSelectedEntityType(entityType);
+    }
   };
 
   return (
@@ -56,7 +64,7 @@ export default function EntityTypeSelector() {
       </Button>
 
       {entityTypes.map(([type, config]) => {
-        const isActive = !allSelected && activeEntityTypes.includes(type as EntityType);
+        const isActive = activeEntityTypes.includes(type as EntityType) && !isGlobalMode;
 
         return (
           <Button
@@ -64,11 +72,12 @@ export default function EntityTypeSelector() {
             variant="default"
             size="lg"
             className={`${base} ${isActive ? active : inactive}`}
-            onClick={() => handleEntityClick(type as EntityType)}
+            onClick={(event) => handleEntityClick(type as EntityType, event)}
           >
             <EntityLegendIndicator
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
+              size={20}
             />
             {t(config.slug)}
           </Button>

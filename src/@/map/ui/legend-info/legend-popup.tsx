@@ -148,7 +148,7 @@ const LegendPopup = ({
           size="icon"
           variant="icon"
         >
-          <Maximize2 size={14} />
+          <Maximize2 size={14} className="text-foreground/60!" />
         </Button>
       ) : null}
     </div>
@@ -189,7 +189,7 @@ const LegendPopup = ({
               size="icon"
               variant="icon"
             >
-              <Maximize2 size={14} />
+              <Maximize2 size={14} className="text-foreground/60!" />
             </Button>
           </CollapsibleTrigger>
         </div>
@@ -248,7 +248,7 @@ const LegendPopup = ({
             }}
             type="button"
           >
-            <Minimize2 size={14} />
+            <Minimize2 size={14} className="text-foreground/60!" />
           </Button>
         </CollapsibleTrigger>
       </div>
@@ -290,7 +290,7 @@ const LegendPopup = ({
       <PopoverContent
         align="end"
         className={cn(
-          'z-6002! overflow-visible! rounded-md! border! border-border! bg-popover! p-0! shadow-xs!',
+          'z-6002! overflow-visible! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
           'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
           'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
           'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
