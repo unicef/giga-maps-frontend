@@ -22,7 +22,7 @@ const useSchoolPopupData = () => {
   const countryCode = useStore($countryCode);
   const multipleSchoolStats = useStore($schoolStatsMap);
   const { layerUtils, stylePaintData, feature: schoolStats } = useStore($schoolPopupData);
-  const { selectedLayerData, currentLayerTypeUtils, benchmarkNamesAllLayers, countryConnectivityNames: countryConnectivityNames,
+  const { selectedLayerData, currentLayerTypeUtils, benchmarkNamesAllLayers, countryConnectivityNames,
     connectivityBenchMarks, isSchoolBenchmark } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};

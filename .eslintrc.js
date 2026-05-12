@@ -43,6 +43,7 @@ const config = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/recommended",
+    "plugin:oxlint/recommended",
     'prettier',
   ],
   overrides: [

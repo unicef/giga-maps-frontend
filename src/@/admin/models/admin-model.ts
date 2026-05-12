@@ -13,7 +13,7 @@ export const onGetEntityTypes = createEvent();
 export const $entityTypes = createStore<EntityMeta[] | []>([]);
 $entityTypes.on(getEntityTypesFx.doneData, (_, response) => {
   const entityTypes = Object.values(response || {});
-  return entityTypes.sort((a, b) => a.display_order - b.display_order);
+  return entityTypes.toSorted((a, b) => a.display_order - b.display_order);
 });
 
 sample({

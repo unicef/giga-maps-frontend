@@ -23,7 +23,7 @@ describe('setUpActiveAccountFx', () => {
       getAllAccounts: vi.fn().mockImplementation(() => []),
       clearCache: vi.fn(),
       logoutPopup: vi.fn(),
-      addEventCallback: function (callback: any) {
+      addEventCallback (callback: any) {
         callback({
           eventType: '',
           payload: {}
@@ -47,7 +47,7 @@ describe('setUpActiveAccountFx', () => {
 
   it('should set active account', async () => {
     await onMsalInstance({
-      ...msalInstance, addEventCallback: function (callback: any) {
+      ...msalInstance, addEventCallback (callback: any) {
         callback({
           eventType: 'LOGIN_SUCCESS',
           payload: { idToken: "XLK" }
@@ -60,7 +60,7 @@ describe('setUpActiveAccountFx', () => {
 
   it('should not set active account', async () => {
     await onMsalInstance({
-      ...msalInstance, addEventCallback: function (callback: any) {
+      ...msalInstance, addEventCallback (callback: any) {
         callback({
           eventType: 'LOGIN_SUCCESS',
           payload: { idToken: null }
@@ -76,7 +76,7 @@ describe('setUpActiveAccountFx', () => {
     const errorCodes = ["AADB2C90080"]
     const props = {
       ...msalInstance,
-      addEventCallback: function (callback: any) {
+      addEventCallback (callback: any) {
         callback({
           eventType: 'ACQUIRE_TOKEN_FAILURE',
           payload: null,

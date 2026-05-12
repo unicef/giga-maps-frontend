@@ -82,7 +82,7 @@ $layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
 
 export const $layerListTranslated = createStore<LayerType[]>([]);
 
-export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
+export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).toSorted((a) => a.created_by ? 0 : -1) || [])
 export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
 
 export const onSelectSchoolStatusLayer = createEvent<number | null>();

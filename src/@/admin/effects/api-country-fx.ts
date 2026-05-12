@@ -15,7 +15,7 @@ export const getCountryListFx = createEffect(({ page, pageSize, search }: { page
   }
 
   return createRequestAuthFx({
-    url: url
+    url
   }) as Promise<APIListType<CountryType>>
 })
 
@@ -30,7 +30,7 @@ export const getCountrySummaryListFx = createEffect(({ page, pageSize, search, f
   url += searchParam;
 
   return createRequestAuthFx({
-    url: url
+    url
   }) as Promise<APIListType<CountrySummaryType>>
 })
 

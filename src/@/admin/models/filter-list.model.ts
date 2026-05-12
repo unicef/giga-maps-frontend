@@ -138,7 +138,7 @@ sample({
       options: {
         live_choices: true,
         range_auto_compute: true,
-        ...(filterData.options ?? {}),
+        ...filterData.options,
       },
     };
   },

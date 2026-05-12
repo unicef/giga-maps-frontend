@@ -40,7 +40,7 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
         data_source_column_function: isLive ? formData.supportedFunctions : null,
         applicable_countries: countryList.filter((country) => formData.applicableCountries.includes(country.id)).map((item) => ({ name: item.code })),
         legend_configs: { ...defaultGigaLayerForm.legendConfigs, ...formData.legendConfigs },
-        global_benchmark: { ...(isLive ? { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } : { benchmark_name: formData?.globalBenchmark?.benchmark_name ?? 'Global' }) },
+        global_benchmark: (isLive ? { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } : { benchmark_name: formData?.globalBenchmark?.benchmark_name ?? 'Global' }),
         ...(!layerItem?.status ? { status: LayerStatusType.DRAFT } : {}),
         entity_type: entityTypeId,
       }

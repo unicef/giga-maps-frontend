@@ -52,7 +52,7 @@ $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
         ...config,
         colors: {
           ...merged[type].colors,
-          ...(config?.colors ?? {}),
+          ...config?.colors,
         },
         fields: config?.fields ?? merged[type].fields,
       };

@@ -57,7 +57,7 @@ describe('Sidebar', () => {
     const { container } = render(testWrapper(<Sidebar />))
     const sliderButton = container.querySelector('#mobile-view-slider')
     await fireEvent.click(sliderButton as Element)
-    const accessibleButton = container.querySelector('[data-testid=\"accessible-button\"]')
+    const accessibleButton = container.querySelector('[data-testid="accessible-button"]')
     expect(accessibleButton).toBeInTheDocument();
   })
 
