@@ -238,7 +238,7 @@ sample({
 
 const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const { query, id } = getCurrentQueryId(props);
-  const url = `api/accounts/layers/${id}/info/`
+  const url = `api/v2/entities/layers/${id}/info/`
   return {
     url,
     query
@@ -452,9 +452,8 @@ sample({
 sample({
   clock: fetchCountryFx.doneData,
   fn: (country) => {
-    debugger
     const school = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.SCHOOL)?.data_layer_id ?? null;
-    const health = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.HEALTH)?.data_layer_id ?? 30;
+    const health = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.HEALTH)?.data_layer_id ?? null;
     return { school, health };
   },
   target: createEffect(({ school, health }: { school: number | null, health: number | null }) => {

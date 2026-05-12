@@ -90,7 +90,7 @@ export const fetchEntityGlobalStatsFx = createRequestFx(
 
 export const fetchAdvanceFilterFx = createRequestFx(
   async (countryId: number, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
-    url: `api/accounts/adv_filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
+    url: `api/v2/entities/filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
     signal: controller?.getSignal()
   })
 );
@@ -110,7 +110,7 @@ export const fetchSchoolLayerInfoFx = createEffect(
 
 export const fetchCountryLiveLayerInfo = createEffect(
   async ({ query, id }: { query: string; id: number | null }): Promise<ConnectivityStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
+    fetchLayerInfoFx(`api/v2/entities/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
 );
 
 export const fetchConnectivityLayerFx = createEffect(
