@@ -1,18 +1,18 @@
 import { useStore } from 'effector-react';
+import { useTranslation } from 'react-i18next';
+import styled, { useTheme } from 'styled-components';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
+import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { $isLoadingCountryAdminView } from '~/@/sidebar/sidebar.model';
+import { $lng } from '~/core/i18n/store';
 import { mapSchools } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 import { formatNumber } from '~/lib/utils';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import { SchoolInfoSection } from '../styles/layer-view-common.style';
-import styled, { useTheme } from 'styled-components';
-import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { $lng } from '~/core/i18n/store';
-import { useTranslation } from 'react-i18next';
 
 const SchoolConnectivityLayerContainer = styled.div`
   display: flex;
@@ -38,6 +38,7 @@ const SchoolConnectivityLayer = () => {
   return (
     <SchoolConnectivityLayerContainer>
       <div>
+        <span className='text-red-500'>test check school connectivity layer</span>
         <CurrentLayerNameIcon showFilter={false} label={t("connectivity-status")} isSchoolStatus={true} />
         {!schoolView && <SchoolInfoSection>
           {isLoading ? <>  <LoadingText $blockSize='3.5625' width="4rem" />

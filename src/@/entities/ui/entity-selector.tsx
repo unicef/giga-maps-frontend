@@ -39,6 +39,7 @@ export default function EntityTypeSelector() {
   };
 
   const handleEntityClick = (entityType: EntityType) => {
+    debugger;
     changeActiveEntityTypes([entityType]);
     changeSelectedEntityType(entityType);
   };

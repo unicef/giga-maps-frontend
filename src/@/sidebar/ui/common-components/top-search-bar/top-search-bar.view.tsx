@@ -1,4 +1,5 @@
 import { useStore } from 'effector-react';
+import { ChevronDown, ChevronUp, Cross, Earth, Search, X } from 'lucide-react';
 import { type CSSProperties, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -6,6 +7,7 @@ import FooterTourContact from '~/@/sidebar/ui/common-components/footer-tour-cont
 import { SearchCountryList } from '~/@/sidebar/ui/search-result/search-country-list';
 import SearchSchoolPanel from '~/@/sidebar/ui/search-result/search-country-list/search-school-panel-view';
 import { SearchResultScroll } from '~/@/sidebar/ui/search-result/styles/search-result-style';
+import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
@@ -15,8 +17,6 @@ import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
 
 import { $isActiveSearchBar, $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
-import { ChevronDown, ChevronUp, Cross, Earth, Search, X } from 'lucide-react';
-import { Button } from '~/components/ui/button';
 
 
 const onChange = changeSearchText.prepend(getInputValue);

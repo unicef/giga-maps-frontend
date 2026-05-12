@@ -2,6 +2,7 @@ import { combine, createEvent, createStore, restore, sample } from 'effector';
 import i18next from 'i18next';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchEntitiesConnectivityStatsFx, fetchGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, EntitiesConnectivityStatsResponse, SchoolStatsType } from '~/api/types';
@@ -11,6 +12,7 @@ import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 import { evaluateExpression } from '~/lib/utils';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
+import { EntityType } from '../entities';
 import { UNKNOWN } from '../map/map.types';
 import { onChangeTourStartPopup } from '../product-tour/models/product-tour.model';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
@@ -82,22 +84,44 @@ $layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
 
 export const $layerListTranslated = createStore<LayerType[]>([]);
 
-export const $connectivityLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
-export const $staticLayers = $layersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
+export const $filteredLayersList = combine($layersList, $selectedEntityType, (layers, entityType) => {
+  return layers?.filter(layer => layer?.entity_type__code === entityType) || [];
+});
+
+export const $connectivityLayers = $filteredLayersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.LIVE).sort((a) => a.created_by ? 0 : -1) || [])
+export const $staticLayers = $filteredLayersList.map((layers) => layers?.filter(layer => layer?.type === LayerTypeChoices.STATIC) || [])
 
 export const onSelectSchoolStatusLayer = createEvent<number | null>();
 export const $schoolStatusSelectedLayer = restore(onSelectSchoolStatusLayer, SCHOOL_STATUS_LAYER.id);
 
 export const onSelectMainLayer = createEvent<number | null>();
 export const $selectedLayerId = restore(onSelectMainLayer, null);
-export const $globalLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by && layer.code === 'DOWNLOAD') ?? null);
+
+export const onSelectHealthLayer = createEvent<number | null>();
+export const $healthSelectedLayerId = restore(onSelectHealthLayer, null);
+export const $globalLayerData = $filteredLayersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by && layer.code === 'DOWNLOAD') ?? null);
 export const $globalLayerId = $globalLayerData.map(layer => layer?.id ?? null);
-export const $downloadLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
+export const $downloadLayerData = $filteredLayersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
 export const $downloadLayerId = $downloadLayerData.map(layer => layer?.id ?? null);
-export const $coverageLayerData = $layersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
+export const $coverageLayerData = $filteredLayersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.STATIC && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'coverage_type') ?? null);
 export const $coverageLayerId = $coverageLayerData.map(layer => layer?.id ?? null);
 
-export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (layers, countryIdToCode) => {
+export const $countryDefaultLayerByEntity = $country.map((country) => {
+  const result = { [EntityType.SCHOOL]: null as number | null, [EntityType.HEALTH]: null as number | null };
+  country?.active_layers_list?.forEach((layer) => {
+    const layerEntityType = layer.entity_type?.toLowerCase();
+    if (layer.is_default && layerEntityType) {
+      if (layerEntityType === EntityType.SCHOOL) {
+        result[EntityType.SCHOOL] = layer.data_layer_id;
+      } else if (layerEntityType === EntityType.HEALTH) {
+        result[EntityType.HEALTH] = layer.data_layer_id;
+      }
+    }
+  });
+  return result;
+});
+
+export const $activeLayerByCountries = combine($filteredLayersList, $countryIdToCode, (layers, countryIdToCode) => {
   const list = {} as Record<string, { activeCountries: string[] }>
   const countryDefaultLayerList = {} as Record<string, number>;
   layers?.forEach((layer) => {
@@ -117,15 +141,15 @@ export const $activeLayerByCountries = combine($layersList, $countryIdToCode, (l
   };
 })
 
-export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $globalLayerId, (countryCode, activeLayers, globalLayerId) => {
-  const layerId = activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? globalLayerId;
-  return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : null;
+export const $currentDefaultLayerId = combine($countryCode, $activeLayerByCountries, $globalLayerId, $countryDefaultLayerByEntity, $selectedEntityType, $filteredLayersList, (countryCode, activeLayers, globalLayerId, countryDefaultByEntity, selectedEntity, filteredLayers) => {
+  const layerId = countryDefaultByEntity[selectedEntity] ?? activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? globalLayerId ?? filteredLayers?.[0]?.id;
+  return activeLayers.list[layerId]?.activeCountries?.includes?.(countryCode?.toLowerCase()) ? layerId : (filteredLayers?.[0]?.id ?? null);
 })
 export const $isActiveCurrentLayer = combine($activeLayerByCountries, $selectedLayerId, $countryCode, (activeLayers, selectedId, countryCode) => {
   return !!selectedId && activeLayers.list[selectedId]?.activeCountries?.includes(countryCode.toLowerCase())
 })
 
-export const $activeLayerByCountryCode = combine($layersList, $activeLayerByCountries, $countryCode, (layers, activeLayers, countryCode) => {
+export const $activeLayerByCountryCode = combine($filteredLayersList, $activeLayerByCountries, $countryCode, (layers, activeLayers, countryCode) => {
   const list = {} as Record<string, boolean>
   layers?.forEach((layer) => {
     list[layer.id] = activeLayers.list[layer.id]?.activeCountries?.includes(countryCode.toLowerCase())
@@ -133,7 +157,7 @@ export const $activeLayerByCountryCode = combine($layersList, $activeLayerByCoun
   return list;
 });
 
-export const $selectedLayerData = combine($layersList, $selectedLayerId, (layers, selectedId) => {
+export const $selectedLayerData = combine($filteredLayersList, $selectedLayerId, (layers, selectedId) => {
   return layers?.find(item => item.id === selectedId) ?? null;
 });
 
@@ -142,7 +166,7 @@ export const $currentLayerCountryDataSource = combine($selectedLayerData, $count
   return selectedData.active_countries_list.find(activeLayers => activeLayers.country === country.id)?.data_sources || null
 })
 
-export const $benchmarkNamesAllLayers = $layersList.map(layers => layers.reduce((acc, curr) => {
+export const $benchmarkNamesAllLayers = $filteredLayersList.map(layers => layers.reduce((acc, curr) => {
   acc[curr.id ?? ""] = curr?.global_benchmark?.benchmark_name;
   return acc
 }, {} as Record<string, string>))
@@ -242,7 +266,7 @@ export const $isSchoolBenchmark = combine($selectedLayerData, $connectivityBench
 })
 
 export const $layerUtils = combine({
-  layers: $layersList,
+  layers: $filteredLayersList,
   liveLayers: $connectivityLayers,
   staticLayers: $staticLayers,
   selectedLayerId: $selectedLayerId,
@@ -261,7 +285,8 @@ export const $layerUtils = combine({
   staticPopupActiveLayer: $staticPopupActiveLayer,
   isSchoolBenchmark: $isSchoolBenchmark,
   benchmarkNamesAllLayers: $benchmarkNamesAllLayers,
-  countryConnectivityNames: $countryConnectivityNames,
+  healthSelectedLayerId: $healthSelectedLayerId,
+  selectedEntityType: $selectedEntityType,
   connectivityBenchMarks: $connectivityBenchMark
 });
 
@@ -476,9 +501,10 @@ $coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $potentialCoverageOpenStatus.reset(onSelectMainLayer);
 $schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
+$healthSelectedLayerId.reset($countryCode, $selectedLayerId);
 $isMenuOpen.reset(router.historyUpdated)
 // on history update, clear connectivity dates;
-$connectivityAvailability.reset(router.historyUpdated, $selectedLayerId);
+$connectivityAvailability.reset(router.historyUpdated, $selectedLayerId, $selectedEntityType);
 
 $isTimeplayer.reset(router.historyUpdated);
 $timePlayerCurrentYear.reset($isTimeplayer)

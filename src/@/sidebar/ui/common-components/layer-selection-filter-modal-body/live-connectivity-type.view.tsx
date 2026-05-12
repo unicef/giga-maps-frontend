@@ -1,17 +1,17 @@
 import { RadioButton, RadioButtonGroup } from "@carbon/react";
 import { useStore } from 'effector-react';
-import { forwardRef, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
+import { useTranslation } from "react-i18next";
 
+import { $country } from "~/@/country/country.model";
 import {
   $activeLayerByCountryCode,
   $connectivityLayers, $selectedLayerId, onSelectMainLayer,
 } from '~/@/sidebar/sidebar.model';
+import { LayerType, LayerTypeChoices } from "~/@/sidebar/types";
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentConnectivitytype } from "../styles/layer-filter-modal.style";
-import { LayerType, LayerTypeChoices } from "~/@/sidebar/types";
-import { $country } from "~/@/country/country.model";
-import { useTranslation } from "react-i18next";
 
 
 export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { setCurrentLayer: (id: null | number) => void }, ref) {
@@ -24,6 +24,10 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
   const handleConnectivityTypeChange = () => {
     onSelectMainLayer(selectedId);
   };
+
+  useMemo(() => {
+
+  }, [connectivityLayers])
 
   imperativeHandle(ref, handleConnectivityTypeChange)
 

@@ -1,10 +1,13 @@
 import { useStore } from 'effector-react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
-import { $stylePaintData, $globalStats } from '~/@/map/map.model';
+import { $globalStats, $stylePaintData } from '~/@/map/map.model';
+import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { $connectivityStats, $isLoadingCountryAdminView, $selectedLayerData } from '~/@/sidebar/sidebar.model';
+import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
@@ -12,10 +15,6 @@ import { HistoryGraphAccordian } from '../../common-components/history-graph';
 import WeekSlider from '../common/week-slider/week-slider.view';
 import { DateWeekWrapper } from './connectivity-layer.style';
 import LiveAverage from './live-average.view';
-import { UNKNOWN } from '~/@/map/map.types';
-import { useTranslation } from 'react-i18next';
-import { $lng } from '~/core/i18n/store';
-import { Trans } from "react-i18next";
 
 export default function ConnectivityLayer() {
   const { t } = useTranslation();

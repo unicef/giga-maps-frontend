@@ -1,6 +1,5 @@
+import { format } from 'date-fns';
 import { combine, createEffect, merge, sample } from 'effector';
-import { $activeDublicateSchoolsPopup, $activeSchoolPopup, $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
-import { debounce, getInverted } from '~/lib/effector-kit';
 
 import {
   $admin1Id,
@@ -13,6 +12,8 @@ import {
   $countrySearchString,
   countryReceived, onRecenterView
 } from '~/@/country/country.model';
+import { $selectedEntityType, changeSelectedEntityType } from '~/@/entities/models/entity.model';
+import { $activeDublicateSchoolsPopup, $activeSchoolPopup, $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
 import {
   $connectivityBenchMark,
   $connectivityLayers,
@@ -41,19 +42,21 @@ import {
   changeConnectivityBenchmark,
   checkConnectivityBenchmark,
   onSchoolUncheck,
+  onSelectHealthLayer,
   onSelectMainLayer,
   onSelectSchoolStatusLayer,
   resetCoverageFilterSelection,
   resetFilterModal,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
-import { fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchDublicateSchoolPopupDataFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchDublicateSchoolPopupDataFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { languageStore } from '~/core/i18n/store';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes, mapOverview, mapSchools, router } from '~/core/routes';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
+import { debounce, getInverted } from '~/lib/effector-kit';
 
-import { format } from 'date-fns';
+import { EntityType } from '../entities';
 import { MaxAllowedDublicateSchoolIds, SCHOOL_LAYER_ID } from '../map/map.constant';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
 import { getSchoolAvailableDates } from './effects/search-country-fx';
@@ -95,15 +98,17 @@ const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (co
 }))
 
 sample({
-  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId]),
-  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId }),
-  fn: ({ countryIdAndSchoolIds, selectedLayerId }) => {
+  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId, $selectedEntityType]),
+  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId, selectedEntityType: $selectedEntityType }),
+  fn: ({ countryIdAndSchoolIds, selectedLayerId, selectedEntityType }) => {
     const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
+    //entity_type currently iam doing hardcode school because api have some issue in entity type hardcoded with school.
     return {
-      query: `?layer_id=${selectedLayerId}&country_id=${countryId}${schoolIds?.length ? `&school_ids=${schoolIds?.join(',')}` : ''}${admin1Id ? `&admin1_id=${admin1Id}` : ''}`
+      query: `?layer_id=${selectedLayerId}&country_id=${countryId}${schoolIds?.length ? `&school_ids=${schoolIds?.join(',')}` : ''}${admin1Id ? `&admin1_id=${admin1Id}` : ''}${selectedEntityType ? `&entity_type__code=${selectedEntityType}` : ''}`
     }
   },
   filter: ({ countryIdAndSchoolIds, isCurrentLayerLive, layers }) => {
+    //debugger
     const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
     if (!!countryId && layers?.length && !!isCurrentLayerLive) {
       return !!countryId || !!schoolIds?.length || !!admin1Id
@@ -154,9 +159,10 @@ const sourceForInfo = combine({
   countrySearch: $countrySearchString,
   isMobile: $isMobile,
   allowDublicateSchoolIds: $allowDublicateSchoolIds,
+  selectedEntityType: $selectedEntityType,
 })
 
-export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked, allowDublicateSchoolIds }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
+export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked, allowDublicateSchoolIds, selectedEntityType }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
   const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
   const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
@@ -196,6 +202,10 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
     params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
   }
 
+  if (selectedEntityType) {
+    params.set('entity_type__code', selectedEntityType);
+  }
+
   let query = `?${params.toString()}`;
   if (mapRoutes.country && countrySearch) {
     query += `&${countrySearch}`;
@@ -205,7 +215,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
 
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, $selectedEntityType, debounce($historyInterval, { timeout: 500 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -216,7 +226,7 @@ sample({
 
 // for all static layers
 sample({
-  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId, $selectedEntityType]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -236,7 +246,7 @@ const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSch
 }
 // school view info api
 sample({
-  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
+  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $selectedEntityType, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
   source: sourceForInfo,
   fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
   filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -368,19 +378,28 @@ const loadedLayersAndCountries = combine($connectivityLayers, $countries, $curre
 });
 
 sample({
-  clock: loadedLayersAndCountries,
+  clock: merge([loadedLayersAndCountries, changeSelectedEntityType]),
   source: combine({
     layerUtils: $layerUtils,
     loadedLayersAndCountries,
     initialUrlParams: $initialUrlParams,
-    isAppSettled: $isAppSettled
+    isAppSettled: $isAppSettled,
+    selectedEntityType: $selectedEntityType,
   }),
-  fn: ({ layerUtils: { currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
+  fn: ({ layerUtils: { currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled, selectedEntityType }) => {
     // If URL has layer param and it hasn't been applied yet, use URL value
-    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
-      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
-      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
-        return initialUrlParams.layerId;
+    if (!isAppSettled) {
+      if (selectedEntityType === 'school' && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
+        const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+        if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
+          return initialUrlParams.layerId;
+        }
+      }
+      if (selectedEntityType === 'health' && (initialUrlParams.healthLayer || initialUrlParams.isHealthLayerNull)) {
+        const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.healthLayer ?? ''];
+        if (isUrlLayerActive || initialUrlParams.isHealthLayerNull) {
+          return initialUrlParams.healthLayer;
+        }
       }
     }
     // Otherwise use default layer
@@ -399,12 +418,20 @@ sample({
     initialUrlParams: $initialUrlParams,
     isAppSettled: $isAppSettled
   }),
-  fn: ({ layerUtils: { selectedLayerId, currentLayerTypeUtils, isActiveCurrentLayer, currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
+  fn: ({ layerUtils: { selectedLayerId, currentLayerTypeUtils, isActiveCurrentLayer, currentDefaultLayerId, activeLayerByCountryCode, selectedEntityType }, initialUrlParams, isAppSettled }) => {
     // On first country code update, if URL has layer param, use it (if valid for country)
-    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
-      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
-      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
-        return initialUrlParams.layerId;
+    if (!isAppSettled) {
+      if (selectedEntityType === 'school' && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
+        const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+        if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
+          return initialUrlParams.layerId;
+        }
+      }
+      if (selectedEntityType === 'health' && (initialUrlParams.healthLayer || initialUrlParams.isHealthLayerNull)) {
+        const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.healthLayer ?? ''];
+        if (isUrlLayerActive || initialUrlParams.isHealthLayerNull) {
+          return initialUrlParams.healthLayer;
+        }
       }
     }
     // Normal behavior for subsequent updates
@@ -420,6 +447,24 @@ sample({
   },
   filter: ({ countryCode }) => !!countryCode,
   target: onSelectMainLayer
+})
+
+sample({
+  clock: fetchCountryFx.doneData,
+  fn: (country) => {
+    debugger
+    const school = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.SCHOOL)?.data_layer_id ?? null;
+    const health = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.HEALTH)?.data_layer_id ?? 30;
+    return { school, health };
+  },
+  target: createEffect(({ school, health }: { school: number | null, health: number | null }) => {
+    if (school) {
+      onSelectMainLayer(school);
+    }
+    if (health) {
+      onSelectHealthLayer(health);
+    }
+  })
 })
 
 sample({

@@ -16,6 +16,7 @@ import {
   $coverage5g4g,
   $coverageNoCoverage,
   $coverageUnknown,
+  $healthSelectedLayerId,
   $schoolStatusSelectedLayer,
   $selectedLayerId,
   $selectedSchoolIds,
@@ -28,6 +29,7 @@ import {
   changeCoverage5g4g,
   changeCoverageNoCoverage,
   changeCoverageUnknown,
+  onSelectHealthLayer,
   staticLegendsSelection,
 } from './sidebar.model';
 import { getUrlParams, parseBoolParam, parseNumberParam, setBoolParam, setNumberParam, URL_PARAM_KEYS } from './url-params.util';
@@ -74,6 +76,7 @@ export const getInitialUrlParams = () => {
     return {
       layerId: null,
       schoolStatusLayer: null,
+      healthLayer: null,
       entityTypes: [], // Default to empty (all entities)
       speedGood: true,
       speedModerate: true,
@@ -108,6 +111,8 @@ export const getInitialUrlParams = () => {
     isLayerIdNull: params.get(URL_PARAM_KEYS.LAYER_ID) === 'null',
     schoolStatusLayer: parseNumberParam(params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER)),
     isSchoolStatusLayerNull: params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER) === 'null',
+    healthLayer: parseNumberParam(params.get(URL_PARAM_KEYS.HEALTH_LAYER)),
+    isHealthLayerNull: params.get(URL_PARAM_KEYS.HEALTH_LAYER) === 'null',
     entityTypes: params.get(URL_PARAM_KEYS.ENTITY)?.split(',').filter(Boolean) ?? [],
     speedGood: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_GOOD), true),
     speedModerate: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_MODERATE), true),
@@ -140,6 +145,7 @@ export const $urlTrackedParams = combine({
   coverageUnknown: $coverageUnknown,
   schoolStatusLegends: $staticLegendsSelected,
   language: $lng,
+  healthLayer: $healthSelectedLayerId,
 });
 
 // Effect to update URL params
@@ -181,6 +187,7 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
   // Update layer params
   setNumberParam(searchParams, URL_PARAM_KEYS.LAYER_ID, params.layerId ?? 'null');
   setNumberParam(searchParams, URL_PARAM_KEYS.SCHOOL_STATUS_LAYER, params.schoolStatusLayer ?? 'null');
+  setNumberParam(searchParams, URL_PARAM_KEYS.HEALTH_LAYER, params.healthLayer ?? 'null');
 
   // Update connectivity speed params (only set if false)
   setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_GOOD, params.speedGood);
@@ -247,6 +254,11 @@ const applyUrlParamsToStoresFx = createEffect(() => {
   // Apply school status legends
   staticLegendsSelection(params.schoolStatusLegends);
 
+  // Apply health layer param
+  if (params.healthLayer !== null) {
+    onSelectHealthLayer(params.healthLayer);
+  }
+
   // Apply language param (i18next handles this via URL detection)
   if (params.language) {
     void onLanguageChange(params.language);
@@ -275,6 +287,7 @@ sample({
     $selectedSchoolIds,
     $selectedLayerId,
     $schoolStatusSelectedLayer,
+    $healthSelectedLayerId,
     $activeEntityTypes,
     $connectivitySpeedGood,
     $connectivitySpeedModerate,
