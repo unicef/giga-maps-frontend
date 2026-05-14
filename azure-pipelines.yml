@@ -23,10 +23,6 @@ variables:
 
 steps:
   # Unit Tests
-  - task: NodeTool@0
-    displayName: Install Node.js 24
-    inputs:
-      versionSpec: '24.x'
   - task: Bash@3
     displayName: Unit Tests
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/entity-development-base')
