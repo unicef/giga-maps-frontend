@@ -23,6 +23,7 @@ const TopMenuBar = ({
               }}
               variant="icon"
               size="icon"
+              aria-label={isMenuOpen ? 'Close' : 'Menu'}
             >
               {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </Button>

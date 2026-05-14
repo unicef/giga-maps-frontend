@@ -243,7 +243,8 @@ describe('createLineLayerForCountry', () => {
       addLayer: vi.fn(),
       setFilter: vi.fn(),
       showLayer: vi.fn(),
-      setLayoutProperty: vi.fn()
+      setLayoutProperty: vi.fn(),
+      setPaintProperty: vi.fn()
     };
   });
 

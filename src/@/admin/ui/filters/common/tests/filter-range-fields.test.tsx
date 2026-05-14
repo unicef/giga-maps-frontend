@@ -3,6 +3,7 @@ import FilterRangeFields from '../filter-range-fields';
 import FilterCommonFields from '../filter-common-fields';
 import { useStore } from 'effector-react';
 import { $filterColumnList, $filterTypeChoices, $filterQueryParamsChoices, $formFilterData } from '~/@/admin/models/filter-list.model';
+import { $entityTypes } from '~/@/admin/models/admin-model';
 import { testWrapper } from '~/tests/test-wrapper';
 
 
@@ -25,6 +26,9 @@ describe('FilterRangeFields', () => {
       }
       if (store === $formFilterData) {
         return {};
+      }
+      if (store === $entityTypes) {
+        return [];
       }
     });
   });
@@ -83,6 +87,9 @@ describe('FilterCommonFields', () => {
           description: 'Test Description',
           query_param_filter: 'param1'
         };
+      }
+      if (store === $entityTypes) {
+        return [];
       }
     });
   });

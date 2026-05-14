@@ -40,8 +40,9 @@ const schoolSummaryOrder = [
 
 const LegendPopup = ({
   open,
+  onOpenChange,
   children,
-}: PropsWithChildren<{ open: boolean }>) => {
+}: PropsWithChildren<{ open: boolean, onOpenChange?: (open: boolean) => void }>) => {
   const { t } = useTranslation();
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityConfigMap = useStore($entityConfigMap);
@@ -281,7 +282,9 @@ const LegendPopup = ({
   );
 
   return (
-    <Popover modal={false} open={open}>
+    <Popover modal={false} onOpenChange={(nextOpen) => {
+      onOpenChange?.(nextOpen);
+    }} open={open}>
       <PopoverAnchor asChild>
         <div className="legend-info-popover-link relative! inline-flex!">
           {children}
@@ -298,7 +301,6 @@ const LegendPopup = ({
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
-        onInteractOutside={(event) => event.preventDefault()}
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="left"
         sideOffset={12}

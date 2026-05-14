@@ -1,4 +1,4 @@
-import { createAndUpdateMapLayer, createSourceForMapAndCountry, createSourceForSchool, getLayerIdsAndLastChange } from '../effects/add-layers-utils';
+import { createAndUpdateMapLayer, createSourceForMapAndCountry, getLayerIdsAndLastChange } from '../effects/add-layers-utils';
 
 describe('addLayerUtils', () => {
 
@@ -107,46 +107,6 @@ describe('addLayerUtils', () => {
     expect(map.addSource).toHaveBeenCalled();
   });
 
-  it('should return early if map is not provided', () => {
-    const func = createSourceForSchool({
-      layerUtils: {},
-      schoolStats: [],
-      selectedLayerId: 1,
-      lastSelectedLayer: {
-        schoolId: 0,
-        layerId: 0
-      }
-    } as any);
-
-    expect(func).toBeUndefined();
-  });
-
-  it('should delete existing sources and layers', () => {
-    const map = {
-      addSource: vi.fn(),
-      createSource: vi.fn(),
-      getStyle: () => ({
-        sources: {}
-      })
-    } as any;
-    const layerUtils = {};
-    const schoolStats = [{ id: 1 }];
-    const selectedLayerId = 1;
-    const lastSelectedLayer = {
-      schoolId: 0,
-      layerId: 0
-    };
-
-    createSourceForSchool({
-      map,
-      layerUtils,
-      schoolStats,
-      selectedLayerId,
-      lastSelectedLayer
-    } as any);
-
-    expect(map.addSource).toHaveBeenCalled();
-  });
 
 
   it('createAndUpdateMapLayers: should return empty createAndUpdateMapLayers', () => {

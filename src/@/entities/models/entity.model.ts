@@ -44,6 +44,7 @@ $entityRegistry.on(updateEntityRegistry, (_, payload) => payload);
 
 // Merge from API — API data overrides defaults, new types get added
 $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
+  if (!apiConfigs) return current;
   const merged = { ...current };
   Object.entries(apiConfigs).forEach(([type, config]) => {
     if (merged[type]) {

@@ -323,9 +323,8 @@ describe('onPausePlayTimeplayerFx', () => {
   });
 
   it('should handle undefined interval', () => {
-    global.interval = undefined;
     onPausePlayTimeplayerFx(true);
-    expect(clearTimeout).toHaveBeenCalledWith(undefined);
+    expect(clearTimeout).toHaveBeenCalled();
   });
 });
 

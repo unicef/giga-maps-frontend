@@ -8,6 +8,7 @@ vi.mock('../../country.utils', () => ({
   addAdminCountryLayerEvents: vi.fn(),
   onChangeLabelLayer: vi.fn(),
   onChangeAdminBoundariesLayer: vi.fn(),
+  applyWorldViewToLabels: vi.fn(),
 }))
 
 describe('createUpdateCountriesLayer', () => {

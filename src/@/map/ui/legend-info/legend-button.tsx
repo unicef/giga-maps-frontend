@@ -34,13 +34,12 @@ const LegendButton = () => {
     if (!nextOpen && isProductTour) {
       return;
     }
-
     onShowLegend(nextOpen);
   };
 
   return (
     <div className="relative! legend-container">
-      <LegendPopup open={showLegend}>
+      <LegendPopup onOpenChange={handleLegendOpenChange} open={showLegend}>
         <MapControlButton
           active={showLegend}
           aria-label={t('legend')}

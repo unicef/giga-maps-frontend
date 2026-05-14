@@ -3,6 +3,9 @@ import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from '../upd
 import { Country, CountryBasic } from '~/api/types'
 
 vi.mock('../../country.model')
+vi.mock('../../country.utils', () => ({
+  getAdminCountrySource: vi.fn((level) => `admin${level}`),
+}))
 
 describe('updateLookupSourceForAdmin0', () => {
   let map: vi.Mocked<Map>
@@ -17,9 +20,9 @@ describe('updateLookupSourceForAdmin0', () => {
     } as any
 
     countries = [
-      { id: 1, name: 'Country 1', code: 'C1' },
-      { id: 2, name: 'Country 2', code: 'C2' },
-    ]
+      { id: 1, name: 'Country 1', code: 'C1', admin_metadata: { mapbox_id: '1' } },
+      { id: 2, name: 'Country 2', code: 'C2', admin_metadata: { mapbox_id: '2' } },
+    ] as any
   })
 
   it('should return early if map is null', async () => {
@@ -55,9 +58,9 @@ describe('updateLookupSourceForAdmin1', () => {
     } as any
 
     admin1List = [
-      { id: 1, name: 'Admin1' },
-      { id: 2, name: 'admin2' },
-    ]
+      { id: 1, name: 'Admin1', mapbox_id: 'a1' },
+      { id: 2, name: 'admin2', mapbox_id: 'a2' },
+    ] as any
   })
 
   it('should return early if map is null', async () => {

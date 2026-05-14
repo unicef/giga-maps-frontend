@@ -117,7 +117,7 @@ const AdminViewLayer = () => {
           </LayerContentWrapper>
           {isLive && <LayerContentWrapper>
             <LayerLabel>Parameter Aggregator Function</LayerLabel>
-            <LayerDetail>{`${layerItem?.data_source_column_function.verbose} ${layerItem.data_source_column_function.description ? `(${layerItem.data_source_column_function.description})` : ''}`}</LayerDetail>
+            <LayerDetail>{`${layerItem?.data_source_column_function?.verbose ?? ''} ${layerItem?.data_source_column_function?.description ? `(${layerItem.data_source_column_function.description})` : ''}`}</LayerDetail>
           </LayerContentWrapper>}
           <LayerContentWrapper>
             <LayerLabel>Countries</LayerLabel>

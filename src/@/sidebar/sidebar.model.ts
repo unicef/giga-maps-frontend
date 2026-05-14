@@ -75,6 +75,7 @@ $layersList.on(publishLayersTranslationFx.doneData, (state, payload) => {
 })
 export const $layersListMapping = createStore<[string, string][]>([]);
 $layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
+  if (!payload?.results) return [];
   const list = Object.entries(extractDataWithMapping({ layersList: payload.results }, publishLayersListMapping)).filter(([_key, value]) => !!value);
   return list;
 })
@@ -139,7 +140,7 @@ export const $selectedLayerData = combine($layersList, $selectedLayerId, (layers
 
 export const $currentLayerCountryDataSource = combine($selectedLayerData, $country, (selectedData, country) => {
   if (!selectedData || !country) return null;
-  return selectedData.active_countries_list.find(activeLayers => activeLayers.country === country.id)?.data_sources || null
+  return selectedData?.active_countries_list?.find(activeLayers => activeLayers.country === country.id)?.data_sources || null
 })
 
 export const $benchmarkNamesAllLayers = $layersList.map(layers => layers.reduce((acc, curr) => {
@@ -202,11 +203,11 @@ export const $currentLayerLegends = combine({
 export const $benchmarkmarkUtils = combine($countryBenchmark, $selectedLayerData, $connectivityBenchMark, $countryConnectivityNames, (countryBenchmark, selectedLayerData, connectivityBenchMark, countryConnectivityNames) => {
   if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
   const { global_benchmark, is_reverse: isReverse, benchmark_metadata } = selectedLayerData;
-  const { convert_unit: unit, value, benchmark_name: benchmarkName } = global_benchmark;
+  const { convert_unit: unit, value, benchmark_name: benchmarkName } = global_benchmark ?? {};
   const { base_benchmark: baseBenchmark, round_unit_value: formula = getDefaultFormula(unit) } = benchmark_metadata ?? {};
   const baseBenchmarkValue = Number(evaluateExpression(formula, baseBenchmark ?? 0));
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
-  const nationalBenchmarkValue = Number(evaluateExpression(formula, countryBenchmark[selectedLayerData.id] ?? 0)) || 0;
+  const nationalBenchmarkValue = Number(evaluateExpression(formula, countryBenchmark?.[selectedLayerData.id] ?? 0)) || 0;
   const currentBenchmarkValue = connectivityBenchMark === ConnectivityBenchMarks.national ? nationalBenchmarkValue : globalBenchmarkValue;
   const benchmarkLogic = getConnectivityLogicalValues(String(currentBenchmarkValue), unit, baseBenchmarkValue, isReverse);
   return ({
@@ -235,9 +236,9 @@ export const $isSchoolBenchmark = combine($selectedLayerData, $connectivityBench
   const isLive = isLiveLayer(selectedLayer?.type);
   if (!isLive) return false;
   if (conntectivityBenchmark === ConnectivityBenchMarks.global) {
-    return selectedLayer?.global_benchmark.value.startsWith('SQL:')
+    return selectedLayer?.global_benchmark?.value?.startsWith('SQL:')
   } else if (conntectivityBenchmark === ConnectivityBenchMarks.national) {
-    return country?.benchmark_metadata.live_layer?.[selectedLayer?.id ?? ""]?.startsWith('SQL:')
+    return country?.benchmark_metadata?.live_layer?.[selectedLayer?.id ?? ""]?.startsWith('SQL:')
   }
 })
 
@@ -331,6 +332,7 @@ export const $multiSelectionSchoolCheckbox = createStore<MultischoolSelectionSta
 $multiSelectionSchoolCheckbox.on(changeDefaultMultiSelectionSchoolCheckbox, setPayload);
 
 $multiSelectionSchoolCheckbox.on(changeMultiSelectionSchoolCheckbox, (state: MultischoolSelectionStats, payload: SelectedSchool) => {
+  if (!payload) return state;
   const { countryId, schoolIds } = payload;
 
   const newState = { ...state };
@@ -418,12 +420,15 @@ export const $showFilterSidebar = restore(onShowFilterSidebar, false);
 export const onShowAdvancedFilter = createEvent<boolean>();
 export const $showAdvancedFilter = restore(onShowAdvancedFilter, false);
 
+sample({
+  clock: mapOverview.visible,
+  filter: (visible) => visible,
+  target: onChangeTourStartPopup.prepend(() => true)
+});
+
 export const $isProductTour = sample({
   source: combine(mapOverview.router.search, mapOverview.visible),
-  fn: ([searchParams, isVisible]) => {
-    if (isVisible) {
-      onChangeTourStartPopup(true)
-    }
+  fn: ([searchParams]) => {
     const params = new URLSearchParams(searchParams)
     return params.get('popover') === 'tour'
   }

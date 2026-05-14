@@ -29,7 +29,7 @@ describe("School Crud Tab", () => {
     fireEvent.click(button);
   })
 
-  test("Select School and delete", () => {
+  test("Select School and delete", async () => {
     setSchoolList(mockSchoolList)
     const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchools onClick={handleClick} />));
@@ -38,8 +38,10 @@ describe("School Crud Tab", () => {
       fireEvent.click(checkboxes[1]);
       const button = container.querySelector('#delete-selected-School');
       fireEvent.click(button)
-      const yesButton = screen.getByText('Yes');
-      fireEvent.click(yesButton);
+      await waitFor(() => {
+        const yesButton = screen.getByRole('button', { name: /yes/i });
+        fireEvent.click(yesButton);
+      });
     } else {
       console.error('No button with class name found');
     }

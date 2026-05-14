@@ -1,6 +1,14 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
+import { createStore } from 'effector';
 import NavBar from '../Sections/nav-bar';
+
+// Mock $isMobile to true so mobile-specific elements render in JSDOM
+vi.mock('~/core/media-query', () => ({
+  $isMobile: createStore(true),
+  $isTablet: createStore(false),
+  $isDesktop: createStore(false),
+}));
 
 describe('NavBar Component', () => {
   const mockData = {
@@ -28,7 +36,7 @@ describe('NavBar Component', () => {
 
   it('displays Giga logo', () => {
     render(<NavBar data={mockData} />);
-    expect(screen.getByText('Menu')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-bar-logo')).toBeInTheDocument();
   });
 
   it('toggles menu in mobile view', () => {

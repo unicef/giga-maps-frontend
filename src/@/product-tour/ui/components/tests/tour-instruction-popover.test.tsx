@@ -47,7 +47,7 @@ describe('TourInstructionPopover', () => {
       content: []
     };
     const { queryByRole } = render(testWrapper(<TourInstructionPopover {...props} />));
-    expect(queryByRole('button', { name: 'previous' })).not.toBeInTheDocument();
+    expect(queryByRole('button', { name: /previous/i })).not.toBeInTheDocument();
   });
 
   it('should handle last sub step state', () => {
@@ -59,7 +59,7 @@ describe('TourInstructionPopover', () => {
       content: []
     };
     const { getByRole } = render(testWrapper(<TourInstructionPopover {...props} />));
-    const nextButton = getByRole('button', { name: 'Next' });
+    const nextButton = getByRole('button', { name: /next/i });
     expect(nextButton).toBeInTheDocument();
   });
 

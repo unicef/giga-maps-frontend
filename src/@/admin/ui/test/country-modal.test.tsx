@@ -87,14 +87,12 @@ describe("CountryFilterModal", () => {
     expect(setOpen).toHaveBeenCalledWith(false);
   })
 
-  test("render CountryFilterModal and click on reset", () => {
-    const handleClick = vi.fn();
-    const { getByTestId } = render(testWrapper(<CountryFilterModal open={true} setOpen={vi.fn()} list={countryList} filterValues={[]} setFilterValues={vi.fn()} updateList={vi.fn()} name={""} onClick={handleClick} />));
+  test("render CountryFilterModal and click on reset", async () => {
+    const setOpen = vi.fn();
+    const { getByTestId } = render(testWrapper(<CountryFilterModal open={true} setOpen={setOpen} list={countryList} filterValues={[]} setFilterValues={vi.fn()} updateList={vi.fn()} name={""} />));
     const button = getByTestId(`reset-country-filter`);
     fireEvent.click(button);
-    void waitFor(() => {
-      expect(screen.getByText('Filter By Country')).not.toBeInTheDocument()
-    })
+    expect(setOpen).toHaveBeenCalledWith(false);
   })
 })
 

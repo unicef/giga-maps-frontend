@@ -1,4 +1,4 @@
-import { describe, test, expect, jest } from '@jest/globals'
+import { describe, test, expect, beforeEach, vi } from 'vitest'
 import { addCountriesFx } from '../add-countries-fx';
 import { createSourceForAdminCountry } from '../../country.utils'
 import { DEFAULT_SOURCE } from '~/@/map/map.constant';

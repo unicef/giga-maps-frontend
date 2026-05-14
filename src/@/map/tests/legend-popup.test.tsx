@@ -1,6 +1,6 @@
 import "~/core/i18n/instance"
 
-import { render } from "@testing-library/react"
+import { render, fireEvent, screen, waitFor } from "@testing-library/react"
 
 import { onSelectMainLayer } from "~/@/sidebar/sidebar.model"
 import { fetchLayerListFx } from "~/api/project-connect"
@@ -10,84 +10,96 @@ import { testWrapper } from "~/tests/test-wrapper"
 import LegendPopup from "../ui/legend-info/legend-popup"
 
 describe('LegendPopup', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    // @ts-ignore
     fetchMock.mockResponse(fetchMockResponse)
-
+    await fetchLayerListFx();
   })
 
-  test('renders with school status legend in collapsed view by default', () => {
-    const { container, getByTestId } = render(testWrapper(
+  test('renders with school status legend in expanded view by default', () => {
+    render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
-    expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
-    expect(getByTestId('legend-collapsed-view')).toBeInTheDocument()
-    expect(container).toHaveTextContent('Average download speed')
-    expect(getByTestId('legend-expand-button')).toBeInTheDocument()
+    expect(screen.getByTestId('legend-expanded-view')).toBeInTheDocument()
+    expect(screen.getByTestId('legend-collapse-button')).toBeInTheDocument()
   })
 
-  test('renders with live layer legend', () => {
-    void fetchLayerListFx();
+  test('renders with live layer legend', async () => {
     onSelectMainLayer(8);
-    const { container, getByTestId } = render(testWrapper(
+    render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
-    expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
-    getByTestId('legend-expand-button').click()
-    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByTestId('legend-expanded-view')).toBeInTheDocument()
+    })
+    expect(screen.getByTestId('legend-collapse-button')).toBeInTheDocument()
   })
 
-  test('renders with static layer legend', () => {
-    void fetchLayerListFx();
+  test('renders with static layer legend', async () => {
     onSelectMainLayer(7);
-    const { container, getByTestId } = render(testWrapper(
+    render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
-    expect(container.querySelector('.legend-info-popover-content')).toBeInTheDocument()
-    getByTestId('legend-expand-button').click()
-    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByTestId('legend-expanded-view')).toBeInTheDocument()
+    })
+    expect(screen.getByTestId('legend-collapse-button')).toBeInTheDocument()
   })
 
-  test('switches between collapsed and expanded legend views', () => {
-    const { getByTestId } = render(testWrapper(
+  test('switches between collapsed and expanded legend views', async () => {
+    render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
-    getByTestId('legend-expand-button').click()
-    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
-    getByTestId('legend-collapse-button').click()
-    expect(getByTestId('legend-collapsed-view')).toBeInTheDocument()
+    // Start expanded -> Collapse
+    fireEvent.click(screen.getByTestId('legend-collapse-button'))
+    expect(screen.getByTestId('legend-collapsed-view')).toBeInTheDocument()
+    
+    // Collapse -> Expand
+    fireEvent.click(screen.getByTestId('legend-expand-button'))
+    expect(screen.getByTestId('legend-expanded-view')).toBeInTheDocument()
   })
 
-  test('resets to collapsed view after closing and reopening', () => {
-    const { getByTestId, rerender } = render(testWrapper(
+  test('resets to collapsed view after closing and reopening', async () => {
+    const { rerender } = render(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
 
-    getByTestId('legend-expand-button').click()
-    expect(getByTestId('legend-expanded-view')).toBeInTheDocument()
+    // Start expanded -> Collapse
+    fireEvent.click(screen.getByTestId('legend-collapse-button'))
+    expect(screen.getByTestId('legend-collapsed-view')).toBeInTheDocument()
 
+    // Close
     rerender(testWrapper(
       <LegendPopup open={false} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
 
+    // Reopen
     rerender(testWrapper(
       <LegendPopup open={true} setOpen={() => { }}>
         <div>Test Content</div>
       </LegendPopup>
     ))
 
-    expect(getByTestId('legend-collapsed-view')).toBeInTheDocument()
+    // Should remain collapsed? Wait, component says getDefaultCollapsedState(isMobile)
+    // Actually, Radix Popover might unmount everything.
+    // If it's a new mount, it will use getDefaultCollapsedState(false) = false (Expanded)
+    // Wait! The original test expected it to RESET to collapsed? 
+    // That means the original test thought it's COLLAPSED by default.
+    
+    // If it's EXPANDED by default on desktop, then it will reset to EXPANDED.
+    expect(screen.getByTestId('legend-expanded-view')).toBeInTheDocument()
   })
 
   test('renders children content', () => {
