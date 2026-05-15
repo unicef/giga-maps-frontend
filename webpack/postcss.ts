@@ -1,6 +1,6 @@
-import flexBugsFixes from 'postcss-flexbugs-fixes';
-import normalize from 'postcss-normalize';
-import presetEnv from 'postcss-preset-env';
+const flexBugsFixes = require('postcss-flexbugs-fixes');
+const normalize = require('postcss-normalize');
+const presetEnv = require('postcss-preset-env');
 
 import { isDevelopment } from './env';
 

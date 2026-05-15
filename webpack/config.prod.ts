@@ -18,10 +18,6 @@ const productionPlugins = [
     systemvars: true,
   }),
   new CleanPlugin(),
-  new webpack.ProgressPlugin({
-    activeModules: false,
-    entries: true,
-  }),
   // new webpack.SourceMapDevToolPlugin({
   //   noSources: true,
   // }),
