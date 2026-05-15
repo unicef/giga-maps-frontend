@@ -1,6 +1,7 @@
 import { Checkbox, ModalBody } from "@carbon/react";
 import { useStore } from 'effector-react';
 import { forwardRef, useCallback, useImperativeHandle, useState } from 'react'
+import { useTranslation } from "react-i18next";
 
 import {
   $coverageStats,
@@ -12,9 +13,8 @@ import {
   changeCoverageUnknown,
 } from '~/@/sidebar/sidebar.model';
 
-import { PopoverFilterContentCoverageConnectivityStatus } from "./styles/layer-filter-modal.style";
 import { CoverageBenchmarkNames, CoverageColorNames } from "../global-and-country-view-components/container/layer-view.constant";
-import { useTranslation } from "react-i18next";
+import { PopoverFilterContentCoverageConnectivityStatus } from "./styles/layer-filter-modal.style";
 
 const CoverageLayerSelectionFilterModalBody = forwardRef(function CoverageFilterBody(_props, ref) {
   const { t } = useTranslation();

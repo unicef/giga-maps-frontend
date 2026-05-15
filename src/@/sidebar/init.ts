@@ -453,7 +453,7 @@ sample({
   clock: fetchCountryFx.doneData,
   fn: (country) => {
     const school = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.SCHOOL)?.data_layer_id ?? null;
-    const health = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.HEALTH)?.data_layer_id ?? null;
+    const health = country?.active_layers_list?.find(l => /* l.is_default &&*/ l.entity_type === EntityType.HEALTH)?.data_layer_id ?? null;
     return { school, health };
   },
   target: createEffect(({ school, health }: { school: number | null, health: number | null }) => {

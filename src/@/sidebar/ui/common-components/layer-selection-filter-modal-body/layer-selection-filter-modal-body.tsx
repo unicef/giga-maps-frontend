@@ -1,11 +1,12 @@
 import { ModalBody } from "@carbon/react";
+import { useStore } from "effector-react";
 import { forwardRef, useRef, useState } from 'react'
+
+import { $currentLayerTypeUtils } from "~/@/sidebar/sidebar.model";
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import ConnectivityBenchmark from "./connectivity-benchmark.view";
 import LiveConnectivityType from "./live-connectivity-type.view";
-import { $currentLayerTypeUtils } from "~/@/sidebar/sidebar.model";
-import { useStore } from "effector-react";
 
 type RefType = { apply: () => void } | null;
 export default forwardRef(function LayerSelectionFilterModalBody(_props, ref) {
@@ -23,7 +24,9 @@ export default forwardRef(function LayerSelectionFilterModalBody(_props, ref) {
 
   return (
     <ModalBody className='layer-selection-filter-body'>
+
       {isLive && <LiveConnectivityType ref={liveConnectivityRef} setCurrentLayer={setCurrentLayerId} />}
+      <span className="text-red-500">test check layer filter : {isLive ? 'live' : 'static'}</span>
       <ConnectivityBenchmark ref={connectvityBenchmarkRef} layerId={currentLayerId} />
     </ModalBody>
   )

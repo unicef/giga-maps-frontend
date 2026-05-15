@@ -141,7 +141,7 @@ export const fetchEntitiesConnectivityStatsFx = createEffect(
 
 export const fetchCountryStaticLayerInfo = createEffect(
   async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<CoverageStat>
+    fetchLayerInfoFx(`api/v2/entities/layers/${id}/info/${query}`) as Promise<CoverageStat>
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(

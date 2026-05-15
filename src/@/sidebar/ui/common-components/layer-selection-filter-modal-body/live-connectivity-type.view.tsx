@@ -30,7 +30,7 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
   }, [connectivityLayers])
 
   imperativeHandle(ref, handleConnectivityTypeChange)
-
+  console.log("layer connectivity", connectivityLayers)
   return (
     <PopoverFilterContentConnectivitytype>
       <h2 className="filter-popover-title">{t('real-time-connectivity-data-layer')}</h2>
@@ -45,7 +45,7 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
         }}
       >
         {connectivityLayers.map((layer: LayerType) => {
-          if ((!layer.created_by && layer.type === LayerTypeChoices.LIVE) || layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <></>;
+          if ((!layer.created_by && layer.type === LayerTypeChoices.LIVE) || layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <>na {layer.name}</>;
           return (
             <RadioButton
               key={layer.id}

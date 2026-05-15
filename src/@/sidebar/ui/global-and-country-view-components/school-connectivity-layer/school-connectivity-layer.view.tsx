@@ -38,7 +38,6 @@ const SchoolConnectivityLayer = () => {
   return (
     <SchoolConnectivityLayerContainer>
       <div>
-        <span className='text-red-500'>test check school connectivity layer</span>
         <CurrentLayerNameIcon showFilter={false} label={t("connectivity-status")} isSchoolStatus={true} />
         {!schoolView && <SchoolInfoSection>
           {isLoading ? <>  <LoadingText $blockSize='3.5625' width="4rem" />
