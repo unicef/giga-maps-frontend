@@ -42,6 +42,9 @@ export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
 }
 
 export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
+  if (!mapDotsClickIdsAndHandler[source]) {
+    mapDotsClickIdsAndHandler[source] = {};
+  }
   mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(e.point, {
       layers: [...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
@@ -420,8 +423,10 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEF
   // create on click on dots;
   // clear click event before creating new layer;
 
-  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-  delete mapDotsClickIdsAndHandler[source][id];
+  if (mapDotsClickIdsAndHandler[source]) {
+    map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
+    delete mapDotsClickIdsAndHandler[source][id];
+  }
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }

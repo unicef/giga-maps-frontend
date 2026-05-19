@@ -1,4 +1,4 @@
-import { $countryCode, $countrySearchParams } from '~/@/country/country.model';
+import { $countryCode, $countrySearchParams, setZoomCountryCode } from './country.model';
 import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl";
 
 import { mapCountry } from "~/core/routes";
@@ -6,7 +6,6 @@ import { mapCountry } from "~/core/routes";
 import { Colors, CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
 import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
-import { setZoomCountryCode } from "./country.model";
 import { AddCountries } from "./country.types";
 import { $isNavigateByAdminLevel } from '../map/map.model';
 

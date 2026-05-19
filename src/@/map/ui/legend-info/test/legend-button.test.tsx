@@ -1,19 +1,25 @@
-import { render } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { $showLegend, onSelectMainLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
+import { $isProductTour, $showLegend, onSelectMainLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
 
 import LegendButton from '../legend-button';
+import { testWrapper } from '~/tests/test-wrapper';
+import '~/core/i18n/instance'
 
 describe('LegendButton', () => {
+  beforeEach(() => {
+    onShowLegend(false);
+  });
+
   test('renders legend button in desktop view', () => {
-    render(<LegendButton />);
-    expect(document.body).toHaveTextContent('legend');
+    render(testWrapper(<LegendButton />));
+    expect(screen.getByLabelText(/legend/i)).toBeInTheDocument();
   });
 
   test('toggles legend visibility on button click', async () => {
-    render(<LegendButton />);
-    const button = document.querySelector('button[aria-label="legend"]');
+    const { container } = render(testWrapper(<LegendButton />));
+    const button = container.querySelector('button[aria-label="Legend"]');
 
     expect(button).toBeInTheDocument();
 
@@ -21,17 +27,21 @@ describe('LegendButton', () => {
       throw new Error('Legend button is missing');
     }
 
-    await userEvent.click(button);
+    await act(async () => {
+      fireEvent.click(button);
+    });
     expect($showLegend.getState()).toBe(true);
 
-    await userEvent.click(button);
+    await act(async () => {
+      fireEvent.click(button);
+    });
     expect($showLegend.getState()).toBe(false);
   });
 
   test('hides legend by default on mobile', () => {
     global.innerWidth = 400;
     window.dispatchEvent(new Event('resize'));
-    render(<LegendButton />);
+    render(testWrapper(<LegendButton />));
 
     expect($showLegend.getState()).toBe(false);
   });
@@ -40,9 +50,9 @@ describe('LegendButton', () => {
     global.innerWidth = 400;
     window.dispatchEvent(new Event('resize'));
     onShowLegend(true);
-    render(<LegendButton />);
+    render(testWrapper(<LegendButton />));
 
-    const clickAnywhere = document.querySelector('.lengend-container');
+    const clickAnywhere = document.querySelector('.legend-container');
     expect(clickAnywhere).toBeInTheDocument();
   });
 
@@ -50,17 +60,27 @@ describe('LegendButton', () => {
     global.innerWidth = 1200;
     window.dispatchEvent(new Event('resize'));
     onShowLegend(true);
-    render(<LegendButton />);
+    const { getByTestId } = render(testWrapper(
+      <div>
+        <div data-testid="outside">Outside</div>
+        <LegendButton />
+      </div>
+    ));
 
-    await userEvent.click(document.body);
-    expect($showLegend.getState()).toBe(false);
+    await act(async () => {
+      await userEvent.click(getByTestId('outside'));
+    });
+
+    await waitFor(() => {
+      expect($showLegend.getState()).toBe(false);
+    });
   });
 
   test('preserves legend open state while switching layers', async () => {
     global.innerWidth = 1200;
     window.dispatchEvent(new Event('resize'));
     onShowLegend(true);
-    render(<LegendButton />);
+    render(testWrapper(<LegendButton />));
 
     onSelectMainLayer(123);
     await new Promise((resolve) => setTimeout(resolve, 0));

@@ -1,5 +1,3 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Month slider > should render component 1`] = `[Function]`;
-
-exports[`Month slider should render component 1`] = `[Function]`;

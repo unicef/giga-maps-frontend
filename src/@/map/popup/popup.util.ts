@@ -43,7 +43,7 @@ const setContentHTML = (el: HTMLElement, className = '', content = '') => {
 }
 
 export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintData, layerUtils, isGotoSchool, countryCode }: { popupElement: HTMLElement, isGotoSchool?: boolean; countryCode?: string; unit?: string; } & SchoolPopupDataType) => {
-  const { selectedLayerData, currentLayerTypeUtils, isSchoolBenchmark, benchmarkNamesAllLayers, countryConnectivityNames: countryConnectivityNames,
+  const { selectedLayerData, currentLayerTypeUtils, isSchoolBenchmark, benchmarkNamesAllLayers, countryConnectivityNames,
     connectivityBenchMarks } = layerUtils;
   const { isLive, isStatic } = currentLayerTypeUtils
   const { global_benchmark } = selectedLayerData ?? {};
@@ -70,7 +70,7 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
-  setContentHTML(popupTemplate, '.map-school-geo', schoolCoords.reverse().join(', '));
+  setContentHTML(popupTemplate, '.map-school-geo', schoolCoords.toReversed().join(', '));
   if (isLive) {
     showElement(popupTemplate, '.live-container');
     const connectivityElm = setContentHTML(popupTemplate, '.map-school-connectivity-speed', connectivityValue);

@@ -5,9 +5,3 @@ exports[`Admin Filter > should render component 1`] = `[Function]`;
 exports[`Admin Filter > should render component 2`] = `[Function]`;
 
 exports[`Admin Filter > should render component 3`] = `[Function]`;
-
-exports[`Admin Filter should render component 1`] = `[Function]`;
-
-exports[`Admin Filter should render component 2`] = `[Function]`;
-
-exports[`Admin Filter should render component 3`] = `[Function]`;

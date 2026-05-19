@@ -30,7 +30,7 @@ describe('PromptActionable Component', () => {
   it('should apply custom styles if $style prop is provided', () => {
     const { container } = render(<PromptActionable {...defaultProps} />);
     const wrapper = container.querySelector('div');
-    expect(wrapper).toHaveStyle('background-color: red');
+    expect(wrapper).toHaveStyle('background-color: rgb(255, 0, 0)');
   });
 
   // it('should render the notification with low contrast and inline', () => {

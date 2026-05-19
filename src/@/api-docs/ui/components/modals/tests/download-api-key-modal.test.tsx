@@ -84,14 +84,14 @@ describe('DownloadApiKeyModal', () => {
 
   it('request api key on button is clicked', () => {
     render(<DownloadApiKeyModal />);
-    const submitButton = screen.getByText('Request API Key');
+    const submitButton = screen.getByText('request one');
     fireEvent.click(submitButton);
   });
 
   it('request api key on button is clicked when api is public', () => {
     getExploreApiListFx.doneData({ results: [{ ...testApiData, category: 'public' }] });
     render(<DownloadApiKeyModal />);
-    const submitButton = screen.getByText('Request API Key');
+    const submitButton = screen.getByText('request one');
     fireEvent.click(submitButton);
   });
 

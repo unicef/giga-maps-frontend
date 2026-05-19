@@ -14,7 +14,7 @@ export const initMapFx = createEffect(
       style: styleUrls[style],
       center: center ?? defaultCenter,
       zoom: zoom ?? defaultZoom,
-      maxZoom: maxZoom,
+      maxZoom,
       container,
     });
     map.dragRotate.disable();

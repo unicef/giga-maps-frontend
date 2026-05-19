@@ -50,7 +50,7 @@ $aboutConnectivityStats.on(connectivityStatsFx.doneData, setPayload);
 
 export const $aboutUsContent = createStore<AboutType[] | null>(null)
 $aboutUsContent.on(getAboutUsContentFx.doneData, (_, payload) => {
-  const aboutUsContent = payload?.sort((a, b) => a.id - b.id);
+  const aboutUsContent = payload?.toSorted((a, b) => a.id - b.id);
   return setPayload(_, aboutUsContent)
 })
 

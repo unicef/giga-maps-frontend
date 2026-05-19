@@ -1,5 +1,5 @@
 # Stage 1
-FROM node:22.12.0 AS s1
+FROM node:24.11.1-bookworm-slim AS s1
 WORKDIR /proco
 COPY package.json ./
 RUN yarn install

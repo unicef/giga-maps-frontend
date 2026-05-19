@@ -25,14 +25,14 @@ describe('Layer selection filter modal', () => {
 
   it('should close modal and apply filters when clicking apply button', () => {
     const { getByText } = render(testWrapper(<LayerSelectionFilterModal open={true} setOpen={mockSetOpen} />));
-    const applyButton = getByText('Apply');
+    const applyButton = getByText(/apply/i);
     fireEvent.click(applyButton);
     expect(mockSetOpen).toHaveBeenCalledWith(false);
   });
 
   it('should close modal when clicking reset button', () => {
     const { getByText } = render(testWrapper(<LayerSelectionFilterModal open={true} setOpen={mockSetOpen} />));
-    const resetButton = getByText('Reset');
+    const resetButton = getByText(/reset/i);
     fireEvent.click(resetButton);
     expect(mockSetOpen).toHaveBeenCalledWith(false);
   });

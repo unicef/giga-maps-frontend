@@ -1,4 +1,4 @@
-import { describe, test, expect, jest } from '@jest/globals'
+import { describe, test, expect, beforeEach, vi } from 'vitest'
 import { zoomToCountryFx } from '../zoom-to-country-fx'
 import { defaultCenter, defaultZoom } from '~/@/map/map.constant'
 
@@ -23,6 +23,7 @@ describe('zoomToCountryFx', () => {
     expect(map.flyTo).toHaveBeenCalledWith({
       center: schoolFocusLatLng,
       zoom: 10,
+      offset: [0, -180],
     })
     expect(result).toBe(schoolFocusLatLng.toString())
   })

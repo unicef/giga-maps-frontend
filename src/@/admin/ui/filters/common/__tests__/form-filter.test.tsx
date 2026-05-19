@@ -31,12 +31,12 @@ describe('AddEditFilterListForm', () => {
 
   beforeEach(() => {
     fetchMock.mockResponse(fetchMockResponse)
-
+    // @ts-ignore
     useStore.mockImplementation((store) => {
       if (store === $formFilterData) return mockFormData;
       if (store === $userPermissions) return mockPermissions;
       if (store === $filterColumnList) return filterColumnconfigurationData.results
-      return {};
+      return [];
     });
   });
 
@@ -76,7 +76,7 @@ describe('AddEditFilterListForm', () => {
         CAN_ADD_ADVANCE_FILTER: false
       };
       if (store === $filterColumnList) return filterColumnconfigurationData.results
-      return {};
+      return [];
     });
 
     render(<AddEditFilterListForm isEditMode={true} id={1} />);

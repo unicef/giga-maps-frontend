@@ -235,7 +235,7 @@ export const SelectDropDownSection = ({ field }: { field: AboutFormFieldType }) 
       )}
       selectedItems={selectedItem}
       onChange={({ selectedItems }: { selectedItems: any[] }) => {
-        const selectedValue = selectedItems.map(item => item.value).sort((a, b) => aboutUsFormType.indexOf(a) - aboutUsFormType.indexOf(b)).join(',');
+        const selectedValue = selectedItems.map(item => item.value).toSorted((a, b) => aboutUsFormType.indexOf(a) - aboutUsFormType.indexOf(b)).join(',');
         onChangeFormField({
           path: field.path,
           value: selectedValue,

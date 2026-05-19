@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { createEvent } from "effector";
 
 import { testCountryDailyList } from "~/tests/data/country-filter-modal";
@@ -17,7 +17,7 @@ $countryDailySummaryList.on(setCountryDailySummaryList, (_, payload) => payload)
 
 
 describe("Country Crud Tab", () => {
-  test("Select CountryDailySummary and delete and verify", () => {
+  test("Select CountryDailySummary and delete and verify", async () => {
     setCountryDailySummaryList(testCountryDailyList)
     const handleClick = vi.fn();
     const { container, getByTestId } = render(testWrapper(<ListCountryDailySummary onClick={handleClick} />));
@@ -26,8 +26,10 @@ describe("Country Crud Tab", () => {
       fireEvent.click(checkboxes[1]);
       const button = getByTestId('delete-country-daily-summary');
       fireEvent.click(button)
-      const yesButton = screen.getByText('Yes');
-      fireEvent.click(yesButton);
+      await waitFor(() => {
+        const yesButton = screen.getByRole('button', { name: /yes/i });
+        fireEvent.click(yesButton);
+      });
     } else {
       console.error('No button with class name found');
     }

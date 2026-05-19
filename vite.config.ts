@@ -4,10 +4,12 @@ import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import tailwindcss from '@tailwindcss/vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import path from 'path';
 
 export default defineConfig(({ mode }) => ({
   plugins: [
+    tsconfigPaths(),
     tailwindcss(),
     react({
       babel: {
@@ -51,12 +53,6 @@ export default defineConfig(({ mode }) => ({
       },
     }),
   ],
-  resolve: {
-    alias: {
-      '~': path.resolve(__dirname, 'src'),
-      '@': path.resolve(__dirname, 'src/@'),
-    },
-  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -98,7 +94,7 @@ export default defineConfig(({ mode }) => ({
     css: false,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'lcov'],
       exclude: [
         'src/assets/*',
         'src/lib/**/*',

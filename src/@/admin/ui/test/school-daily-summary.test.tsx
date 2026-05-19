@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { createEvent } from "effector";
 
 import { mockSchoolDailtSummary, mockSchoolSummaryList } from "~/tests/data/school-list";
@@ -29,7 +29,7 @@ describe("School daily Summary Crud Tab", () => {
     fireEvent.click(button);
   })
 
-  test("Select school daily summary and delete", () => {
+  test("Select school daily summary and delete", async () => {
     setSchoolDailyListAdmin(mockSchoolDailtSummary)
     const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchoolDailyConnectivitySummary onClick={handleClick} />));
@@ -38,8 +38,10 @@ describe("School daily Summary Crud Tab", () => {
       fireEvent.click(checkboxes[1]);
       const button = container.querySelector('#delete-selected-School-daily-Summary');
       fireEvent.click(button)
-      const yesButton = screen.getByText('Yes');
-      fireEvent.click(yesButton);
+      await waitFor(() => {
+        const yesButton = screen.getByRole('button', { name: /yes/i });
+        fireEvent.click(yesButton);
+      });
     } else {
       console.error('No button with class name found');
     }

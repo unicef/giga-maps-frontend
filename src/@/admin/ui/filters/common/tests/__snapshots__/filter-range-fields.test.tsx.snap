@@ -1,8 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FilterRangeFields > renders FilterRangeFields and take a snapshop 1`] = `<DocumentFragment />`;
-
-exports[`FilterRangeFields renders FilterCommonFields and take a snapshop, edit mode true 1`] = `
+exports[`FilterRangeFields > renders FilterCommonFields and take a snapshop, edit mode true 1`] = `
 <DocumentFragment>
   .c0 {
   color: #c0c0c0;
@@ -92,6 +90,75 @@ exports[`FilterRangeFields renders FilterCommonFields and take a snapshop, edit 
           class="cds--text-input__counter-alert"
           role="alert"
         />
+      </div>
+    </div>
+  </div>
+  .c0 {
+  margin-top: 0.5rem;
+}
+
+.c0 .cds--label {
+  color: #c0c0c0;
+}
+
+.c0 .cds--select-input {
+  background: #333333;
+  color: #f5f5f5;
+}
+
+.c0 .cds--list-box__label {
+  color: #f5f5f5;
+}
+
+.c0 svg {
+  fill: #f5f5f5;
+}
+
+<div
+    class="cds--form-item c0"
+  >
+    <div
+      class="cds--select"
+    >
+      <label
+        class="cds--label"
+        for="entity-type-select"
+      >
+        Entity Type
+      </label>
+      <div
+        class="cds--select-input__wrapper"
+      >
+        <select
+          class="cds--select-input"
+          id="entity-type-select"
+          name="entity_type"
+          placeholder="Choose entity type"
+          required=""
+          title=""
+        >
+          <option
+            class="cds--select-option"
+            value=""
+          >
+            Choose entity type
+          </option>
+        </select>
+        <svg
+          aria-hidden="true"
+          class="cds--select__arrow"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+          />
+        </svg>
       </div>
     </div>
   </div>
@@ -484,4 +551,4 @@ exports[`FilterRangeFields renders FilterCommonFields and take a snapshop, edit 
 </DocumentFragment>
 `;
 
-exports[`FilterRangeFields renders FilterRangeFields and take a snapshop 1`] = `<DocumentFragment />`;
+exports[`FilterRangeFields > renders FilterRangeFields and take a snapshop 1`] = `<DocumentFragment />`;

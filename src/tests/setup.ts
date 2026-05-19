@@ -1,6 +1,22 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
+
+// Wrap global Request to strip AbortSignal in tests (prevents JSDOM compatibility issues)
+const NativeRequest = globalThis.Request;
+// @ts-ignore
+globalThis.Request = class extends NativeRequest {
+  constructor(input, init) {
+    if (init && init.signal) {
+      const { signal, ...rest } = init;
+      super(input, rest);
+    } else {
+      super(input, init);
+    }
+  }
+};
+
 import createFetchMock from 'vitest-fetch-mock';
+import { createEffect } from 'effector';
 
 const fetchMock = createFetchMock(vi);
 
@@ -61,17 +77,16 @@ vi.mock('webfontloader', () => ({
 }));
 
 // Scroll effects mocks
-vi.mock('~/@/scroll', () => ({
-  scrollToHashFx: {
-    use: vi.fn(),
-    done: { watch: vi.fn() },
-    fail: { watch: vi.fn() },
-    pending: { watch: vi.fn() },
-  },
-  instantScrollFx: {
-    use: vi.fn(),
-  },
-}));
+vi.mock('~/@/scroll', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/@/scroll')>();
+  return {
+    ...actual,
+    scrollToHashFx: createEffect(() => {}),
+    instantScrollFx: createEffect(() => {}),
+  };
+});
+
+
 
 afterEach(() => {
   vi.clearAllMocks();

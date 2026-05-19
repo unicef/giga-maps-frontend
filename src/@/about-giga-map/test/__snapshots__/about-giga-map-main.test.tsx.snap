@@ -15,19 +15,3 @@ exports[`AboutGigaMapModal > renders AboutGigaMapModal and take a snapshop 1`] =
   </div>
 </DocumentFragment>
 `;
-
-exports[`AboutGigaMapModal renders AboutGigaMapModal and take a snapshop 1`] = `
-<DocumentFragment>
-  .c0 {
-  background-color: #000000;
-  width: 100vw;
-  max-height: calc()(100vh - 3rem);
-}
-
-<div>
-    <div
-      class="c0"
-    />
-  </div>
-</DocumentFragment>
-`;

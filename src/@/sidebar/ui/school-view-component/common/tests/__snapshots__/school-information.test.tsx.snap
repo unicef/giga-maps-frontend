@@ -5,9 +5,3 @@ exports[`School information > should render component 1`] = `[Function]`;
 exports[`School information > should render component 2`] = `[Function]`;
 
 exports[`School information > should render component 3`] = `[Function]`;
-
-exports[`School information should render component 1`] = `[Function]`;
-
-exports[`School information should render component 2`] = `[Function]`;
-
-exports[`School information should render component 3`] = `[Function]`;
