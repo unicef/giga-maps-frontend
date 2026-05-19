@@ -39,6 +39,7 @@ import {
   $schoolStats,
   $schoolStatusSelectedLayer,
   $selectedLayerId,
+  $healthSelectedLayerId,
   changeConnectivityBenchmark,
   checkConnectivityBenchmark,
   onSchoolUncheck,
@@ -98,13 +99,19 @@ const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (co
 }))
 
 sample({
-  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId, $selectedEntityType]),
-  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId, selectedEntityType: $selectedEntityType }),
-  fn: ({ countryIdAndSchoolIds, selectedLayerId, selectedEntityType }) => {
+  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId, $healthSelectedLayerId]),
+  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId, healthSelectedLayerId: $healthSelectedLayerId, selectedEntityType: $selectedEntityType }),
+  fn: ({ countryIdAndSchoolIds, selectedLayerId, healthSelectedLayerId, selectedEntityType }) => {
     const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
-    //entity_type currently iam doing hardcode school because api have some issue in entity type hardcoded with school.
+    const query = new URLSearchParams();
+    if (selectedLayerId) query.set('school_layer_id', selectedLayerId.toString());
+    if (healthSelectedLayerId) query.set('health_layer_id', healthSelectedLayerId.toString());
+    if (countryId) query.set('country_id', countryId.toString());
+    if (schoolIds?.length) query.set('school_ids', schoolIds.join(','));
+    if (admin1Id) query.set('admin1_id', admin1Id.toString());
+    
     return {
-      query: `?layer_id=${selectedLayerId}&country_id=${countryId}${schoolIds?.length ? `&school_ids=${schoolIds?.join(',')}` : ''}${admin1Id ? `&admin1_id=${admin1Id}` : ''}${selectedEntityType ? `&entity_type__code=${selectedEntityType}` : ''}`
+      query: `?${query.toString()}`
     }
   },
   filter: ({ countryIdAndSchoolIds, isCurrentLayerLive, layers }) => {
@@ -171,19 +178,20 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   const endDate = format(interval.end, 'dd-MM-yyyy');
   const params = new URLSearchParams()
   if (isLive) {
-    params.set('start_date', startDate);
-    params.set('end_date', endDate);
-    params.set('is_weekly', isWeekly.toString());
+    params.set('school_start_date', startDate);
+    params.set('school_end_date', endDate);
+    params.set('health_start_date', startDate);
+    params.set('health_end_date', endDate);
+    params.set('school_is_weekly', isWeekly.toString());
+    params.set('health_is_weekly', isWeekly.toString());
   }
-  // if (isDownload) {
-  //   params.set('indicator', 'download');
-  // }
   if (country?.id) {
     params.set('country_id', String(country.id));
   }
-  // if (!mapRoutes.map && isLive) {
-  params.set('benchmark', connectivityBenchMark);
-  // }
+  
+  params.set('school_benchmark', connectivityBenchMark);
+  params.set('health_benchmark', connectivityBenchMark);
+
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
@@ -197,13 +205,17 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
     params.set('school_id__in', schoolKeys);
   }
 
-  params.set('include_same_location_schools', String(allowDublicateSchoolIds));
+  params.set('school_include_same_location', String(allowDublicateSchoolIds));
+  params.set('health_include_same_location', String(allowDublicateSchoolIds));
   if (allowDublicateSchoolIds) {
     params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
   }
 
-  if (selectedEntityType) {
-    params.set('entity_type__code', selectedEntityType);
+  if (layersUtils.selectedLayerId) {
+    params.set('school_layer_id', String(layersUtils.selectedLayerId));
+  }
+  if (layersUtils.healthSelectedLayerId) {
+    params.set('health_layer_id', String(layersUtils.healthSelectedLayerId));
   }
 
   let query = `?${params.toString()}`;
@@ -215,7 +227,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
 
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, $selectedEntityType, debounce($historyInterval, { timeout: 500 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -226,7 +238,7 @@ sample({
 
 // for all static layers
 sample({
-  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId, $selectedEntityType]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -237,8 +249,8 @@ sample({
 
 
 const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
-  const { query, id } = getCurrentQueryId(props);
-  const url = `api/v2/entities/layers/${id}/info/`
+  const { query } = getCurrentQueryId(props);
+  const url = `api/v2/entities/layers/info/`
   return {
     url,
     query
@@ -246,7 +258,7 @@ const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSch
 }
 // school view info api
 sample({
-  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $selectedEntityType, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
+  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
   source: sourceForInfo,
   fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
   filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {

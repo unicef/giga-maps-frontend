@@ -58,7 +58,7 @@ export const fetchLayerListFx = createRequestFx(
 );
 
 export const fetchSchoolPopupDataFx = createRequestFx(
-  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<Record<string, SchoolStatsType[]>> =>
     request({
       url: `${url}${query}`,
       signal: controller?.getSignal()
@@ -67,7 +67,7 @@ export const fetchSchoolPopupDataFx = createRequestFx(
 
 // Fetch dublicate school info by IDs
 export const fetchDublicateSchoolPopupDataFx = createRequestFx(
-  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<Record<string, SchoolStatsType[]>> =>
     request({
       url: `${url}${query}`,
       signal: controller?.getSignal()
@@ -104,13 +104,13 @@ export const fetchLayerInfoFx = createRequestFx(
 );
 
 export const fetchSchoolLayerInfoFx = createEffect(
-  async ({ query, url }: { query: string; url: string }): Promise<SchoolStatsType[]> =>
-    fetchLayerInfoFx(`${url}${query}`) as Promise<SchoolStatsType[]>
+  async ({ query, url }: { query: string; url: string }): Promise<Record<string, SchoolStatsType[]>> =>
+    fetchLayerInfoFx(`${url}${query}`) as Promise<Record<string, SchoolStatsType[]>>
 );
 
 export const fetchCountryLiveLayerInfo = createEffect(
-  async ({ query, id }: { query: string; id: number | null }): Promise<ConnectivityStat> =>
-    fetchLayerInfoFx(`api/v2/entities/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
+  async ({ query, id }: { query: string; id: number | null }): Promise<Record<string, ConnectivityStat>> =>
+    fetchLayerInfoFx(`api/v2/entities/layers/info/${query}`) as Promise<Record<string, ConnectivityStat>>
 );
 
 export const fetchConnectivityLayerFx = createEffect(
@@ -140,8 +140,8 @@ export const fetchEntitiesConnectivityStatsFx = createEffect(
 );
 
 export const fetchCountryStaticLayerInfo = createEffect(
-  async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
-    fetchLayerInfoFx(`api/v2/entities/layers/${id}/info/${query}`) as Promise<CoverageStat>
+  async ({ query, id }: { query: string; id: number | null }): Promise<Record<string, CoverageStat>> =>
+    fetchLayerInfoFx(`api/v2/entities/layers/info/${query}`) as Promise<Record<string, CoverageStat>>
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(

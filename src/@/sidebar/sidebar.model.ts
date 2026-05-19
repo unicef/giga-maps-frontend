@@ -1,4 +1,4 @@
-import { combine, createEvent, createStore, restore, sample } from 'effector';
+import { combine, createEvent, createStore, merge, restore, sample } from 'effector';
 import i18next from 'i18next';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
@@ -42,10 +42,31 @@ export const $connectivityStatsByEntity = createStore<EntitiesConnectivityStatsR
 $connectivityStatsByEntity.on(fetchEntitiesConnectivityStatsFx.doneData, setPayload);
 export const $connectivityStats = createStore<ConnectivityStat | null>(null);
 $connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
-$connectivityStats.on(fetchCountryLiveLayerInfo.doneData, setPayload);
+export const $connectivityStatsResponse = createStore<Record<string, ConnectivityStat> | null>(null);
+$connectivityStatsResponse.on(fetchCountryLiveLayerInfo.doneData, setPayload);
+
+sample({
+  clock: merge([$connectivityStatsResponse, $selectedEntityType]),
+  source: { response: $connectivityStatsResponse, entityType: $selectedEntityType },
+  fn: ({ response, entityType }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return response?.[entityType] || null;
+  },
+  target: $connectivityStats
+});
 
 export const $coverageStats = createStore<CoverageStat | null>(null);
-$coverageStats.on(fetchCountryStaticLayerInfo.doneData, setPayload);
+export const $coverageStatsResponse = createStore<Record<string, CoverageStat> | null>(null);
+$coverageStatsResponse.on(fetchCountryStaticLayerInfo.doneData, setPayload);
+
+sample({
+  clock: merge([$coverageStatsResponse, $selectedEntityType]),
+  source: { response: $coverageStatsResponse, entityType: $selectedEntityType },
+  fn: ({ response, entityType }) => {
+    return (response as any)?.[entityType] || null;
+  },
+  target: $coverageStats
+});
 
 export const onChangeMenu = createEvent<boolean>();
 export const $isMenuOpen = createStore(false)
@@ -373,8 +394,18 @@ $multiSelectionSchoolCheckbox.on(changeMultiSelectionSchoolCheckbox, (state: Mul
 });
 
 export const onSchoolUncheck = createEvent<number>();
+export const $schoolStatsResponse = createStore<Record<string, SchoolStatsType[]> | null>(null);
+$schoolStatsResponse.on(fetchSchoolLayerInfoFx.doneData, setPayload);
+
 export const $schoolStats = createStore<SchoolStatsType[] | null>([])
-$schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
+sample({
+  clock: merge([$schoolStatsResponse, $selectedEntityType]),
+  source: { response: $schoolStatsResponse, entityType: $selectedEntityType },
+  fn: ({ response, entityType }) => {
+    return (response as any)?.[entityType] || null;
+  },
+  target: $schoolStats
+});
 export const schoolStatsMap = (school: SchoolStatsType) => ({
   name: school.name,
   geopoint: school?.geopoint,
@@ -417,7 +448,17 @@ export const $connectivityYears = $connectivityAvailability.map((data) => {
   }
   return null;
 });
-$connectivityAvailability.on(getSchoolAvailableDates.doneData, setPayload);
+export const $connectivityAvailabilityResponse = createStore<Record<string, ConnectivityConfig> | null>(null);
+$connectivityAvailabilityResponse.on(getSchoolAvailableDates.doneData, setPayload);
+
+sample({
+  clock: merge([$connectivityAvailabilityResponse, $selectedEntityType]),
+  source: { response: $connectivityAvailabilityResponse, entityType: $selectedEntityType },
+  fn: ({ response, entityType }) => {
+    return response?.[entityType] || null;
+  },
+  target: $connectivityAvailability
+});
 
 export const $allLoadings = combine({
   country: fetchCountryFx.pending,

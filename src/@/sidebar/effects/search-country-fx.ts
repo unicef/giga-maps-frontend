@@ -18,7 +18,7 @@ export const applySearchFx = createEffect(({ schoolIds, countryCode }: { schoolI
 })
 
 export const getSchoolAvailableDates = createRequestFx(
-  ({ query }: { query: string }, controller?: Controller): Promise<ConnectivityConfig> => {
+  ({ query }: { query: string }, controller?: Controller): Promise<Record<string, ConnectivityConfig>> => {
     return request({
       url: `/api/v2/entities/connectivityconfigs/${query}`,
       signal: controller?.getSignal(),
