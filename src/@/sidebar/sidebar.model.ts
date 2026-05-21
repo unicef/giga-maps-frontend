@@ -117,10 +117,35 @@ export const onSelectSchoolStatusLayer = createEvent<number | null>();
 export const $schoolStatusSelectedLayer = restore(onSelectSchoolStatusLayer, SCHOOL_STATUS_LAYER.id);
 
 export const onSelectMainLayer = createEvent<number | null>();
-export const $selectedLayerId = restore(onSelectMainLayer, null);
-
 export const onSelectHealthLayer = createEvent<number | null>();
-export const $healthSelectedLayerId = restore(onSelectHealthLayer, null);
+
+export const $schoolSelectedLayerId = createStore<number | null>(null);
+export const $healthSelectedLayerId = createStore<number | null>(null);
+
+$schoolSelectedLayerId.on(onSelectMainLayer, (state, id) => {
+  const entityType = $selectedEntityType.getState();
+  if (entityType === EntityType.SCHOOL) {
+    return id;
+  }
+  return state;
+});
+
+$healthSelectedLayerId.on(onSelectMainLayer, (state, id) => {
+  const entityType = $selectedEntityType.getState();
+  if (entityType === EntityType.HEALTH) {
+    return id;
+  }
+  return state;
+}).on(onSelectHealthLayer, (_, id) => id);
+
+export const $selectedLayerId = combine(
+  $selectedEntityType,
+  $schoolSelectedLayerId,
+  $healthSelectedLayerId,
+  (entityType, schoolLayer, healthLayer) => {
+    return entityType === EntityType.HEALTH ? healthLayer : schoolLayer;
+  }
+);
 export const $globalLayerData = $filteredLayersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && !layer.created_by && layer.code === 'DOWNLOAD') ?? null);
 export const $globalLayerId = $globalLayerData.map(layer => layer?.id ?? null);
 export const $downloadLayerData = $filteredLayersList.map(layers => layers?.find(layer => layer?.type === LayerTypeChoices.LIVE && layer.created_by && Object.values(layer.data_source_column ?? {})[0].name === 'connectivity_speed') ?? null);
@@ -292,6 +317,7 @@ export const $layerUtils = combine({
   liveLayers: $connectivityLayers,
   staticLayers: $staticLayers,
   selectedLayerId: $selectedLayerId,
+  schoolSelectedLayerId: $schoolSelectedLayerId,
   selectedLayerData: $selectedLayerData,
   globalLayerId: $globalLayerId,
   globalLayerData: $globalLayerData,
@@ -546,11 +572,12 @@ $coverage3g2g.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $potentialCoverageOpenStatus.reset(onSelectMainLayer);
-$schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
-$healthSelectedLayerId.reset($countryCode, $selectedLayerId);
+$schoolStats.reset(mapSchools.visible, $countryCode, $schoolSelectedLayerId, $healthSelectedLayerId);
+$healthSelectedLayerId.reset($countryCode);
+$schoolSelectedLayerId.reset($countryCode);
 $isMenuOpen.reset(router.historyUpdated)
 // on history update, clear connectivity dates;
-$connectivityAvailability.reset(router.historyUpdated, $selectedLayerId, $selectedEntityType);
+$connectivityAvailability.reset(router.historyUpdated, $schoolSelectedLayerId, $healthSelectedLayerId, $selectedEntityType);
 
 $isTimeplayer.reset(router.historyUpdated);
 $timePlayerCurrentYear.reset($isTimeplayer)

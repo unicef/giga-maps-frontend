@@ -18,6 +18,7 @@ import {
   $coverageUnknown,
   $healthSelectedLayerId,
   $schoolStatusSelectedLayer,
+  $schoolSelectedLayerId,
   $selectedLayerId,
   $selectedSchoolIds,
   $staticLegendsSelected,
@@ -134,7 +135,7 @@ export const $initialUrlParams = createStore(getInitialUrlParams());
 
 // Combined store for all URL-tracked values
 export const $urlTrackedParams = combine({
-  layerId: $selectedLayerId,
+  layerId: $schoolSelectedLayerId,
   schoolStatusLayer: $schoolStatusSelectedLayer,
   entityTypes: $activeEntityTypes,
   isGlobal: $isGlobalMode,
@@ -291,7 +292,7 @@ sample({
     $country,
     $admin1Code,
     $selectedSchoolIds,
-    $selectedLayerId,
+    $schoolSelectedLayerId,
     $schoolStatusSelectedLayer,
     $healthSelectedLayerId,
     $activeEntityTypes,

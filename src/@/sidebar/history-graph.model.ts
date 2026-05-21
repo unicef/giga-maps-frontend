@@ -10,8 +10,8 @@ import { getInterval, isCurrentInterval } from '~/lib/date-fns-kit';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { getInverted, setPayload } from '~/lib/effector-kit';
 
-import { $connectivityAvailability, $currentLayerTypeUtils, $selectedLayerId } from "./sidebar.model";
-import { createHistoryIntervalFormat } from './sidebar.util';
+import { $connectivityAvailability, $currentLayerTypeUtils, $schoolSelectedLayerId, $healthSelectedLayerId, $layersList } from "./sidebar.model";
+import { createHistoryIntervalFormat, isLiveLayer } from './sidebar.util';
 
 export const changeHistoryIntervalUnit = createEvent<IntervalUnit>();
 export const nextHistoryInterval = createEvent();
@@ -28,9 +28,12 @@ export const $isPreviousHistoryIntervalAvailable = createStore(false);
 export const $lastAvailableDates = createStore<null | { [IntervalUnit.week]: Interval, [IntervalUnit.month]: Interval }>(null);
 
 export const $isCheckedLastDate = combine([
-  $lastAvailableDates, $currentLayerTypeUtils, $mapRoutes
-], ([lastAvailableDates, currentLayerTypeUtils, mapRoutes]) => {
-  const { isLive } = currentLayerTypeUtils;
+  $lastAvailableDates, $currentLayerTypeUtils, $mapRoutes, $layersList, $schoolSelectedLayerId, $healthSelectedLayerId
+], ([lastAvailableDates, currentLayerTypeUtils, mapRoutes, layers, schoolLayerId, healthLayerId]) => {
+  const isSchoolLive = isLiveLayer(layers?.find((l: any) => l.id === schoolLayerId)?.type);
+  const isHealthLive = isLiveLayer(layers?.find((l: any) => l.id === healthLayerId)?.type);
+  const isLive = currentLayerTypeUtils.isLive || isSchoolLive || isHealthLive;
+  
   if (mapRoutes.map) return true
   if (isLive) {
     return !!lastAvailableDates
@@ -106,4 +109,4 @@ sample({
 // reset 
 $historyIntervalUnit.on(changeHistoryIntervalUnit, setPayload);
 $historyInterval.reset(router.historyUpdated);
-$lastAvailableDates.reset(router.historyUpdated, $selectedLayerId);
+$lastAvailableDates.reset(router.historyUpdated, $schoolSelectedLayerId, $healthSelectedLayerId);

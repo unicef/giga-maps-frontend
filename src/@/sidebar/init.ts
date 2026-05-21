@@ -29,6 +29,7 @@ import {
   $currentLayerTypeUtils,
   $getSchoolParams,
   $globalLayerId,
+  $healthSelectedLayerId,
   $isCurrentLayerLive,
   $isSidebarCollapsed,
   $isTimeplayer,
@@ -36,10 +37,10 @@ import {
   $layersListMapping,
   $layerUtils,
   $schoolAdminId,
+  $schoolSelectedLayerId,
   $schoolStats,
   $schoolStatusSelectedLayer,
   $selectedLayerId,
-  $healthSelectedLayerId,
   changeConnectivityBenchmark,
   checkConnectivityBenchmark,
   onSchoolUncheck,
@@ -99,8 +100,8 @@ const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (co
 }))
 
 sample({
-  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId, $healthSelectedLayerId]),
-  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId, healthSelectedLayerId: $healthSelectedLayerId, selectedEntityType: $selectedEntityType }),
+  clock: merge([$countryId, $admin1Id, $getSchoolParams, $schoolSelectedLayerId, $healthSelectedLayerId, $layersList]),
+  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $schoolSelectedLayerId, healthSelectedLayerId: $healthSelectedLayerId, selectedEntityType: $selectedEntityType }),
   fn: ({ countryIdAndSchoolIds, selectedLayerId, healthSelectedLayerId, selectedEntityType }) => {
     const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
     const query = new URLSearchParams();
@@ -109,15 +110,18 @@ sample({
     if (countryId) query.set('country_id', countryId.toString());
     if (schoolIds?.length) query.set('school_ids', schoolIds.join(','));
     if (admin1Id) query.set('admin1_id', admin1Id.toString());
-    
+
     return {
       query: `?${query.toString()}`
     }
   },
-  filter: ({ countryIdAndSchoolIds, isCurrentLayerLive, layers }) => {
+  filter: ({ countryIdAndSchoolIds, isCurrentLayerLive, layers, selectedLayerId, healthSelectedLayerId }) => {
     //debugger
     const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
-    if (!!countryId && layers?.length && !!isCurrentLayerLive) {
+    const isSchoolLive = isLiveLayer(layers?.find(l => l.id === selectedLayerId)?.type);
+    const isHealthLive = isLiveLayer(layers?.find(l => l.id === healthSelectedLayerId)?.type);
+
+    if (!!countryId && layers?.length && (isCurrentLayerLive || isSchoolLive || isHealthLive)) {
       return !!countryId || !!schoolIds?.length || !!admin1Id
     }
     return false;
@@ -188,7 +192,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   if (country?.id) {
     params.set('country_id', String(country.id));
   }
-  
+
   params.set('school_benchmark', connectivityBenchMark);
   params.set('health_benchmark', connectivityBenchMark);
 
@@ -211,8 +215,8 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
     params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
   }
 
-  if (layersUtils.selectedLayerId) {
-    params.set('school_layer_id', String(layersUtils.selectedLayerId));
+  if (layersUtils.schoolSelectedLayerId) {
+    params.set('school_layer_id', String(layersUtils.schoolSelectedLayerId));
   }
   if (layersUtils.healthSelectedLayerId) {
     params.set('health_layer_id', String(layersUtils.healthSelectedLayerId));
@@ -227,22 +231,28 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
 
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $schoolSelectedLayerId, $healthSelectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 }), $isCheckedLastDate]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.country && (!!country?.id || !!admin1Id) && !!isCheckedLastDate && !!layersUtils.currentLayerTypeUtils.isLive;
+    const isSchoolLive = isLiveLayer(layersUtils.layers?.find(l => l.id === layersUtils.schoolSelectedLayerId)?.type);
+    const isHealthLive = isLiveLayer(layersUtils.layers?.find(l => l.id === layersUtils.healthSelectedLayerId)?.type);
+
+    return mapRoutes.country && (!!country?.id || !!admin1Id) && !!isCheckedLastDate && (layersUtils.currentLayerTypeUtils.isLive || isSchoolLive || isHealthLive);
   },
   target: fetchCountryLiveLayerInfo
 })
 
 // for all static layers
 sample({
-  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $schoolSelectedLayerId, $healthSelectedLayerId, $layersList]),
   source: sourceForInfo,
   fn: getCurrentQueryId,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.country && (!!country?.id || !!admin1Id) && !!layersUtils.currentLayerTypeUtils.isStatic;
+    const isSchoolStatic = isStaticLayer(layersUtils.layers?.find(l => l.id === layersUtils.schoolSelectedLayerId)?.type);
+    const isHealthStatic = isStaticLayer(layersUtils.layers?.find(l => l.id === layersUtils.healthSelectedLayerId)?.type);
+
+    return mapRoutes.country && (!!country?.id || !!admin1Id) && (layersUtils.currentLayerTypeUtils.isStatic || isSchoolStatic || isHealthStatic);
   },
   target: fetchCountryStaticLayerInfo
 })
@@ -258,7 +268,7 @@ const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSch
 }
 // school view info api
 sample({
-  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
+  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $schoolSelectedLayerId, $healthSelectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
   source: sourceForInfo,
   fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
   filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {
@@ -316,7 +326,7 @@ sample({
 
 // refetch open duplicate-school popup data when user switches the live layer
 sample({
-  clock: $selectedLayerId,
+  clock: merge([$schoolSelectedLayerId, $healthSelectedLayerId]),
   source: combine({
     info: sourceForInfo,
     duplicateSchoolPopup: $activeDublicateSchoolsPopup,
@@ -464,8 +474,10 @@ sample({
 sample({
   clock: fetchCountryFx.doneData,
   fn: (country) => {
-    const school = country?.active_layers_list?.find(l => l.is_default && l.entity_type === EntityType.SCHOOL)?.data_layer_id ?? null;
-    const health = country?.active_layers_list?.find(l => /* l.is_default &&*/ l.entity_type === EntityType.HEALTH)?.data_layer_id ?? null;
+    const schoolLayers = country?.active_layers_list?.filter(l => l.entity_type === EntityType.SCHOOL) ?? [];
+    const healthLayers = country?.active_layers_list?.filter(l => l.entity_type === EntityType.HEALTH) ?? [];
+    const school = schoolLayers.find(l => l.is_default)?.data_layer_id ?? schoolLayers[0]?.data_layer_id ?? null;
+    const health = healthLayers.find(l => l.is_default)?.data_layer_id ?? healthLayers[0]?.data_layer_id ?? null;
     return { school, health };
   },
   target: createEffect(({ school, health }: { school: number | null, health: number | null }) => {

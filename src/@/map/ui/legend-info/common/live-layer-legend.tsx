@@ -13,7 +13,7 @@ import {
   $connectivitySpeedModerate,
   $connectivitySpeednoInternet,
   $connectivitySpeedUnknown,
-  $connectivityStats,
+  $connectivityStatsByEntity,
   $layerUtils,
   $schoolStats,
   changeConnectivitySpeedGood,
@@ -58,9 +58,10 @@ const LiveLayerLegend = ({
   const countryObj = useStore($country);
   const countryBenchmarkDescriptions = countryObj?.benchmark_metadata?.layer_descriptions;
   const [realtimeCheckedStatus, setRealtimeCheckedStatus] = useState<CheckedStatus>({});
-  const realtimeStatsFromStore = useStore($connectivityStats);
+  const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
+  const realtimeStatsFromStore = connectivityStatsByEntity?.[entityType as 'school' | 'health'] as any;
   const schoolRealTimeStats = useStore($schoolStats);
-  const realtimeStats = realtimeStatsFromStore?.real_time_connected_schools ?? {} as DefaultLegendValuesType;
+  const realtimeStats = (realtimeStatsFromStore?.real_time_connected_entities ?? realtimeStatsFromStore?.real_time_connected_schools ?? {}) as DefaultLegendValuesType;
   const benchmarkValue = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.rounded_benchmark_value;
   const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.display_unit;
   const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? '';

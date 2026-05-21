@@ -10,7 +10,7 @@ import {
   $coverage3g2g,
   $coverage5g4g,
   $coverageNoCoverage,
-  $coverageStats,
+  $coverageStatsResponse,
   $coverageUnknown,
   $layerUtils,
   changeCoverage3g2g,
@@ -43,7 +43,9 @@ const StaticLayerLegend = ({
   const { t } = useTranslation();
   const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
   const { currentLayerLegends: legends, selectedLayerData } = useStore($layerUtils);
-  const coverageStats = useStore($coverageStats) as { connected_schools?: Record<string, number> } | null;
+  const coverageStatsResponse = useStore($coverageStatsResponse);
+  const coverageStats = coverageStatsResponse?.[entityType] as Record<string, any> | null;
+  const connectedStats = coverageStats?.connected_entities ?? coverageStats?.connected_schools;
   const connectivityBenchMark = useStore($connectivityBenchMark);
   const countryObj = useStore($country);
   const countryBenchmarkDescriptions = countryObj?.benchmark_metadata?.layer_descriptions;
@@ -107,7 +109,7 @@ const StaticLayerLegend = ({
       {legends.values.map(({ key, label, tooltip }) => {
         const tooltipLabel = key === 'unknown' ? (tooltip || `Doesn't match any criteria`) : tooltip;
 
-        return coverageStats?.connected_schools && (label in coverageStats.connected_schools) && coverageStats.connected_schools[label] > 0 ? (
+        return connectedStats && (label in connectedStats) && connectedStats[label] > 0 ? (
           <button className="mt-3! flex! w-full! items-center! justify-between! border-0! bg-transparent! p-0! text-left!" key={key} title={tooltipLabel} type="button">
             <div className="flex! min-w-0! items-center!">
               {shouldShowControls ? (
@@ -124,8 +126,8 @@ const StaticLayerLegend = ({
               </div>
             </div>
             {shouldShowControls ? (
-              <div className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!" data-title={t('int', { val: coverageStats?.connected_schools?.[label] ?? 0 })}>
-                {formatNumber(coverageStats?.connected_schools?.[label] ?? 0, lng)}
+              <div className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!" data-title={t('int', { val: connectedStats?.[label] ?? 0 })}>
+                {formatNumber(connectedStats?.[label] ?? 0, lng)}
               </div>
             ) : null}
           </button>
