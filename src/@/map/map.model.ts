@@ -1,9 +1,10 @@
-import { createEvent, createStore, restore } from 'effector';
+import { createEvent, createStore, restore, sample, merge } from 'effector';
 
 import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchEntityGlobalStatsFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { AdvanceFilterType, EntitiesGlobalStatsResponse, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 
 import { getLocalStorage, setLocalStorage } from '~/lib/utils';
@@ -117,14 +118,34 @@ export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(s
 
 export const setMultipleSchoolPopup = createEvent<SchoolClickupPopupType[] | null>();
 export const $multipleSchoolPopup = restore(setMultipleSchoolPopup, null);
+export const $schoolClickDataResponse = createStore<Record<string, SchoolStatsType[]> | null>(null);
+$schoolClickDataResponse.on(fetchSchoolPopupDataFx.doneData, setPayload);
+
 export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
-$schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
+sample({
+  clock: merge([$schoolClickDataResponse, $selectedEntityType]),
+  source: { response: $schoolClickDataResponse, entityType: $selectedEntityType },
+  fn: ({ response, entityType }) => {
+    return (response as any)?.[entityType] || null;
+  },
+  target: $schoolClickData
+});
 
 export const resetDublicateSchoolClickData = createEvent();
 export const setDublicateSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
 export const $dublicateSchoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setDublicateSchoolCLickupPopupDiv, null);
+export const $dublicateSchoolClickDataResponse = createStore<Record<string, SchoolStatsType[]> | null>(null);
+$dublicateSchoolClickDataResponse.on(fetchDublicateSchoolPopupDataFx.doneData, setPayload);
+
 export const $dublicateSchoolClickData = createStore<SchoolStatsType[] | null>(null)
-$dublicateSchoolClickData.on(fetchDublicateSchoolPopupDataFx.doneData, setPayload);
+sample({
+  clock: merge([$dublicateSchoolClickDataResponse, $selectedEntityType]),
+  source: { response: $dublicateSchoolClickDataResponse, entityType: $selectedEntityType },
+  fn: ({ response, entityType }) => {
+    return (response as any)?.[entityType] || null;
+  },
+  target: $dublicateSchoolClickData
+});
 $dublicateSchoolClickData.reset(resetDublicateSchoolClickData);
 
 export const $advanceFilterList = createStore<AdvanceFilterType[]>([]);

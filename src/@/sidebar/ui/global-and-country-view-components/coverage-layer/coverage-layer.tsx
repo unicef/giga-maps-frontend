@@ -1,16 +1,16 @@
 import { useStore } from 'effector-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next';
+import styled, { useTheme } from 'styled-components';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
-import { $isLoadingCountryAdminView, $potentialCoverageOpenStatus, changePotentialCoverageOpenStatus, $layerUtils, $coverageStats } from '~/@/sidebar/sidebar.model';
+import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { $coverageStats, $isLoadingCountryAdminView, $layerUtils, $potentialCoverageOpenStatus, changePotentialCoverageOpenStatus } from '~/@/sidebar/sidebar.model';
+import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
-import styled, { useTheme } from 'styled-components';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
-import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { Trans, useTranslation } from 'react-i18next';
-import { $lng } from '~/core/i18n/store';
 
 const CoverageLayerContanier = styled.div` 
   display: flex;
@@ -61,7 +61,7 @@ const CoverageLayer = () => {
         <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
             <Div $margin='0rem 0.2rem 0 0'>
-              <Text data-title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
+              <Text data-title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData.good : theme.text}>
                 {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>

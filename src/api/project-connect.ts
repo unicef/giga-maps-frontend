@@ -37,14 +37,14 @@ export const getBaseUrl = (url: string): string => `${apiBaseUrl}${url}`;
 export const fetchCountryFx = createRequestFx(
   async (countryCode: string, controller?: Controller): Promise<Country> =>
     request({
-      url: `api/locations/countries/${encodeURIComponent(countryCode)}/`,
+      url: `api/v2/entities/countries/${encodeURIComponent(countryCode)}/`,
       signal: controller?.getSignal(),
     })
 );
 
 export const fetchCountriesFx = createRequestFx(
   async (_, controller?: Controller): Promise<CountryBasic[]> => request({
-    url: 'api/locations/countries/',
+    url: 'api/v2/entities/countries/',
     signal: controller?.getSignal(),
   })
 );
@@ -52,13 +52,13 @@ export const fetchCountriesFx = createRequestFx(
 export const fetchLayerListFx = createRequestFx(
   async (_, controller?: Controller): Promise<APIListType<LayerType>> =>
     request({
-      url: 'api/accounts/layers/PUBLISHED/?expand=created_by,last_modified_by,published_by&ordering=-last_modified_at',
+      url: 'api/v2/entities/layers/PUBLISHED/?expand=created_by,last_modified_by,published_by&ordering=-last_modified_at',
       signal: controller?.getSignal()
     })
 );
 
 export const fetchSchoolPopupDataFx = createRequestFx(
-  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<Record<string, SchoolStatsType[]>> =>
     request({
       url: `${url}${query}`,
       signal: controller?.getSignal()
@@ -67,7 +67,7 @@ export const fetchSchoolPopupDataFx = createRequestFx(
 
 // Fetch dublicate school info by IDs
 export const fetchDublicateSchoolPopupDataFx = createRequestFx(
-  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
+  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<Record<string, SchoolStatsType[]>> =>
     request({
       url: `${url}${query}`,
       signal: controller?.getSignal()
@@ -90,7 +90,7 @@ export const fetchEntityGlobalStatsFx = createRequestFx(
 
 export const fetchAdvanceFilterFx = createRequestFx(
   async (countryId: number, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
-    url: `api/accounts/adv_filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
+    url: `api/v2/entities/filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
     signal: controller?.getSignal()
   })
 );
@@ -104,13 +104,13 @@ export const fetchLayerInfoFx = createRequestFx(
 );
 
 export const fetchSchoolLayerInfoFx = createEffect(
-  async ({ query, url }: { query: string; url: string }): Promise<SchoolStatsType[]> =>
-    fetchLayerInfoFx(`${url}${query}`) as Promise<SchoolStatsType[]>
+  async ({ query, url }: { query: string; url: string }): Promise<Record<string, SchoolStatsType[]>> =>
+    fetchLayerInfoFx(`${url}${query}`) as Promise<Record<string, SchoolStatsType[]>>
 );
 
 export const fetchCountryLiveLayerInfo = createEffect(
-  async ({ query, id }: { query: string; id: number | null }): Promise<ConnectivityStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
+  async ({ query, id }: { query: string; id: number | null }): Promise<Record<string, ConnectivityStat>> =>
+    fetchLayerInfoFx(`api/v2/entities/layers/info/${query}`) as Promise<Record<string, ConnectivityStat>>
 );
 
 export const fetchConnectivityLayerFx = createEffect(
@@ -140,8 +140,8 @@ export const fetchEntitiesConnectivityStatsFx = createEffect(
 );
 
 export const fetchCountryStaticLayerInfo = createEffect(
-  async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<CoverageStat>
+  async ({ query, id }: { query: string; id: number | null }): Promise<Record<string, CoverageStat>> =>
+    fetchLayerInfoFx(`api/v2/entities/layers/info/${query}`) as Promise<Record<string, CoverageStat>>
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(

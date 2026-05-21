@@ -35,7 +35,7 @@ describe('Sidebar Init', () => {
             },
           },
         }))
-      } else if (req.url.includes('api/locations/countries/br'))
+      } else if (req.url.includes('api/v2/entities/countries/br'))
         return Promise.resolve(JSON.stringify({
           id: 1,
           name: 'Brazil',

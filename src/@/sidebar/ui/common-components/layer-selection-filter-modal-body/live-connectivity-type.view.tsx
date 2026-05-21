@@ -1,17 +1,17 @@
 import { RadioButton, RadioButtonGroup } from "@carbon/react";
 import { useStore } from 'effector-react';
-import { forwardRef, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
+import { useTranslation } from "react-i18next";
 
+import { $country } from "~/@/country/country.model";
 import {
   $activeLayerByCountryCode,
   $connectivityLayers, $selectedLayerId, onSelectMainLayer,
 } from '~/@/sidebar/sidebar.model';
+import { LayerType, LayerTypeChoices } from "~/@/sidebar/types";
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentConnectivitytype } from "../styles/layer-filter-modal.style";
-import { LayerType, LayerTypeChoices } from "~/@/sidebar/types";
-import { $country } from "~/@/country/country.model";
-import { useTranslation } from "react-i18next";
 
 
 export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { setCurrentLayer: (id: null | number) => void }, ref) {
@@ -25,8 +25,12 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
     onSelectMainLayer(selectedId);
   };
 
-  imperativeHandle(ref, handleConnectivityTypeChange)
+  useMemo(() => {
 
+  }, [connectivityLayers])
+
+  imperativeHandle(ref, handleConnectivityTypeChange)
+  console.log("layer connectivity", connectivityLayers)
   return (
     <PopoverFilterContentConnectivitytype>
       <h2 className="filter-popover-title">{t('real-time-connectivity-data-layer')}</h2>
@@ -41,7 +45,7 @@ export default forwardRef(function LiveConnectivityType({ setCurrentLayer }: { s
         }}
       >
         {connectivityLayers.map((layer: LayerType) => {
-          if ((!layer.created_by && layer.type === LayerTypeChoices.LIVE) || layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <></>;
+          if ((!layer.created_by && layer.type === LayerTypeChoices.LIVE) || layer.applicable_countries?.length && !layer.applicable_countries.includes(country.id)) return <>na {layer.name}</>;
           return (
             <RadioButton
               key={layer.id}

@@ -135,3 +135,48 @@ ${props => props.$hide && css`
   width:100%;
 }
 `
+
+export const CountryViewSidebarFooterGigaLayerContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  z-index: 1;
+  background: transparent;
+
+  .cds--btn--ghost:not([disabled]) svg {
+    fill: var(--cds-icon-primary, #161616);
+    color: #9e9e9e;
+    height: 0.8rem;
+    margin-right: 0.4rem;
+    width: 0.8rem;
+  }
+
+  #connectivityID {
+    margin: 0;
+    padding-left: 0.16rem;
+    padding-right: 0.16rem;
+  }
+
+  .sidebar-worldview-gigaIcon {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transform: scale(0.9);
+  }
+
+  .sidebar-footer-gigalayer-icons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.4rem;
+    padding-right: 0rem;
+
+    .cds--popover-caret {
+      background: ${props => props.theme.main};
+    }
+
+    transform: scale(0.9);
+  }
+`

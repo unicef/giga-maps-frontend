@@ -1,14 +1,16 @@
-import { findByLabelText, fireEvent, render, screen } from "@testing-library/react"
+import "~/core/i18n/instance"
 
-import TextField from "../ui/advanced-filter/text-input"
-import FilterPopupContent from "../ui/advanced-filter/filter-popup-content"
+import { findByLabelText, fireEvent, render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+
 import { fetchAdvanceFilterFx, fetchCountryFx } from "~/api/project-connect"
 import filterData from "~/tests/data/filter-data"
-import RangeTextInput from "../ui/advanced-filter/range-text-input"
-import FilterButton from "../ui/advanced-filter/filter"
 import { testWrapper } from "~/tests/test-wrapper"
-import "~/core/i18n/instance"
-import userEvent from "@testing-library/user-event"
+
+import FilterButton from "../ui/advanced-filter/filter"
+import FilterPopupContent from "../ui/advanced-filter/filter-popup-content"
+import RangeTextInput from "../ui/advanced-filter/range-text-input"
+import TextField from "../ui/advanced-filter/text-input"
 
 describe('AdvancedFilter', () => {
 
@@ -16,7 +18,7 @@ describe('AdvancedFilter', () => {
     fetchMock.mockResponse((req) => {
       if (req.url.includes('accounts/adv_filters')) {
         return Promise.resolve(JSON.stringify(filterData))
-      } else if (req.url.includes('api/locations/countries/br')) {
+      } else if (req.url.includes('api/v2/entities/countries/br')) {
         return Promise.resolve(JSON.stringify({
           id: 1,
           name: 'Brazil',

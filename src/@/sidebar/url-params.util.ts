@@ -1,6 +1,10 @@
 // URL Parameter keys (short keys to keep URLs compact)
+import { $entityRegistry } from '../entities/models/entity.model';
+import type { EntityType } from '../entities/types/base-entity.type';
+
 export const URL_PARAM_KEYS = {
   LAYER_ID: 'layer',
+  HEALTH_LAYER: 'healthlayer',
   SCHOOL_STATUS_LAYER: 'status',
   // Connectivity speed filters (c = connectivity)
   SPEED_GOOD: 'cG',
@@ -20,9 +24,6 @@ export const URL_PARAM_KEYS = {
   LANGUAGE: 'lng',
   GLOBAL: 'g',
 } as const;
-
-import { $entityRegistry } from '../entities/models/entity.model';
-import type { EntityType } from '../entities/types/base-entity.type';
 
 // Helper to parse URL params
 export const getUrlParams = (): URLSearchParams => {

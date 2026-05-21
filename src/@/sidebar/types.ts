@@ -1,3 +1,5 @@
+import { EntityType } from "../entities";
+
 export type SortType =
   | 'number'
   | 'date'
@@ -60,6 +62,8 @@ export interface LayerType {
   version: string;
   type: LayerTypeChoices;
   category: string
+  entity_type: number
+  entity_type__code: EntityType
   applicable_countries: number[]
   global_benchmark: GlobalBenchmark
   created_by: null | string

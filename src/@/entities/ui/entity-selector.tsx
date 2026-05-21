@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import {
   $activeEntityTypes,
   $entityRegistry,
+  $isGlobalMode,
   changeActiveEntityTypes,
   changeSelectedEntityType,
   selectAllEntityTypes,
   toggleEntityType,
-  $isGlobalMode,
 } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';

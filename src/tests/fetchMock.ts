@@ -86,15 +86,21 @@ export const fetchMockResponse = (req: any, fallback?: any) => {
     return Promise.resolve(JSON.stringify(filterData))
   } else if (req.url.includes('accounts/layers')) {
     return Promise.resolve(JSON.stringify({ results: dataLayerlistMock, count: 2 }))
-  } else if (req.url.includes('/statistics/connectivityconfigs/')) {
-    return Promise.resolve(JSON.stringify(connectivityConfigData))
+  } else if (req.url.includes('/entities/connectivityconfigs/')) {
+    return Promise.resolve(JSON.stringify({
+      school: connectivityConfigData,
+      health: connectivityConfigData
+    }))
   } else if (req.url.includes('api/v2/entities/connectivity-stat/?start_date')) {
     return Promise.resolve(JSON.stringify({
       school: connectivityStatsData,
       health: healthConnectivityStatsData,
     }))
-  } else if (req.url.includes('/info/') && req.url.includes('?start_date')) {
-    return Promise.resolve(JSON.stringify(liveInfoData))
+  } else if (req.url.includes('/info/') && (req.url.includes('?school_start_date') || req.url.includes('?school_layer_id'))) {
+    return Promise.resolve(JSON.stringify({
+      school: liveInfoData,
+      health: liveInfoData
+    }))
   } else if (req.url.includes('accounts/column_configurations/')) {
     return Promise.resolve(JSON.stringify(filterColumnconfigurationData))
   } else if (req.url.includes('auth/roles/5')) {

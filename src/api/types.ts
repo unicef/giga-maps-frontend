@@ -1,3 +1,4 @@
+import { EntityType } from "~/@/entities";
 import { GeoJSONGeometry, GeoJSONPoint } from "~/core/global-types";
 
 export type ConnectionStatus = 'no' | 'moderate' | 'good' | 'unknown';
@@ -226,7 +227,8 @@ export type ActiveFilterListType = {
   is_default?: boolean,
   default_filter_values?: {
     values: string | boolean | { min: number, max: number, none_range: boolean } | string[]
-  }
+  },
+  entity_type: EntityType,
 }
 export type Country = {
   id: number;
@@ -263,6 +265,7 @@ export type Country = {
       description: string
     }
     is_applicable: boolean
+    entity_type: EntityType
     legend_configs: Record<string, {
       values: string[]
       labels: string

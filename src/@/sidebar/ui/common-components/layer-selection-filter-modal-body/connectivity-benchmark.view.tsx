@@ -1,12 +1,14 @@
+import { Information } from '@carbon/icons-react'
 import { RadioButton, RadioButtonGroup, Tooltip } from "@carbon/react";
 import { useStore } from 'effector-react';
 import { forwardRef, useEffect, useState } from 'react'
-import { Information } from '@carbon/icons-react'
+import { useTranslation } from "react-i18next";
 
+import { $countryActiveLayersDataById, $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
 import {
-  $benchmarkNamesAllLayers,
   $benchmarkmarkUtils,
+  $benchmarkNamesAllLayers,
   $connectivityBenchMark,
   $layerUtils,
   changeConnectivityBenchmark,
@@ -14,8 +16,6 @@ import {
 import { imperativeHandle } from "~/lib/utils/react.util";
 
 import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.style";
-import { $countryActiveLayersDataById, $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
-import { useTranslation } from "react-i18next";
 
 export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
   const { t } = useTranslation();

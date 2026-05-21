@@ -1,5 +1,7 @@
 import { useStore } from 'effector-react';
+import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 import { MouseEvent } from 'react';
+
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 import { BroadcastButton, TakeTourWrapper } from '~/@/map/ui/layer-theme/theme-button.style';
@@ -31,7 +33,6 @@ import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
-import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation()
@@ -95,7 +96,7 @@ export default function Sidebar() {
             </LayerDetailContainer>
           }
           {
-            !mapRoute && <CommonComponentGigaLayer />
+            !mapRoute && !countryRoute && <CommonComponentGigaLayer />
           }
           <button
             className={cn(
