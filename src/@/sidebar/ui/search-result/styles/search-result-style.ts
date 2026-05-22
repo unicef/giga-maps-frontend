@@ -537,7 +537,7 @@ color: ${props => props.theme.grey60};
 `
 
 export const LayerDetailContainer = styled.div<{ $height?: string; }>`
- height: calc(100% - 8.5rem);
+ height: 100%;
  background: ${props => props.theme.main} ;
  overflow: hidden;
 
