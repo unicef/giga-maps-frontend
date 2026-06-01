@@ -13,6 +13,8 @@ import {
   $countrySearchString,
   countryReceived, onRecenterView
 } from '~/@/country/country.model';
+import { $activeEntityTypes, changeSelectedEntityType } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
   $connectivityBenchMark,
   $connectivityLayers,
@@ -28,7 +30,6 @@ import {
   $currentLayerTypeUtils,
   $getSchoolParams,
   $globalLayerId,
-  $isCurrentLayerLive,
   $isSidebarCollapsed,
   $isTimeplayer,
   $layersList,
@@ -38,16 +39,19 @@ import {
   $schoolStats,
   $schoolStatusSelectedLayer,
   $selectedLayerId,
+  $selectedLayerIdByEntity,
+  $statusLayerIdByEntity,
   changeConnectivityBenchmark,
   checkConnectivityBenchmark,
   onSchoolUncheck,
   onSelectMainLayer,
+  onSelectEntityMainLayer,
   onSelectSchoolStatusLayer,
   resetCoverageFilterSelection,
   resetFilterModal,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
-import { fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchDublicateSchoolPopupDataFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchDublicateSchoolPopupDataFx, fetchEntitiesLayerInfoFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { languageStore } from '~/core/i18n/store';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes, mapOverview, mapSchools, router } from '~/core/routes';
@@ -56,7 +60,7 @@ import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { format } from 'date-fns';
 import { MaxAllowedDublicateSchoolIds, SCHOOL_LAYER_ID } from '../map/map.constant';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
-import { getSchoolAvailableDates } from './effects/search-country-fx';
+import { getEntitiesAvailableDates, getSchoolAvailableDates } from './effects/search-country-fx';
 import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
 import { ConnectivityBenchMarks, SCHOOL_STATUS_LAYER } from './sidebar.constant';
 import { isLiveLayer } from './sidebar.util';
@@ -66,6 +70,8 @@ $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
   schoolId: $schoolStatusSelectedLayer,
   selectedId: $selectedLayerId,
+  schoolIdByEntity: $statusLayerIdByEntity,
+  selectedIdByEntity: $selectedLayerIdByEntity,
 })
 
 export const $connectivityFilter = combine(
@@ -86,31 +92,6 @@ export const $coverageFilter = combine({
   moderate: $coverage3g2g,
   bad: $coverageNoCoverage,
   unknown: $coverageUnknown,
-})
-
-const countryIdAndSchoolIds = combine($country, $getSchoolParams, $admin1Id, (country, schoolParams, admin1Id) => ({
-  countryId: country?.id,
-  schoolIds: schoolParams?.schoolIds,
-  admin1Id
-}))
-
-sample({
-  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId]),
-  source: combine({ countryIdAndSchoolIds, isCurrentLayerLive: $isCurrentLayerLive, layers: $layersList, selectedLayerId: $selectedLayerId }),
-  fn: ({ countryIdAndSchoolIds, selectedLayerId }) => {
-    const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
-    return {
-      query: `?layer_id=${selectedLayerId}&country_id=${countryId}${schoolIds?.length ? `&school_ids=${schoolIds?.join(',')}` : ''}${admin1Id ? `&admin1_id=${admin1Id}` : ''}`
-    }
-  },
-  filter: ({ countryIdAndSchoolIds, isCurrentLayerLive, layers }) => {
-    const { countryId, schoolIds, admin1Id } = countryIdAndSchoolIds
-    if (!!countryId && layers?.length && !!isCurrentLayerLive) {
-      return !!countryId || !!schoolIds?.length || !!admin1Id
-    }
-    return false;
-  },
-  target: getSchoolAvailableDates
 })
 
 // on school remove from list;
@@ -154,6 +135,8 @@ const sourceForInfo = combine({
   countrySearch: $countrySearchString,
   isMobile: $isMobile,
   allowDublicateSchoolIds: $allowDublicateSchoolIds,
+  activeEntityTypes: $activeEntityTypes,
+  selectedLayerIdByEntity: $selectedLayerIdByEntity,
 })
 
 export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked, allowDublicateSchoolIds }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
@@ -203,26 +186,164 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
   return { query, id: selectedLayerId };
 }
 
+const getLayerIdForEntity = (
+  entityType: EntityType,
+  selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>,
+  selectedLayerId: number | null,
+  defaultLayerId: number | null,
+) => {
+  return Object.prototype.hasOwnProperty.call(selectedLayerIdByEntity, entityType)
+    ? selectedLayerIdByEntity[entityType]
+    : defaultLayerId ?? selectedLayerId;
+};
+
+export const getCurrentEntityLayerInfoQuery = ({
+  activeEntityTypes,
+  admin1Id,
+  allowDublicateSchoolIds,
+  connectivityBenchMark,
+  country,
+  countrySearch,
+  interval,
+  intervalUnit,
+  lastSelectedLayers,
+  layersUtils,
+  selectedLayerIdByEntity,
+}: ReturnType<typeof sourceForInfo.getState>) => {
+  const isWeekly = intervalUnit === IntervalUnit.week;
+  const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
+  const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
+  const startDate = format(interval.start, 'dd-MM-yyyy');
+  const endDate = format(interval.end, 'dd-MM-yyyy');
+  const params = new URLSearchParams();
+
+  if (country?.id) {
+    params.set('country_id', String(country.id));
+  }
+  if (admin1Id) {
+    params.set('admin1_id', String(admin1Id));
+  }
+
+  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+  entityTypes.forEach((entityType) => {
+    const prefix = `${entityType}_`;
+    const entityLayerId = getLayerIdForEntity(entityType, selectedLayerIdByEntity, selectedLayerId, defaultLayerId);
+    const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === entityLayerId)?.type);
+
+    if (isLive) {
+      params.set(`${prefix}start_date`, startDate);
+      params.set(`${prefix}end_date`, endDate);
+      params.set(`${prefix}is_weekly`, isWeekly.toString());
+    }
+    if (entityLayerId) {
+      params.set(`${prefix}layer_id`, String(entityLayerId));
+    }
+    params.set(`${prefix}benchmark`, connectivityBenchMark);
+    params.set(`${prefix}include_same_location`, String(allowDublicateSchoolIds));
+  });
+
+  let query = `?${params.toString()}`;
+  if (countrySearch) {
+    query += `&${countrySearch}`;
+  }
+  return { query };
+};
+
+export const getCurrentEntityConnectivityConfigQuery = ({
+  activeEntityTypes,
+  country,
+  admin1Id,
+  layersUtils,
+  selectedLayerIdByEntity,
+}: ReturnType<typeof sourceForInfo.getState>) => {
+  const params = new URLSearchParams();
+  if (country?.id) {
+    params.set('country_id', String(country.id));
+  }
+  if (admin1Id) {
+    params.set('admin1_id', String(admin1Id));
+  }
+  const defaultLayerId = layersUtils.selectedLayerId ?? layersUtils.globalLayerId;
+  if (defaultLayerId) {
+    params.set('layer_id', String(defaultLayerId));
+  }
+  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+  entityTypes.forEach((entityType) => {
+    const layerId = Object.prototype.hasOwnProperty.call(selectedLayerIdByEntity, entityType)
+      ? selectedLayerIdByEntity[entityType]
+      : defaultLayerId;
+    if (layerId) {
+      params.set(`${entityType}_layer_id`, String(layerId));
+    }
+  });
+  const query = params.toString();
+  return { query: query ? `?${query}` : '' };
+};
+
+const getCurrentSchoolConnectivityConfigQuery = ({
+  admin1Id,
+  country,
+  layersUtils,
+  schoolParams,
+}: ReturnType<typeof sourceForInfo.getState>) => {
+  const params = new URLSearchParams();
+  const selectedLayerId = layersUtils.selectedLayerId ?? layersUtils.globalLayerId;
+  if (selectedLayerId) {
+    params.set('layer_id', String(selectedLayerId));
+  }
+  if (country?.id) {
+    params.set('country_id', String(country.id));
+  }
+  if (schoolParams?.schoolIds?.length) {
+    params.set('school_ids', schoolParams.schoolIds.join(','));
+  }
+  if (admin1Id) {
+    params.set('admin1_id', String(admin1Id));
+  }
+  const query = params.toString();
+  return { query: query ? `?${query}` : '' };
+};
+
+sample({
+  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId, $selectedLayerIdByEntity, $activeEntityTypes]),
+  source: sourceForInfo,
+  fn: getCurrentEntityConnectivityConfigQuery,
+  filter: ({ country, layersUtils, mapRoutes }) => {
+    return mapRoutes.country && !!country?.id && !!layersUtils.layers?.length && !!layersUtils.currentLayerTypeUtils.isLive;
+  },
+  target: getEntitiesAvailableDates
+})
+
+sample({
+  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId]),
+  source: sourceForInfo,
+  fn: getCurrentSchoolConnectivityConfigQuery,
+  filter: ({ country, layersUtils, mapRoutes }) => {
+    return mapRoutes.schools && !!country?.id && !!layersUtils.layers?.length && !!layersUtils.currentLayerTypeUtils.isLive;
+  },
+  target: getSchoolAvailableDates
+})
+
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
+  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $selectedLayerIdByEntity, $activeEntityTypes, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
   source: sourceForInfo,
-  fn: getCurrentQueryId,
+  fn: getCurrentEntityLayerInfoQuery,
   filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
     return mapRoutes.country && (!!country?.id || !!admin1Id) && !!isCheckedLastDate && !!layersUtils.currentLayerTypeUtils.isLive;
   },
-  target: fetchCountryLiveLayerInfo
+  target: fetchEntitiesLayerInfoFx
 })
 
 // for all static layers
 sample({
-  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId]),
+  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId, $selectedLayerIdByEntity, $activeEntityTypes]),
   source: sourceForInfo,
-  fn: getCurrentQueryId,
+  fn: getCurrentEntityLayerInfoQuery,
   filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
     return mapRoutes.country && (!!country?.id || !!admin1Id) && !!layersUtils.currentLayerTypeUtils.isStatic;
   },
-  target: fetchCountryStaticLayerInfo
+  target: fetchEntitiesLayerInfoFx
 })
 
 
@@ -420,6 +541,27 @@ sample({
   },
   filter: ({ countryCode }) => !!countryCode,
   target: onSelectMainLayer
+})
+
+sample({
+  clock: changeSelectedEntityType,
+  source: combine({
+    currentDefaultLayerId: $currentDefaultLayerId,
+    selectedLayerIdByEntity: $selectedLayerIdByEntity,
+    selectedLayerId: $selectedLayerId,
+  }),
+  fn: ({ currentDefaultLayerId, selectedLayerIdByEntity, selectedLayerId }, entityType) => {
+    return Object.prototype.hasOwnProperty.call(selectedLayerIdByEntity, entityType)
+      ? selectedLayerIdByEntity[entityType] ?? null
+      : currentDefaultLayerId ?? selectedLayerId;
+  },
+  target: onSelectMainLayer
+})
+
+sample({
+  clock: onSelectEntityMainLayer,
+  fn: ({ entityType }) => entityType,
+  target: changeSelectedEntityType
 })
 
 sample({

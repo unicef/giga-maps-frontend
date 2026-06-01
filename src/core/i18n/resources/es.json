@@ -14,6 +14,8 @@
   "school-connectivity-status-a-real-time-measurement-source": "'Estado de conectividad escolar mapeado utilizando datos gubernamentales o una fuente de medición en tiempo real.",
   "schools-with-periodical-software-and-hardware-based-solutions": "Escuelas con mediciones periódicas de Internet en la escuela a partir de soluciones basadas en software y hardware.",
   "real-time-connectivity": "Conectividad a tiempo real",
+  "real-time-layers": "Capas en tiempo real",
+  "static-layers": "Capas estáticas",
   "key-connectivity-metrics-based-solutions": "Métricas clave de conectividad calculadas utilizando mediciones periódicas de Internet en la escuela a partir de soluciones basadas en software y hardware.",
   "no-data-available": "No hay datos disponibles.",
   "data-layer-benchmark": "punto de referencia de la capa de datos",

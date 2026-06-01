@@ -1,10 +1,8 @@
 import { VectorSource } from "mapbox-gl";
 
-import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
-
 import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createEntitySymbolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
-import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID, getSourceLayerName, getEntityStatusLayerId, getEntitySelectedLayerId, SOURCE_LAYER_SCHOOLS } from "../map.constant";
+import { animateCircles, checkSourceAvailable, createSchoolLayer, createEntitySymbolLayer, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, getSourceLayerName, getEntityStatusLayerId, getEntitySelectedLayerId } from "../map.constant";
 import { EntityType } from "~/@/entities/types/base-entity.type";
 import type { EntityConfig } from "~/@/entities/config/entity-config.types";
 
@@ -153,24 +151,50 @@ export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter
   }
 }
 
-export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintData, selectedLayerIds, schoolLegends, isMobile }: ChangeLayerOptions) => {
+export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintData, selectedLayerIds, schoolLegends, schoolLegendsByEntity, isMobile, activeEntityTypes, entityRegistry }: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
-  const { schoolId: schoolLayerId } = selectedLayerIds;
+  const { schoolId: schoolLayerId, schoolIdByEntity = {} } = selectedLayerIds;
   const isSourceAvailable = checkSourceAvailable(map, CONNECTIVITY_STATUS_SOURCE);
-  // create school layer (country view — uses legacy source-layer "default");
-  if (isSourceAvailable && schoolLayerId) {
-    createSchoolLayer(map, {
-      source: CONNECTIVITY_STATUS_SOURCE,
-      id: getMapId(SCHOOL_LAYER_ID),
-      paintData,
-      isMobile,
-      options: {
-        'source-layer': "default",
-        filter: filterSchoolStatus(schoolLegends)
-      }, mapRoute
-    });
+  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+  if (isSourceAvailable && entityTypes.some((entityType) => schoolIdByEntity[entityType] ?? schoolLayerId)) {
+    for (const entityType of entityTypes) {
+      const entityStatusLayerId = schoolIdByEntity[entityType] ?? schoolLayerId;
+      if (!entityStatusLayerId) {
+        hideLayer(map, getEntityStatusLayerId(entityType));
+        continue;
+      }
+      const config = entityRegistry?.[entityType] as EntityConfig | undefined;
+      const markerType = config?.markerType ?? 'circle';
+      const options = {
+        'source-layer': getSourceLayerName(entityType),
+        filter: filterSchoolStatus(schoolLegendsByEntity?.[entityType] ?? schoolLegends)
+      };
+
+      if (markerType === 'circle') {
+        createSchoolLayer(map, {
+          source: CONNECTIVITY_STATUS_SOURCE,
+          id: getEntityStatusLayerId(entityType),
+          paintData,
+          isMobile,
+          options,
+          mapRoute
+        });
+      } else {
+        createEntitySymbolLayer(map, {
+          source: CONNECTIVITY_STATUS_SOURCE,
+          id: getEntityStatusLayerId(entityType),
+          symbol: config?.symbol ?? '■',
+          paintData,
+          isMobile,
+          options,
+          mapRoute
+        });
+      }
+    }
   } else {
-    hideLayer(map, getMapId(SCHOOL_LAYER_ID));
+    for (const entityType of entityTypes) {
+      hideLayer(map, getEntityStatusLayerId(entityType));
+    }
   }
 }
 

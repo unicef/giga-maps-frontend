@@ -87,6 +87,8 @@ export type EntityConnectivityStat = {
 };
 
 export type EntitiesConnectivityStatsResponse = Partial<Record<EntityStatsResponseKey, EntityConnectivityStat>>;
+export type EntityLayerInfoStat = Partial<ConnectivityStat & EntityConnectivityStat> & Record<string, unknown>;
+export type EntitiesLayerInfoResponse = Partial<Record<EntityStatsResponseKey, EntityLayerInfoStat>>;
 export type SchoolInfoStats = {
   num_students: number;
   num_teachers: number;

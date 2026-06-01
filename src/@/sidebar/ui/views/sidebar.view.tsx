@@ -21,7 +21,7 @@ import { cn } from '~/lib/cn';
 import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
-import CommonComponentGigaLayer from '../common-components/common-component-gigalayer';
+import CommonComponentGigaLayer from '../global-and-country-view-components/common-component-gigalayer';
 import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
 import SidebarMenuList from '../common-components/sidebar-menu-list';
@@ -61,7 +61,7 @@ export default function Sidebar() {
             'fixed top-2',
             isSidebarCollapsed ? '-left-68 min-[1584px]:left-[-18.2rem]' : 'left-2',
             'bottom-[1.8rem] min-[1584px]:bottom-2',
-            'w-[288px] min-[1584px]:w-[296px]'
+            'w-[320px] min-[1584px]:w-[320px]'
           )
       )}
       onClick={() => onClickSidebar()}
@@ -95,7 +95,7 @@ export default function Sidebar() {
             </LayerDetailContainer>
           }
           {
-            !mapRoute && <CommonComponentGigaLayer />
+            !mapRoute && !countryRoute && <CommonComponentGigaLayer />
           }
           <button
             className={cn(

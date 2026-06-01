@@ -1,89 +1,261 @@
-import {
-  Account as UserRound,
-} from '@carbon/icons-react';
+import { Account as UserRound } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
-import { Wifi } from 'lucide-react';
+import { Info, Wifi } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
   $layerUtils,
-  $schoolStatusSelectedLayer,
+  $selectedLayerIdByEntity,
+  $statusLayerIdByEntity,
   checkConnectivityBenchmark,
-  onSelectMainLayer,
-  onSelectSchoolStatusLayer,
+  onSelectEntityMainLayer,
+  onSelectEntityStatusLayer,
   resetCoverageFilterSelection,
-  selectAllStaticLegendsSelection,
+  selectAllEntityStaticLegendsSelection,
 } from '~/@/sidebar/sidebar.model';
-import { TooltipProvider } from '~/components/ui/tooltip';
+import { Button } from '~/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { cn } from '~/lib/cn';
 
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
+import { LayerType, LayerTypeChoices } from '../../types';
 import GigaLayerButton from './giga-layer-button';
 
-const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
+const isLayerForEntity = (layer: LayerType, entityType: EntityType) => {
+  return !layer.entity_type__code || layer.entity_type__code.toLowerCase() === String(entityType);
+};
+
+const getEntityMapValue = <T,>(values: Partial<Record<EntityType, T>>, entityType: EntityType, fallback: T) => {
+  return Object.prototype.hasOwnProperty.call(values, entityType) ? values[entityType] as T : fallback;
+};
+
+const PopupLayerButton = ({
+  disabled,
+  icon,
+  isActive,
+  label,
+  onClick,
+}: {
+  disabled?: boolean;
+  icon?: ReactNode;
+  isActive?: boolean;
+  label: string;
+  onClick: () => void;
+}) => (
+  <div className="relative! flex! h-[4.25rem]! w-20! min-w-20!">
+    <Button
+      aria-pressed={isActive}
+      className={cn(
+        'h-full! min-h-full! w-full! flex-col! items-start! justify-start! gap-2! rounded-md! border-0! p-1! text-left! shadow-none!',
+        '[&_svg]:size-4! [&_svg]:shrink-0!',
+        isActive
+          ? 'bg-primary! text-primary-foreground! hover:bg-primary!'
+          : 'bg-[#393939]! text-white/50! hover:bg-[#393939]! hover:text-white/70!',
+      )}
+      disabled={disabled}
+      onClick={onClick}
+      type="button"
+      variant="ghost"
+    >
+      <span
+        className={cn(
+          'flex! h-4! w-full! items-center! justify-between! pr-4!',
+          !isActive && 'opacity-0!',
+        )}
+      >
+        <span className="[&_svg]:fill-current!">
+          {icon}
+        </span>
+      </span>
+      <span
+        className="mt-auto! w-full! min-w-0! overflow-hidden! text-ellipsis! whitespace-normal! break-words! text-xs! font-normal! leading-4!"
+        style={{
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 2,
+        }}
+      >
+        {label}
+      </span>
+    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          aria-label={`Info about ${label}`}
+          className={cn(
+            'absolute! right-1! top-1! z-1! size-3! text-white/50! hover:bg-transparent! hover:text-white! [&_svg]:size-2.5!',
+            !isActive && 'pointer-events-none! opacity-0!',
+          )}
+          onClick={(event) => event.stopPropagation()}
+          size="icon-xs"
+          type="button"
+          variant="icon"
+        >
+          <Info aria-hidden="true" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent align="center" side="bottom" sideOffset={4}>
+        {label}
+      </TooltipContent>
+    </Tooltip>
+  </div>
+);
+
+const GigaLayerButtonIcons = ({ entityType, popup }: { entityType?: EntityType; popup?: boolean }) => {
   const { t } = useTranslation();
   const {
     currentDefaultLayerId,
+    currentDefaultLayerIdByEntity,
+    layers,
     selectedLayerId,
-    staticLayers,
-    currentLayerTypeUtils,
     staticPopupActiveLayer,
+    staticPopupActiveLayerByEntity,
+    staticLayers,
     activeLayerByCountryCode,
+    activeLayerByCountryCodeByEntity,
   } = useStore($layerUtils);
-  const schoolStatusSelectedLayer = useStore($schoolStatusSelectedLayer);
-  const { isLive, isSchoolStatus } = currentLayerTypeUtils;
+  const statusLayerIdByEntity = useStore($statusLayerIdByEntity);
+  const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
+  const selectedEntityType = useStore($selectedEntityType);
+  const targetEntityType = entityType ?? selectedEntityType;
+  const targetStatusSelectedLayer = getEntityMapValue(statusLayerIdByEntity, targetEntityType, SCHOOL_STATUS_LAYER.id);
+  const targetActiveLayerByCountryCode = activeLayerByCountryCodeByEntity[targetEntityType] ?? activeLayerByCountryCode;
+  const entityLayers = layers.filter(layer => isLayerForEntity(layer, targetEntityType));
+  const entityLiveLayers = entityLayers.filter(layer => layer.type === LayerTypeChoices.LIVE);
+  const entityStaticLayers = staticLayers.filter(layer => isLayerForEntity(layer, targetEntityType));
+  const targetDefaultLayerId = entityLayers.find(layer =>
+    layer.type === LayerTypeChoices.LIVE &&
+    targetActiveLayerByCountryCode[layer.id] &&
+    layer.active_countries_list?.some(({ is_default }) => is_default)
+  )?.id ?? currentDefaultLayerIdByEntity[targetEntityType] ?? currentDefaultLayerId;
+  const targetStaticPopupActiveLayer = entityStaticLayers.find(layer =>
+    layer.created_by &&
+    targetActiveLayerByCountryCode[layer.id]
+  ) ?? entityStaticLayers.find(layer => targetActiveLayerByCountryCode[layer.id]) ?? staticPopupActiveLayerByEntity[targetEntityType] ?? staticPopupActiveLayer;
+  const targetSelectedLayerId = entityType
+    ? getEntityMapValue(selectedLayerIdByEntity, targetEntityType, targetDefaultLayerId)
+    : selectedLayerId;
+  const targetLayerData = layers.find(layer => layer.id === targetSelectedLayerId);
+  const isLive = targetLayerData?.type === LayerTypeChoices.LIVE;
+  const isConnectivityStatus = !!targetStatusSelectedLayer;
+  const entityStatusLabel = `${targetEntityType} ${t('status')}`;
   const updateLayer = useCallback(
     (prevSelectedId: number | null) => {
       let selectedId = null;
-      if (selectedLayerId !== prevSelectedId) {
+      if (targetSelectedLayerId !== prevSelectedId) {
         selectedId = prevSelectedId;
         if (selectedId) {
           checkConnectivityBenchmark(selectedId);
         }
       }
-      onSelectMainLayer(selectedId);
+      onSelectEntityMainLayer({ entityType: targetEntityType, layerId: selectedId });
+
     },
-    [selectedLayerId],
+    [targetEntityType, targetSelectedLayerId],
   );
 
-  const handleSchoolConnectivityClicked = useCallback(
+  const handleConnectivityStatusClicked = useCallback(
     (selectedId: number) => {
-      // Logic for toggling of school connectivity status ON and OFF only when overlay layer should have some selected
-      if (selectedLayerId) {
-        onSelectSchoolStatusLayer(
-          schoolStatusSelectedLayer ? null : selectedId,
-        );
-        selectAllStaticLegendsSelection([]);
+      // Toggle connectivity status overlay while preserving the target entity layer selection.
+      if (targetSelectedLayerId) {
+        onSelectEntityMainLayer({ entityType: targetEntityType, layerId: targetSelectedLayerId });
+        onSelectEntityStatusLayer({
+          entityType: targetEntityType,
+          layerId: targetStatusSelectedLayer ? null : selectedId,
+        });
+        selectAllEntityStaticLegendsSelection({ entityType: targetEntityType });
       }
     },
-    [selectedLayerId, schoolStatusSelectedLayer],
+    [targetEntityType, targetSelectedLayerId, targetStatusSelectedLayer],
   );
+
+  if (popup) {
+    return (
+      <TooltipProvider>
+        <div className="inline-flex! flex-col! items-start! gap-4!">
+          <section className="flex! flex-col! items-start! gap-2!">
+            <p className="text-sm! font-normal! leading-5! text-[#f4f4f4]!">
+              {t('real-time-layers')}
+            </p>
+            <div className="grid! grid-cols-[repeat(3,5rem)]! gap-2!">
+              {entityLiveLayers.map((layer) => (
+                <PopupLayerButton
+                  disabled={!targetActiveLayerByCountryCode[layer.id]}
+                  icon={layer.icon ? (
+                    <span
+                      className="[&_svg]:size-4! [&_svg]:fill-current!"
+                      dangerouslySetInnerHTML={{ __html: layer.icon }}
+                    />
+                  ) : <Wifi />}
+                  isActive={layer.id === targetSelectedLayerId}
+                  key={layer.id}
+                  label={layer.name}
+                  onClick={() => updateLayer(layer.id)}
+                />
+              ))}
+            </div>
+          </section>
+
+          <section className="flex! flex-col! items-start! gap-2!">
+            <p className="text-sm! font-normal! leading-5! text-[#f4f4f4]!">
+              {t('static-layers')}
+            </p>
+            <div className="grid! grid-cols-[repeat(3,5rem)]! gap-2!">
+              <PopupLayerButton
+                icon={<UserRound />}
+                isActive={isConnectivityStatus}
+                label={entityStatusLabel}
+                onClick={() => handleConnectivityStatusClicked(SCHOOL_STATUS_LAYER.id)}
+              />
+              {entityStaticLayers.map((layer) => (
+                <PopupLayerButton
+                  disabled={!targetActiveLayerByCountryCode[layer.id]}
+                  icon={layer.icon ? (
+                    <span
+                      className="[&_svg]:size-4! [&_svg]:fill-current!"
+                      dangerouslySetInnerHTML={{ __html: layer.icon }}
+                    />
+                  ) : undefined}
+                  isActive={layer.id === targetSelectedLayerId}
+                  key={layer.id}
+                  label={layer.name}
+                  onClick={() => {
+                    updateLayer(layer.id);
+                    resetCoverageFilterSelection();
+                  }}
+                />
+              ))}
+            </div>
+          </section>
+        </div>
+      </TooltipProvider>
+    );
+  }
+
   return (
     <TooltipProvider>
-      {popup && (
-        <p className="text-xs! font-normal! leading-[1.125rem]! tracking-[0.01rem]! text-foreground!">
-          {t('giga-layers')}
-        </p>
-      )}
       <div
         className={cn(
-          'flex! h-full! w-full!',
-          popup ? 'flex-wrap!' : 'flex-nowrap!',
+          'flex! h-full! w-full! min-w-0!',
+          popup ? 'flex-wrap!' : 'flex-nowrap! gap-2!',
         )}
       >
         <GigaLayerButton
-          label={t('school-status')}
+          label={entityStatusLabel}
           popup={popup}
-          isActive={isSchoolStatus}
+          isActive={isConnectivityStatus}
           icon={<UserRound />}
           onClick={() => {
-            handleSchoolConnectivityClicked(SCHOOL_STATUS_LAYER.id);
+            handleConnectivityStatusClicked(SCHOOL_STATUS_LAYER.id);
           }}
         />
         <GigaLayerButton
           label={t('real-time-connectivity')}
-          disabled={!activeLayerByCountryCode[String(currentDefaultLayerId)]}
+          disabled={!targetActiveLayerByCountryCode[String(targetDefaultLayerId)]}
           popup={popup}
           isActive={isLive}
           icon={<Wifi />}
@@ -91,44 +263,44 @@ const GigaLayerButtonIcons = ({ popup }: { popup?: boolean }) => {
             if (isLive) {
               updateLayer(null);
             } else {
-              updateLayer(currentDefaultLayerId);
+              updateLayer(targetDefaultLayerId);
             }
           }}
         />
         <GigaLayerButton
-          label={staticPopupActiveLayer?.name ?? t('cellular-coverage')}
+          label={targetStaticPopupActiveLayer?.name ?? t('cellular-coverage')}
           popup={popup}
           disabled={
-            !staticPopupActiveLayer ||
-            !activeLayerByCountryCode[String(staticPopupActiveLayer?.id)]
+            !targetStaticPopupActiveLayer ||
+            !targetActiveLayerByCountryCode[String(targetStaticPopupActiveLayer?.id)]
           }
-          isActive={staticPopupActiveLayer?.id === selectedLayerId}
+          isActive={targetStaticPopupActiveLayer?.id === targetSelectedLayerId}
           icon={
             <span
               className=""
               dangerouslySetInnerHTML={{
-                __html: staticPopupActiveLayer?.icon ?? '',
+                __html: targetStaticPopupActiveLayer?.icon ?? '',
               }}
             />
           }
           onClick={() => {
-            if (staticPopupActiveLayer) {
-              updateLayer(staticPopupActiveLayer.id);
+            if (targetStaticPopupActiveLayer) {
+              updateLayer(targetStaticPopupActiveLayer.id);
               resetCoverageFilterSelection();
             }
           }}
         />
         {popup &&
-          staticLayers.map(
+          entityStaticLayers.map(
             (layer) =>
               layer.created_by &&
-              layer.id !== staticPopupActiveLayer?.id && (
+              layer.id !== targetStaticPopupActiveLayer?.id && (
                 <GigaLayerButton
                   key={layer.name}
-                  disabled={!activeLayerByCountryCode[layer.id]}
+                  disabled={!targetActiveLayerByCountryCode[layer.id]}
                   label={layer.name}
                   popup={popup}
-                  isActive={layer.id === selectedLayerId}
+                  isActive={layer.id === targetSelectedLayerId}
                   icon={
                     <span
                       className="[&_svg]:size-4! [&_svg]:fill-current!"

@@ -7,6 +7,7 @@ import styled, { useTheme } from 'styled-components';
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
 import { $historyIntervalUnit } from '~/@/sidebar/history-graph.model';
 import { $selectedLayerData } from '~/@/sidebar/sidebar.model';
+import type { LayerType } from '~/@/sidebar/types';
 
 const LiverAverageWrapper = styled.div`
   display: flex;
@@ -81,10 +82,12 @@ const LayerNameWrapper = styled.div`
 export default function LiveAverage({
   value,
   color,
-  isLoading
-}: { readonly value: number, readonly color: string, readonly isLoading: boolean }) {
+  isLoading,
+  currentLayerData,
+}: { readonly value: number, readonly color: string, readonly isLoading: boolean, readonly currentLayerData?: LayerType | null }) {
   const { t } = useTranslation();
-  const currentLayer = useStore($selectedLayerData);
+  const selectedLayerData = useStore($selectedLayerData);
+  const currentLayer = currentLayerData ?? selectedLayerData;
   const heading = currentLayer?.name;
   const theme = useTheme();
   const dataSourceId = currentLayer?.data_sources_list?.length ? currentLayer.data_sources_list[0].id : undefined;

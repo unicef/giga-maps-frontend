@@ -3,13 +3,14 @@ import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $globalStats, $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
-  $layerUtils,
-  $staticLegendsSelected,
-  staticLegendsSelection,
+  $currentLayerTypeUtilsByEntity,
+  $staticLegendsSelectedByEntity,
+  entityStaticLegendsSelection,
 } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { $lng } from '~/core/i18n/store';
@@ -31,12 +32,14 @@ const SchoolStatusLegend = ({
   const { t } = useTranslation();
   const lng = useStore($lng);
   const paintData = useStore($stylePaintData);
-  const { currentLayerTypeUtils } = useStore($layerUtils);
-  const { isSchoolStatus } = currentLayerTypeUtils;
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const currentEntityType = entityType as EntityType;
+  const { isSchoolStatus } = currentLayerTypeUtilsByEntity[currentEntityType] ?? { isSchoolStatus: false };
   const [schoolStatusCheckedStatus, setSchoolStatusCheckedStatus] = useState<CheckedStatus>({});
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
   const globalStatsFromStore = useStore($globalStats);
-  const staticLegends = useStore($staticLegendsSelected);
+  const staticLegendsByEntity = useStore($staticLegendsSelectedByEntity);
+  const staticLegends = staticLegendsByEntity[currentEntityType] ?? [];
   const schoolStatusStats = globalStatsFromStore?.connected_schools as Record<string, number> | undefined;
 
   const handleSchoolStatusLayerChange = (key: string) => {
@@ -48,13 +51,13 @@ const SchoolStatusLegend = ({
 
     switch (key) {
       case 'connected':
-        staticLegendsSelection(connected);
+        entityStaticLegendsSelection({ entityType: currentEntityType, legends: connected });
         break;
       case 'not_connected':
-        staticLegendsSelection(notConnected);
+        entityStaticLegendsSelection({ entityType: currentEntityType, legends: notConnected });
         break;
       case 'unknown':
-        staticLegendsSelection(unknown);
+        entityStaticLegendsSelection({ entityType: currentEntityType, legends: unknown });
         break;
       default:
         break;

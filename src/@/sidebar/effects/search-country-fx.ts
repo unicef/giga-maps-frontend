@@ -25,3 +25,12 @@ export const getSchoolAvailableDates = createRequestFx(
     })
   }
 );
+
+export const getEntitiesAvailableDates = createRequestFx(
+  ({ query }: { query: string }, controller?: Controller): Promise<Partial<Record<string, ConnectivityConfig>>> => {
+    return request({
+      url: `/api/v2/entities/connectivityconfigs/${query}`,
+      signal: controller?.getSignal(),
+    })
+  }
+);

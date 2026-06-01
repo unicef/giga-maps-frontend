@@ -1,7 +1,8 @@
 import { createEvent } from 'effector';
 
 import { changeCountryCode } from '~/@/country/country.model';
-import { fetchLayerListFx } from '~/api/project-connect';
+import { onLoadPage } from '~/@/map/map.model';
+import { fetchEntityGlobalStatsFx, fetchLayerListFx } from '~/api/project-connect';
 import { $isMobile } from '~/core/media-query';
 import { router } from '~/core/routes';
 import globalStatusData from '~/tests/data/globalStatus.data';
@@ -49,6 +50,23 @@ describe('Sidebar Init', () => {
     void fetchLayerListFx()
     router.navigate('/map/schools?country=br&school_ids=46313,1212');
     expect(window.location.pathname).toBe('/map/schools');
+  })
+
+  test('calls entity global stats on initial global map load', async () => {
+    router.navigate('/map');
+    await import('~/@/map/map.init');
+
+    const calls: Array<{ query?: string }> = [];
+    const unwatch = fetchEntityGlobalStatsFx.watch((payload) => {
+      calls.push(payload);
+    });
+
+    try {
+      onLoadPage();
+      expect(calls).toEqual(expect.arrayContaining([{ query: '' }]));
+    } finally {
+      unwatch();
+    }
   })
 
 })

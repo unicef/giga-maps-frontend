@@ -1,13 +1,12 @@
 
 import { $admin1Data, $admin1Id, $country, $countryId, $countryMapping, $countrySearchString, countryReceived, setSchoolFocusLatLng, $countryActiveFiltersList, $schoolFocusLatLng } from '~/@/country/country.model';
 import { $activeEntityTypes, $entityRegistry } from '~/@/entities/models/entity.model';
-import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $connectivityBenchMark, $isLoadedTimePlayer, $isLoadingTimeplayer, $isPauseTimeplayer, $isTimeplayer, $layerUtils, $schoolAdminId, $schoolStatsMap, $schoolStatusSelectedLayer, $selectedLayerId, $selectedSchoolIds, $staticLegendsSelected, $staticLegendsSelectedByEntity, $statusLayerIdByEntity, $timePlayerInfo, onLoadTimePlayerData, onTimeoutTimePlayer, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
   fetchCountryFx,
   fetchEntityGlobalStatsFx,
-  fetchGlobalStatsFx,
   fetchLayerListFx,
   fetchSchoolPopupDataFx,
   getBaseUrl,
@@ -72,9 +71,6 @@ sample({
   clock: merge([onLoadPage, map.visible]),
   source: $mapRoutes,
   target: createEffect((routes: ReturnType<typeof $mapRoutes.getState>) => {
-    if (routes.map) {
-      void fetchEntityGlobalStatsFx({});
-    }
     if (routes.map || routes.country || routes.schools) {
       void fetchLayerListFx();
       void fetchCountriesFx();
@@ -85,7 +81,7 @@ sample({
 
 // load global stats
 sample({
-  clock: merge([mapOverview.visible, mapCountry.visible, fetchCountryFx.doneData, $admin1Id, $countrySearchString]),
+  clock: merge([onLoadPage, mapOverview.visible, mapCountry.visible, fetchCountryFx.doneData, $admin1Id, $countrySearchString]),
   source: combine({ routes: $mapRoutes, country: $country, admin1Id: $admin1Id, countrySearchString: $countrySearchString }),
   fn: ({ routes, country, admin1Id, countrySearchString }) => {
     let query = ''
@@ -101,10 +97,10 @@ sample({
     }
     return { query }
   },
-  filter: ({ routes, country, admin1Id }) => {
-    return [routes.map || (routes.country && !!country) || admin1Id].some(Boolean)
+  filter: ({ routes, country }) => {
+    return routes.map || (routes.country && !!country?.id)
   },
-  target: [fetchGlobalStatsFx, fetchEntityGlobalStatsFx]
+  target: fetchEntityGlobalStatsFx
 })
 
 sample({
@@ -195,6 +191,7 @@ export const gigaLayerSource = combine({
   connectivityBenchMark: $connectivityBenchMark,
   lastAvailableDates: $lastAvailableDates,
   schoolLegends: $staticLegendsSelected,
+  schoolLegendsByEntity: $staticLegendsSelectedByEntity,
   coverageFilter: $coverageFilter,
   layerUtils: $layerUtils,
   connectivitySpeedFilter: $connectivitySpeedFilter,
@@ -232,7 +229,7 @@ const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 
 sample({
   clock: merge([$zoomState,
-    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $schoolStatsMap, timePlayerActive, $activeEntityTypes]),
+    $mapRouteVisible, $countrySearchString, onReloadedMap, $map, countryReceived, $admin1Id, $schoolAdminId, $schoolStatusSelectedLayer, $statusLayerIdByEntity, $schoolStatsMap, timePlayerActive, $activeEntityTypes]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: ({ map }) => {
@@ -303,14 +300,15 @@ sample({
 });
 
 sample({
-  clock: $staticLegendsSelected,
+  clock: $staticLegendsSelectedByEntity,
   source: combine({
     map: $map,
     lastSelectedLayer: $selectedGigaLayers,
     activeEntityTypes: $activeEntityTypes,
+    schoolLegendsByEntity: $staticLegendsSelectedByEntity,
   }),
-  fn: (source, lengendsSelected) => ({
-    lengendsSelected,
+  fn: (source, legendsSelectedByEntity) => ({
+    legendsSelectedByEntity,
     ...source
   }),
   target: updateConnectivityStatus,

@@ -13,7 +13,7 @@ export default function SchoolViewConnectivityLayer() {
   const isMoreThenOne = (schoolIds?.length) > 1
   return (
     <>
-      <CurrentLayerNameIcon label={t("real-time-connectivity")} isLiveLayer={true} />
+      {/* <CurrentLayerNameIcon label={t("real-time-connectivity")} isLiveLayer={true} /> */}
       {!isMoreThenOne && (
         <>
           <SingleSchoolConnnectivityLayer schoolId={schoolIds[0]} />

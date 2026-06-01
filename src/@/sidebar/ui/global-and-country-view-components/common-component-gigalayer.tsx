@@ -3,6 +3,7 @@ import { LayoutGrid } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { Scroll } from '~/@/scroll';
 import { Button } from '~/components/ui/button';
 import {
@@ -20,11 +21,13 @@ import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 
 import { $sidebarHeight } from '../../sidebar.model';
-import GigaLayerButtonIcons from './giga-layer-button-icons';
+import GigaLayerButtonIcons from '../common-components/giga-layer-button-icons';
 
 const CommonComponentGigaLayer = ({
+  entityType,
   isCountryView = false,
 }: {
+  entityType?: EntityType;
   isCountryView?: boolean;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -37,18 +40,19 @@ const CommonComponentGigaLayer = ({
         className={cn(
           'sidebar-footer-gigalayer-container z-1! flex! items-start! bg-background! transition-transform! duration-[400ms]! ease-in-out!',
           isCountryView
-            ? 'relative! w-full! justify-center! bg-transparent!'
+            ? 'relative! mt-auto! w-full! justify-center! bg-transparent! pb-2!'
             : 'fixed! bottom-[1.8rem]! w-[inherit]! justify-between! border-t! border-secondary! max-md:bottom-0! max-md:w-full!',
           isMobile && !sidebarHeight && !isCountryView && 'translate-y-full!',
         )}
       >
         <div
-          className={cn(
-            'sidebar-footer-gigalayer-icons-container flex! flex-row! items-center! pr-0!',
-            isCountryView ? 'p-[0.4rem]! scale-90!' : 'p-2!',
-          )}
+          className={
+            'sidebar-footer-gigalayer-icons-container flex! w-full! min-w-0! flex-row! items-center! gap-2! overflow-hidden! p-2!'
+          }
         >
-          <GigaLayerButtonIcons />
+          <div className="min-w-0! flex-1! overflow-hidden!">
+            <GigaLayerButtonIcons entityType={entityType} />
+          </div>
           <Popover open={modalOpen} onOpenChange={setModalOpen}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -56,7 +60,10 @@ const CommonComponentGigaLayer = ({
                   <Button
                     aria-label={t('show-more')}
                     className={cn(
-                      'sidebar-worldview-gigaIcon flex! items-center! p-0! text-muted-foreground! hover:bg-transparent! hover:text-foreground!',
+                      'sidebar-worldview-gigaIcon flex! h-[4.25rem]! w-8! min-w-8! items-center! rounded-md! p-0!',
+                      modalOpen
+                        ? 'bg-primary! text-primary-foreground! hover:bg-primary! hover:text-primary-foreground!'
+                        : 'text-muted-foreground! hover:bg-transparent! hover:text-foreground!',
                       isCountryView && 'scale-90!',
                     )}
                     size="icon-sm"
@@ -74,14 +81,14 @@ const CommonComponentGigaLayer = ({
               </TooltipContent>
             </Tooltip>
             <PopoverContent
-              align="end"
-              className="sidebar-footer-gigalayer-icons-popover z-50! h-[13rem]! w-[19rem]! border! border-border! bg-popover! p-4! text-popover-foreground! shadow-md! max-md:max-h-[25rem]! max-md:overflow-y-auto! max-md:p-2! max-md:pl-4!"
+              align="center"
+              className="sidebar-footer-gigalayer-icons-popover z-50! w-[17.25rem]! max-w-[calc(100vw-1rem)]! rounded-lg! border! border-[#393939]! bg-[#161616]! px-2.5! py-4! text-[#f4f4f4]! shadow-[0_1px_2px_0_rgb(0_0_0/0.05)]! max-md:max-h-[25rem]! max-md:overflow-y-auto!"
               onCloseAutoFocus={(event) => event.preventDefault()}
               side={isMobile ? 'top' : 'right'}
-              sideOffset={4}
+              sideOffset={20}
             >
-              <Scroll className="max-h-[11rem]!">
-                <GigaLayerButtonIcons popup={true} />
+              <Scroll className="max-h-[24.5rem]!">
+                <GigaLayerButtonIcons entityType={entityType} popup={true} />
               </Scroll>
             </PopoverContent>
           </Popover>

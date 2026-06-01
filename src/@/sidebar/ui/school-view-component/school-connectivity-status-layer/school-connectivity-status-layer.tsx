@@ -16,7 +16,7 @@ const SchoolStatsTypeus = () => {
   const singleSchool = schoolIds?.length === 1;
   return (
     <>
-      <CurrentLayerNameIcon label={t('school-status')} isSchoolStatus={true} />
+      {/* <CurrentLayerNameIcon label={t('school-status')} isSchoolStatus={true} /> */}
       {singleSchool && (
         <>
           <CommonUIOnlySchoolConnectivityLayer schoolId={schoolIds[0]} />

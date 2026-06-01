@@ -16,7 +16,7 @@ export const DEFAULT_SOURCE = 'map-data-source';
 export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
 export const COVERAGE_URL = 'api/locations/schools/tiles';
 export const CONNECTIVITY_URL = 'api/v2/entities/tiles/connectivity';
-export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
+export const CONNECTIVITY_STATUS_URL = "api/v2/entities/tiles/connectivity_status"
 
 /** Source-layer names returned by the v2 tiles API */
 export const SOURCE_LAYER_SCHOOLS = 'schools';

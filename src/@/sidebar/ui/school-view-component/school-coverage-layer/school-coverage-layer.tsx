@@ -16,7 +16,7 @@ const SchoolCoverageLayer = () => {
 
   return (
     <>
-      <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} />
+      {/* <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} /> */}
       {!isMoreThenOne && <SingleSchoolCoverageLayer schoolId={schoolIds[0]} />}
       {isMoreThenOne && <MultiSchoolLayerView schoolLength={schoolIds.length} schoolLayerList={schoolStats} />}
       <FooterDataSourcePopUp size={25} isFooter={false} />

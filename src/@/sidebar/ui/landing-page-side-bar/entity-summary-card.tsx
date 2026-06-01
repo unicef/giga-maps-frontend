@@ -20,10 +20,13 @@ type EntitySummaryCardProps = {
   expanded: boolean;
   isLoading?: boolean;
   lng: string;
+  showSummaryRowsWhenExpanded?: boolean;
   t: LandingPageTranslationFn;
 };
 
-const EntitySummaryCard = ({ card, children, expanded, isLoading = false, lng, t }: EntitySummaryCardProps) => {
+const EntitySummaryCard = ({ card, children, expanded, isLoading = false, lng, showSummaryRowsWhenExpanded = false, t }: EntitySummaryCardProps) => {
+  const shouldShowSummaryRows = !isLoading && (!expanded || showSummaryRowsWhenExpanded);
+
   return (
     <AccordionItem
       className="overflow-visible! rounded-lg! border! border-border!"
@@ -49,7 +52,7 @@ const EntitySummaryCard = ({ card, children, expanded, isLoading = false, lng, t
         </div>
       ) : null}
 
-      {!isLoading && !expanded ? (
+      {shouldShowSummaryRows ? (
         <div className="px-3.5! pb-2!">
           {card.collapsedRows.map((row, index) => (
             <div key={row.label}>

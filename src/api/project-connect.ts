@@ -9,6 +9,7 @@ import {
   CountryBasic,
   EntitiesConnectivityStatsResponse,
   EntitiesGlobalStatsResponse,
+  EntitiesLayerInfoResponse,
   GlobalStats,
   SchoolStatsType,
 } from '~/api/types';
@@ -37,14 +38,14 @@ export const getBaseUrl = (url: string): string => `${apiBaseUrl}${url}`;
 export const fetchCountryFx = createRequestFx(
   async (countryCode: string, controller?: Controller): Promise<Country> =>
     request({
-      url: `api/locations/countries/${encodeURIComponent(countryCode)}/`,
+      url: `api/v2/entities/countries/${encodeURIComponent(countryCode)}/`,
       signal: controller?.getSignal(),
     })
 );
 
 export const fetchCountriesFx = createRequestFx(
   async (_, controller?: Controller): Promise<CountryBasic[]> => request({
-    url: 'api/locations/countries/',
+    url: 'api/v2/entities/countries/',
     signal: controller?.getSignal(),
   })
 );
@@ -52,7 +53,7 @@ export const fetchCountriesFx = createRequestFx(
 export const fetchLayerListFx = createRequestFx(
   async (_, controller?: Controller): Promise<APIListType<LayerType>> =>
     request({
-      url: 'api/accounts/layers/PUBLISHED/?expand=created_by,last_modified_by,published_by&ordering=-last_modified_at',
+      url: 'api/v2/entities/layers/PUBLISHED/?expand=created_by,last_modified_by,published_by&ordering=-last_modified_at',
       signal: controller?.getSignal()
     })
 );
@@ -113,6 +114,18 @@ export const fetchCountryLiveLayerInfo = createEffect(
     fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
 );
 
+export const fetchEntitiesLayerInfoFx = createEffect(
+  async ({
+    query
+  }: {
+    query: string;
+  }): Promise<EntitiesLayerInfoResponse> => {
+    return fetchLayerInfoFx(
+      `api/v2/entities/layers/info/${query}`
+    ) as Promise<EntitiesLayerInfoResponse>
+  }
+);
+
 export const fetchConnectivityLayerFx = createEffect(
   async ({
     query
@@ -141,7 +154,7 @@ export const fetchEntitiesConnectivityStatsFx = createEffect(
 
 export const fetchCountryStaticLayerInfo = createEffect(
   async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<CoverageStat>
+    fetchLayerInfoFx(`api/v2/entities/layers/info/${id}/info/${query}`) as Promise<CoverageStat>
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(

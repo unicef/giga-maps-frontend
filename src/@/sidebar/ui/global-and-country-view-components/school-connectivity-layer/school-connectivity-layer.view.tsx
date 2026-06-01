@@ -1,7 +1,9 @@
 import { useStore } from 'effector-react';
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
-import { $globalStats, $stylePaintData } from '~/@/map/map.model';
+import { $entityConfigMap, $selectedEntityConfig, $selectedEntityType } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import { $globalStats, $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
 import { $isLoadingCountryAdminView } from '~/@/sidebar/sidebar.model';
 import { mapSchools } from '~/core/routes';
 import { useRoute } from '~/lib/router';
@@ -24,30 +26,42 @@ const SchoolConnectivityLayerContainer = styled.div`
   }
 `
 
-const SchoolConnectivityLayer = () => {
+const SchoolConnectivityLayer = ({ entityType }: { entityType?: EntityType }) => {
   const lng = useStore($lng)
   const { t } = useTranslation();
   const globalStats = useStore($globalStats);
+  const globalStatsByEntity = useStore($globalStatsByEntity);
+  const currentSelectedEntityType = useStore($selectedEntityType);
+  const selectedEntityType = entityType ?? currentSelectedEntityType;
+  const currentSelectedEntityConfig = useStore($selectedEntityConfig);
+  const entityConfigMap = useStore($entityConfigMap);
+  const selectedEntityConfig = entityType ? entityConfigMap[entityType] : currentSelectedEntityConfig;
+  const selectedEntityGlobalStats = globalStatsByEntity[selectedEntityType];
   const isLoading = useStore($isLoadingCountryAdminView);
   const schoolView = useRoute(mapSchools);
   const stylePaintData = useStore($stylePaintData);
-  const connectedNumber = formatNumber(globalStats?.connected_schools?.connected || 0, lng);
-  const totalMappedNumber = formatNumber(globalStats?.schools_connected || 0, lng);
-  const isConnected = globalStats?.connected_schools?.connected > 0;
+  const connectedValue = selectedEntityGlobalStats?.connected_entities?.connected ?? globalStats?.connected_schools?.connected ?? 0;
+  const totalMappedValue = selectedEntityGlobalStats?.entities_connected ?? selectedEntityGlobalStats?.entities_total ?? globalStats?.schools_connected ?? 0;
+  const connectedNumber = formatNumber(connectedValue, lng);
+  const totalMappedNumber = formatNumber(totalMappedValue, lng);
+  const isConnected = connectedValue > 0;
   const theme = useTheme();
+  const entityLabel = t(selectedEntityConfig?.slug ?? 'schools');
   return (
     <SchoolConnectivityLayerContainer>
       <div>
-        <CurrentLayerNameIcon showFilter={false} label={t("connectivity-status")} isSchoolStatus={true} />
+        {/* <CurrentLayerNameIcon showFilter={false} label={t("connectivity-status")} isSchoolStatus={true} /> */}
         {!schoolView && <SchoolInfoSection>
           {isLoading ? <>  <LoadingText $blockSize='3.5625' width="4rem" />
             <LoadingText $blockSize='0.5' />
           </> : <Div $margin='0rem 1rem 0rem 0rem'>
-            <Text data-title={t('int', { val: (isConnected ? globalStats?.connected_schools?.connected : globalStats?.schools_connected) ?? 0 })} $size={2.375} $color={isConnected ? stylePaintData.connected : theme.text}>
+            <Text data-title={t('int', { val: (isConnected ? connectedValue : totalMappedValue) ?? 0 })} $size={2.375} $color={isConnected ? stylePaintData.connected : theme.text}>
               {isConnected ? connectedNumber : totalMappedNumber}
             </Text>
             <Text $color={theme.titleDesc}>
-              {isConnected ? `${t("connected-schools-for-total-mapped-number", { count: globalStats?.schools_connected ?? 0, total: totalMappedNumber })} ` : ''}{t('schools-mapped')}
+              {selectedEntityType === EntityType.SCHOOL
+                ? `${isConnected ? `${t("connected-schools-for-total-mapped-number", { count: totalMappedValue, total: totalMappedNumber })} ` : ''}${t('schools-mapped')}`
+                : `${isConnected ? `${t('connected')} ${entityLabel} / ${totalMappedNumber} ` : ''}${entityLabel} mapped`}
             </Text>
           </Div>}
         </SchoolInfoSection>}

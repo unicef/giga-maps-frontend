@@ -1,6 +1,7 @@
 import { createEvent, createStore, restore } from 'effector';
 
-import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchEntityGlobalStatsFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchEntityGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import { AdvanceFilterType, EntitiesGlobalStatsResponse, GlobalStats, SchoolStatsType } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
@@ -66,7 +67,19 @@ export const $stylePaintData = createStore<StylePaintData>(
 export const $globalStatsByEntity = createStore<EntitiesGlobalStatsResponse>({});
 $globalStatsByEntity.on(fetchEntityGlobalStatsFx.doneData, setPayload);
 export const $globalStats = createStore<GlobalStats>(defaultGlobalStats);
-$globalStats.on(fetchGlobalStatsFx.doneData, setPayload);
+$globalStats.on(fetchEntityGlobalStatsFx.doneData, (_, payload) => {
+  const schoolStats = payload?.[EntityType.SCHOOL];
+  if (!schoolStats) return defaultGlobalStats;
+
+  return {
+    no_of_countries: schoolStats.no_of_countries ?? 0,
+    schools_connected: schoolStats.entities_connected ?? schoolStats.entities_total ?? 0,
+    connectivity_global_benchmark: schoolStats.connectivity_global_benchmark ?? defaultGlobalStats.connectivity_global_benchmark,
+    countries_with_connectivity_status_mapped: schoolStats.countries_with_connectivity_status_mapped ?? 0,
+    connected_schools: schoolStats.connected_entities ?? defaultGlobalStats.connected_schools,
+    schools_with_connectivity_status_mapped: schoolStats.entities_with_connectivity_status_mapped ?? 0,
+  };
+});
 
 export const $pending = createStore<boolean>(false);
 export const $loader = createStore<Marker | null>(null);

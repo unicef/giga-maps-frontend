@@ -2,8 +2,10 @@ import { useStore } from 'effector-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
+import { $entityConfigMap, $selectedEntityConfig, $selectedEntityType } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import { $stylePaintData } from '~/@/map/map.model';
-import { $isLoadingCountryAdminView, $potentialCoverageOpenStatus, changePotentialCoverageOpenStatus, $layerUtils, $coverageStats } from '~/@/sidebar/sidebar.model';
+import { $isLoadingCountryAdminView, $layerUtils, $coverageStats, $coverageStatsByEntity } from '~/@/sidebar/sidebar.model';
 import { formatNumber } from '~/lib/utils';
 import styled, { useTheme } from 'styled-components';
 
@@ -22,14 +24,22 @@ const CoverageLayerContanier = styled.div`
   }
 `
 
-const CoverageLayer = () => {
+const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const { t } = useTranslation();
   const lng = useStore($lng)
-  const coverageStats = useStore($coverageStats);
+  const currentCoverageStats = useStore($coverageStats);
+  const coverageStatsByEntity = useStore($coverageStatsByEntity);
+  const currentSelectedEntityType = useStore($selectedEntityType);
+  const selectedEntityType = entityType ?? currentSelectedEntityType;
+  const currentSelectedEntityConfig = useStore($selectedEntityConfig);
+  const entityConfigMap = useStore($entityConfigMap);
+  const selectedEntityConfig = entityType ? entityConfigMap[entityType] : currentSelectedEntityConfig;
+  const coverageStats = entityType ? coverageStatsByEntity[entityType] : currentCoverageStats;
   const isLoading = useStore($isLoadingCountryAdminView);
   const legends = coverageStats?.connected_schools;
   const totalSchools = coverageStats?.total_schools ?? 0;
-  const { selectedLayerData } = useStore($layerUtils);
+  const { selectedLayerData, selectedLayerDataByEntity } = useStore($layerUtils);
+  const currentSelectedLayerData = entityType ? selectedLayerDataByEntity[entityType] : selectedLayerData;
   const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
 
   const [displayNumber, setDisplayNumber] = useState(0);
@@ -38,6 +48,7 @@ const CoverageLayer = () => {
   const styledPaintData = useStore($stylePaintData);
   const isDataAvailable = legendsList.length
   const theme = useTheme();
+  const entityLabel = t(selectedEntityConfig?.slug ?? 'schools');
   // this block of useEffect needs refactoring, all this logic should come from column config
   useEffect(() => {
     if (legendsList.length > 1) {
@@ -47,17 +58,21 @@ const CoverageLayer = () => {
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
       setDisplayNumber(firstValue + secondValue + thirdValue);
-      setDisplayText({ key: 'schools-with-coverage-schools-mapped', data: { totalSchools: formatNumber(sum, lng), totalSchoolsExact: t('int', { val: sum }), layerName: selectedLayerData?.name } });
+      if (selectedEntityType === EntityType.SCHOOL) {
+        setDisplayText({ key: 'schools-with-coverage-schools-mapped', data: { totalSchools: formatNumber(sum, lng), totalSchoolsExact: t('int', { val: sum }), layerName: currentSelectedLayerData?.name } });
+      } else {
+        setDisplayText({ key: '', data: { totalSchools: formatNumber(sum, lng), layerName: currentSelectedLayerData?.name } });
+      }
     } else {
       setDisplayNumber(0);
       setDisplayText({ key: 'insufficient-data' });
     }
-  }, [legendsList, totalSchools, lng]);
+  }, [entityLabel, legendsList, selectedEntityType, currentSelectedLayerData?.name, totalSchools, lng]);
 
   return (
     <CoverageLayerContanier>
       <Div>
-        <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} />
+        {/* <CurrentLayerNameIcon label={currentSelectedLayerData?.name} icon={currentSelectedLayerData?.icon} /> */}
         <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
           {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
             <Div $margin='0rem 0.2rem 0 0'>
@@ -65,10 +80,14 @@ const CoverageLayer = () => {
                 {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
               </Text>
               <Text $color={theme.titleDesc}>
-                <Trans i18nKey={displayText.key}
-                  values={displayText.data}
-                  components={[<span />]}
-                />
+                {displayText.key ? (
+                  <Trans i18nKey={displayText.key}
+                    values={displayText.data}
+                    components={[<span />]}
+                  />
+                ) : (
+                  `${entityLabel} with ${currentSelectedLayerData?.name ?? t('coverage')} mapped`
+                )}
               </Text>
             </Div>}
         </Div>

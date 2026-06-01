@@ -80,4 +80,6 @@ export interface LayerType {
     round_unit_value: string;
   },
   legend_configs: Record<string, { values: string[], labels: string }>
+  entity_type?: number | string;
+  entity_type__code?: string;
 }

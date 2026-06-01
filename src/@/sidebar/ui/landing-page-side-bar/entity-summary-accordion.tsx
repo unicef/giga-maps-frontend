@@ -25,12 +25,16 @@ type EntitySummaryAccordionProps = {
   children: (card: EntitySummaryCardData, context: EntitySummaryAccordionRenderContext) => ReactNode;
   connectivityStatsByEntity: EntitiesConnectivityStatsResponse | null;
   isLoadingConnectivityStats?: boolean;
+  selectEntityOnExpand?: boolean;
+  showSummaryRowsWhenExpanded?: boolean;
 };
 
 const EntitySummaryAccordion = ({
   children,
   connectivityStatsByEntity,
   isLoadingConnectivityStats = false,
+  selectEntityOnExpand = true,
+  showSummaryRowsWhenExpanded = false,
 }: EntitySummaryAccordionProps) => {
   const globalStatsByEntity = useStore($globalStatsByEntity);
   const entityConfigMap = useStore($entityConfigMap);
@@ -41,7 +45,7 @@ const EntitySummaryAccordion = ({
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityTypesFiltered = useStore($entityTypesFiltered);
   const visibleEntityTypes = entityTypesFiltered.filter((type) => activeEntityTypes.includes(type));
-  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>();
+  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>(null);
 
   const isLoading = isLoadingGlobalStats || isLoadingConnectivityStats;
   const entityCards = buildEntityCards({
@@ -55,12 +59,8 @@ const EntitySummaryAccordion = ({
   });
 
   useEffect(() => {
-    void fetchEntityGlobalStatsFx({});
-  }, []);
-
-  useEffect(() => {
     if (activeAccordion && !activeEntityTypes.includes(activeAccordion)) {
-      setActiveAccordion(activeEntityTypes[0] ?? null);
+      setActiveAccordion(null);
       return;
     }
 
@@ -73,7 +73,7 @@ const EntitySummaryAccordion = ({
     const nextAccordion = nextValue ? (nextValue as EntityType) : null;
     setActiveAccordion(nextAccordion);
 
-    if (nextAccordion) {
+    if (nextAccordion && selectEntityOnExpand) {
       changeSelectedEntityType(nextAccordion);
     }
   };
@@ -97,6 +97,7 @@ const EntitySummaryAccordion = ({
                 isLoading={isLoading}
                 key={accordionItem.value}
                 lng={lng}
+                showSummaryRowsWhenExpanded={showSummaryRowsWhenExpanded}
                 t={t}
               >
                 {children(card, { lng, t })}

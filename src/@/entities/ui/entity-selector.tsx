@@ -53,7 +53,7 @@ export default function EntityTypeSelector() {
   };
 
   return (
-    <div className="fixed top-2 left-80 z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]">
+    <div className="fixed top-2 left-86 z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]">
       <Button
         variant="default"
         size="lg"

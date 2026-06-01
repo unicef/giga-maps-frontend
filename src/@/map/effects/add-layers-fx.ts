@@ -49,6 +49,8 @@ const callDelay = delayMethodCall();
 let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
+  // temporary stop map layer redering;
+  return;
   let { timeout = 20, zoomState, selectedLayerIds, isCheckedLastDate, mapRoute, refresh, lastSelectedLayer, map } = props;
   if (!map) return;
   clearTimeout(timerId);
@@ -98,14 +100,14 @@ export const updateConnectivityFilter = createEffect(({ map, layerUtils, connect
   }
 })
 
-export const updateConnectivityStatus = createEffect(({ map, lengendsSelected, activeEntityTypes }: UpdateConnectivityType & { lengendsSelected: string[]; activeEntityTypes?: string[] }) => {
+export const updateConnectivityStatus = createEffect(({ map, lengendsSelected, legendsSelectedByEntity, activeEntityTypes }: Pick<UpdateConnectivityType, "map"> & { lengendsSelected?: string[]; legendsSelectedByEntity?: Record<string, string[]>; activeEntityTypes?: string[] }) => {
   if (!map) return;
   const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
   for (const entityType of entityTypes) {
     const layerId = getEntityStatusLayerId(entityType);
     const layer = map.getLayer(layerId);
     if (layer) {
-      const filter = filterSchoolStatus(lengendsSelected);
+      const filter = filterSchoolStatus(legendsSelectedByEntity?.[entityType] ?? lengendsSelected ?? []);
       map.setFilter(layerId, filter);
     }
   }
