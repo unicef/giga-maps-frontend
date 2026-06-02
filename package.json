@@ -138,6 +138,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-perfect-scrollbar": "1.5.8",
     "react-transition-group": "^4",
+    "recharts": "^3.8.1",
     "styled-components": "^6",
     "styled-normalize": "^8.0.7",
     "tailwind-merge": "^3.5.0",

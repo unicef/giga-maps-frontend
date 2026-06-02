@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { EntityType } from '~/@/entities/types/base-entity.type';
-import { Scroll } from '~/@/scroll';
 import { Button } from '~/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
+import { ScrollArea } from '~/components/ui/scroll-area';
 import {
   Tooltip,
   TooltipContent,
@@ -38,9 +38,9 @@ const CommonComponentGigaLayer = ({
     <TooltipProvider>
       <div
         className={cn(
-          'sidebar-footer-gigalayer-container z-1! flex! items-start! bg-background! transition-transform! duration-[400ms]! ease-in-out!',
+          'sidebar-footer-gigalayer-container z-1! md:sticky! md:bottom-0! flex! items-start! bg-background! transition-transform! duration-[400ms]! ease-in-out!',
           isCountryView
-            ? 'relative! mt-auto! w-full! justify-center! bg-transparent! pb-2!'
+            ? 'relative! mt-auto! w-full! justify-center! pb-2!'
             : 'fixed! bottom-[1.8rem]! w-[inherit]! justify-between! border-t! border-secondary! max-md:bottom-0! max-md:w-full!',
           isMobile && !sidebarHeight && !isCountryView && 'translate-y-full!',
         )}
@@ -82,14 +82,18 @@ const CommonComponentGigaLayer = ({
             </Tooltip>
             <PopoverContent
               align="center"
-              className="sidebar-footer-gigalayer-icons-popover z-50! w-[17.25rem]! max-w-[calc(100vw-1rem)]! rounded-lg! border! border-[#393939]! bg-[#161616]! px-2.5! py-4! text-[#f4f4f4]! shadow-[0_1px_2px_0_rgb(0_0_0/0.05)]! max-md:max-h-[25rem]! max-md:overflow-y-auto!"
+              className="sidebar-footer-gigalayer-icons-popover z-50! w-[17.25rem]! max-w-[calc(100vw-1rem)]! overflow-hidden! rounded-lg! border! border-[#393939]! bg-[#161616]! px-2.5! py-4! text-[#f4f4f4]! shadow-[0_1px_2px_0_rgb(0_0_0/0.05)]!"
               onCloseAutoFocus={(event) => event.preventDefault()}
               side={isMobile ? 'top' : 'right'}
               sideOffset={20}
             >
-              <Scroll className="max-h-[24.5rem]!">
+              <ScrollArea
+                className="w-[calc(100%+0.625rem)]!"
+                style={{ height: 'min(24.5rem, calc(100vh - 8rem))' }}
+                viewportClassName="h-full! pr-2.5!"
+              >
                 <GigaLayerButtonIcons entityType={entityType} popup={true} />
-              </Scroll>
+              </ScrollArea>
             </PopoverContent>
           </Popover>
         </div>

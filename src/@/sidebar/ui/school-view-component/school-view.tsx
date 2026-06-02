@@ -1,7 +1,12 @@
 import { useStore } from 'effector-react';
 
-import { $currentLayerTypeUtils, $schoolStatusSelectedLayer, $selectedLayerId } from '../../sidebar.model';
-import { SidebarScroll } from '../sidebar.style';
+import { ScrollArea } from '~/components/ui/scroll-area';
+
+import {
+  $currentLayerTypeUtils,
+  $schoolStatusSelectedLayer,
+  $selectedLayerId,
+} from '../../sidebar.model';
 import SchoolStatsTypeus from './school-connectivity-status-layer/school-connectivity-status-layer';
 import SchoolCoverageLayer from './school-coverage-layer/school-coverage-layer';
 import SchoolViewConnectivityLayer from './school-view-connectivity-layer/school-view-connectivity-layer.view';
@@ -13,12 +18,12 @@ const SchoolView = () => {
   const defaultUIEnable = !selectedLayerId && schoolStatusSelectedLayer;
 
   return (
-    <SidebarScroll id="school-sidebar-scroll">
-      {(defaultUIEnable) && <SchoolStatsTypeus />}
+    <ScrollArea id="school-sidebar-scroll">
+      {defaultUIEnable && <SchoolStatsTypeus />}
       {isLive && <SchoolViewConnectivityLayer />}
       {isStatic && <SchoolCoverageLayer />}
-    </SidebarScroll>
-  )
-}
+    </ScrollArea>
+  );
+};
 
-export default SchoolView
+export default SchoolView;

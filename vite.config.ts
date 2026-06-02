@@ -1,11 +1,14 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
-import { createHtmlPlugin } from 'vite-plugin-html';
 import tailwindcss from '@tailwindcss/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import react from '@vitejs/plugin-react';
 import path from 'path';
+import { defineConfig } from 'vite';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import svgr from 'vite-plugin-svgr';
+import tsconfigPaths from 'vite-tsconfig-paths';
+
+const resolveFromRoot = (...paths: string[]) =>
+  path.resolve(__dirname, ...paths);
 
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -14,12 +17,20 @@ export default defineConfig(({ mode }) => ({
     react({
       babel: {
         plugins: [
-          ['babel-plugin-styled-components', {
-            displayName: mode === 'development',
-            pure: true,
-          }],
+          [
+            'babel-plugin-styled-components',
+            {
+              displayName: mode === 'development',
+              pure: true,
+            },
+          ],
           ...(mode === 'development' || mode === 'test'
-            ? [['effector/babel-plugin', { addLoc: true, importName: ['effector', 'effector-logger'] }]]
+            ? [
+                [
+                  'effector/babel-plugin',
+                  { addLoc: true, importName: ['effector', 'effector-logger'] },
+                ],
+              ]
             : []),
         ],
       },
@@ -77,6 +88,44 @@ export default defineConfig(({ mode }) => ({
   define: {
     // Polyfill process.env.NODE_ENV for libraries that depend on it
     'process.env.NODE_ENV': JSON.stringify(mode),
+  },
+  resolve: {
+    alias: {
+      recharts: resolveFromRoot('node_modules/recharts/es6/index.js'),
+      'es-toolkit/compat/get': resolveFromRoot(
+        'src/lib/recharts-compat/get.ts',
+      ),
+      'es-toolkit/compat/isPlainObject': resolveFromRoot(
+        'src/lib/recharts-compat/isPlainObject.ts',
+      ),
+      'es-toolkit/compat/last': resolveFromRoot(
+        'src/lib/recharts-compat/last.ts',
+      ),
+      'es-toolkit/compat/maxBy': resolveFromRoot(
+        'src/lib/recharts-compat/maxBy.ts',
+      ),
+      'es-toolkit/compat/minBy': resolveFromRoot(
+        'src/lib/recharts-compat/minBy.ts',
+      ),
+      'es-toolkit/compat/omit': resolveFromRoot(
+        'src/lib/recharts-compat/omit.ts',
+      ),
+      'es-toolkit/compat/range': resolveFromRoot(
+        'src/lib/recharts-compat/range.ts',
+      ),
+      'es-toolkit/compat/sortBy': resolveFromRoot(
+        'src/lib/recharts-compat/sortBy.ts',
+      ),
+      'es-toolkit/compat/sumBy': resolveFromRoot(
+        'src/lib/recharts-compat/sumBy.ts',
+      ),
+      'es-toolkit/compat/throttle': resolveFromRoot(
+        'src/lib/recharts-compat/throttle.ts',
+      ),
+      'es-toolkit/compat/uniqBy': resolveFromRoot(
+        'src/lib/recharts-compat/uniqBy.ts',
+      ),
+    },
   },
   test: {
     globals: true,

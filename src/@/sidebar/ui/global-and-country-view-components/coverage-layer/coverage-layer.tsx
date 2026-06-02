@@ -1,53 +1,56 @@
 import { useStore } from 'effector-react';
-import { useCallback, useEffect, useMemo, useState } from 'react'
-
-import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
-import { $entityConfigMap, $selectedEntityConfig, $selectedEntityType } from '~/@/entities/models/entity.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
-import { $stylePaintData } from '~/@/map/map.model';
-import { $isLoadingCountryAdminView, $layerUtils, $coverageStats, $coverageStatsByEntity } from '~/@/sidebar/sidebar.model';
-import { formatNumber } from '~/lib/utils';
-import styled, { useTheme } from 'styled-components';
-
-import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
-import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { $lng } from '~/core/i18n/store';
 
-const CoverageLayerContanier = styled.div` 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  @media (max-width: 768px) {
-    height: auto;
-  }
-`
+import {
+  $entityConfigMap,
+  $selectedEntityConfig,
+  $selectedEntityType,
+} from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import {
+  $coverageStats,
+  $coverageStatsByEntity,
+  $isLoadingCountryAdminView,
+  $layerUtils,
+} from '~/@/sidebar/sidebar.model';
+import { Skeleton } from '~/components/ui/skeleton';
+import { $lng } from '~/core/i18n/store';
+import { formatNumber } from '~/lib/utils';
 
 const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const { t } = useTranslation();
-  const lng = useStore($lng)
+  const lng = useStore($lng);
   const currentCoverageStats = useStore($coverageStats);
   const coverageStatsByEntity = useStore($coverageStatsByEntity);
   const currentSelectedEntityType = useStore($selectedEntityType);
   const selectedEntityType = entityType ?? currentSelectedEntityType;
   const currentSelectedEntityConfig = useStore($selectedEntityConfig);
   const entityConfigMap = useStore($entityConfigMap);
-  const selectedEntityConfig = entityType ? entityConfigMap[entityType] : currentSelectedEntityConfig;
-  const coverageStats = entityType ? coverageStatsByEntity[entityType] : currentCoverageStats;
+  const selectedEntityConfig = entityType
+    ? entityConfigMap[entityType]
+    : currentSelectedEntityConfig;
+  const coverageStats = entityType
+    ? coverageStatsByEntity[entityType]
+    : currentCoverageStats;
   const isLoading = useStore($isLoadingCountryAdminView);
   const legends = coverageStats?.connected_schools;
   const totalSchools = coverageStats?.total_schools ?? 0;
-  const { selectedLayerData, selectedLayerDataByEntity } = useStore($layerUtils);
-  const currentSelectedLayerData = entityType ? selectedLayerDataByEntity[entityType] : selectedLayerData;
+  const { selectedLayerData, selectedLayerDataByEntity } =
+    useStore($layerUtils);
+  const currentSelectedLayerData = entityType
+    ? selectedLayerDataByEntity[entityType]
+    : selectedLayerData;
   const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
 
   const [displayNumber, setDisplayNumber] = useState(0);
-  const [displayText, setDisplayText] = useState<{ key: string, data?: Record<string, any> }>({ key: '', data: {} });
+  const [displayText, setDisplayText] = useState<{
+    key: string;
+    data?: Record<string, unknown>;
+  }>({ key: '', data: {} });
 
-  const styledPaintData = useStore($stylePaintData);
-  const isDataAvailable = legendsList.length
-  const theme = useTheme();
+  const isDataAvailable = legendsList.length;
   const entityLabel = t(selectedEntityConfig?.slug ?? 'schools');
   // this block of useEffect needs refactoring, all this logic should come from column config
   useEffect(() => {
@@ -59,42 +62,72 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
       const sum = firstValue + secondValue + thirdValue + fourthValue;
       setDisplayNumber(firstValue + secondValue + thirdValue);
       if (selectedEntityType === EntityType.SCHOOL) {
-        setDisplayText({ key: 'schools-with-coverage-schools-mapped', data: { totalSchools: formatNumber(sum, lng), totalSchoolsExact: t('int', { val: sum }), layerName: currentSelectedLayerData?.name } });
+        setDisplayText({
+          key: 'schools-with-coverage-schools-mapped',
+          data: {
+            totalSchools: formatNumber(sum, lng),
+            totalSchoolsExact: t('int', { val: sum }),
+            layerName: currentSelectedLayerData?.name,
+          },
+        });
       } else {
-        setDisplayText({ key: '', data: { totalSchools: formatNumber(sum, lng), layerName: currentSelectedLayerData?.name } });
+        setDisplayText({
+          key: '',
+          data: {
+            totalSchools: formatNumber(sum, lng),
+            layerName: currentSelectedLayerData?.name,
+          },
+        });
       }
     } else {
       setDisplayNumber(0);
       setDisplayText({ key: 'insufficient-data' });
     }
-  }, [entityLabel, legendsList, selectedEntityType, currentSelectedLayerData?.name, totalSchools, lng]);
+  }, [
+    entityLabel,
+    legendsList,
+    selectedEntityType,
+    currentSelectedLayerData?.name,
+    totalSchools,
+    lng,
+  ]);
 
   return (
-    <CoverageLayerContanier>
-      <Div>
-        {/* <CurrentLayerNameIcon label={currentSelectedLayerData?.name} icon={currentSelectedLayerData?.icon} /> */}
-        <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
-          {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
-            <Div $margin='0rem 0.2rem 0 0'>
-              <Text data-title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
-                {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
-              </Text>
-              <Text $color={theme.titleDesc}>
+    <div className="flex! h-full! flex-col! justify-between! max-md:h-auto!">
+      <div>
+        <div className="mt-4! mb-3! ml-4! flex! items-center!">
+          {isLoading ? (
+            <Skeleton className="h-4! w-4/5!" />
+          ) : (
+            <div className="mr-0.5!">
+              <p
+                className={
+                  isDataAvailable
+                    ? 'my-2! text-[2.375rem]! font-normal! leading-none! text-success!'
+                    : 'my-2! text-[2.375rem]! font-normal! leading-none! text-foreground!'
+                }
+                data-title={t('int', { val: displayNumber })}
+              >
+                {isDataAvailable ? formatNumber(displayNumber, lng) : ''}
+              </p>
+              <p className="my-2! text-xs! font-normal! leading-4! text-muted-foreground!">
                 {displayText.key ? (
-                  <Trans i18nKey={displayText.key}
+                  <Trans
+                    i18nKey={displayText.key}
                     values={displayText.data}
                     components={[<span />]}
                   />
                 ) : (
                   `${entityLabel} with ${currentSelectedLayerData?.name ?? t('coverage')} mapped`
                 )}
-              </Text>
-            </Div>}
-        </Div>
-      </Div>
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
       <FooterDataSourcePopUp size={25} isFooter={false} />
-    </CoverageLayerContanier>
-  )
-}
+    </div>
+  );
+};
 
-export default CoverageLayer
+export default CoverageLayer;

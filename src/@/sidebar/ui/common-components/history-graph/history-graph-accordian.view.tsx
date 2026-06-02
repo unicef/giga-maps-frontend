@@ -1,18 +1,16 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { SchoolStatsType } from '~/api/types';
 
-import { SchoolStatsType } from "~/api/types";
+import HistoryGraph from './history-graph.view';
 
-import HistoryGraph from "./history-graph.view";
-
-const ProgressGraphWrapper = styled.div`
-    margin: 0rem 1rem 0rem 1rem;
-
-`
-
-export function HistoryGraphAccordian({ schoolData, isLoading }: { readonly schoolData?: SchoolStatsType; readonly isLoading?: boolean }) {
+export function HistoryGraphAccordian({
+  schoolData,
+  isLoading,
+}: {
+  readonly schoolData?: SchoolStatsType;
+  readonly isLoading?: boolean;
+}) {
   return (
-    // <ProgressGraphWrapper>
+    // <div className="mx-4!">
     //   <AccordionDistribution>
     //     <AccordionItem
     //       title={
@@ -30,7 +28,13 @@ export function HistoryGraphAccordian({ schoolData, isLoading }: { readonly scho
     //       <HistoryGraph isChartOpen={true} schoolData={schoolData} isLoading={isLoading} />
     //     </AccordionItem>
     //   </AccordionDistribution>
-    // </ProgressGraphWrapper>
-    <ProgressGraphWrapper><HistoryGraph isChartOpen={true} schoolData={schoolData} isLoading={isLoading} /></ProgressGraphWrapper>
-  )
+    // </div>
+    <div className="mx-4!">
+      <HistoryGraph
+        isChartOpen={true}
+        schoolData={schoolData}
+        isLoading={isLoading}
+      />
+    </div>
+  );
 }

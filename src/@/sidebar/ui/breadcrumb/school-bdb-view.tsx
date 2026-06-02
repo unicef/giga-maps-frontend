@@ -1,31 +1,32 @@
-import { Breadcrumb } from '@carbon/react';
 import { useStore } from 'effector-react';
-import styled from 'styled-components';
 
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from '~/components/ui/breadcrumb';
 import { $mapRoutes } from '~/core/routes';
 
 import { GoToCountry, GoToMap, GoToSchool } from './common-bdb-view';
-
-
-const BreadcrumbCustom = styled(Breadcrumb)`
-  .cds--breadcrumb {
-    flex-wrap: nowrap;
-  }
-`
 
 const SchoolBDB = () => {
   const { schools } = useStore($mapRoutes);
 
   if (!schools) return;
-  return ((<div className="sidebar-worldview-global-indication">
-    <div className="sidebar-worldview-global-indication-country-breadcrumb">
-      <BreadcrumbCustom className="school-breadcrumb">
-        <GoToMap />
-        <GoToCountry />
-        <GoToSchool />
-      </BreadcrumbCustom>
+  return (
+    <div className="flex! w-[86%]! justify-start!">
+      <div className="w-full!">
+        <Breadcrumb>
+          <BreadcrumbList className="flex-nowrap!">
+            <GoToMap />
+            <BreadcrumbSeparator />
+            <GoToCountry />
+            <GoToSchool />
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
     </div>
-  </div>))
-}
+  );
+};
 
 export default SchoolBDB;
