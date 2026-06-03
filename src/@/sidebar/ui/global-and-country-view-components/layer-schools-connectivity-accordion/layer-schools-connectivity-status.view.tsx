@@ -1,74 +1,59 @@
-import { Account } from '@carbon/icons-react'
-import { AccordionItem } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { useCallback, useEffect } from 'react'
-import styled from 'styled-components';
+import { Hash, School } from 'lucide-react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
 import { Colors } from '~/@/map/map.constant';
-import { $globalStats, $schoolConnectedOpenStatus, $stylePaintData, changeSchoolConnectedOpenStatus } from '~/@/map/map.model';
-import { ConnectivityStatusDistribution, SCHOOL_STATUS_LAYER } from '~/@/sidebar/sidebar.constant';
-import { $allLoadings, $currentLayerTypeUtils, $schoolStatusSelectedLayer, $staticLegendsSelected, onSelectSchoolStatusLayer, staticLegendsSelection } from '~/@/sidebar/sidebar.model';
+import {
+  $globalStats,
+  $schoolConnectedOpenStatus,
+  $stylePaintData,
+  changeSchoolConnectedOpenStatus,
+} from '~/@/map/map.model';
+import {
+  ConnectivityStatusDistribution,
+  SCHOOL_STATUS_LAYER,
+} from '~/@/sidebar/sidebar.constant';
+import {
+  $allLoadings,
+  $currentLayerTypeUtils,
+  $schoolStatusSelectedLayer,
+  $staticLegendsSelected,
+  onSelectSchoolStatusLayer,
+  staticLegendsSelection,
+} from '~/@/sidebar/sidebar.model';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '~/components/ui/accordion';
+import { Skeleton } from '~/components/ui/skeleton';
+import { $lng } from '~/core/i18n/store';
 import { $isMobile } from '~/core/media-query';
 import { formatNumber } from '~/lib/utils';
 
 import ProgressBar from '../../common-components/progress-bar/progress-bar.view';
-import { AccordionDistribution, HashtagIcon } from '../../sidebar.style';
 import { AccordionItemTitle } from '../common/accordion-item-title.view';
 import { ConnectivityStatusNames } from '../container/layer-view.constant';
-import { $lng } from '~/core/i18n/store';
-import { useTranslation } from 'react-i18next';
-
-const SchoolConntectivtyWrapper = styled.div`
-  margin-top: 1rem;
-  position: fixed;
-  bottom: 7rem;
-  width: 273px;
-  margin:0.5rem 0.5rem;
-  background: ${props => props.theme.schoolListBack};
-  z-index: 2; 
-  .cds--accordion__content {
-    padding: 0rem 1rem 1rem 1rem;
-  }
-  @media (max-width: 768px) {
-    width: 100%;
-    margin:0;
-    margin-bottom:0.5rem;
-    bottom: 5rem;
-  }
-
-  @media only screen and (min-width: 1584px) {
-    width: 280px;
-  }
-`
-const AccordionTitle = styled.div`
-display: flex;
-align-items: center;
-p{
-  color:  ${props => props.theme.text};
-font-family: Open Sans;
-font-size: 0.875rem;
-font-weight: 500;
-line-height: 1.25rem; 
-letter-spacing: 0.01rem;
-margin-left:0.5rem;
-margin-right:0.5rem;
-}
-`
 
 const AccordionTitleWrapper = () => (
-  <AccordionItemTitle tooltipLabel={'School status'} label={<AccordionTitle>
-    <Account />
-    <p>
-      School status
-    </p>
-  </AccordionTitle>}
+  <AccordionItemTitle
+    tooltipLabel={'School status'}
+    label={
+      <div className="flex! items-center!">
+        <School aria-hidden="true" className="size-4! text-foreground!" />
+        <p className="mx-2! my-0! text-sm! font-medium! leading-5! text-foreground!">
+          School status
+        </p>
+      </div>
+    }
   />
 );
 
 const LayerSchoolsConnectivityStatus = () => {
-  const isMobile = useStore($isMobile)
-  const lng = useStore($lng)
+  const isMobile = useStore($isMobile);
+  const lng = useStore($lng);
   const { t } = useTranslation();
   const globalstats = useStore($globalStats);
   const { stats, country } = useStore($allLoadings);
@@ -77,42 +62,65 @@ const LayerSchoolsConnectivityStatus = () => {
   const { isSchoolStatus } = useStore($currentLayerTypeUtils);
   const staticLegends = useStore($staticLegendsSelected);
   const connectivityStatusColor = useStore($stylePaintData);
-  const schoolStatusSelected = useStore($schoolStatusSelectedLayer)
+  const schoolStatusSelected = useStore($schoolStatusSelectedLayer);
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
-  const handleAccordionChange = useCallback(() => {
-    changeSchoolConnectedOpenStatus(!schoolConnectedOpenStatus)
-  }, [schoolConnectedOpenStatus]);
 
   const handleClicked = (buttonId: string) => {
     if (!schoolStatusSelected && buttonId) {
-      onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id)
+      onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id);
     }
     if (!isSchoolStatus) {
-      staticLegendsSelection([buttonId])
+      staticLegendsSelection([buttonId]);
     } else {
       staticLegendsSelection(buttonId);
     }
-  }
+  };
 
   useEffect(() => {
     if (isMobile) {
-      changeSchoolConnectedOpenStatus(false)
+      changeSchoolConnectedOpenStatus(false);
     }
-  }, [])
+  }, []);
 
   return (
-    <SchoolConntectivtyWrapper className="connectivity-status-container">
-      <AccordionDistribution>
-        <AccordionItem
-          title={<AccordionTitleWrapper />}
-          open={schoolConnectedOpenStatus}
-          onHeadingClick={handleAccordionChange} >
-          <>
-            <Div $margin={"0 0 0.75rem 0"}>
-              {isLoading ? <LoadingText width="80%" /> :
-                <Text $size={0.75} $color="#9E9E9E"><HashtagIcon size={12} /><span title={t('int', { val: globalstats?.schools_connected ? globalstats?.schools_connected : 0 })}>{formatNumber(globalstats?.schools_connected ? globalstats?.schools_connected : 0, lng)}</span> schools mapped</Text>
-              }
-            </Div>
+    <div className="connectivity-status-container fixed! bottom-28! z-2! mx-2! my-2! w-[273px]! bg-background! max-md:bottom-20! max-md:mx-0! max-md:mb-2! max-md:w-full! min-[1584px]:w-[280px]!">
+      <Accordion
+        collapsible
+        onValueChange={(value) =>
+          changeSchoolConnectedOpenStatus(value === 'school-status')
+        }
+        type="single"
+        value={schoolConnectedOpenStatus ? 'school-status' : undefined}
+      >
+        <AccordionItem className="border-0!" value="school-status">
+          <AccordionTrigger className="px-4! py-3! text-left! hover:no-underline!">
+            <AccordionTitleWrapper />
+          </AccordionTrigger>
+          <AccordionContent className="px-4! pb-4!">
+            <div className="mb-3!">
+              {isLoading ? (
+                <Skeleton className="h-4! w-4/5!" />
+              ) : (
+                <p className="m-0! flex! items-center! text-xs! text-muted-foreground!">
+                  <Hash aria-hidden="true" className="mr-1! size-3!" />
+                  <span
+                    title={t('int', {
+                      val: globalstats?.schools_connected
+                        ? globalstats?.schools_connected
+                        : 0,
+                    })}
+                  >
+                    {formatNumber(
+                      globalstats?.schools_connected
+                        ? globalstats?.schools_connected
+                        : 0,
+                      lng,
+                    )}
+                  </span>
+                  &nbsp;schools mapped
+                </p>
+              )}
+            </div>
             <ProgressBar
               isLoading={isLoading}
               value={globalstats?.connected_schools?.connected}
@@ -121,7 +129,9 @@ const LayerSchoolsConnectivityStatus = () => {
               toggleProps={{
                 id: `${connected}_id`,
                 onToggle: () => handleClicked(connected),
-                toggled: !!(staticLegends.includes(connected) && isSchoolStatus)
+                toggled: !!(
+                  staticLegends.includes(connected) && isSchoolStatus
+                ),
               }}
               colorType={connectivityStatusColor[connected]}
               backColor={Colors.LIGHT_GREEN}
@@ -135,7 +145,9 @@ const LayerSchoolsConnectivityStatus = () => {
               toggleProps={{
                 id: `${notConnected}_id`,
                 onToggle: () => handleClicked(notConnected),
-                toggled: !!(staticLegends.includes(notConnected) && isSchoolStatus)
+                toggled: !!(
+                  staticLegends.includes(notConnected) && isSchoolStatus
+                ),
               }}
               colorType={connectivityStatusColor[notConnected]}
               backColor={Colors.LIGHT_RED}
@@ -148,17 +160,16 @@ const LayerSchoolsConnectivityStatus = () => {
               toggleProps={{
                 id: `${unknown}_id`,
                 onToggle: () => handleClicked(unknown),
-                toggled: !!(staticLegends.includes(unknown) && isSchoolStatus)
+                toggled: !!(staticLegends.includes(unknown) && isSchoolStatus),
               }}
               colorType={connectivityStatusColor[unknown]}
               backColor={Colors.LIGHT_BLUE}
             />
-          </>
+          </AccordionContent>
         </AccordionItem>
-      </AccordionDistribution>
-    </SchoolConntectivtyWrapper>
-  )
-}
+      </Accordion>
+    </div>
+  );
+};
 
-
-export default LayerSchoolsConnectivityStatus
+export default LayerSchoolsConnectivityStatus;

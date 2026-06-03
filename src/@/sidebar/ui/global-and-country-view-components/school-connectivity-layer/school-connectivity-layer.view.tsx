@@ -84,7 +84,6 @@ const SchoolConnectivityLayer = ({
       </div>
       <FooterDataSourcePopUp
         showOldDataSource={true}
-        size={25}
         isFooter={false}
       />
     </div>

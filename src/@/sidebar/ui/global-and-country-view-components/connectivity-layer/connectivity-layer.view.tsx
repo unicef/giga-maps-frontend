@@ -58,7 +58,7 @@ export default function ConnectivityLayer({
         </div>
       </div>
       <HistoryGraphAccordian isLoading={isLoading} />
-      <FooterDataSourcePopUp size={25} isFooter={false} />
+      <FooterDataSourcePopUp isFooter={false} />
     </>
   );
 }

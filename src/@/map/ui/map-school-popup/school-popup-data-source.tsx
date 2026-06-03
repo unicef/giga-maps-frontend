@@ -1,12 +1,19 @@
-import { useMemo } from 'react';
-import styled from 'styled-components';
-import { useStore } from 'effector-react';
 import { DataBase, Information } from '@carbon/icons-react';
+import { useStore } from 'effector-react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
+import { Chip, TooltipButton } from '~/@/common/style/styled-component-style';
 import { $dataSource } from '~/@/country/country.model';
 import { $currentLayerCountryDataSource, $currentLayerTypeUtils } from '~/@/sidebar/sidebar.model';
-import { Chip, TooltipButton } from '~/@/common/style/styled-component-style';
+
+import {
+  ensureAbsoluteUrl,
+  parseNameAndUrl,
+  replaceSourceName,
+  splitOutsideParens,
+} from '../data-source-utils';
 
 const Container = styled.div`
   margin: 1.25rem 0 0.25rem;
@@ -66,37 +73,6 @@ const ChipButton = styled.button`
   cursor: pointer;
 `;
 
-const replaceSourceName = (name?: string) => name?.replace(/Daily Check App/i, 'Giga Meter') ?? '';
-const isValidUrl = (str: string): boolean => {
-  const trimmed = str.trim();
-  // Check if it has a protocol (http://, https://, //, etc.)
-  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed) || trimmed.startsWith('//')) return true;
-  // Check if it contains at least one dot (for domain.tld pattern)
-  if (trimmed.includes('.')) return true;
-  return false;
-};
-const parseNameAndUrl = (raw: string): { name: string; url?: string } => {
-  if (!raw) return { name: '' };
-  const trimmed = raw.trim();
-  const match = /^(.*?)\(([^)]+)\)\s*$/i.exec(trimmed);
-  if (match) {
-    const extractedUrl = match[2].trim();
-    // Only treat as URL if it looks like a valid URL
-    if (isValidUrl(extractedUrl)) {
-      return { name: match[1].trim(), url: extractedUrl };
-    }
-    // If not a valid URL, return the full text as name (keep parentheses content)
-    return { name: trimmed };
-  }
-  return { name: trimmed };
-}
-const ensureAbsoluteUrl = (u?: string): string => {
-  if (!u) return '';
-  const v = u.trim();
-  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v) || v.startsWith('//')) return v;
-  return `https://${v}`;
-}
-
 const SOURCE_LINKS: Record<string, string> = {
   Ericsson: 'https://www.ericsson.com/',
 };
@@ -108,24 +84,7 @@ const SchoolPopupDataSource = () => {
   const currentDataSource = useStore($currentLayerCountryDataSource);
 
   const { dataSourceName, dataSourceDescription } = useMemo(() => {
-    const splitOutsideParens = (input: string): string[] => {
-      const out: string[] = [];
-      let buf = '';
-      let depth = 0;
-      for (const ch of input || '') {
-        if (ch === '(') depth += 1; else if (ch === ')' && depth > 0) depth -= 1;
-        if ((ch === ',' || ch === ';') && depth === 0) {
-          if (buf.trim()) out.push(buf.trim());
-          buf = '';
-        } else {
-          buf += ch;
-        }
-      }
-      if (buf.trim()) out.push(buf.trim());
-      return out;
-    };
-
-    let names = currentDataSource?.name ? splitOutsideParens(currentDataSource.name) : [] as string[];
+    const names = currentDataSource?.name ? splitOutsideParens(currentDataSource.name) : [] as string[];
     if (names && isSchoolStatus) {
       splitOutsideParens(dataSource || '').forEach((item) => {
         if (item && !names.includes(item)) names.push(item);

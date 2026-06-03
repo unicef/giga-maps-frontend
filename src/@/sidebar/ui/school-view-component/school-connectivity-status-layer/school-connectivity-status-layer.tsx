@@ -25,7 +25,7 @@ const SchoolStatsTypeus = () => {
       )}
       {!singleSchool && <MultiSchoolLayerView schoolLength={schoolIds?.length} schoolLayerList={SchoolStatsTypeus} />}
 
-      <FooterDataSourcePopUp showOldDataSource={true} size={25} isFooter={false} />
+      <FooterDataSourcePopUp showOldDataSource={true} isFooter={false} />
     </>
   );
 }

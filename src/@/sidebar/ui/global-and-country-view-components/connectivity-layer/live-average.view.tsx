@@ -1,11 +1,17 @@
-import { Information } from '@carbon/icons-react';
-import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
+import { Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { $selectedLayerData } from '~/@/sidebar/sidebar.model';
 import type { LayerType } from '~/@/sidebar/types';
+import { Button } from '~/components/ui/button';
 import { Skeleton } from '~/components/ui/skeleton';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 
 export default function LiveAverage({
   value,
@@ -39,21 +45,36 @@ export default function LiveAverage({
           {value ? (
             <div className="mt-2! flex! flex-col!">
               <div>
-                <div className="flex! items-center! [&_.cds--tooltip-content]:max-w-40! [&_.cds--tooltip-content]:text-xs!">
+                <div className="flex! items-center!">
                   <div className="flex! items-center!">
                     <p className="m-0! text-sm! leading-5! text-muted-foreground!">
                       {heading}
                     </p>
                   </div>
-                  <Tooltip
-                    align="left"
-                    autoAlign={true}
-                    label={`${currentLayer?.description} `}
-                  >
-                    <button className="border-0! bg-transparent! p-0!">
-                      <Information className="flex! size-3! items-center! text-on-surface-dim!" />
-                    </button>
-                  </Tooltip>
+                  {currentLayer?.description && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            aria-label={currentLayer.description}
+                            className="size-5! bg-transparent! p-0! text-muted-foreground! hover:bg-transparent! hover:text-foreground!"
+                            size="icon-xs"
+                            type="button"
+                            variant="icon"
+                          >
+                            <Info aria-hidden="true" className="size-3!" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          align="start"
+                          className="max-w-40! text-xs!"
+                          side="left"
+                        >
+                          {currentLayer.description}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
                 </div>
                 <div className="flex! items-baseline!">
                   <p

@@ -328,9 +328,9 @@ color:${props => props.theme.text};
 export const SchoolListWrapper = styled.div`
 background: ${props => props.theme.main};
 position: fixed;
-left: 18.5rem;
+left: 19rem;
 z-index: 3;
-top: 6rem;
+top: 0;
 height: calc(100vh - 7.7rem);
 width: 288px;
 max-width: 18rem;
