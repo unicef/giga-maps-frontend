@@ -47,7 +47,7 @@ export default function ConnectivityLayer({
   return (
     <>
       <div className="mx-4!">
-        <div className="relative! flex! w-full! flex-col! pt-3! pb-6!">
+        <div className="relative! flex! w-full! flex-col! pt-3! pb-6! gap-3!">
           <LiveAverage
             isLoading={isLoading}
             colorClassName={colorClassName}

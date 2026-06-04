@@ -36,7 +36,7 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   return (
     <div>
       <Div $margin="0 1rem 0rem 1rem">
-        <div className="relative! flex! w-full! flex-col! pt-3! pb-6! [&>p]:pt-[0.56rem]! [&>p]:pb-4!">
+        <div className="relative! flex! w-full! flex-col! pt-3! pb-6! [&>p]:pt-[0.56rem]! [&>p]:pb-4! gap-3!">
           <LiveAverage
             isLoading={isLoading}
             icon={icon ?? ''}
