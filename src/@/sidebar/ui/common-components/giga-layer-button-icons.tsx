@@ -3,8 +3,13 @@ import { UserRound, Wifi } from 'lucide-react';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
+import {
+  $selectedEntityType,
+  EntityType,
+  isLayerForEntity,
+  getEntityMapValue,
+  formatEntityTypeLabel,
+} from '~/@/entities';
 import {
   $layerUtils,
   $selectedLayerIdByEntity,
@@ -22,25 +27,6 @@ import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
 import { LayerType, LayerTypeChoices } from '../../types';
 import GigaLayerButton from './giga-layer-button';
 
-const isLayerForEntity = (layer: LayerType, entityType: EntityType) => {
-  return (
-    !layer.entity_type__code ||
-    layer.entity_type__code.toLowerCase() === String(entityType)
-  );
-};
-
-const getEntityMapValue = <T,>(
-  values: Partial<Record<EntityType, T>>,
-  entityType: EntityType,
-  fallback: T,
-) => {
-  return Object.prototype.hasOwnProperty.call(values, entityType)
-    ? (values[entityType] as T)
-    : fallback;
-};
-
-const formatEntityTypeLabel = (entityType: EntityType) =>
-  `${entityType.charAt(0).toUpperCase()}${entityType.slice(1)}`;
 
 const GigaLayerButtonIcons = ({
   entityType,

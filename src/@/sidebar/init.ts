@@ -13,8 +13,8 @@ import {
   $countrySearchString,
   countryReceived, onRecenterView
 } from '~/@/country/country.model';
+import { getEntityMapValue, EntityType } from '~/@/entities';
 import { $activeEntityTypes, changeSelectedEntityType } from '~/@/entities/models/entity.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
   $connectivityBenchMark,
   $connectivityLayers,
@@ -192,9 +192,7 @@ const getLayerIdForEntity = (
   selectedLayerId: number | null,
   defaultLayerId: number | null,
 ) => {
-  return Object.prototype.hasOwnProperty.call(selectedLayerIdByEntity, entityType)
-    ? selectedLayerIdByEntity[entityType]
-    : defaultLayerId ?? selectedLayerId;
+  return getEntityMapValue(selectedLayerIdByEntity, entityType, defaultLayerId ?? selectedLayerId);
 };
 
 export const getCurrentEntityLayerInfoQuery = ({
@@ -269,9 +267,7 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   }
   const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
   entityTypes.forEach((entityType) => {
-    const layerId = Object.prototype.hasOwnProperty.call(selectedLayerIdByEntity, entityType)
-      ? selectedLayerIdByEntity[entityType]
-      : defaultLayerId;
+    const layerId = getEntityMapValue(selectedLayerIdByEntity, entityType, defaultLayerId);
     if (layerId) {
       params.set(`${entityType}_layer_id`, String(layerId));
     }

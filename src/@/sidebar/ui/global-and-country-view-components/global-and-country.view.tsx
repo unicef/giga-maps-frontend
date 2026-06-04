@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { getEntityMapValue, EntityType } from '~/@/entities';
 import {
   $connectivityStatsByEntity,
   $currentDefaultLayerIdByEntity,
@@ -17,13 +17,6 @@ import CommonComponentGigaLayer from './common-component-gigalayer';
 import ConnectivityLayer from './connectivity-layer/connectivity-layer.view';
 import SchoolConnectivityLayer from './school-connectivity-layer/school-connectivity-layer.view';
 
-const hasEntityValue = <T,>(
-  values: Partial<Record<EntityType, T>>,
-  entityType: EntityType,
-) => {
-  return Object.prototype.hasOwnProperty.call(values, entityType);
-};
-
 const EntityLayerContent = ({ entityType }: { entityType: EntityType }) => {
   const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
   const currentDefaultLayerIdByEntity = useStore(
@@ -33,9 +26,11 @@ const EntityLayerContent = ({ entityType }: { entityType: EntityType }) => {
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
   );
-  const selectedLayerId = hasEntityValue(selectedLayerIdByEntity, entityType)
-    ? selectedLayerIdByEntity[entityType]
-    : currentDefaultLayerIdByEntity[entityType];
+  const selectedLayerId = getEntityMapValue(
+    selectedLayerIdByEntity,
+    entityType,
+    currentDefaultLayerIdByEntity[entityType],
+  );
   const statusLayerId = statusLayerIdByEntity[entityType];
   const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
   const defaultUIEnable = !selectedLayerId && statusLayerId;

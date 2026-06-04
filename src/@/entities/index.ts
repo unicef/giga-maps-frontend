@@ -35,6 +35,13 @@ export {
   narrowEntityType,
 } from './utils/entity-type-guards';
 
+export {
+  isLayerForEntity,
+  getEntityMapValue,
+  formatEntityTypeLabel,
+  getLayerEntityTypes,
+} from './utils/entity-layer-utils';
+
 // Models (Effector stores)
 export {
   // Registry store

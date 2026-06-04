@@ -2,8 +2,8 @@ import { combine, createEvent, createStore, restore, sample } from 'effector';
 import i18next from 'i18next';
 
 import { $admin1Code, $country, $countryActiveLayersDataById, $countryBenchmark, $countryCode, $countryConnectivityNames, $countryIdToCode, $countrySearchString } from '~/@/country/country.model';
+import { getEntityMapValue, EntityType, getLayerEntityTypes } from '~/@/entities';
 import { $activeEntityTypes, $selectedEntityType, changeSelectedEntityType } from '~/@/entities/models/entity.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
 import { $stylePaintData } from '~/@/map/map.model';
 import { fetchConnectivityLayerFx, fetchCountriesFx, fetchCountryFx, fetchCountryLiveLayerInfo, fetchCountryStaticLayerInfo, fetchEntitiesConnectivityStatsFx, fetchEntitiesLayerInfoFx, fetchEntityGlobalStatsFx, fetchLayerInfoFx, fetchLayerListFx, fetchSchoolLayerInfoFx } from '~/api/project-connect';
 import { ConnectivityStat, CountryBasic, EntitiesConnectivityStatsResponse, EntitiesLayerInfoResponse, SchoolStatsType } from '~/api/types';
@@ -35,16 +35,7 @@ const defaultStatusLegendsSelection = [
   ConnectivityStatusDistribution.unknown,
 ];
 
-const getEntityValue = <T>(values: EntityStoreMap<T>, entityType: EntityType, fallback: T): T => {
-  return Object.prototype.hasOwnProperty.call(values, entityType) ? values[entityType] as T : fallback;
-};
-
-const getLayerEntityTypes = (layer: LayerType, activeEntityTypes: EntityType[]) => {
-  if (layer.entity_type__code) {
-    return [layer.entity_type__code.toLowerCase() as EntityType];
-  }
-  return activeEntityTypes.length ? activeEntityTypes : [EntityType.SCHOOL];
-};
+const getEntityValue = getEntityMapValue;
 
 const getSelectedEntityLayerId = (
   selectedLayerIdByEntity: EntityStoreMap<number | null>,
