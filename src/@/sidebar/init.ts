@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { combine, merge, sample } from 'effector';
+import { combine, createEffect, merge, sample } from 'effector';
 
 import {
   $admin1Id,
@@ -39,6 +39,7 @@ import {
   $coverageNoCoverage,
   $coverageUnknown,
   $currentDefaultLayerId,
+  $currentDefaultLayerIdByEntity,
   $currentLayerTypeUtils,
   $getSchoolParams,
   $isSidebarCollapsed,
@@ -638,9 +639,9 @@ sample({
 const loadedLayersAndCountries = combine(
   $connectivityLayers,
   $countries,
-  $currentDefaultLayerId,
+  $currentDefaultLayerIdByEntity,
   (layers, countries, currentDefaultLayerId) => {
-    return !!layers?.length && !!countries?.length && !!currentDefaultLayerId;
+    return !!layers?.length && !!countries?.length && !!$currentDefaultLayerIdByEntity;
   },
 );
 
@@ -653,75 +654,86 @@ sample({
     isAppSettled: $isAppSettled,
   }),
   fn: ({
-    layerUtils: { currentDefaultLayerId, activeLayerByCountryCode },
+    layerUtils: { currentDefaultLayerIdByEntity, activeLayerByCountryCode },
     initialUrlParams,
     isAppSettled,
   }) => {
+    // TODO: don't remove fix once url params are fixed with entity layer implementation; 
     // If URL has layer param and it hasn't been applied yet, use URL value
-    if (
-      !isAppSettled &&
-      (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)
-    ) {
-      const isUrlLayerActive =
-        activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
-      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
-        return initialUrlParams.layerId;
-      }
-    }
+    // if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)
+    // ) {
+    //   const isUrlLayerActive =
+    //     activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+    //   if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
+    //     return initialUrlParams.layerId;
+    //   }
+    // }
     // Otherwise use default layer
-    return currentDefaultLayerId;
+    return currentDefaultLayerIdByEntity;
   },
   filter: ({ loadedLayersAndCountries: isLoaded }) => isLoaded,
-  target: onSelectMainLayer,
+  target: createEffect(() => { })// onSelectMainLayer, // temporary disabled
 });
 
 // On first country code update, preserve URL layer value if present
 sample({
-  clock: merge([$countryCode]),
+  clock: merge([$countryCode, loadedLayersAndCountries]),
   source: combine({
+    activeEntityTypes: $activeEntityTypes,
     layerUtils: $layerUtils,
     countryCode: $countryCode,
+    loadedLayersAndCountries,
     initialUrlParams: $initialUrlParams,
     isAppSettled: $isAppSettled,
   }),
   fn: ({
     layerUtils: {
-      selectedLayerId,
-      currentLayerTypeUtils,
-      isActiveCurrentLayer,
-      currentDefaultLayerId,
-      activeLayerByCountryCode,
+      selectedLayerIdByEntity,
+      currentLayerTypeUtilsByEntity,
+      isActiveCurrentLayerByEntity,
+      currentDefaultLayerIdByEntity,
+      activeLayerByCountryCodeByEntity,
     },
+    activeEntityTypes,
     initialUrlParams,
     isAppSettled,
   }) => {
+    // TODO: don't remove fix once url params are fixed with entity layer implementation; 
     // On first country code update, if URL has layer param, use it (if valid for country)
-    if (
-      !isAppSettled &&
-      (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)
-    ) {
-      const isUrlLayerActive =
-        activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
-      if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
-        return initialUrlParams.layerId;
-      }
-    }
+    // if (!isAppSettled &&
+    //   (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)
+    // ) {
+    //   const isUrlLayerActive =
+    //     activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+    //   if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
+    //     return initialUrlParams.layerId;
+    //   }
+    // }
     // Normal behavior for subsequent updates
-    let nextLayerId = selectedLayerId;
-    if (
-      (currentLayerTypeUtils.isLive && !isActiveCurrentLayer) ||
-      (currentLayerTypeUtils.isStatic && !isActiveCurrentLayer)
-    ) {
-      nextLayerId = null;
-    }
-    if (currentLayerTypeUtils.isLive && currentDefaultLayerId) {
-      return currentDefaultLayerId;
-    }
-    // select default layer
-    return nextLayerId;
+    const result = {} as Partial<Record<EntityType, number | null>>;
+    activeEntityTypes.forEach((entityType) => {
+      let nextLayerId = selectedLayerIdByEntity[entityType] ?? null;
+      const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[entityType];
+      const isActiveCurrentLayer = isActiveCurrentLayerByEntity[entityType];
+      const currentDefaultLayerId = currentDefaultLayerIdByEntity[entityType];
+      if (
+        (currentLayerTypeUtils?.isLive && !isActiveCurrentLayer) ||
+        (currentLayerTypeUtils?.isStatic && !isActiveCurrentLayer)
+      ) {
+        nextLayerId = null;
+      }
+      if (currentLayerTypeUtils?.isLive && currentDefaultLayerId) {
+        nextLayerId = currentDefaultLayerId;
+      }
+      // select default layer
+      result[entityType] = nextLayerId ?? currentDefaultLayerId ?? null;
+    })
+    return result;
   },
-  filter: ({ countryCode }) => !!countryCode,
-  target: onSelectMainLayer,
+  filter: ({ countryCode, loadedLayersAndCountries }) => {
+    return !!countryCode && loadedLayersAndCountries;
+  },
+  target: onSelectEntityMainLayer,
 });
 
 sample({
@@ -777,26 +789,26 @@ const benchmarkSource = combine({
 });
 const benchmarkFn =
   (isClockId: boolean) =>
-  (
-    {
-      countryDefaultNational = {},
-      selectedLayerId,
-      connectivityBenchMark,
-    }: ReturnType<typeof benchmarkSource.getState>,
-    clockLayerId: unknown,
-  ) => {
-    let currentBenchmark = connectivityBenchMark;
-    const layerId =
-      isClockId && typeof clockLayerId === 'number'
-        ? clockLayerId
-        : selectedLayerId;
-    if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
-      currentBenchmark = ConnectivityBenchMarks.national;
-    } else {
-      currentBenchmark = ConnectivityBenchMarks.global;
-    }
-    return currentBenchmark;
-  };
+    (
+      {
+        countryDefaultNational = {},
+        selectedLayerId,
+        connectivityBenchMark,
+      }: ReturnType<typeof benchmarkSource.getState>,
+      clockLayerId: unknown,
+    ) => {
+      let currentBenchmark = connectivityBenchMark;
+      const layerId =
+        isClockId && typeof clockLayerId === 'number'
+          ? clockLayerId
+          : selectedLayerId;
+      if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+        currentBenchmark = ConnectivityBenchMarks.national;
+      } else {
+        currentBenchmark = ConnectivityBenchMarks.global;
+      }
+      return currentBenchmark;
+    };
 
 // default national for a country and layer
 sample({

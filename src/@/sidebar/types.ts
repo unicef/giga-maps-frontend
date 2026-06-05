@@ -54,6 +54,7 @@ export enum LayerTypeChoices {
 }
 export interface LayerType {
   id: number
+  code: string
   name: string
   description: string
   icon: string;

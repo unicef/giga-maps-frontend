@@ -147,7 +147,7 @@ export const $urlTrackedParams = combine({
 
 // Effect to update URL params
 const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedParams.getState>) => {
-
+  return; // Temporary disabled url update
   const url = new URL(window.location.href);
   const searchParams = url.searchParams;
 

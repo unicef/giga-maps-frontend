@@ -18,6 +18,7 @@ import {
 } from '~/@/entities';
 import {
   $activeEntityTypes,
+  $entityTypesFiltered,
   $selectedEntityType,
   changeSelectedEntityType,
 } from '~/@/entities/models/entity.model';
@@ -101,9 +102,8 @@ const getEntityValue = getEntityMapValue;
 const getSelectedEntityLayerId = (
   selectedLayerIdByEntity: EntityStoreMap<number | null>,
   entityType: EntityType,
-  fallbackLayerId: number | null,
 ) => {
-  return getEntityValue(selectedLayerIdByEntity, entityType, fallbackLayerId);
+  return getEntityValue(selectedLayerIdByEntity, entityType, null);
 };
 
 export const onClickSidebar = createEvent();
@@ -339,10 +339,9 @@ export const $staticLayers = $layersList.map(
 );
 
 export const onSelectSchoolStatusLayer = createEvent<number | null>();
-export const onSelectEntityStatusLayer = createEvent<{
-  entityType: EntityType;
-  layerId: number | null;
-}>();
+export const onSelectEntityStatusLayer = createEvent<
+  EntityStoreMap<number | null>
+>();
 export const $statusLayerIdByEntity = createStore<
   EntityStoreMap<number | null>
 >(defaultEntityStatusLayerSelection);
@@ -352,9 +351,9 @@ $statusLayerIdByEntity.on(onSelectSchoolStatusLayer, (state, layerId) => ({
 }));
 $statusLayerIdByEntity.on(
   onSelectEntityStatusLayer,
-  (state, { entityType, layerId }) => ({
+  (state, payload) => ({
     ...state,
-    [entityType]: layerId,
+    ...payload
   }),
 );
 export const $schoolStatusSelectedLayer = combine(
@@ -369,26 +368,27 @@ export const $schoolStatusSelectedLayer = combine(
 );
 
 export const onSelectMainLayer = createEvent<number | null>();
-export const onSelectEntityMainLayer = createEvent<{
-  entityType: EntityType;
-  layerId: number | null;
-}>();
-export const $selectedLayerId = restore(onSelectMainLayer, null);
-$selectedLayerId.on(onSelectEntityMainLayer, (_, { layerId }) => layerId);
+export const onSelectEntityMainLayer = createEvent<EntityStoreMap<number | null>>();
+
 export const $selectedLayerIdByEntity = createStore<
   EntityStoreMap<number | null>
 >({});
-$selectedLayerIdByEntity.on(onSelectMainLayer, (state, layerId) => ({
-  ...state,
-  [$selectedEntityType.getState()]: layerId,
-}));
+
 $selectedLayerIdByEntity.on(
   onSelectEntityMainLayer,
-  (state, { entityType, layerId }) => ({
+  (state, payload) => ({
     ...state,
-    [entityType]: layerId,
+    ...payload,
   }),
 );
+export const $selectedLayerId = combine(
+  $selectedLayerIdByEntity,
+  $selectedEntityType,
+  (selectedLayerIdByEntity, selectedEntityType) =>
+    getEntityValue(selectedLayerIdByEntity, selectedEntityType, null),
+);
+
+// TODO: remove this store and use $selectedLayerIdByEntity directly in the component by passing selectedEntityType as argument to get the value, this will avoid unnecessary store and combine
 export const $globalLayerData = $layersList.map(
   (layers) =>
     layers?.find(
@@ -401,6 +401,20 @@ export const $globalLayerData = $layersList.map(
 export const $globalLayerId = $globalLayerData.map(
   (layer) => layer?.id ?? null,
 );
+
+// TODO: remove download code in condition when createdBy layer is fix, currently multiple not createdBy layers are there which causing an issue 
+export const $globalLayerDataByEntity = $layersList.map((layers) => {
+  const result = {} as EntityStoreMap<LayerType | null>;
+  layers?.forEach((layer) => {
+    getLayerEntityTypes(layer, []).forEach((entityType) => {
+      if (layer?.type === LayerTypeChoices.LIVE && !layer.created_by && layer.code === 'DOWNLOAD') {
+        result[entityType] = layer;
+      }
+    });
+  });
+  return result;
+});
+
 export const $downloadLayerData = $layersList.map(
   (layers) =>
     layers?.find(
@@ -408,7 +422,7 @@ export const $downloadLayerData = $layersList.map(
         layer?.type === LayerTypeChoices.LIVE &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-          'connectivity_speed',
+        'connectivity_speed',
     ) ?? null,
 );
 export const $downloadLayerId = $downloadLayerData.map(
@@ -421,7 +435,7 @@ export const $coverageLayerData = $layersList.map(
         layer?.type === LayerTypeChoices.STATIC &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-          'coverage_type',
+        'coverage_type',
     ) ?? null,
 );
 export const $coverageLayerId = $coverageLayerData.map(
@@ -431,14 +445,14 @@ export const $coverageLayerId = $coverageLayerData.map(
 export const $activeLayerByCountriesByEntity = combine(
   $layersList,
   $countryIdToCode,
-  $activeEntityTypes,
-  (layers, countryIdToCode, activeEntityTypes) => {
+  $entityTypesFiltered,
+  (layers, countryIdToCode, entityTypesFiltered) => {
     const result = {} as EntityStoreMap<{
       list: Record<string, { activeCountries: string[] }>;
       countryDefaultLayerList: Record<string, number>;
     }>;
     layers?.forEach((layer) => {
-      getLayerEntityTypes(layer, activeEntityTypes).forEach((entityType) => {
+      getLayerEntityTypes(layer, entityTypesFiltered).forEach((entityType) => {
         const entityLayers = result[entityType] ?? {
           list: {},
           countryDefaultLayerList: {},
@@ -460,6 +474,7 @@ export const $activeLayerByCountriesByEntity = combine(
   },
 );
 
+// TODO: remove this store and use $activeLayerByCountriesByEntity directly in the component by passing selectedEntityType as argument to get the value, this will avoid unnecessary store and combine
 export const $activeLayerByCountries = combine(
   $activeLayerByCountriesByEntity,
   $selectedEntityType,
@@ -474,13 +489,12 @@ export const $activeLayerByCountries = combine(
 export const $currentDefaultLayerIdByEntity = combine(
   $countryCode,
   $activeLayerByCountriesByEntity,
-  $globalLayerId,
-  (countryCode, activeLayersByEntity, globalLayerId) => {
-    return Object.entries(activeLayersByEntity).reduce(
+  $globalLayerDataByEntity,
+  (countryCode, activeLayerByCountriesByEntity, globalLayerDataByEntity) => {
+    return Object.entries(activeLayerByCountriesByEntity).reduce(
       (acc, [entityType, activeLayers]) => {
         const layerId =
-          activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ??
-          globalLayerId;
+          activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? globalLayerDataByEntity[entityType as EntityType]?.id;
         acc[entityType as EntityType] = activeLayers.list[
           layerId ?? ''
         ]?.activeCountries?.includes?.(countryCode?.toLowerCase())
@@ -493,15 +507,15 @@ export const $currentDefaultLayerIdByEntity = combine(
   },
 );
 
+// TODO: remove this store and use $currentDefaultLayerIdByEntity directly in the component by passing selectedEntityType as argument to get the value, this will avoid unnecessary store and combine
 export const $currentDefaultLayerId = combine(
   $currentDefaultLayerIdByEntity,
   $selectedEntityType,
-  $globalLayerId,
-  (currentDefaultLayerIdByEntity, selectedEntityType, globalLayerId) => {
+  (currentDefaultLayerIdByEntity, selectedEntityType) => {
     return getEntityValue(
       currentDefaultLayerIdByEntity,
       selectedEntityType,
-      globalLayerId,
+      null,
     );
   },
 );
@@ -510,19 +524,12 @@ export const $isActiveCurrentLayerByEntity = combine(
   $activeLayerByCountriesByEntity,
   $selectedLayerIdByEntity,
   $countryCode,
-  $selectedLayerId,
-  (
-    activeLayersByEntity,
-    selectedLayerIdByEntity,
-    countryCode,
-    selectedLayerId,
-  ) => {
+  (activeLayersByEntity, selectedLayerIdByEntity, countryCode) => {
     return Object.entries(activeLayersByEntity).reduce(
       (acc, [entityType, activeLayers]) => {
         const entityLayerId = getSelectedEntityLayerId(
           selectedLayerIdByEntity,
           entityType as EntityType,
-          selectedLayerId,
         );
         acc[entityType as EntityType] =
           !!entityLayerId &&
@@ -598,13 +605,7 @@ export const $selectedLayerDataByEntity = combine(
   $layersList,
   $selectedLayerIdByEntity,
   $currentDefaultLayerIdByEntity,
-  $selectedLayerId,
-  (
-    layers,
-    selectedLayerIdByEntity,
-    currentDefaultLayerIdByEntity,
-    selectedLayerId,
-  ) => {
+  (layers, selectedLayerIdByEntity, currentDefaultLayerIdByEntity) => {
     const entityTypes = new Set<EntityType>([
       ...(Object.keys(selectedLayerIdByEntity) as EntityType[]),
       ...(Object.keys(currentDefaultLayerIdByEntity) as EntityType[]),
@@ -614,7 +615,7 @@ export const $selectedLayerDataByEntity = combine(
         const entityLayerId = getEntityValue(
           selectedLayerIdByEntity,
           entityType,
-          currentDefaultLayerIdByEntity[entityType] ?? selectedLayerId,
+          currentDefaultLayerIdByEntity[entityType] ?? null,
         );
         acc[entityType] =
           layers?.find((item) => item.id === entityLayerId) ?? null;
@@ -766,8 +767,8 @@ const buildCurrentLayerLegends = ({
   };
   selectedLayerData?: LayerType | null;
   stylePaintData: typeof $stylePaintData extends { getState: () => infer T }
-    ? T
-    : never;
+  ? T
+  : never;
 }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -1377,7 +1378,7 @@ $connectivityAvailability.on(
   (_, payload) => {
     return (
       (payload as Partial<Record<EntityType, ConnectivityConfig>>)?.[
-        $selectedEntityType.getState()
+      $selectedEntityType.getState()
       ] ?? null
     );
   },
@@ -1484,7 +1485,10 @@ $coverage5g4g.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverage3g2g.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
-$potentialCoverageOpenStatus.reset(onSelectMainLayer);
+$potentialCoverageOpenStatus.reset([
+  onSelectMainLayer,
+  onSelectEntityMainLayer,
+]);
 $schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
 $isMenuOpen.reset(router.historyUpdated);
 // on history update, clear connectivity dates;

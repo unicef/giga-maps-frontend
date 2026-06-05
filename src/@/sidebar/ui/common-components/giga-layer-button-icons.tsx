@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import {
   $selectedEntityType,
   EntityType,
-  isLayerForEntity,
-  getEntityMapValue,
   formatEntityTypeLabel,
+  getEntityMapValue,
+  isLayerForEntity,
 } from '~/@/entities';
 import {
   $layerUtils,
@@ -24,9 +24,8 @@ import { TooltipProvider } from '~/components/ui/tooltip';
 import { cn } from '~/lib/cn';
 
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
-import { LayerType, LayerTypeChoices } from '../../types';
+import { LayerTypeChoices } from '../../types';
 import GigaLayerButton from './giga-layer-button';
-
 
 const GigaLayerButtonIcons = ({
   entityType,
@@ -37,7 +36,6 @@ const GigaLayerButtonIcons = ({
 }) => {
   const { t } = useTranslation();
   const {
-    currentDefaultLayerId,
     currentDefaultLayerIdByEntity,
     layers,
     selectedLayerId,
@@ -76,7 +74,7 @@ const GigaLayerButtonIcons = ({
         layer.active_countries_list?.some(({ is_default }) => is_default),
     )?.id ??
     currentDefaultLayerIdByEntity[targetEntityType] ??
-    currentDefaultLayerId;
+    null;
   const targetStaticPopupActiveLayer =
     entityStaticLayers.find(
       (layer) => layer.created_by && targetActiveLayerByCountryCode[layer.id],
@@ -88,10 +86,10 @@ const GigaLayerButtonIcons = ({
     staticPopupActiveLayer;
   const targetSelectedLayerId = entityType
     ? getEntityMapValue(
-        selectedLayerIdByEntity,
-        targetEntityType,
-        targetDefaultLayerId,
-      )
+      selectedLayerIdByEntity,
+      targetEntityType,
+      targetDefaultLayerId,
+    )
     : selectedLayerId;
   const targetLayerData = layers.find(
     (layer) => layer.id === targetSelectedLayerId,
@@ -109,8 +107,7 @@ const GigaLayerButtonIcons = ({
         }
       }
       onSelectEntityMainLayer({
-        entityType: targetEntityType,
-        layerId: selectedId,
+        [targetEntityType]: selectedId,
       });
     },
     [targetEntityType, targetSelectedLayerId],
@@ -121,12 +118,10 @@ const GigaLayerButtonIcons = ({
       // Toggle connectivity status overlay while preserving the target entity layer selection.
       if (targetSelectedLayerId) {
         onSelectEntityMainLayer({
-          entityType: targetEntityType,
-          layerId: targetSelectedLayerId,
+          [targetEntityType]: targetSelectedLayerId,
         });
         onSelectEntityStatusLayer({
-          entityType: targetEntityType,
-          layerId: targetStatusSelectedLayer ? null : selectedId,
+          [targetEntityType]: targetStatusSelectedLayer ? null : selectedId,
         });
         selectAllEntityStaticLegendsSelection({ entityType: targetEntityType });
       }
@@ -247,7 +242,7 @@ const GigaLayerButtonIcons = ({
           disabled={
             !targetStaticPopupActiveLayer ||
             !targetActiveLayerByCountryCode[
-              String(targetStaticPopupActiveLayer?.id)
+            String(targetStaticPopupActiveLayer?.id)
             ]
           }
           isActive={targetStaticPopupActiveLayer?.id === targetSelectedLayerId}
