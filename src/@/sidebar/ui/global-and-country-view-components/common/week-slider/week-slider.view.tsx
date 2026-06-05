@@ -27,7 +27,7 @@ export default function WeekSlider() {
 
   return (
     <div className="flex! flex-row! items-center! justify-between!">
-      <div className="week_control_style flex! h-8! flex-row! flex-nowrap! items-center! gap-2!">
+      <div className="week_control_style flex! h-8! flex-row! flex-nowrap! items-center! gap-1! ml-[-0.5rem]!">
         <Button
           aria-label="Previous week"
           className="previous_week_button size-8! p-0! text-foreground!"

@@ -29,8 +29,8 @@ export default function GigaLayerButton({
   return (
     <div
       className={cn(
-        'relative! flex! h-[4.25rem]! w-20! max-w-20! min-w-0! flex-1! flex-col! items-start! justify-start!',
-        popup && 'mr-2! mt-4!',
+        'relative! flex! h-[4.25rem]! w-20! max-w-20! flex-col! items-start! justify-start!',
+        popup ? 'min-w-20!' : 'min-w-0! flex-1!',
       )}
     >
       <Button
@@ -40,7 +40,7 @@ export default function GigaLayerButton({
           '[&_svg]:size-4! [&_svg]:shrink-0!',
           isActive
             ? 'bg-primary! text-primary-foreground! hover:bg-primary!'
-            : 'bg-[#393939]! text-white/50! hover:bg-[#393939]! hover:text-white/70!',
+            : 'bg-[#393939]! text-white/30! hover:bg-[#393939]! hover:text-white/70!',
         )}
         disabled={disabled}
         onClick={onClick}

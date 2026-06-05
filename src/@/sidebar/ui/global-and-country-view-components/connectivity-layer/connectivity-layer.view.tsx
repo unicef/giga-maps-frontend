@@ -41,13 +41,13 @@ export default function ConnectivityLayer({
     : selectedLayerData;
   const colorClassName =
     connectivityColorClassByStatus[
-    connectivityStats?.live_avg_connectivity ?? UNKNOWN
+      connectivityStats?.live_avg_connectivity ?? UNKNOWN
     ] ?? 'text-neutral!';
 
   return (
     <>
       <div className="mx-4!">
-        <div className="relative! flex! w-full! flex-col! pt-3! pb-6!">
+        <div className="relative! flex! w-full! flex-col! pt-3! pb-6! gap-3!">
           <LiveAverage
             isLoading={isLoading}
             colorClassName={colorClassName}
@@ -57,7 +57,11 @@ export default function ConnectivityLayer({
           <WeekSlider />
         </div>
       </div>
-      <HistoryGraphAccordian isLoading={isLoading} />
+      <HistoryGraphAccordian
+        connectivityStats={connectivityStats}
+        isLoading={isLoading}
+        selectedLayerData={currentLayerData}
+      />
       <FooterDataSourcePopUp isFooter={false} />
     </>
   );

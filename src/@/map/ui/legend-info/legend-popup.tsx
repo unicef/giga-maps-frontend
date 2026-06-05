@@ -1,27 +1,37 @@
 import { useStore } from 'effector-react';
-import { CSSProperties, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { Maximize2, Minimize2 } from 'lucide-react';
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-
-import { $activeEntityTypes, $entityConfigMap, $entityTypesFiltered } from '~/@/entities/models/entity.model';
+import {
+  $activeEntityTypes,
+  $entityConfigMap,
+  $entityTypesFiltered,
+} from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import { $layerUtils } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~/components/ui/collapsible';
-import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
+import { Button } from '~/components/ui/button';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '~/components/ui/collapsible';
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from '~/components/ui/popover';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes } from '~/core/routes';
-
 import { cn } from '~/lib/cn';
 
 import LiveLayerLegend from './common/live-layer-legend';
 import SchoolStatusLegend from './common/school-status-legend';
 import StaticLayerLegend from './common/static-layer-legend';
-import { Maximize2, Minimize2 } from 'lucide-react';
-import { Button } from '~/components/ui/button';
 
 type LegendSummaryItem = {
   color: string;
@@ -29,7 +39,8 @@ type LegendSummaryItem = {
   label: string;
 };
 
-const getDefaultLegendTab = (entityTypes: EntityType[]) => entityTypes[0] ?? 'school';
+const getDefaultLegendTab = (entityTypes: EntityType[]) =>
+  entityTypes[0] ?? 'school';
 const getDefaultCollapsedState = (isMobile: boolean) => isMobile;
 
 const schoolSummaryOrder = [
@@ -42,74 +53,103 @@ const LegendPopup = ({
   open,
   onOpenChange,
   children,
-}: PropsWithChildren<{ open: boolean, onOpenChange?: (open: boolean) => void }>) => {
+}: PropsWithChildren<{
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
+}>) => {
   const { t } = useTranslation();
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityConfigMap = useStore($entityConfigMap);
   const entityTypesFiltered = useStore($entityTypesFiltered);
-  const { currentLayerLegends, currentLayerTypeUtils, selectedLayerData } = useStore($layerUtils);
+  const {
+    currentLayerLegends,
+    currentLayerTypeUtils,
+    globalLayerData,
+    selectedLayerData,
+  } = useStore($layerUtils);
   const { isStatic, isLive, isSchoolStatus } = currentLayerTypeUtils;
   const isMobile = useStore($isMobile);
   const mapLevel = useStore($mapRoutes);
+  const isGlobalView = mapLevel.map;
   const shouldShowControls = !mapLevel.map && !mapLevel.schools;
 
   const paintData = useStore($stylePaintData);
   const visibleLegendEntityTypes = useMemo(() => {
     // Filter to only types that are both active AND visible in config, maintain registry order
-    return entityTypesFiltered.filter((type) => activeEntityTypes.includes(type));
+    return entityTypesFiltered.filter((type) =>
+      activeEntityTypes.includes(type),
+    );
   }, [activeEntityTypes, entityTypesFiltered]);
-  const [collapsed, setCollapsed] = useState(() => getDefaultCollapsedState(isMobile));
-  const [activeTab, setActiveTab] = useState<EntityType>(() => getDefaultLegendTab(visibleLegendEntityTypes));
-
-
+  const [collapsed, setCollapsed] = useState(() =>
+    getDefaultCollapsedState(isMobile),
+  );
+  const [activeTab, setActiveTab] = useState<EntityType>(() =>
+    getDefaultLegendTab(visibleLegendEntityTypes),
+  );
 
   useEffect(() => {
     if (!visibleLegendEntityTypes.length) return;
 
-    setActiveTab((currentTab) => (visibleLegendEntityTypes.includes(currentTab) ? currentTab : visibleLegendEntityTypes[0]));
+    setActiveTab((currentTab) =>
+      visibleLegendEntityTypes.includes(currentTab)
+        ? currentTab
+        : visibleLegendEntityTypes[0],
+    );
   }, [visibleLegendEntityTypes]);
 
-  const activeLegendConfig = entityConfigMap[activeTab] ?? entityConfigMap[visibleLegendEntityTypes[0] ?? 'school'];
-  const legendMetricTitle = t('internet-quality')
+  const legendMetricTitle = t('internet-quality');
+  const metricLayerData = isGlobalView ? globalLayerData : selectedLayerData;
   const legendMetricSubtitle = isStatic
-    ? selectedLayerData?.name ?? t('coverage-data')
-    : selectedLayerData?.name ?? t('average-download-speed');
+    ? (metricLayerData?.name ?? t('coverage-data'))
+    : (metricLayerData?.name ?? t('average-download-speed'));
   const legendStatusTitle = t('connectivity-status');
 
-  const schoolSummaryItems: LegendSummaryItem[] = schoolSummaryOrder.map((key) => ({
-    color: paintData[key],
-    key,
-    label: t(ConnectivityStatusNames[key]),
-  }));
-
-  const activeLayerSummaryItems: LegendSummaryItem[] = currentLayerLegends.values.length
-    ? currentLayerLegends.values.map(({ key, label }) => ({
-      color: currentLayerLegends.colors[key] ?? paintData[key] ?? paintData.unknown,
+  const schoolSummaryItems: LegendSummaryItem[] = schoolSummaryOrder.map(
+    (key) => ({
+      color: paintData[key],
       key,
-      label,
-    }))
-    : [
-      { color: paintData.good, key: 'good', label: t('high') },
-      { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-      { color: paintData.bad, key: 'bad', label: t('low') },
-      { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-    ];
+      label: t(ConnectivityStatusNames[key]),
+    }),
+  );
 
-  const shouldShowMetricSummary = isLive || isStatic;
+  const activeLayerSummaryItems: LegendSummaryItem[] = currentLayerLegends
+    .values.length
+    ? currentLayerLegends.values.map(({ key, label }) => ({
+        color:
+          currentLayerLegends.colors[key] ??
+          paintData[key] ??
+          paintData.unknown,
+        key,
+        label,
+      }))
+    : [
+        { color: paintData.good, key: 'good', label: t('high') },
+        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+        { color: paintData.bad, key: 'bad', label: t('low') },
+        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+      ];
+
+  const shouldShowMetricSummary = isGlobalView || isLive || isStatic;
   const shouldShowStatusSummary = isSchoolStatus;
-  const renderedSectionCount = Number(isSchoolStatus) + Number(isLive) + Number(isStatic);
-  const liveMetricFill = paintData[ConnectivityStatusDistribution.connected as string];
+  const renderedSectionCount =
+    Number(isSchoolStatus) + Number(isGlobalView || isLive) + Number(isStatic);
+  const liveMetricFill =
+    paintData[ConnectivityStatusDistribution.connected as string];
 
   const renderMetricSummary = () => (
     <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
       <div className="flex! min-w-0! w-full! flex-col! gap-1!">
         <div className="flex! items-center! justify-between! gap-3!">
-          <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">{legendMetricTitle}</span>
-          <span className="text-xs! leading-4.5! text-muted-foreground!">{legendMetricSubtitle}</span>
+          <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
+            {legendMetricTitle}
+          </span>
+          <span className="text-xs! leading-4.5! text-muted-foreground!">
+            {legendMetricSubtitle}
+          </span>
         </div>
         <div className="flex! h-1! w-full! gap-0! overflow-hidden! rounded-full!">
-          {activeLayerSummaryItems.map(({ color, key, label }) => (
-            isLive ? (
+          {activeLayerSummaryItems.map(({ color, key, label }) =>
+            isLive || isGlobalView ? (
               <span
                 aria-hidden="true"
                 className="relative! block! min-w-0! flex-1! overflow-hidden! rounded-full! bg-transparent! mr-1.5! last:mr-0!"
@@ -133,8 +173,8 @@ const LegendPopup = ({
                 style={{ background: color }}
                 title={label}
               />
-            )
-          ))}
+            ),
+          )}
         </div>
       </div>
       {!shouldShowStatusSummary ? (
@@ -156,13 +196,20 @@ const LegendPopup = ({
   );
 
   const collapsedContent = (
-    <div className="flex! flex-col! gap-2.5! bg-popover! px-3.5! py-3! max-md:gap-2! max-md:px-3! max-md:py-2.5!" data-testid="legend-collapsed-view">
+    <div
+      className="flex! flex-col! gap-2.5! bg-popover! px-3.5! py-3! max-md:gap-2! max-md:px-3! max-md:py-2.5!"
+      data-testid="legend-collapsed-view"
+    >
       {shouldShowStatusSummary ? (
         <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
           <div className="flex! min-w-0! w-full! flex-col! gap-1!">
             <div className="flex! min-w-0! w-full! gap-0!">
               {schoolSummaryItems.map(({ key, label }) => (
-                <span className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-muted-foreground! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!" key={key} title={label}>
+                <span
+                  className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-muted-foreground! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!"
+                  key={key}
+                  title={label}
+                >
                   {label}
                 </span>
               ))}
@@ -194,8 +241,12 @@ const LegendPopup = ({
             </Button>
           </CollapsibleTrigger>
         </div>
-      ) : shouldShowMetricSummary ? renderMetricSummary() : null}
-      {shouldShowStatusSummary && shouldShowMetricSummary ? renderMetricSummary() : null}
+      ) : shouldShowMetricSummary ? (
+        renderMetricSummary()
+      ) : null}
+      {shouldShowStatusSummary && shouldShowMetricSummary
+        ? renderMetricSummary()
+        : null}
     </div>
   );
 
@@ -213,7 +264,9 @@ const LegendPopup = ({
               <button
                 className={cn(
                   'relative! inline-flex! cursor-pointer! items-center! gap-1! border-0! bg-transparent! pb-2.5! px-3! text-sm! leading-5!',
-                  isActive ? 'text-foreground!' : 'text-muted-foreground! opacity-[0.78]!'
+                  isActive
+                    ? 'text-foreground!'
+                    : 'text-muted-foreground! opacity-[0.78]!',
                 )}
                 key={entityType}
                 onClick={(event) => {
@@ -223,14 +276,18 @@ const LegendPopup = ({
                 type="button"
               >
                 <EntityLegendIndicator
-                  color={isActive ? 'var(--color-foreground)' : 'var(--color-muted-foreground)'}
+                  color={
+                    isActive
+                      ? 'var(--color-foreground)'
+                      : 'var(--color-muted-foreground)'
+                  }
                   entityType={entityType}
                 />
                 <span>{t(config.slug)}</span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',
-                    isActive ? 'bg-primary!' : 'bg-transparent!'
+                    isActive ? 'bg-primary!' : 'bg-transparent!',
                   )}
                 />
               </button>
@@ -253,7 +310,10 @@ const LegendPopup = ({
           </Button>
         </CollapsibleTrigger>
       </div>
-      <div className="flex! flex-wrap! gap-4! bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!" data-testid="legend-expanded-view">
+      <div
+        className="flex! flex-wrap! gap-4! bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
+        data-testid="legend-expanded-view"
+      >
         {isSchoolStatus ? (
           <SchoolStatusLegend
             entityType={activeTab}
@@ -261,7 +321,7 @@ const LegendPopup = ({
             statusTitle={legendStatusTitle}
           />
         ) : null}
-        {isLive ? (
+        {isLive || isGlobalView ? (
           <LiveLayerLegend
             entityType={activeTab}
             metricSubtitle={legendMetricSubtitle}
@@ -282,9 +342,13 @@ const LegendPopup = ({
   );
 
   return (
-    <Popover modal={false} onOpenChange={(nextOpen) => {
-      onOpenChange?.(nextOpen);
-    }} open={open}>
+    <Popover
+      modal={false}
+      onOpenChange={(nextOpen) => {
+        onOpenChange?.(nextOpen);
+      }}
+      open={open}
+    >
       <PopoverAnchor asChild>
         <div className="legend-info-popover-link relative! inline-flex!">
           {children}
@@ -297,14 +361,15 @@ const LegendPopup = ({
           'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
           'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
           'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
-          !collapsed && renderedSectionCount === 1 && 'w-[min(22rem,calc(100vw-1rem))]! max-w-[min(22rem,calc(100vw-1rem))]! max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!'
+          !collapsed &&
+            renderedSectionCount === 1 &&
+            'w-[min(22rem,calc(100vw-1rem))]! max-w-[min(22rem,calc(100vw-1rem))]! max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="left"
         sideOffset={12}
-
       >
         <Collapsible
           onOpenChange={(nextOpen) => {

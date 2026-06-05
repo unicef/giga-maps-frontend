@@ -45,7 +45,7 @@ export default function LiveAverage({
           {value ? (
             <div className="mt-2! flex! flex-col!">
               <div>
-                <div className="flex! items-center!">
+                <div className="flex! items-center! mb-4!">
                   <div className="flex! items-center!">
                     <p className="m-0! text-sm! leading-5! text-muted-foreground!">
                       {heading}
