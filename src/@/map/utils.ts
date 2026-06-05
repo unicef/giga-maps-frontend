@@ -1,34 +1,68 @@
-import { format } from "date-fns";
-import { CircleLayer, CirclePaint, Map, MapboxGeoJSONFeature, MapLayerMouseEvent, VectorSource } from "mapbox-gl";
+import { format } from 'date-fns';
+import {
+  CircleLayer,
+  CirclePaint,
+  Map,
+  MapboxGeoJSONFeature,
+  MapLayerMouseEvent,
+  VectorSource,
+} from 'mapbox-gl';
 
-import { getBaseUrl } from "~/api/project-connect";
-import { GeoJSONFeatureCollection, GeoJSONPoint, PointCoordinates } from '~/core/global-types';
+import { getBaseUrl } from '~/api/project-connect';
+import {
+  GeoJSONFeatureCollection,
+  GeoJSONPoint,
+  PointCoordinates,
+} from '~/core/global-types';
+import { gigaThemeList, ThemeType } from '~/core/theme.model';
 
-import { gigaThemeList, ThemeType } from "~/core/theme.model";
-import { $countryCode, setSchoolFocusLatLng } from "../country/country.model";
-import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
-import { $schoolClickedId, resetDublicateSchoolClickData, setPopupOnClickDot } from "./map.model";
-import { ChangeLayerOptions, StylePaintData } from "./map.types";
+import { $countryCode, setSchoolFocusLatLng } from '../country/country.model';
+import {
+  ConnectivityBenchMarks,
+  ConnectivityDistribution,
+  ConnectivityStatusDistribution,
+  Layers,
+  SCHOOL_STATUS_LAYER,
+} from '../sidebar/sidebar.constant';
+import {
+  animateCircleConfig,
+  Colors,
+  CONNECTIVITY_STATUS_SOURCE,
+  CONNECTIVITY_STATUS_URL,
+  CONNECTIVITY_URL,
+  CountryPaintData,
+  DEFAULT_SOURCE,
+  defaultWorldView,
+  LayerDataProps,
+  mapPaintData,
+  SCHOOL_LAYER_ID,
+} from './map.constant';
+import {
+  $schoolClickedId,
+  resetDublicateSchoolClickData,
+  setPopupOnClickDot,
+} from './map.model';
+import { ChangeLayerOptions, StylePaintData } from './map.types';
 
 interface CreateSourceType {
   source?: string;
   minzoom?: number;
   url: string;
   map: Map;
-  schoolData?: GeoJSONFeatureCollection
+  schoolData?: GeoJSONFeatureCollection;
 }
 
 export const isDefaultStyle = (style: string) => {
-  return gigaThemeList.includes(style as ThemeType)
+  return gigaThemeList.includes(style as ThemeType);
 };
 
 export const mapDotsClickIdsAndHandler = {
   [CONNECTIVITY_STATUS_SOURCE]: {},
-  [DEFAULT_SOURCE]: {}
+  [DEFAULT_SOURCE]: {},
 } as Record<string, Record<string, (event: MapLayerMouseEvent) => void>>;
 
-export const isConnectivity = (id: string) => id === `${Layers.connectivity}_layer`;
+export const isConnectivity = (id: string) =>
+  id === `${Layers.connectivity}_layer`;
 export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
 
 export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
@@ -38,8 +72,8 @@ export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
     delete mapDotsClickIdsAndHandler?.[source]?.[id];
     resetDublicateSchoolClickData();
-  })
-}
+  });
+};
 
 export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
   if (!mapDotsClickIdsAndHandler[source]) {
@@ -47,53 +81,65 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
   }
   mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
     const features = map.queryRenderedFeatures(e.point, {
-      layers: [...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
+      layers: [
+        ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]),
+        ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE]),
+      ],
     });
     if (!features.length) return;
-    const ids = new Set(features.map((feature) => {
-      return feature.layer.id;
-    }));
+    const ids = new Set(
+      features.map((feature) => {
+        return feature.layer.id;
+      }),
+    );
     if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
       return;
     }
     const feature = features[0];
     const feature2 = features[1];
     if ($schoolClickedId.getState() === feature?.properties?.id) {
-      setPopupOnClickDot(null)
+      setPopupOnClickDot(null);
       return;
     }
     const schoolId = feature?.properties?.id ?? feature2?.properties?.id;
     if (feature?.layer?.id?.includes('_layer') && schoolId) {
-      console.log("schoolId", schoolId, feature.geometry)
+      console.log('schoolId', schoolId, feature.geometry);
       setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
       setPopupOnClickDot({
         id: schoolId,
         geopoint: feature.geometry as GeoJSONPoint,
-        allowDublicateSchoolIds: true
+        allowDublicateSchoolIds: true,
       });
     }
-  }
+  };
   map.on('click', id, mapDotsClickIdsAndHandler[source][id]);
-}
+};
 
-const getZoomDivisible = (zoom: number, zoomDivisible?: [number, number][]): number => {
+const getZoomDivisible = (
+  zoom: number,
+  zoomDivisible?: [number, number][],
+): number => {
   if (!zoomDivisible?.length) return zoom;
   const divisibleValue = getInterpolatedValue(zoomDivisible, zoom);
   return divisibleValue ? zoom / divisibleValue : zoom;
-}
+};
 
 const getAnimateConfig = () => {
-  const countryAnimatedCircle = CountryPaintData[$countryCode.getState()?.toLowerCase() as keyof typeof CountryPaintData]?.animatedCircle;
+  const countryAnimatedCircle =
+    CountryPaintData[
+      $countryCode.getState()?.toLowerCase() as keyof typeof CountryPaintData
+    ]?.animatedCircle;
   return {
     ...animateCircleConfig,
-    ...countryAnimatedCircle
-  }
-}
+    ...countryAnimatedCircle,
+  };
+};
 
 const setCurrentRadius = () => {
   let lastZoom = 0;
   let radiusValue = [0, 0];
-  const { maxRadius, maxRadiusPortion, startRadiusPortion, zoomDivisible } = getAnimateConfig();
+  const { maxRadius, maxRadiusPortion, startRadiusPortion, zoomDivisible } =
+    getAnimateConfig();
   return (currentZoom: number) => {
     const value = getZoomDivisible(currentZoom, zoomDivisible);
     currentZoom = Math.min(value, maxRadius);
@@ -106,8 +152,8 @@ const setCurrentRadius = () => {
     const max = currentZoom + zoomThird;
     radiusValue = [start, max];
     return radiusValue;
-  }
-}
+  };
+};
 
 export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
   const animationFrameData = { requestId: 0 };
@@ -125,14 +171,20 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
     if (progress >= duration) {
       progress = duration;
     }
-    let radius = (progress / duration) * (maxRadius - startRadius) + startRadius;
-    let opacity = opacityMax - (progress / duration) * (opacityMax - opacityMin);
+    let radius =
+      (progress / duration) * (maxRadius - startRadius) + startRadius;
+    let opacity =
+      opacityMax - (progress / duration) * (opacityMax - opacityMin);
     if (!isGrowing) {
       radius = maxRadius - (progress / duration) * (maxRadius - startRadius);
       opacity = (progress / duration) * (opacityMax - opacityMin) + opacityMin;
     }
     map.setPaintProperty(layer, 'circle-radius', radius);
-    map.setPaintProperty(layer, 'circle-opacity', opacity > opacityMax ? opacityMax : opacity);
+    map.setPaintProperty(
+      layer,
+      'circle-opacity',
+      opacity > opacityMax ? opacityMax : opacity,
+    );
     if (progress >= duration) {
       // await waitFor(300)
       startTime = performance.now();
@@ -145,93 +197,163 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
   return animationFrameData;
 }
 
+export const getDynamicUrl = (layerId: string) =>
+  `api/accounts/layers/${layerId}/map`;
 
-export const getDynamicUrl = (layerId: string) => `api/accounts/layers/${layerId}/map`
-
-export const generateMapParams = ({ connectivityFilter, mapRoute, connectivityBenchMark, isLive, countrySearch, schoolPageIds }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "mapRoute" | "connectivityBenchMark" | "schoolPageIds"> & { isLive?: boolean }): string => {
+export const generateMapParams = ({
+  connectivityFilter,
+  mapRoute,
+  connectivityBenchMark,
+  isLive,
+  countrySearch,
+  schoolPageIds,
+}: Pick<
+  ChangeLayerOptions,
+  | 'countrySearch'
+  | 'connectivityFilter'
+  | 'mapRoute'
+  | 'connectivityBenchMark'
+  | 'schoolPageIds'
+> & { isLive?: boolean }): string => {
   const { isWeek, range } = connectivityFilter;
   const startDate = format(range.start, 'dd-MM-yyyy');
   const endDate = format(range.end, 'dd-MM-yyyy');
-  let params = `${mapRoute.map ? 'limit=14000' : ''}`
+  let params = `${mapRoute.map ? 'limit=14000' : ''}`;
+  const benchmark = mapRoute.map
+    ? ConnectivityBenchMarks.global
+    : connectivityBenchMark;
   if (isLive) {
-    params += `&indicator=${'download'}&benchmark=${connectivityBenchMark}&start_date=${startDate}&end_date=${endDate}&is_weekly=${isWeek.toString()}`;
+    params += `&indicator=${'download'}&benchmark=${benchmark}&start_date=${startDate}&end_date=${endDate}&is_weekly=${isWeek.toString()}`;
   }
   if (mapRoute.country && countrySearch) {
-    params += `&${countrySearch}`
+    params += `&${countrySearch}`;
   }
   if (schoolPageIds?.length === 1) {
-    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`
+    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`;
   }
   return params;
-}
+};
 
-
-export const getCountryParams = (country: boolean, countryId?: number, admin1Id?: number | null) => {
-  let params = country && countryId ? `country_id=${countryId}` : ''
+export const getCountryParams = (
+  country: boolean,
+  countryId?: number,
+  admin1Id?: number | null,
+) => {
+  let params = country && countryId ? `country_id=${countryId}` : '';
   if (admin1Id) {
-    params += `&admin1_id=${admin1Id}`
+    params += `&admin1_id=${admin1Id}`;
   }
   return params;
-}
+};
 
-export const generateStaticLayerUrl = ({ mapRoute, country, admin1Id, countrySearch, schoolPageIds }: Pick<ChangeLayerOptions, "mapRoute" | "country" | "countrySearch" | "schoolPageIds"> & { admin1Id?: number | null }) => {
+export const generateStaticLayerUrl = ({
+  mapRoute,
+  country,
+  admin1Id,
+  countrySearch,
+  schoolPageIds,
+}: Pick<
+  ChangeLayerOptions,
+  'mapRoute' | 'country' | 'countrySearch' | 'schoolPageIds'
+> & { admin1Id?: number | null }) => {
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   let params = getBaseUrl(`${CONNECTIVITY_STATUS_URL}/?${countryParams}`);
   if (countrySearch) {
-    params += `&${countrySearch}`
+    params += `&${countrySearch}`;
   }
   if (schoolPageIds?.length === 1) {
-    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`
+    params += `&exclude_schools_same_coords_except_id=${schoolPageIds[0]}`;
   }
   return `${params}&z={z}&x={x}&y={y}.mvt`;
-}
-export const generateLayerUrls = ({ layerId, connectivityBenchMark, schoolPageIds, layerUtils, mapRoute, country, admin1Id, connectivityFilter, countrySearch }: Pick<ChangeLayerOptions, "countrySearch" | "connectivityFilter" | "layerUtils" | "mapRoute" | "country" | "connectivityBenchMark" | "schoolPageIds"> & { layerId: number | null, admin1Id?: number | null }) => {
-  let url = ''
+};
+export const generateLayerUrls = ({
+  layerId,
+  connectivityBenchMark,
+  schoolPageIds,
+  layerUtils,
+  mapRoute,
+  country,
+  admin1Id,
+  connectivityFilter,
+  countrySearch,
+}: Pick<
+  ChangeLayerOptions,
+  | 'countrySearch'
+  | 'connectivityFilter'
+  | 'layerUtils'
+  | 'mapRoute'
+  | 'country'
+  | 'connectivityBenchMark'
+  | 'schoolPageIds'
+> & { layerId: number | null; admin1Id?: number | null }) => {
+  let url = '';
   const { globalLayerId } = layerUtils;
-  const { isLive } = layerUtils.currentLayerTypeUtils;
+  const isLive = mapRoute.map || layerUtils.currentLayerTypeUtils.isLive;
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
-  const params = generateMapParams({ connectivityFilter, mapRoute, isLive, schoolPageIds, connectivityBenchMark, countrySearch });
+  const params = generateMapParams({
+    connectivityFilter,
+    mapRoute,
+    isLive,
+    schoolPageIds,
+    connectivityBenchMark,
+    countrySearch,
+  });
   if (globalLayerId === layerId || !layerId) {
     url = CONNECTIVITY_URL;
   } else {
-    url = getDynamicUrl(String(layerId))
+    url = getDynamicUrl(String(layerId));
   }
   return getBaseUrl(`${url}/?${countryParams}${params}&z={z}&x={x}&y={y}.mvt`);
-}
+};
 
 export const getMapId = (id: number | null, prefix = ''): string => {
   if (id) return `${id}_layer${prefix}`;
   return '';
-}
+};
 
-export const createSource = ({ map, source = DEFAULT_SOURCE, url }: CreateSourceType, options: VectorSource): void => {
+export const createSource = (
+  { map, source = DEFAULT_SOURCE, url }: CreateSourceType,
+  options: VectorSource,
+): void => {
   map.addSource(source, {
     tiles: [url],
     minzoom: 0,
     maxzoom: 18,
     ...options,
-    type: "vector",
+    type: 'vector',
   });
-}
+};
 
-export const createSchoolSource = ({ map, source = DEFAULT_SOURCE, schoolData }: CreateSourceType) => {
+export const createSchoolSource = ({
+  map,
+  source = DEFAULT_SOURCE,
+  schoolData,
+}: CreateSourceType) => {
   map.addSource(source, {
     type: 'geojson',
     data: schoolData as unknown as GeoJSON.FeatureCollection,
   });
-}
+};
 
 export const getAllSourceLayers = (map: Map, sourceId = DEFAULT_SOURCE) => {
-  const layersFromSource = map.getStyle().layers.filter((layer: any) => layer.source === sourceId);
-  return layersFromSource
-}
+  const layersFromSource = map
+    .getStyle()
+    .layers.filter((layer: any) => layer.source === sourceId);
+  return layersFromSource;
+};
 
 export const checkSourceAvailable = (map: Map, sourceId: string): boolean => {
   const { sources } = map.getStyle();
   return !!sources && !!sources[sourceId];
-}
+};
 
-export const deleteSourceAndLayers = ({ map, sourceId = DEFAULT_SOURCE }: { map: Map, sourceId?: string }): void => {
+export const deleteSourceAndLayers = ({
+  map,
+  sourceId = DEFAULT_SOURCE,
+}: {
+  map: Map;
+  sourceId?: string;
+}): void => {
   // remove click handlers
   removePreviewsMapClickHandlers(map, sourceId);
 
@@ -243,26 +365,50 @@ export const deleteSourceAndLayers = ({ map, sourceId = DEFAULT_SOURCE }: { map:
     }
   });
   map.removeSource(sourceId);
-}
+};
 
 export const showLayer = (map: Map, id: string): void => {
   if (!map.getLayer(id)) return;
   map.setLayoutProperty(id, 'visibility', 'visible');
-}
+};
 
 export const hideLayer = (map: Map, id: string): void => {
   if (!map.getLayer(id)) return;
   map.setLayoutProperty(id, 'visibility', 'none');
-}
+};
 
-export const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string) => {
-  return map.addLayer({
-    minzoom: 0,
-    ...options
-  }, layerBefore && map.getLayer(layerBefore) ? layerBefore : '');
-}
+export const createCircleLayer = (
+  map: Map,
+  options: CircleLayer,
+  layerBefore?: string,
+) => {
+  return map.addLayer(
+    {
+      minzoom: 0,
+      ...options,
+    },
+    layerBefore && map.getLayer(layerBefore) ? layerBefore : '',
+  );
+};
 
-export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
+export const createSchoolLayer = (
+  map: Map,
+  {
+    id,
+    source = DEFAULT_SOURCE,
+    paintData,
+    options,
+    mapRoute,
+    isMobile,
+  }: {
+    id: string;
+    source?: string;
+    paintData: StylePaintData;
+    options: Record<string, any>;
+    mapRoute: ChangeLayerOptions['mapRoute'];
+    isMobile: boolean;
+  },
+): void => {
   if (map.getLayer(id)) {
     showLayer(map, id);
     return;
@@ -270,26 +416,32 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
 
   const connectivityStatusColors = paintData;
   const circleColor = [
-    ...mapPaintData.connectivityStatus["circle-color"],
-    ConnectivityStatusDistribution.connected, connectivityStatusColors.connected,
-    ConnectivityStatusDistribution.notConnected, connectivityStatusColors.not_connected,
-    ConnectivityStatusDistribution.unknown, connectivityStatusColors.unknown,
-    connectivityStatusColors.unknown
+    ...mapPaintData.connectivityStatus['circle-color'],
+    ConnectivityStatusDistribution.connected,
+    connectivityStatusColors.connected,
+    ConnectivityStatusDistribution.notConnected,
+    connectivityStatusColors.not_connected,
+    ConnectivityStatusDistribution.unknown,
+    connectivityStatusColors.unknown,
+    connectivityStatusColors.unknown,
   ];
   const countryCode = $countryCode.getState();
-  const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
+  const currentCountryPaintData =
+    CountryPaintData[
+      countryCode?.toLowerCase() as keyof typeof CountryPaintData
+    ];
   const paint = {
     ...mapPaintData.connectivityStatus,
     ...currentCountryPaintData?.connectivityStatus,
-    "circle-color": circleColor
+    'circle-color': circleColor,
   } as unknown as CirclePaint;
   createCircleLayer(map, {
     id,
-    type: "circle",
+    type: 'circle',
     source,
     minzoom: 0,
     paint,
-    ...options
+    ...options,
   });
 
   map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
@@ -297,14 +449,33 @@ export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paint
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, CONNECTIVITY_STATUS_SOURCE);
   }
-}
+};
 
 /**
  * Create a symbol layer for non-circle entity types (health, etc.)
  * Uses text-field with a unicode symbol character (e.g. ■) from entity registry.
  * Colors are driven by connectivity_status, matching the same logic as createSchoolLayer.
  */
-export const createEntitySymbolLayer = (map: Map, { id, symbol, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; symbol: string; source?: string; paintData: StylePaintData; options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute']; isMobile: boolean }): void => {
+export const createEntitySymbolLayer = (
+  map: Map,
+  {
+    id,
+    symbol,
+    source = DEFAULT_SOURCE,
+    paintData,
+    options,
+    mapRoute,
+    isMobile,
+  }: {
+    id: string;
+    symbol: string;
+    source?: string;
+    paintData: StylePaintData;
+    options: Record<string, any>;
+    mapRoute: ChangeLayerOptions['mapRoute'];
+    isMobile: boolean;
+  },
+): void => {
   if (map.getLayer(id)) {
     showLayer(map, id);
     return;
@@ -313,14 +484,21 @@ export const createEntitySymbolLayer = (map: Map, { id, symbol, source = DEFAULT
   const connectivityStatusColors = paintData;
   // Build text-color expression matching the same connectivity_status logic as circle-color
   const textColor = [
-    ...mapPaintData.connectivityStatus["circle-color"],
-    ConnectivityStatusDistribution.connected, connectivityStatusColors.connected,
-    ConnectivityStatusDistribution.notConnected, connectivityStatusColors.not_connected,
-    ConnectivityStatusDistribution.unknown, connectivityStatusColors.unknown,
-    connectivityStatusColors.unknown
+    ...mapPaintData.connectivityStatus['circle-color'],
+    ConnectivityStatusDistribution.connected,
+    connectivityStatusColors.connected,
+    ConnectivityStatusDistribution.notConnected,
+    connectivityStatusColors.not_connected,
+    ConnectivityStatusDistribution.unknown,
+    connectivityStatusColors.unknown,
+    connectivityStatusColors.unknown,
   ];
 
-  const { 'source-layer': sourceLayer, filter: layerFilter, ...restOptions } = options;
+  const {
+    'source-layer': sourceLayer,
+    filter: layerFilter,
+    ...restOptions
+  } = options;
 
   map.addLayer({
     id,
@@ -330,13 +508,21 @@ export const createEntitySymbolLayer = (map: Map, { id, symbol, source = DEFAULT
     layout: {
       'text-field': symbol,
       'text-size': [
-        'interpolate', ['linear'], ['zoom'],
-        0, 4,
-        2, 6,
-        4, 8,
-        5, 10,
-        8, 14,
-        10, 18
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        4,
+        2,
+        6,
+        4,
+        8,
+        5,
+        10,
+        8,
+        14,
+        10,
+        18,
       ],
       'text-allow-overlap': true,
       'text-ignore-placement': true,
@@ -356,70 +542,129 @@ export const createEntitySymbolLayer = (map: Map, { id, symbol, source = DEFAULT
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
-}
+};
 
-const getConnectivityPaint = (colorsConnectivity: StylePaintData, isDynamicLayer: boolean) => {
+const getConnectivityPaint = (
+  colorsConnectivity: StylePaintData,
+  isDynamicLayer: boolean,
+) => {
   const countryCode = $countryCode.getState();
-  const currentCountryPaintData = CountryPaintData[countryCode?.toLowerCase() as keyof typeof CountryPaintData];
+  const currentCountryPaintData =
+    CountryPaintData[
+      countryCode?.toLowerCase() as keyof typeof CountryPaintData
+    ];
   return {
     ...mapPaintData.connectivity,
     ...currentCountryPaintData?.connectivity,
-    "circle-color": [
-      ...mapPaintData.connectivity["circle-color"],
+    'circle-color': [
+      ...mapPaintData.connectivity['circle-color'],
       [
-        "match",
-        ["get", isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.connectivity.key],
-        ConnectivityDistribution.good, colorsConnectivity.good,
-        ConnectivityDistribution.moderate, colorsConnectivity.moderate,
-        ConnectivityDistribution.bad, colorsConnectivity.bad,
-        ConnectivityDistribution.unknown, colorsConnectivity.unknown,
-        Colors.TRANSPARENT
+        'match',
+        [
+          'get',
+          isDynamicLayer
+            ? LayerDataProps.fieldStatus.key
+            : LayerDataProps.connectivity.key,
+        ],
+        ConnectivityDistribution.good,
+        colorsConnectivity.good,
+        ConnectivityDistribution.moderate,
+        colorsConnectivity.moderate,
+        ConnectivityDistribution.bad,
+        colorsConnectivity.bad,
+        ConnectivityDistribution.unknown,
+        colorsConnectivity.unknown,
+        Colors.TRANSPARENT,
       ],
-      Colors.TRANSPARENT
-    ]
+      Colors.TRANSPARENT,
+    ],
   } as unknown as CirclePaint;
-}
+};
 
-export const getCoveragePaint = (colors: StylePaintData, isDynamicLayer: boolean) => {
+export const getCoveragePaint = (
+  colors: StylePaintData,
+  isDynamicLayer: boolean,
+) => {
   return {
     ...mapPaintData.coverage,
-    "circle-color": [
-      ...mapPaintData.coverage["circle-color"],
-      ["get", isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.coverage.key],
-      ConnectivityDistribution.good, colors.good,
-      ConnectivityDistribution.moderate, colors.moderate,
-      ConnectivityDistribution.bad, colors.bad,
-      ConnectivityDistribution.unknown, colors.unknown,
-      colors.unknown  // Default color for other cases
-    ]
+    'circle-color': [
+      ...mapPaintData.coverage['circle-color'],
+      [
+        'get',
+        isDynamicLayer
+          ? LayerDataProps.fieldStatus.key
+          : LayerDataProps.coverage.key,
+      ],
+      ConnectivityDistribution.good,
+      colors.good,
+      ConnectivityDistribution.moderate,
+      colors.moderate,
+      ConnectivityDistribution.bad,
+      colors.bad,
+      ConnectivityDistribution.unknown,
+      colors.unknown,
+      colors.unknown, // Default color for other cases
+    ],
   } as unknown as CirclePaint;
-}
+};
 
 // eslint-disable-next-line consistent-return
-const getPaintData = ({ isLive, paintData, isDynamicLayer }: { isLive?: boolean; isDynamicLayer: boolean; paintData: StylePaintData }): undefined | CirclePaint => {
-  if ((isLive)) {
-    return getConnectivityPaint(paintData, isDynamicLayer)
+const getPaintData = ({
+  isLive,
+  paintData,
+  isDynamicLayer,
+}: {
+  isLive?: boolean;
+  isDynamicLayer: boolean;
+  paintData: StylePaintData;
+}): undefined | CirclePaint => {
+  if (isLive) {
+    return getConnectivityPaint(paintData, isDynamicLayer);
   } else {
     return getCoveragePaint(paintData, isDynamicLayer);
   }
+};
 
-}
-
-export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEFAULT_SOURCE, paintData, mapRoute, options, isLive, isMobile }: { id: string; isDynamicLayer: boolean; isLive?: boolean; source?: string; paintData: StylePaintData; options: Record<string, string>, isMobile: boolean; mapRoute: ChangeLayerOptions["mapRoute"] }): void => {
+export const createSelectedLayer = (
+  map: Map,
+  {
+    id,
+    isDynamicLayer,
+    source = DEFAULT_SOURCE,
+    paintData,
+    mapRoute,
+    options,
+    isLive,
+    isMobile,
+  }: {
+    id: string;
+    isDynamicLayer: boolean;
+    isLive?: boolean;
+    source?: string;
+    paintData: StylePaintData;
+    options: Record<string, string>;
+    isMobile: boolean;
+    mapRoute: ChangeLayerOptions['mapRoute'];
+  },
+): void => {
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
     return;
   }
   const paint = getPaintData({ isLive, paintData, isDynamicLayer });
 
-  createCircleLayer(map, {
-    id,
-    type: "circle",
-    source,
-    minzoom: 0,
-    paint,
-    ...options
-  }, getMapId(SCHOOL_LAYER_ID));
+  createCircleLayer(
+    map,
+    {
+      id,
+      type: 'circle',
+      source,
+      minzoom: 0,
+      paint,
+      ...options,
+    },
+    getMapId(SCHOOL_LAYER_ID),
+  );
   // create on click on dots;
   // clear click event before creating new layer;
 
@@ -430,88 +675,97 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEF
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
+};
 
-}
+export const filterCoverageList = (
+  coverageFilter: Record<string, boolean>,
+  isDynamicLayer = false,
+): string[] => {
+  const filterList = Object.keys(coverageFilter).filter(
+    (keyName: string) => coverageFilter[keyName],
+  );
 
-export const filterCoverageList = (coverageFilter: Record<string, boolean>, isDynamicLayer = false): string[] => {
-  const filterList = Object.keys(coverageFilter)
-    .filter((keyName: string) => coverageFilter[keyName]);
+  return [
+    'in',
+    isDynamicLayer
+      ? LayerDataProps.fieldStatus.key
+      : LayerDataProps.coverage.key,
+  ].concat(filterList);
+};
 
-  return ['in', isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.coverage.key].concat(filterList);
-}
-
-
-export const filterConnectivityList = (connectivitySpeedFilter: Record<string, boolean>, isDynamicLayer = false) => {
-  const filterList = Object.keys(connectivitySpeedFilter)
-    .filter(key => connectivitySpeedFilter[key])
+export const filterConnectivityList = (
+  connectivitySpeedFilter: Record<string, boolean>,
+  isDynamicLayer = false,
+) => {
+  const filterList = Object.keys(connectivitySpeedFilter).filter(
+    (key) => connectivitySpeedFilter[key],
+  );
   return [
     'all',
-    ["==", 'is_rt_connected', true],
-    ['in', isDynamicLayer ? LayerDataProps.fieldStatus.key : LayerDataProps.connectivity.key].concat(filterList)
-  ]
-}
+    ['==', 'is_rt_connected', true],
+    [
+      'in',
+      isDynamicLayer
+        ? LayerDataProps.fieldStatus.key
+        : LayerDataProps.connectivity.key,
+    ].concat(filterList),
+  ];
+};
 
 export const filterSchoolStatus = (lengendsSelected: string[]) => {
   return ['in', LayerDataProps.connectivityStatus.key, ...lengendsSelected];
-}
+};
 
 // Creates a worldview filtes for Mapbox Boundaries tilesets
 export const wvFilter = (worldview = defaultWorldView) => {
   return [
-    "any",
-    ["==", "all", ["get", "worldview"]],
-    ["in", worldview, ["get", "worldview"]],
+    'any',
+    ['==', 'all', ['get', 'worldview']],
+    ['in', worldview, ['get', 'worldview']],
   ];
-}
+};
 
 export const notHasDispute = (worldview = defaultWorldView) => {
-  return [
-    "all",
-    ["!", ["has", "dispute"]],
-    wvFilter(worldview),
-  ]
-}
-export const filterCountry = (countryCode: string, operator = "==", worldView?: string) => {
+  return ['all', ['!', ['has', 'dispute']], wvFilter(worldview)];
+};
+export const filterCountry = (
+  countryCode: string,
+  operator = '==',
+  worldView?: string,
+) => {
   // Create a filter expression for the boundary layer using the country and worldview selection
-  if (!countryCode) return []
+  if (!countryCode) return [];
 
   return [
-    "all",
-    [operator, ["get", "iso_3166_1"], countryCode],
-    wvFilter(worldView)
+    'all',
+    [operator, ['get', 'iso_3166_1'], countryCode],
+    wvFilter(worldView),
   ];
-}
+};
 
 export const matchCountryFilter = (countryCode: string, options: string[]) => {
-  return [
-    "match",
-    [
-      "get",
-      "iso_3166_1"
-    ],
-    [
-      countryCode
-    ],
-    ...options
-  ]
-}
+  return ['match', ['get', 'iso_3166_1'], [countryCode], ...options];
+};
 
-export const matchAdminFilter = (code: string, state: string, color: string) => {
-  return [
-    'case',
-    ['==', ['feature-state', state], code], color,
-    'transparent'
-  ]
-}
+export const matchAdminFilter = (
+  code: string,
+  state: string,
+  color: string,
+) => {
+  return ['case', ['==', ['feature-state', state], code], color, 'transparent'];
+};
 
 export const findLayer = (features: MapboxGeoJSONFeature[], id: string) => {
-  return features.find((feature => feature.layer.id === id))
-}
+  return features.find((feature) => feature.layer.id === id);
+};
 
-export const getInterpolatedValue = (stops: [number, number][], zoom: number): number | undefined => {
+export const getInterpolatedValue = (
+  stops: [number, number][],
+  zoom: number,
+): number | undefined => {
   const len = stops.length;
 
-  if (len === 0) throw new Error("Stops array cannot be empty");
+  if (len === 0) throw new Error('Stops array cannot be empty');
 
   // If zoom is before the first stop, return the first value
   if (zoom <= stops[0][0]) return stops[0][1];
@@ -530,4 +784,4 @@ export const getInterpolatedValue = (stops: [number, number][], zoom: number): n
       return v1 + t * (v2 - v1);
     }
   }
-}
+};

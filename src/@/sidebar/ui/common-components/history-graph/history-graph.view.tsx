@@ -5,7 +5,13 @@ import { Bar, BarChart, ReferenceLine, XAxis, YAxis } from 'recharts';
 
 import { $historyIntervalUnit } from '~/@/sidebar/history-graph.model';
 import { $connectivityStats } from '~/@/sidebar/sidebar.model';
-import { GraphData, SchoolStatsType } from '~/api/types';
+import type { LayerType } from '~/@/sidebar/types';
+import {
+  ConnectivityStat,
+  EntityConnectivityStat,
+  GraphData,
+  SchoolStatsType,
+} from '~/api/types';
 import { Button } from '~/components/ui/button';
 import {
   ChartConfig,
@@ -181,6 +187,11 @@ function HistoryBarChart({
             <ChartTooltipContent
               hideName
               valueFormatter={(value) => formatChartValue(value, unit)}
+              active={false}
+              payload={[]}
+              coordinate={undefined}
+              accessibilityLayer={false}
+              activeIndex={undefined}
             />
           }
         />
@@ -191,26 +202,43 @@ function HistoryBarChart({
 }
 
 const HistoryGraph = ({
+  connectivityStats,
   schoolData,
   isLoading,
+  selectedLayerData,
 }: {
+  connectivityStats?: ConnectivityStat | EntityConnectivityStat | null;
   schoolData?: SchoolStatsType;
   isLoading?: boolean;
+  selectedLayerData?: LayerType | null;
 }) => {
   const intervalUnit = useStore($historyIntervalUnit);
-  const connectivityStats = useStore($connectivityStats);
+  const fallbackConnectivityStats = useStore($connectivityStats);
   const schoolView = useRoute(mapSchools);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const isWeek = intervalUnit === IntervalUnit.week;
+  const currentConnectivityStats =
+    connectivityStats ?? fallbackConnectivityStats;
   const infoBenchmark = schoolView
     ? schoolData?.benchmark_metadata
-    : connectivityStats?.benchmark_metadata;
-  const benchmark = toNumber(infoBenchmark?.rounded_benchmark_value);
-  const unit = infoBenchmark?.display_unit || infoBenchmark?.convert_unit;
+    : currentConnectivityStats?.benchmark_metadata;
+  const benchmark = toNumber(
+    infoBenchmark?.rounded_benchmark_value ??
+      selectedLayerData?.global_benchmark?.value,
+  );
+  const unit =
+    infoBenchmark?.display_unit ||
+    infoBenchmark?.convert_unit ||
+    selectedLayerData?.global_benchmark?.convert_unit ||
+    selectedLayerData?.global_benchmark?.unit;
   const data = useMemo(() => {
-    if (!schoolView) return connectivityStats?.graph_data ?? [];
+    if (!schoolView) return currentConnectivityStats?.graph_data ?? [];
     return schoolData?.graph_data ?? [];
-  }, [connectivityStats?.graph_data, schoolData?.graph_data, schoolView]);
+  }, [
+    currentConnectivityStats?.graph_data,
+    schoolData?.graph_data,
+    schoolView,
+  ]);
 
   return (
     <div className="overflow-hidden!">

@@ -1,6 +1,5 @@
-import { combine, createEffect, merge, sample } from 'effector';
-import { $activeDublicateSchoolsPopup, $activeSchoolPopup, $allowDublicateSchoolIds, $schoolClickedId, $selectedGigaLayers, changeSchoolConnectedOpenStatus, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
-import { debounce, getInverted } from '~/lib/effector-kit';
+import { format } from 'date-fns';
+import { combine, merge, sample } from 'effector';
 
 import {
   $admin1Id,
@@ -11,10 +10,23 @@ import {
   $countryDefaultNational,
   $countryId,
   $countrySearchString,
-  countryReceived, onRecenterView
+  countryReceived,
+  onRecenterView,
 } from '~/@/country/country.model';
-import { getEntityMapValue, EntityType } from '~/@/entities';
-import { $activeEntityTypes, changeSelectedEntityType } from '~/@/entities/models/entity.model';
+import { EntityType, getEntityMapValue } from '~/@/entities';
+import {
+  $activeEntityTypes,
+  changeSelectedEntityType,
+} from '~/@/entities/models/entity.model';
+import {
+  $activeDublicateSchoolsPopup,
+  $activeSchoolPopup,
+  $allowDublicateSchoolIds,
+  $schoolClickedId,
+  $selectedGigaLayers,
+  changeSchoolConnectedOpenStatus,
+  setSchoolIdsOnPopupClickDot,
+} from '~/@/map/map.model';
 import {
   $connectivityBenchMark,
   $connectivityLayers,
@@ -29,7 +41,6 @@ import {
   $currentDefaultLayerId,
   $currentLayerTypeUtils,
   $getSchoolParams,
-  $globalLayerId,
   $isSidebarCollapsed,
   $isTimeplayer,
   $layersList,
@@ -44,27 +55,47 @@ import {
   changeConnectivityBenchmark,
   checkConnectivityBenchmark,
   onSchoolUncheck,
-  onSelectMainLayer,
   onSelectEntityMainLayer,
+  onSelectMainLayer,
   onSelectSchoolStatusLayer,
   resetCoverageFilterSelection,
   resetFilterModal,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
-import { fetchDublicateSchoolPopupDataFx, fetchEntitiesLayerInfoFx, fetchSchoolLayerInfoFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
+import {
+  fetchDublicateSchoolPopupDataFx,
+  fetchEntitiesLayerInfoFx,
+  fetchSchoolLayerInfoFx,
+  fetchSchoolPopupDataFx,
+} from '~/api/project-connect';
 import { languageStore } from '~/core/i18n/store';
 import { $isMobile } from '~/core/media-query';
-import { $mapRoutes, mapOverview, mapSchools, router } from '~/core/routes';
+import { $mapRoutes, mapSchools, router } from '~/core/routes';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
+import { debounce, getInverted } from '~/lib/effector-kit';
 
-import { format } from 'date-fns';
-import { MaxAllowedDublicateSchoolIds, SCHOOL_LAYER_ID } from '../map/map.constant';
+import { MaxAllowedDublicateSchoolIds } from '../map/map.constant';
 import { publishLayersTranslationFx } from './effects/all-translation-fx';
-import { getEntitiesAvailableDates, getSchoolAvailableDates } from './effects/search-country-fx';
-import { $historyInterval, $historyIntervalUnit, $isCheckedLastDate, $lastAvailableDates } from './history-graph.model';
-import { ConnectivityBenchMarks, SCHOOL_STATUS_LAYER } from './sidebar.constant';
+import {
+  getEntitiesAvailableDates,
+  getSchoolAvailableDates,
+} from './effects/search-country-fx';
+import {
+  $historyInterval,
+  $historyIntervalUnit,
+  $isCheckedLastDate,
+  $lastAvailableDates,
+} from './history-graph.model';
+import {
+  ConnectivityBenchMarks,
+  SCHOOL_STATUS_LAYER,
+} from './sidebar.constant';
 import { isLiveLayer } from './sidebar.util';
-import { $initialUrlParams, $isAppSettled, initializeFromUrlParams } from './url-params.model';
+import {
+  $initialUrlParams,
+  $isAppSettled,
+  initializeFromUrlParams,
+} from './url-params.model';
 
 $isSidebarCollapsed.on(toggleSidebar, getInverted);
 export const $selectedLayers = combine({
@@ -72,37 +103,37 @@ export const $selectedLayers = combine({
   selectedId: $selectedLayerId,
   schoolIdByEntity: $statusLayerIdByEntity,
   selectedIdByEntity: $selectedLayerIdByEntity,
-})
+});
 
 export const $connectivityFilter = combine(
   $historyInterval,
   $historyIntervalUnit,
-  (range, interval) => ({ isWeek: interval === IntervalUnit.week, range })
-)
+  (range, interval) => ({ isWeek: interval === IntervalUnit.week, range }),
+);
 
 export const $connectivitySpeedFilter = combine({
   good: $connectivitySpeedGood,
   moderate: $connectivitySpeedModerate,
   bad: $connectivitySpeednoInternet,
-  unknown: $connectivitySpeedUnknown
-})
+  unknown: $connectivitySpeedUnknown,
+});
 
 export const $coverageFilter = combine({
   good: $coverage5g4g,
   moderate: $coverage3g2g,
   bad: $coverageNoCoverage,
   unknown: $coverageUnknown,
-})
+});
 
 // on school remove from list;
 sample({
   clock: onSchoolUncheck,
   source: $schoolStats,
   fn: (schoolStats, id) => {
-    return schoolStats?.filter(school => school.id !== id) ?? null;
+    return schoolStats?.filter((school) => school.id !== id) ?? null;
   },
-  target: $schoolStats
-})
+  target: $schoolStats,
+});
 
 sample({
   clock: onSchoolUncheck,
@@ -110,14 +141,16 @@ sample({
   fn: (schoolParams, uncheckId) => {
     const newParams = new URLSearchParams({
       country: schoolParams.country ?? '',
-      school_ids: schoolParams?.schoolIds?.filter((id) => String(id) !== String(uncheckId)) ?? ''
-    } as Record<string, string>).toString()
+      school_ids:
+        schoolParams?.schoolIds?.filter(
+          (id) => String(id) !== String(uncheckId),
+        ) ?? '',
+    } as Record<string, string>).toString();
     const url = '/map/schools?' + newParams;
     router.history.replace(url);
     return url;
   },
 });
-
 
 // live layer effect
 const sourceForInfo = combine({
@@ -137,16 +170,35 @@ const sourceForInfo = combine({
   allowDublicateSchoolIds: $allowDublicateSchoolIds,
   activeEntityTypes: $activeEntityTypes,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
-})
+});
 
-export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolParams, lastSelectedLayers, intervalUnit, layersUtils, connectivityBenchMark, country, admin1Id, isSchoolClicked, allowDublicateSchoolIds }: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
+export const getCurrentQueryId = ({
+  countrySearch,
+  interval,
+  mapRoutes,
+  schoolParams,
+  lastSelectedLayers,
+  intervalUnit,
+  layersUtils,
+  connectivityBenchMark,
+  country,
+  admin1Id,
+  isSchoolClicked,
+  allowDublicateSchoolIds,
+}: ReturnType<typeof sourceForInfo.getState> & {
+  isSchoolClicked?: boolean;
+}) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
-  const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
+  const defaultLayerId = lastSelectedLayers.layerId
+    ? lastSelectedLayers.layerId
+    : layersUtils.coverageLayerId;
   const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
-  const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === selectedLayerId)?.type);
+  const isLive = isLiveLayer(
+    layersUtils.layers.find((layer) => layer.id === selectedLayerId)?.type,
+  );
   const startDate = format(interval.start, 'dd-MM-yyyy');
   const endDate = format(interval.end, 'dd-MM-yyyy');
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
   if (isLive) {
     params.set('start_date', startDate);
     params.set('end_date', endDate);
@@ -169,14 +221,17 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
     if (typeof schoolParams.schoolIds === 'number') {
       schoolKeys = String(schoolParams.schoolIds);
     } else if (Array.isArray(schoolParams?.schoolIds)) {
-      schoolKeys = schoolParams.schoolIds.join(',')
+      schoolKeys = schoolParams.schoolIds.join(',');
     }
     params.set('school_id__in', schoolKeys);
   }
 
   params.set('include_same_location_schools', String(allowDublicateSchoolIds));
   if (allowDublicateSchoolIds) {
-    params.set('limit_same_location_schools', String(MaxAllowedDublicateSchoolIds));
+    params.set(
+      'limit_same_location_schools',
+      String(MaxAllowedDublicateSchoolIds),
+    );
   }
 
   let query = `?${params.toString()}`;
@@ -184,7 +239,7 @@ export const getCurrentQueryId = ({ countrySearch, interval, mapRoutes, schoolPa
     query += `&${countrySearch}`;
   }
   return { query, id: selectedLayerId };
-}
+};
 
 const getLayerIdForEntity = (
   entityType: EntityType,
@@ -192,7 +247,11 @@ const getLayerIdForEntity = (
   selectedLayerId: number | null,
   defaultLayerId: number | null,
 ) => {
-  return getEntityMapValue(selectedLayerIdByEntity, entityType, defaultLayerId ?? selectedLayerId);
+  return getEntityMapValue(
+    selectedLayerIdByEntity,
+    entityType,
+    defaultLayerId ?? selectedLayerId,
+  );
 };
 
 export const getCurrentEntityLayerInfoQuery = ({
@@ -209,7 +268,9 @@ export const getCurrentEntityLayerInfoQuery = ({
   selectedLayerIdByEntity,
 }: ReturnType<typeof sourceForInfo.getState>) => {
   const isWeekly = intervalUnit === IntervalUnit.week;
-  const defaultLayerId = lastSelectedLayers.layerId ? lastSelectedLayers.layerId : layersUtils.coverageLayerId;
+  const defaultLayerId = lastSelectedLayers.layerId
+    ? lastSelectedLayers.layerId
+    : layersUtils.coverageLayerId;
   const selectedLayerId = layersUtils.selectedLayerId ?? defaultLayerId;
   const startDate = format(interval.start, 'dd-MM-yyyy');
   const endDate = format(interval.end, 'dd-MM-yyyy');
@@ -222,11 +283,20 @@ export const getCurrentEntityLayerInfoQuery = ({
     params.set('admin1_id', String(admin1Id));
   }
 
-  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+  const entityTypes = activeEntityTypes?.length
+    ? activeEntityTypes
+    : [EntityType.SCHOOL];
   entityTypes.forEach((entityType) => {
     const prefix = `${entityType}_`;
-    const entityLayerId = getLayerIdForEntity(entityType, selectedLayerIdByEntity, selectedLayerId, defaultLayerId);
-    const isLive = isLiveLayer(layersUtils.layers.find(layer => layer.id === entityLayerId)?.type);
+    const entityLayerId = getLayerIdForEntity(
+      entityType,
+      selectedLayerIdByEntity,
+      selectedLayerId,
+      defaultLayerId,
+    );
+    const isLive = isLiveLayer(
+      layersUtils.layers.find((layer) => layer.id === entityLayerId)?.type,
+    );
 
     if (isLive) {
       params.set(`${prefix}start_date`, startDate);
@@ -237,7 +307,10 @@ export const getCurrentEntityLayerInfoQuery = ({
       params.set(`${prefix}layer_id`, String(entityLayerId));
     }
     params.set(`${prefix}benchmark`, connectivityBenchMark);
-    params.set(`${prefix}include_same_location`, String(allowDublicateSchoolIds));
+    params.set(
+      `${prefix}include_same_location`,
+      String(allowDublicateSchoolIds),
+    );
   });
 
   let query = `?${params.toString()}`;
@@ -261,13 +334,20 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  const defaultLayerId = layersUtils.selectedLayerId ?? layersUtils.globalLayerId;
+  const defaultLayerId =
+    layersUtils.selectedLayerId ?? layersUtils.globalLayerId;
   if (defaultLayerId) {
     params.set('layer_id', String(defaultLayerId));
   }
-  const entityTypes = activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL];
+  const entityTypes = activeEntityTypes?.length
+    ? activeEntityTypes
+    : [EntityType.SCHOOL];
   entityTypes.forEach((entityType) => {
-    const layerId = getEntityMapValue(selectedLayerIdByEntity, entityType, defaultLayerId);
+    const layerId = getEntityMapValue(
+      selectedLayerIdByEntity,
+      entityType,
+      defaultLayerId,
+    );
     if (layerId) {
       params.set(`${entityType}_layer_id`, String(layerId));
     }
@@ -283,7 +363,8 @@ const getCurrentSchoolConnectivityConfigQuery = ({
   schoolParams,
 }: ReturnType<typeof sourceForInfo.getState>) => {
   const params = new URLSearchParams();
-  const selectedLayerId = layersUtils.selectedLayerId ?? layersUtils.globalLayerId;
+  const selectedLayerId =
+    layersUtils.selectedLayerId ?? layersUtils.globalLayerId;
   if (selectedLayerId) {
     params.set('layer_id', String(selectedLayerId));
   }
@@ -301,67 +382,135 @@ const getCurrentSchoolConnectivityConfigQuery = ({
 };
 
 sample({
-  clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId, $selectedLayerIdByEntity, $activeEntityTypes]),
+  clock: merge([
+    $countryId,
+    $admin1Id,
+    $getSchoolParams,
+    $selectedLayerId,
+    $selectedLayerIdByEntity,
+    $activeEntityTypes,
+  ]),
   source: sourceForInfo,
   fn: getCurrentEntityConnectivityConfigQuery,
   filter: ({ country, layersUtils, mapRoutes }) => {
-    return mapRoutes.country && !!country?.id && !!layersUtils.layers?.length && !!layersUtils.currentLayerTypeUtils.isLive;
+    return (
+      mapRoutes.country &&
+      !!country?.id &&
+      !!layersUtils.layers?.length &&
+      !!layersUtils.currentLayerTypeUtils.isLive
+    );
   },
-  target: getEntitiesAvailableDates
-})
+  target: getEntitiesAvailableDates,
+});
 
 sample({
   clock: merge([$countryId, $admin1Id, $getSchoolParams, $selectedLayerId]),
   source: sourceForInfo,
   fn: getCurrentSchoolConnectivityConfigQuery,
   filter: ({ country, layersUtils, mapRoutes }) => {
-    return mapRoutes.schools && !!country?.id && !!layersUtils.layers?.length && !!layersUtils.currentLayerTypeUtils.isLive;
+    return (
+      mapRoutes.schools &&
+      !!country?.id &&
+      !!layersUtils.layers?.length &&
+      !!layersUtils.currentLayerTypeUtils.isLive
+    );
   },
-  target: getSchoolAvailableDates
-})
+  target: getSchoolAvailableDates,
+});
 
 // for all live layers;
 sample({
-  clock: merge([$countrySearchString, $country, $admin1Id, $selectedLayerId, $selectedLayerIdByEntity, $activeEntityTypes, $connectivityBenchMark, debounce($historyInterval, { timeout: 500 })]),
+  clock: merge([
+    $countrySearchString,
+    $country,
+    $admin1Id,
+    $selectedLayerId,
+    $selectedLayerIdByEntity,
+    $activeEntityTypes,
+    $connectivityBenchMark,
+    debounce($historyInterval, { timeout: 500 }),
+  ]),
   source: sourceForInfo,
   fn: getCurrentEntityLayerInfoQuery,
-  filter: ({ mapRoutes, country, admin1Id, isCheckedLastDate, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.country && (!!country?.id || !!admin1Id) && !!isCheckedLastDate && !!layersUtils.currentLayerTypeUtils.isLive;
+  filter: ({
+    mapRoutes,
+    country,
+    admin1Id,
+    isCheckedLastDate,
+    layersUtils,
+  }: ReturnType<typeof sourceForInfo.getState>) => {
+    return (
+      mapRoutes.country &&
+      (!!country?.id || !!admin1Id) &&
+      !!isCheckedLastDate &&
+      !!layersUtils.currentLayerTypeUtils.isLive
+    );
   },
-  target: fetchEntitiesLayerInfoFx
-})
+  target: fetchEntitiesLayerInfoFx,
+});
 
 // for all static layers
 sample({
-  clock: merge([$countrySearchString, $countryId, $admin1Id, $connectivityBenchMark, $selectedLayerId, $selectedLayerIdByEntity, $activeEntityTypes]),
+  clock: merge([
+    $countrySearchString,
+    $countryId,
+    $admin1Id,
+    $connectivityBenchMark,
+    $selectedLayerId,
+    $selectedLayerIdByEntity,
+    $activeEntityTypes,
+  ]),
   source: sourceForInfo,
   fn: getCurrentEntityLayerInfoQuery,
-  filter: ({ mapRoutes, country, admin1Id, layersUtils }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.country && (!!country?.id || !!admin1Id) && !!layersUtils.currentLayerTypeUtils.isStatic;
+  filter: ({
+    mapRoutes,
+    country,
+    admin1Id,
+    layersUtils,
+  }: ReturnType<typeof sourceForInfo.getState>) => {
+    return (
+      mapRoutes.country &&
+      (!!country?.id || !!admin1Id) &&
+      !!layersUtils.currentLayerTypeUtils.isStatic
+    );
   },
-  target: fetchEntitiesLayerInfoFx
-})
-
-
-const schoolInfoFn = (props: ReturnType<typeof sourceForInfo.getState> & { isSchoolClicked?: boolean }) => {
-  const { query, id } = getCurrentQueryId(props);
-  const url = `api/accounts/layers/${id}/info/`
-  return {
-    url,
-    query
-  }
-}
-// school view info api
-sample({
-  clock: merge([mapSchools.visible, countryReceived, $isCheckedLastDate, $selectedLayerId, $historyInterval, mapSchools.router.historyUpdate, $connectivityBenchMark]),
-  source: sourceForInfo,
-  fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
-  filter: ({ mapRoutes, country, isCheckedLastDate }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.schools && !!country && !!isCheckedLastDate;
-  },
-  target: fetchSchoolLayerInfoFx
+  target: fetchEntitiesLayerInfoFx,
 });
 
+const schoolInfoFn = (
+  props: ReturnType<typeof sourceForInfo.getState> & {
+    isSchoolClicked?: boolean;
+  },
+) => {
+  const { query, id } = getCurrentQueryId(props);
+  const url = `api/accounts/layers/${id}/info/`;
+  return {
+    url,
+    query,
+  };
+};
+// school view info api
+sample({
+  clock: merge([
+    mapSchools.visible,
+    countryReceived,
+    $isCheckedLastDate,
+    $selectedLayerId,
+    $historyInterval,
+    mapSchools.router.historyUpdate,
+    $connectivityBenchMark,
+  ]),
+  source: sourceForInfo,
+  fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
+  filter: ({
+    mapRoutes,
+    country,
+    isCheckedLastDate,
+  }: ReturnType<typeof sourceForInfo.getState>) => {
+    return mapRoutes.schools && !!country && !!isCheckedLastDate;
+  },
+  target: fetchSchoolLayerInfoFx,
+});
 
 // fetch click school data
 sample({
@@ -378,7 +527,7 @@ sample({
       schoolParams: { schoolIds: [Number(schoolIds)], country: null },
       allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
     }),
-  target: fetchSchoolPopupDataFx
+  target: fetchSchoolPopupDataFx,
 });
 
 // refetch open school popup data when user switches the live layer
@@ -397,7 +546,7 @@ sample({
       schoolParams: { schoolIds: [Number(schoolClickedId)], country: null },
       allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
     }),
-  target: fetchSchoolPopupDataFx
+  target: fetchSchoolPopupDataFx,
 });
 
 // Fetch dublicate school data
@@ -405,8 +554,14 @@ sample({
   clock: setSchoolIdsOnPopupClickDot,
   source: sourceForInfo,
   filter: ({ isMobile }) => !isMobile,
-  fn: (props, school) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: school?.ids, country: null }, allowDublicateSchoolIds: school?.allowDublicateSchoolIds ?? false }),
-  target: fetchDublicateSchoolPopupDataFx
+  fn: (props, school) =>
+    schoolInfoFn({
+      ...props,
+      isSchoolClicked: true,
+      schoolParams: { schoolIds: school?.ids, country: null },
+      allowDublicateSchoolIds: school?.allowDublicateSchoolIds ?? false,
+    }),
+  target: fetchDublicateSchoolPopupDataFx,
 });
 
 // refetch open duplicate-school popup data when user switches the live layer
@@ -416,14 +571,17 @@ sample({
     info: sourceForInfo,
     duplicateSchoolPopup: $activeDublicateSchoolsPopup,
   }),
-  filter: ({ info, duplicateSchoolPopup }) => !info.isMobile && !!duplicateSchoolPopup?.ids?.length,
-  fn: ({ info, duplicateSchoolPopup }) => schoolInfoFn({
-    ...info,
-    isSchoolClicked: true,
-    schoolParams: { schoolIds: duplicateSchoolPopup?.ids, country: null },
-    allowDublicateSchoolIds: duplicateSchoolPopup?.allowDublicateSchoolIds ?? false
-  }),
-  target: fetchDublicateSchoolPopupDataFx
+  filter: ({ info, duplicateSchoolPopup }) =>
+    !info.isMobile && !!duplicateSchoolPopup?.ids?.length,
+  fn: ({ info, duplicateSchoolPopup }) =>
+    schoolInfoFn({
+      ...info,
+      isSchoolClicked: true,
+      schoolParams: { schoolIds: duplicateSchoolPopup?.ids, country: null },
+      allowDublicateSchoolIds:
+        duplicateSchoolPopup?.allowDublicateSchoolIds ?? false,
+    }),
+  target: fetchDublicateSchoolPopupDataFx,
 });
 
 // Fetch dublicate school data
@@ -431,22 +589,15 @@ sample({
   clock: setSchoolIdsOnPopupClickDot,
   source: sourceForInfo,
   filter: ({ isMobile }) => !isMobile,
-  fn: (props, schoolIds) => schoolInfoFn({ ...props, isSchoolClicked: true, schoolParams: { schoolIds: schoolIds?.ids, country: null }, allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false }),
-  target: fetchDublicateSchoolPopupDataFx
-})
-
-
-// change layer when open global view or close global view
-sample({
-  clock: merge([mapOverview.visible, $connectivityLayers]),
-  source: combine({ globalLayerId: $globalLayerId, mapVisible: mapOverview.visible }),
-  filter: ({ mapVisible }) => mapVisible,
-  target: createEffect(({ globalLayerId }: { globalLayerId: number | null }) => {
-    onSelectMainLayer(globalLayerId);
-    onSelectSchoolStatusLayer(SCHOOL_LAYER_ID)
-    changeConnectivityBenchmark(ConnectivityBenchMarks.global)
-  })
-})
+  fn: (props, schoolIds) =>
+    schoolInfoFn({
+      ...props,
+      isSchoolClicked: true,
+      schoolParams: { schoolIds: schoolIds?.ids, country: null },
+      allowDublicateSchoolIds: schoolIds?.allowDublicateSchoolIds ?? false,
+    }),
+  target: fetchDublicateSchoolPopupDataFx,
+});
 
 // update school layer when main layer changed
 sample({
@@ -455,34 +606,43 @@ sample({
     schoolId: $schoolStatusSelectedLayer,
     layerUtils: $layerUtils,
     initialUrlParams: $initialUrlParams,
-    isAppSettled: $isAppSettled
+    isAppSettled: $isAppSettled,
   }),
   fn: ({ schoolId, layerUtils, initialUrlParams, isAppSettled }) => {
     const { selectedLayerId, currentLayerTypeUtils } = layerUtils;
     const { isStatic } = currentLayerTypeUtils;
 
     // On first load, if URL has school status layer param, use it
-    if (!isAppSettled && (initialUrlParams.schoolStatusLayer || initialUrlParams.isSchoolStatusLayerNull)) {
+    if (
+      !isAppSettled &&
+      (initialUrlParams.schoolStatusLayer ||
+        initialUrlParams.isSchoolStatusLayerNull)
+    ) {
       if (!isStatic) {
         return initialUrlParams.schoolStatusLayer;
       }
     }
-    let currentSchoolLayer = schoolId
+    let currentSchoolLayer = schoolId;
     if (!selectedLayerId && !schoolId) {
-      currentSchoolLayer = SCHOOL_STATUS_LAYER.id
+      currentSchoolLayer = SCHOOL_STATUS_LAYER.id;
     }
     if (isStatic && currentSchoolLayer) {
       currentSchoolLayer = null;
     }
     return currentSchoolLayer;
   },
-  target: onSelectSchoolStatusLayer
-})
+  target: onSelectSchoolStatusLayer,
+});
 
 // set default layer on layers list load/change
-const loadedLayersAndCountries = combine($connectivityLayers, $countries, $currentDefaultLayerId, (layers, countries, currentDefaultLayerId) => {
-  return (!!layers?.length && !!countries?.length && !!currentDefaultLayerId)
-});
+const loadedLayersAndCountries = combine(
+  $connectivityLayers,
+  $countries,
+  $currentDefaultLayerId,
+  (layers, countries, currentDefaultLayerId) => {
+    return !!layers?.length && !!countries?.length && !!currentDefaultLayerId;
+  },
+);
 
 sample({
   clock: loadedLayersAndCountries,
@@ -490,12 +650,20 @@ sample({
     layerUtils: $layerUtils,
     loadedLayersAndCountries,
     initialUrlParams: $initialUrlParams,
-    isAppSettled: $isAppSettled
+    isAppSettled: $isAppSettled,
   }),
-  fn: ({ layerUtils: { currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
+  fn: ({
+    layerUtils: { currentDefaultLayerId, activeLayerByCountryCode },
+    initialUrlParams,
+    isAppSettled,
+  }) => {
     // If URL has layer param and it hasn't been applied yet, use URL value
-    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
-      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+    if (
+      !isAppSettled &&
+      (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)
+    ) {
+      const isUrlLayerActive =
+        activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
       if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
         return initialUrlParams.layerId;
       }
@@ -514,30 +682,47 @@ sample({
     layerUtils: $layerUtils,
     countryCode: $countryCode,
     initialUrlParams: $initialUrlParams,
-    isAppSettled: $isAppSettled
+    isAppSettled: $isAppSettled,
   }),
-  fn: ({ layerUtils: { selectedLayerId, currentLayerTypeUtils, isActiveCurrentLayer, currentDefaultLayerId, activeLayerByCountryCode }, initialUrlParams, isAppSettled }) => {
+  fn: ({
+    layerUtils: {
+      selectedLayerId,
+      currentLayerTypeUtils,
+      isActiveCurrentLayer,
+      currentDefaultLayerId,
+      activeLayerByCountryCode,
+    },
+    initialUrlParams,
+    isAppSettled,
+  }) => {
     // On first country code update, if URL has layer param, use it (if valid for country)
-    if (!isAppSettled && (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)) {
-      const isUrlLayerActive = activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
+    if (
+      !isAppSettled &&
+      (initialUrlParams.layerId || initialUrlParams.isLayerIdNull)
+    ) {
+      const isUrlLayerActive =
+        activeLayerByCountryCode[initialUrlParams.layerId ?? ''];
       if (isUrlLayerActive || initialUrlParams.isLayerIdNull) {
         return initialUrlParams.layerId;
       }
     }
     // Normal behavior for subsequent updates
     let nextLayerId = selectedLayerId;
-    if (currentLayerTypeUtils.isLive && !isActiveCurrentLayer || currentLayerTypeUtils.isStatic && !isActiveCurrentLayer) {
+    if (
+      (currentLayerTypeUtils.isLive && !isActiveCurrentLayer) ||
+      (currentLayerTypeUtils.isStatic && !isActiveCurrentLayer)
+    ) {
       nextLayerId = null;
     }
     if (currentLayerTypeUtils.isLive && currentDefaultLayerId) {
       return currentDefaultLayerId;
     }
-    // select default layer 
+    // select default layer
     return nextLayerId;
   },
   filter: ({ countryCode }) => !!countryCode,
-  target: onSelectMainLayer
-})
+  target: onSelectMainLayer,
+});
 
 sample({
   clock: changeSelectedEntityType,
@@ -546,48 +731,72 @@ sample({
     selectedLayerIdByEntity: $selectedLayerIdByEntity,
     selectedLayerId: $selectedLayerId,
   }),
-  fn: ({ currentDefaultLayerId, selectedLayerIdByEntity, selectedLayerId }, entityType) => {
-    return Object.prototype.hasOwnProperty.call(selectedLayerIdByEntity, entityType)
-      ? selectedLayerIdByEntity[entityType] ?? null
-      : currentDefaultLayerId ?? selectedLayerId;
+  fn: (
+    { currentDefaultLayerId, selectedLayerIdByEntity, selectedLayerId },
+    entityType,
+  ) => {
+    return Object.prototype.hasOwnProperty.call(
+      selectedLayerIdByEntity,
+      entityType,
+    )
+      ? (selectedLayerIdByEntity[entityType] ?? null)
+      : (currentDefaultLayerId ?? selectedLayerId);
   },
-  target: onSelectMainLayer
-})
+  target: onSelectMainLayer,
+});
 
 sample({
   clock: onSelectEntityMainLayer,
   fn: ({ entityType }) => entityType,
-  target: changeSelectedEntityType
-})
+  target: changeSelectedEntityType,
+});
 
 sample({
   clock: $schoolStatusSelectedLayer,
   fn: Boolean,
-  target: changeSchoolConnectedOpenStatus
-})
+  target: changeSchoolConnectedOpenStatus,
+});
 
 sample({
   clock: $isTimeplayer,
-  target: $isSidebarCollapsed
-})
+  target: $isSidebarCollapsed,
+});
 
 sample({
   clock: $isTimeplayer,
   filter: Boolean,
-  target: onRecenterView
-})
+  target: onRecenterView,
+});
 
-const benchmarkSource = combine({ connectivityBenchMark: $connectivityBenchMark, countryDefaultNational: $countryDefaultNational, country: $country, currentLayerTypeUtils: $currentLayerTypeUtils, selectedLayerId: $selectedLayerId });
-const benchmarkFn = (isClockId: boolean) => ({ countryDefaultNational = {}, selectedLayerId, connectivityBenchMark }: ReturnType<typeof benchmarkSource.getState>, clockLayerId: any) => {
-  let currentBenchmark = connectivityBenchMark;
-  const layerId = isClockId ? clockLayerId : selectedLayerId;
-  if (countryDefaultNational && countryDefaultNational[layerId ?? ""]) {
-    currentBenchmark = ConnectivityBenchMarks.national
-  } else {
-    currentBenchmark = ConnectivityBenchMarks.global
-  }
-  return currentBenchmark
-}
+const benchmarkSource = combine({
+  connectivityBenchMark: $connectivityBenchMark,
+  countryDefaultNational: $countryDefaultNational,
+  country: $country,
+  currentLayerTypeUtils: $currentLayerTypeUtils,
+  selectedLayerId: $selectedLayerId,
+});
+const benchmarkFn =
+  (isClockId: boolean) =>
+  (
+    {
+      countryDefaultNational = {},
+      selectedLayerId,
+      connectivityBenchMark,
+    }: ReturnType<typeof benchmarkSource.getState>,
+    clockLayerId: unknown,
+  ) => {
+    let currentBenchmark = connectivityBenchMark;
+    const layerId =
+      isClockId && typeof clockLayerId === 'number'
+        ? clockLayerId
+        : selectedLayerId;
+    if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+      currentBenchmark = ConnectivityBenchMarks.national;
+    } else {
+      currentBenchmark = ConnectivityBenchMarks.global;
+    }
+    return currentBenchmark;
+  };
 
 // default national for a country and layer
 sample({
@@ -595,16 +804,16 @@ sample({
   source: benchmarkSource,
   fn: benchmarkFn(false),
   filter: ({ country }) => !!country,
-  target: changeConnectivityBenchmark
-})
+  target: changeConnectivityBenchmark,
+});
 // for static layer
 sample({
   clock: checkConnectivityBenchmark,
   source: benchmarkSource,
   fn: benchmarkFn(true),
   filter: ({ country }) => !!country,
-  target: changeConnectivityBenchmark
-})
+  target: changeConnectivityBenchmark,
+});
 
 sample({
   source: combine($schoolAdminId, $schoolStats),
@@ -614,25 +823,25 @@ sample({
     }
     return null;
   },
-  target: $countryAdminSchoolId
-})
+  target: $countryAdminSchoolId,
+});
 
 sample({
   clock: merge([$layersListMapping, languageStore.$language]),
   source: { mapping: $layersListMapping, lng: languageStore.$language },
   filter: ({ mapping, lng }) => {
-    return !!mapping?.length && !!lng
+    return !!mapping?.length && !!lng;
   },
-  target: publishLayersTranslationFx
-})
+  target: publishLayersTranslationFx,
+});
 
 // reset legends on country change
 sample({
   clock: merge([$countryCode]),
   source: $isAppSettled,
   filter: (isAppSettled) => isAppSettled,
-  target: [resetFilterModal, resetCoverageFilterSelection]
-})
+  target: [resetFilterModal, resetCoverageFilterSelection],
+});
 // Initialize URL params on app start
 // This applies URL params to stores (connectivity speed, coverage filters, etc.)
 initializeFromUrlParams();

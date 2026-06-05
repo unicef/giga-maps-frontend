@@ -7,7 +7,7 @@ export type Center = mapboxGl.LngLatLike;
 export type Map = mapboxGl.Map;
 export type Marker = mapboxGl.Marker;
 
-export const UNKNOWN = "unknown";
+export const UNKNOWN = 'unknown';
 export type StylePaintData = {
   allCountryColor: string;
   notCountryColor: string;
@@ -31,21 +31,34 @@ export type InitMapOptions = {
 
 export type MapType = 'connectivity' | 'coverage';
 
-export type ChangeLayerOptions = ({
+export type ChangeLayerOptions = {
   refresh?: boolean;
   timeout?: number;
-} & ReturnType<typeof gigaLayerSource.getState>)
+} & ReturnType<typeof gigaLayerSource.getState>;
 
-export type UpdateCoverageFilterOptions = Pick<ChangeLayerOptions, "map" | "coverageFilter" | "lastSelectedLayer" | "layerUtils">
+export type UpdateCoverageFilterOptions = Pick<
+  ChangeLayerOptions,
+  'map' | 'coverageFilter' | 'lastSelectedLayer' | 'layerUtils'
+>;
 
-export type UpdateConnectivityFilterOptions = Pick<ChangeLayerOptions, "map" | "connectivitySpeedFilter" | "lastSelectedLayer" | "layerUtils">
+export type UpdateConnectivityFilterOptions = Pick<
+  ChangeLayerOptions,
+  | 'map'
+  | 'connectivitySpeedFilter'
+  | 'lastSelectedLayer'
+  | 'layerUtils'
+  | 'mapRoute'
+>;
 
-export type UpdateConnectivityType = Pick<ChangeLayerOptions, "map" | "lastSelectedLayer" | "layerUtils">
+export type UpdateConnectivityType = Pick<
+  ChangeLayerOptions,
+  'map' | 'lastSelectedLayer' | 'layerUtils'
+>;
 
 export type SchoolMarker = {
   id: number;
   marker: Marker;
-}
+};
 
 export type DuplicateSchoolsRequestPayload = {
   ids: number[];
