@@ -91,7 +91,7 @@ export const fetchEntityGlobalStatsFx = createRequestFx(
 
 export const fetchAdvanceFilterFx = createRequestFx(
   async (countryId: number, controller?: Controller): Promise<APIListType<AdvanceFilterType>> => request({
-    url: `api/accounts/adv_filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
+    url: `api/v2/entities/filters/PUBLISHED/${countryId}/?expand=column_configuration&ordering=name`,
     signal: controller?.getSignal()
   })
 );

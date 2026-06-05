@@ -1,3 +1,4 @@
+import { EntityType } from "~/@/entities";
 import { GeoJSONGeometry, GeoJSONPoint } from "~/core/global-types";
 
 export type ConnectionStatus = 'no' | 'moderate' | 'good' | 'unknown';
@@ -371,6 +372,7 @@ export interface AdvanceFilterType {
   name: string
   type: string
   description: string
+  entity_type: EntityType
   column_configuration: ColumnConfiguration
   options?: {
     choices?: Choice[]
