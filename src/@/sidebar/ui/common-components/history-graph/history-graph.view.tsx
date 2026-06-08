@@ -3,7 +3,11 @@ import { MoveHorizontal } from 'lucide-react';
 import { type ReactNode, useMemo, useRef } from 'react';
 import { Bar, BarChart, ReferenceLine, XAxis, YAxis } from 'recharts';
 
-import { $historyIntervalUnit } from '~/@/sidebar/history-graph.model';
+import type { EntityType } from '~/@/entities';
+import {
+  $historyIntervalUnit,
+  $historyIntervalUnitByEntity,
+} from '~/@/sidebar/history-graph.model';
 import { $connectivityStats } from '~/@/sidebar/sidebar.model';
 import type { LayerType } from '~/@/sidebar/types';
 import {
@@ -203,16 +207,22 @@ function HistoryBarChart({
 
 const HistoryGraph = ({
   connectivityStats,
+  entityType,
   schoolData,
   isLoading,
   selectedLayerData,
 }: {
   connectivityStats?: ConnectivityStat | EntityConnectivityStat | null;
+  entityType?: EntityType;
   schoolData?: SchoolStatsType;
   isLoading?: boolean;
   selectedLayerData?: LayerType | null;
 }) => {
-  const intervalUnit = useStore($historyIntervalUnit);
+  const selectedIntervalUnit = useStore($historyIntervalUnit);
+  const historyIntervalUnitByEntity = useStore($historyIntervalUnitByEntity);
+  const intervalUnit = entityType
+    ? (historyIntervalUnitByEntity[entityType] ?? IntervalUnit.week)
+    : selectedIntervalUnit;
   const fallbackConnectivityStats = useStore($connectivityStats);
   const schoolView = useRoute(mapSchools);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -242,7 +252,7 @@ const HistoryGraph = ({
 
   return (
     <div className="overflow-hidden!">
-      <HistoryButtons isWeek={isWeek} />
+      <HistoryButtons entityType={entityType} isWeek={isWeek} />
       {isLoading ? (
         <Skeleton className="ml-2.5! h-40! w-full!" />
       ) : (

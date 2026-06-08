@@ -1,10 +1,31 @@
-import { combine, createEffect, createEvent, createStore, merge, restore, sample } from 'effector';
+import {
+  combine,
+  createEffect,
+  createEvent,
+  createStore,
+  merge,
+  restore,
+  sample,
+} from 'effector';
 
-import { fetchAdvanceFilterFx, fetchCountriesFx, fetchCountryFx, fetchLayerListFx } from '~/api/project-connect';
+import {
+  fetchAdvanceFilterFx,
+  fetchCountriesFx,
+  fetchCountryFx,
+  fetchLayerListFx,
+} from '~/api/project-connect';
 import { $lng, onLanguageChange } from '~/core/i18n/store';
 
 import { $admin1Code, $country } from '../country/country.model';
-import { $activeEntityTypes, $entityRegistry, $isGlobalMode, changeActiveEntityTypes, setGlobalMode } from '../entities/models/entity.model';
+import { getEntityMapValue } from '../entities';
+import {
+  $activeEntityTypes,
+  $entityRegistry,
+  $isGlobalMode,
+  $selectedEntityType,
+  changeActiveEntityTypes,
+  setGlobalMode,
+} from '../entities/models/entity.model';
 import type { EntityType } from '../entities/types/base-entity.type';
 import { ConnectivityStatusDistribution } from './sidebar.constant';
 import {
@@ -17,7 +38,7 @@ import {
   $coverageNoCoverage,
   $coverageUnknown,
   $schoolStatusSelectedLayer,
-  $selectedLayerId,
+  $selectedLayerIdByEntity,
   $selectedSchoolIds,
   $staticLegendsSelected,
   changeConnectivitySpeedGood,
@@ -30,8 +51,14 @@ import {
   changeCoverageUnknown,
   staticLegendsSelection,
 } from './sidebar.model';
-import { getUrlParams, parseBoolParam, parseNumberParam, setBoolParam, setNumberParam, URL_PARAM_KEYS } from './url-params.util';
-
+import {
+  getUrlParams,
+  parseBoolParam,
+  parseNumberParam,
+  setBoolParam,
+  setNumberParam,
+  URL_PARAM_KEYS,
+} from './url-params.util';
 
 export const setAppSettled = createEvent<boolean>();
 export const $isAppSettled = restore(setAppSettled, false);
@@ -47,16 +74,21 @@ $isLayersSettled.on(fetchLayerListFx.doneData, () => true);
 $isFilterSettled.on(fetchAdvanceFilterFx.doneData, () => true);
 
 sample({
-  source: combine($isCountrySettled, $isCountriesSettled, $isLayersSettled, $isFilterSettled, (...all) => all.every(Boolean)),
+  source: combine(
+    $isCountrySettled,
+    $isCountriesSettled,
+    $isLayersSettled,
+    $isFilterSettled,
+    (...all) => all.every(Boolean),
+  ),
   filter: (isAllDone: boolean) => isAllDone,
-  target: setAppSettled
-})
+  target: setAppSettled,
+});
 
 // Track if URL params have been consumed on initial load
 export const $urlParamsConsumed = createStore(false);
 export const markUrlParamsConsumed = createEvent();
 $urlParamsConsumed.on(markUrlParamsConsumed, () => true);
-
 
 // Check if current route is mapOverview (global map without country)
 const isMapOverviewRoute = (): boolean => {
@@ -94,31 +126,62 @@ export const getInitialUrlParams = () => {
   }
 
   // Parse school status legends
-  const ssConnected = parseBoolParam(params.get(URL_PARAM_KEYS.SS_CONNECTED), true);
-  const ssNotConnected = parseBoolParam(params.get(URL_PARAM_KEYS.SS_NOT_CONNECTED), true);
+  const ssConnected = parseBoolParam(
+    params.get(URL_PARAM_KEYS.SS_CONNECTED),
+    true,
+  );
+  const ssNotConnected = parseBoolParam(
+    params.get(URL_PARAM_KEYS.SS_NOT_CONNECTED),
+    true,
+  );
   const ssUnknown = parseBoolParam(params.get(URL_PARAM_KEYS.SS_UNKNOWN), true);
 
   // Build school status legends array
   const schoolStatusLegends: string[] = [];
-  if (ssConnected) schoolStatusLegends.push(ConnectivityStatusDistribution.connected);
-  if (ssNotConnected) schoolStatusLegends.push(ConnectivityStatusDistribution.notConnected);
-  if (ssUnknown) schoolStatusLegends.push(ConnectivityStatusDistribution.unknown);
+  if (ssConnected)
+    schoolStatusLegends.push(ConnectivityStatusDistribution.connected);
+  if (ssNotConnected)
+    schoolStatusLegends.push(ConnectivityStatusDistribution.notConnected);
+  if (ssUnknown)
+    schoolStatusLegends.push(ConnectivityStatusDistribution.unknown);
 
   return {
     layerId: parseNumberParam(params.get(URL_PARAM_KEYS.LAYER_ID)),
     isLayerIdNull: params.get(URL_PARAM_KEYS.LAYER_ID) === 'null',
-    schoolStatusLayer: parseNumberParam(params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER)),
-    isSchoolStatusLayerNull: params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER) === 'null',
-    entityTypes: params.get(URL_PARAM_KEYS.ENTITY)?.split(',').filter(Boolean) ?? [],
+    schoolStatusLayer: parseNumberParam(
+      params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER),
+    ),
+    isSchoolStatusLayerNull:
+      params.get(URL_PARAM_KEYS.SCHOOL_STATUS_LAYER) === 'null',
+    entityTypes:
+      params.get(URL_PARAM_KEYS.ENTITY)?.split(',').filter(Boolean) ?? [],
     isGlobal: parseBoolParam(params.get(URL_PARAM_KEYS.GLOBAL), true),
     speedGood: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_GOOD), true),
-    speedModerate: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_MODERATE), true),
-    speedNoInternet: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_NO_INTERNET), true),
-    speedUnknown: parseBoolParam(params.get(URL_PARAM_KEYS.SPEED_UNKNOWN), true),
-    coverage5g4g: parseBoolParam(params.get(URL_PARAM_KEYS.COVERAGE_5G4G), true),
-    coverage3g2g: parseBoolParam(params.get(URL_PARAM_KEYS.COVERAGE_3G2G), true),
+    speedModerate: parseBoolParam(
+      params.get(URL_PARAM_KEYS.SPEED_MODERATE),
+      true,
+    ),
+    speedNoInternet: parseBoolParam(
+      params.get(URL_PARAM_KEYS.SPEED_NO_INTERNET),
+      true,
+    ),
+    speedUnknown: parseBoolParam(
+      params.get(URL_PARAM_KEYS.SPEED_UNKNOWN),
+      true,
+    ),
+    coverage5g4g: parseBoolParam(
+      params.get(URL_PARAM_KEYS.COVERAGE_5G4G),
+      true,
+    ),
+    coverage3g2g: parseBoolParam(
+      params.get(URL_PARAM_KEYS.COVERAGE_3G2G),
+      true,
+    ),
     coverageNo: parseBoolParam(params.get(URL_PARAM_KEYS.COVERAGE_NO), true),
-    coverageUnknown: parseBoolParam(params.get(URL_PARAM_KEYS.COVERAGE_UNKNOWN), true),
+    coverageUnknown: parseBoolParam(
+      params.get(URL_PARAM_KEYS.COVERAGE_UNKNOWN),
+      true,
+    ),
     schoolStatusLegends,
     language: params.get(URL_PARAM_KEYS.LANGUAGE),
   };
@@ -127,9 +190,16 @@ export const getInitialUrlParams = () => {
 // Store for initial URL params (captured once on load)
 export const $initialUrlParams = createStore(getInitialUrlParams());
 
+const $urlSelectedLayerId = combine(
+  $selectedLayerIdByEntity,
+  $selectedEntityType,
+  (selectedLayerIdByEntity, selectedEntityType) =>
+    getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null),
+);
+
 // Combined store for all URL-tracked values
 export const $urlTrackedParams = combine({
-  layerId: $selectedLayerId,
+  layerId: $urlSelectedLayerId,
   schoolStatusLayer: $schoolStatusSelectedLayer,
   entityTypes: $activeEntityTypes,
   isGlobal: $isGlobalMode,
@@ -146,18 +216,113 @@ export const $urlTrackedParams = combine({
 });
 
 // Effect to update URL params
-const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedParams.getState>) => {
-  return; // Temporary disabled url update
-  const url = new URL(window.location.href);
-  const searchParams = url.searchParams;
+const updateUrlParamsFx = createEffect(
+  (params: ReturnType<typeof $urlTrackedParams.getState>) => {
+    return; // Temporary disabled url update
+    const url = new URL(window.location.href);
+    const searchParams = url.searchParams;
 
-  // On /map overview route, only keep language and entity params
-  if (isMapOverviewRoute()) {
-    // Clear all params except language and entity
-    const keysToDelete = Array.from(searchParams.keys()).filter(key =>
-      key !== URL_PARAM_KEYS.LANGUAGE && key !== URL_PARAM_KEYS.ENTITY
+    // On /map overview route, only keep language and entity params
+    if (isMapOverviewRoute()) {
+      // Clear all params except language and entity
+      const keysToDelete = Array.from(searchParams.keys()).filter(
+        (key) =>
+          key !== URL_PARAM_KEYS.LANGUAGE && key !== URL_PARAM_KEYS.ENTITY,
+      );
+      keysToDelete.forEach((key) => searchParams.delete(key));
+
+      // Update entity and global params
+      if (params.isGlobal) {
+        searchParams.delete(URL_PARAM_KEYS.ENTITY);
+        searchParams.delete(URL_PARAM_KEYS.GLOBAL);
+      } else {
+        searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
+        searchParams.set(URL_PARAM_KEYS.GLOBAL, '0');
+      }
+
+      // Update language if needed
+      if (params.language && params.language !== 'en') {
+        searchParams.set(URL_PARAM_KEYS.LANGUAGE, params.language);
+      } else {
+        searchParams.delete(URL_PARAM_KEYS.LANGUAGE);
+      }
+
+      const newUrl = `${url.pathname}${searchParams.toString() ? '?' + searchParams.toString() : ''}${url.hash}`;
+      window.history.replaceState(window.history.state, '', newUrl);
+      return;
+    }
+
+    // For other routes, update all params
+    // Update layer params
+    setNumberParam(
+      searchParams,
+      URL_PARAM_KEYS.LAYER_ID,
+      params.layerId ?? 'null',
     );
-    keysToDelete.forEach(key => searchParams.delete(key));
+    setNumberParam(
+      searchParams,
+      URL_PARAM_KEYS.SCHOOL_STATUS_LAYER,
+      params.schoolStatusLayer ?? 'null',
+    );
+
+    // Update connectivity speed params (only set if false)
+    setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_GOOD, params.speedGood);
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.SPEED_MODERATE,
+      params.speedModerate,
+    );
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.SPEED_NO_INTERNET,
+      params.speedNoInternet,
+    );
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.SPEED_UNKNOWN,
+      params.speedUnknown,
+    );
+
+    // Update coverage params (only set if false)
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.COVERAGE_5G4G,
+      params.coverage5g4g,
+    );
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.COVERAGE_3G2G,
+      params.coverage3g2g,
+    );
+    setBoolParam(searchParams, URL_PARAM_KEYS.COVERAGE_NO, params.coverageNo);
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.COVERAGE_UNKNOWN,
+      params.coverageUnknown,
+    );
+
+    // Update school status legends (only set if unchecked)
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.SS_CONNECTED,
+      params.schoolStatusLegends.includes(
+        ConnectivityStatusDistribution.connected,
+      ),
+    );
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.SS_NOT_CONNECTED,
+      params.schoolStatusLegends.includes(
+        ConnectivityStatusDistribution.notConnected,
+      ),
+    );
+    setBoolParam(
+      searchParams,
+      URL_PARAM_KEYS.SS_UNKNOWN,
+      params.schoolStatusLegends.includes(
+        ConnectivityStatusDistribution.unknown,
+      ),
+    );
 
     // Update entity and global params
     if (params.isGlobal) {
@@ -168,60 +333,18 @@ const updateUrlParamsFx = createEffect((params: ReturnType<typeof $urlTrackedPar
       searchParams.set(URL_PARAM_KEYS.GLOBAL, '0');
     }
 
-    // Update language if needed
+    // Update language param (only set if not default)
     if (params.language && params.language !== 'en') {
       searchParams.set(URL_PARAM_KEYS.LANGUAGE, params.language);
     } else {
       searchParams.delete(URL_PARAM_KEYS.LANGUAGE);
     }
 
+    // Update URL without page reload using replaceState
     const newUrl = `${url.pathname}${searchParams.toString() ? '?' + searchParams.toString() : ''}${url.hash}`;
     window.history.replaceState(window.history.state, '', newUrl);
-    return;
-  }
-
-  // For other routes, update all params
-  // Update layer params
-  setNumberParam(searchParams, URL_PARAM_KEYS.LAYER_ID, params.layerId ?? 'null');
-  setNumberParam(searchParams, URL_PARAM_KEYS.SCHOOL_STATUS_LAYER, params.schoolStatusLayer ?? 'null');
-
-  // Update connectivity speed params (only set if false)
-  setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_GOOD, params.speedGood);
-  setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_MODERATE, params.speedModerate);
-  setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_NO_INTERNET, params.speedNoInternet);
-  setBoolParam(searchParams, URL_PARAM_KEYS.SPEED_UNKNOWN, params.speedUnknown);
-
-  // Update coverage params (only set if false)
-  setBoolParam(searchParams, URL_PARAM_KEYS.COVERAGE_5G4G, params.coverage5g4g);
-  setBoolParam(searchParams, URL_PARAM_KEYS.COVERAGE_3G2G, params.coverage3g2g);
-  setBoolParam(searchParams, URL_PARAM_KEYS.COVERAGE_NO, params.coverageNo);
-  setBoolParam(searchParams, URL_PARAM_KEYS.COVERAGE_UNKNOWN, params.coverageUnknown);
-
-  // Update school status legends (only set if unchecked)
-  setBoolParam(searchParams, URL_PARAM_KEYS.SS_CONNECTED, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.connected));
-  setBoolParam(searchParams, URL_PARAM_KEYS.SS_NOT_CONNECTED, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.notConnected));
-  setBoolParam(searchParams, URL_PARAM_KEYS.SS_UNKNOWN, params.schoolStatusLegends.includes(ConnectivityStatusDistribution.unknown));
-
-  // Update entity and global params
-  if (params.isGlobal) {
-    searchParams.delete(URL_PARAM_KEYS.ENTITY);
-    searchParams.delete(URL_PARAM_KEYS.GLOBAL);
-  } else {
-    searchParams.set(URL_PARAM_KEYS.ENTITY, params.entityTypes.join(','));
-    searchParams.set(URL_PARAM_KEYS.GLOBAL, '0');
-  }
-
-  // Update language param (only set if not default)
-  if (params.language && params.language !== 'en') {
-    searchParams.set(URL_PARAM_KEYS.LANGUAGE, params.language);
-  } else {
-    searchParams.delete(URL_PARAM_KEYS.LANGUAGE);
-  }
-
-  // Update URL without page reload using replaceState
-  const newUrl = `${url.pathname}${searchParams.toString() ? '?' + searchParams.toString() : ''}${url.hash}`;
-  window.history.replaceState(window.history.state, '', newUrl);
-});
+  },
+);
 
 // Event to initialize stores from URL params
 export const initializeFromUrlParams = createEvent();
@@ -279,7 +402,7 @@ sample({
     $country,
     $admin1Code,
     $selectedSchoolIds,
-    $selectedLayerId,
+    $selectedLayerIdByEntity,
     $schoolStatusSelectedLayer,
     $activeEntityTypes,
     $isGlobalMode,
@@ -304,7 +427,9 @@ sample({
 });
 
 // Entity URL param handling - read from URL on initial load
-export const $entityParamFromUrl = $initialUrlParams.map((params) => params.entityTypes ?? []);
+export const $entityParamFromUrl = $initialUrlParams.map(
+  (params) => params.entityTypes ?? [],
+);
 
 // Event to set active entity types from URL (avoiding circular updates)
 export const setActiveEntityTypesFromUrl = createEvent<EntityType[]>();
@@ -314,4 +439,3 @@ sample({
   clock: setActiveEntityTypesFromUrl,
   target: changeActiveEntityTypes,
 });
-

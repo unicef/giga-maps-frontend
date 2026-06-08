@@ -3,7 +3,8 @@ import { SlidersHorizontal } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $selectedLayerId } from '~/@/sidebar/sidebar.model';
+import { $selectedEntityType, getEntityMapValue } from '~/@/entities';
+import { $selectedLayerIdByEntity } from '~/@/sidebar/sidebar.model';
 import { Button } from '~/components/ui/button';
 import {
   Tooltip,
@@ -25,7 +26,13 @@ export default function LayerTopHead({
   hideSetting?: boolean;
 }>) {
   const { t } = useTranslation();
-  const selectedLayerId = useStore($selectedLayerId);
+  const selectedEntityType = useStore($selectedEntityType);
+  const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
+  const selectedLayerId = getEntityMapValue(
+    selectedLayerIdByEntity,
+    selectedEntityType,
+    null,
+  );
   const isDisabled = disabled && !selectedLayerId;
 
   return (

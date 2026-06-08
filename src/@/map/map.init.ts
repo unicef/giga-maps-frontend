@@ -10,9 +10,12 @@ import {
   $countryActiveFiltersList,
   $schoolFocusLatLng,
 } from '~/@/country/country.model';
+import type { Map as MapboxMap } from 'mapbox-gl';
+import { EntityType, getEntityMapValue } from '~/@/entities';
 import {
   $activeEntityTypes,
   $entityRegistry,
+  $selectedEntityType,
 } from '~/@/entities/models/entity.model';
 import {
   $connectivityBenchMark,
@@ -24,7 +27,7 @@ import {
   $schoolAdminId,
   $schoolStatsMap,
   $schoolStatusSelectedLayer,
-  $selectedLayerId,
+  $selectedLayerIdByEntity,
   $selectedSchoolIds,
   $staticLegendsSelected,
   $staticLegendsSelectedByEntity,
@@ -253,15 +256,15 @@ sample({
   target: router.navigate,
 });
 
-$map.watch(zoomIn, (map: Map | null) => {
+$map.watch(zoomIn, (map: MapboxMap | null) => {
   map?.zoomIn({ duration: 500 });
 });
 
-$map.watch(zoomOut, (map: Map | null) => {
+$map.watch(zoomOut, (map: MapboxMap | null) => {
   map?.zoomOut({ duration: 500 });
 });
 
-$map.watch(setCenter, (map: Map | null, center) => {
+$map.watch(setCenter, (map: MapboxMap | null, center) => {
   map?.setCenter(center);
 });
 
@@ -339,7 +342,7 @@ sample({
 });
 
 sample({
-  clock: merge([$selectedLayerId]),
+  clock: merge([$selectedLayerIdByEntity]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   filter: mapLayerFilter,
@@ -509,10 +512,16 @@ sample({
   }),
   source: combine({
     country: $country,
-    selectedLayerId: $selectedLayerId,
+    selectedEntityType: $selectedEntityType,
+    selectedLayerIdByEntity: $selectedLayerIdByEntity,
     map: $map,
   }),
-  fn: ({ map, country, selectedLayerId }) => {
+  fn: ({ map, country, selectedEntityType, selectedLayerIdByEntity }) => {
+    const selectedLayerId = getEntityMapValue(
+      selectedLayerIdByEntity,
+      selectedEntityType,
+      selectedLayerIdByEntity[EntityType.SCHOOL] ?? null,
+    );
     const params = `country_id=${country?.id}&layer_id=${selectedLayerId}&start_year=2020`;
     const url = getBaseUrl(
       `api/accounts/time-players/v2/?${params}&z={z}&x={x}&y={y}.mvt`,
@@ -581,7 +590,7 @@ sample({
 sample({
   clock: merge([languageStore.$language, $map]),
   source: combine({ map: $map, lng: languageStore.$language }),
-  target: createEffect(({ map, lng }: { map: Map; lng: string }) => {
+  target: createEffect(({ map, lng }: { map: MapboxMap; lng: string }) => {
     if (!map || !lng) return;
     for (let key in mapLabelLayerList) {
       map.setLayoutProperty(mapLabelLayerList[key], 'text-field', [

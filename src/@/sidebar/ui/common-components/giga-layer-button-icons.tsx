@@ -26,6 +26,7 @@ import { cn } from '~/lib/cn';
 import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
 import { LayerTypeChoices } from '../../types';
 import GigaLayerButton from './giga-layer-button';
+import { getEntityStatusId } from '../../sidebar.util';
 
 const GigaLayerButtonIcons = ({
   entityType,
@@ -52,7 +53,7 @@ const GigaLayerButtonIcons = ({
   const targetStatusSelectedLayer = getEntityMapValue(
     statusLayerIdByEntity,
     targetEntityType,
-    SCHOOL_STATUS_LAYER.id,
+    getEntityStatusId(targetEntityType),
   );
   const targetActiveLayerByCountryCode =
     activeLayerByCountryCodeByEntity[targetEntityType] ??
