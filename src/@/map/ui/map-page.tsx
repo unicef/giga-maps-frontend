@@ -2,7 +2,7 @@ import { useStore } from 'effector-react';
 import styled from 'styled-components';
 
 import ProductTour from '~/@/product-tour/ui/product-tour.view';
-import { mapCountry } from '~/core/routes';
+import { $mapRoutes, mapCountry } from '~/core/routes';
 import { Layout, Main } from '~/ui';
 
 import Sidebar from '@/sidebar/ui';
@@ -26,7 +26,8 @@ const PopupContainer = styled.div`
 const MapPage = () => {
   const { code = '' } = useStore(mapCountry.params) ?? {};
   const isProductTour = useStore($isProductTour);
-  const isTimeplayer = useStore($isTimeplayer)
+  const isTimeplayer = useStore($isTimeplayer);
+  const mapRoute = useStore($mapRoutes);
   useEffect(() => {
     if (code) {
       changeCountryCode(code);
@@ -45,7 +46,8 @@ const MapPage = () => {
         </PopupContainer>
       </Main>
       <EntityTypeSelector />
-      <TopLoader />
+      {/* TODO:// temporary hide toploader */}
+      {!mapRoute.country && <TopLoader />}
       <Footer />
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}
