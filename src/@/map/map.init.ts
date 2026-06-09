@@ -19,6 +19,8 @@ import {
 } from '~/@/entities/models/entity.model';
 import {
   $connectivityBenchMark,
+  $connectivityBenchMarkByEntity,
+  $connectivitySpeedFilterByEntity,
   $isLoadedTimePlayer,
   $isLoadingTimeplayer,
   $isPauseTimeplayer,
@@ -63,6 +65,7 @@ import {
   $connectivityFilter,
   $connectivitySpeedFilter,
   $coverageFilter,
+  $coverageFilterByEntity,
   $selectedLayers,
 } from '@/sidebar/init';
 
@@ -274,12 +277,15 @@ export const gigaLayerSource = combine({
   isCheckedLastDate: $isCheckedLastDate,
   connectivityFilter: $connectivityFilter,
   connectivityBenchMark: $connectivityBenchMark,
+  connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   lastAvailableDates: $lastAvailableDates,
   schoolLegends: $staticLegendsSelected,
   schoolLegendsByEntity: $staticLegendsSelectedByEntity,
   coverageFilter: $coverageFilter,
+  coverageFilterByEntity: $coverageFilterByEntity,
   layerUtils: $layerUtils,
   connectivitySpeedFilter: $connectivitySpeedFilter,
+  connectivitySpeedFilterByEntity: $connectivitySpeedFilterByEntity,
   lastSelectedLayer: $selectedGigaLayers,
   paintData: $stylePaintData,
   mapRoute: $mapRoutes,
@@ -359,6 +365,7 @@ sample({
     $schoolAdminId,
     $schoolStatsMap,
     $countrySearchString,
+    $connectivityBenchMarkByEntity,
     timePlayerActive,
     $zoomState,
     $activeEntityTypes,
@@ -387,7 +394,7 @@ sample({
 
 // update dots, change on coverage filter
 sample({
-  clock: $coverageFilter,
+  clock: $coverageFilterByEntity,
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   target: updateCoverageFilter,
@@ -395,7 +402,7 @@ sample({
 
 // update connectivity filter;
 sample({
-  clock: $connectivitySpeedFilter,
+  clock: $connectivitySpeedFilterByEntity,
   source: gigaLayerSource,
   fn: combineGigaFn({}),
   target: updateConnectivityFilter,

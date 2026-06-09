@@ -148,7 +148,9 @@ export const createAndUpdateMapLayer = ({
   map,
   mapRoute,
   connectivitySpeedFilter,
+  connectivitySpeedFilterByEntity,
   coverageFilter,
+  coverageFilterByEntity,
   layerUtils,
   selectedLayerId,
   paintData,
@@ -158,12 +160,11 @@ export const createAndUpdateMapLayer = ({
   entityRegistry,
 }: ChangeLayerOptions & {
   selectedLayerId: number | null;
-  schoolLayerId: number | null;
+  schoolLayerId: number | string | null;
 }) => {
   if (!map) return;
   const { currentLayerTypeUtils, globalLayerId } = layerUtils;
   const isLive = mapRoute.map || currentLayerTypeUtils.isLive;
-  const isDynamicLayer = !(selectedLayerId === globalLayerId);
   const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
 
   // Cancel all previous entity animations
@@ -177,12 +178,22 @@ export const createAndUpdateMapLayer = ({
   // --- Selected layer (connectivity/coverage) per entity type ---
   if (isSourceAvailable && selectedLayerId) {
     for (const entityType of entityTypes) {
+      const entityLayerId = mapRoute.map
+        ? globalLayerId
+        : (layerUtils.selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
+      if (!entityLayerId) continue;
+      const isDynamicLayer = !(entityLayerId === globalLayerId);
       const sourceLayer = getSourceLayerName(entityType);
-      const layerIdStr = getEntitySelectedLayerId(entityType, selectedLayerId);
+      const layerIdStr = getEntitySelectedLayerId(entityType, entityLayerId);
+      const entityConnectivityFilter =
+        connectivitySpeedFilterByEntity?.[entityType] ??
+        connectivitySpeedFilter;
+      const entityCoverageFilter =
+        coverageFilterByEntity?.[entityType] ?? coverageFilter;
       const options: Record<string, unknown> = {
         filter: isLive
-          ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer)
-          : filterCoverageList(coverageFilter, isDynamicLayer),
+          ? filterConnectivityList(entityConnectivityFilter, isDynamicLayer)
+          : filterCoverageList(entityCoverageFilter, isDynamicLayer),
         'source-layer': sourceLayer,
       };
 

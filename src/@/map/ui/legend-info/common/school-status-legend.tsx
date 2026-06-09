@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
-import { $globalStats, $stylePaintData } from '~/@/map/map.model';
+import {
+  $globalStats,
+  $globalStatsByEntity,
+  $stylePaintData,
+} from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $currentLayerTypeUtilsByEntity,
@@ -22,25 +26,39 @@ interface CheckedStatus {
 
 const SchoolStatusLegend = ({
   entityType,
+  forceVisible = false,
   shouldShowControls,
   statusTitle,
 }: {
-  entityType: string;
+  entityType: EntityType;
+  forceVisible?: boolean;
   shouldShowControls: boolean;
   statusTitle: string;
 }) => {
   const { t } = useTranslation();
   const lng = useStore($lng);
   const paintData = useStore($stylePaintData);
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const currentEntityType = entityType as EntityType;
-  const { isSchoolStatus } = currentLayerTypeUtilsByEntity[currentEntityType] ?? { isSchoolStatus: false };
-  const [schoolStatusCheckedStatus, setSchoolStatusCheckedStatus] = useState<CheckedStatus>({});
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const currentEntityType = entityType;
+  const { isSchoolStatus } = currentLayerTypeUtilsByEntity[
+    currentEntityType
+  ] ?? { isSchoolStatus: false };
+  const [schoolStatusCheckedStatus, setSchoolStatusCheckedStatus] =
+    useState<CheckedStatus>({});
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
   const globalStatsFromStore = useStore($globalStats);
+  const globalStatsByEntity = useStore($globalStatsByEntity);
   const staticLegendsByEntity = useStore($staticLegendsSelectedByEntity);
   const staticLegends = staticLegendsByEntity[currentEntityType] ?? [];
-  const schoolStatusStats = globalStatsFromStore?.connected_schools as Record<string, number> | undefined;
+  const entityStatusStats =
+    globalStatsByEntity[currentEntityType]?.connected_entities;
+  const schoolStatusStats =
+    entityStatusStats ??
+    (globalStatsFromStore?.connected_schools as
+      | Record<string, number>
+      | undefined);
 
   const handleSchoolStatusLayerChange = (key: string) => {
     const newStatus = !schoolStatusCheckedStatus[key];
@@ -51,13 +69,22 @@ const SchoolStatusLegend = ({
 
     switch (key) {
       case 'connected':
-        entityStaticLegendsSelection({ entityType: currentEntityType, legends: connected });
+        entityStaticLegendsSelection({
+          entityType: currentEntityType,
+          legends: connected,
+        });
         break;
       case 'not_connected':
-        entityStaticLegendsSelection({ entityType: currentEntityType, legends: notConnected });
+        entityStaticLegendsSelection({
+          entityType: currentEntityType,
+          legends: notConnected,
+        });
         break;
       case 'unknown':
-        entityStaticLegendsSelection({ entityType: currentEntityType, legends: unknown });
+        entityStaticLegendsSelection({
+          entityType: currentEntityType,
+          legends: unknown,
+        });
         break;
       default:
         break;
@@ -72,7 +99,7 @@ const SchoolStatusLegend = ({
     });
   }, [connected, notConnected, staticLegends, unknown]);
 
-  if (!isSchoolStatus) return null;
+  if (!isSchoolStatus && !forceVisible) return null;
 
   return (
     <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start max-[560px]:basis-full max-[560px]:min-w-full">
@@ -81,7 +108,10 @@ const SchoolStatusLegend = ({
         {/* <Info size={12} /> */}
       </div>
       {Object.values(ConnectivityStatusDistribution).map((key) => (
-        <div className="mt-3! flex! w-full! items-center! justify-between!" key={key}>
+        <div
+          className="mt-3! flex! w-full! items-center! justify-between!"
+          key={key}
+        >
           <div className="flex! min-w-0! items-center!">
             {shouldShowControls ? (
               <input
@@ -92,12 +122,20 @@ const SchoolStatusLegend = ({
               />
             ) : null}
             <div className="flex! min-w-0! items-center! gap-2!">
-              <EntityLegendIndicator color={paintData[key]} entityType={entityType} />
-              <span className="text-sm! font-normal! leading-5! text-foreground!">{t(ConnectivityStatusNames[key])}</span>
+              <EntityLegendIndicator
+                color={paintData[key]}
+                entityType={entityType}
+              />
+              <span className="text-sm! font-normal! leading-5! text-foreground!">
+                {t(ConnectivityStatusNames[key])}
+              </span>
             </div>
           </div>
           {shouldShowControls ? (
-            <div className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!" data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}>
+            <div
+              className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+              data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}
+            >
               {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
             </div>
           ) : null}

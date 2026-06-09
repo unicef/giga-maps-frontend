@@ -642,7 +642,7 @@ export const createSelectedLayer = (
     isLive?: boolean;
     source?: string;
     paintData: StylePaintData;
-    options: Record<string, string>;
+    options: Record<string, unknown>;
     isMobile: boolean;
     mapRoute: ChangeLayerOptions['mapRoute'];
   },

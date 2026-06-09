@@ -1,29 +1,24 @@
 import { useStore } from 'effector-react';
 import { Info } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $country } from '~/@/country/country.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import {
   ConnectivityBenchMarks,
+  ConnectivityDistribution,
   ConnectivityStatusDistribution,
 } from '~/@/sidebar/sidebar.constant';
 import {
-  $benchmarkmarkUtils,
-  $connectivityBenchMark,
-  $connectivitySpeedGood,
-  $connectivitySpeedModerate,
-  $connectivitySpeednoInternet,
-  $connectivitySpeedUnknown,
-  $connectivityStats,
+  $benchmarkmarkUtilsByEntity,
+  $connectivityBenchMarkByEntity,
+  $connectivitySpeedFilterByEntity,
+  $connectivityStatsByEntity,
   $layerUtils,
   $schoolStats,
-  changeConnectivitySpeedGood,
-  changeConnectivitySpeedModerate,
-  changeConnectivitySpeednoInternet,
-  changeConnectivitySpeedUnknown,
+  changeEntityConnectivitySpeed,
 } from '~/@/sidebar/sidebar.model';
 import { DefaultLegendValuesType } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
@@ -32,17 +27,13 @@ import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
-interface CheckedStatus {
-  [key: string]: boolean;
-}
-
 const LiveLayerLegend = ({
   entityType,
   metricSubtitle,
   metricTitle,
   shouldShowControls,
 }: {
-  entityType: string;
+  entityType: EntityType;
   metricSubtitle: string;
   metricTitle: string;
   shouldShowControls: boolean;
@@ -52,26 +43,34 @@ const LiveLayerLegend = ({
   const { map, schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const {
-    currentLayerLegends: legends,
+    currentLayerLegends,
+    currentLayerLegendsByEntity,
     globalLayerData,
     selectedLayerData,
+    selectedLayerDataByEntity,
   } = useStore($layerUtils);
-  const { benchmarkLogic } = useStore($benchmarkmarkUtils);
-  const speedGood = useStore($connectivitySpeedGood);
-  const speedModerate = useStore($connectivitySpeedModerate);
-  const speedNoInternet = useStore($connectivitySpeednoInternet);
-  const speedUnknown = useStore($connectivitySpeedUnknown);
-  const connectivityBenchMark = useStore($connectivityBenchMark);
+  const legends =
+    currentLayerLegendsByEntity[entityType] ?? currentLayerLegends;
+  const { benchmarkLogic } =
+    useStore($benchmarkmarkUtilsByEntity)[entityType] ?? {};
+  const connectivitySpeedFilter = (useStore($connectivitySpeedFilterByEntity)[
+    entityType
+  ] ?? {}) as Record<string, boolean>;
+  const connectivityBenchMark =
+    useStore($connectivityBenchMarkByEntity)[entityType] ??
+    ConnectivityBenchMarks.global;
   const countryObj = useStore($country);
   const countryBenchmarkDescriptions =
     countryObj?.benchmark_metadata?.layer_descriptions;
-  const metricLayerData = map ? globalLayerData : selectedLayerData;
-  const [realtimeCheckedStatus, setRealtimeCheckedStatus] =
-    useState<CheckedStatus>({});
-  const realtimeStatsFromStore = useStore($connectivityStats);
+  const metricLayerData = map
+    ? globalLayerData
+    : (selectedLayerDataByEntity[entityType] ?? selectedLayerData);
+  const realtimeStatsFromStore = useStore($connectivityStatsByEntity)[
+    entityType
+  ];
   const schoolRealTimeStats = useStore($schoolStats);
   const realtimeStats =
-    realtimeStatsFromStore?.real_time_connected_schools ??
+    realtimeStatsFromStore?.real_time_connected_entities ??
     ({} as DefaultLegendValuesType);
   const benchmarkValue = (
     !schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
@@ -83,38 +82,16 @@ const LiveLayerLegend = ({
     countryBenchmarkDescriptions?.[metricLayerData?.id ?? 0] ?? '';
 
   const handleRealtimeLayerChange = (key: string) => {
-    const newStatus = !realtimeCheckedStatus[key];
-    setRealtimeCheckedStatus((prevState) => ({
-      ...prevState,
-      [key]: newStatus,
-    }));
-
-    switch (key) {
-      case 'good':
-        changeConnectivitySpeedGood(newStatus);
-        break;
-      case 'moderate':
-        changeConnectivitySpeedModerate(newStatus);
-        break;
-      case 'bad':
-        changeConnectivitySpeednoInternet(newStatus);
-        break;
-      case 'unknown':
-        changeConnectivitySpeedUnknown(newStatus);
-        break;
-      default:
-        break;
-    }
-  };
-
-  useEffect(() => {
-    setRealtimeCheckedStatus({
-      good: speedGood,
-      moderate: speedModerate,
-      bad: speedNoInternet,
-      unknown: speedUnknown,
+    changeEntityConnectivitySpeed({
+      entityType,
+      key: key as
+        | ConnectivityDistribution.good
+        | ConnectivityDistribution.moderate
+        | ConnectivityDistribution.bad
+        | ConnectivityDistribution.unknown,
+      value: !connectivitySpeedFilter[key],
     });
-  }, [speedGood, speedModerate, speedNoInternet, speedUnknown]);
+  };
 
   const isNational =
     !map && connectivityBenchMark === ConnectivityBenchMarks.national;
@@ -175,7 +152,7 @@ const LiveLayerLegend = ({
               <div className="flex! min-w-0! items-center!">
                 {shouldShowControls ? (
                   <input
-                    checked={Boolean(realtimeCheckedStatus[key])}
+                    checked={Boolean(connectivitySpeedFilter[key])}
                     className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
                     onChange={() => handleRealtimeLayerChange(key)}
                     type="checkbox"
@@ -219,6 +196,7 @@ const LiveLayerLegend = ({
         },
       )}
       <LegendBenchmarkDropdown
+        entityType={entityType}
         interactive={shouldShowControls}
         staticLabel={map ? `${t('global-benchmark')} 20Mbps` : undefined}
         title={isNational ? nationalBenchMarkDescription : undefined}
