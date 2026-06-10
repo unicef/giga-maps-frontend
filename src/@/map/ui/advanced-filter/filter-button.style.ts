@@ -1,7 +1,9 @@
 import { Checkbox, Dropdown, MultiSelect, Popover } from "@carbon/react";
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
+
 import { Scroll } from "~/@/scroll";
-import { css } from "styled-components";
+import { AccordionTrigger } from "~/components/ui/accordion";
+import { Badge } from "~/components/ui/badge";
 
 export const FilterPopover = styled(Popover)`
     /* position: absolute; */
@@ -342,3 +344,33 @@ export const FilterTagContainer = styled.div`
     pointer-events: all;
   }
 `
+
+export const StyledAccordionTrigger = styled(AccordionTrigger)`
+  font-family: 'Open Sans', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-size: 16px !important;
+  leading-trim: none;
+  line-height: 24px !important;
+  letter-spacing: 0% !important;
+  background: var(--Grey-50, #FAFAFA) !important;
+`;
+
+export const StyledFilterBadge = styled(Badge)`
+  display:flex;
+  justify-content: space-between;
+  background: #85FFBC;
+  height: 22px !important;
+  width: 210px;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  color: #000;
+  font-size: 12px;
+  line-height: 18px;
+  opacity: 1 !important;
+  border-radius: 0.375rem;
+  gap: 12px;
+  
+`;
