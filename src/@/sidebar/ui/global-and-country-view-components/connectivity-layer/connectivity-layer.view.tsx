@@ -54,11 +54,12 @@ export default function ConnectivityLayer({
             currentLayerData={currentLayerData}
             value={connectivityStats?.live_avg ?? 0}
           />
-          <WeekSlider />
+          <WeekSlider entityType={entityType} />
         </div>
       </div>
       <HistoryGraphAccordian
         connectivityStats={connectivityStats}
+        entityType={entityType}
         isLoading={isLoading}
         selectedLayerData={currentLayerData}
       />

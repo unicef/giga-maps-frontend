@@ -69,7 +69,7 @@ import {
   publishLayersListMapping,
   SCHOOL_STATUS_LAYER,
 } from './sidebar.constant';
-import { isLiveLayer, isStaticLayer } from './sidebar.util';
+import { getEntityStatusId, isLiveLayer, isStaticLayer } from './sidebar.util';
 import {
   ConnectivityConfig,
   CoverageStat,
@@ -338,24 +338,15 @@ export const $staticLayers = $layersList.map(
     layers?.filter((layer) => layer?.type === LayerTypeChoices.STATIC) || [],
 );
 
-export const onSelectSchoolStatusLayer = createEvent<number | null>();
-export const onSelectEntityStatusLayer = createEvent<
-  EntityStoreMap<number | null>
->();
+export const onSelectEntityStatusLayer =
+  createEvent<EntityStoreMap<string | null>>();
 export const $statusLayerIdByEntity = createStore<
-  EntityStoreMap<number | null>
->(defaultEntityStatusLayerSelection);
-$statusLayerIdByEntity.on(onSelectSchoolStatusLayer, (state, layerId) => ({
+  EntityStoreMap<string | null>
+>({});
+$statusLayerIdByEntity.on(onSelectEntityStatusLayer, (state, payload) => ({
   ...state,
-  [$selectedEntityType.getState()]: layerId,
+  ...payload,
 }));
-$statusLayerIdByEntity.on(
-  onSelectEntityStatusLayer,
-  (state, payload) => ({
-    ...state,
-    ...payload
-  }),
-);
 export const $schoolStatusSelectedLayer = combine(
   $statusLayerIdByEntity,
   $selectedEntityType,
@@ -363,24 +354,23 @@ export const $schoolStatusSelectedLayer = combine(
     getEntityValue(
       statusLayerIdByEntity,
       selectedEntityType,
-      SCHOOL_STATUS_LAYER.id,
+      getEntityStatusId(selectedEntityType),
     ),
 );
 
+// TODO: remove onSelectMainLayer compatibility event when remaining tests move to onSelectEntityMainLayer.
 export const onSelectMainLayer = createEvent<number | null>();
-export const onSelectEntityMainLayer = createEvent<EntityStoreMap<number | null>>();
+export const onSelectEntityMainLayer =
+  createEvent<EntityStoreMap<number | null>>();
 
 export const $selectedLayerIdByEntity = createStore<
   EntityStoreMap<number | null>
 >({});
 
-$selectedLayerIdByEntity.on(
-  onSelectEntityMainLayer,
-  (state, payload) => ({
-    ...state,
-    ...payload,
-  }),
-);
+$selectedLayerIdByEntity.on(onSelectEntityMainLayer, (state, payload) => ({
+  ...state,
+  ...payload,
+}));
 export const $selectedLayerId = combine(
   $selectedLayerIdByEntity,
   $selectedEntityType,
@@ -388,7 +378,7 @@ export const $selectedLayerId = combine(
     getEntityValue(selectedLayerIdByEntity, selectedEntityType, null),
 );
 
-// TODO: remove this store and use $selectedLayerIdByEntity directly in the component by passing selectedEntityType as argument to get the value, this will avoid unnecessary store and combine
+// TODO: remove $selectedLayerId compatibility selector and use $selectedLayerIdByEntity directly by resolving the target entity type.
 export const $globalLayerData = $layersList.map(
   (layers) =>
     layers?.find(
@@ -402,12 +392,16 @@ export const $globalLayerId = $globalLayerData.map(
   (layer) => layer?.id ?? null,
 );
 
-// TODO: remove download code in condition when createdBy layer is fix, currently multiple not createdBy layers are there which causing an issue 
+// TODO: remove download code in condition when createdBy layer is fix, currently multiple not createdBy layers are there which causing an issue
 export const $globalLayerDataByEntity = $layersList.map((layers) => {
   const result = {} as EntityStoreMap<LayerType | null>;
   layers?.forEach((layer) => {
     getLayerEntityTypes(layer, []).forEach((entityType) => {
-      if (layer?.type === LayerTypeChoices.LIVE && !layer.created_by && layer.code === 'DOWNLOAD') {
+      if (
+        layer?.type === LayerTypeChoices.LIVE &&
+        !layer.created_by &&
+        layer.code === 'DOWNLOAD'
+      ) {
         result[entityType] = layer;
       }
     });
@@ -422,7 +416,7 @@ export const $downloadLayerData = $layersList.map(
         layer?.type === LayerTypeChoices.LIVE &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-        'connectivity_speed',
+          'connectivity_speed',
     ) ?? null,
 );
 export const $downloadLayerId = $downloadLayerData.map(
@@ -435,7 +429,7 @@ export const $coverageLayerData = $layersList.map(
         layer?.type === LayerTypeChoices.STATIC &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-        'coverage_type',
+          'coverage_type',
     ) ?? null,
 );
 export const $coverageLayerId = $coverageLayerData.map(
@@ -494,7 +488,8 @@ export const $currentDefaultLayerIdByEntity = combine(
     return Object.entries(activeLayerByCountriesByEntity).reduce(
       (acc, [entityType, activeLayers]) => {
         const layerId =
-          activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ?? globalLayerDataByEntity[entityType as EntityType]?.id;
+          activeLayers.countryDefaultLayerList[countryCode?.toLowerCase()] ??
+          globalLayerDataByEntity[entityType as EntityType]?.id;
         acc[entityType as EntityType] = activeLayers.list[
           layerId ?? ''
         ]?.activeCountries?.includes?.(countryCode?.toLowerCase())
@@ -767,8 +762,8 @@ const buildCurrentLayerLegends = ({
   };
   selectedLayerData?: LayerType | null;
   stylePaintData: typeof $stylePaintData extends { getState: () => infer T }
-  ? T
-  : never;
+    ? T
+    : never;
 }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -1354,37 +1349,49 @@ export const $connectivityColorsWithBenchmarkByEntity = combine(
   },
 );
 
-export const $connectivityAvailability = createStore<ConnectivityConfig | null>(
-  null,
-);
 export const $connectivityAvailabilityByEntity = createStore<
-  Partial<Record<EntityType, ConnectivityConfig>>
+  Partial<Record<EntityType, ConnectivityConfig | null>>
 >({});
+$connectivityAvailabilityByEntity.on(
+  getSchoolAvailableDates.doneData,
+  (state, payload) => ({
+    ...state,
+    [EntityType.SCHOOL]: payload,
+  }),
+);
+$connectivityAvailabilityByEntity.on(
+  getEntitiesAvailableDates.doneData,
+  (_, payload) => {
+    const payloadByEntity = payload as Partial<
+      Record<EntityType, ConnectivityConfig>
+    >;
+    const entityTypes = new Set<EntityType>([
+      ...$activeEntityTypes.getState(),
+      ...(Object.keys(payloadByEntity) as EntityType[]),
+    ]);
+    if (!entityTypes.size) {
+      entityTypes.add(EntityType.SCHOOL);
+    }
+    return Array.from(entityTypes).reduce(
+      (acc, entityType) => {
+        acc[entityType] = payloadByEntity[entityType] ?? null;
+        return acc;
+      },
+      {} as Partial<Record<EntityType, ConnectivityConfig | null>>,
+    );
+  },
+);
+export const $connectivityAvailability = combine(
+  $connectivityAvailabilityByEntity,
+  $selectedEntityType,
+  (connectivityAvailabilityByEntity, selectedEntityType) =>
+    connectivityAvailabilityByEntity[selectedEntityType] ?? null,
+);
 export const $connectivityYears = $connectivityAvailability.map((data) => {
   if (data?.years && data.years.length >= 2) {
     return data.years;
   }
   return null;
-});
-$connectivityAvailability.on(getSchoolAvailableDates.doneData, setPayload);
-$connectivityAvailabilityByEntity.on(
-  getEntitiesAvailableDates.doneData,
-  (_, payload) => {
-    return payload as Partial<Record<EntityType, ConnectivityConfig>>;
-  },
-);
-$connectivityAvailability.on(
-  getEntitiesAvailableDates.doneData,
-  (_, payload) => {
-    return (
-      (payload as Partial<Record<EntityType, ConnectivityConfig>>)?.[
-      $selectedEntityType.getState()
-      ] ?? null
-    );
-  },
-);
-$connectivityAvailability.on(changeSelectedEntityType, (_, entityType) => {
-  return $connectivityAvailabilityByEntity.getState()?.[entityType] ?? null;
 });
 
 export const $allLoadings = combine({
@@ -1485,18 +1492,11 @@ $coverage5g4g.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverage3g2g.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageNoCoverage.reset([resetCoverageFilterSelection, mapOverview.visible]);
 $coverageUnknown.reset([resetCoverageFilterSelection, mapOverview.visible]);
-$potentialCoverageOpenStatus.reset([
-  onSelectMainLayer,
-  onSelectEntityMainLayer,
-]);
-$schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerId);
+$potentialCoverageOpenStatus.reset(onSelectEntityMainLayer);
+$schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerIdByEntity);
 $isMenuOpen.reset(router.historyUpdated);
 // on history update, clear connectivity dates;
-$connectivityAvailability.reset(router.historyUpdated, $selectedLayerId);
-$connectivityAvailabilityByEntity.reset(
-  router.historyUpdated,
-  $selectedLayerId,
-);
+$connectivityAvailabilityByEntity.reset(router.historyUpdated);
 $countryLayerInfoByEntity.reset(router.historyUpdated);
 $coverageStatsByEntity.reset(router.historyUpdated);
 

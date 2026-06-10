@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Colors } from '~/@/map/map.constant';
+import { $selectedEntityType } from '~/@/entities';
 import {
   $globalStats,
   $schoolConnectedOpenStatus,
@@ -19,7 +20,7 @@ import {
   $currentLayerTypeUtils,
   $schoolStatusSelectedLayer,
   $staticLegendsSelected,
-  onSelectSchoolStatusLayer,
+  onSelectEntityStatusLayer,
   staticLegendsSelection,
 } from '~/@/sidebar/sidebar.model';
 import {
@@ -63,11 +64,14 @@ const LayerSchoolsConnectivityStatus = () => {
   const staticLegends = useStore($staticLegendsSelected);
   const connectivityStatusColor = useStore($stylePaintData);
   const schoolStatusSelected = useStore($schoolStatusSelectedLayer);
+  const selectedEntityType = useStore($selectedEntityType);
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
 
   const handleClicked = (buttonId: string) => {
     if (!schoolStatusSelected && buttonId) {
-      onSelectSchoolStatusLayer(SCHOOL_STATUS_LAYER.id);
+      onSelectEntityStatusLayer({
+        [selectedEntityType]: SCHOOL_STATUS_LAYER.id,
+      });
     }
     if (!isSchoolStatus) {
       staticLegendsSelection([buttonId]);

@@ -4,11 +4,15 @@ import { forwardRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $country } from '~/@/country/country.model';
-import { $selectedEntityType } from '~/@/entities';
 import {
-  $activeLayerByCountryCode,
+  $selectedEntityType,
+  getEntityMapValue,
+  isLayerForEntity,
+} from '~/@/entities';
+import {
+  $activeLayerByCountryCodeByEntity,
   $connectivityLayers,
-  $selectedLayerId,
+  $selectedLayerIdByEntity,
   onSelectEntityMainLayer,
 } from '~/@/sidebar/sidebar.model';
 import { LayerType, LayerTypeChoices } from '~/@/sidebar/types';
@@ -21,11 +25,20 @@ export default forwardRef(function LiveConnectivityType(
   ref,
 ) {
   const { t } = useTranslation();
-  const selectedIndicatorId = useStore($selectedLayerId);
   const selectedEntityType = useStore($selectedEntityType);
+  const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
+  const selectedIndicatorId = getEntityMapValue(
+    selectedLayerIdByEntity,
+    selectedEntityType,
+    null,
+  );
   const [selectedId, setSelectedId] = useState(selectedIndicatorId);
   const connectivityLayers = useStore($connectivityLayers);
-  const activeLayersByCountry = useStore($activeLayerByCountryCode);
+  const activeLayersByCountryByEntity = useStore(
+    $activeLayerByCountryCodeByEntity,
+  );
+  const activeLayersByCountry =
+    activeLayersByCountryByEntity[selectedEntityType] ?? {};
   const country = useStore($country) ?? { id: 0 };
   const handleConnectivityTypeChange = () => {
     onSelectEntityMainLayer({
@@ -54,23 +67,25 @@ export default forwardRef(function LiveConnectivityType(
           setSelectedId(id as number);
         }}
       >
-        {connectivityLayers.map((layer: LayerType) => {
-          if (
-            (!layer.created_by && layer.type === LayerTypeChoices.LIVE) ||
-            (layer.applicable_countries?.length &&
-              !layer.applicable_countries.includes(country.id))
-          )
-            return <></>;
-          return (
-            <RadioButton
-              key={layer.id}
-              labelText={layer.name}
-              value={layer.id}
-              id={`${layer.name}${layer.id}`}
-              disabled={!activeLayersByCountry[String(layer.id)]}
-            />
-          );
-        })}
+        {connectivityLayers
+          .filter((layer) => isLayerForEntity(layer, selectedEntityType))
+          .map((layer: LayerType) => {
+            if (
+              (!layer.created_by && layer.type === LayerTypeChoices.LIVE) ||
+              (layer.applicable_countries?.length &&
+                !layer.applicable_countries.includes(country.id))
+            )
+              return <></>;
+            return (
+              <RadioButton
+                key={layer.id}
+                labelText={layer.name}
+                value={layer.id}
+                id={`${layer.name}${layer.id}`}
+                disabled={!activeLayersByCountry[String(layer.id)]}
+              />
+            );
+          })}
       </RadioButtonGroup>
     </PopoverFilterContentConnectivitytype>
   );
