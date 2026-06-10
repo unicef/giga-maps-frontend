@@ -3,20 +3,26 @@ import { useTranslation } from 'react-i18next';
 
 import {
   $activeEntityTypes,
+  $isGlobalMode,
   $entityRegistry,
   changeActiveEntityTypes,
   changeSelectedEntityType,
   selectAllEntityTypes,
   toggleEntityType,
-  $isGlobalMode,
 } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { Button } from '~/components/ui/button';
 
-const base = 'px-4 py-2 rounded-lg border border-border';
-const active = '';
-const inactive = 'bg-background text-foreground hover:bg-background/80 hover:text-foreground';
+const base =
+  'h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5!';
+const active = 'border-primary';
+const inactive =
+  'border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground';
+
+const handleSelectAllEntityTypes = () => {
+  selectAllEntityTypes();
+};
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -25,6 +31,7 @@ export default function EntityTypeSelector() {
   const { t } = useTranslation();
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityRegistry = useStore($entityRegistry);
+  const isGlobalMode = useStore($isGlobalMode);
 
   const entityTypes = Object.entries(entityRegistry);
 
@@ -32,12 +39,7 @@ export default function EntityTypeSelector() {
     return null;
   }
 
-  const isGlobalMode = useStore($isGlobalMode);
   const allSelected = isGlobalMode;
-
-  const handleSelectAll = () => {
-    selectAllEntityTypes();
-  };
 
   const handleEntityClick = (entityType: EntityType, event: React.MouseEvent) => {
     if (isGlobalMode) {
@@ -58,7 +60,7 @@ export default function EntityTypeSelector() {
         variant="default"
         size="lg"
         className={`${base} ${allSelected ? active : inactive}`}
-        onClick={handleSelectAll}
+        onClick={handleSelectAllEntityTypes}
       >
         {t('all-entities', 'All entities')}
       </Button>
@@ -75,9 +77,11 @@ export default function EntityTypeSelector() {
             onClick={(event) => handleEntityClick(type as EntityType, event)}
           >
             <EntityLegendIndicator
+              className="ml-0!"
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
-              size={20}
+              fitToViewBox
+              size={11}
             />
             {t(config.slug)}
           </Button>
