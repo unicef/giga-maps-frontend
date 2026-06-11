@@ -1,5 +1,7 @@
-import { fetchConfig } from './airtable';
+import { fetchConfig, CountryConfig } from './country-config';
 import { SchoolStatsType } from '~/api/types';
+
+export type { CountryConfig };
 
 export type StatisticConfig = {
   key: keyof SchoolStatsType['statistics'];
@@ -52,22 +54,24 @@ const defaultStatistics: (keyof SchoolStatsType['statistics'])[] = [
 
 ];
 
-export type CountryConfig = {
-  countryCode: number;
-  enabledStatistics: (keyof SchoolStatsType['statistics'])[];
-};
-
 let dynamicConfig: CountryConfig[] | null = null;
+
+export const resetCountryConfigCache = () => {
+  dynamicConfig = null;
+};
 
 export const getStatisticsConfig = async (countryCode: number): Promise<StatisticConfig[]> => {
   if (dynamicConfig === null) {
-    dynamicConfig = await fetchConfig();
+    const config = await fetchConfig();
+    if (config.length > 0) {
+      dynamicConfig = config;
+    }
   }
 
-  const countryConfig = dynamicConfig.find(config => config.countryCode === countryCode);
+  const countryConfig = dynamicConfig?.find(
+    config => Number(config.countryCode) === Number(countryCode),
+  );
   const enabledKeys = countryConfig ? countryConfig.enabledStatistics : defaultStatistics;
 
   return allStatistics.filter(stat => enabledKeys.includes(stat.key));
 };
-
-
