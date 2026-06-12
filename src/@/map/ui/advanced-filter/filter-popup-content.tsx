@@ -9,14 +9,14 @@ import { useTranslation } from "react-i18next";
 import { $country, $countrySearchParams } from "~/@/country/country.model";
 import { $activeEntityTypes, $selectedEntityType, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
-import { Accordion, AccordionContent, AccordionItem } from '~/components/ui/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import { Badge } from '~/components/ui/badge';
 import { Separator } from '~/components/ui/separator';
 import { $isMobile } from "~/core/media-query";
 import { router } from "~/core/routes";
 
 import { $advanceFilterList } from "../../map.model";
-import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer, StyledAccordionTrigger, StyledFilterBadge } from "./filter-button.style";
+import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
 import MultiSelectDropdown from "./multi-select-dropdown";
 import RangeTextInput from './range-text-input';
 import SingleDropdown from "./single-dropdown";
@@ -187,7 +187,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          {t('filter-s')}
+          {t('filters')}
         </h3>
         <IconButton
           size="md"
@@ -205,8 +205,10 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           {activeFilterBadges.length > 0 && (
             <div style={{ padding: '0.5rem 10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {activeFilterBadges.map(({ entity, label, itemKey }) => (
-                <StyledFilterBadge
-                  key={itemKey}>
+                <Badge
+                  key={itemKey}
+                  className="flex! justify-between! bg-[#85FFBC]! h-[22px]! w-[210px]! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-black! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3!"
+                >
                   <span><strong>{entity}:</strong> {label}</span>
                   <button
                     type="button"
@@ -214,14 +216,14 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
                   >
                     <Close size={12} />
                   </button>
-                </StyledFilterBadge>
+                </Badge>
               ))}
-              <StyledFilterBadge
-                style={{ backgroundColor: '#393939', color: '#FFF', width: 'auto' }}
+              <Badge
+                className="flex! justify-between! bg-[#393939]! h-[22px]! w-auto! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-white! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3! cursor-pointer!"
                 onClick={(e) => clearAllBadges(e)}
               >
                 <span>{t('clear-all')}</span>
-              </StyledFilterBadge>
+              </Badge>
             </div>
           )}
 
@@ -236,10 +238,10 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
               className="flex! flex-col! gap-3!">
 
               <AccordionItem value={el}>
-                <StyledAccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!">
+                <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
                   <span >{t(DEFAULT_ENTITY_REGISTRY[el].filterEntityName)} {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
                   {openItems === el ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </StyledAccordionTrigger>
+                </AccordionTrigger>
                 <AccordionContent>
                   {advanceFilterList.filter(elAdvanceFilter => elAdvanceFilter.entity_type === el).map((item, index) => {
                     const Component = components[item.type] as React.JSXElementConstructor<any>;
