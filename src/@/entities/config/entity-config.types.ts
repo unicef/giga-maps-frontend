@@ -66,8 +66,6 @@ export interface EntityConfig {
 
   /** Whether this entity is active/visible in the UI */
   active: boolean;
-
-  filterEntityName: `entity_${EntityType}`;
   /** Map marker configuration */
   markerType: MarkerType;
   /** Symbol character (only used when markerType is 'symbol') */

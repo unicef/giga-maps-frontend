@@ -17,8 +17,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
   [EntityType.SCHOOL]: {
     type: EntityType.SCHOOL,
     displayName: 'Schools',
-    slug: 'schools',
-    filterEntityName: 'entity_school',
+    slug: 'school',
     icon: 'Education',
     active: true,
     visible: true,
@@ -54,7 +53,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     type: EntityType.HEALTH,
     displayName: 'Health centers',
     slug: 'health-centers',
-    filterEntityName: 'entity_health',
     icon: 'Hospital',
     active: true,
     visible: true,

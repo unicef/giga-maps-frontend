@@ -47,7 +47,7 @@ const SchoolConnectivityLayer = ({
   const connectedNumber = formatNumber(connectedValue, lng);
   const totalMappedNumber = formatNumber(totalMappedValue, lng);
   const isConnected = connectedValue > 0;
-  const entityLabel = t(selectedEntityConfig?.slug ?? 'schools');
+  const entityLabel = t(selectedEntityConfig?.slug ?? 'school', selectedEntityConfig?.slug ? undefined : { count: 2 });
   return (
     <div className="flex! h-full! flex-col! justify-between! max-md:h-auto!">
       <div>

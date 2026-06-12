@@ -115,19 +115,19 @@ const LegendPopup = ({
   const activeLayerSummaryItems: LegendSummaryItem[] = currentLayerLegends
     .values.length
     ? currentLayerLegends.values.map(({ key, label }) => ({
-        color:
-          currentLayerLegends.colors[key] ??
-          paintData[key] ??
-          paintData.unknown,
-        key,
-        label,
-      }))
+      color:
+        currentLayerLegends.colors[key] ??
+        paintData[key] ??
+        paintData.unknown,
+      key,
+      label,
+    }))
     : [
-        { color: paintData.good, key: 'good', label: t('high') },
-        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-        { color: paintData.bad, key: 'bad', label: t('low') },
-        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-      ];
+      { color: paintData.good, key: 'good', label: t('high') },
+      { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+      { color: paintData.bad, key: 'bad', label: t('low') },
+      { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+    ];
 
   const shouldShowMetricSummary = isGlobalView || isLive || isStatic;
   const shouldShowStatusSummary = isSchoolStatus;
@@ -283,7 +283,7 @@ const LegendPopup = ({
                   }
                   entityType={entityType}
                 />
-                <span>{t(config.slug)}</span>
+                <span>{t(config.slug, { count: 2 })}</span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',
@@ -362,8 +362,8 @@ const LegendPopup = ({
           'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
           'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
           !collapsed &&
-            renderedSectionCount === 1 &&
-            'w-[min(22rem,calc(100vw-1rem))]! max-w-[min(22rem,calc(100vw-1rem))]! max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
+          renderedSectionCount === 1 &&
+          'w-[min(22rem,calc(100vw-1rem))]! max-w-[min(22rem,calc(100vw-1rem))]! max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

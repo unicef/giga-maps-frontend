@@ -239,7 +239,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
 
               <AccordionItem value={el}>
                 <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
-                  <span >{t(DEFAULT_ENTITY_REGISTRY[el].filterEntityName)} {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
+                  <span >{t(DEFAULT_ENTITY_REGISTRY[el].slug, DEFAULT_ENTITY_REGISTRY[el].slug === (EntityType.SCHOOL as string) ? { count: 1 } : undefined)} {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
                   {openItems === el ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </AccordionTrigger>
                 <AccordionContent>
