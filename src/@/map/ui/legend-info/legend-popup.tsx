@@ -8,7 +8,7 @@ import {
   $entityConfigMap,
   $entityTypesFiltered,
 } from '~/@/entities/models/entity.model';
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
@@ -283,7 +283,7 @@ const LegendPopup = ({
                   }
                   entityType={entityType}
                 />
-                <span>{t(config.slug, { count: 2 })}</span>
+                <span>{t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}</span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',

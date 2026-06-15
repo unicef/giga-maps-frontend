@@ -46,7 +46,6 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     value: string;
   }>>({})
   const country = useStore($country);
-  console.log("activeEntityTypes", activeEntityTypes);
   // multiple key value pair
   const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
     setSelectedFields({

@@ -57,7 +57,7 @@ export const buildEntityCard = ({
     ],
     footerLogoVariant: config.sidebar.footerLogoVariant ?? 'default',
     showFooter: config.sidebar.footerLogoVariant === 'school',
-    title: t(config.slug),
+    title: t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined),
     value: entityType,
   };
 };

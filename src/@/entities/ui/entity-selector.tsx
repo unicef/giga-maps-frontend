@@ -10,7 +10,7 @@ import {
   selectAllEntityTypes,
   toggleEntityType,
 } from '~/@/entities/models/entity.model';
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { Button } from '~/components/ui/button';
 
@@ -79,7 +79,7 @@ export default function EntityTypeSelector() {
               entityType={type}
               size={20}
             />
-            {t(config.slug, { count: 2 })}
+            {t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}
           </Button>
         );
       })}
