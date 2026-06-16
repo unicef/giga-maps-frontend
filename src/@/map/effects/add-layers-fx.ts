@@ -18,13 +18,13 @@ import {
   filterConnectivityList,
   filterCoverageList,
   filterSchoolStatus,
-  getMapId,
   removePreviewsMapClickHandlers,
 } from '@/map/utils';
 
 import {
   CONNECTIVITY_STATUS_SOURCE,
   DEFAULT_SOURCE,
+  getEntitySelectedLayerId,
   getEntityStatusLayerId,
 } from '../map.constant';
 import {
@@ -123,14 +123,36 @@ export const changeStaticLayerFx = createEffect((props: ChangeLayerOptions) => {
 });
 
 export const updateCoverageFilter = createEffect(
-  ({ map, layerUtils, coverageFilter }: UpdateCoverageFilterOptions) => {
+  ({
+    map,
+    layerUtils,
+    coverageFilter,
+    coverageFilterByEntity,
+  }: UpdateCoverageFilterOptions) => {
     if (!map) return;
-    const { selectedLayerId } = layerUtils;
+    const { selectedLayerId, selectedLayerIdByEntity } = layerUtils;
+    const activeEntityTypes = Object.keys(
+      selectedLayerIdByEntity ?? { [EntityType.SCHOOL]: selectedLayerId },
+    ) as EntityType[];
     const { isStatic } = layerUtils.currentLayerTypeUtils;
-    const mapLayer = map.getLayer(getMapId(selectedLayerId));
-    if (isStatic && mapLayer) {
-      const filter = filterCoverageList(coverageFilter, true);
-      map.setFilter(getMapId(selectedLayerId), filter);
+    if (isStatic) {
+      for (const entityType of activeEntityTypes.length
+        ? activeEntityTypes
+        : [EntityType.SCHOOL]) {
+        const effectiveSelectedLayerId =
+          selectedLayerIdByEntity?.[entityType] ?? selectedLayerId;
+        const layerId = getEntitySelectedLayerId(
+          entityType,
+          effectiveSelectedLayerId,
+        );
+        const mapLayer = map.getLayer(layerId);
+        if (!mapLayer) continue;
+        const filter = filterCoverageList(
+          coverageFilterByEntity?.[entityType] ?? coverageFilter,
+          true,
+        );
+        map.setFilter(layerId, filter);
+      }
     }
   },
 );
@@ -140,22 +162,38 @@ export const updateConnectivityFilter = createEffect(
     map,
     layerUtils,
     connectivitySpeedFilter,
+    connectivitySpeedFilterByEntity,
     mapRoute,
   }: UpdateConnectivityFilterOptions) => {
     if (!map) return;
-    const { selectedLayerId, globalLayerId } = layerUtils;
-    const effectiveSelectedLayerId = mapRoute.map
-      ? globalLayerId
-      : selectedLayerId;
+    const { selectedLayerId, globalLayerId, selectedLayerIdByEntity } =
+      layerUtils;
+    const activeEntityTypes = Object.keys(
+      selectedLayerIdByEntity ?? { [EntityType.SCHOOL]: selectedLayerId },
+    ) as EntityType[];
     const isLive = mapRoute.map || layerUtils.currentLayerTypeUtils.isLive;
-    const mapLayer = map.getLayer(getMapId(effectiveSelectedLayerId));
-    if (isLive && mapLayer) {
-      const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
-      const filter = filterConnectivityList(
-        connectivitySpeedFilter,
-        isDynamicLayer,
-      );
-      map.setFilter(getMapId(effectiveSelectedLayerId), filter);
+    if (isLive) {
+      for (const entityType of activeEntityTypes.length
+        ? activeEntityTypes
+        : [EntityType.SCHOOL]) {
+        const effectiveSelectedLayerId = mapRoute.map
+          ? globalLayerId
+          : (selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
+        const mapLayer = map.getLayer(
+          getEntitySelectedLayerId(entityType, effectiveSelectedLayerId),
+        );
+        if (!mapLayer) continue;
+        const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
+        const filter = filterConnectivityList(
+          connectivitySpeedFilterByEntity?.[entityType] ??
+            connectivitySpeedFilter,
+          isDynamicLayer,
+        );
+        map.setFilter(
+          getEntitySelectedLayerId(entityType, effectiveSelectedLayerId),
+          filter,
+        );
+      }
     }
   },
 );

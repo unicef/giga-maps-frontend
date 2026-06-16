@@ -63,11 +63,13 @@ const LegendPopup = ({
   const entityTypesFiltered = useStore($entityTypesFiltered);
   const {
     currentLayerLegends,
+    currentLayerLegendsByEntity,
     currentLayerTypeUtils,
+    currentLayerTypeUtilsByEntity,
     globalLayerData,
     selectedLayerData,
+    selectedLayerDataByEntity,
   } = useStore($layerUtils);
-  const { isStatic, isLive, isSchoolStatus } = currentLayerTypeUtils;
   const isMobile = useStore($isMobile);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
@@ -98,7 +100,16 @@ const LegendPopup = ({
   }, [visibleLegendEntityTypes]);
 
   const legendMetricTitle = t('internet-quality');
-  const metricLayerData = isGlobalView ? globalLayerData : selectedLayerData;
+  const activeLayerTypeUtils =
+    currentLayerTypeUtilsByEntity[activeTab] ?? currentLayerTypeUtils;
+  const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils;
+  const activeEntityLayerData =
+    selectedLayerDataByEntity[activeTab] ?? selectedLayerData;
+  const activeEntityLayerLegends =
+    currentLayerLegendsByEntity[activeTab] ?? currentLayerLegends;
+  const metricLayerData = isGlobalView
+    ? globalLayerData
+    : activeEntityLayerData;
   const legendMetricSubtitle = isStatic
     ? (metricLayerData?.name ?? t('coverage-data'))
     : (metricLayerData?.name ?? t('average-download-speed'));
@@ -112,11 +123,11 @@ const LegendPopup = ({
     }),
   );
 
-  const activeLayerSummaryItems: LegendSummaryItem[] = currentLayerLegends
+  const activeLayerSummaryItems: LegendSummaryItem[] = activeEntityLayerLegends
     .values.length
-    ? currentLayerLegends.values.map(({ key, label }) => ({
+    ? activeEntityLayerLegends.values.map(({ key, label }) => ({
       color:
-        currentLayerLegends.colors[key] ??
+        activeEntityLayerLegends.colors[key] ??
         paintData[key] ??
         paintData.unknown,
       key,
@@ -130,9 +141,9 @@ const LegendPopup = ({
     ];
 
   const shouldShowMetricSummary = isGlobalView || isLive || isStatic;
-  const shouldShowStatusSummary = isSchoolStatus;
-  const renderedSectionCount =
-    Number(isSchoolStatus) + Number(isGlobalView || isLive) + Number(isStatic);
+  const shouldShowGlobalSchoolStatus = isGlobalView;
+  const shouldShowStatusSummary =
+    isSchoolStatus || shouldShowGlobalSchoolStatus;
   const liveMetricFill =
     paintData[ConnectivityStatusDistribution.connected as string];
 
@@ -314,9 +325,10 @@ const LegendPopup = ({
         className="flex! flex-wrap! gap-4! bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
         data-testid="legend-expanded-view"
       >
-        {isSchoolStatus ? (
+        {shouldShowStatusSummary ? (
           <SchoolStatusLegend
             entityType={activeTab}
+            forceVisible={shouldShowGlobalSchoolStatus}
             shouldShowControls={shouldShowControls}
             statusTitle={legendStatusTitle}
           />
@@ -357,16 +369,14 @@ const LegendPopup = ({
       <PopoverContent
         align="end"
         className={cn(
-          'z-6002! overflow-visible! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
+          'z-6002! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
           'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
           'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
           'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
-          !collapsed &&
-          renderedSectionCount === 1 &&
-          'w-[min(22rem,calc(100vw-1rem))]! max-w-[min(22rem,calc(100vw-1rem))]! max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
+        onInteractOutside={(event) => event.preventDefault()}
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="left"
         sideOffset={12}

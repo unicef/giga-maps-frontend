@@ -1,3 +1,4 @@
+// this is depricated component, will be removed in future, please use legend benchmark dropdown instead of this component for connectivity benchmark selection in layer filter modal
 import { RadioButton, RadioButtonGroup, Tooltip } from "@carbon/react";
 import { useStore } from 'effector-react';
 import { forwardRef, useEffect, useState } from 'react'

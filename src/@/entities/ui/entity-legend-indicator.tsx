@@ -8,17 +8,22 @@ type EntityLegendIndicatorProps = {
   className?: string;
   color: string;
   entityType: string;
+  fitToViewBox?: boolean;
   glowColor?: string;
   size?: number;
 };
 
-type GlyphOffset = {
+type GlyphMetrics = {
+  boundsHeight: number;
+  boundsWidth: number;
+  boundsX: number;
+  boundsY: number;
   x: number;
   y: number;
 };
 
 const FALLBACK_FONT_FAMILY = '"Open Sans", sans-serif';
-const glyphOffsetCache = new Map<string, GlyphOffset>();
+const glyphMetricsCache = new Map<string, GlyphMetrics>();
 
 let measurementContext: CanvasRenderingContext2D | null | undefined;
 let measurementFontFamily: string | undefined;
@@ -53,39 +58,57 @@ const getMeasurementFontFamily = () => {
   return measurementFontFamily;
 };
 
-const getGlyphOffset = (symbol: string, glyphSize: number): GlyphOffset => {
+const getGlyphMetrics = (symbol: string, glyphSize: number): GlyphMetrics => {
   const context = getMeasurementContext();
   const fontFamily = getMeasurementFontFamily();
   const cacheKey = `${fontFamily}:${glyphSize}:${symbol}`;
-  const cachedOffset = glyphOffsetCache.get(cacheKey);
+  const cachedMetrics = glyphMetricsCache.get(cacheKey);
 
-  if (cachedOffset) {
-    return cachedOffset;
+  if (cachedMetrics) {
+    return cachedMetrics;
   }
 
   if (!context) {
-    const fallbackOffset = { x: 0, y: 0 };
-    glyphOffsetCache.set(cacheKey, fallbackOffset);
-    return fallbackOffset;
+    const fallbackMetrics = {
+      boundsHeight: glyphSize,
+      boundsWidth: glyphSize,
+      boundsX: 0,
+      boundsY: 0,
+      x: 0,
+      y: 0,
+    };
+    glyphMetricsCache.set(cacheKey, fallbackMetrics);
+    return fallbackMetrics;
   }
 
   context.font = `${glyphSize}px ${fontFamily}`;
 
   const metrics = context.measureText(symbol);
-  const glyphOffset = {
-    x: (metrics.actualBoundingBoxLeft - metrics.actualBoundingBoxRight) / 2,
-    y: (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2,
+  const left = metrics.actualBoundingBoxLeft || 0;
+  const right = metrics.actualBoundingBoxRight || metrics.width || glyphSize;
+  const ascent = metrics.actualBoundingBoxAscent || glyphSize;
+  const descent = metrics.actualBoundingBoxDescent || 0;
+  const boundsWidth = Math.max(left + right, 1);
+  const boundsHeight = Math.max(ascent + descent, 1);
+  const glyphMetrics = {
+    boundsHeight,
+    boundsWidth,
+    boundsX: -left,
+    boundsY: -ascent,
+    x: (left - right) / 2,
+    y: (ascent - descent) / 2,
   };
 
-  glyphOffsetCache.set(cacheKey, glyphOffset);
+  glyphMetricsCache.set(cacheKey, glyphMetrics);
 
-  return glyphOffset;
+  return glyphMetrics;
 };
 
 const EntityLegendIndicator = ({
   className,
   color,
   entityType,
+  fitToViewBox = false,
   glowColor,
   size = 16,
 }: EntityLegendIndicatorProps) => {
@@ -102,8 +125,41 @@ const EntityLegendIndicator = ({
   } as CSSProperties;
 
   const renderGlyph = (glyphSize: number, glyphColor: string, extraClass: string = '') => {
-    const glyphOffset = getGlyphOffset(symbol, glyphSize);
     const fontFamily = getMeasurementFontFamily();
+
+    if (fitToViewBox) {
+      const baseMetrics = getGlyphMetrics(symbol, glyphSize);
+      const targetScale = glyphSize / Math.max(baseMetrics.boundsWidth, baseMetrics.boundsHeight);
+      const fittedFontSize = glyphSize * targetScale;
+      const glyphMetrics = getGlyphMetrics(symbol, fittedFontSize);
+      const centerX = glyphMetrics.boundsX + (glyphMetrics.boundsWidth / 2);
+      const centerY = glyphMetrics.boundsY + (glyphMetrics.boundsHeight / 2);
+
+      return (
+        <svg
+          className={cn('block! shrink-0! overflow-visible!', extraClass)}
+          focusable="false"
+          style={{
+            height: `${glyphSize}px`,
+            width: `${glyphSize}px`,
+          }}
+          viewBox={`0 0 ${glyphSize} ${glyphSize}`}
+        >
+          <text
+            fill={glyphColor}
+            fontFamily={fontFamily}
+            fontSize={fittedFontSize}
+            textAnchor="start"
+            x={(glyphSize / 2) - centerX}
+            y={(glyphSize / 2) - centerY}
+          >
+            {symbol}
+          </text>
+        </svg>
+      );
+    }
+
+    const glyphMetrics = getGlyphMetrics(symbol, glyphSize);
 
     return (
       <svg
@@ -120,8 +176,8 @@ const EntityLegendIndicator = ({
           fontFamily={fontFamily}
           fontSize={glyphSize}
           textAnchor="start"
-          x={(glyphSize / 2) + glyphOffset.x}
-          y={(glyphSize / 2) + glyphOffset.y}
+          x={(glyphSize / 2) + glyphMetrics.x}
+          y={(glyphSize / 2) + glyphMetrics.y}
         >
           {symbol}
         </text>

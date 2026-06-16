@@ -14,7 +14,7 @@ import {
   $layerUtils,
   $selectedLayerIdByEntity,
   $statusLayerIdByEntity,
-  checkConnectivityBenchmark,
+  checkEntityConnectivityBenchmark,
   onSelectEntityMainLayer,
   onSelectEntityStatusLayer,
   resetCoverageFilterSelection,
@@ -87,10 +87,10 @@ const GigaLayerButtonIcons = ({
     staticPopupActiveLayer;
   const targetSelectedLayerId = entityType
     ? getEntityMapValue(
-      selectedLayerIdByEntity,
-      targetEntityType,
-      targetDefaultLayerId,
-    )
+        selectedLayerIdByEntity,
+        targetEntityType,
+        targetDefaultLayerId,
+      )
     : selectedLayerId;
   const targetLayerData = layers.find(
     (layer) => layer.id === targetSelectedLayerId,
@@ -104,7 +104,10 @@ const GigaLayerButtonIcons = ({
       if (targetSelectedLayerId !== prevSelectedId) {
         selectedId = prevSelectedId;
         if (selectedId) {
-          checkConnectivityBenchmark(selectedId);
+          checkEntityConnectivityBenchmark({
+            entityType: targetEntityType,
+            layerId: selectedId,
+          });
         }
       }
       onSelectEntityMainLayer({
@@ -243,7 +246,7 @@ const GigaLayerButtonIcons = ({
           disabled={
             !targetStaticPopupActiveLayer ||
             !targetActiveLayerByCountryCode[
-            String(targetStaticPopupActiveLayer?.id)
+              String(targetStaticPopupActiveLayer?.id)
             ]
           }
           isActive={targetStaticPopupActiveLayer?.id === targetSelectedLayerId}

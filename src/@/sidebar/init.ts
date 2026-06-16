@@ -30,14 +30,13 @@ import {
 } from '~/@/map/map.model';
 import {
   $connectivityBenchMark,
+  $connectivityBenchMarkByEntity,
   $connectivityLayers,
-  $connectivitySpeedGood,
-  $connectivitySpeedModerate,
-  $connectivitySpeednoInternet,
-  $connectivitySpeedUnknown,
+  $connectivitySpeedFilterByEntity,
   $coverage3g2g,
   $coverage5g4g,
   $coverageNoCoverage,
+  $coverageStatusAllByEntity,
   $coverageUnknown,
   $currentDefaultLayerIdByEntity,
   $currentLayerTypeUtils,
@@ -54,6 +53,8 @@ import {
   $selectedLayerIdByEntity,
   $statusLayerIdByEntity,
   changeConnectivityBenchmark,
+  changeEntityConnectivityBenchmark,
+  checkEntityConnectivityBenchmark,
   checkConnectivityBenchmark,
   onSchoolUncheck,
   onSelectEntityMainLayer,
@@ -116,12 +117,16 @@ export const $connectivityFilter = combine(
   (range, interval) => ({ isWeek: interval === IntervalUnit.week, range }),
 );
 
-export const $connectivitySpeedFilter = combine({
-  good: $connectivitySpeedGood,
-  moderate: $connectivitySpeedModerate,
-  bad: $connectivitySpeednoInternet,
-  unknown: $connectivitySpeedUnknown,
-});
+export const $connectivitySpeedFilter = combine(
+  $connectivitySpeedFilterByEntity,
+  $selectedEntityType,
+  (state, selectedEntityType) => ({
+    good: state[selectedEntityType]?.good ?? true,
+    moderate: state[selectedEntityType]?.moderate ?? true,
+    bad: state[selectedEntityType]?.bad ?? true,
+    unknown: state[selectedEntityType]?.unknown ?? true,
+  }),
+);
 
 export const $coverageFilter = combine({
   good: $coverage5g4g,
@@ -129,6 +134,7 @@ export const $coverageFilter = combine({
   bad: $coverageNoCoverage,
   unknown: $coverageUnknown,
 });
+export const $coverageFilterByEntity = $coverageStatusAllByEntity;
 
 // on school remove from list;
 sample({
@@ -160,6 +166,7 @@ sample({
 // live layer effect
 const sourceForInfo = combine({
   connectivityBenchMark: $connectivityBenchMark,
+  connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   country: $country,
   interval: $historyInterval,
   intervalByEntity: $historyIntervalByEntity,
@@ -190,6 +197,7 @@ export const getCurrentQueryId = ({
   intervalUnitByEntity,
   layersUtils,
   connectivityBenchMark,
+  connectivityBenchMarkByEntity,
   country,
   admin1Id,
   isSchoolClicked,
@@ -271,6 +279,7 @@ export const getCurrentEntityLayerInfoQuery = ({
   admin1Id,
   allowDublicateSchoolIds,
   connectivityBenchMark,
+  connectivityBenchMarkByEntity,
   country,
   countrySearch,
   interval,
@@ -329,7 +338,14 @@ export const getCurrentEntityLayerInfoQuery = ({
     if (entityLayerId) {
       params.set(`${prefix}layer_id`, String(entityLayerId));
     }
-    params.set(`${prefix}benchmark`, connectivityBenchMark);
+    params.set(
+      `${prefix}benchmark`,
+      getEntityMapValue(
+        connectivityBenchMarkByEntity,
+        entityType,
+        connectivityBenchMark,
+      ),
+    );
     params.set(
       `${prefix}include_same_location`,
       String(allowDublicateSchoolIds),
@@ -454,7 +470,7 @@ sample({
     $admin1Id,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
-    $connectivityBenchMark,
+    $connectivityBenchMarkByEntity,
     debounce($historyIntervalByEntity, { timeout: 500 }),
     $historyIntervalUnitByEntity,
   ]),
@@ -485,7 +501,7 @@ sample({
     $countrySearchString,
     $countryId,
     $admin1Id,
-    $connectivityBenchMark,
+    $connectivityBenchMarkByEntity,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
   ]),
@@ -529,7 +545,7 @@ sample({
     $selectedLayerIdByEntity,
     $historyIntervalByEntity,
     mapSchools.router.historyUpdate,
-    $connectivityBenchMark,
+    $connectivityBenchMarkByEntity,
   ]),
   source: sourceForInfo,
   fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
@@ -714,7 +730,7 @@ sample({
     return currentDefaultLayerIdByEntity;
   },
   filter: ({ loadedLayersAndCountries: isLoaded }) => isLoaded,
-  target: createEffect(() => { }), // temporary disabled
+  target: createEffect(() => {}), // temporary disabled
 });
 
 // On first country code update, preserve URL layer value if present
@@ -780,9 +796,9 @@ sample({
     )
       ? selectedLayerIdByEntity
       : {
-        ...selectedLayerIdByEntity,
-        [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
-      };
+          ...selectedLayerIdByEntity,
+          [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
+        };
   },
   target: $selectedLayerIdByEntity,
 });
@@ -816,6 +832,7 @@ sample({
 
 const benchmarkSource = combine({
   connectivityBenchMark: $connectivityBenchMark,
+  connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   countryDefaultNational: $countryDefaultNational,
   country: $country,
   currentLayerTypeUtils: $currentLayerTypeUtils,
@@ -824,27 +841,52 @@ const benchmarkSource = combine({
 });
 const benchmarkFn =
   (isClockId: boolean) =>
-    (
-      {
-        countryDefaultNational = {},
-        selectedEntityType,
-        selectedLayerIdByEntity,
-        connectivityBenchMark,
-      }: ReturnType<typeof benchmarkSource.getState>,
-      clockLayerId: unknown,
-    ) => {
-      let currentBenchmark = connectivityBenchMark;
-      const layerId =
-        isClockId && typeof clockLayerId === 'number'
-          ? clockLayerId
-          : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
-      if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
-        currentBenchmark = ConnectivityBenchMarks.national;
-      } else {
-        currentBenchmark = ConnectivityBenchMarks.global;
-      }
-      return currentBenchmark;
-    };
+  (
+    {
+      countryDefaultNational = {},
+      selectedEntityType,
+      selectedLayerIdByEntity,
+      connectivityBenchMark,
+      connectivityBenchMarkByEntity,
+    }: ReturnType<typeof benchmarkSource.getState>,
+    clockLayerId: unknown,
+  ) => {
+    let currentBenchmark = getEntityMapValue(
+      connectivityBenchMarkByEntity,
+      selectedEntityType,
+      connectivityBenchMark,
+    );
+    const layerId =
+      isClockId && typeof clockLayerId === 'number'
+        ? clockLayerId
+        : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
+    if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+      currentBenchmark = ConnectivityBenchMarks.national;
+    } else {
+      currentBenchmark = ConnectivityBenchMarks.global;
+    }
+    return currentBenchmark;
+  };
+const entityBenchmarkFn = (
+  {
+    countryDefaultNational = {},
+    connectivityBenchMark,
+    connectivityBenchMarkByEntity,
+  }: ReturnType<typeof benchmarkSource.getState>,
+  { entityType, layerId }: { entityType: EntityType; layerId: number },
+) => {
+  let currentBenchmark = getEntityMapValue(
+    connectivityBenchMarkByEntity,
+    entityType,
+    connectivityBenchMark,
+  );
+  if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+    currentBenchmark = ConnectivityBenchMarks.national;
+  } else {
+    currentBenchmark = ConnectivityBenchMarks.global;
+  }
+  return { entityType, benchmark: currentBenchmark };
+};
 
 // default national for a country and layer
 sample({
@@ -861,6 +903,13 @@ sample({
   fn: benchmarkFn(true),
   filter: ({ country }) => !!country,
   target: changeConnectivityBenchmark,
+});
+sample({
+  clock: checkEntityConnectivityBenchmark,
+  source: benchmarkSource,
+  fn: entityBenchmarkFn,
+  filter: ({ country }) => !!country,
+  target: changeEntityConnectivityBenchmark,
 });
 
 sample({

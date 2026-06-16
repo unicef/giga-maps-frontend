@@ -8,12 +8,13 @@ import {
   $countryBenchmark,
   $countryConnectivityNames,
 } from '~/@/country/country.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
 import {
   $benchmarkNamesAllLayers,
-  $connectivityBenchMark,
+  $connectivityBenchMarkByEntity,
   $layerUtils,
-  changeConnectivityBenchmark,
+  changeEntityConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';
 import {
   Popover,
@@ -29,6 +30,7 @@ import { $mapRoutes } from '~/core/routes';
 import { cn } from '~/lib/cn';
 
 type LegendBenchmarkDropdownProps = {
+  entityType: EntityType;
   interactive: boolean;
   staticLabel?: string;
   title?: string;
@@ -56,6 +58,7 @@ const SelectedOptionIcon = () => (
 );
 
 const LegendBenchmarkDropdown = ({
+  entityType,
   interactive,
   staticLabel,
   title,
@@ -63,21 +66,27 @@ const LegendBenchmarkDropdown = ({
 }: LegendBenchmarkDropdownProps) => {
   const { t } = useTranslation();
   const { globalLayerId, selectedLayerId } = useStore($layerUtils);
+  const { selectedLayerIdByEntity } = useStore($layerUtils);
   const { map } = useStore($mapRoutes);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
-  const connectivityBenchMark = useStore($connectivityBenchMark);
+  const connectivityBenchMark =
+    useStore($connectivityBenchMarkByEntity)[entityType] ??
+    ConnectivityBenchMarks.global;
   const countryConnectivityNames = useStore($countryConnectivityNames);
   const countryBenchmark = useStore($countryBenchmark);
   const countryActiveLayersDataById = useStore($countryActiveLayersDataById);
   const [open, setOpen] = useState(false);
 
-  const layerId = (map ? globalLayerId : selectedLayerId) ?? 0;
+  const layerId =
+    (map
+      ? globalLayerId
+      : (selectedLayerIdByEntity[entityType] ?? selectedLayerId)) ?? 0;
   const currentLegendConfig = (countryActiveLayersDataById[layerId]
     ?.legend_configs ?? {}) as Record<string, unknown>;
   const isCountryNationalBenchmark =
     !!countryBenchmark[layerId] || Object.keys(currentLegendConfig).length > 0;
-  const globalLabel = benchmarkNames[layerId] ?? t('global-benchmark');
-  const nationalLabel = countryConnectivityNames?.[layerId] ?? t('national');
+  const globalLabel = benchmarkNames[layerId] || t('global-benchmark');
+  const nationalLabel = countryConnectivityNames?.[layerId] || t('national');
 
   const options = useMemo(
     () => [
@@ -108,14 +117,14 @@ const LegendBenchmarkDropdown = ({
   const triggerLabel = valueLabel
     ? `${selectedLabel}: ${valueLabel}`
     : selectedLabel;
-  const nonInteractiveLabel = staticLabel ?? `${triggerLabel} 20Mbps`;
+  const nonInteractiveLabel = staticLabel ?? triggerLabel;
 
   const handleSelect = (
     nextValue: ConnectivityBenchMarks,
     disabled: boolean,
   ) => {
     if (map || disabled) return;
-    changeConnectivityBenchmark(nextValue);
+    changeEntityConnectivityBenchmark({ entityType, benchmark: nextValue });
     setOpen(false);
   };
 
