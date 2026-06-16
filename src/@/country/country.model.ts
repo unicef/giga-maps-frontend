@@ -8,8 +8,8 @@ import {
 import { $isMobile } from '~/core/media-query';
 import { mapCountry, mapOverview, mapSchools } from '~/core/routes';
 import { setPayload } from '~/lib/effector-kit';
-
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+
 import { PointCoordinates } from "../../core/global-types";
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
@@ -89,12 +89,12 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
   const searchEntires = searchParams.entries();
   for (const [key, value] of searchEntires) {
     try {
-      const [start, field, filter] = key.split('__');
-      if (start === 'filter' && field && filter) {
+      const [start, entity, field, filter] = key.split('__');
+      if (start === 'filter' && entity && field && filter) {
         if (!field.startsWith('ignore_')) {
-          filterSearchParams.set(`${field}__${filter}`, value);
+          filterSearchParams.set(`${entity}__${field}__${filter}`, value);
         }
-        urlFieldList[`${field}__${filter}`] = { field, filter, value };
+        urlFieldList[`${entity}__${field}__${filter}`] = { entity, field, filter, value };
         if (!field.startsWith('ignore_')) {
           actualSelectedCount++;
         }

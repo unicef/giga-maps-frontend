@@ -1,17 +1,26 @@
-import { Button, Form, PopoverContent, IconButton } from "@carbon/react";
+import { color } from '@carbon/charts';
 import { Close } from '@carbon/icons-react'
+import { Button, Form, IconButton, PopoverContent } from "@carbon/react";
 import { useStore } from 'effector-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
-import SingleDropdown from "./single-dropdown";
-import MultiSelectDropdown from "./multi-select-dropdown";
-import TextField from "./text-input";
-import { $advanceFilterList } from "../../map.model";
-import { $country, $countrySearchParams } from "~/@/country/country.model";
-import RangeTextInput from './range-text-input';
-import { router } from "~/core/routes";
-import { $isMobile } from "~/core/media-query";
 import { useTranslation } from "react-i18next";
+
+import { $country, $countrySearchParams } from "~/@/country/country.model";
+import { $activeEntityTypes, $selectedEntityType, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
+import { EntityType } from '~/@/entities/types/entity-types';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
+import { Badge } from '~/components/ui/badge';
+import { Separator } from '~/components/ui/separator';
+import { $isMobile } from "~/core/media-query";
+import { router } from "~/core/routes";
+
+import { $advanceFilterList } from "../../map.model";
+import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
+import MultiSelectDropdown from "./multi-select-dropdown";
+import RangeTextInput from './range-text-input';
+import SingleDropdown from "./single-dropdown";
+import TextField from "./text-input";
 
 export const components = {
   'DROPDOWN': SingleDropdown,
@@ -25,15 +34,18 @@ export const components = {
 const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
   const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
+
   const isMobile = useStore($isMobile);
+  const selectedEntityType = useStore($selectedEntityType);
+  const activeEntityTypes = useStore($activeEntityTypes);
   const advanceFilterList = useStore($advanceFilterList);
   const { urlFieldList } = useStore($countrySearchParams);
+  const [openItems, setOpenItems] = useState<EntityType | null>(null);
   const [selectedFields, setSelectedFields] = useState<Record<string, string | {
     none_range: boolean;
     value: string;
   }>>({})
   const country = useStore($country);
-
   // multiple key value pair
   const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
     setSelectedFields({
@@ -49,7 +61,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       value: string;
     }>;
     advanceFilterList?.forEach(item => {
-      const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
+      const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
       const field = urlFieldList[itemKey];
       const extraItemKey = `ignore_${itemKey}`;
       const extraField = urlFieldList[extraItemKey];
@@ -61,7 +73,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           value: field.value
         } : field.value
       } else {
-        selectedFields[`${item.column_configuration.name}__${item.query_param_filter}`] = ''
+        selectedFields[`${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
       if (extraField) {
         selectedFields[`${extraItemKey}`] = extraField.value
@@ -115,13 +127,66 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     setOpen(false)
   }
 
+  const entityWiseSelectedFilterCount = useMemo(() => {
+    return activeEntityTypes.reduce((acc, elEntity) => {
+      acc[elEntity] = Object.keys(selectedFields).filter((elSelectedField: string) => elSelectedField.startsWith(elEntity + "__")).length;
+      return acc;
+    }, {} as Record<string, number>)
+  }, [activeEntityTypes, selectedFields])
+
+  const activeFilterBadges = useMemo(() => {
+    if (Object.keys(selectedFields).length === 0) return [];
+    const filteredAdvanceFilterList = advanceFilterList
+      .filter(item => {
+        const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+        const val = selectedFields[itemKey];
+        if (val) {
+          return true
+        };
+        return false;
+      });
+
+    const mapedfilteredAdvanceFilterList = filteredAdvanceFilterList.map(item => ({
+      entity: item.entity_type,
+      label: item.name,
+      itemKey: `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`,
+    }));
+
+
+    return mapedfilteredAdvanceFilterList;
+  }, [advanceFilterList, selectedFields]);
+
+  const clearSingleBadge = (itemKey: string, e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedFields(prev => {
+      const next = { ...prev };
+      next[itemKey] = "";
+      next[`ignore_${itemKey}`] = "";
+      return next;
+    });
+  };
+
+  const clearAllBadges = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedFields(prev => {
+      const next = { ...prev };
+      activeFilterBadges.forEach(({ itemKey }) => {
+        next[itemKey] = "";
+        next[`ignore_${itemKey}`] = "";
+      });
+      return next;
+    });
+  };
+
   // const items = ['All data layers']
   if (!isReady) return null;
   return (
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          {t('filter-schools-by')}
+          {t('filters')}
         </h3>
         <IconButton
           size="md"
@@ -136,16 +201,64 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       </FilterHeaderWrapper>
       <Form aria-label="filter-form">
         <ScrollableContainer>
-          {advanceFilterList.map((item, index) => {
-            const Component = components[item.type] as React.JSXElementConstructor<any>;
-            if (!Component) return null;
-            const itemKey = `${item.column_configuration.name}__${item.query_param_filter}`;
-            const extraItemKey = `ignore_${itemKey}`;
-            const extraValue = selectedFields[extraItemKey];
-            return (
-              <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
-            )
+          {activeFilterBadges.length > 0 && (
+            <div style={{ padding: '0.5rem 10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {activeFilterBadges.map(({ entity, label, itemKey }) => (
+                <Badge
+                  key={itemKey}
+                  className="flex! justify-between! bg-[#85FFBC]! h-[22px]! w-[210px]! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-black! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3!"
+                >
+                  <span><strong>{entity}:</strong> {label}</span>
+                  <button
+                    type="button"
+                    onClick={(e: any) => clearSingleBadge(itemKey, e)}
+                  >
+                    <Close size={12} />
+                  </button>
+                </Badge>
+              ))}
+              <Badge
+                className="flex! justify-between! bg-[#393939]! h-[22px]! w-auto! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-white! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3! cursor-pointer!"
+                onClick={(e) => clearAllBadges(e)}
+              >
+                <span>{t('clear-all')}</span>
+              </Badge>
+            </div>
+          )}
+
+          {activeEntityTypes.sort((a, b) => a < b ? 1 : -1).map((el, index) => {
+            return (<><Accordion type="single"
+              collapsible
+              key={'accordian' + el}
+              value={openItems === el ? el : undefined}
+              onValueChange={(eventAccordion: EntityType) => {
+                setOpenItems(eventAccordion || null);
+              }}
+              className="flex! flex-col! gap-3!">
+
+              <AccordionItem value={el}>
+                <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
+                  <span >{t(DEFAULT_ENTITY_REGISTRY[el].slug, DEFAULT_ENTITY_REGISTRY[el].slug === (EntityType.SCHOOL as string) ? { count: 1 } : undefined)} {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
+                  {openItems === el ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </AccordionTrigger>
+                <AccordionContent>
+                  {advanceFilterList.filter(elAdvanceFilter => elAdvanceFilter.entity_type === el).map((item, index) => {
+                    const Component = components[item.type] as React.JSXElementConstructor<any>;
+                    if (!Component) return null;
+                    const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+                    const extraItemKey = `ignore_${itemKey}`;
+                    const extraValue = selectedFields[extraItemKey];
+                    return (
+                      <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
+                    )
+                  })}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+              {index < activeEntityTypes.length - 1 && <Separator className="my-2!" />}
+            </>)
           })}
+
         </ScrollableContainer>
         <FilterActionButtonWrapper>
           <Button

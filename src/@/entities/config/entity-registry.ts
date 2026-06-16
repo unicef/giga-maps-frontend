@@ -17,7 +17,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
   [EntityType.SCHOOL]: {
     type: EntityType.SCHOOL,
     displayName: 'Schools',
-    slug: 'schools',
+    slug: 'school',
     icon: 'Education',
     active: true,
     visible: true,

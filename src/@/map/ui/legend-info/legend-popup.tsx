@@ -126,19 +126,19 @@ const LegendPopup = ({
   const activeLayerSummaryItems: LegendSummaryItem[] = activeEntityLayerLegends
     .values.length
     ? activeEntityLayerLegends.values.map(({ key, label }) => ({
-        color:
-          activeEntityLayerLegends.colors[key] ??
-          paintData[key] ??
-          paintData.unknown,
-        key,
-        label,
-      }))
+      color:
+        activeEntityLayerLegends.colors[key] ??
+        paintData[key] ??
+        paintData.unknown,
+      key,
+      label,
+    }))
     : [
-        { color: paintData.good, key: 'good', label: t('high') },
-        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-        { color: paintData.bad, key: 'bad', label: t('low') },
-        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-      ];
+      { color: paintData.good, key: 'good', label: t('high') },
+      { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+      { color: paintData.bad, key: 'bad', label: t('low') },
+      { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+    ];
 
   const shouldShowMetricSummary = isGlobalView || isLive || isStatic;
   const shouldShowGlobalSchoolStatus = isGlobalView;
@@ -294,7 +294,7 @@ const LegendPopup = ({
                   }
                   entityType={entityType}
                 />
-                <span>{t(config.slug)}</span>
+                <span>{t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}</span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',

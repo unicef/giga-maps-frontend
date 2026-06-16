@@ -1,7 +1,9 @@
 import { Checkbox, Dropdown, MultiSelect, Popover } from "@carbon/react";
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
+
 import { Scroll } from "~/@/scroll";
-import { css } from "styled-components";
+import { AccordionTrigger } from "~/components/ui/accordion";
+import { Badge } from "~/components/ui/badge";
 
 export const FilterPopover = styled(Popover)`
     /* position: absolute; */

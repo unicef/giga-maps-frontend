@@ -1,5 +1,5 @@
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import type { EntitiesConnectivityStatsResponse, EntitiesGlobalStatsResponse, EntityConnectivityStat, EntityGlobalStats } from '~/api/types';
 import { LanguageSuffixes } from '~/lib/utils';
 
@@ -43,21 +43,21 @@ export const buildEntityCard = ({
   if (!config) return null;
 
   const entityGlobalStats = globalStats as LandingPageEntityStats | undefined;
-  const connectedGroup = entityGlobalStats?.['connected_entities'] as LandingPageStatsGroup;
-  const mappedValue = Number(entityGlobalStats?.['entities_connected'] ?? entityGlobalStats?.['entities_total'] ?? 0);
-  const measureValue = Number(connectivityStats?.['no_of_entities_measure'] ?? 0);
+  const connectedGroup = entityGlobalStats?.connected_entities as LandingPageStatsGroup;
+  const mappedValue = Number(entityGlobalStats?.entities_connected ?? entityGlobalStats?.entities_total ?? 0);
+  const measureValue = Number(connectivityStats?.no_of_entities_measure ?? 0);
   const connectedValue = Number(connectedGroup?.connected ?? 0);
 
   return {
     badge: config.sidebar.badge,
     collapsedRows: [
       { label: t('locations-mapped'), value: mappedValue },
-      { label: `${t('connected')} ${t(config.slug)}`, value: connectedValue },
+      { label: `${t('connected')} ${t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}`, value: connectedValue },
       { label: t('reporting-internet-quality'), value: measureValue },
     ],
     footerLogoVariant: config.sidebar.footerLogoVariant ?? 'default',
     showFooter: config.sidebar.footerLogoVariant === 'school',
-    title: t(config.slug),
+    title: t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined),
     value: entityType,
   };
 };
@@ -74,15 +74,15 @@ export const buildEntityCardContent = ({
   if (!config) return null;
 
   const entityGlobalStats = globalStats as LandingPageEntityStats | undefined;
-  const connectedGroup = entityGlobalStats?.['connected_entities'] as LandingPageStatsGroup;
-  const connectivityGroup = connectivityStats?.['real_time_connected_entities'] as LandingPageStatsGroup;
-  const mappedValue = Number(entityGlobalStats?.['entities_connected'] ?? entityGlobalStats?.['entities_total'] ?? 0);
-  const measureValue = Number(connectivityStats?.['no_of_entities_measure'] ?? 0);
+  const connectedGroup = entityGlobalStats?.connected_entities as LandingPageStatsGroup;
+  const connectivityGroup = connectivityStats?.real_time_connected_entities as LandingPageStatsGroup;
+  const mappedValue = Number(entityGlobalStats?.entities_connected ?? entityGlobalStats?.entities_total ?? 0);
+  const measureValue = Number(connectivityStats?.no_of_entities_measure ?? 0);
   const connectedValue = Number(connectedGroup?.connected ?? 0);
   const estimate = config.sidebar.estimatedTotalInMillions
     ? `/${config.sidebar.estimatedTotalInMillions}${LanguageSuffixes[lng].million}`
     : undefined;
-  const entityLabel = t(config.slug);
+  const entityLabel = t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined);
 
   return {
     metrics: [
@@ -95,7 +95,7 @@ export const buildEntityCardContent = ({
       },
       {
         detail: t('across-no-countries', { count: entityGlobalStats?.countries_with_connectivity_status_mapped ?? 0 }),
-        label: `${t('connected')} ${t(config.slug)}`,
+        label: `${t('connected')} ${t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}`,
         tooltip: t('with-mapped-connectivity-status-tooltip', { entity: entityLabel }),
         value: connectedValue,
       },
@@ -124,7 +124,7 @@ export const buildEntityCardContent = ({
         value: measureValue,
       },
     ],
-    title: t(config.slug),
+    title: t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined),
     value: entityType,
   };
 };

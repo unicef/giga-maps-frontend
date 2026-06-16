@@ -51,7 +51,7 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   }>({ key: '', data: {} });
 
   const isDataAvailable = legendsList.length;
-  const entityLabel = t(selectedEntityConfig?.slug ?? 'schools');
+  const entityLabel = t(selectedEntityConfig?.slug ?? 'school', selectedEntityConfig?.slug ? undefined : { count: 2 });
   // this block of useEffect needs refactoring, all this logic should come from column config
   useEffect(() => {
     if (legendsList.length > 1) {
