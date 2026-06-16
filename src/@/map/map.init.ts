@@ -1,16 +1,18 @@
+import { combine, createEffect, guard, merge, sample } from 'effector';
+import type { Map as MapboxMap } from 'mapbox-gl';
+
 import {
   $admin1Data,
   $admin1Id,
   $country,
+  $countryActiveFiltersList,
   $countryId,
   $countryMapping,
   $countrySearchString,
+  $schoolFocusLatLng,
   countryReceived,
   setSchoolFocusLatLng,
-  $countryActiveFiltersList,
-  $schoolFocusLatLng,
 } from '~/@/country/country.model';
-import type { Map as MapboxMap } from 'mapbox-gl';
 import { EntityType, getEntityMapValue } from '~/@/entities';
 import {
   $activeEntityTypes,
@@ -46,6 +48,7 @@ import {
   fetchSchoolPopupDataFx,
   getBaseUrl,
 } from '~/api/project-connect';
+import { languageStore } from '~/core/i18n/store';
 import {
   $mapRoutes,
   map,
@@ -53,6 +56,7 @@ import {
   mapOverview,
   router,
 } from '~/core/routes';
+import { $theme } from '~/core/theme.model';
 
 import {
   changeLayersFx,
@@ -66,14 +70,16 @@ import {
   $selectedLayers,
 } from '@/sidebar/init';
 
-import { languageStore } from '~/core/i18n/store';
-import { $theme } from '~/core/theme.model';
 import { $isMobile } from '../admin/models/media-query';
 import { mapLabelLayerList } from '../country/country.constant';
 import {
   countryTranslationFx,
   filterTranslationFx,
 } from '../sidebar/effects/all-translation-fx';
+import {
+  $isCheckedLastDate,
+  $lastAvailableDates,
+} from '../sidebar/history-graph.model';
 import {
   changeStaticLayerFx,
   updateConnectivityFilter,
@@ -121,11 +127,6 @@ import {
 } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
-import { sample, merge, createEffect, combine, guard } from 'effector';
-import {
-  $isCheckedLastDate,
-  $lastAvailableDates,
-} from '../sidebar/history-graph.model';
 
 sample({
   source: $theme,
@@ -171,8 +172,11 @@ sample({
       if (countrySearchString) {
         queryParts.push(countrySearchString);
       }
+      // TODO: add dynamic query in future according activeEntityTypes state
+      queryParts.push("entity_type__code=all")
       query = `?${queryParts.join('&')}`;
     }
+
     return { query };
   },
   filter: ({ routes, country }) => {
@@ -251,7 +255,7 @@ sample({
   fn: ({ countryActiveFiltersList, activeFiltersList }) =>
     buildFilterQueryFromSelections(
       countryActiveFiltersList!,
-      activeFiltersList!,
+      activeFiltersList,
     ),
   target: router.navigate,
 });
@@ -297,10 +301,10 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-    ...source,
-    ...data,
-  });
+    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+      ...source,
+      ...data,
+    });
 
 const mapLayerFilter = ({
   isCheckedLastDate,
@@ -592,7 +596,7 @@ sample({
   source: combine({ map: $map, lng: languageStore.$language }),
   target: createEffect(({ map, lng }: { map: MapboxMap; lng: string }) => {
     if (!map || !lng) return;
-    for (let key in mapLabelLayerList) {
+    for (const key in mapLabelLayerList) {
       map.setLayoutProperty(mapLabelLayerList[key], 'text-field', [
         'get',
         `name_${lng}`,
