@@ -153,6 +153,7 @@ export const createAndUpdateMapLayer = ({
   coverageFilterByEntity,
   layerUtils,
   selectedLayerId,
+  selectedLayerIds,
   paintData,
   lastSelectedLayer,
   isMobile,
@@ -229,6 +230,13 @@ export const createAndUpdateMapLayer = ({
   // --- Status layer (connectivity_status dots) per entity type in global view ---
   if (isSourceAvailable) {
     for (const entityType of entityTypes) {
+      const isStatusSelected =
+        selectedLayerIds.schoolIdByEntity?.[entityType] ??
+        selectedLayerIds.schoolId;
+      if (!isStatusSelected) {
+        hideLayer(map, getEntityStatusLayerId(entityType));
+        continue;
+      }
       const sourceLayer = getSourceLayerName(entityType);
       const statusLayerId = getEntityStatusLayerId(entityType);
       const config = entityRegistry?.[entityType] as EntityConfig | undefined;

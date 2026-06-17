@@ -23,10 +23,9 @@ import {
 import { TooltipProvider } from '~/components/ui/tooltip';
 import { cn } from '~/lib/cn';
 
-import { SCHOOL_STATUS_LAYER } from '../../sidebar.constant';
+import { getEntityStatusId } from '../../sidebar.util';
 import { LayerTypeChoices } from '../../types';
 import GigaLayerButton from './giga-layer-button';
-import { getEntityStatusId } from '../../sidebar.util';
 
 const GigaLayerButtonIcons = ({
   entityType,
@@ -118,17 +117,15 @@ const GigaLayerButtonIcons = ({
   );
 
   const handleConnectivityStatusClicked = useCallback(
-    (selectedId: number) => {
+    (selectedId: string) => {
       // Toggle connectivity status overlay while preserving the target entity layer selection.
-      if (targetSelectedLayerId) {
-        onSelectEntityMainLayer({
-          [targetEntityType]: targetSelectedLayerId,
-        });
-        onSelectEntityStatusLayer({
-          [targetEntityType]: targetStatusSelectedLayer ? null : selectedId,
-        });
-        selectAllEntityStaticLegendsSelection({ entityType: targetEntityType });
-      }
+      onSelectEntityMainLayer({
+        [targetEntityType]: targetSelectedLayerId ?? null,
+      });
+      onSelectEntityStatusLayer({
+        [targetEntityType]: targetStatusSelectedLayer ? null : selectedId,
+      });
+      selectAllEntityStaticLegendsSelection({ entityType: targetEntityType });
     },
     [targetEntityType, targetSelectedLayerId, targetStatusSelectedLayer],
   );
@@ -175,7 +172,9 @@ const GigaLayerButtonIcons = ({
                 isActive={isConnectivityStatus}
                 label={entityStatusLabel}
                 onClick={() =>
-                  handleConnectivityStatusClicked(SCHOOL_STATUS_LAYER.id)
+                  handleConnectivityStatusClicked(
+                    getEntityStatusId(targetEntityType),
+                  )
                 }
                 popup={true}
               />
@@ -221,7 +220,9 @@ const GigaLayerButtonIcons = ({
           isActive={isConnectivityStatus}
           icon={<UserRound />}
           onClick={() => {
-            handleConnectivityStatusClicked(SCHOOL_STATUS_LAYER.id);
+            handleConnectivityStatusClicked(
+              getEntityStatusId(targetEntityType),
+            );
           }}
         />
         <GigaLayerButton
