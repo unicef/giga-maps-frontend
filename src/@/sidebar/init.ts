@@ -382,7 +382,9 @@ export const getCurrentEntityConnectivityConfigQuery = ({
       entityType,
       null,
     );
-    if (layerId) {
+    const isStaticLayer =
+      layersUtils.currentLayerTypeUtilsByEntity[entityType]?.isStatic;
+    if (layerId && !isStaticLayer) {
       params.set(`${entityType}_layer_id`, String(layerId));
     }
   });
@@ -429,13 +431,17 @@ sample({
   ]),
   source: sourceForInfo,
   fn: getCurrentEntityConnectivityConfigQuery,
-  filter: ({ country, layersUtils, mapRoutes }) => {
+  filter: ({ activeEntityTypes, country, layersUtils, mapRoutes }) => {
+    const entityTypes = activeEntityTypes?.length
+      ? activeEntityTypes
+      : [EntityType.SCHOOL];
     return (
       mapRoutes.country &&
       !!country?.id &&
       !!layersUtils.layers?.length &&
-      Object.values(layersUtils.currentLayerTypeUtilsByEntity).some(
-        (layerTypeUtils) => layerTypeUtils?.isLive,
+      entityTypes.some(
+        (entityType) =>
+          layersUtils.currentLayerTypeUtilsByEntity[entityType]?.isLive,
       )
     );
   },

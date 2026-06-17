@@ -52,9 +52,10 @@ const LandingPage = () => {
             connectivityStatsByEntity={connectivityStatsByEntity}
             isLoadingConnectivityStats={isLoadingConnectivityStats}
           >
-            {(card, { lng, t: translate }) => (
+            {(card, { infoLoadingMetricLabels, lng, t: translate }) => (
               <EntitySummaryCardContent
                 card={card.accordionContent}
+                loadingMetricLabels={infoLoadingMetricLabels}
                 lng={lng}
                 t={translate}
               />
