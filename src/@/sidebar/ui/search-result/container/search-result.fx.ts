@@ -1,11 +1,12 @@
 
+import type { EntityType } from "~/@/entities/types/base-entity.type";
 import { request } from "~/api/request-setup";
 import { APIListType } from "~/api/types";
+import { createRequestFx } from "~/lib/request-fx";
+import type { Controller } from "~/lib/request-fx/types";
 
 import { ADMIN_UNKNOWN_TYPE, SEARCH_SCHOOL_RESULT_SIZE } from "./search-result.constant";
 import { CountryWithDistrictCount, SearchResultApi } from "./search-result.type";
-import { createRequestFx } from "~/lib/request-fx";
-import type { Controller } from "~/lib/request-fx/types";
 
 export const fetchCountriesWithDistrictFx = createRequestFx(
   (_?: unknown, controller?: Controller): Promise<Record<string, CountryWithDistrictCount>> => request({
@@ -39,14 +40,17 @@ export const getSearchResultsFx = createRequestFx(
     limit = SEARCH_SCHOOL_RESULT_SIZE,
     countryId,
     page = 0,
-    excludeCountryId = false
+    excludeCountryId = false,
+    selectedSearchEntityTypes = []
   }: {
     query: string;
     page?: number;
     limit?: number;
     countryId?: number;
     excludeCountryId?: boolean;
+    selectedSearchEntityTypes?: EntityType[];
   }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
+    debugger;
     const splitQuery = query.split(" ");
     if (query && splitQuery.length > 1) {
       query = `"${query}"`;

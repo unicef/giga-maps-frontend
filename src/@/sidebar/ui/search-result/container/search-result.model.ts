@@ -7,7 +7,7 @@ import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { getId, getLocalStorage, setLocalStorage } from "~/lib/utils";
 
 import { applySearchFx } from "../../../effects/search-country-fx";
-import { $hasSearchInput, $isSearchFocused, $searchInput, $showCountries, changeSearchText, clearSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
+import { $hasSearchInput, $isSearchFocused, $searchInput, $selectedSearchEntityTags, $showCountries, changeSearchText, clearSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
 import { MAX_SEARCH_HISTORY, SCHOOL_LIST_SEARCH_LENGTH, SEARCH_ADMIN_SIZE, SEARCH_COUNTRY_SIZE, SEARCH_DATA_TYPE, STORE_SEARCH_HISTORY } from "./search-result.constant";
 import { fetchCountriesWithDistrictFx, fetchSchoolListFx, getSearchResultsFx } from "./search-result.fx";
 import { CountryWithDistrictCount, SearchResultApi, SearchResultCollection, SearchType } from "./search-result.type";
@@ -257,17 +257,17 @@ export const loadMoreResults = createEvent();
 // Sample for initial search
 sample({
   clock: $query,
-  source: combine($hasSearchInput, $query, $country, $mapRoutes),
+  source: combine($hasSearchInput, $query, $country, $mapRoutes, $selectedSearchEntityTags),
   filter: ([hasSearchInput]) => {
     return hasSearchInput
   },
-  fn: ([_, query, country, mapRoutes]) => {
+  fn: ([_, query, country, mapRoutes, selectedSearchEntityTags]) => {
     let countryId = country?.id;
     if (mapRoutes.map) {
       countryId = undefined;
     }
     // Reset to page 0 for new queries
-    return ({ query, countryId, page: 0 })
+    return ({ query, countryId, page: 0, selectedSearchEntityTags })
   },
   target: getSearchResultsFx
 });
@@ -277,12 +277,14 @@ $query.watch(() => {
 })
 // Handle loading more results
 loadMoreResults.watch(() => {
+  debugger;
   const hasSearchInput = $hasSearchInput.getState();
   const hasMore = $hasMoreResults.getState();
   const query = $query.getState();
   const country = $country.getState();
   const mapRoutes = $mapRoutes.getState();
   const page = $searchPage.getState();
+  const selectedSearchEntityTypes = $selectedSearchEntityTags.getState();
   const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
 
   if (hasSearchInput && hasMore) {
@@ -295,7 +297,7 @@ loadMoreResults.watch(() => {
     setSearchPage(page + 1);
 
     // Fetch more results
-    getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page });
+    getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page, selectedSearchEntityTypes });
   }
 });
 

@@ -1,11 +1,16 @@
 import { useStore } from 'effector-react';
-import { type CSSProperties, useEffect, useRef, useState } from 'react';
+import { ChevronDown, ChevronUp, Earth, Search, X } from 'lucide-react';
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { $entityRegistryFiltered, selectAllEntityTypes } from '~/@/entities/models/entity.model';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterTourContact from '~/@/sidebar/ui/common-components/footer-tour-contact.view';
 import { SearchCountryList } from '~/@/sidebar/ui/search-result/search-country-list';
 import SearchSchoolPanel from '~/@/sidebar/ui/search-result/search-country-list/search-school-panel-view';
 import { SearchResultScroll } from '~/@/sidebar/ui/search-result/styles/search-result-style';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
@@ -14,9 +19,7 @@ import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
 
-import { $isActiveSearchBar, $searchInput, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from './top-search-bar.model';
-import { ChevronDown, ChevronUp, Cross, Earth, Search, X } from 'lucide-react';
-import { Button } from '~/components/ui/button';
+import { $isActiveSearchBar, $searchInput, $selectedSearchEntityTags, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, toggleSearchEntityTag } from './top-search-bar.model';
 
 
 const onChange = changeSearchText.prepend(getInputValue);
@@ -27,10 +30,36 @@ const TopSearchBar = () => {
   const isActiveSearchBar = useStore($isActiveSearchBar);
   const showCountries = useStore($showCountries)
   const isMobile = useStore($isMobile)
+  const entityRegistry = useStore($entityRegistryFiltered);
+  const selectedTags = useStore($selectedSearchEntityTags);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchShellRef = useRef<HTMLDivElement>(null);
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const { t } = useTranslation();
+
+  const entityTagEntries = useMemo(
+    () => Object.values(entityRegistry).filter((config) => config.active),
+    [entityRegistry],
+  );
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [mentionQuery, setMentionQuery] = useState('');
+
+  const selectedTagConfigs = selectedTags
+    .map((tag) => entityRegistry[tag])
+    .filter(Boolean);
+
+  const filteredSuggestions = useMemo(() => {
+    if (!showSuggestions) return [];
+    const query = mentionQuery.toLowerCase();
+    return entityTagEntries.filter((config) => {
+      if (selectedTags.includes(config.type)) return false;
+      const slug = config.slug.toLowerCase();
+      const name = config.displayName.toLowerCase();
+      const translated = t(config.slug, { defaultValue: config.displayName }).toLowerCase();
+      return !query || slug.includes(query) || name.includes(query) || translated.includes(query);
+    });
+  }, [showSuggestions, mentionQuery, entityTagEntries, selectedTags, t]);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -55,9 +84,40 @@ const TopSearchBar = () => {
     const isInsideContainer = searchContainerRef.current?.contains(relatedTarget);
 
     if (!isInsideResults && !isInsideContainer) {
-      setTimeout(() => changeIsSearchFocused(false), 0);
+      setTimeout(() => {
+        changeIsSearchFocused(false);
+        setShowSuggestions(false);
+      }, 0);
     }
   }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const mentionMatch = value.match(/@([\w-]*)$/);
+    if (mentionMatch) {
+      setMentionQuery(mentionMatch[1]);
+      setShowSuggestions(true);
+    } else {
+      setMentionQuery('');
+      setShowSuggestions(false);
+    }
+    onChange(e);
+  };
+
+  const handleSelectEntityTag = (entityType: EntityType) => {
+    selectAllEntityTypes()
+    toggleSearchEntityTag(entityType);
+    const newText = searchText.replace(/@[\w-]*$/, '').trim();
+    changeSearchText(newText);
+    setShowSuggestions(false);
+    setMentionQuery('');
+    document.getElementById('main-search-bar')?.focus();
+  };
+
+  const handleRemoveTag = (entityType: EntityType) => {
+    toggleSearchEntityTag(entityType);
+    document.getElementById('main-search-bar')?.focus();
+  };
 
   const dropdownButton = (
     <button
@@ -108,40 +168,96 @@ const TopSearchBar = () => {
               className="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! bg-[#f4f4f4]! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
               style={{ '--search-shell-border': isActiveSearchBar ? '#0f62fe' : '#c6c6c6' } as CSSProperties}
             >
-              <Search size={16} className="pointer-events-none! absolute! left-3.5! top-1/2! z-1! -translate-y-1/2!" />
-              <Input
-                aria-label={t('search-country-region-school-id')}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoFocus={isMobile}
-                autoCorrect="off"
-                spellCheck={false}
-                className="h-12! border-0! bg-transparent! px-11! pr-11! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
-                id="main-search-bar"
-                inputMode="search"
-                onBlur={onBlurSearch}
-                onChange={onChange}
-                onFocus={() => {
-                  onShowCountriesAdminList(false);
-                  changeIsSearchFocused(true);
-                }}
-                placeholder={t("search-country-region-school-id")}
-                value={searchText}
-              />
+              <div className="flex! h-12! items-center!">
+                <Search size={16} className="pointer-events-none! ml-3.5! shrink-0! text-[#525252]!" />
+                {selectedTagConfigs.map((config) => (
+                  <Badge
+                    key={config.type}
+                    className="ml-1! shrink-0! cursor-default! rounded-md! border-0! px-1.5! py-1! text-[11px]! font-medium! text-white!"
+                    style={{ backgroundColor: config.colors.primary }}
+                  >
+                    {t(config.slug, { defaultValue: config.displayName })}
+                    <button
+                      type="button"
+                      aria-label={t('remove-tag', { defaultValue: 'Remove filter' })}
+                      className="ml-0.5! inline-flex! items-center! opacity-80! hover:opacity-100!"
+                      onClick={() => handleRemoveTag(config.type as EntityType)}
+                    >
+                      <X size={10} />
+                    </button>
+                  </Badge>
+                ))}
+                <Input
+                  aria-label={t('search-country-region-school-id')}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoFocus={isMobile}
+                  autoCorrect="off"
+                  spellCheck={false}
+                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-10! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                  id="main-search-bar"
+                  inputMode="search"
+                  onBlur={onBlurSearch}
+                  onChange={handleSearchChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setShowSuggestions(false);
+                      setMentionQuery('');
+                    }
+                    if (e.key === 'Backspace' && !searchText && selectedTags.length > 0) {
+                      handleRemoveTag(selectedTags[selectedTags.length - 1]);
+                    }
+                    if (e.key === 'Enter' && showSuggestions && filteredSuggestions.length > 0) {
+                      e.preventDefault();
+                      handleSelectEntityTag(filteredSuggestions[0].type as EntityType);
+                    }
+                  }}
+                  onFocus={() => {
+                    onShowCountriesAdminList(false);
+                    changeIsSearchFocused(true);
+                  }}
+                  placeholder={t("search-country-region-school-id")}
+                  value={searchText}
+                />
+              </div>
               <Button
                 aria-label={t('clear-search')}
                 variant={'icon'}
                 className={cn(
                   'main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0!',
-                  !searchText && 'hidden!'
+                  !searchText && selectedTags.length === 0 && 'hidden!'
                 )}
                 onClick={() => {
                   onClear();
                   changeIsSearchFocused(false);
+                  setShowSuggestions(false);
+                  setMentionQuery('');
                 }}
               >
                 <X size={16} className="fill-current" />
               </Button>
+
+              {/* @ mention entity type suggestions */}
+              {showSuggestions && filteredSuggestions.length > 0 && (
+                <div className="absolute! left-0! right-0! top-full! z-50! mt-1! overflow-hidden! rounded-lg! border! border-[#e0e0e0]! bg-white! py-1! shadow-lg!">
+                  <div className="px-3! py-1.5! text-[11px]! font-medium! uppercase! tracking-wider! text-[#8d8d8d]!">
+                    {t('filter-by-type', { defaultValue: 'Filter by type' })}
+                  </div>
+                  {filteredSuggestions.map((config) => (
+                    <button
+                      key={config.type}
+                      id={`entity-suggest-${config.slug}`}
+                      className="flex! w-full! items-center! gap-2! px-3! py-2! text-left! text-sm! text-[#161616]! transition-colors! hover:bg-[#e8e8e8]! focus:bg-[#e8e8e8]! focus:outline-none!"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => handleSelectEntityTag(config.type as EntityType)}
+                      type="button"
+                    >
+                      <span style={{ color: config.colors.primary }}>{config.symbol}</span>
+                      <span>@{t(config.slug, { defaultValue: config.displayName })}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </PopoverAnchor>
