@@ -30,8 +30,11 @@ export const toggleSearchEntityTag = createEvent<EntityType>();
 
 export const $selectedSearchEntityTags = createStore<EntityType[]>([]);
 
+// Single-select for now; change handler to [...current, tag] for multi-select
 $selectedSearchEntityTags.on(toggleSearchEntityTag, (current, tag) =>
-  current.includes(tag) ? current.filter((t) => t !== tag) : [...current, tag],
+  //future need
+  //current.includes(tag) ? current.filter((t) => t !== tag) : [...current, tag],
+  current.includes(tag) ? [] : [tag],
 );
 
 $selectedSearchEntityTags.reset(clearSearchText, router.historyUpdated);

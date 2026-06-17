@@ -1,5 +1,5 @@
 
-import type { EntityType } from "~/@/entities/types/base-entity.type";
+import { EntityType } from "~/@/entities/types/base-entity.type";
 import { request } from "~/api/request-setup";
 import { APIListType } from "~/api/types";
 import { createRequestFx } from "~/lib/request-fx";
@@ -28,7 +28,7 @@ export const fetchSchoolListFx = createRequestFx(
     }
 
     return request({
-      url: `api/locations/gsearch/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,external_id&page=${page}&page_size=${limit}&country_id__in=${countryId}&ordering=name${admin2 ? '&admin2_id__exact=' + admin2 : ''}${admin1 ? `&${admin1Abbr}=${admin1}` : ''}${query ? `&q=${query}*&search_fields=name,giga_id_school,external_id` : ''}`,
+      url: `api/locations/gsearch/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,external_id&page=${page}&page_size=${limit}&country_id__in=${countryId}&ordering=name${admin2 ? '&admin2_id__exact=' + admin2 : ''}${admin1 ? `&${admin1Abbr}=${admin1}` : ''}${query ? `&q=${query}*&search_fields=name,giga_id_school,external_id&entity_type__code=${EntityType.SCHOOL}` : ''}`,
       signal: controller?.getSignal(),
     })
   }
@@ -41,14 +41,14 @@ export const getSearchResultsFx = createRequestFx(
     countryId,
     page = 0,
     excludeCountryId = false,
-    selectedSearchEntityTypes = []
+    selectedSearchEntityTags = []
   }: {
     query: string;
     page?: number;
     limit?: number;
     countryId?: number;
     excludeCountryId?: boolean;
-    selectedSearchEntityTypes?: EntityType[];
+    selectedSearchEntityTags?: EntityType[];
   }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
     debugger;
     const splitQuery = query.split(" ");
@@ -69,8 +69,13 @@ export const getSearchResultsFx = createRequestFx(
       countryFilter = `&country_id__exact=${countryId}`;
     }
 
+    let entityFilter = '& =all';
+    if (selectedSearchEntityTags.length > 0) {
+      entityFilter = `&entity_type__code=${selectedSearchEntityTags.join(',')}`;
+    }
+
     return request({
-      url: `api/locations/gsearch/?${selectFields}&${orderingFields}&page=${page}&page_size=${limit}&q=${query}*${searchFields}${countryFilter}`,
+      url: `api/v2/entities/gentity-search/?${selectFields}&${orderingFields}&page=${page}&page_size=${limit}&q=${query}*${searchFields}${countryFilter}${entityFilter}`,
       signal: controller?.getSignal(),
     })
   }

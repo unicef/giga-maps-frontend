@@ -262,6 +262,7 @@ sample({
     return hasSearchInput
   },
   fn: ([_, query, country, mapRoutes, selectedSearchEntityTags]) => {
+    debugger;
     let countryId = country?.id;
     if (mapRoutes.map) {
       countryId = undefined;

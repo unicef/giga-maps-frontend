@@ -177,14 +177,14 @@ const TopSearchBar = () => {
                     style={{ backgroundColor: config.colors.primary }}
                   >
                     {t(config.slug, { defaultValue: config.displayName })}
-                    <button
+                    {/* <button
                       type="button"
                       aria-label={t('remove-tag', { defaultValue: 'Remove filter' })}
                       className="ml-0.5! inline-flex! items-center! opacity-80! hover:opacity-100!"
                       onClick={() => handleRemoveTag(config.type as EntityType)}
                     >
                       <X size={10} />
-                    </button>
+                    </button> */}
                   </Badge>
                 ))}
                 <Input
