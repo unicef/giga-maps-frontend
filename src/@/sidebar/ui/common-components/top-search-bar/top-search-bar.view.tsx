@@ -105,7 +105,6 @@ const TopSearchBar = () => {
   };
 
   const handleSelectEntityTag = (entityType: EntityType) => {
-    selectAllEntityTypes()
     toggleSearchEntityTag(entityType);
     const newText = searchText.replace(/@[\w-]*$/, '').trim();
     changeSearchText(newText);

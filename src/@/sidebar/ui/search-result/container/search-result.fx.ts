@@ -50,7 +50,6 @@ export const getSearchResultsFx = createRequestFx(
     excludeCountryId?: boolean;
     selectedSearchEntityTags?: EntityType[];
   }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
-    debugger;
     const splitQuery = query.split(" ");
     if (query && splitQuery.length > 1) {
       query = `"${query}"`;

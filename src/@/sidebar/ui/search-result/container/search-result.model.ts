@@ -257,18 +257,18 @@ export const loadMoreResults = createEvent();
 // Sample for initial search
 sample({
   clock: $query,
-  source: combine($hasSearchInput, $query, $country, $mapRoutes, $selectedSearchEntityTags),
+  source: combine($hasSearchInput, $query, $country, $mapRoutes,),
   filter: ([hasSearchInput]) => {
     return hasSearchInput
   },
-  fn: ([_, query, country, mapRoutes, selectedSearchEntityTags]) => {
-    debugger;
+  fn: ([_, query, country, mapRoutes]) => {
     let countryId = country?.id;
     if (mapRoutes.map) {
       countryId = undefined;
     }
+    // const selectedSearchEntityTags = $selectedSearchEntityTags.getState();
     // Reset to page 0 for new queries
-    return ({ query, countryId, page: 0, selectedSearchEntityTags })
+    return ({ query, countryId, page: 0,/* selectedSearchEntityTags*/ })
   },
   target: getSearchResultsFx
 });
