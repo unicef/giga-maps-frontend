@@ -44,7 +44,7 @@ export function buildFilterQueryFromSelections(
       // other object shapes are intentionally NOT supported here
       return String(v).trim();
     };
-    const entiryTypePrefix = filter.entity_type + "__";
+
     // RANGE handling — ONLY accept object shape { min, max, none_range? }
     if (filter.type === "RANGE") {
       if (typeof raw === "object" && raw !== null && !Array.isArray(raw) && "min" in (raw as any)) {
@@ -54,9 +54,9 @@ export function buildFilterQueryFromSelections(
         const str = `${min},${max}`;
         const noneRangeFlag = Boolean(obj.none_range ?? df?.none_range);
         if (noneRangeFlag) {
-          params.set(`${prefix}${entiryTypePrefix}${colName}__none__${qFilter}`, str);
+          params.set(`${prefix}${colName}__none__${qFilter}`, str);
         } else {
-          params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, str);
+          params.set(`${prefix}${colName}__${qFilter}`, str);
         }
       }
       // if it's not the expected object shape, skip (per your request)
@@ -67,7 +67,7 @@ export function buildFilterQueryFromSelections(
     if (filter.type === "BOOLEAN") {
       const v = makeStringValue(raw);
       if (v === "") continue;
-      params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, v);
+      params.set(`${prefix}${colName}__${qFilter}`, v);
       continue;
     }
 
@@ -77,7 +77,7 @@ export function buildFilterQueryFromSelections(
       if (!Array.isArray(raw)) continue;
       const v = makeStringValue(raw);
       if (v === "") continue;
-      params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, v);
+      params.set(`${prefix}${colName}__${qFilter}`, v);
 
       // optional grouped choices -> ignore_<col>
       if (filter.options?.group_choices && Array.isArray(filter.options.choices)) {
@@ -93,7 +93,7 @@ export function buildFilterQueryFromSelections(
         const labels = matchedLabels.join(multiValueDelimiter);
 
         if (labels !== "") {
-          params.set(`${prefix}${entiryTypePrefix}ignore_${colName}__${qFilter}`, labels);
+          params.set(`${prefix}ignore_${colName}__${qFilter}`, labels);
         }
       }
       continue;
@@ -103,7 +103,7 @@ export function buildFilterQueryFromSelections(
     if (typeof raw === "string" || typeof raw === "number" || typeof raw === "boolean") {
       const value = makeStringValue(raw);
       if (value === "") continue;
-      params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, value);
+      params.set(`${prefix}${colName}__${qFilter}`, value);
     }
   }
 
