@@ -1865,7 +1865,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                     <p>
                       0 /6M 
                       <span>
-                        schools location mapped
+                        Schools mapped
                       </span>
                     </p>
                     <span
@@ -1949,7 +1949,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                     <p>
                       0 
                       <span>
-                        schools connectivity status mapped
+                        Schools with connectivity status
                       </span>
                     </p>
                     <span
@@ -2047,7 +2047,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                     <p>
                       0 
                       <span>
-                        schools with real-time data mapped
+                        Schools sending real-time connectivity measurements
                       </span>
                     </p>
                     <span
