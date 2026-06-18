@@ -14,7 +14,7 @@ import { $globalStats } from '~/@/map/map.model';
 import layersData from '~/tests/data/layers-data';
 import countrySingleData from '~/tests/data/country.single.data';
 import globalStatusData from '~/tests/data/globalStatus.data';
-import { fetchCountryLiveLayerInfo, fetchLayerListFx } from '~/api/project-connect';
+import { fetchLayerListFx } from '~/api/project-connect';
 import { useRoute } from '~/lib/router';
 
 vi.mock('~/lib/router', async () => {
@@ -126,7 +126,6 @@ describe('Sidebar', () => {
     });
 
     await fetchLayerListFx();
-    await fetchCountryLiveLayerInfo({ query: '?start_date=2022-09-01&end_date=2022-09-30', id: 47 });
     const { container } = render(testWrapper(<Sidebar />))
     await waitFor(() => {
       ($selectedLayerId as any).setState(47);

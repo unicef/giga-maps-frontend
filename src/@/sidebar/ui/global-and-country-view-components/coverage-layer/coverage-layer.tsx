@@ -10,7 +10,6 @@ import {
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import {
-  $coverageStats,
   $coverageStatsByEntity,
   $isLoadingCountryAdminView,
   $layerUtils,
@@ -22,7 +21,6 @@ import { formatNumber } from '~/lib/utils';
 const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const { t } = useTranslation();
   const lng = useStore($lng);
-  const currentCoverageStats = useStore($coverageStats);
   const coverageStatsByEntity = useStore($coverageStatsByEntity);
   const currentSelectedEntityType = useStore($selectedEntityType);
   const selectedEntityType = entityType ?? currentSelectedEntityType;
@@ -31,9 +29,7 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const selectedEntityConfig = entityType
     ? entityConfigMap[entityType]
     : currentSelectedEntityConfig;
-  const coverageStats = entityType
-    ? coverageStatsByEntity[entityType]
-    : currentCoverageStats;
+  const coverageStats = coverageStatsByEntity[entityType as EntityType];
   const isLoading = useStore($isLoadingCountryAdminView);
   const legends = coverageStats?.connected_schools;
   const totalSchools = coverageStats?.total_schools ?? 0;
