@@ -257,7 +257,8 @@ export const generateStaticLayerUrl = ({
   'mapRoute' | 'country' | 'countrySearch' | 'schoolPageIds'
 > & { admin1Id?: number | null }) => {
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
-  let params = getBaseUrl(`${CONNECTIVITY_STATUS_URL}/?${countryParams}`);
+  const entityParams = `${countryParams ? `${countryParams}&` : ''}entity_type__code=all`;
+  let params = getBaseUrl(`${CONNECTIVITY_STATUS_URL}/?${entityParams}`);
   if (countrySearch) {
     params += `&${countrySearch}`;
   }

@@ -53,6 +53,9 @@ describe('add-layers-utils', () => {
       expect(result).toEqual({
         schoolLayerId: 1,
         selectedLayerId: 2,
+        selectedLayerIdByEntity: {
+          [EntityType.SCHOOL]: 2,
+        },
         isLastSelectionChange: true
       });
     });
@@ -62,6 +65,29 @@ describe('add-layers-utils', () => {
         selectedLayerIds: { schoolId: 1, selectedId: 3 },
         refresh: false,
         lastSelectedLayer: { layerId: 2 }
+      });
+
+      expect(result.isLastSelectionChange).toBe(true);
+    });
+
+    it('should detect selection change for entity-specific layer ids', () => {
+      const result = getLayerIdsAndLastChange({
+        selectedLayerIds: {
+          schoolId: 1,
+          selectedId: 2,
+          selectedIdByEntity: {
+            [EntityType.SCHOOL]: 2,
+            [EntityType.HEALTH]: 5,
+          },
+        },
+        refresh: false,
+        lastSelectedLayer: {
+          layerId: 2,
+          layerIdByEntity: {
+            [EntityType.SCHOOL]: 2,
+            [EntityType.HEALTH]: 4,
+          },
+        },
       });
 
       expect(result.isLastSelectionChange).toBe(true);

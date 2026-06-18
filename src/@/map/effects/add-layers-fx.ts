@@ -9,7 +9,7 @@ import {
   UpdateConnectivityType,
   UpdateCoverageFilterOptions,
 } from '~/@/map/map.types';
-import { $mapRoutes, map as mapRouter } from '~/core/routes';
+import { map as mapRouter } from '~/core/routes';
 import { delayMethodCall } from '~/lib/utils';
 
 import {
@@ -46,8 +46,14 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
     lastSelectedLayer,
     mapRoute,
     layerUtils,
+    activeEntityTypes,
   } = props;
-  const { schoolLayerId, selectedLayerId, isLastSelectionChange } =
+  const {
+    schoolLayerId,
+    selectedLayerId,
+    selectedLayerIdByEntity,
+    isLastSelectionChange,
+  } =
     getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
   const effectiveSelectedLayerId = mapRoute.map
     ? layerUtils.globalLayerId
@@ -70,7 +76,18 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   });
   // update giga selection
   changeGigaSelection({
-    layerId: effectiveSelectedLayerId ?? lastSelectedLayer.layerId,
+    layerId: effectiveSelectedLayerId ?? lastSelectedLayer?.layerId ?? null,
+    layerIdByEntity: mapRoute.map
+      ? (
+          activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL]
+        ).reduce(
+          (acc, entityType) => ({
+            ...acc,
+            [entityType]: effectiveSelectedLayerId,
+          }),
+          {} as Partial<Record<EntityType, number | null>>,
+        )
+      : selectedLayerIdByEntity,
   });
 };
 
@@ -78,8 +95,6 @@ const callDelay = delayMethodCall();
 let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
-  // temporary stop map layer redering;
-  if (!$mapRoutes.getState().map) return;
   const {
     timeout = 20,
     zoomState,
@@ -186,7 +201,7 @@ export const updateConnectivityFilter = createEffect(
         const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
         const filter = filterConnectivityList(
           connectivitySpeedFilterByEntity?.[entityType] ??
-            connectivitySpeedFilter,
+          connectivitySpeedFilter,
           isDynamicLayer,
         );
         map.setFilter(

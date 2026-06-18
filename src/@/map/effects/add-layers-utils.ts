@@ -48,11 +48,35 @@ export const getLayerIdsAndLastChange = ({
   'selectedLayerIds' | 'refresh' | 'lastSelectedLayer'
 >) => {
   const { schoolId: schoolLayerId, selectedId: selectedLayerId } =
-    selectedLayerIds;
-  const checkSelectionChange =
-    selectedLayerId && selectedLayerId !== lastSelectedLayer.layerId;
-  const isLastSelectionChange = refresh || !!checkSelectionChange;
-  return { schoolLayerId, selectedLayerId, isLastSelectionChange };
+    selectedLayerIds ?? {};
+  const selectedLayerIdByEntity: Partial<Record<EntityType, number | null>> =
+    selectedLayerIds?.selectedIdByEntity ??
+    (selectedLayerId ? { [EntityType.SCHOOL]: selectedLayerId } : {});
+  const lastLayerIdByEntity: Partial<Record<EntityType, number | null>> =
+    lastSelectedLayer?.layerIdByEntity ??
+    (lastSelectedLayer?.layerId
+      ? { [EntityType.SCHOOL]: lastSelectedLayer.layerId }
+      : {});
+  const entityTypes = new Set([
+    ...Object.keys(selectedLayerIdByEntity),
+    ...Object.keys(lastLayerIdByEntity),
+  ]);
+  const checkSelectionChange = entityTypes.size
+    ? Array.from(entityTypes).some((entityType) => {
+        const typedEntityType = entityType as EntityType;
+        return (
+          selectedLayerIdByEntity[typedEntityType] !==
+          lastLayerIdByEntity[typedEntityType]
+        );
+      })
+    : !!(selectedLayerId && selectedLayerId !== lastSelectedLayer?.layerId);
+  const isLastSelectionChange = refresh || checkSelectionChange;
+  return {
+    schoolLayerId,
+    selectedLayerId,
+    selectedLayerIdByEntity,
+    isLastSelectionChange,
+  };
 };
 
 export const createSourceForMapAndCountry = ({
@@ -231,8 +255,8 @@ export const createAndUpdateMapLayer = ({
   if (isSourceAvailable) {
     for (const entityType of entityTypes) {
       const isStatusSelected =
-        selectedLayerIds.schoolIdByEntity?.[entityType] ??
-        selectedLayerIds.schoolId;
+        selectedLayerIds?.schoolIdByEntity?.[entityType] ??
+        selectedLayerIds?.schoolId;
       if (!isStatusSelected) {
         hideLayer(map, getEntityStatusLayerId(entityType));
         continue;
