@@ -1,12 +1,12 @@
 import { Image, Search, ChevronDown, ChevronUp } from '@carbon/icons-react';
-import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, TextInput } from "@carbon/react";
+import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, Tag, TextInput } from "@carbon/react";
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { createOrUpdateCountryFx, getPublishDataLayerListFx } from '~/@/admin/effects/api-country-fx';
 import { $formDataCountry, $publishDataLayerListResponce, onUdpateCountryForm, setToasterWarning } from '~/@/admin/models/country-model';
-import { FilterListWithOptionsTypes, FiltersDefaultValueType } from '~/@/admin/types/filter-list.type';
+import { FilterListWithOptionsTypes } from '~/@/admin/types/filter-list.type';
 import { DataLayer, LegendConfigType } from '~/@/admin/types/giga-layer.type';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
 import { Div } from '~/@/common/style/styled-component-style';
@@ -24,6 +24,62 @@ import { ActiveFilterListType } from '~/api/types';
 type RangeValue = { none_range: boolean; value: string };
 type SelectedFieldValue = string | RangeValue;
 type AdminDefinedDefaultFilterValuesRecord = Record<string, SelectedFieldValue>;
+type SelectOption = { id: number; name: string; code?: string; entity_type__code?: string };
+
+const UNKNOWN_ENTITY_TYPE = 'unknown';
+const getEntityTypeCode = (item?: { entity_type__code?: string | null }) => item?.entity_type__code || UNKNOWN_ENTITY_TYPE;
+
+const groupByEntityTypeCode = <T extends { entity_type__code?: string | null }>(items: T[]) => {
+  return items.reduce((acc, item) => {
+    const entityTypeCode = getEntityTypeCode(item);
+    if (!acc[entityTypeCode]) {
+      acc[entityTypeCode] = [];
+    }
+    acc[entityTypeCode].push(item);
+    return acc;
+  }, {} as Record<string, T[]>);
+};
+
+const EntityTypeTag = ({ entityTypeCode }: { entityTypeCode?: string }) => (
+  <Tag size="sm" type="blue" style={{ flex: '0 0 auto', maxWidth: 'none', whiteSpace: 'nowrap' }}>
+    {entityTypeCode || UNKNOWN_ENTITY_TYPE}
+  </Tag>
+);
+
+const dropdownItemStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: '0.5rem',
+  lineHeight: 1.35,
+  whiteSpace: 'normal',
+  width: '100%'
+};
+
+const dropdownItemTextStyle: React.CSSProperties = {
+  minWidth: 0,
+  overflowWrap: 'anywhere',
+  whiteSpace: 'normal'
+};
+
+const entityGroupStyle: React.CSSProperties = {
+  background: '#fff',
+  border: '1px solid #c6c6c6',
+  borderTop: '4px solid #0f62fe',
+  borderRadius: '4px',
+  margin: '0 3rem 1rem'
+};
+
+const entityGroupHeaderStyle: React.CSSProperties = {
+  alignItems: 'center',
+  borderBottom: '1px solid #e0e0e0',
+  display: 'flex',
+  gap: '0.75rem',
+  padding: '0.85rem 1rem'
+};
+
+const entityGroupContentStyle: React.CSSProperties = {
+  padding: '1rem 1rem 0'
+};
 
 const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId?: number }) => {
   const id = Number(countryItemId);
@@ -40,9 +96,9 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [defaultNationalBenchmark, setDefaultNationalBenchmark] = useState<Record<string, boolean>>({});
   const [dataSource, setDataSource] = useState<Record<string, { name: string, description: string }>>({});
   const [legendConfigList, setLegendConfigList] = useState<Record<string, LegendConfigType>>({});
-  const [selectedActiveLayers, setSelectedActiveLayers] = useState<{ id: number; name: string; }[]>([]);
-  const [selectedActiveFilters, setSelectedActiveFilters] = useState<{ id: number; name: string; }[]>([]);
-  const [defaultLayer, setDefaultLayer] = useState<number | undefined>();
+  const [selectedActiveLayers, setSelectedActiveLayers] = useState<SelectOption[]>([]);
+  const [selectedActiveFilters, setSelectedActiveFilters] = useState<SelectOption[]>([]);
+  const [defaultLayersByEntity, setDefaultLayersByEntity] = useState<Record<string, number>>({});
   const [adminDefinedDefaultFilterValues, setAdminDefinedDefaultFilterValues] = useState<Record<string, string | {
     none_range: boolean;
     value: string;
@@ -50,7 +106,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   const [isDefaultFilterValuesLoaded, setIsDefaultFilterValuesLoaded] = useState(false)
   const [openAccordion, setOpenAccordion] = useState<'layers' | 'filters' | null>(null);
 
-  const filteredPublishDataLayerList = useMemo(() => publishDataLayerListResponce.sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
+  const filteredPublishDataLayerList = useMemo(() => [...publishDataLayerListResponce].sort((a, b) => a.type.localeCompare(b.type)), [publishDataLayerListResponce]);
   const updateDefaultNationalBenchmark = (id: number, checked: boolean) => {
     if (checked) {
       setDefaultNationalBenchmark({
@@ -69,8 +125,14 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     }, {} as Record<string, DataLayer>)
   }, [publishDataLayerListResponce])
 
-  const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name, code: item.code })), [publishDataLayerListResponce]);
-  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name, code: item.code })), [filterPublishedList]);
+  const layerListAvailablility = useMemo(() => publishDataLayerListResponce.map((item) => ({ id: item.id, name: item.name, code: item.code, entity_type__code: item.entity_type__code })), [publishDataLayerListResponce]);
+  const filterListAvailablility = useMemo(() => filterPublishedList.map((item) => ({ id: item.id, name: item.name, code: item.code, entity_type__code: item.entity_type__code })), [filterPublishedList]);
+  const publishedFiltersById = useMemo(() => {
+    return filterPublishedList.reduce((acc, filter) => {
+      acc[filter.id] = filter;
+      return acc;
+    }, {} as Record<string, { entity_type__code?: string }>);
+  }, [filterPublishedList]);
 
   const getActiveFilterListFromStore: ActiveFilterListType[] = useMemo(() => formDataCountry?.active_filters_list, [formDataCountry])
   const enrichedFilters = useMemo((): FilterListWithOptionsTypes[] => {
@@ -83,9 +145,11 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
 
     return (filterListWithOptions ?? []).map(filter => {
       const defaults = defaultsById.get(filter.id);
+      const publishedFilter = publishedFiltersById[filter.id];
 
       return {
         ...filter,
+        entity_type__code: filter.entity_type__code ?? publishedFilter?.entity_type__code,
         options: {
           ...filter.options,
           is_default: !!defaults?.is_default, // ensure boolean
@@ -93,7 +157,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         },
       };
     });
-  }, [getActiveFilterListFromStore, filterListWithOptions]);
+  }, [getActiveFilterListFromStore, filterListWithOptions, publishedFiltersById]);
 
   useEffect(() => {
     const countryCode = countryList.find((country) => country.id === id)?.code.toLowerCase();
@@ -106,8 +170,10 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     if (formDataCountry?.active_layers_list) {
       const dataSourceList = {} as Record<string, { name: string, description: string }>;
       const legendConfigDefault = {} as Record<string, LegendConfigType>;
-      let currentDefaultLayer;
+      const currentDefaultLayersByEntity = {} as Record<string, number>;
       const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string }, legend_configs?: LegendConfigType; }) => {
+        const layerInfo = layersNames[String(layer.data_layer_id)];
+        const entityTypeCode = getEntityTypeCode(layerInfo);
         dataSourceList[String(layer.data_layer_id)] = {
           name: '',
           description: '',
@@ -115,17 +181,18 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         }
         legendConfigDefault[String(layer.data_layer_id)] = layer.legend_configs || {};
         if (layer.is_default) {
-          currentDefaultLayer = layer?.data_layer_id;
+          currentDefaultLayersByEntity[entityTypeCode] = layer.data_layer_id;
         }
         return {
           id: layer.data_layer_id,
-          name: layersNames[String(layer.data_layer_id)]?.name,
-          code: layersNames[String(layer.data_layer_id)]?.code
+          name: layerInfo?.name ?? '',
+          code: layerInfo?.code,
+          entity_type__code: layerInfo?.entity_type__code
         }
       });
       setSelectedActiveLayers(activeLayerList);
       setDataSource(dataSourceList);
-      setDefaultLayer(currentDefaultLayer);
+      setDefaultLayersByEntity(currentDefaultLayersByEntity);
       setLegendConfigList(legendConfigDefault);
     }
   }, [formDataCountry?.active_layers_list, layersNames]);
@@ -137,7 +204,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         return {
           id: filter.advance_filter_id,
           name: foundFilter?.name ?? '',
-          code: foundFilter?.code ?? ''
+          code: foundFilter?.code ?? '',
+          entity_type__code: foundFilter?.entity_type__code
         }
       })
       setSelectedActiveFilters(activeFilterList);
@@ -175,6 +243,26 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
     const selectedIds = new Set(selectedActiveFilters.map(s => s.id));
     return (enrichedFilters || []).filter(f => selectedIds.has(f.id));
   }, [enrichedFilters, selectedActiveFilters]);
+
+  const selectedActiveLayerDetails = useMemo(() => {
+    const selectedIds = new Set(selectedActiveLayers.map(layer => layer.id));
+    return filteredPublishDataLayerList.filter(layer => selectedIds.has(layer.id));
+  }, [filteredPublishDataLayerList, selectedActiveLayers]);
+
+  const selectedActiveLayersByEntity = useMemo(() => {
+    return groupByEntityTypeCode(selectedActiveLayerDetails);
+  }, [selectedActiveLayerDetails]);
+
+  const activeFiltersByEntity = useMemo(() => {
+    return groupByEntityTypeCode(activeFilters);
+  }, [activeFilters]);
+
+  const updateDefaultLayerForEntity = (entityTypeCode: string, layerId: number) => {
+    setDefaultLayersByEntity((current) => ({
+      ...current,
+      [entityTypeCode]: layerId
+    }));
+  };
 
   const activeFiltersById = useMemo(() => {
     const m = new Map<number, FilterListWithOptionsTypes>();
@@ -348,7 +436,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('active_layers_list', JSON.stringify(selectedActiveLayers?.map((layer) => ({
         data_layer_id: layer.id,
         data_sources: dataSource[String(layer.id)],
-        is_default: String(defaultLayer) === String(layer.id),
+        is_default: String(defaultLayersByEntity[getEntityTypeCode(layer)]) === String(layer.id),
         legend_configs: legendConfigList[String(layer.id)] ?? {}
       }))));
       formData.append('active_filters_list', JSON.stringify(selectedActiveFilters?.map((filter) =>
@@ -599,15 +687,16 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               required
               label="Choose active layers"
               titleText="Active layers"
-              itemToString={(item: DataLayer) => item.name || ''}
-              itemToElement={(item: DataLayer) => (
-                <span>
-                  {item.name} ({item.code})
+              itemToString={(item: SelectOption) => item.name || ''}
+              itemToElement={(item: SelectOption) => (
+                <span style={dropdownItemStyle}>
+                  <EntityTypeTag entityTypeCode={item.entity_type__code} />
+                  <span style={dropdownItemTextStyle}>{item.name} ({item.code})</span>
                 </span>
               )}
               items={layerListAvailablility}
               id={`active-layers`}
-              onChange={({ selectedItems }: { selectedItems: { id: number; name: string }[] }) => {
+              onChange={({ selectedItems }: { selectedItems: SelectOption[] }) => {
                 setSelectedActiveLayers(selectedItems);
               }}
               selectedItems={selectedActiveLayers}
@@ -619,16 +708,16 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               required
               label="Choose active filters"
               titleText="Active filters"
-              itemToString={(item: { id: number; name: string }) => item.name || ''}
-              itemToElement={(item: { id: number; name: string }) => (
-                <span>
-                  {item.name} ({item.code})
+              itemToString={(item: SelectOption) => item.name || ''}
+              itemToElement={(item: SelectOption) => (
+                <span style={dropdownItemStyle}>
+                  <EntityTypeTag entityTypeCode={item.entity_type__code} />
+                  <span style={dropdownItemTextStyle}>{item.name} ({item.code})</span>
                 </span>
               )}
               items={filterListAvailablility}
               id={`active-filters`}
-              onChange={({ selectedItems }: { selectedItems: { id: number; name: string }[] }) => {
-                console.log("selectedItems: ", selectedItems);
+              onChange={({ selectedItems }: { selectedItems: SelectOption[] }) => {
                 setSelectedActiveFilters(selectedItems);
               }}
               selectedItems={selectedActiveFilters}
@@ -661,113 +750,121 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               </div>
             </div>
             {openAccordion === 'layers' &&
-              filteredPublishDataLayerList.map((item: DataLayer) => (
-                selectedActiveLayers.some(layer => layer.id === item.id) && <React.Fragment key={item.id}>
-                  <div style={{ paddingLeft: '3rem', gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <p style={{ fontWeight: 'bold' }}>{item.name} ({item.type.toLowerCase()})</p>
-                    {item.type === 'LIVE' &&
-                      <RadioButton labelText="Select default layer" name={item.name} value={item.id} id={String(item.id)} checked={String(item.id) === String(defaultLayer)} onChange={() => setDefaultLayer(item.id)} />
-                    }
+              Object.entries(selectedActiveLayersByEntity).map(([entityTypeCode, layers]) => (
+                <div key={entityTypeCode} style={entityGroupStyle}>
+                  <div style={entityGroupHeaderStyle}>
+                    <EntityTypeTag entityTypeCode={entityTypeCode} />
+                    <strong>{layers.length} associated layer{layers.length === 1 ? '' : 's'}</strong>
                   </div>
-                  <RowContainer>
-                    {item.type === 'LIVE' && <InputContainer>
-                      <InputLabel>
-                        National / School benchmark ({item.global_benchmark?.unit})
-                        <Checkbox id={`default-national-benchmark-${item.id}`} disabled={!layersBenchmark[item?.id]} labelText="Is default benchmark" name={item.name} value={item.id} checked={defaultNationalBenchmark[item?.id]} onChange={(_, { checked }) => updateDefaultNationalBenchmark(item.id, checked)} />
-                      </InputLabel>
-                      <SchoolFieldsWrapper>
-                        <TextInput
-                          labelText=""
-                          id={`${item?.name}{item?.id}`}
-                          name={item?.name}
-                          placeholder="Enter national / school benchmark"
-                          value={layersBenchmark[item?.id] || ""}
-                          onChange={(e) => {
-                            if (!e.target.value) {
-                              updateDefaultNationalBenchmark(item.id, false)
-                            }
-                            setLayersBenchmark({ ...layersBenchmark, [item?.id]: e.target.value })
-                          }
-                          }
-                        />
-                        <Div $margin="0.5rem 0">
-                          {!isNaN(Number(layersBenchmark[item?.id])) && <InputLabel>
-                            {speedConverterUtil(item.global_benchmark.unit, item.global_benchmark.convert_unit, Number(layersBenchmark[item?.id] || 0))}
-                            {' '}<b>{item?.global_benchmark?.convert_unit?.toUpperCase()}</b>
-                          </InputLabel>}
-                        </Div>
-                      </SchoolFieldsWrapper>
-                    </InputContainer>}
-                    {item.type === 'LIVE' &&
-                      <InputContainer>
-                        <InputLabel>
-                          National / School benchmark description
-                        </InputLabel>
-                        <SchoolFieldsWrapper>
-                          <TextInput
-                            labelText=""
-                            id={`${item?.name}{item?.id}`}
-                            name={item?.name}
-                            placeholder="Enter national / school benchmark description"
-                            value={layerDescriptions[item?.id] || ""}
-                            onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
-                          />
-                        </SchoolFieldsWrapper>
-                      </InputContainer>
-                    }
-                    <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
-                    <InputContainer style={{ alignSelf: 'flex-start' }}>
-                      <InputLabel>
-                        Benchmark name (default: National)
-                      </InputLabel>
-                      <SchoolFieldsWrapper>
-                        <TextInput
-                          labelText=""
-                          id={`benchmark-types-${item?.id}`}
-                          name={`${item?.name}_benchmark-type`}
-                          placeholder="Enter benchmark name (default: National)"
-                          value={benchmarkNames[item?.id] || ""}
-                          onChange={(e) => {
-                            setbenchmarkNames({ ...benchmarkNames, [item?.id]: e.target.value })
-                          }
-                          }
-                        />
-                      </SchoolFieldsWrapper>
-                    </InputContainer>
-                  </RowContainer>
-                  <RowContainer>
-                    <InputContainer>
-                      <InputLabel>
-                        Data source name
-                      </InputLabel>
-                      <SchoolFieldsWrapper>
-                        <TextInput
-                          labelText=""
-                          id={`${item?.name}data_source${item?.id}`}
-                          name={`${item?.name}_data_source_name`}
-                          placeholder="Enter data source name"
-                          value={dataSource[item.id]?.name || ""}
-                          onChange={(e) => setDataSource({ ...dataSource, [item.id]: { ...dataSource[item.id], name: e.target.value } })}
-                        />
-                      </SchoolFieldsWrapper>
-                    </InputContainer>
-                    <InputContainer>
-                      <InputLabel>
-                        Data source descriptions
-                      </InputLabel>
-                      <SchoolFieldsWrapper>
-                        <TextInput
-                          labelText=""
-                          id={`${item?.name}datasource${item?.id}`}
-                          name={`data_source_description_${item.id}`}
-                          placeholder="Enter data source descriptions"
-                          value={dataSource[item.id]?.description || ""}
-                          onChange={(e) => setDataSource({ ...dataSource, [item.id]: { ...dataSource[item.id], description: e.target.value } })}
-                        />
-                      </SchoolFieldsWrapper>
-                    </InputContainer>
-                  </RowContainer>
-                </React.Fragment>
+                  {layers.map((item: DataLayer) => (
+                    <React.Fragment key={item.id}>
+                      <div style={{ ...entityGroupContentStyle, gap: '0.4rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                        <p style={{ fontWeight: 'bold' }}>{item.name} ({item.type.toLowerCase()})</p>
+                        {item.type === 'LIVE' &&
+                          <RadioButton labelText="Select default layer" name={`default-layer-${entityTypeCode}`} value={item.id} id={String(item.id)} checked={String(defaultLayersByEntity[entityTypeCode]) === String(item.id)} onChange={() => updateDefaultLayerForEntity(entityTypeCode, item.id)} />
+                        }
+                      </div>
+                      <RowContainer style={{ padding: '0 1rem 1rem' }}>
+                        {item.type === 'LIVE' && <InputContainer>
+                          <InputLabel>
+                            National / School benchmark ({item.global_benchmark?.unit})
+                            <Checkbox id={`default-national-benchmark-${item.id}`} disabled={!layersBenchmark[item?.id]} labelText="Is default benchmark" name={item.name} value={item.id} checked={defaultNationalBenchmark[item?.id]} onChange={(_, { checked }) => updateDefaultNationalBenchmark(item.id, checked)} />
+                          </InputLabel>
+                          <SchoolFieldsWrapper>
+                            <TextInput
+                              labelText=""
+                              id={`${item?.name}{item?.id}`}
+                              name={item?.name}
+                              placeholder="Enter national / school benchmark"
+                              value={layersBenchmark[item?.id] || ""}
+                              onChange={(e) => {
+                                if (!e.target.value) {
+                                  updateDefaultNationalBenchmark(item.id, false)
+                                }
+                                setLayersBenchmark({ ...layersBenchmark, [item?.id]: e.target.value })
+                              }
+                              }
+                            />
+                            <Div $margin="0.5rem 0">
+                              {!isNaN(Number(layersBenchmark[item?.id])) && <InputLabel>
+                                {speedConverterUtil(item.global_benchmark.unit, item.global_benchmark.convert_unit, Number(layersBenchmark[item?.id] || 0))}
+                                {' '}<b>{item?.global_benchmark?.convert_unit?.toUpperCase()}</b>
+                              </InputLabel>}
+                            </Div>
+                          </SchoolFieldsWrapper>
+                        </InputContainer>}
+                        {item.type === 'LIVE' &&
+                          <InputContainer>
+                            <InputLabel>
+                              National / School benchmark description
+                            </InputLabel>
+                            <SchoolFieldsWrapper>
+                              <TextInput
+                                labelText=""
+                                id={`${item?.name}{item?.id}`}
+                                name={item?.name}
+                                placeholder="Enter national / school benchmark description"
+                                value={layerDescriptions[item?.id] || ""}
+                                onChange={(e) => setLayerDescriptions({ ...layerDescriptions, [item?.id]: e.target.value })}
+                              />
+                            </SchoolFieldsWrapper>
+                          </InputContainer>
+                        }
+                        <CountryLegendBenchmark globalConfig={item.legend_configs} config={legendConfigList[item?.id]} onChange={(value: LegendConfigType) => setLegendConfigList({ ...legendConfigList, [item?.id]: value })} />
+                        <InputContainer style={{ alignSelf: 'flex-start' }}>
+                          <InputLabel>
+                            Benchmark name (default: National)
+                          </InputLabel>
+                          <SchoolFieldsWrapper>
+                            <TextInput
+                              labelText=""
+                              id={`benchmark-types-${item?.id}`}
+                              name={`${item?.name}_benchmark-type`}
+                              placeholder="Enter benchmark name (default: National)"
+                              value={benchmarkNames[item?.id] || ""}
+                              onChange={(e) => {
+                                setbenchmarkNames({ ...benchmarkNames, [item?.id]: e.target.value })
+                              }
+                              }
+                            />
+                          </SchoolFieldsWrapper>
+                        </InputContainer>
+                      </RowContainer>
+                      <RowContainer style={{ padding: '0 1rem 1rem' }}>
+                        <InputContainer>
+                          <InputLabel>
+                            Data source name
+                          </InputLabel>
+                          <SchoolFieldsWrapper>
+                            <TextInput
+                              labelText=""
+                              id={`${item?.name}data_source${item?.id}`}
+                              name={`${item?.name}_data_source_name`}
+                              placeholder="Enter data source name"
+                              value={dataSource[item.id]?.name || ""}
+                              onChange={(e) => setDataSource({ ...dataSource, [item.id]: { ...dataSource[item.id], name: e.target.value } })}
+                            />
+                          </SchoolFieldsWrapper>
+                        </InputContainer>
+                        <InputContainer>
+                          <InputLabel>
+                            Data source descriptions
+                          </InputLabel>
+                          <SchoolFieldsWrapper>
+                            <TextInput
+                              labelText=""
+                              id={`${item?.name}datasource${item?.id}`}
+                              name={`data_source_description_${item.id}`}
+                              placeholder="Enter data source descriptions"
+                              value={dataSource[item.id]?.description || ""}
+                              onChange={(e) => setDataSource({ ...dataSource, [item.id]: { ...dataSource[item.id], description: e.target.value } })}
+                            />
+                          </SchoolFieldsWrapper>
+                        </InputContainer>
+                      </RowContainer>
+                    </React.Fragment>
+                  ))}
+                </div>
               ))
             }
           </CountryListDataLayer>
@@ -800,27 +897,37 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
             </div>
           </div>
           {openAccordion === 'filters' && (
-            <CountryListDefaultFilters>
-              {activeFilters.map(item => {
-                const Component = components?.[item.type] as React.JSXElementConstructor<any>;
-                if (!Component) return null;
-                const itemKey = `${item.id}`;
-                const extraItemKey = `ignore_${itemKey}`;
-                const extraValue = adminDefinedDefaultFilterValues[extraItemKey];
-                const value = adminDefinedDefaultFilterValues[itemKey];
-                return (
-                  <Component
-                    key={item.id}
-                    {...item}
-                    itemKey={itemKey}
-                    value={value}
-                    extraValue={extraValue}
-                    onChange={onDefaultFiltersValueChange}
-                    light
-                  />
-                );
-              })}
-            </CountryListDefaultFilters>
+            <>
+              {Object.entries(activeFiltersByEntity).map(([entityTypeCode, filters]) => (
+                <div key={entityTypeCode} style={entityGroupStyle}>
+                  <div style={entityGroupHeaderStyle}>
+                    <EntityTypeTag entityTypeCode={entityTypeCode} />
+                    <strong>{filters.length} default filter{filters.length === 1 ? '' : 's'}</strong>
+                  </div>
+                  <CountryListDefaultFilters style={{ padding: '1rem', paddingBottom: '1.25rem' }}>
+                    {filters.map(item => {
+                      const Component = components?.[item.type] as React.JSXElementConstructor<any>;
+                      if (!Component) return null;
+                      const itemKey = `${item.id}`;
+                      const extraItemKey = `ignore_${itemKey}`;
+                      const extraValue = adminDefinedDefaultFilterValues[extraItemKey];
+                      const value = adminDefinedDefaultFilterValues[itemKey];
+                      return (
+                        <Component
+                          key={item.id}
+                          {...item}
+                          itemKey={itemKey}
+                          value={value}
+                          extraValue={extraValue}
+                          onChange={onDefaultFiltersValueChange}
+                          light
+                        />
+                      );
+                    })}
+                  </CountryListDefaultFilters>
+                </div>
+              ))}
+            </>
           )}
           </div>}
       </CountryFormScroll>
