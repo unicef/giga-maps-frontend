@@ -285,7 +285,7 @@ loadMoreResults.watch(() => {
   const country = $country.getState();
   const mapRoutes = $mapRoutes.getState();
   const page = $searchPage.getState();
-  const selectedSearchEntityTypes = $selectedSearchEntityTags.getState();
+  const selectedSearchEntityTags = $selectedSearchEntityTags.getState();
   const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
 
   if (hasSearchInput && hasMore) {
@@ -298,7 +298,7 @@ loadMoreResults.watch(() => {
     setSearchPage(page + 1);
 
     // Fetch more results
-    getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page, selectedSearchEntityTypes });
+    void getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page, selectedSearchEntityTags });
   }
 });
 
