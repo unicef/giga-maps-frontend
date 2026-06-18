@@ -8,7 +8,6 @@ export function buildFilterQueryFromSelections(
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
-  debugger;
   // Start from current query so we preserve non-filter params
   const params = new URLSearchParams(window.location.search);
 
