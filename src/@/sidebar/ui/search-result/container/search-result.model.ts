@@ -82,15 +82,18 @@ export const $searchResultResponse = createStore<SearchResultCollection[] | null
 $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
   // Convert the results to our format
   const results = payload.results as unknown as SearchResultApi[];
-  const mappedResults = results.map(({ name, admin1_name: admin1Name, admin2_name: admin2Name, country_code: countryCode, country_id: countryId, country_name: countryName, id }) => ({
-    admin1Name,
-    admin2Name,
-    countryCode,
-    countryId,
-    countryName,
-    name,
-    id
-  })) as SearchResultCollection[];
+  const mappedResults = results.map(({ name, admin1_name: admin1Name, admin2_name: admin2Name, country_code: countryCode, country_id: countryId,
+    country_name: countryName, entity_type_code: entityTypetag, id }) => ({
+      admin1Name,
+      admin2Name,
+      countryCode,
+      countryId,
+      countryName,
+      entityTypetag,
+      name,
+      id,
+
+    })) as SearchResultCollection[];
   const count = payload.count;
   let list = mappedResults;
   const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
@@ -122,6 +125,7 @@ export const $searchResultCollection = sample({
   }),
   fn: ({ hasSearchInput, query, countryAdminCollection, schoolCollection }) => {
     if (!hasSearchInput) return [];
+    debugger;
     const { countries, admin1 } = countryAdminCollection;
     const matchCountries = matchAndCollectItems({ data: countries, type: SEARCH_DATA_TYPE.COUNTRY, query, maxCount: SEARCH_COUNTRY_SIZE })
     const matchAdmin1 = matchAndCollectItems({ data: admin1, type: SEARCH_DATA_TYPE.ADMIN1, query, maxCount: SEARCH_ADMIN_SIZE });
@@ -130,7 +134,7 @@ export const $searchResultCollection = sample({
       adminName: item.admin1Name || item.admin2Name,
       schoolId: item.id,
       id: getId(),
-      type: SEARCH_DATA_TYPE.SCHOOL
+      type: SEARCH_DATA_TYPE.SCHOOL,
     })) || []
     return [
       ...matchCountries,
@@ -218,7 +222,7 @@ sample({
     if (item.type === SEARCH_DATA_TYPE.COUNTRY) {
       mapCountry.navigate({ code: item.countryCode.toLowerCase() });
     } else if (item.type === SEARCH_DATA_TYPE.SCHOOL) {
-      void applySearchFx({ schoolIds: [item.schoolId ?? 0], countryCode: item.countryCode })
+      void applySearchFx({ schoolIds: [item.schoolId ?? 0], countryCode: item.countryCode, item })
     } else {
       mapCountry.navigate({ code: item.countryCode.toLowerCase(), path: `/${item.adminCode}` });
       // district click
@@ -266,9 +270,9 @@ sample({
     if (mapRoutes.map) {
       countryId = undefined;
     }
-    // const selectedSearchEntityTags = $selectedSearchEntityTags.getState();
+    const selectedSearchEntityTags = $selectedSearchEntityTags.getState();
     // Reset to page 0 for new queries
-    return ({ query, countryId, page: 0,/* selectedSearchEntityTags*/ })
+    return ({ query, countryId, page: 0, selectedSearchEntityTags })
   },
   target: getSearchResultsFx
 });
@@ -278,7 +282,6 @@ $query.watch(() => {
 })
 // Handle loading more results
 loadMoreResults.watch(() => {
-  debugger;
   const hasSearchInput = $hasSearchInput.getState();
   const hasMore = $hasMoreResults.getState();
   const query = $query.getState();

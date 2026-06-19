@@ -326,10 +326,10 @@ export const changeConnectivitySpeedUnknown = createEvent<boolean>();
 export const changeEntityConnectivitySpeed = createEvent<{
   entityType: EntityType;
   key:
-    | ConnectivityDistribution.good
-    | ConnectivityDistribution.moderate
-    | ConnectivityDistribution.bad
-    | ConnectivityDistribution.unknown;
+  | ConnectivityDistribution.good
+  | ConnectivityDistribution.moderate
+  | ConnectivityDistribution.bad
+  | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultConnectivitySpeedFilter = {
@@ -424,17 +424,17 @@ $connectivitySpeedFilterByEntity.on(
 );
 const getSelectedConnectivitySpeedValue =
   (key: keyof typeof defaultConnectivitySpeedFilter) =>
-  (
-    connectivitySpeedFilterByEntity: EntityStoreMap<
-      typeof defaultConnectivitySpeedFilter
-    >,
-    selectedEntityType: EntityType,
-  ) =>
-    getEntityValue(
-      connectivitySpeedFilterByEntity,
-      selectedEntityType,
-      defaultConnectivitySpeedFilter,
-    )[key];
+    (
+      connectivitySpeedFilterByEntity: EntityStoreMap<
+        typeof defaultConnectivitySpeedFilter
+      >,
+      selectedEntityType: EntityType,
+    ) =>
+      getEntityValue(
+        connectivitySpeedFilterByEntity,
+        selectedEntityType,
+        defaultConnectivitySpeedFilter,
+      )[key];
 export const $connectivitySpeedGood = combine(
   $connectivitySpeedFilterByEntity,
   $selectedEntityType,
@@ -571,7 +571,7 @@ export const $downloadLayerData = $layersList.map(
         layer?.type === LayerTypeChoices.LIVE &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-          'connectivity_speed',
+        'connectivity_speed',
     ) ?? null,
 );
 export const $downloadLayerId = $downloadLayerData.map(
@@ -584,7 +584,7 @@ export const $coverageLayerData = $layersList.map(
         layer?.type === LayerTypeChoices.STATIC &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-          'coverage_type',
+        'coverage_type',
     ) ?? null,
 );
 export const $coverageLayerId = $coverageLayerData.map(
@@ -917,8 +917,8 @@ const buildCurrentLayerLegends = ({
   };
   selectedLayerData?: LayerType | null;
   stylePaintData: typeof $stylePaintData extends { getState: () => infer T }
-    ? T
-    : never;
+  ? T
+  : never;
 }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -1400,10 +1400,10 @@ export const changeCoverageUnknown = createEvent<boolean>();
 export const changeEntityCoverageStatus = createEvent<{
   entityType: EntityType;
   key:
-    | ConnectivityDistribution.good
-    | ConnectivityDistribution.moderate
-    | ConnectivityDistribution.bad
-    | ConnectivityDistribution.unknown;
+  | ConnectivityDistribution.good
+  | ConnectivityDistribution.moderate
+  | ConnectivityDistribution.bad
+  | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultCoverageStatusAll = {
@@ -1470,15 +1470,15 @@ $coverageStatusAllByEntity.on(
 );
 const getSelectedCoverageStatusValue =
   (key: keyof typeof defaultCoverageStatusAll) =>
-  (
-    coverageStatusAllByEntity: EntityStoreMap<typeof defaultCoverageStatusAll>,
-    selectedEntityType: EntityType,
-  ) =>
-    getEntityValue(
-      coverageStatusAllByEntity,
-      selectedEntityType,
-      defaultCoverageStatusAll,
-    )[key];
+    (
+      coverageStatusAllByEntity: EntityStoreMap<typeof defaultCoverageStatusAll>,
+      selectedEntityType: EntityType,
+    ) =>
+      getEntityValue(
+        coverageStatusAllByEntity,
+        selectedEntityType,
+        defaultCoverageStatusAll,
+      )[key];
 export const $coverage5g4g = combine(
   $coverageStatusAllByEntity,
   $selectedEntityType,

@@ -1,16 +1,17 @@
-import { useRef, useEffect } from "react";
 import { useStore } from "effector-react";
-import { PropsWithChildren, useMemo } from "react";
+import { PropsWithChildren, useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+import { DEFAULT_ENTITY_REGISTRY } from "~/@/entities";
 
 import { $searchInput, setSearchInMobile } from "../../common-components/top-search-bar/top-search-bar.model";
 import { SEARCH_DATA_TYPE } from "../container/search-result.constant";
 import { getSearchResultsFx } from "../container/search-result.fx";
-import { $searchResultCollection, $hasMoreResults, loadMoreResults, onSearchItemClick, $searchPage } from "../container/search-result.model";
+import { $hasMoreResults, $searchPage, $searchResultCollection, loadMoreResults, onSearchItemClick } from "../container/search-result.model";
 import { SearchType } from "../container/search-result.type";
 import SearchResultNotFoundView from "../search-country-list/search-result-not-found-view";
 import { LeftItem, Loading, NoMoreResults, SearchItem, SearchResultScroll } from "../styles/search-result-style";
-import { useTranslation } from "react-i18next";
 
 
 function HighlightedText({ query, children }: PropsWithChildren<{ query: string }>) {
@@ -70,7 +71,7 @@ export default function SearchResultList() {
           <HighlightedText query={searchInput}>{t(item?.name)}</HighlightedText>
           {item.type === SEARCH_DATA_TYPE.COUNTRY && <span className="type-name">{t('country')}</span>}
           {item.type === SEARCH_DATA_TYPE.SCHOOL && <span className="type-name">
-            {t('school')} <span className="light">{' '}{t('in')}{' '}</span>
+            {t(DEFAULT_ENTITY_REGISTRY[item.entityTypetag].slug)} <span className="light">{' '}{t('in')}{' '}</span>
             <span className="highlight">{item?.adminName}{' '}/{' '}{t(item.countryName)}</span>
           </span>}
           {item.type === SEARCH_DATA_TYPE.ADMIN1 && <span className="type-name">
@@ -81,6 +82,7 @@ export default function SearchResultList() {
       </SearchItem>
     ));
   };
+  console.log(searchResult);
   return (<SearchResultScroll ref={scrollRef} id="scrollableDiv" className="search-results-container">
 
     {isLoading && searchResult?.length === 0 && <Loading description="Loading..." />}

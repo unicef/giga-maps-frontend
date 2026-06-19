@@ -67,7 +67,6 @@ export const getSearchResultsFx = createRequestFx(
     } else if (countryId) {
       countryFilter = `&country_id__exact=${countryId}`;
     }
-    debugger;
 
     let entityFilter = '&entity_type__code=all';
     if (selectedSearchEntityTags.length > 0) {
