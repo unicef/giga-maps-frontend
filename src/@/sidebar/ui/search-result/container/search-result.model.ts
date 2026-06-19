@@ -125,7 +125,6 @@ export const $searchResultCollection = sample({
   }),
   fn: ({ hasSearchInput, query, countryAdminCollection, schoolCollection }) => {
     if (!hasSearchInput) return [];
-    debugger;
     const { countries, admin1 } = countryAdminCollection;
     const matchCountries = matchAndCollectItems({ data: countries, type: SEARCH_DATA_TYPE.COUNTRY, query, maxCount: SEARCH_COUNTRY_SIZE })
     const matchAdmin1 = matchAndCollectItems({ data: admin1, type: SEARCH_DATA_TYPE.ADMIN1, query, maxCount: SEARCH_ADMIN_SIZE });

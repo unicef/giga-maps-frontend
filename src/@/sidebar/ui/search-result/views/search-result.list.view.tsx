@@ -82,7 +82,6 @@ export default function SearchResultList() {
       </SearchItem>
     ));
   };
-  console.log(searchResult);
   return (<SearchResultScroll ref={scrollRef} id="scrollableDiv" className="search-results-container">
 
     {isLoading && searchResult?.length === 0 && <Loading description="Loading..." />}
