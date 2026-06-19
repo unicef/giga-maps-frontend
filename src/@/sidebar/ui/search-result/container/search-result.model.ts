@@ -7,7 +7,7 @@ import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { getId, getLocalStorage, setLocalStorage } from "~/lib/utils";
 
 import { applySearchFx } from "../../../effects/search-country-fx";
-import { $hasSearchInput, $isSearchFocused, $searchInput, $showCountries, changeSearchText, clearSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
+import { $hasSearchInput, $isSearchFocused, $searchInput, $selectedSearchEntityTags, $showCountries, changeSearchText, clearSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
 import { MAX_SEARCH_HISTORY, SCHOOL_LIST_SEARCH_LENGTH, SEARCH_ADMIN_SIZE, SEARCH_COUNTRY_SIZE, SEARCH_DATA_TYPE, STORE_SEARCH_HISTORY } from "./search-result.constant";
 import { fetchCountriesWithDistrictFx, fetchSchoolListFx, getSearchResultsFx } from "./search-result.fx";
 import { CountryWithDistrictCount, SearchResultApi, SearchResultCollection, SearchType } from "./search-result.type";
@@ -82,15 +82,18 @@ export const $searchResultResponse = createStore<SearchResultCollection[] | null
 $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
   // Convert the results to our format
   const results = payload.results as unknown as SearchResultApi[];
-  const mappedResults = results.map(({ name, admin1_name: admin1Name, admin2_name: admin2Name, country_code: countryCode, country_id: countryId, country_name: countryName, id }) => ({
-    admin1Name,
-    admin2Name,
-    countryCode,
-    countryId,
-    countryName,
-    name,
-    id
-  })) as SearchResultCollection[];
+  const mappedResults = results.map(({ name, admin1_name: admin1Name, admin2_name: admin2Name, country_code: countryCode, country_id: countryId,
+    country_name: countryName, entity_type_code: entityTypetag, id }) => ({
+      admin1Name,
+      admin2Name,
+      countryCode,
+      countryId,
+      countryName,
+      entityTypetag,
+      name,
+      id,
+
+    })) as SearchResultCollection[];
   const count = payload.count;
   let list = mappedResults;
   const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
@@ -130,7 +133,7 @@ export const $searchResultCollection = sample({
       adminName: item.admin1Name || item.admin2Name,
       schoolId: item.id,
       id: getId(),
-      type: SEARCH_DATA_TYPE.SCHOOL
+      type: SEARCH_DATA_TYPE.SCHOOL,
     })) || []
     return [
       ...matchCountries,
@@ -218,7 +221,7 @@ sample({
     if (item.type === SEARCH_DATA_TYPE.COUNTRY) {
       mapCountry.navigate({ code: item.countryCode.toLowerCase() });
     } else if (item.type === SEARCH_DATA_TYPE.SCHOOL) {
-      void applySearchFx({ schoolIds: [item.schoolId ?? 0], countryCode: item.countryCode })
+      void applySearchFx({ schoolIds: [item.schoolId ?? 0], countryCode: item.countryCode, item })
     } else {
       mapCountry.navigate({ code: item.countryCode.toLowerCase(), path: `/${item.adminCode}` });
       // district click
@@ -257,7 +260,7 @@ export const loadMoreResults = createEvent();
 // Sample for initial search
 sample({
   clock: $query,
-  source: combine($hasSearchInput, $query, $country, $mapRoutes),
+  source: combine($hasSearchInput, $query, $country, $mapRoutes,),
   filter: ([hasSearchInput]) => {
     return hasSearchInput
   },
@@ -266,8 +269,9 @@ sample({
     if (mapRoutes.map) {
       countryId = undefined;
     }
+    const selectedSearchEntityTags = $selectedSearchEntityTags.getState();
     // Reset to page 0 for new queries
-    return ({ query, countryId, page: 0 })
+    return ({ query, countryId, page: 0, selectedSearchEntityTags })
   },
   target: getSearchResultsFx
 });
@@ -283,6 +287,7 @@ loadMoreResults.watch(() => {
   const country = $country.getState();
   const mapRoutes = $mapRoutes.getState();
   const page = $searchPage.getState();
+  const selectedSearchEntityTags = $selectedSearchEntityTags.getState();
   const hasLoadedAllForCurrentCountry = $hasLoadedAllForCurrentCountry.getState();
 
   if (hasSearchInput && hasMore) {
@@ -295,7 +300,7 @@ loadMoreResults.watch(() => {
     setSearchPage(page + 1);
 
     // Fetch more results
-    getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page });
+    void getSearchResultsFx({ query, countryId, excludeCountryId: hasLoadedAllForCurrentCountry, page, selectedSearchEntityTags });
   }
 });
 

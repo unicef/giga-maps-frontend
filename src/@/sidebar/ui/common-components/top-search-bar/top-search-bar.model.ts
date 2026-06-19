@@ -1,6 +1,7 @@
 import { combine, createEvent, createStore, restore } from "effector";
-import { router } from "~/core/routes";
 
+import { EntityType } from "~/@/entities/types/base-entity.type";
+import { router } from "~/core/routes";
 import { setPayload } from "~/lib/effector-kit";
 
 
@@ -24,3 +25,16 @@ $searchInMobile.on(setSearchInMobile, setPayload);
 
 $showCountries.reset(router.historyUpdated, changeSearchText);
 
+// Selected entity tags for search filtering
+export const toggleSearchEntityTag = createEvent<EntityType>();
+
+export const $selectedSearchEntityTags = createStore<EntityType[]>([]);
+
+// Single-select for now; change handler to [...current, tag] for multi-select
+$selectedSearchEntityTags.on(toggleSearchEntityTag, (current, tag) =>
+  //future need
+  //current.includes(tag) ? current.filter((t) => t !== tag) : [...current, tag],
+  current.includes(tag) ? [] : [tag],
+);
+
+$selectedSearchEntityTags.reset(clearSearchText, router.historyUpdated);

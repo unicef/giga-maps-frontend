@@ -1,5 +1,7 @@
 import { useStore } from 'effector-react';
+import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 import { MouseEvent } from 'react';
+
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 import {
@@ -25,17 +27,16 @@ import { cn } from '~/lib/cn';
 import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
-import CommonComponentGigaLayer from '../global-and-country-view-components/common-component-gigalayer';
 import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
 import SidebarMenuList from '../common-components/sidebar-menu-list';
 import TopSearchBar from '../common-components/top-search-bar';
 import GlobalAndCountryView from '../global-and-country-view-components';
+import CommonComponentGigaLayer from '../global-and-country-view-components/common-component-gigalayer';
 import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
 import { LayerDetailContainer } from '../search-result/styles/search-result-style';
-import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation(),
@@ -57,18 +58,18 @@ export default function Sidebar() {
         'relative z-2 flex w-full shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)]',
         isMobile
           ? cn(
-              'fixed inset-x-0',
-              sidebarHeight ? 'h-[60vh]' : 'h-[32vh]',
-              isSidebarCollapsed ? 'bottom-[-24vh]' : 'bottom-0',
-            )
+            'fixed inset-x-0',
+            sidebarHeight ? 'h-[60vh]' : 'h-[32vh]',
+            isSidebarCollapsed ? 'bottom-[-24vh]' : 'bottom-0',
+          )
           : cn(
-              'fixed top-2',
-              isSidebarCollapsed
-                ? '-left-68 min-[1584px]:left-[-18.2rem]'
-                : 'left-2',
-              'bottom-[1.8rem] min-[1584px]:bottom-2',
-              'w-[320px] min-[1584px]:w-[320px]',
-            ),
+            'fixed top-2',
+            isSidebarCollapsed
+              ? '-left-68 min-[1584px]:left-[-18.2rem]'
+              : 'left-2',
+            'bottom-[1.8rem] min-[1584px]:bottom-2',
+            'w-[320px] min-[1584px]:w-[320px]',
+          ),
       )}
       onClick={() => onClickSidebar()}
     >

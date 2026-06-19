@@ -20,6 +20,7 @@ export const mapOverview = router.add('/map');
 export const mapCountries = router.add('/map/countries:path(/.*)?');
 export const mapCountry = router.add<Code>('/map/country/:code:path(/.*)?');
 export const mapSchools = router.add('/map/schools:path(/.*)?');
+export const mapEntity = router.add('/map/entity:path(/.*)?');
 export const entityView = router.add('/map/view:path(/.*)?');
 export const aboutus = router.add('/about');
 export const tour = router.add('/map/tour');
@@ -114,6 +115,7 @@ export const $mapRoutes = combine({
   map: mapOverview.visible,
   country: mapCountry.visible,
   schools: mapSchools.visible,
+  entity: mapEntity.visible,
   entityView: entityView.visible,
 });
 
