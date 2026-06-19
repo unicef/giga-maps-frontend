@@ -92,6 +92,8 @@ export const createSourceForMapAndCountry = ({
   country,
   lastSelectedLayer,
   admin1Data,
+  activeEntityTypes,
+  entityRegistry,
   isConnectivityStatus,
 }: ChangeLayerOptions & {
   selectedLayerId: number | null;
@@ -130,6 +132,7 @@ export const createSourceForMapAndCountry = ({
   if (!isConnectivityStatus) {
     url = generateLayerUrls({
       layerId,
+      activeEntityTypes,
       connectivityBenchMark,
       schoolPageIds,
       layerUtils,
@@ -138,6 +141,7 @@ export const createSourceForMapAndCountry = ({
       country,
       admin1Id,
       countrySearch,
+      entityRegistry,
     });
   } else {
     url = generateStaticLayerUrl({

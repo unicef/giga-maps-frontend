@@ -1,5 +1,5 @@
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
-import { EntityType } from '~/@/entities/types/base-entity.type';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
 import type {
   EntitiesConnectivityStatsResponse,
   EntitiesGlobalStatsResponse,
@@ -29,6 +29,11 @@ type BuildEntityCardArgs = {
   t: LandingPageTranslationFn;
 };
 
+const getEntityLabel = (
+  config: EntityConfig,
+  t: LandingPageTranslationFn,
+) => t(config.slug, { count: 2 });
+
 type BuildEntityCardsArgs = {
   connectivityStatsByEntity: EntitiesConnectivityStatsResponse | null;
   entityConfigMap: Partial<Record<EntityType, EntityConfig>>;
@@ -55,31 +60,27 @@ export const buildEntityCard = ({
     entityGlobalStats?.connected_entities as LandingPageStatsGroup;
   const mappedValue = Number(
     entityGlobalStats?.entities_connected ??
-      entityGlobalStats?.entities_total ??
-      0,
+    entityGlobalStats?.entities_total ??
+    0,
   );
   const measureValue = isStaticLayer
     ? 0
     : Number(connectivityStats?.no_of_entities_measure ?? 0);
   const connectedValue = Number(connectedGroup?.connected ?? 0);
+  const entityLabel = getEntityLabel(config, t);
 
   return {
     badge: config.sidebar.badge,
     collapsedRows: [
       { label: t('locations-mapped'), value: mappedValue },
       {
-        label: `${t('connected')} ${t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}`,
+        label: `${t('connected')} ${entityLabel}`,
         value: connectedValue,
       },
       { label: t('reporting-internet-quality'), value: measureValue },
     ],
-    footerLogoVariant: config.sidebar.footerLogoVariant ?? 'default',
-    showFooter: config.sidebar.footerLogoVariant === 'school',
     t,
-    title: t(
-      config.slug,
-      config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined,
-    ),
+    title: entityLabel,
     value: entityType,
   };
 };
@@ -103,8 +104,8 @@ export const buildEntityCardContent = ({
     connectivityStats?.real_time_connected_entities as LandingPageStatsGroup;
   const mappedValue = Number(
     entityGlobalStats?.entities_connected ??
-      entityGlobalStats?.entities_total ??
-      0,
+    entityGlobalStats?.entities_total ??
+    0,
   );
   const measureValue = isStaticLayer
     ? 0
@@ -113,10 +114,7 @@ export const buildEntityCardContent = ({
   const estimate = config.sidebar.estimatedTotalInMillions
     ? `/${config.sidebar.estimatedTotalInMillions}${LanguageSuffixes[lng].million}`
     : undefined;
-  const entityLabel = t(
-    config.slug,
-    config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined,
-  );
+  const entityLabel = getEntityLabel(config, t);
 
   return {
     metrics: [
@@ -136,7 +134,7 @@ export const buildEntityCardContent = ({
           count:
             entityGlobalStats?.countries_with_connectivity_status_mapped ?? 0,
         }),
-        label: `${t('connected')} ${t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}`,
+        label: `${t('connected')} ${entityLabel}`,
         tooltip: t('with-mapped-connectivity-status-tooltip', {
           entity: entityLabel,
         }),
@@ -178,10 +176,7 @@ export const buildEntityCardContent = ({
         value: measureValue,
       },
     ],
-    title: t(
-      config.slug,
-      config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined,
-    ),
+    title: entityLabel,
     value: entityType,
   };
 };

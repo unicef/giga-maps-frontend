@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import GigaMapsLogo from '~/assets/images/giga-logo.png';
 import SchoolAccordionFooterLogo from '~/assets/images/school-accordion-footer-logo.svg';
 import {
@@ -43,6 +44,7 @@ const EntitySummaryCard = ({
   const shouldShowSummaryRows =
     !isLoading && (!expanded || showSummaryRowsWhenExpanded);
   const loadingRowLabelSet = new Set(loadingRowLabels);
+  const shouldShowSchoolFooter = card.value === EntityType.SCHOOL;
 
   return (
     <AccordionItem
@@ -104,13 +106,11 @@ const EntitySummaryCard = ({
         {children}
       </AccordionContent>
 
-      {!isLoading && card.showFooter ? (
+      {!isLoading && shouldShowSchoolFooter ? (
         <div className="flex! items-center! justify-center! gap-3! rounded-b-lg! bg-[#0f62fe]! px-3.5! py-[0.35rem]! text-[#f4f4f4]! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
-          {card.footerLogoVariant === 'school' ? (
-            <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
-              <SchoolAccordionFooterLogo />
-            </div>
-          ) : null}
+          <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
+            <SchoolAccordionFooterLogo />
+          </div>
         </div>
       ) : null}
     </AccordionItem>

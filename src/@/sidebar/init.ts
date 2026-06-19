@@ -16,9 +16,14 @@ import {
 import { EntityType, getEntityMapValue } from '~/@/entities';
 import {
   $activeEntityTypes,
+  $entityTypesFiltered,
   $selectedEntityType,
   changeSelectedEntityType,
 } from '~/@/entities/models/entity.model';
+import {
+  ENTITY_TYPE_CODE_PARAM,
+  getEntityTypeCodeParam,
+} from '~/@/entities/utils/entity-query-params';
 import {
   $activeDublicateSchoolsPopup,
   $activeSchoolPopup,
@@ -54,8 +59,8 @@ import {
   $statusLayerIdByEntity,
   changeConnectivityBenchmark,
   changeEntityConnectivityBenchmark,
-  checkEntityConnectivityBenchmark,
   checkConnectivityBenchmark,
+  checkEntityConnectivityBenchmark,
   onSchoolUncheck,
   onSelectEntityMainLayer,
   onSelectEntityStatusLayer,
@@ -183,6 +188,7 @@ const sourceForInfo = combine({
   isMobile: $isMobile,
   allowDublicateSchoolIds: $allowDublicateSchoolIds,
   activeEntityTypes: $activeEntityTypes,
+  entityTypesFiltered: $entityTypesFiltered,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
 });
 
@@ -288,6 +294,7 @@ export const getCurrentEntityLayerInfoQuery = ({
   intervalUnitByEntity,
   lastSelectedLayers,
   layersUtils,
+  entityTypesFiltered,
   selectedLayerIdByEntity,
 }: ReturnType<typeof sourceForInfo.getState>) => {
   const defaultLayerId = lastSelectedLayers.layerId
@@ -304,7 +311,11 @@ export const getCurrentEntityLayerInfoQuery = ({
 
   const entityTypes = activeEntityTypes?.length
     ? activeEntityTypes
-    : [EntityType.SCHOOL];
+    : entityTypesFiltered;
+  params.set(
+    ENTITY_TYPE_CODE_PARAM,
+    getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
+  );
   entityTypes.forEach((entityType) => {
     const prefix = `${entityType}_`;
     const entityLayerId = getLayerIdForEntity(
@@ -362,6 +373,7 @@ export const getCurrentEntityLayerInfoQuery = ({
 export const getCurrentEntityConnectivityConfigQuery = ({
   activeEntityTypes,
   country,
+  entityTypesFiltered,
   admin1Id,
   layersUtils,
   selectedLayerIdByEntity,
@@ -375,7 +387,11 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   }
   const entityTypes = activeEntityTypes?.length
     ? activeEntityTypes
-    : [EntityType.SCHOOL];
+    : entityTypesFiltered;
+  params.set(
+    ENTITY_TYPE_CODE_PARAM,
+    getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
+  );
   entityTypes.forEach((entityType) => {
     const layerId = getEntityMapValue(
       selectedLayerIdByEntity,
@@ -428,13 +444,20 @@ sample({
     $getSchoolParams,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
+    $entityTypesFiltered,
   ]),
   source: sourceForInfo,
   fn: getCurrentEntityConnectivityConfigQuery,
-  filter: ({ activeEntityTypes, country, layersUtils, mapRoutes }) => {
+  filter: ({
+    activeEntityTypes,
+    country,
+    entityTypesFiltered,
+    layersUtils,
+    mapRoutes,
+  }) => {
     const entityTypes = activeEntityTypes?.length
       ? activeEntityTypes
-      : [EntityType.SCHOOL];
+      : entityTypesFiltered;
     return (
       mapRoutes.country &&
       !!country?.id &&
@@ -476,6 +499,7 @@ sample({
     $admin1Id,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
+    $entityTypesFiltered,
     $connectivityBenchMarkByEntity,
     debounce($historyIntervalByEntity, { timeout: 500 }),
     $historyIntervalUnitByEntity,
@@ -510,6 +534,7 @@ sample({
     $connectivityBenchMarkByEntity,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
+    $entityTypesFiltered,
   ]),
   source: sourceForInfo,
   fn: getCurrentEntityLayerInfoQuery,

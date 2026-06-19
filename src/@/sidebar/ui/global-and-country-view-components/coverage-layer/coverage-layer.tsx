@@ -1,13 +1,13 @@
 import { useStore } from 'effector-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import {
   $entityConfigMap,
   $selectedEntityConfig,
   $selectedEntityType,
 } from '~/@/entities/models/entity.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import {
   $coverageStatsByEntity,
@@ -29,25 +29,26 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const selectedEntityConfig = entityType
     ? entityConfigMap[entityType]
     : currentSelectedEntityConfig;
-  const coverageStats = coverageStatsByEntity[entityType as EntityType];
+  const coverageStats = coverageStatsByEntity[selectedEntityType];
   const isLoading = useStore($isLoadingCountryAdminView);
-  const legends = coverageStats?.connected_schools;
-  const totalSchools = coverageStats?.total_schools ?? 0;
+  const coverageDistribution = coverageStats?.connected_schools;
   const { selectedLayerData, selectedLayerDataByEntity } =
     useStore($layerUtils);
   const currentSelectedLayerData = entityType
     ? selectedLayerDataByEntity[entityType]
     : selectedLayerData;
-  const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
+  const legendsList = useMemo(
+    () => Object.entries(coverageDistribution || {}),
+    [coverageDistribution],
+  );
 
   const [displayNumber, setDisplayNumber] = useState(0);
-  const [displayText, setDisplayText] = useState<{
-    key: string;
-    data?: Record<string, unknown>;
-  }>({ key: '', data: {} });
+  const [displayText, setDisplayText] = useState('');
 
   const isDataAvailable = legendsList.length;
-  const entityLabel = t(selectedEntityConfig?.slug ?? 'school', selectedEntityConfig?.slug ? undefined : { count: 2 });
+  const entityLabel = t(selectedEntityConfig?.slug ?? selectedEntityType, {
+    count: 2,
+  });
   // this block of useEffect needs refactoring, all this logic should come from column config
   useEffect(() => {
     if (legendsList.length > 1) {
@@ -56,37 +57,19 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
       const thirdValue = legendsList[2] ? legendsList[2][1] : 0;
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
+      const layerName = currentSelectedLayerData?.name ?? t('coverage');
       setDisplayNumber(firstValue + secondValue + thirdValue);
-      if (selectedEntityType === EntityType.SCHOOL) {
-        setDisplayText({
-          key: 'schools-with-coverage-schools-mapped',
-          data: {
-            totalSchools: formatNumber(sum, lng),
-            totalSchoolsExact: t('int', { val: sum }),
-            layerName: currentSelectedLayerData?.name,
-          },
-        });
-      } else {
-        setDisplayText({
-          key: '',
-          data: {
-            totalSchools: formatNumber(sum, lng),
-            layerName: currentSelectedLayerData?.name,
-          },
-        });
-      }
+      setDisplayText(
+        `${entityLabel} with ${layerName} data out of ${formatNumber(
+          sum,
+          lng,
+        )} ${entityLabel} mapped`,
+      );
     } else {
       setDisplayNumber(0);
-      setDisplayText({ key: 'insufficient-data' });
+      setDisplayText(t('insufficient-data'));
     }
-  }, [
-    entityLabel,
-    legendsList,
-    selectedEntityType,
-    currentSelectedLayerData?.name,
-    totalSchools,
-    lng,
-  ]);
+  }, [entityLabel, legendsList, currentSelectedLayerData?.name, lng, t]);
 
   return (
     <div className="flex! h-full! flex-col! justify-between! max-md:h-auto!">
@@ -107,15 +90,7 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
                 {isDataAvailable ? formatNumber(displayNumber, lng) : ''}
               </p>
               <p className="my-2! text-xs! font-normal! leading-4! text-muted-foreground!">
-                {displayText.key ? (
-                  <Trans
-                    i18nKey={displayText.key}
-                    values={displayText.data}
-                    components={[<span />]}
-                  />
-                ) : (
-                  `${entityLabel} with ${currentSelectedLayerData?.name ?? t('coverage')} mapped`
-                )}
+                {displayText}
               </p>
             </div>
           )}

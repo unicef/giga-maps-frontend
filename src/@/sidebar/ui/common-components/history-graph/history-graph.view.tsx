@@ -225,11 +225,12 @@ const HistoryGraph = ({
     : selectedIntervalUnit;
   const fallbackConnectivityStats = useStore($connectivityStats);
   const schoolView = useRoute(mapSchools);
+  const useSchoolData = !entityType && schoolView;
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const isWeek = intervalUnit === IntervalUnit.week;
   const currentConnectivityStats =
     connectivityStats ?? fallbackConnectivityStats;
-  const infoBenchmark = schoolView
+  const infoBenchmark = useSchoolData
     ? schoolData?.benchmark_metadata
     : currentConnectivityStats?.benchmark_metadata;
   const benchmark = toNumber(
@@ -242,12 +243,12 @@ const HistoryGraph = ({
     selectedLayerData?.global_benchmark?.convert_unit ||
     selectedLayerData?.global_benchmark?.unit;
   const data = useMemo(() => {
-    if (!schoolView) return currentConnectivityStats?.graph_data ?? [];
-    return schoolData?.graph_data ?? [];
+    if (useSchoolData) return schoolData?.graph_data ?? [];
+    return currentConnectivityStats?.graph_data ?? [];
   }, [
     currentConnectivityStats?.graph_data,
     schoolData?.graph_data,
-    schoolView,
+    useSchoolData,
   ]);
 
   return (

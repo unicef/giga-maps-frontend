@@ -8,6 +8,8 @@ import {
   VectorSource,
 } from 'mapbox-gl';
 
+import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { getEntityTypeCodeParam } from '~/@/entities/utils/entity-query-params';
 import { getBaseUrl } from '~/api/project-connect';
 import {
   GeoJSONFeatureCollection,
@@ -269,6 +271,7 @@ export const generateStaticLayerUrl = ({
 };
 export const generateLayerUrls = ({
   layerId,
+  activeEntityTypes,
   connectivityBenchMark,
   schoolPageIds,
   layerUtils,
@@ -277,10 +280,13 @@ export const generateLayerUrls = ({
   admin1Id,
   connectivityFilter,
   countrySearch,
+  entityRegistry,
 }: Pick<
   ChangeLayerOptions,
+  | 'activeEntityTypes'
   | 'countrySearch'
   | 'connectivityFilter'
+  | 'entityRegistry'
   | 'layerUtils'
   | 'mapRoute'
   | 'country'
@@ -291,6 +297,13 @@ export const generateLayerUrls = ({
   const { globalLayerId } = layerUtils;
   const isLive = mapRoute.map || layerUtils.currentLayerTypeUtils.isLive;
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
+  const entityTypes = Object.entries(entityRegistry ?? {})
+    .filter(([, config]) => config.visible)
+    .map(([entityType]) => entityType as EntityType);
+  const entityParams = `entity_type__code=${getEntityTypeCodeParam(
+    activeEntityTypes,
+    entityTypes,
+  )}`;
   const params = generateMapParams({
     connectivityFilter,
     mapRoute,
@@ -304,7 +317,13 @@ export const generateLayerUrls = ({
   } else {
     url = getDynamicUrl(String(layerId));
   }
-  return getBaseUrl(`${url}/?${countryParams}${params}&z={z}&x={x}&y={y}.mvt`);
+  const normalizedParams = params.startsWith('&') ? params.slice(1) : params;
+  const query = [countryParams, entityParams, normalizedParams]
+    .filter(Boolean)
+    .join('&');
+  return getBaseUrl(
+    `${url}/?${query}&z={z}&x={x}&y={y}.mvt`,
+  );
 };
 
 export const getMapId = (id: number | null, prefix = ''): string => {
