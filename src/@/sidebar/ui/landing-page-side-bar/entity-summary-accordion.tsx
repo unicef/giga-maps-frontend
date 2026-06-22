@@ -3,26 +3,44 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $activeEntityTypes, $entityConfigMap, $entityTypesFiltered, changeSelectedEntityType } from '~/@/entities/models/entity.model';
+import {
+  $activeEntityTypes,
+  $entityConfigMap,
+  $entityTypesFiltered,
+  changeSelectedEntityType,
+} from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
-import { fetchEntityGlobalStatsFx } from '~/api/project-connect';
+import { $currentLayerTypeUtilsByEntity } from '~/@/sidebar/sidebar.model';
+import {
+  fetchEntitiesConnectivityStatsFx,
+  fetchEntitiesLayerInfoFx,
+  fetchEntityGlobalStatsFx,
+} from '~/api/project-connect';
 import type { EntitiesConnectivityStatsResponse } from '~/api/types';
 import { Accordion } from '~/components/ui/accordion';
 import { defaultLanguage } from '~/core/i18n/constant';
 import { $lng } from '~/core/i18n/store';
 
 import EntitySummaryCard from './entity-summary-card';
-import type { EntitySummaryCardData, LandingPageTranslationFn } from './landing-page.types';
+import type {
+  EntitySummaryCardData,
+  LandingPageTranslationFn,
+} from './landing-page.types';
 import { buildEntityCards } from './landing-page.utils';
 
 type EntitySummaryAccordionRenderContext = {
+  infoLoadingMetricLabels: string[];
+  isLoadingEntityInfo: boolean;
   lng: string;
   t: LandingPageTranslationFn;
 };
 
 type EntitySummaryAccordionProps = {
-  children: (card: EntitySummaryCardData, context: EntitySummaryAccordionRenderContext) => ReactNode;
+  children: (
+    card: EntitySummaryCardData,
+    context: EntitySummaryAccordionRenderContext,
+  ) => ReactNode;
   connectivityStatsByEntity: EntitiesConnectivityStatsResponse | null;
   isLoadingConnectivityStats?: boolean;
   selectEntityOnExpand?: boolean;
@@ -37,22 +55,47 @@ const EntitySummaryAccordion = ({
   showSummaryRowsWhenExpanded = false,
 }: EntitySummaryAccordionProps) => {
   const globalStatsByEntity = useStore($globalStatsByEntity);
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
   const entityConfigMap = useStore($entityConfigMap);
   const stylePaintData = useStore($stylePaintData);
   const isLoadingGlobalStats = useStore(fetchEntityGlobalStatsFx.pending);
+  const isLoadingEntityInfo = useStore(fetchEntitiesLayerInfoFx.pending);
+  const isLoadingEntityConnectivityStats = useStore(
+    fetchEntitiesConnectivityStatsFx.pending,
+  );
   const { t } = useTranslation();
   const lng = useStore($lng) ?? defaultLanguage;
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityTypesFiltered = useStore($entityTypesFiltered);
-  const visibleEntityTypes = entityTypesFiltered.filter((type) => activeEntityTypes.includes(type));
-  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>(null);
+  const visibleEntityTypes = entityTypesFiltered.filter((type) =>
+    activeEntityTypes.includes(type),
+  );
+  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>(
+    null,
+  );
 
-  const isLoading = isLoadingGlobalStats || isLoadingConnectivityStats;
+  const isLoading =
+    isLoadingGlobalStats ||
+    isLoadingConnectivityStats ||
+    isLoadingEntityConnectivityStats;
+  const infoLoadingMetricLabels = isLoadingEntityInfo
+    ? [t('reporting-internet-quality')]
+    : [];
   const entityCards = buildEntityCards({
     connectivityStatsByEntity,
     entityConfigMap,
     entityTypes: visibleEntityTypes,
     globalStatsByEntity,
+    isStaticLayerByEntity: Object.fromEntries(
+      Object.entries(currentLayerTypeUtilsByEntity).map(
+        ([entityType, layerTypeUtils]) => [
+          entityType,
+          !!layerTypeUtils?.isStatic,
+        ],
+      ),
+    ),
     lng,
     stylePaintData,
     t,
@@ -96,11 +139,17 @@ const EntitySummaryAccordion = ({
                 expanded={activeAccordion === accordionItem.value}
                 isLoading={isLoading}
                 key={accordionItem.value}
+                loadingRowLabels={infoLoadingMetricLabels}
                 lng={lng}
                 showSummaryRowsWhenExpanded={showSummaryRowsWhenExpanded}
                 t={t}
               >
-                {children(card, { lng, t })}
+                {children(card, {
+                  infoLoadingMetricLabels,
+                  isLoadingEntityInfo,
+                  lng,
+                  t,
+                })}
               </EntitySummaryCard>
             );
           })}

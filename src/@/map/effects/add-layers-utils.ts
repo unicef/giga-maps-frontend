@@ -48,11 +48,35 @@ export const getLayerIdsAndLastChange = ({
   'selectedLayerIds' | 'refresh' | 'lastSelectedLayer'
 >) => {
   const { schoolId: schoolLayerId, selectedId: selectedLayerId } =
-    selectedLayerIds;
-  const checkSelectionChange =
-    selectedLayerId && selectedLayerId !== lastSelectedLayer.layerId;
-  const isLastSelectionChange = refresh || !!checkSelectionChange;
-  return { schoolLayerId, selectedLayerId, isLastSelectionChange };
+    selectedLayerIds ?? {};
+  const selectedLayerIdByEntity: Partial<Record<EntityType, number | null>> =
+    selectedLayerIds?.selectedIdByEntity ??
+    (selectedLayerId ? { [EntityType.SCHOOL]: selectedLayerId } : {});
+  const lastLayerIdByEntity: Partial<Record<EntityType, number | null>> =
+    lastSelectedLayer?.layerIdByEntity ??
+    (lastSelectedLayer?.layerId
+      ? { [EntityType.SCHOOL]: lastSelectedLayer.layerId }
+      : {});
+  const entityTypes = new Set([
+    ...Object.keys(selectedLayerIdByEntity),
+    ...Object.keys(lastLayerIdByEntity),
+  ]);
+  const checkSelectionChange = entityTypes.size
+    ? Array.from(entityTypes).some((entityType) => {
+        const typedEntityType = entityType as EntityType;
+        return (
+          selectedLayerIdByEntity[typedEntityType] !==
+          lastLayerIdByEntity[typedEntityType]
+        );
+      })
+    : !!(selectedLayerId && selectedLayerId !== lastSelectedLayer?.layerId);
+  const isLastSelectionChange = refresh || checkSelectionChange;
+  return {
+    schoolLayerId,
+    selectedLayerId,
+    selectedLayerIdByEntity,
+    isLastSelectionChange,
+  };
 };
 
 export const createSourceForMapAndCountry = ({
@@ -68,6 +92,8 @@ export const createSourceForMapAndCountry = ({
   country,
   lastSelectedLayer,
   admin1Data,
+  activeEntityTypes,
+  entityRegistry,
   isConnectivityStatus,
 }: ChangeLayerOptions & {
   selectedLayerId: number | null;
@@ -106,6 +132,7 @@ export const createSourceForMapAndCountry = ({
   if (!isConnectivityStatus) {
     url = generateLayerUrls({
       layerId,
+      activeEntityTypes,
       connectivityBenchMark,
       schoolPageIds,
       layerUtils,
@@ -114,6 +141,7 @@ export const createSourceForMapAndCountry = ({
       country,
       admin1Id,
       countrySearch,
+      entityRegistry,
     });
   } else {
     url = generateStaticLayerUrl({
@@ -153,6 +181,7 @@ export const createAndUpdateMapLayer = ({
   coverageFilterByEntity,
   layerUtils,
   selectedLayerId,
+  selectedLayerIds,
   paintData,
   lastSelectedLayer,
   isMobile,
@@ -229,6 +258,13 @@ export const createAndUpdateMapLayer = ({
   // --- Status layer (connectivity_status dots) per entity type in global view ---
   if (isSourceAvailable) {
     for (const entityType of entityTypes) {
+      const isStatusSelected =
+        selectedLayerIds?.schoolIdByEntity?.[entityType] ??
+        selectedLayerIds?.schoolId;
+      if (!isStatusSelected) {
+        hideLayer(map, getEntityStatusLayerId(entityType));
+        continue;
+      }
       const sourceLayer = getSourceLayerName(entityType);
       const statusLayerId = getEntityStatusLayerId(entityType);
       const config = entityRegistry?.[entityType] as EntityConfig | undefined;

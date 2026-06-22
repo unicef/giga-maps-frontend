@@ -40,7 +40,6 @@ export interface EntityLegendConfig {
 export interface EntitySidebarConfig {
   badge?: string;
   estimatedTotalInMillions?: number;
-  footerLogoVariant?: 'default' | 'none' | 'school';
 }
 
 export interface EntityStatsConfig {

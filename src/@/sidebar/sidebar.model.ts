@@ -27,8 +27,6 @@ import {
   fetchConnectivityLayerFx,
   fetchCountriesFx,
   fetchCountryFx,
-  fetchCountryLiveLayerInfo,
-  fetchCountryStaticLayerInfo,
   fetchEntitiesConnectivityStatsFx,
   fetchEntitiesLayerInfoFx,
   fetchEntityGlobalStatsFx,
@@ -87,9 +85,9 @@ import {
 type EntityStoreMap<T> = Partial<Record<EntityType, T>>;
 
 const defaultEntityStatusLayerSelection = {
-  [EntityType.SCHOOL]: SCHOOL_STATUS_LAYER.id,
-  [EntityType.HEALTH]: SCHOOL_STATUS_LAYER.id,
-} as EntityStoreMap<number | null>;
+  [EntityType.SCHOOL]: getEntityStatusId(EntityType.SCHOOL),
+  [EntityType.HEALTH]: getEntityStatusId(EntityType.HEALTH),
+} as EntityStoreMap<string | null>;
 
 const defaultStatusLegendsSelection = [
   ConnectivityStatusDistribution.connected,
@@ -166,10 +164,12 @@ $connectivityStatsByEntity.on(
   fetchEntitiesConnectivityStatsFx.doneData,
   setPayload,
 );
+$connectivityStatsByEntity.reset($countryCode);
 export const $countryLayerInfoByEntity = createStore<EntitiesLayerInfoResponse>(
   {},
 );
 $countryLayerInfoByEntity.on(fetchEntitiesLayerInfoFx.doneData, setPayload);
+$countryLayerInfoByEntity.reset($countryCode);
 
 const toEntityConnectivityStat = (
   stat: Record<string, any> | null | undefined,
@@ -227,7 +227,6 @@ $connectivityStatsByEntity.on(
 
 export const $connectivityStats = createStore<ConnectivityStat | null>(null);
 $connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
-$connectivityStats.on(fetchCountryLiveLayerInfo.doneData, setPayload);
 
 const toConnectivityStat = (
   stat: Record<string, any> | null | undefined,
@@ -261,7 +260,6 @@ $connectivityStats.on(changeSelectedEntityType, (_, entityType) => {
 });
 
 export const $coverageStats = createStore<CoverageStat | null>(null);
-$coverageStats.on(fetchCountryStaticLayerInfo.doneData, setPayload);
 
 export const $coverageStatsByEntity = createStore<
   Partial<Record<EntityType, CoverageStat>>
@@ -293,8 +291,7 @@ const hasCoverageLayerInfo = (stat: Record<string, any> | null | undefined) => {
 $coverageStatsByEntity.on(
   fetchEntitiesLayerInfoFx.doneData,
   (state, payload) => {
-    if (!Object.values(payload ?? {}).some(hasCoverageLayerInfo)) return state;
-
+    // if (!Object.values(payload ?? {}).some(hasCoverageLayerInfo)) return state;
     return Object.entries(payload ?? {}).reduce(
       (acc, [entityType, stat]) => {
         const nextStat = toCoverageStat(stat);
@@ -307,13 +304,13 @@ $coverageStatsByEntity.on(
     );
   },
 );
-$coverageStats.on(fetchEntitiesLayerInfoFx.doneData, (state, payload) => {
-  const stat = payload?.[$selectedEntityType.getState()];
-  return hasCoverageLayerInfo(stat) ? toCoverageStat(stat) : state;
-});
-$coverageStats.on(changeSelectedEntityType, (_, entityType) => {
-  return toCoverageStat($coverageStatsByEntity.getState()?.[entityType]);
-});
+// $coverageStats.on(fetchEntitiesLayerInfoFx.doneData, (state, payload) => {
+//   const stat = payload?.[$selectedEntityType.getState()];
+//   return hasCoverageLayerInfo(stat) ? toCoverageStat(stat) : state;
+// });
+// $coverageStats.on(changeSelectedEntityType, (_, entityType) => {
+//   return toCoverageStat($coverageStatsByEntity.getState()?.[entityType]);
+// });
 
 export const onChangeMenu = createEvent<boolean>();
 export const $isMenuOpen = createStore(false);
@@ -497,7 +494,7 @@ export const onSelectEntityStatusLayer =
   createEvent<EntityStoreMap<string | null>>();
 export const $statusLayerIdByEntity = createStore<
   EntityStoreMap<string | null>
->({});
+>(defaultEntityStatusLayerSelection);
 $statusLayerIdByEntity.on(onSelectEntityStatusLayer, (state, payload) => ({
   ...state,
   ...payload,
@@ -1738,6 +1735,7 @@ export const $selectedSchoolIds = $getSchoolParams.map(
 );
 
 // all reset model
+$statusLayerIdByEntity.reset(mapOverview.visible);
 $staticLegendsSelectedByEntity.reset([resetFilterModal, mapOverview.visible]);
 $connectivityBenchMarkByEntity.reset(resetFilterModal, mapOverview.visible);
 $connectivitySpeedFilterByEntity.reset([resetFilterModal, mapOverview.visible]);

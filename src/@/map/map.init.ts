@@ -17,8 +17,13 @@ import { EntityType, getEntityMapValue } from '~/@/entities';
 import {
   $activeEntityTypes,
   $entityRegistry,
+  $entityTypesFiltered,
   $selectedEntityType,
 } from '~/@/entities/models/entity.model';
+import {
+  ENTITY_TYPE_CODE_PARAM,
+  getEntityTypeCodeParam,
+} from '~/@/entities/utils/entity-query-params';
 import {
   $connectivityBenchMark,
   $connectivityBenchMarkByEntity,
@@ -158,29 +163,43 @@ sample({
     fetchCountryFx.doneData,
     $admin1Id,
     $countrySearchString,
+    $activeEntityTypes,
+    $entityTypesFiltered,
   ]),
   source: combine({
     routes: $mapRoutes,
     country: $country,
     admin1Id: $admin1Id,
     countrySearchString: $countrySearchString,
+    activeEntityTypes: $activeEntityTypes,
+    entityTypesFiltered: $entityTypesFiltered,
   }),
-  fn: ({ routes, country, admin1Id, countrySearchString }) => {
-    let query = '';
+  fn: ({
+    routes,
+    country,
+    admin1Id,
+    countrySearchString,
+    activeEntityTypes,
+    entityTypesFiltered,
+  }) => {
+    const queryParts = [
+      `${ENTITY_TYPE_CODE_PARAM}=${getEntityTypeCodeParam(
+        activeEntityTypes,
+        entityTypesFiltered,
+      )}`,
+    ];
+
     if (routes.country) {
-      const queryParts = [`country_id=${country?.id}`];
+      queryParts.unshift(`country_id=${country?.id}`);
       if (admin1Id) {
         queryParts.push(`admin1_id=${admin1Id}`);
       }
       if (countrySearchString) {
         queryParts.push(countrySearchString);
       }
-      // TODO: add dynamic query in future according activeEntityTypes state
-      queryParts.push("entity_type__code=all")
-      query = `?${queryParts.join('&')}`;
     }
 
-    return { query };
+    return { query: `?${queryParts.join('&')}` };
   },
   filter: ({ routes, country }) => {
     return routes.map || (routes.country && !!country?.id);

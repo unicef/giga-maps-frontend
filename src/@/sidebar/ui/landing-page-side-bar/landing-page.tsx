@@ -2,6 +2,11 @@ import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import { useCallback, useEffect, useState } from 'react';
 
+import {
+  $activeEntityTypes,
+  $entityTypesFiltered,
+} from '~/@/entities/models/entity.model';
+import { addEntityTypeCodeParam } from '~/@/entities/utils/entity-query-params';
 import { fetchEntitiesConnectivityStatsFx } from '~/api/project-connect';
 import { ScrollArea } from '~/components/ui/scroll-area';
 
@@ -13,6 +18,8 @@ import EntitySummaryCardContent from './entity-summary-card-content';
 import LandingPageHeader from './landing-page-header';
 
 const LandingPage = () => {
+  const activeEntityTypes = useStore($activeEntityTypes);
+  const entityTypesFiltered = useStore($entityTypesFiltered);
   const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
   const isLoadingConnectivityStats = useStore(
     fetchEntitiesConnectivityStatsFx.pending,
@@ -22,15 +29,19 @@ const LandingPage = () => {
   useEffect(() => {
     const startDate = format(defaultInterval().start, 'dd-MM-yyyy');
     const endDate = format(defaultInterval().end, 'dd-MM-yyyy');
-    const params = {
-      start_date: startDate,
-      end_date: endDate,
-      benchmark: 'global',
-      is_weekly: 'true',
-    };
-    const query = new URLSearchParams(params).toString();
+    const params = addEntityTypeCodeParam(
+      new URLSearchParams({
+        start_date: startDate,
+        end_date: endDate,
+        benchmark: 'global',
+        is_weekly: 'true',
+      }),
+      activeEntityTypes,
+      entityTypesFiltered,
+    );
+    const query = params.toString();
     void fetchEntitiesConnectivityStatsFx({ query: `?${query}` });
-  }, []);
+  }, [activeEntityTypes, entityTypesFiltered]);
 
   const handleShareClicked = useCallback(() => {
     setShareModalOpen((current) => !current);
@@ -52,9 +63,10 @@ const LandingPage = () => {
             connectivityStatsByEntity={connectivityStatsByEntity}
             isLoadingConnectivityStats={isLoadingConnectivityStats}
           >
-            {(card, { lng, t: translate }) => (
+            {(card, { infoLoadingMetricLabels, lng, t: translate }) => (
               <EntitySummaryCardContent
                 card={card.accordionContent}
+                loadingMetricLabels={infoLoadingMetricLabels}
                 lng={lng}
                 t={translate}
               />

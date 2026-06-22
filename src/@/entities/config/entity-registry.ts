@@ -26,7 +26,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     sidebar: {
       badge: 'GigaMaps',
       estimatedTotalInMillions: 6,
-      footerLogoVariant: 'school',
     },
     colors: {
       primary: '#0062FF',
@@ -59,7 +58,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     markerType: 'symbol',
     symbol: '■',
     sidebar: {
-      footerLogoVariant: 'none',
       estimatedTotalInMillions: 3,
     },
     colors: {

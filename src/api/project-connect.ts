@@ -109,11 +109,6 @@ export const fetchSchoolLayerInfoFx = createEffect(
     fetchLayerInfoFx(`${url}${query}`) as Promise<SchoolStatsType[]>
 );
 
-export const fetchCountryLiveLayerInfo = createEffect(
-  async ({ query, id }: { query: string; id: number | null }): Promise<ConnectivityStat> =>
-    fetchLayerInfoFx(`api/accounts/layers/${id}/info/${query}`) as Promise<ConnectivityStat>
-);
-
 export const fetchEntitiesLayerInfoFx = createEffect(
   async ({
     query
@@ -150,11 +145,6 @@ export const fetchEntitiesConnectivityStatsFx = createEffect(
       `api/v2/entities/connectivity-stat/${ensureCacheParam(query)}`
     ) as Promise<EntitiesConnectivityStatsResponse>
   }
-);
-
-export const fetchCountryStaticLayerInfo = createEffect(
-  async ({ query, id }: { query: string; id: number | null }): Promise<CoverageStat> =>
-    fetchLayerInfoFx(`api/v2/entities/layers/info/${id}/info/${query}`) as Promise<CoverageStat>
 );
 
 export const fetchTimePlayerDataFx = createRequestFx(

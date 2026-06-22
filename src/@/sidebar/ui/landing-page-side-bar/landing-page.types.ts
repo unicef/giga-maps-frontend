@@ -1,3 +1,4 @@
+import type { EntitySidebarConfig } from '~/@/entities/config/entity-config.types';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 
 export type CardBarData = {
@@ -21,8 +22,6 @@ export type CardMetric = {
 export type EntityCardData = {
   badge?: string;
   collapsedRows: { label: string; value: number }[];
-  footerLogoVariant?: 'default' | 'none' | 'school';
-  showFooter?: boolean;
   title: string;
   value: EntityType;
   t: LandingPageTranslationFn;
