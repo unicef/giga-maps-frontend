@@ -26,6 +26,8 @@ const LinkButtons = styled.div`
 
 const Message = styled.p`
     font-size: 0.75rem;
+    white-space: pre-line;
+    text-align: center;
 `
 const Link = styled(CarbonLink)`
 font-size: 0.75rem !important;
