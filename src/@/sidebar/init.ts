@@ -13,7 +13,11 @@ import {
   countryReceived,
   onRecenterView,
 } from '~/@/country/country.model';
-import { EntityType, getEntityMapValue } from '~/@/entities';
+import {
+  EntityType,
+  getEntityMapValue,
+  getLayerEntityTypes,
+} from '~/@/entities';
 import {
   $activeEntityTypes,
   $entityTypesFiltered,
@@ -278,6 +282,62 @@ const getLayerIdForEntity = (
   defaultLayerId: number | null,
 ) => {
   return getEntityMapValue(selectedLayerIdByEntity, entityType, defaultLayerId);
+};
+type InitialUrlParams = ReturnType<typeof $initialUrlParams.getState>;
+type InitialEntityValue<T> = { hasValue: boolean; value: T | null };
+
+const hasOwnEntityValue = <T>(
+  values: Partial<Record<EntityType, T>>,
+  entityType: EntityType,
+) => Object.prototype.hasOwnProperty.call(values, entityType);
+
+const getInitialLayerIdForEntity = (
+  initialUrlParams: InitialUrlParams,
+  entityType: EntityType,
+  layers: ReturnType<typeof $layerUtils.getState>['layers'],
+  activeEntityTypes: EntityType[],
+): InitialEntityValue<number> => {
+  if (hasOwnEntityValue(initialUrlParams.layerIdByEntity, entityType)) {
+    return {
+      hasValue: true,
+      value: initialUrlParams.layerIdByEntity[entityType] ?? null,
+    };
+  }
+
+  const layerId = initialUrlParams.layerIds.find((candidate) => {
+    if (candidate === null) return false;
+    const layer = layers.find((item) => item.id === candidate);
+    return (
+      !!layer &&
+      getLayerEntityTypes(layer, activeEntityTypes).includes(entityType)
+    );
+  });
+
+  return layerId === undefined
+    ? { hasValue: false, value: null }
+    : { hasValue: true, value: layerId };
+};
+
+const getInitialStatusLayerForEntity = (
+  initialUrlParams: InitialUrlParams,
+  entityType: EntityType,
+): InitialEntityValue<string> => {
+  if (
+    hasOwnEntityValue(initialUrlParams.entityStatusLayerByEntity, entityType)
+  ) {
+    return {
+      hasValue: true,
+      value: initialUrlParams.entityStatusLayerByEntity[entityType] ?? null,
+    };
+  }
+
+  const statusLayerId = initialUrlParams.entityStatusLayerIds.find(
+    (candidate) => candidate?.startsWith(`${entityType}_`),
+  );
+
+  return statusLayerId === undefined
+    ? { hasValue: false, value: null }
+    : { hasValue: true, value: statusLayerId };
 };
 
 export const getCurrentEntityLayerInfoQuery = ({
@@ -705,13 +765,15 @@ sample({
           let currentStatusLayer = statusLayerId;
           const selectedLayerId = selectedLayerIdByEntity[entityType] ?? null;
 
-          //TODO: don't remove this below - fix once url params are fixed with entity layer implementation;
-          // On first load, if URL has school status layer param, use it
-          // if (!isAppSettled && (initialUrlParams.schoolStatusLayer || initialUrlParams.isSchoolStatusLayerNull)) {
-          //   if (!isStatic) {
-          //     return initialUrlParams.schoolStatusLayer;
-          //   }
-          // }
+          const initialStatusLayer = getInitialStatusLayerForEntity(
+            initialUrlParams,
+            entityType,
+          );
+          if (!isAppSettled && initialStatusLayer.hasValue) {
+            currentStatusLayer = isStatic ? null : initialStatusLayer.value;
+            acc[entityType] = currentStatusLayer;
+            return acc;
+          }
 
           if (!selectedLayerId && !statusLayerId) {
             currentStatusLayer = getEntityStatusId(entityType);
@@ -781,8 +843,11 @@ sample({
       currentLayerTypeUtilsByEntity,
       isActiveCurrentLayerByEntity,
       currentDefaultLayerIdByEntity,
+      layers,
     },
     activeEntityTypes,
+    initialUrlParams,
+    isAppSettled,
   }) => {
     // TODO: don't remove fix once url params are fixed with entity layer implementation;
     // On first country code update, if URL has layer param, use it (if valid for country).
@@ -792,6 +857,16 @@ sample({
       const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[entityType];
       const isActiveCurrentLayer = isActiveCurrentLayerByEntity[entityType];
       const currentDefaultLayerId = currentDefaultLayerIdByEntity[entityType];
+      const initialLayerId = getInitialLayerIdForEntity(
+        initialUrlParams,
+        entityType,
+        layers,
+        activeEntityTypes,
+      );
+      if (!isAppSettled && initialLayerId.hasValue) {
+        result[entityType] = initialLayerId.value;
+        return;
+      }
       if (
         (currentLayerTypeUtils?.isLive && !isActiveCurrentLayer) ||
         (currentLayerTypeUtils?.isStatic && !isActiveCurrentLayer)
