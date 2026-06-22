@@ -19,7 +19,7 @@ export const CONNECTIVITY_URL = 'api/v2/entities/tiles/connectivity';
 export const CONNECTIVITY_STATUS_URL = "api/v2/entities/tiles/connectivity_status"
 
 /** Source-layer names returned by the v2 tiles API */
-export const SOURCE_LAYER_SCHOOLS = 'schools';
+export const SOURCE_LAYER_SCHOOLS = 'school';
 export const SOURCE_LAYER_ENTITIES = 'entities';
 
 /** Get the correct source-layer name based on entity type */
