@@ -85,7 +85,7 @@
   "copy": "Copiar",
   "timeplayer": "Reproductor de tiempo",
   "search-country-region-school-id": "Buscar país, región, escuela, identificación",
-  "not-the-results-you-expected": "¿No son los resultados que esperabas?",
+  "not-the-results-you-expected": "¿No son los resultados que esperabas?\nActualmente, los resultados están limitados solo a escuelas.",
   "zoom-in": "Acercar",
   "zoom-out": "Alejar",
   "theme-layers": "Tema y capas",
