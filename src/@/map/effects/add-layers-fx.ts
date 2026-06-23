@@ -53,11 +53,21 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
     selectedLayerId,
     selectedLayerIdByEntity,
     isLastSelectionChange,
-  } =
-    getLayerIdsAndLastChange({ selectedLayerIds, refresh, lastSelectedLayer });
+  } = getLayerIdsAndLastChange({
+    selectedLayerIds,
+    refresh,
+    lastSelectedLayer,
+  });
+  const entityTypes = activeEntityTypes?.length
+    ? activeEntityTypes
+    : (Object.keys(selectedLayerIdByEntity) as EntityType[]);
+  const firstEntitySelectedLayerId =
+    entityTypes
+      .map((entityType) => selectedLayerIdByEntity[entityType])
+      .find((id): id is number => Boolean(id)) ?? null;
   const effectiveSelectedLayerId = mapRoute.map
     ? layerUtils.globalLayerId
-    : selectedLayerId;
+    : (selectedLayerId ?? firstEntitySelectedLayerId);
   if (isLastSelectionChange || !checkSourceAvailable(map, DEFAULT_SOURCE)) {
     // create source data country and global view;
     if (mapRoute.map || mapRoute.country || mapRoute.schools) {
@@ -78,8 +88,9 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   changeGigaSelection({
     layerId: effectiveSelectedLayerId ?? lastSelectedLayer?.layerId ?? null,
     layerIdByEntity: mapRoute.map
-      ? (
-          activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL]
+      ? (activeEntityTypes?.length
+          ? activeEntityTypes
+          : [EntityType.SCHOOL]
         ).reduce(
           (acc, entityType) => ({
             ...acc,
@@ -181,38 +192,46 @@ export const updateConnectivityFilter = createEffect(
     mapRoute,
   }: UpdateConnectivityFilterOptions) => {
     if (!map) return;
-    const { selectedLayerId, globalLayerId, selectedLayerIdByEntity } =
-      layerUtils;
-    const activeEntityTypes = Object.keys(
-      selectedLayerIdByEntity ?? { [EntityType.SCHOOL]: selectedLayerId },
+    const {
+      selectedLayerId,
+      globalLayerId,
+      selectedLayerIdByEntity,
+      currentLayerTypeUtils,
+      currentLayerTypeUtilsByEntity,
+    } = layerUtils;
+    const selectedEntityTypes = Object.keys(
+      selectedLayerIdByEntity ?? {},
     ) as EntityType[];
-    const isLive = mapRoute.map || layerUtils.currentLayerTypeUtils.isLive;
-    if (isLive) {
-      for (const entityType of activeEntityTypes.length
-        ? activeEntityTypes
-        : [EntityType.SCHOOL]) {
-        const effectiveSelectedLayerId = mapRoute.map
-          ? globalLayerId
-          : (selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
-        const mapLayer = map.getLayer(
-          getEntitySelectedLayerId(entityType, effectiveSelectedLayerId),
-        );
-        if (!mapLayer) continue;
-        const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
-        const filter = filterConnectivityList(
-          connectivitySpeedFilterByEntity?.[entityType] ??
+    const activeEntityTypes = selectedEntityTypes.length
+      ? selectedEntityTypes
+      : [EntityType.SCHOOL];
+    const isGlobalMap = Boolean(mapRoute?.map);
+    for (const entityType of activeEntityTypes) {
+      const effectiveSelectedLayerId = isGlobalMap
+        ? globalLayerId
+        : (selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
+      if (!effectiveSelectedLayerId) continue;
+      const isEntityLive =
+        isGlobalMap ||
+        (currentLayerTypeUtilsByEntity?.[entityType]?.isLive ??
+          currentLayerTypeUtils.isLive);
+      if (!isEntityLive) continue;
+      const layerId = getEntitySelectedLayerId(
+        entityType,
+        effectiveSelectedLayerId,
+      );
+      const mapLayer = map.getLayer(layerId);
+      if (!mapLayer) continue;
+      const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
+      const filter = filterConnectivityList(
+        connectivitySpeedFilterByEntity?.[entityType] ??
           connectivitySpeedFilter,
-          isDynamicLayer,
-        );
-        map.setFilter(
-          getEntitySelectedLayerId(entityType, effectiveSelectedLayerId),
-          filter,
-        );
-      }
+        isDynamicLayer,
+      );
+      map.setFilter(layerId, filter);
     }
   },
 );
-
 export const updateConnectivityStatus = createEffect(
   ({
     map,

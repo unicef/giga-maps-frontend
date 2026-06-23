@@ -17,6 +17,7 @@ import {
   createEntitySymbolLayer,
   createSchoolLayer,
   createSelectedLayer,
+  createSelectedSymbolLayer,
   createSource,
   deleteSourceAndLayers,
   filterConnectivityList,
@@ -85,8 +86,13 @@ export const createSourceForMapAndCountry = ({
   schoolAdminId,
   countrySearch,
   connectivityBenchMark,
+  connectivityBenchMarkByEntity,
   selectedLayerId: layerId,
   connectivityFilter,
+  interval,
+  intervalByEntity,
+  intervalUnit,
+  intervalUnitByEntity,
   layerUtils,
   mapRoute,
   country,
@@ -111,10 +117,11 @@ export const createSourceForMapAndCountry = ({
   deleteSourceAndLayers({ map, sourceId });
   // create new source
   const { coverageLayerId } = layerUtils;
+  const fallbackLayerId = mapRoute.map
+    ? layerUtils.globalLayerId
+    : (lastSelectedLayer.layerId ?? coverageLayerId);
   if (!layerId) {
-    layerId = mapRoute.map
-      ? layerUtils.globalLayerId
-      : (lastSelectedLayer.layerId ?? coverageLayerId);
+    layerId = fallbackLayerId;
   }
   let admin1Id = mapRoute.schools ? schoolAdminId : admin1Data?.id;
   if (mapRoute.schools) {
@@ -131,12 +138,17 @@ export const createSourceForMapAndCountry = ({
   let url = null;
   if (!isConnectivityStatus) {
     url = generateLayerUrls({
-      layerId,
+      layerId: fallbackLayerId,
       activeEntityTypes,
       connectivityBenchMark,
+      connectivityBenchMarkByEntity,
       schoolPageIds,
       layerUtils,
       connectivityFilter,
+      interval,
+      intervalByEntity,
+      intervalUnit,
+      intervalUnitByEntity,
       mapRoute,
       country,
       admin1Id,
@@ -145,6 +157,8 @@ export const createSourceForMapAndCountry = ({
     });
   } else {
     url = generateStaticLayerUrl({
+      activeEntityTypes,
+      entityRegistry,
       mapRoute,
       country,
       schoolPageIds,
@@ -193,7 +207,10 @@ export const createAndUpdateMapLayer = ({
 }) => {
   if (!map) return;
   const { currentLayerTypeUtils, globalLayerId } = layerUtils;
-  const isLive = mapRoute.map || currentLayerTypeUtils.isLive;
+  const getIsEntityLive = (entityType: EntityType) =>
+    mapRoute.map ||
+    (layerUtils.currentLayerTypeUtilsByEntity?.[entityType]?.isLive ??
+      currentLayerTypeUtils.isLive);
   const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
 
   // Cancel all previous entity animations
@@ -204,8 +221,16 @@ export const createAndUpdateMapLayer = ({
     ? activeEntityTypes
     : [EntityType.SCHOOL];
 
+  const hasSelectedEntityLayer = entityTypes.some((entityType) =>
+    Boolean(
+      mapRoute.map
+        ? globalLayerId
+        : (layerUtils.selectedLayerIdByEntity?.[entityType] ?? selectedLayerId),
+    ),
+  );
+
   // --- Selected layer (connectivity/coverage) per entity type ---
-  if (isSourceAvailable && selectedLayerId) {
+  if (isSourceAvailable && hasSelectedEntityLayer) {
     for (const entityType of entityTypes) {
       const entityLayerId = mapRoute.map
         ? globalLayerId
@@ -220,28 +245,44 @@ export const createAndUpdateMapLayer = ({
       const entityCoverageFilter =
         coverageFilterByEntity?.[entityType] ?? coverageFilter;
       const options: Record<string, unknown> = {
-        filter: isLive
+        filter: getIsEntityLive(entityType)
           ? filterConnectivityList(entityConnectivityFilter, isDynamicLayer)
           : filterCoverageList(entityCoverageFilter, isDynamicLayer),
         'source-layer': sourceLayer,
       };
 
-      if (isLive) {
+      const config = entityRegistry?.[entityType] as EntityConfig | undefined;
+      const markerType = config?.markerType ?? 'circle';
+
+      if (getIsEntityLive(entityType)) {
         animateCircleHandlers[entityType] = animateCircles({
           map,
           id: layerIdStr,
         });
       }
 
-      createSelectedLayer(map, {
-        id: layerIdStr,
-        isMobile,
-        isLive,
-        isDynamicLayer,
-        paintData,
-        mapRoute,
-        options,
-      });
+      if (markerType === 'circle') {
+        createSelectedLayer(map, {
+          id: layerIdStr,
+          isMobile,
+          isLive: getIsEntityLive(entityType),
+          isDynamicLayer,
+          paintData,
+          mapRoute,
+          options,
+        });
+      } else {
+        createSelectedSymbolLayer(map, {
+          id: layerIdStr,
+          symbol: config?.symbol ?? '\u25A0',
+          isMobile,
+          isLive: getIsEntityLive(entityType),
+          isDynamicLayer,
+          paintData,
+          mapRoute,
+          options,
+        });
+      }
     }
   } else {
     // hide previous selected layers for all entity types

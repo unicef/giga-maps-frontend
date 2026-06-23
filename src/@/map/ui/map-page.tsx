@@ -46,8 +46,7 @@ const MapPage = () => {
         </PopupContainer>
       </Main>
       <EntityTypeSelector />
-      {/* TODO:// temporary hide toploader */}
-      {!mapRoute.country && <TopLoader />}
+      <TopLoader />
       <Footer />
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}

@@ -85,6 +85,10 @@ import {
   filterTranslationFx,
 } from '../sidebar/effects/all-translation-fx';
 import {
+  $historyInterval,
+  $historyIntervalByEntity,
+  $historyIntervalUnit,
+  $historyIntervalUnitByEntity,
   $isCheckedLastDate,
   $lastAvailableDates,
 } from '../sidebar/history-graph.model';
@@ -299,6 +303,10 @@ export const gigaLayerSource = combine({
   map: $map,
   isCheckedLastDate: $isCheckedLastDate,
   connectivityFilter: $connectivityFilter,
+  interval: $historyInterval,
+  intervalByEntity: $historyIntervalByEntity,
+  intervalUnit: $historyIntervalUnit,
+  intervalUnitByEntity: $historyIntervalUnitByEntity,
   connectivityBenchMark: $connectivityBenchMark,
   connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   lastAvailableDates: $lastAvailableDates,
@@ -326,10 +334,10 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-      ...source,
-      ...data,
-    });
+  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+    ...source,
+    ...data,
+  });
 
 const mapLayerFilter = ({
   isCheckedLastDate,
