@@ -84,7 +84,7 @@
   "copy": "Copy",
   "timeplayer": "Timeplayer",
   "search-country-region-school-id": "Search country, region",
-  "not-the-results-you-expected": "Not the results you expected?",
+  "not-the-results-you-expected": "Not the results you expected?\nCurrently, results are limited to schools only.",
   "zoom-in": "Zoom in",
   "zoom-out": "Zoom out",
   "theme-layers": "Theme & Layers",

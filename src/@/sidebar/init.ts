@@ -823,7 +823,7 @@ sample({
     return currentDefaultLayerIdByEntity;
   },
   filter: ({ loadedLayersAndCountries: isLoaded }) => isLoaded,
-  target: createEffect(() => {}), // temporary disabled
+  target: createEffect(() => { }), // temporary disabled
 });
 
 // On first country code update, preserve URL layer value if present
@@ -902,9 +902,9 @@ sample({
     )
       ? selectedLayerIdByEntity
       : {
-          ...selectedLayerIdByEntity,
-          [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
-        };
+        ...selectedLayerIdByEntity,
+        [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
+      };
   },
   target: $selectedLayerIdByEntity,
 });
@@ -947,32 +947,32 @@ const benchmarkSource = combine({
 });
 const benchmarkFn =
   (isClockId: boolean) =>
-  (
-    {
-      countryDefaultNational = {},
-      selectedEntityType,
-      selectedLayerIdByEntity,
-      connectivityBenchMark,
-      connectivityBenchMarkByEntity,
-    }: ReturnType<typeof benchmarkSource.getState>,
-    clockLayerId: unknown,
-  ) => {
-    let currentBenchmark = getEntityMapValue(
-      connectivityBenchMarkByEntity,
-      selectedEntityType,
-      connectivityBenchMark,
-    );
-    const layerId =
-      isClockId && typeof clockLayerId === 'number'
-        ? clockLayerId
-        : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
-    if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
-      currentBenchmark = ConnectivityBenchMarks.national;
-    } else {
-      currentBenchmark = ConnectivityBenchMarks.global;
-    }
-    return currentBenchmark;
-  };
+    (
+      {
+        countryDefaultNational = {},
+        selectedEntityType,
+        selectedLayerIdByEntity,
+        connectivityBenchMark,
+        connectivityBenchMarkByEntity,
+      }: ReturnType<typeof benchmarkSource.getState>,
+      clockLayerId: unknown,
+    ) => {
+      let currentBenchmark = getEntityMapValue(
+        connectivityBenchMarkByEntity,
+        selectedEntityType,
+        connectivityBenchMark,
+      );
+      const layerId =
+        isClockId && typeof clockLayerId === 'number'
+          ? clockLayerId
+          : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
+      if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+        currentBenchmark = ConnectivityBenchMarks.national;
+      } else {
+        currentBenchmark = ConnectivityBenchMarks.global;
+      }
+      return currentBenchmark;
+    };
 const entityBenchmarkFn = (
   {
     countryDefaultNational = {},

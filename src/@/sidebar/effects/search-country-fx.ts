@@ -2,18 +2,20 @@ import { createEffect } from "effector";
 
 import { request } from "~/api/request-setup";
 import { router } from "~/core/routes";
-
-import { ConnectivityConfig } from "../types";
-import { changeIsSearchFocused } from "../ui/common-components/top-search-bar/top-search-bar.model";
 import { createRequestFx } from "~/lib/request-fx";
 import type { Controller } from "~/lib/request-fx/types";
 
-export const applySearchFx = createEffect(({ schoolIds, countryCode }: { schoolIds: number[]; countryCode: string }) => {
+import { ConnectivityConfig } from "../types";
+import { changeIsSearchFocused } from "../ui/common-components/top-search-bar/top-search-bar.model";
+import { SearchType } from "../ui/search-result/container/search-result.type";
+
+export const applySearchFx = createEffect(({ schoolIds, countryCode, item }: { schoolIds: number[]; countryCode: string, item: SearchType }) => {
   const queryParams = new URLSearchParams({
     country: countryCode,
-    school_ids: schoolIds.join(',')
+    entity_type: item.entityTypetag,
+    entity_ids: schoolIds.join(',')
   } as Record<string, string>)
-  router.navigate(`/map/schools?${queryParams.toString()}`);
+  router.navigate(`/map/entity/?${queryParams.toString()}`);
   changeIsSearchFocused(false);
 })
 
