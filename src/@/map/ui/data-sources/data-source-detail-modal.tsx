@@ -40,7 +40,7 @@ const DataSourceDetailModal = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!source) return null;
+  if (!source || !source.description) return null;
 
   return (
     <Modal

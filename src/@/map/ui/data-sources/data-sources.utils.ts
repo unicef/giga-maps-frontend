@@ -197,7 +197,7 @@ export const parseLayerDataSources = (
         url,
         collectionYear: getFillerCollectionYear(countryCode, displayName),
         category: isAdditional ? 'additional' : 'school',
-        clickable: !isAdditional,
+        clickable: !isAdditional && Boolean(description),
       } satisfies DataSourceBadgeItem;
     })
     .filter((item): item is DataSourceBadgeItem => item !== null);
@@ -229,7 +229,7 @@ const mergeCountrySourcesIntoMap = (
       name: displayName,
       description,
       category: isAdditional ? 'additional' : 'school',
-      clickable: !isAdditional,
+      clickable: !isAdditional && Boolean(description),
       collectionYear: getFillerCollectionYear(countryCode, displayName),
     });
   });

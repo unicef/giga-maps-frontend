@@ -99,7 +99,13 @@ const DataSourcesPanel = ({ mergeCountrySources = false }: { mergeCountrySources
                 <SectionLabel>{t('data-sources-school-label')}</SectionLabel>
                 <BadgeGrid>
                   {groups.school.map((source) => (
-                    <DataSourceBadge key={source.id} source={source} onClick={setDetailSource} />
+                    <DataSourceBadge
+                      key={source.id}
+                      source={source}
+                      onClick={(item) => {
+                        if (item.description) setDetailSource(item);
+                      }}
+                    />
                   ))}
                 </BadgeGrid>
               </>
