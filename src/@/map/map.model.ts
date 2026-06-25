@@ -109,7 +109,14 @@ export const $selectedGigaLayers = restore<SelectedGigaLayers>(
   defaultGigaLayers,
 );
 
-export const setPopupOnClickDot = createEvent<{ id: number; geopoint?: GeoJSONPoint | null; allowDublicateSchoolIds?: boolean; } | null>();
+type EntityDotPopupPayload = {
+  id: number;
+  entityType: EntityType;
+  geopoint?: GeoJSONPoint | null;
+  allowDublicateSchoolIds?: boolean;
+};
+
+export const setPopupOnClickDot = createEvent<EntityDotPopupPayload | null>();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
 export const setSchoolIdsOnPopupClickDot = createEvent<DuplicateSchoolsRequestPayload | null>();
@@ -132,6 +139,9 @@ type SchoolClickupPopupType = {
 }
 
 export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
+export const $schoolClickedEntityType = $activeSchoolPopup.map(
+  (data) => data?.entityType ?? null,
+);
 export const $dublicateSchoolsClickedId = $activeDublicateSchoolsPopup.map((data) => data);
 export const setSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
 export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setSchoolCLickupPopupDiv, null);

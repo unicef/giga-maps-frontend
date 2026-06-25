@@ -41,7 +41,7 @@ import {
   SCHOOL_LAYER_ID,
 } from './map.constant';
 import {
-  $schoolClickedId,
+  $activeSchoolPopup,
   resetDublicateSchoolClickData,
   setPopupOnClickDot,
 } from './map.model';
@@ -86,6 +86,20 @@ export const isConnectivity = (id: string) =>
   id === `${Layers.connectivity}_layer`;
 export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
 
+const getEntityTypeFromMapLayerId = (layerId?: string): EntityType | null => {
+  if (!layerId) return null;
+  if (layerId.startsWith('entity-status-')) {
+    return layerId.replace('entity-status-', '') as EntityType;
+  }
+
+  const selectedLayerMatch = layerId.match(/^entity-selected-(.+)-[^-]+$/);
+  if (selectedLayerMatch?.[1]) {
+    return selectedLayerMatch[1] as EntityType;
+  }
+
+  return null;
+};
+
 export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
   const ids = Object.keys(mapDotsClickIdsAndHandler[source]);
   if (!ids?.length) return;
@@ -96,7 +110,7 @@ export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
   });
 };
 
-export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
+export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
   if (!mapDotsClickIdsAndHandler[source]) {
     mapDotsClickIdsAndHandler[source] = {};
   }
@@ -116,18 +130,26 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
     if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
       return;
     }
-    const feature = features[0];
-    const feature2 = features[1];
-    if ($schoolClickedId.getState() === feature?.properties?.id) {
+    const feature =
+      features.find((item) => item.layer.id === id) ?? features[0];
+    const fallbackFeature = features.find((item) => item !== feature);
+    const entityId = Number(
+      feature?.properties?.id ?? fallbackFeature?.properties?.id,
+    );
+    const entityType =
+      getEntityTypeFromMapLayerId(feature?.layer?.id) ??
+      getEntityTypeFromMapLayerId(id);
+    if (!entityType) return;
+    const activePopup = $activeSchoolPopup.getState();
+    if (activePopup?.id === entityId && activePopup.entityType === entityType) {
       setPopupOnClickDot(null);
       return;
     }
-    const schoolId = feature?.properties?.id ?? feature2?.properties?.id;
-    if (feature?.layer?.id?.includes('_layer') && schoolId) {
-      console.log('schoolId', schoolId, feature.geometry);
+    if (feature?.layer?.id && entityId) {
       setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
       setPopupOnClickDot({
-        id: schoolId,
+        id: entityId,
+        entityType,
         geopoint: feature.geometry as GeoJSONPoint,
         allowDublicateSchoolIds: true,
       });
@@ -135,6 +157,8 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
   };
   map.on('click', id, mapDotsClickIdsAndHandler[source][id]);
 };
+
+export const onClickOnSchoolDots = onClickOnEntityDots;
 
 const getZoomDivisible = (
   zoom: number,

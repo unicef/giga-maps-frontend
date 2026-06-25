@@ -1,5 +1,7 @@
 import type mapboxGl from 'mapbox-gl';
 
+import type { EntityType } from '~/@/entities/types/base-entity.type';
+
 import { gigaLayerSource } from './map.init';
 
 export type Style = 'dark' | 'light' | 'satellite' | 'accessible' | 'street';
@@ -66,6 +68,7 @@ export type SchoolMarker = {
 };
 
 export type DuplicateSchoolsRequestPayload = {
+  entityType: EntityType;
   ids: number[];
   allowDublicateSchoolIds?: boolean;
   requestId?: string;

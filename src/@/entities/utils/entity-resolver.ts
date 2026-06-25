@@ -1,4 +1,5 @@
 import type { EntityConfig } from '../config/entity-config.types';
+import type { EntityType } from '../types/base-entity.type';
 
 /**
  * Entity resolver — pure utility functions that accept registry as a parameter.
@@ -88,4 +89,36 @@ export const getNewEntityTypes = (registry: Record<string, EntityConfig>): strin
  */
 export const getLegacyEntityTypes = (registry: Record<string, EntityConfig>): string[] => {
   return Object.keys(registry).filter(type => registry[type].useLegacyApi);
+};
+export const normalizeEntityLayerInfoList = <T = unknown>(
+  payload: unknown,
+  entityType?: EntityType,
+): T[] => {
+  if (!payload) return [];
+  if (Array.isArray(payload)) return payload as T[];
+  if (typeof payload !== 'object') return [];
+
+  const record = payload as Record<string, unknown>;
+  const entityPayload = entityType ? record[entityType] : payload;
+
+  if (!entityPayload) return [];
+  if (Array.isArray(entityPayload)) return entityPayload as T[];
+  if (typeof entityPayload !== 'object') return [];
+
+  const entityRecord = entityPayload as Record<string, unknown>;
+  if (Array.isArray(entityRecord.results)) {
+    return entityRecord.results as T[];
+  }
+  if ('id' in entityRecord) {
+    return [entityRecord as T];
+  }
+
+  if (!entityType) return [];
+
+  const values = Object.values(entityRecord);
+  if (values.every((value) => typeof value === 'object' && value !== null)) {
+    return values as T[];
+  }
+
+  return [];
 };

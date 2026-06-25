@@ -9,13 +9,14 @@ import { fetchSchoolPopupDataFx } from "~/api/project-connect";
 import { $mapRoutes } from "~/core/routes";
 import { formatDateInterval } from "~/lib/date-fns-kit/format-date-interval";
 import { $schoolPopupData } from "../../map.init";
-import { $multipleSchoolPopup, $schoolClickedPopupDiv } from "../../map.model";
+import { $activeSchoolPopup, $multipleSchoolPopup, $schoolClickedPopupDiv } from "../../map.model";
 import { UNKNOWN } from "../../map.types";
 
 
 const useSchoolPopupData = () => {
   const { t } = useTranslation();
   const { schools: isSchoolView } = useStore($mapRoutes);
+  const activePopup = useStore($activeSchoolPopup);
   const schoolPopupDiv = useStore($schoolClickedPopupDiv);
   const multipleSchoolDiv = useStore($multipleSchoolPopup)
   const isLoading = useStore(fetchSchoolPopupDataFx.pending);
@@ -54,8 +55,6 @@ const useSchoolPopupData = () => {
       staticValue = staticValue === true ? 'yes' : 'no';
     } else if (staticValue === 'unknown' || !staticValue) {
       staticValue = t('unknown');
-    } else {
-      staticValue = staticValue;
     }
 
     return {
@@ -103,6 +102,7 @@ const useSchoolPopupData = () => {
     isSchoolView,
     isSchoolBenchmark,
     formattedInterval,
+    entityType: activePopup?.entityType,
   }
 
 }

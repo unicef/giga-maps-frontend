@@ -1,6 +1,8 @@
 import { createEffect } from 'effector';
 
-import { CoverageStat, LayerType } from '~/@/sidebar/types';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { normalizeEntityLayerInfoList } from '~/@/entities/utils/entity-resolver';
+import { LayerType } from '~/@/sidebar/types';
 import {
   AdvanceFilterType,
   APIListType,
@@ -34,6 +36,11 @@ export const getDatasetUrl = (countryCode: string): string =>
   `${apiBaseUrl}api/locations/countries/${encodeURIComponent(countryCode)}/schools/export-csv-schools/`;
 
 export const getBaseUrl = (url: string): string => `${apiBaseUrl}${url}`;
+type EntityLayerInfoRequest = {
+  query: string;
+  url: string;
+  entityType?: EntityType;
+};
 
 export const fetchCountryFx = createRequestFx(
   async (countryCode: string, controller?: Controller): Promise<Country> =>
@@ -59,20 +66,24 @@ export const fetchLayerListFx = createRequestFx(
 );
 
 export const fetchSchoolPopupDataFx = createRequestFx(
-  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
-    request({
+  async ({ query, url, entityType }: EntityLayerInfoRequest, controller?: Controller): Promise<SchoolStatsType[]> => {
+    const payload = await request<unknown>({
       url: `${url}${query}`,
       signal: controller?.getSignal()
-    })
+    });
+    return normalizeEntityLayerInfoList<SchoolStatsType>(payload, entityType);
+  }
 );
 
-// Fetch dublicate school info by IDs
+// Fetch duplicate entity info by IDs
 export const fetchDublicateSchoolPopupDataFx = createRequestFx(
-  async ({ query, url }: { query: string; url: string }, controller?: Controller): Promise<SchoolStatsType[]> =>
-    request({
+  async ({ query, url, entityType }: EntityLayerInfoRequest, controller?: Controller): Promise<SchoolStatsType[]> => {
+    const payload = await request<unknown>({
       url: `${url}${query}`,
       signal: controller?.getSignal()
-    })
+    });
+    return normalizeEntityLayerInfoList<SchoolStatsType>(payload, entityType);
+  }
 );
 
 export const fetchGlobalStatsFx = createRequestFx(
@@ -105,8 +116,14 @@ export const fetchLayerInfoFx = createRequestFx(
 );
 
 export const fetchSchoolLayerInfoFx = createEffect(
-  async ({ query, url }: { query: string; url: string }): Promise<SchoolStatsType[]> =>
-    fetchLayerInfoFx(`${url}${query}`) as Promise<SchoolStatsType[]>
+  async ({
+    entityType,
+    query,
+    url,
+  }: EntityLayerInfoRequest): Promise<SchoolStatsType[]> => {
+    const payload = await fetchLayerInfoFx(`${url}${query}`);
+    return normalizeEntityLayerInfoList<SchoolStatsType>(payload, entityType);
+  }
 );
 
 export const fetchEntitiesLayerInfoFx = createEffect(

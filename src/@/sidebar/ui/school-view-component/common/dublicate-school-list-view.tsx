@@ -8,13 +8,13 @@ import { UNKNOWN } from '~/@/map/map.types';
 import { InnerCircle, InnerCircleConnectivity } from '~/@/map/ui/legend-info/legend-button.style';
 import DublicateSchoolLoader from '~/@/map/ui/map-school-popup/dublicate-school-popup-loader.view';
 import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from '~/@/map/ui/map-school-popup/school-popup.style';
-import { $layerUtils, $schoolStats, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import { $getSchoolParams, $layerUtils, $schoolStats, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
 import { PointCoordinates } from '~/core/global-types';
-import { router } from '~/core/routes';
 import { ConnectivityStatusNames } from '../../global-and-country-view-components/container/layer-view.constant';
 import { DublicateSchoolList, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, SchoolName, SidebarDublicateSchoolWrapper, ToggleLink, TotalCountLabel } from './dublicate-school-list.style';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 
 type Props = {
   scrollableTargetId: string; // id of scroll container owned by parent
@@ -39,6 +39,7 @@ export default function SidebarDublicateSchoolList({
   const stylePaintData = useStore($stylePaintData);
   const layerUtils = useStore($layerUtils);
   const countryCode = useStore($countryCode);
+  const { entityType } = useStore($getSchoolParams);
 
   // derived from layer utils (kept from your code)
   const { currentLayerTypeUtils, selectedLayerData } = layerUtils ?? {};
@@ -102,7 +103,7 @@ export default function SidebarDublicateSchoolList({
     if (fromIndex >= to) return false;
 
     const idsToFetch = duplicateIds.slice(fromIndex, to);
-    if (!idsToFetch.length) return false;
+    if (!idsToFetch.length || !entityType) return false;
 
     // guard + record
     isFetchingRef.current = true;
@@ -117,6 +118,7 @@ export default function SidebarDublicateSchoolList({
     // dispatch to effector (app-level) to actually fetch details
     setSchoolIdsOnPopupClickDot({
       ids: idsToFetch,
+      entityType,
       allowDublicateSchoolIds: false,
     });
 
@@ -218,7 +220,8 @@ export default function SidebarDublicateSchoolList({
                 <SchoolName
                   onClick={() => {
                     handleGoTop();
-                    router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${s.id}`);
+                    if (!entityType) return;
+                    navigateToEntity(entityType, countryCode, s.id);
                     setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
                   }}
                   aria-label={`Open ${s.name}`}

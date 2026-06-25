@@ -18,15 +18,22 @@ export const buildEntityUrl = (
 };
 
 /**
- * Navigate to a specific entity detail view using /map/view.
+ * Navigate to a specific entity detail view using /map/entity/.
  */
 export const navigateToEntity = (
   entityType: EntityType,
-  country: string
+  country: string,
+  entityId?: number | string,
 ): void => {
-  router.navigate(
-    `/map/view?entity=${entityType}&country=${country.toLowerCase()}`
-  );
+  const params = new URLSearchParams({
+    country: country.toLowerCase(),
+  });
+
+  if (entityId !== undefined && entityId !== null) {
+    params.set(`${entityType}_ids`, String(entityId));
+  }
+
+  router.navigate(`/map/entity/?${params.toString()}`);
 };
 
 /**

@@ -42,7 +42,7 @@ import {
   SchoolStatsType,
 } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
-import { mapOverview, mapSchools, router } from '~/core/routes';
+import { mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 import { evaluateExpression } from '~/lib/utils';
 import {
@@ -1555,15 +1555,15 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
   staticType: school?.field_status ?? school?.coverage_status,
   connectivityStatus:
-    school.connectivity_status || school.statistics.connectivity_status,
+    school.connectivity_status ?? school.statistics?.connectivity_status ?? UNKNOWN,
   isRealTime: school.is_rt_connected,
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
   id: school?.id,
   externalId: school?.external_id,
   schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
   schoolAtSameLocation: {
-    count: school.schools_at_same_location?.count,
-    schoolIds: school.schools_at_same_location?.school_ids,
+    count: school.schools_at_same_location?.count ?? 0,
+    schoolIds: school.schools_at_same_location?.school_ids ?? [],
   },
 });
 export const $schoolStatsMap = $schoolStats.map((schools) => {
@@ -1719,15 +1719,32 @@ export const $timePlayerInfo = combine({
 export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
-export const $getSchoolParams = sample({
-  source: mapSchools.router.search,
-  fn: (searchParams) => {
-    const params = new URLSearchParams(searchParams);
-    return {
-      country: params.get('country'),
-      schoolIds: params.get('school_ids')?.split(',').map(Number),
-    };
-  },
+export const $getSchoolParams = combine({
+  entitySearch: mapEntity.router.search,
+  entityVisible: mapEntity.visible,
+  schoolSearch: mapSchools.router.search,
+  schoolVisible: mapSchools.visible,
+}, ({ entitySearch, entityVisible, schoolSearch, schoolVisible }) => {
+  const params = new URLSearchParams(entityVisible ? entitySearch : schoolSearch);
+  const entityIdsParam = Array.from(params.entries()).find(
+    ([key, value]) => key.endsWith('_ids') && key !== 'entity_ids' && !!value,
+  );
+  const entityTypeFromIds = entityIdsParam?.[0].replace(/_ids$/, '') as
+    | EntityType
+    | undefined;
+  const legacyEntityTypeParam = params.get('entity_type') ?? params.get('entity');
+  const entityType = entityTypeFromIds
+    ?? (legacyEntityTypeParam ? (legacyEntityTypeParam as EntityType) : undefined)
+    ?? (schoolVisible ? EntityType.SCHOOL : undefined);
+  const idsParam = entityIdsParam?.[1]
+    ?? (entityType ? params.get(`${entityType}_ids`) : null)
+    ?? params.get('entity_ids');
+
+  return {
+    country: params.get('country'),
+    entityType,
+    schoolIds: idsParam?.split(',').map(Number),
+  };
 });
 
 export const $selectedSchoolIds = $getSchoolParams.map(
@@ -1744,7 +1761,7 @@ $coverageStatusAllByEntity.reset([
   mapOverview.visible,
 ]);
 $potentialCoverageOpenStatus.reset(onSelectEntityMainLayer);
-$schoolStats.reset(mapSchools.visible, $countryCode, $selectedLayerIdByEntity);
+$schoolStats.reset(mapSchools.visible, mapEntity.visible, $countryCode, $selectedLayerIdByEntity);
 $isMenuOpen.reset(router.historyUpdated);
 // on history update, clear connectivity dates;
 $connectivityAvailabilityByEntity.reset(router.historyUpdated);

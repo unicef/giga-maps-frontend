@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
+import { normalizeEntityLayerInfoList } from '~/@/entities/utils/entity-resolver';
 import { $layerUtils, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
 import { PointCoordinates } from '~/core/global-types';
-import { router } from '~/core/routes';
 import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '../../map.model';
 import { UNKNOWN } from '../../map.types';
 import {
@@ -35,6 +37,7 @@ import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from './
 
 type Props = {
   schoolIds: number[];
+  entityType: EntityType;
   countryCode: string;
   /**
    * ID of the scroll container managed by the parent.
@@ -57,6 +60,7 @@ export function getStaticValue(staticValue: boolean | undefined | string | null)
 
 export default function DublicateSchoolPopup({
   schoolIds,
+  entityType,
   countryCode,
   scrollableTargetId,
   batchSize = 10,
@@ -134,6 +138,7 @@ export default function DublicateSchoolPopup({
     // dispatch to effector — other parts of app handle the effect
     setSchoolIdsOnPopupClickDot({
       ids: nextIds,
+      entityType,
     });
   }
 
@@ -143,31 +148,11 @@ export default function DublicateSchoolPopup({
     requestNextBatch();
   };
 
-  // normalize incoming effector payload into array of SchoolStatsType
-  function normalizeFetchPayload(payload: any): SchoolStatsType[] {
-    if (!payload) return [];
-    if (Array.isArray(payload)) return payload as SchoolStatsType[];
-
-    if (typeof payload === 'object') {
-      // if it's a map of id -> object, return values
-      const vals = Object.values(payload);
-      // detect whether it's an array-like values of objects
-      if (vals.length > 0 && typeof vals[0] === 'object') {
-        return vals as SchoolStatsType[];
-      }
-      // fallback: maybe single object (one school)
-      return [payload as SchoolStatsType];
-    }
-
-    // unexpected shape
-    return [];
-  }
-
   useEffect(() => {
     if (!mountedRef.current) return;
 
     try {
-      const payloadArr = normalizeFetchPayload(globalFetchStore);
+      const payloadArr = normalizeEntityLayerInfoList<SchoolStatsType>(globalFetchStore, entityType);
 
       if (payloadArr.length === 0) {
         // if there's no payload and no pending request, clear loading trackers
@@ -291,7 +276,7 @@ export default function DublicateSchoolPopup({
                   <GoToSchoolInfo
                     className="cds--btn cds--btn--primary"
                     onClick={() => {
-                      router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${s.id}`);
+                      navigateToEntity(entityType, countryCode, s.id);
                       setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
                     }}
                     aria-label={`View ${s.name}`}

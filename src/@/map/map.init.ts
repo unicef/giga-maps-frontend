@@ -24,6 +24,7 @@ import {
   ENTITY_TYPE_CODE_PARAM,
   getEntityTypeCodeParam,
 } from '~/@/entities/utils/entity-query-params';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import {
   $connectivityBenchMark,
   $connectivityBenchMarkByEntity,
@@ -133,10 +134,7 @@ import {
   zoomIn,
   zoomOut,
 } from './map.model';
-import {
-  createLoadingPopupFx,
-  navigateToSchool,
-} from './popup/effects/create-school-popup-fx';
+import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
 import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
 
@@ -334,10 +332,10 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-    ...source,
-    ...data,
-  });
+    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+      ...source,
+      ...data,
+    });
 
 const mapLayerFilter = ({
   isCheckedLastDate,
@@ -481,13 +479,25 @@ sample({
 });
 
 sample({
-  clock: $schoolClickedId,
+  clock: $activeSchoolPopup,
   source: combine({
+    country: $country,
     isMobile: $isMobile,
   }),
-  filter: ({ isMobile }, schoolId) => isMobile && schoolId?.id,
-  fn: (_, schoolId) => schoolId?.id,
-  target: navigateToSchool,
+  filter: ({ country, isMobile }, activePopup) =>
+    isMobile && !!country?.code && !!activePopup?.entityType && !!activePopup.id,
+  fn: ({ country }, activePopup) => ({
+    countryCode: country!.code,
+    entityId: activePopup!.id,
+    entityType: activePopup!.entityType,
+  }),
+  target: createEffect(
+    ({ countryCode, entityId, entityType }: {
+      countryCode: string;
+      entityId: number;
+      entityType: EntityType;
+    }) => navigateToEntity(entityType, countryCode, entityId),
+  ),
 });
 
 export const $schoolPopupConnectivityMap = $schoolClickData.map((data) =>

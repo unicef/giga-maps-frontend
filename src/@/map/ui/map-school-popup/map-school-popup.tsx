@@ -1,17 +1,18 @@
 import { ArrowRight, Launch } from '@carbon/icons-react';
+import { useStore } from 'effector-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
+import { $entityRegistry } from '~/@/entities/models/entity.model';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { PointCoordinates } from '~/core/global-types';
-import { router } from '~/core/routes';
 import {
   InnerCircle,
   InnerCircleConnectivity,
 } from '../legend-info/legend-button.style';
 import DublicateSchoolPopup from './dublicate-school-popup.view';
-import SchoolPopupDataSource from './school-popup-data-source';
 import useSchoolPopupData from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 import {
@@ -31,6 +32,7 @@ import {
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+  const entityRegistry = useStore($entityRegistry);
   const {
     isLoading,
     features,
@@ -40,9 +42,16 @@ export const MapSchoolPopup = () => {
     isStatic,
     countryCode,
     formattedInterval,
+    entityType,
   } = useSchoolPopupData();
 
   if (!features?.length) return null;
+
+  const entityLabel = entityType
+    ? t(`${entityType}-entity-label`, {
+      defaultValue: t(entityRegistry[entityType]?.slug ?? entityType, { count: 1 }),
+    })
+    : '';
 
   return (
     <>
@@ -60,16 +69,18 @@ export const MapSchoolPopup = () => {
           schoolId
         } = getFeatureInfo(feature);
 
-        const hasDublicateSchools = schoolAtSameLocation?.schoolIds.length > 0;
+        const duplicateSchoolIds = schoolAtSameLocation?.schoolIds ?? [];
+        const hasDublicateSchools = duplicateSchoolIds.length > 0;
 
         return createPortal(
           isLoading && isClicked ? (
             <SchoolPopupLoading />
           ) : (
             <div className="school-popup-data">
-              {(!isLoading && isClicked && hasDublicateSchools) ?
+              {(!isLoading && isClicked && hasDublicateSchools && entityType) ?
                 <DublicateSchoolPopup
-                  schoolIds={[schoolId, ...schoolAtSameLocation.schoolIds]}
+                  schoolIds={[schoolId, ...duplicateSchoolIds]}
+                  entityType={entityType}
                   countryCode={countryCode}
                   scrollableTargetId="parentPopupScrollContainer"
                   batchSize={10}
@@ -107,15 +118,13 @@ export const MapSchoolPopup = () => {
                       {isSchoolBenchmark && benchmarkTitle && <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
                     </SchoolInfoWrapper>
 
-                    {/* Data source section tailored for popup */}
-                    {/* <SchoolPopupDataSource /> */}
                   </PopupTemplate>
-                  {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
-                    router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
+                  {isClicked && entityType && feature?.id && <GoToSchoolButton className="go-to-school" onClick={() => {
+                    navigateToEntity(entityType, countryCode, feature.id);
                     setSchoolFocusLatLng(feature?.geopoint.coordinates as PointCoordinates);
                   }} type="button"
                     renderIcon={ArrowRight} >
-                    {t('go-to-school-page')}
+                    {t('go-to-entity-page', { entity: entityLabel })}
                   </GoToSchoolButton>}
                 </div>}
             </div>
