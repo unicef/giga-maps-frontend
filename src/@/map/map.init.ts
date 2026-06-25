@@ -151,7 +151,7 @@ sample({
   clock: merge([onLoadPage, map.visible]),
   source: $mapRoutes,
   target: createEffect((routes: ReturnType<typeof $mapRoutes.getState>) => {
-    if (routes.map || routes.country || routes.schools) {
+    if (routes.map || routes.country || routes.entity) {
       void fetchLayerListFx();
       void fetchCountriesFx();
     }

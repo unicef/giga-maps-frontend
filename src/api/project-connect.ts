@@ -1,5 +1,6 @@
 import { createEffect } from 'effector';
 
+import { EntityType } from '~/@/entities';
 import { CoverageStat, LayerType } from '~/@/sidebar/types';
 import {
   AdvanceFilterType,
@@ -105,8 +106,8 @@ export const fetchLayerInfoFx = createRequestFx(
 );
 
 export const fetchSchoolLayerInfoFx = createEffect(
-  async ({ query, url }: { query: string; url: string }): Promise<SchoolStatsType[]> =>
-    fetchLayerInfoFx(`${url}${query}`) as Promise<SchoolStatsType[]>
+  async ({ query, url }: { query: string; url: string }): Promise<{ [key in EntityType]: SchoolStatsType[] | null }> =>
+    fetchLayerInfoFx(`${url}${query}`) as Promise<{ [key in EntityType]: SchoolStatsType[] | null }>
 );
 
 export const fetchEntitiesLayerInfoFx = createEffect(

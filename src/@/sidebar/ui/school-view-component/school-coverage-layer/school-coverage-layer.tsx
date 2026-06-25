@@ -2,16 +2,24 @@
 
 import { useStore } from 'effector-react';
 
-import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
-import SingleSchoolCoverageLayer from '../common/single-school-coverage-layer';
-import MultiSchoolLayerView from '../common/multi-school-layer.view';
-import { $getSchoolParams, $layerUtils, $schoolStats } from '~/@/sidebar/sidebar.model';
+import { EntityType } from '~/@/entities';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { $getSchoolParams, $layerUtils, $schoolStats } from '~/@/sidebar/sidebar.model';
+
+import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
+import MultiSchoolLayerView from '../common/multi-school-layer.view';
+import SingleSchoolCoverageLayer from '../common/single-school-coverage-layer';
 
 const SchoolCoverageLayer = () => {
-  const { schoolIds = [0] } = useStore($getSchoolParams);
+  const allPrams = useStore($getSchoolParams);
   const schoolStats = useStore($schoolStats);
   const { selectedLayerData } = useStore($layerUtils);
+  const schoolIds = [];
+  for (const element of Object.values(EntityType)) {
+    if (allPrams[element + "__ids"]) {
+      schoolIds.push(...allPrams[element + "__ids"]);
+    }
+  }
   const isMoreThenOne = (schoolIds?.length || 0) > 1
 
   return (

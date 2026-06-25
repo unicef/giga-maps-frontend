@@ -1,19 +1,19 @@
 import { Tuning } from '@carbon/icons-react'
-import { IconButton, Tag as FilterTag, Button } from '@carbon/react';
+import { Button, IconButton, Tag as FilterTag } from '@carbon/react';
 import { useStore } from 'effector-react';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
 
+import { $country, $countrySearchParams, $countrySearchString } from '~/@/country/country.model';
 import { $showAdvancedFilter, $sidebarHeight, onShowAdvancedFilter, onShowLegend } from '~/@/sidebar/sidebar.model';
 import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
+import { $isMobile } from '~/core/media-query';
+import { $mapRoutes, router } from '~/core/routes';
 
-import { useEffect, useMemo } from 'react';
+import { $advanceFilterList } from '../../map.model';
 import { FilterButtonWrapper, FilterTagContainer, FilterWrapper, Tag } from './filter-button.style';
 import FilterPopup from './filter-popup';
-import { $mapRoutes, router } from '~/core/routes';
-import { $country, $countrySearchParams, $countrySearchString } from '~/@/country/country.model';
-import { $advanceFilterList } from '../../map.model';
-import { $isMobile } from '~/core/media-query';
-import { useTranslation } from 'react-i18next';
 import FilterSelectedChips from './filter-selected-chips';
 
 const FilterButton = () => {
@@ -34,11 +34,11 @@ const FilterButton = () => {
     }
   }, [isOpen]);
   const isDisabled = useMemo(() => {
-    if (routes.schools || !country?.id || !advanceFilterList?.length) {
+    if (routes.entity || !country?.id || !advanceFilterList?.length) {
       return true;
     }
     return false;
-  }, [advanceFilterList, country?.id, routes.schools]);
+  }, [advanceFilterList, country?.id, routes.entity]);
 
   const sidebarHeight = useStore($sidebarHeight)
   if (isDisabled) return null;

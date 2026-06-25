@@ -12,6 +12,7 @@ import {
   $countrySearchString,
 } from '~/@/country/country.model';
 import {
+  DEFAULT_ENTITY_REGISTRY,
   EntityType,
   getEntityMapValue,
   getLayerEntityTypes,
@@ -1546,34 +1547,38 @@ export const $multiSelectionSchoolCheckboxByEntity = combine(
 );
 
 export const onSchoolUncheck = createEvent<number>();
-export const $schoolStats = createStore<SchoolStatsType[] | null>([]);
+export const $schoolStats = createStore<{ [key in EntityType]: SchoolStatsType[] | null }>({ [EntityType.SCHOOL]: [], [EntityType.HEALTH]: [] });
 $schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
-export const schoolStatsMap = (school: SchoolStatsType) => ({
-  name: school.name,
-  geopoint: school?.geopoint,
-  liveAvg: school?.connectivity_speed || school?.live_avg || 0,
-  staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
-  staticType: school?.field_status ?? school?.coverage_status,
-  connectivityStatus:
-    school.connectivity_status || school.statistics.connectivity_status,
-  isRealTime: school.is_rt_connected,
-  connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
-  id: school?.id,
-  externalId: school?.external_id,
-  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
-  schoolAtSameLocation: {
-    count: school.schools_at_same_location?.count,
-    schoolIds: school.schools_at_same_location?.school_ids,
-  },
+export const schoolStatsMap = (school: SchoolStatsType) => {
+  return {
+    name: school.name,
+    geopoint: school?.geopoint,
+    liveAvg: school?.connectivity_speed || school?.live_avg || 0,
+    staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
+    staticType: school?.field_status ?? school?.coverage_status,
+    connectivityStatus:
+      school.connectivity_status || school.statistics.connectivity_status,
+    isRealTime: school.is_rt_connected,
+    connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
+    id: school?.id,
+    externalId: school?.external_id,
+    schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
+    schoolAtSameLocation: {
+      count: school.schools_at_same_location?.count || 1,
+      schoolIds: school.schools_at_same_location?.school_ids || [school.id],
+    },
+  };
+}
+  ;
+export const $schoolStatsMap = $schoolStats.map((entities) => {
+  //TODO: map all entities
+  return entities?.[EntityType.SCHOOL]?.map(schoolStatsMap) ?? null;
 });
-export const $schoolStatsMap = $schoolStats.map((schools) => {
-  return schools?.map(schoolStatsMap) ?? null;
-});
-
-export const $schoolAdminId = $schoolStats.map((schools) => {
-  if (schools?.length) {
-    const ids = new Set(schools?.map((school) => school.admin1_id));
-    return ids.size === 1 ? (schools[0].admin1_id ?? 0) : 0;
+//TODO: map all entities
+export const $schoolAdminId = $schoolStats.map((entities) => {
+  if (entities?.[EntityType.SCHOOL]?.length) {
+    const ids = new Set(entities?.[EntityType.SCHOOL]?.map((school) => school.admin1_id));
+    return ids.size === 1 ? (entities?.[EntityType.SCHOOL]?.[0].admin1_id ?? 0) : 0;
   }
   return null;
 });
@@ -1723,15 +1728,26 @@ export const $getSchoolParams = sample({
   source: mapSchools.router.search,
   fn: (searchParams) => {
     const params = new URLSearchParams(searchParams);
-    return {
-      country: params.get('country'),
-      schoolIds: params.get('school_ids')?.split(',').map(Number),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const entityPram: any = {
+      country: params.get('country') as string,
     };
-  },
+    for (const i of Object.values(EntityType)) {
+      const key = i + "__ids";
+      if (params.has(key)) {
+        entityPram[key] = params.get(key)!.split(',').map(Number);
+      }
+    }
+
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return entityPram;
+  }
 });
 
+// todo - make generic for entity wise health__ids, schools__ids, etc
 export const $selectedSchoolIds = $getSchoolParams.map(
-  (data) => data?.schoolIds ?? null,
+  (data) => data?.[EntityType.SCHOOL + '__ids'] ?? null,
 );
 
 // all reset model

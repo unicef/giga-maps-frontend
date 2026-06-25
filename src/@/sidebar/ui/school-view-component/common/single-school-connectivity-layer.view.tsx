@@ -22,7 +22,8 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   const SchoolStatsTypes = useStore($schoolStats);
   const { global_benchmark: globalBenchmark, icon } =
     useStore($selectedLayerData) ?? {};
-  const schoolDetails = SchoolStatsTypes?.find((info) => info.id === schoolId);
+  // TODO : make here dynamic entity type.
+  const schoolDetails = Object.values(SchoolStatsTypes ?? {})?.find((info) => info.id === schoolId);
   const stylePaintData = useStore($stylePaintData);
   const { value, color } = getLiveSchoolDetails({
     schoolDetails,

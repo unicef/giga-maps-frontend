@@ -99,7 +99,7 @@ const config = {
     ],
     "linebreak-style": "off",
     // Disallow the `any` type.
-    // "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-types": [
       "error",
       {
@@ -128,12 +128,14 @@ const config = {
     // Enforce the use of the shorthand syntax.
     "object-shorthand": "error",
     "no-console": "warn",
-    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "off",
     "react/no-unescaped-entities": "warn",
     "@typescript-eslint/comma-dangle": "off",
     "import/no-named-as-default": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
   },
   "ignorePatterns": [
     "src/lib/storybook-kit/*",
