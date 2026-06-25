@@ -18,7 +18,7 @@ const CommonUIOnlySchoolConnectivityLayer = ({
 }) => {
   const { t } = useTranslation();
   const SchoolStatsTypes = useStore($schoolStats);
-  const schoolData = SchoolStatsTypes?.find((info) => info.id === schoolId);
+  const schoolData = SchoolStatsTypes?.school?.find((info) => info.id === schoolId);
   const connectivityStatus =
     schoolData?.connectivity_status ??
     schoolData?.statistics?.connectivity_status ??

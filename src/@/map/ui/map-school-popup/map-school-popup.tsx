@@ -2,18 +2,17 @@ import { ArrowRight, Launch } from '@carbon/icons-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
+
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { PointCoordinates } from '~/core/global-types';
 import { router } from '~/core/routes';
+
 import {
   InnerCircle,
   InnerCircleConnectivity,
 } from '../legend-info/legend-button.style';
 import DublicateSchoolPopup from './dublicate-school-popup.view';
-import SchoolPopupDataSource from './school-popup-data-source';
-import useSchoolPopupData from './school-popup-hook';
-import { SchoolPopupLoading } from './school-popup-loading.view';
 import {
   ConnectivityCircleWrapper,
   GoToSchoolButton,
@@ -27,6 +26,9 @@ import {
   SchoolName,
   SchoolNameWrapper,
 } from './school-popup.style';
+import SchoolPopupDataSource from './school-popup-data-source';
+import useSchoolPopupData from './school-popup-hook';
+import { SchoolPopupLoading } from './school-popup-loading.view';
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
@@ -59,7 +61,7 @@ export const MapSchoolPopup = () => {
           schoolAtSameLocation,
           schoolId
         } = getFeatureInfo(feature);
-
+        debugger;
         const hasDublicateSchools = schoolAtSameLocation?.schoolIds.length > 0;
 
         return createPortal(

@@ -154,15 +154,26 @@ sample({
 sample({
   clock: onSchoolUncheck,
   source: $getSchoolParams,
-  fn: (schoolParams, uncheckId) => {
-    const newParams = new URLSearchParams({
-      country: schoolParams.country ?? '',
-      school_ids:
-        schoolParams?.schoolIds?.filter(
-          (id) => String(id) !== String(uncheckId),
-        ) ?? '',
-    } as Record<string, string>).toString();
-    const url = '/map/schools?' + newParams;
+  fn: (entityParams, uncheckId: string) => {
+    /* const newParams = new URLSearchParams({
+       country: schoolParams.country ?? '',
+       school_ids:
+         schoolParams?.schoolIds?.filter(
+           (id) => String(id) !== String(uncheckId),
+         ) ?? '',
+     } as Record<string, string>).toString();*/
+
+    const newParams = new URLSearchParams();
+    newParams.set('country', entityParams.country ?? '');
+    for (const i of Object.values(EntityType)) {
+
+      if (entityParams[i + "__ids"]) {
+        newParams.set(i + "__ids", entityParams[i + "__ids"].filter((id: string) => id !== uncheckId))
+      }
+
+    }
+
+    const url = '/map/entity?' + newParams.toString();
     router.history.replace(url);
     return url;
   },
@@ -231,9 +242,9 @@ export const getCurrentQueryId = ({
   const endDate = format(schoolInterval.end, 'dd-MM-yyyy');
   const params = new URLSearchParams();
   if (isLive) {
-    params.set('start_date', startDate);
-    params.set('end_date', endDate);
-    params.set('is_weekly', isWeekly.toString());
+    params.set(EntityType.SCHOOL + '_start_date', startDate);
+    params.set(EntityType.SCHOOL + '_end_date', endDate);
+    params.set(EntityType.SCHOOL + '_is_weekly', isWeekly.toString());
   }
   // if (isDownload) {
   //   params.set('indicator', 'download');
@@ -247,20 +258,30 @@ export const getCurrentQueryId = ({
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  if (schoolParams?.schoolIds && (mapRoutes.schools || isSchoolClicked)) {
-    let schoolKeys = '';
-    if (typeof schoolParams.schoolIds === 'number') {
-      schoolKeys = String(schoolParams.schoolIds);
-    } else if (Array.isArray(schoolParams?.schoolIds)) {
-      schoolKeys = schoolParams.schoolIds.join(',');
+  if (mapRoutes.entity || isSchoolClicked) {
+    for (const entit of Object.values(EntityType)) {
+      const key = entit + '__ids';
+      if (schoolParams?.[key]) {
+        let selectedIds = '';
+        const ids = schoolParams?.[key];
+        if (typeof ids === 'number') {
+          selectedIds = String(ids);
+        } else if (Array.isArray(ids)) {
+          selectedIds = ids?.join(',');
+        }
+        params.set(entit + '_id__in', selectedIds);
+      }
     }
-    params.set('school_id__in', schoolKeys);
+
+  }
+  if (selectedLayerId) {
+    params.set(EntityType.SCHOOL + '_layer_id', String(selectedLayerId).trim());
   }
 
-  params.set('include_same_location_schools', String(allowDublicateSchoolIds));
+  params.set(EntityType.SCHOOL + '_include_same_location_schools', String(allowDublicateSchoolIds));
   if (allowDublicateSchoolIds) {
     params.set(
-      'limit_same_location_schools',
+      EntityType.SCHOOL + '_limit_same_location_schools',
       String(MaxAllowedDublicateSchoolIds),
     );
   }
@@ -387,20 +408,14 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   }
   const entityTypes = activeEntityTypes?.length
     ? activeEntityTypes
-    : entityTypesFiltered;
-  params.set(
-    ENTITY_TYPE_CODE_PARAM,
-    getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
-  );
+    : [EntityType.SCHOOL];
   entityTypes.forEach((entityType) => {
     const layerId = getEntityMapValue(
       selectedLayerIdByEntity,
       entityType,
       null,
     );
-    const isStaticLayer =
-      layersUtils.currentLayerTypeUtilsByEntity[entityType]?.isStatic;
-    if (layerId && !isStaticLayer) {
+    if (layerId) {
       params.set(`${entityType}_layer_id`, String(layerId));
     }
   });
@@ -427,9 +442,17 @@ const getCurrentSchoolConnectivityConfigQuery = ({
   if (country?.id) {
     params.set('country_id', String(country.id));
   }
-  if (schoolParams?.schoolIds?.length) {
-    params.set('school_ids', schoolParams.schoolIds.join(','));
+
+  for (const tempEntity of Object.values(EntityType)) {
+    const pramKey = tempEntity + '__ids';
+    const ids = schoolParams?.[pramKey];
+    if (ids && ids?.length) {
+      params.set(`${tempEntity}__ids`, ids.join(','));
+    }
   }
+  /*if (schoolParams?.schoolIds?.length) {
+    params.set('school_ids', schoolParams.schoolIds.join(','));
+  }*/
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
@@ -482,7 +505,7 @@ sample({
   fn: getCurrentSchoolConnectivityConfigQuery,
   filter: ({ country, layersUtils, mapRoutes }) => {
     return (
-      mapRoutes.schools &&
+      mapRoutes.entity &&
       !!country?.id &&
       !!layersUtils.layers?.length &&
       !!layersUtils.currentLayerTypeUtils.isLive
@@ -561,7 +584,7 @@ const schoolInfoFn = (
   },
 ) => {
   const { query, id } = getCurrentQueryId(props);
-  const url = `api/accounts/layers/${id}/info/`;
+  const url = `api/v2/entities/layers/info/`;
   return {
     url,
     query,
@@ -585,7 +608,7 @@ sample({
     country,
     isCheckedLastDate,
   }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.schools && !!country && !!isCheckedLastDate;
+    return mapRoutes.entity && !!country && !!isCheckedLastDate;
   },
   target: fetchSchoolLayerInfoFx,
 });
@@ -598,13 +621,14 @@ sample({
     activePopup: $activeSchoolPopup,
   }),
   filter: ({ info }) => !info.isMobile,
-  fn: ({ info, activePopup }, schoolIds) =>
-    schoolInfoFn({
+  fn: ({ info, activePopup }, schoolIds) => {
+    return schoolInfoFn({
       ...info,
       isSchoolClicked: true,
       schoolParams: { schoolIds: [Number(schoolIds)], country: null },
       allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
-    }),
+    })
+  },
   target: fetchSchoolPopupDataFx,
 });
 

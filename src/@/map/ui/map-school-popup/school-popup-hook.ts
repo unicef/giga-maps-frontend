@@ -1,6 +1,7 @@
 import { useStore } from "effector-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+
 import { $countryCode } from "~/@/country/country.model";
 import { $historyInterval, $historyIntervalUnit } from "~/@/sidebar/history-graph.model";
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
@@ -8,6 +9,7 @@ import { $schoolStatsMap } from "~/@/sidebar/sidebar.model";
 import { fetchSchoolPopupDataFx } from "~/api/project-connect";
 import { $mapRoutes } from "~/core/routes";
 import { formatDateInterval } from "~/lib/date-fns-kit/format-date-interval";
+
 import { $schoolPopupData } from "../../map.init";
 import { $multipleSchoolPopup, $schoolClickedPopupDiv } from "../../map.model";
 import { UNKNOWN } from "../../map.types";
