@@ -68,12 +68,29 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   const effectiveSelectedLayerId = mapRoute.map
     ? layerUtils.globalLayerId
     : (selectedLayerId ?? firstEntitySelectedLayerId);
+  const entityTypesWithSelectedLayer = getEntityTypesWithSelectedLayer({
+    entityTypes,
+    globalLayerId: layerUtils.globalLayerId,
+    mapRoute,
+    selectedLayerId: effectiveSelectedLayerId,
+    selectedLayerIdByEntity,
+  });
+
+  if (!entityTypesWithSelectedLayer.length) {
+    deleteSourceAndLayers({ map, sourceId: DEFAULT_SOURCE });
+    changeGigaSelection({
+      layerId: null,
+      layerIdByEntity: selectedLayerIdByEntity,
+    });
+    return;
+  }
   if (isLastSelectionChange || !checkSourceAvailable(map, DEFAULT_SOURCE)) {
     // create source data country and global view;
     if (mapRoute.map || mapRoute.country || mapRoute.schools) {
       const next = createSourceForMapAndCountry({
         ...props,
         selectedLayerId: effectiveSelectedLayerId,
+        activeEntityTypes: entityTypesWithSelectedLayer,
       });
       if (!next) return;
     }
@@ -82,6 +99,7 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   createAndUpdateMapLayer({
     ...props,
     selectedLayerId: effectiveSelectedLayerId,
+    activeEntityTypes: entityTypesWithSelectedLayer,
     schoolLayerId,
   });
   // update giga selection
@@ -104,6 +122,29 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
 
 const callDelay = delayMethodCall();
 let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
+
+const getEntityTypesWithSelectedLayer = ({
+  entityTypes,
+  globalLayerId,
+  mapRoute,
+  selectedLayerId,
+  selectedLayerIdByEntity,
+}: {
+  entityTypes: EntityType[];
+  globalLayerId: number | null;
+  mapRoute: ChangeLayerOptions['mapRoute'];
+  selectedLayerId: number | null;
+  selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>;
+}) => {
+  if (mapRoute.map) {
+    return globalLayerId ? entityTypes : [];
+  }
+
+  const fallbackLayerId = entityTypes.length === 1 ? selectedLayerId : null;
+  return entityTypes.filter((entityType) =>
+    Boolean(selectedLayerIdByEntity[entityType] ?? fallbackLayerId),
+  );
+};
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   const {

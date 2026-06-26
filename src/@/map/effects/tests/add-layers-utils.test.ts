@@ -4,6 +4,7 @@ import {
   createSource,
   createSelectedLayer,
   animateCircles,
+  generateLayerUrls,
 } from '../../utils';
 import {
   getLayerIdsAndLastChange,
@@ -49,6 +50,7 @@ describe('add-layers-utils', () => {
     } as any;
 
     vi.clearAllMocks();
+    vi.mocked(generateLayerUrls).mockReturnValue('tile-url');
   });
 
   describe('getLayerIdsAndLastChange', () => {
@@ -132,6 +134,26 @@ describe('add-layers-utils', () => {
       expect(createSource).toHaveBeenCalled();
     });
 
+    it('should not create a source when no layer URL can be generated', async () => {
+      vi.mocked(generateLayerUrls).mockReturnValueOnce('');
+
+      const result = await createSourceForMapAndCountry({
+        map: mockMap,
+        schoolAdminId: 1,
+        countrySearch: '',
+        connectivityBenchMark: 10,
+        selectedLayerId: null,
+        connectivityFilter: [],
+        layerUtils: { selectedLayerIdByEntity: {} },
+        mapRoute: { country: true },
+        country: { code: 'US', admin_metadata: { bbox: [1, 2, 3, 4] } },
+        lastSelectedLayer: { layerId: null },
+        admin1Data: null,
+      } as any);
+
+      expect(result).toBe(false);
+      expect(createSource).not.toHaveBeenCalled();
+    });
     it('should handle undefined map gracefully', async () => {
       const result = await createSourceForMapAndCountry({
         map: null as any,
@@ -162,6 +184,7 @@ describe('add-layers-utils', () => {
           currentLayerTypeUtils: { isLive: true },
           downloadLayerId: 'download',
           coverageLayerId: 'coverage',
+          selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
         },
         selectedLayerId: 1,
         paintData: {},
@@ -203,6 +226,31 @@ describe('add-layers-utils', () => {
       expect(createSelectedLayer).toHaveBeenCalledTimes(2);
     });
 
+    it('should not create selected layers when no entity layer is selected', () => {
+      createAndUpdateMapLayer({
+        map: mockMap,
+        mapRoute: { schools: false },
+        connectivitySpeedFilter: [],
+        coverageFilter: [],
+        layerUtils: {
+          currentLayerTypeUtils: { isLive: true },
+          downloadLayerId: 'download',
+          coverageLayerId: 'coverage',
+          selectedLayerIdByEntity: {},
+        },
+        selectedLayerId: null,
+        paintData: {},
+        schoolLayerId: null,
+        lastSelectedLayer: { layerId: null },
+        schoolLegends: [],
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
+        entityRegistry: {},
+      });
+
+      expect(createSelectedLayer).not.toHaveBeenCalled();
+      expect(animateCircles).not.toHaveBeenCalled();
+    });
     it('should move existing status layers above selected layers', () => {
       mockMap = {
         ...mockMap,

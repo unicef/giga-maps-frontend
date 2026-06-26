@@ -1,5 +1,11 @@
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
-import { createSchoolSource, createSelectedLayer, getCoveragePaint } from '../utils';
+import {
+  createSchoolSource,
+  createSelectedLayer,
+  generateLayerUrls,
+  getCoveragePaint,
+} from '../utils';
 import { LayerDataProps, mapPaintData, stylePaintData } from '../map.constant';
 
 describe('getCoveragePaint', () => {
@@ -14,10 +20,14 @@ describe('getCoveragePaint', () => {
       'circle-color': [
         ...mapPaintData.coverage['circle-color'],
         ['get', LayerDataProps.fieldStatus.key],
-        ConnectivityDistribution.good, colors.good,
-        ConnectivityDistribution.moderate, colors.moderate,
-        ConnectivityDistribution.bad, colors.bad,
-        ConnectivityDistribution.unknown, colors.unknown,
+        ConnectivityDistribution.good,
+        colors.good,
+        ConnectivityDistribution.moderate,
+        colors.moderate,
+        ConnectivityDistribution.bad,
+        colors.bad,
+        ConnectivityDistribution.unknown,
+        colors.unknown,
         colors.unknown,
       ],
     });
@@ -45,7 +55,6 @@ describe('createSchoolSource', () => {
   });
 });
 
-
 describe('createSelectedLayer', () => {
   it('should create the correct layer on the map', () => {
     const map = {
@@ -64,9 +73,38 @@ describe('createSelectedLayer', () => {
       map: null,
     };
 
-    createSelectedLayer(map, { id, isDynamicLayer, source, paintData: stylePaintData.dark, mapRoute });
+    createSelectedLayer(map, {
+      id,
+      isDynamicLayer,
+      source,
+      paintData: stylePaintData.dark,
+      mapRoute,
+    });
 
     expect(map.addLayer).toHaveBeenCalled();
     expect(map.getLayer).toHaveBeenCalledWith(id);
+  });
+});
+
+describe('generateLayerUrls', () => {
+  it('should not generate map tile URL when no entity has a selected layer', () => {
+    const result = generateLayerUrls({
+      layerId: null,
+      activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
+      connectivityBenchMark: 'global',
+      connectivityFilter: {
+        isWeek: false,
+        range: { start: new Date('2026-01-01'), end: new Date('2026-01-31') },
+      },
+      layerUtils: {
+        selectedLayerIdByEntity: {},
+        currentLayerTypeUtilsByEntity: {},
+      },
+      mapRoute: { country: true },
+      country: { id: 1 },
+      entityRegistry: {},
+    } as any);
+
+    expect(result).toBe('');
   });
 });

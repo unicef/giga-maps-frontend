@@ -112,7 +112,6 @@ export const createSourceForMapAndCountry = ({
   layerUtils,
   mapRoute,
   country,
-  lastSelectedLayer,
   admin1Data,
   activeEntityTypes,
   entityRegistry,
@@ -132,10 +131,7 @@ export const createSourceForMapAndCountry = ({
   // delete existing source;
   deleteSourceAndLayers({ map, sourceId });
   // create new source
-  const { coverageLayerId } = layerUtils;
-  const fallbackLayerId = mapRoute.map
-    ? layerUtils.globalLayerId
-    : (lastSelectedLayer.layerId ?? coverageLayerId);
+  const fallbackLayerId = mapRoute.map ? layerUtils.globalLayerId : layerId;
   if (!layerId) {
     layerId = fallbackLayerId;
   }
@@ -182,8 +178,9 @@ export const createSourceForMapAndCountry = ({
       countrySearch,
     });
   }
+  if (!url) return false;
   const options = {} as VectorSource;
-  if (!!country) {
+  if (country) {
     const removeBounds = ignoreCountriesForBounds.includes(
       country.code.toLocaleLowerCase(),
     );
@@ -210,7 +207,6 @@ export const createAndUpdateMapLayer = ({
   coverageFilter,
   coverageFilterByEntity,
   layerUtils,
-  selectedLayerId,
   selectedLayerIds,
   paintData,
   lastSelectedLayer,
@@ -241,7 +237,7 @@ export const createAndUpdateMapLayer = ({
     Boolean(
       mapRoute.map
         ? globalLayerId
-        : (layerUtils.selectedLayerIdByEntity?.[entityType] ?? selectedLayerId),
+        : layerUtils.selectedLayerIdByEntity?.[entityType],
     ),
   );
 
@@ -250,7 +246,7 @@ export const createAndUpdateMapLayer = ({
     for (const entityType of entityTypes) {
       const entityLayerId = mapRoute.map
         ? globalLayerId
-        : (layerUtils.selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
+        : layerUtils.selectedLayerIdByEntity?.[entityType];
       if (!entityLayerId) continue;
       const isDynamicLayer = !(entityLayerId === globalLayerId);
       const sourceLayer = getSourceLayerName(entityType);

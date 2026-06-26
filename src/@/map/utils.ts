@@ -378,6 +378,29 @@ const getEntityLayerId = ({
 }) =>
   getEntityMapValue(selectedLayerIdByEntity ?? {}, entityType, fallbackLayerId);
 
+const getEntityTypesWithLayerId = ({
+  entityTypes,
+  fallbackLayerId,
+  layerUtils,
+}: {
+  entityTypes: EntityType[];
+  fallbackLayerId: number | null;
+  layerUtils: ChangeLayerOptions['layerUtils'];
+}) => {
+  const fallbackEntityLayerId =
+    entityTypes.length === 1 ? fallbackLayerId : null;
+
+  return entityTypes.filter((entityType) =>
+    Boolean(
+      getEntityLayerId({
+        entityType,
+        selectedLayerIdByEntity: layerUtils.selectedLayerIdByEntity,
+        fallbackLayerId: fallbackEntityLayerId,
+      }),
+    ),
+  );
+};
+
 const generateEntityMapParams = ({
   entityTypes,
   layerUtils,
@@ -477,7 +500,7 @@ export const generateMapParams = ({
   const { isWeek, range } = connectivityFilter;
   const startDate = format(range.start, 'dd-MM-yyyy');
   const endDate = format(range.end, 'dd-MM-yyyy');
-  let params = `${mapRoute.map ? 'limit=14000' : ''}`;
+  let params = `${mapRoute.map ? 'limit=5000' : ''}`;
   const benchmark = mapRoute.map
     ? ConnectivityBenchMarks.global
     : connectivityBenchMark;
@@ -579,32 +602,43 @@ export const generateLayerUrls = ({
     activeEntityTypes,
     entityRegistry,
   );
+  const isGlobalView = mapRoute.map;
+  const requestEntityTypes = isGlobalView
+    ? layerId
+      ? entityTypes
+      : []
+    : getEntityTypesWithLayerId({
+      entityTypes,
+      layerUtils,
+      fallbackLayerId: layerId,
+    });
+  if (!requestEntityTypes.length) return '';
+
   const entityParams =
     'entity_type__code=' +
-    getEntityTypeCodeParam(activeEntityTypes, allEntityTypes);
-  const isGlobalView = mapRoute.map;
+    getEntityTypeCodeParam(requestEntityTypes, allEntityTypes);
   const url = isGlobalView ? CONNECTIVITY_URL : getDynamicUrl();
   const requestParams = isGlobalView
     ? generateMapParams({
-        connectivityFilter,
-        mapRoute,
-        isLive: true,
-        schoolPageIds,
-        connectivityBenchMark,
-        countrySearch,
-      })
+      connectivityFilter,
+      mapRoute,
+      isLive: true,
+      schoolPageIds,
+      connectivityBenchMark,
+      countrySearch,
+    })
     : generateEntityMapParams({
-        entityTypes,
-        layerUtils,
-        fallbackLayerId: layerId,
-        connectivityFilter,
-        interval,
-        intervalByEntity,
-        intervalUnit,
-        intervalUnitByEntity,
-        connectivityBenchMark,
-        connectivityBenchMarkByEntity,
-      });
+      entityTypes: requestEntityTypes,
+      layerUtils,
+      fallbackLayerId: requestEntityTypes.length === 1 ? layerId : null,
+      connectivityFilter,
+      interval,
+      intervalByEntity,
+      intervalUnit,
+      intervalUnitByEntity,
+      connectivityBenchMark,
+      connectivityBenchMarkByEntity,
+    });
   const normalizedParams = requestParams.startsWith('&')
     ? requestParams.slice(1)
     : requestParams;
@@ -749,7 +783,7 @@ export const createSchoolLayer = (
   const countryCode = $countryCode.getState();
   const currentCountryPaintData =
     CountryPaintData[
-      countryCode?.toLowerCase() as keyof typeof CountryPaintData
+    countryCode?.toLowerCase() as keyof typeof CountryPaintData
     ];
   const paint = withEntityCircleRadius(
     {
@@ -862,7 +896,7 @@ const getConnectivityPaint = (
   const countryCode = $countryCode.getState();
   const currentCountryPaintData =
     CountryPaintData[
-      countryCode?.toLowerCase() as keyof typeof CountryPaintData
+    countryCode?.toLowerCase() as keyof typeof CountryPaintData
     ];
   return {
     ...mapPaintData.connectivity,
