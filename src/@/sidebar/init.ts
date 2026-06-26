@@ -152,16 +152,20 @@ sample({
 
 sample({
   clock: onSchoolUncheck,
-  source: $getSchoolParams,
-  fn: (schoolParams, uncheckId) => {
+  source: combine({
+    mapRoutes: $mapRoutes,
+    schoolParams: $getSchoolParams,
+  }),
+  fn: ({ mapRoutes, schoolParams }, uncheckId) => {
+    const entityType = schoolParams.entityType ?? EntityType.SCHOOL;
+    const nextIds = schoolParams?.schoolIds?.filter(
+      (id) => String(id) !== String(uncheckId),
+    ) ?? [];
     const newParams = new URLSearchParams({
       country: schoolParams.country ?? '',
-      school_ids:
-        schoolParams?.schoolIds?.filter(
-          (id) => String(id) !== String(uncheckId),
-        ) ?? '',
+      [mapRoutes.entity ? `${entityType}_ids` : 'school_ids']: nextIds.join(','),
     } as Record<string, string>).toString();
-    const url = '/map/schools?' + newParams;
+    const url = `${mapRoutes.entity ? '/map/entity/' : '/map/schools'}?${newParams}`;
     router.history.replace(url);
     return url;
   },
@@ -431,6 +435,8 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   entityTypesFiltered,
   admin1Id,
   layersUtils,
+  mapRoutes,
+  schoolParams,
   selectedLayerIdByEntity,
 }: ReturnType<typeof sourceForInfo.getState>) => {
   const params = new URLSearchParams();
@@ -440,9 +446,11 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  const entityTypes = activeEntityTypes?.length
-    ? activeEntityTypes
-    : entityTypesFiltered;
+  const entityTypes = mapRoutes.entity && schoolParams.entityType
+    ? [schoolParams.entityType]
+    : activeEntityTypes?.length
+      ? activeEntityTypes
+      : entityTypesFiltered;
   params.set(
     ENTITY_TYPE_CODE_PARAM,
     getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
@@ -509,12 +517,15 @@ sample({
     entityTypesFiltered,
     layersUtils,
     mapRoutes,
+    schoolParams,
   }) => {
-    const entityTypes = activeEntityTypes?.length
-      ? activeEntityTypes
-      : entityTypesFiltered;
+    const entityTypes = mapRoutes.entity && schoolParams.entityType
+      ? [schoolParams.entityType]
+      : activeEntityTypes?.length
+        ? activeEntityTypes
+        : entityTypesFiltered;
     return (
-      mapRoutes.country &&
+      (mapRoutes.country || mapRoutes.entity) &&
       !!country?.id &&
       !!layersUtils.layers?.length &&
       entityTypes.some(
@@ -722,6 +733,22 @@ const entityPopupInfoFn = (
     url: 'api/v2/entities/layers/info/',
   };
 };
+// entity detail route selects the entity encoded in the *_ids URL param.
+sample({
+  clock: merge([
+    mapEntity.visible,
+    mapEntity.router.historyUpdate,
+    $getSchoolParams,
+  ]),
+  source: combine({
+    mapRoutes: $mapRoutes,
+    schoolParams: $getSchoolParams,
+  }),
+  filter: ({ mapRoutes, schoolParams }) =>
+    mapRoutes.entity && !!schoolParams.entityType,
+  fn: ({ schoolParams }) => schoolParams.entityType!,
+  target: changeSelectedEntityType,
+});
 // school view info api
 sample({
   clock: merge([
@@ -749,7 +776,10 @@ sample({
 sample({
   clock: merge([
     mapEntity.visible,
+    mapEntity.router.search,
+    $getSchoolParams,
     countryReceived,
+    $countryId,
     $isCheckedLastDate,
     $selectedLayerIdByEntity,
     $historyIntervalByEntity,

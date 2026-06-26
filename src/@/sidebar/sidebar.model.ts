@@ -716,7 +716,7 @@ export const $activeLayerByCountryCodeByEntity = combine(
           countryDefaultLayerList: {},
         });
         result[entityType] = {
-          ...(result[entityType] ?? {}),
+          ...result[entityType],
           [layer.id]:
             activeLayers.list[layer.id]?.activeCountries?.includes(
               countryCode.toLowerCase(),

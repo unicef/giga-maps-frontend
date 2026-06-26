@@ -12,8 +12,7 @@ import { SearchType } from "../ui/search-result/container/search-result.type";
 export const applySearchFx = createEffect(({ schoolIds, countryCode, item }: { schoolIds: number[]; countryCode: string, item: SearchType }) => {
   const queryParams = new URLSearchParams({
     country: countryCode,
-    entity_type: item.entityTypetag,
-    entity_ids: schoolIds.join(',')
+    [`${item.entityTypetag}_ids`]: schoolIds.join(','),
   } as Record<string, string>)
   router.navigate(`/map/entity/?${queryParams.toString()}`);
   changeIsSearchFocused(false);
