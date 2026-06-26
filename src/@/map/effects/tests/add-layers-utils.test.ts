@@ -1,7 +1,16 @@
-import { Map, VectorSource } from 'mapbox-gl';
-import { getSchoolsGeoJson } from '~/@/country/lib/get-schools-geojson';
-import { deleteSourceAndLayers, createSource, createSchoolSource, createSelectedLayer, animateCircles } from '../../utils';
-import { getLayerIdsAndLastChange, createSourceForMapAndCountry, createAndUpdateMapLayer } from '../add-layers-utils';
+import { Map } from 'mapbox-gl';
+import {
+  deleteSourceAndLayers,
+  createSource,
+  createSelectedLayer,
+  animateCircles,
+} from '../../utils';
+import {
+  getLayerIdsAndLastChange,
+  createSourceForMapAndCountry,
+  createAndUpdateMapLayer,
+  createAndUpdateConnectiivtyStatusLayer,
+} from '../add-layers-utils';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 
 // Mock dependencies
@@ -13,7 +22,7 @@ vi.mock('../../utils', () => ({
   createSchoolLayer: vi.fn(),
   animateCircles: vi.fn(() => ({ requestId: 123 })),
   checkSourceAvailable: vi.fn(() => true),
-  getMapId: vi.fn(id => `layer-${id}`),
+  getMapId: vi.fn((id) => `layer-${id}`),
   filterConnectivityList: vi.fn(),
   filterCoverageList: vi.fn(),
   generateLayerUrls: vi.fn(),
@@ -47,7 +56,7 @@ describe('add-layers-utils', () => {
       const result = getLayerIdsAndLastChange({
         selectedLayerIds: { schoolId: 1, selectedId: 2 },
         refresh: true,
-        lastSelectedLayer: { layerId: 2 }
+        lastSelectedLayer: { layerId: 2 },
       });
 
       expect(result).toEqual({
@@ -56,7 +65,7 @@ describe('add-layers-utils', () => {
         selectedLayerIdByEntity: {
           [EntityType.SCHOOL]: 2,
         },
-        isLastSelectionChange: true
+        isLastSelectionChange: true,
       });
     });
 
@@ -64,7 +73,7 @@ describe('add-layers-utils', () => {
       const result = getLayerIdsAndLastChange({
         selectedLayerIds: { schoolId: 1, selectedId: 3 },
         refresh: false,
-        lastSelectedLayer: { layerId: 2 }
+        lastSelectedLayer: { layerId: 2 },
       });
 
       expect(result.isLastSelectionChange).toBe(true);
@@ -99,7 +108,7 @@ describe('add-layers-utils', () => {
       const country = {
         code: 'US',
         admin_metadata: { bbox: [1, 2, 3, 4] },
-        admin1_metadata: [{ id: 1, bbox: [2, 3, 4, 5] }]
+        admin1_metadata: [{ id: 1, bbox: [2, 3, 4, 5] }],
       };
 
       await createSourceForMapAndCountry({
@@ -113,10 +122,13 @@ describe('add-layers-utils', () => {
         mapRoute: { schools: true },
         country,
         lastSelectedLayer: { layerId: null },
-        admin1Data: null
+        admin1Data: null,
       });
 
-      expect(deleteSourceAndLayers).toHaveBeenCalledWith({ map: mockMap, sourceId: 'map-data-source' });
+      expect(deleteSourceAndLayers).toHaveBeenCalledWith({
+        map: mockMap,
+        sourceId: 'map-data-source',
+      });
       expect(createSource).toHaveBeenCalled();
     });
 
@@ -132,7 +144,7 @@ describe('add-layers-utils', () => {
         mapRoute: { schools: true },
         country: null,
         lastSelectedLayer: { layerId: null },
-        admin1Data: null
+        admin1Data: null,
       });
 
       expect(result).toBeUndefined();
@@ -149,7 +161,7 @@ describe('add-layers-utils', () => {
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
           downloadLayerId: 'download',
-          coverageLayerId: 'coverage'
+          coverageLayerId: 'coverage',
         },
         selectedLayerId: 1,
         paintData: {},
@@ -191,6 +203,57 @@ describe('add-layers-utils', () => {
       expect(createSelectedLayer).toHaveBeenCalledTimes(2);
     });
 
+    it('should move existing status layers above selected layers', () => {
+      mockMap = {
+        ...mockMap,
+        getLayer: vi.fn((id) => (id === 'entity-status-school' ? {} : null)),
+        moveLayer: vi.fn(),
+      } as any;
+
+      createAndUpdateMapLayer({
+        map: mockMap,
+        mapRoute: { schools: false },
+        connectivitySpeedFilter: [],
+        coverageFilter: [],
+        layerUtils: {
+          currentLayerTypeUtils: { isLive: true },
+          downloadLayerId: 'download',
+          coverageLayerId: 'coverage',
+        },
+        selectedLayerId: 1,
+        paintData: {},
+        schoolLayerId: null,
+        lastSelectedLayer: { layerId: null },
+        schoolLegends: [],
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL],
+        entityRegistry: {},
+      });
+
+      expect(mockMap.moveLayer).toHaveBeenCalledWith('entity-status-school');
+    });
+
+    it('should move static status layers above existing map layers', () => {
+      mockMap = {
+        ...mockMap,
+        getLayer: vi.fn((id) => (id === 'entity-status-school' ? {} : null)),
+        moveLayer: vi.fn(),
+      } as any;
+
+      createAndUpdateConnectiivtyStatusLayer({
+        map: mockMap,
+        mapRoute: { country: true },
+        paintData: {},
+        selectedLayerIds: { schoolId: 1 },
+        schoolLegends: ['connected'],
+        schoolLegendsByEntity: {},
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL],
+        entityRegistry: {},
+      } as any);
+
+      expect(mockMap.moveLayer).toHaveBeenCalledWith('entity-status-school');
+    });
     it('should handle undefined map gracefully', () => {
       createAndUpdateMapLayer({
         map: null as any,
@@ -200,7 +263,7 @@ describe('add-layers-utils', () => {
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
           downloadLayerId: 'download',
-          coverageLayerId: 'coverage'
+          coverageLayerId: 'coverage',
         },
         selectedLayerId: 1,
         paintData: {},
@@ -217,4 +280,3 @@ describe('add-layers-utils', () => {
     });
   });
 });
-

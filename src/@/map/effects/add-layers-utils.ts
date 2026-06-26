@@ -1,4 +1,4 @@
-import { VectorSource } from 'mapbox-gl';
+import { Map, VectorSource } from 'mapbox-gl';
 
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
 import { EntityType } from '~/@/entities/types/base-entity.type';
@@ -32,6 +32,22 @@ import {
 let animateCircleHandlers: Record<string, { requestId: number }> = {};
 
 const ignoreCountriesForBounds = ['fj'];
+
+const moveEntityStatusLayersToTop = (map: Map, entityTypes: EntityType[]) => {
+  if (
+    typeof map.getLayer !== 'function' ||
+    typeof map.moveLayer !== 'function'
+  ) {
+    return;
+  }
+
+  entityTypes.forEach((entityType) => {
+    const statusLayerId = getEntityStatusLayerId(entityType);
+    if (map.getLayer(statusLayerId)) {
+      map.moveLayer(statusLayerId);
+    }
+  });
+};
 
 export function cancelAnimation() {
   Object.values(animateCircleHandlers).forEach((handler) => {
@@ -258,6 +274,8 @@ export const createAndUpdateMapLayer = ({
         animateCircleHandlers[entityType] = animateCircles({
           map,
           id: layerIdStr,
+          entityConfig: config,
+          fallbackMarkerType: markerType,
         });
       }
 
@@ -270,6 +288,7 @@ export const createAndUpdateMapLayer = ({
           paintData,
           mapRoute,
           options,
+          entityConfig: config,
         });
       } else {
         createSelectedSymbolLayer(map, {
@@ -281,6 +300,7 @@ export const createAndUpdateMapLayer = ({
           paintData,
           mapRoute,
           options,
+          entityConfig: config,
         });
       }
     }
@@ -294,6 +314,7 @@ export const createAndUpdateMapLayer = ({
     }
   }
 
+  moveEntityStatusLayersToTop(map, entityTypes);
   if (!mapRoute.map) return;
 
   // --- Status layer (connectivity_status dots) per entity type in global view ---
@@ -321,6 +342,7 @@ export const createAndUpdateMapLayer = ({
             'source-layer': sourceLayer,
           },
           mapRoute,
+          entityConfig: config,
         });
       } else {
         // Symbol marker (health, etc.) — text-based symbol layer
@@ -334,9 +356,11 @@ export const createAndUpdateMapLayer = ({
             'source-layer': sourceLayer,
           },
           mapRoute,
+          entityConfig: config,
         });
       }
     }
+    moveEntityStatusLayersToTop(map, entityTypes);
   }
 };
 
@@ -389,6 +413,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           isMobile,
           options,
           mapRoute,
+          entityConfig: config,
         });
       } else {
         createEntitySymbolLayer(map, {
@@ -399,9 +424,11 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           isMobile,
           options,
           mapRoute,
+          entityConfig: config,
         });
       }
     }
+    moveEntityStatusLayersToTop(map, entityTypes);
   } else {
     for (const entityType of entityTypes) {
       hideLayer(map, getEntityStatusLayerId(entityType));

@@ -9,6 +9,12 @@ import {
 } from 'mapbox-gl';
 
 import { EntityType, getEntityMapValue } from '~/@/entities';
+import type {
+  EntityConfig,
+  EntityMapAnimationConfig,
+  EntityMapZoomRadius,
+  MarkerType,
+} from '~/@/entities/config/entity-config.types';
 import { getEntityTypeCodeParam } from '~/@/entities/utils/entity-query-params';
 import { getBaseUrl } from '~/api/project-connect';
 import {
@@ -47,23 +53,118 @@ import {
 } from './map.model';
 import { ChangeLayerOptions, StylePaintData } from './map.types';
 
-const selectedSymbolTextSize = [
-  'interpolate',
-  ['linear'],
-  ['zoom'],
-  0,
-  14,
-  2,
-  18,
-  4,
-  24,
-  5,
-  30,
-  8,
-  40,
-  10,
-  52,
-] as const;
+type MapAnimationConfigSource = Pick<
+  EntityConfig,
+  'markerType' | 'mapAnimation'
+>;
+
+const defaultCircleMapAnimation: EntityMapAnimationConfig = {
+  zoomRadius: [
+    { zoom: 0, radius: 0.2 },
+    { zoom: 3, radius: 1 },
+    { zoom: 8, radius: 4 },
+    { zoom: 14, radius: 24 },
+  ],
+  growSpeed: 1,
+  glowMinScale: 0.5,
+  glowMaxScale: 2.5,
+};
+
+const defaultSymbolMapAnimation: EntityMapAnimationConfig = {
+  zoomRadius: [
+    { zoom: 0, radius: 0.2 },
+    { zoom: 3, radius: 2 },
+    { zoom: 8, radius: 6 },
+    { zoom: 14, radius: 40 },
+  ],
+  growSpeed: 1,
+  glowMinScale: 0.5,
+  glowMaxScale: 2,
+};
+
+const getDefaultMapAnimation = (
+  markerType: MarkerType,
+): EntityMapAnimationConfig =>
+  markerType === 'symbol'
+    ? defaultSymbolMapAnimation
+    : defaultCircleMapAnimation;
+
+const getEntityMapAnimation = (
+  entityConfig?: MapAnimationConfigSource,
+  fallbackMarkerType: MarkerType = 'circle',
+): EntityMapAnimationConfig => {
+  const markerType = entityConfig?.markerType ?? fallbackMarkerType;
+  const defaultConfig = getDefaultMapAnimation(markerType);
+  const config = entityConfig?.mapAnimation;
+
+  return {
+    ...defaultConfig,
+    ...config,
+    zoomRadius: config?.zoomRadius?.length
+      ? config.zoomRadius
+      : defaultConfig.zoomRadius,
+    growSpeed:
+      config?.growSpeed && config.growSpeed > 0
+        ? config.growSpeed
+        : defaultConfig.growSpeed,
+  };
+};
+
+const getOrderedZoomRadius = (
+  zoomRadius: EntityMapZoomRadius[],
+): EntityMapZoomRadius[] =>
+  zoomRadius.reduce<EntityMapZoomRadius[]>((ordered, stop) => {
+    const insertIndex = ordered.findIndex(({ zoom }) => stop.zoom < zoom);
+    if (insertIndex === -1) return [...ordered, stop];
+    return [
+      ...ordered.slice(0, insertIndex),
+      stop,
+      ...ordered.slice(insertIndex),
+    ];
+  }, []);
+
+const getRadiusAtZoom = (
+  zoomRadius: EntityMapZoomRadius[],
+  zoom: number,
+): number => {
+  const stops = getOrderedZoomRadius(zoomRadius).map(
+    ({ zoom: stopZoom, radius }) => [stopZoom, radius] as [number, number],
+  );
+
+  return getInterpolatedValue(stops, zoom) ?? stops[0]?.[1] ?? 0;
+};
+
+const getRadiusExpression = (
+  zoomRadius: EntityMapZoomRadius[],
+  scale = 1,
+): unknown[] => {
+  const expression: unknown[] = ['interpolate', ['linear'], ['zoom']];
+  getOrderedZoomRadius(zoomRadius).forEach(({ zoom, radius }) => {
+    expression.push(zoom, radius * scale);
+  });
+  return expression;
+};
+
+const getEntityRadiusExpression = (
+  entityConfig?: MapAnimationConfigSource,
+  fallbackMarkerType: MarkerType = 'circle',
+  scale = 1,
+): unknown[] =>
+  getRadiusExpression(
+    getEntityMapAnimation(entityConfig, fallbackMarkerType).zoomRadius,
+    scale,
+  );
+
+const withEntityCircleRadius = (
+  paint: CirclePaint | undefined,
+  entityConfig?: MapAnimationConfigSource,
+): CirclePaint | undefined => {
+  if (!paint) return paint;
+  return {
+    ...paint,
+    'circle-radius': getEntityRadiusExpression(entityConfig, 'circle'),
+  } as unknown as CirclePaint;
+};
 
 interface CreateSourceType {
   source?: string;
@@ -160,52 +261,45 @@ export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
 
 export const onClickOnSchoolDots = onClickOnEntityDots;
 
-const getZoomDivisible = (
-  zoom: number,
-  zoomDivisible?: [number, number][],
-): number => {
-  if (!zoomDivisible?.length) return zoom;
-  const divisibleValue = getInterpolatedValue(zoomDivisible, zoom);
-  return divisibleValue ? zoom / divisibleValue : zoom;
-};
-
-const getAnimateConfig = () => {
-  const countryAnimatedCircle =
-    CountryPaintData[
-      $countryCode.getState()?.toLowerCase() as keyof typeof CountryPaintData
-    ]?.animatedCircle;
-  return {
-    ...animateCircleConfig,
-    ...countryAnimatedCircle,
-  };
-};
-
-const setCurrentRadius = () => {
-  let lastZoom = 0;
+const setCurrentRadius = (
+  entityConfig?: MapAnimationConfigSource,
+  fallbackMarkerType: MarkerType = 'circle',
+) => {
+  let lastZoom = Number.NaN;
   let radiusValue = [0, 0];
-  const { maxRadius, maxRadiusPortion, startRadiusPortion, zoomDivisible } =
-    getAnimateConfig();
+  const { glowMaxScale, glowMinScale, zoomRadius } = getEntityMapAnimation(
+    entityConfig,
+    fallbackMarkerType,
+  );
   return (currentZoom: number) => {
-    const value = getZoomDivisible(currentZoom, zoomDivisible);
-    currentZoom = Math.min(value, maxRadius);
     if (currentZoom === lastZoom) {
       return radiusValue;
     }
     lastZoom = currentZoom;
-    const zoomThird = currentZoom / maxRadiusPortion;
-    const start = currentZoom - currentZoom / startRadiusPortion;
-    const max = currentZoom + zoomThird;
-    radiusValue = [start, max];
+    const baseRadius = getRadiusAtZoom(zoomRadius, currentZoom);
+    radiusValue = [baseRadius * glowMinScale, baseRadius * glowMaxScale];
     return radiusValue;
   };
 };
 
-export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
+export function animateCircles({
+  map,
+  id: layer,
+  entityConfig,
+  fallbackMarkerType = 'circle',
+}: {
+  map: Map;
+  id: string;
+  entityConfig?: MapAnimationConfigSource;
+  fallbackMarkerType?: MarkerType;
+}) {
   const animationFrameData = { requestId: 0 };
-  const { duration, opacityMax, opacityMin } = animateCircleConfig;
+  const { opacityMax, opacityMin } = animateCircleConfig;
+  const { growSpeed } = getEntityMapAnimation(entityConfig, fallbackMarkerType);
+  const duration = animateCircleConfig.duration / growSpeed;
   let startTime = performance.now();
   let isGrowing = true;
-  const getMaxRadius = setCurrentRadius();
+  const getMaxRadius = setCurrentRadius(entityConfig, fallbackMarkerType);
   function animateFrame(time: number) {
     const mapLayer = map.getLayer(layer) as { type?: string } | undefined;
     if (!mapLayer) {
@@ -227,7 +321,7 @@ export function animateCircles({ map, id: layer }: { map: Map; id: string }) {
     }
     const nextOpacity = opacity > opacityMax ? opacityMax : opacity;
     if (mapLayer.type === 'symbol') {
-      map.setLayoutProperty(layer, 'text-size', Math.max(radius * 3.75, 14));
+      map.setLayoutProperty(layer, 'text-size', radius);
       map.setPaintProperty(layer, 'text-opacity', nextOpacity);
     } else {
       map.setPaintProperty(layer, 'circle-radius', radius);
@@ -625,6 +719,7 @@ export const createSchoolLayer = (
     options,
     mapRoute,
     isMobile,
+    entityConfig,
   }: {
     id: string;
     source?: string;
@@ -632,6 +727,7 @@ export const createSchoolLayer = (
     options: Record<string, any>;
     mapRoute: ChangeLayerOptions['mapRoute'];
     isMobile: boolean;
+    entityConfig?: EntityConfig;
   },
 ): void => {
   if (map.getLayer(id)) {
@@ -655,11 +751,14 @@ export const createSchoolLayer = (
     CountryPaintData[
       countryCode?.toLowerCase() as keyof typeof CountryPaintData
     ];
-  const paint = {
-    ...mapPaintData.connectivityStatus,
-    ...currentCountryPaintData?.connectivityStatus,
-    'circle-color': circleColor,
-  } as unknown as CirclePaint;
+  const paint = withEntityCircleRadius(
+    {
+      ...mapPaintData.connectivityStatus,
+      ...currentCountryPaintData?.connectivityStatus,
+      'circle-color': circleColor,
+    } as unknown as CirclePaint,
+    entityConfig,
+  );
   createCircleLayer(map, {
     id,
     type: 'circle',
@@ -691,6 +790,7 @@ export const createEntitySymbolLayer = (
     options,
     mapRoute,
     isMobile,
+    entityConfig,
   }: {
     id: string;
     symbol: string;
@@ -699,6 +799,7 @@ export const createEntitySymbolLayer = (
     options: Record<string, any>;
     mapRoute: ChangeLayerOptions['mapRoute'];
     isMobile: boolean;
+    entityConfig?: EntityConfig;
   },
 ): void => {
   if (map.getLayer(id)) {
@@ -732,23 +833,7 @@ export const createEntitySymbolLayer = (
     minzoom: 0,
     layout: {
       'text-field': symbol,
-      'text-size': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        0,
-        4,
-        2,
-        6,
-        4,
-        8,
-        5,
-        10,
-        8,
-        14,
-        10,
-        18,
-      ],
+      'text-size': getEntityRadiusExpression(entityConfig, 'symbol'),
       'text-allow-overlap': true,
       'text-ignore-placement': true,
     },
@@ -758,6 +843,7 @@ export const createEntitySymbolLayer = (
     },
     ...(sourceLayer ? { 'source-layer': sourceLayer } : {}),
     ...(layerFilter ? { filter: layerFilter } : {}),
+    ...restOptions,
   });
 
   map.off('click', id, mapDotsClickIdsAndHandler[source]?.[id]);
@@ -861,6 +947,7 @@ export const createSelectedLayer = (
     options,
     isLive,
     isMobile,
+    entityConfig,
   }: {
     id: string;
     isDynamicLayer: boolean;
@@ -869,6 +956,7 @@ export const createSelectedLayer = (
     paintData: StylePaintData;
     options: Record<string, unknown>;
     isMobile: boolean;
+    entityConfig?: EntityConfig;
     mapRoute: ChangeLayerOptions['mapRoute'];
   },
 ): void => {
@@ -876,7 +964,10 @@ export const createSelectedLayer = (
     map.setLayoutProperty(id, 'visibility', 'visible');
     return;
   }
-  const paint = getPaintData({ isLive, paintData, isDynamicLayer });
+  const paint = withEntityCircleRadius(
+    getPaintData({ isLive, paintData, isDynamicLayer }),
+    entityConfig,
+  );
 
   createCircleLayer(
     map,
@@ -914,6 +1005,7 @@ export const createSelectedSymbolLayer = (
     options,
     isLive,
     isMobile,
+    entityConfig,
   }: {
     id: string;
     symbol: string;
@@ -923,6 +1015,7 @@ export const createSelectedSymbolLayer = (
     paintData: StylePaintData;
     options: Record<string, unknown>;
     isMobile: boolean;
+    entityConfig?: EntityConfig;
     mapRoute: ChangeLayerOptions['mapRoute'];
   },
 ): void => {
@@ -949,7 +1042,7 @@ export const createSelectedSymbolLayer = (
       minzoom: 0,
       layout: {
         'text-field': symbol,
-        'text-size': selectedSymbolTextSize,
+        'text-size': getEntityRadiusExpression(entityConfig, 'symbol'),
         'text-allow-overlap': true,
         'text-ignore-placement': true,
       },

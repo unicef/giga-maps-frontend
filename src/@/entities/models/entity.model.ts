@@ -55,6 +55,12 @@ $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
           ...merged[type].colors,
           ...config?.colors,
         },
+        mapAnimation: config?.mapAnimation
+          ? {
+              ...merged[type].mapAnimation,
+              ...config.mapAnimation,
+            }
+          : merged[type].mapAnimation,
         fields: config?.fields ?? merged[type].fields,
       };
     } else {
