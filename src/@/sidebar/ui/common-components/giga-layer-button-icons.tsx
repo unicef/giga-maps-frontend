@@ -118,16 +118,12 @@ const GigaLayerButtonIcons = ({
 
   const handleConnectivityStatusClicked = useCallback(
     (selectedId: string) => {
-      // Toggle connectivity status overlay while preserving the target entity layer selection.
-      onSelectEntityMainLayer({
-        [targetEntityType]: targetSelectedLayerId ?? null,
-      });
       onSelectEntityStatusLayer({
         [targetEntityType]: targetStatusSelectedLayer ? null : selectedId,
       });
       selectAllEntityStaticLegendsSelection({ entityType: targetEntityType });
     },
-    [targetEntityType, targetSelectedLayerId, targetStatusSelectedLayer],
+    [targetEntityType, targetStatusSelectedLayer],
   );
 
   if (popup) {
