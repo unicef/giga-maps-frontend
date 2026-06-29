@@ -173,19 +173,42 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   timerId = callDelay.trigger(timeout, createAndUpdateLayer, props);
 });
 
+const hasSelectedEntityStatusLayer = ({
+  activeEntityTypes,
+  selectedLayerIds,
+}: Pick<ChangeLayerOptions, 'activeEntityTypes' | 'selectedLayerIds'>) => {
+  const { schoolId, schoolIdByEntity = {} } = selectedLayerIds ?? {};
+  const entityTypes = activeEntityTypes?.length
+    ? activeEntityTypes
+    : (Object.keys(schoolIdByEntity) as EntityType[]);
+
+  return entityTypes.length
+    ? entityTypes.some((entityType) => Boolean(schoolIdByEntity[entityType])) ||
+        Boolean(schoolId)
+    : Boolean(schoolId);
+};
 export const changeStaticLayerFx = createEffect((props: ChangeLayerOptions) => {
-  const { map, mapRoute, zoomState } = props;
+  const { map, mapRoute, refresh, zoomState } = props;
   if (!map) return;
   if (mapRoute.map || zoomState !== 'end') {
     deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE });
     return;
   }
-  const next = createSourceForMapAndCountry({
-    ...props,
-    selectedLayerId: null,
-    isConnectivityStatus: true,
-  });
-  if (!next) return;
+  if (!hasSelectedEntityStatusLayer(props)) {
+    deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE });
+    return;
+  }
+
+  const shouldReloadSource =
+    refresh || !checkSourceAvailable(map, CONNECTIVITY_STATUS_SOURCE);
+  if (shouldReloadSource) {
+    const next = createSourceForMapAndCountry({
+      ...props,
+      selectedLayerId: null,
+      isConnectivityStatus: true,
+    });
+    if (!next) return;
+  }
   createAndUpdateConnectiivtyStatusLayer(props);
 });
 
@@ -263,7 +286,7 @@ export const updateConnectivityFilter = createEffect(
       );
       const mapLayer = map.getLayer(layerId);
       if (!mapLayer) continue;
-      const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
+      const isDynamicLayer = !isGlobalMap;
       const filter = filterConnectivityList(
         connectivitySpeedFilterByEntity?.[entityType] ??
           connectivitySpeedFilter,

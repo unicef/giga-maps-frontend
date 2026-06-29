@@ -248,7 +248,7 @@ export const createAndUpdateMapLayer = ({
         ? globalLayerId
         : layerUtils.selectedLayerIdByEntity?.[entityType];
       if (!entityLayerId) continue;
-      const isDynamicLayer = !(entityLayerId === globalLayerId);
+      const isDynamicLayer = !mapRoute.map;
       const sourceLayer = getSourceLayerName(entityType);
       const layerIdStr = getEntitySelectedLayerId(entityType, entityLayerId);
       const entityConnectivityFilter =

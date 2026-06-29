@@ -5,6 +5,7 @@ import {
   createSelectedLayer,
   animateCircles,
   generateLayerUrls,
+  filterConnectivityList,
 } from '../../utils';
 import {
   getLayerIdsAndLastChange,
@@ -200,6 +201,52 @@ describe('add-layers-utils', () => {
       expect(animateCircles).toHaveBeenCalled();
     });
 
+    it('should use dynamic field filters for country download layer', () => {
+      createAndUpdateMapLayer({
+        map: mockMap,
+        mapRoute: { country: true },
+        connectivitySpeedFilter: [],
+        coverageFilter: [],
+        layerUtils: {
+          currentLayerTypeUtils: { isLive: true },
+          globalLayerId: 1,
+          selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+        },
+        selectedLayerId: 1,
+        paintData: {},
+        schoolLayerId: null,
+        lastSelectedLayer: { layerId: null },
+        schoolLegends: [],
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL],
+        entityRegistry: {},
+      });
+
+      expect(filterConnectivityList).toHaveBeenCalledWith([], true);
+    });
+
+    it('should use global field filters on map overview', () => {
+      createAndUpdateMapLayer({
+        map: mockMap,
+        mapRoute: { map: true },
+        connectivitySpeedFilter: [],
+        coverageFilter: [],
+        layerUtils: {
+          currentLayerTypeUtils: { isLive: true },
+          globalLayerId: 1,
+        },
+        selectedLayerId: 1,
+        paintData: {},
+        schoolLayerId: null,
+        lastSelectedLayer: { layerId: null },
+        schoolLegends: [],
+        isMobile: false,
+        activeEntityTypes: [EntityType.SCHOOL],
+        entityRegistry: {},
+      });
+
+      expect(filterConnectivityList).toHaveBeenCalledWith([], false);
+    });
     it('should create layers for multiple entity types', () => {
       createAndUpdateMapLayer({
         map: mockMap,
