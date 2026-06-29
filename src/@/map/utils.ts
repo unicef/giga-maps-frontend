@@ -58,29 +58,32 @@ type MapAnimationConfigSource = Pick<
   'markerType' | 'mapAnimation'
 >;
 
+const defaultMapZoomRadius: EntityMapZoomRadius[] = [
+  { zoom: 0, radius: 0.3 },
+  { zoom: 2, radius: 1 },
+  { zoom: 4, radius: 1.5 },
+  { zoom: 5, radius: 2 },
+  { zoom: 8, radius: 4 },
+  { zoom: 10, radius: 6 },
+  { zoom: 12, radius: 8 },
+  { zoom: 14, radius: 10 },
+];
+
 const defaultCircleMapAnimation: EntityMapAnimationConfig = {
-  zoomRadius: [
-    { zoom: 0, radius: 0.2 },
-    { zoom: 3, radius: 1 },
-    { zoom: 8, radius: 4 },
-    { zoom: 14, radius: 24 },
-  ],
+  zoomRadius: defaultMapZoomRadius,
   growSpeed: 1,
-  glowMinScale: 0.5,
-  glowMaxScale: 2.5,
+  glowMinScale: 1,
+  glowMaxScale: 3,
 };
 
 const defaultSymbolMapAnimation: EntityMapAnimationConfig = {
-  zoomRadius: [
-    { zoom: 0, radius: 0.2 },
-    { zoom: 3, radius: 2 },
-    { zoom: 8, radius: 6 },
-    { zoom: 14, radius: 40 },
-  ],
+  zoomRadius: defaultMapZoomRadius,
   growSpeed: 1,
-  glowMinScale: 0.5,
-  glowMaxScale: 2,
+  glowMinScale: 1,
+  glowMaxScale: 3,
 };
+
+const symbolTextSizeScale = 2.5;
 
 const getDefaultMapAnimation = (
   markerType: MarkerType,
@@ -154,6 +157,12 @@ const getEntityRadiusExpression = (
     getEntityMapAnimation(entityConfig, fallbackMarkerType).zoomRadius,
     scale,
   );
+
+const getEntityTextSizeExpression = (
+  entityConfig?: MapAnimationConfigSource,
+  scale = 1,
+): unknown[] =>
+  getEntityRadiusExpression(entityConfig, 'symbol', scale * symbolTextSizeScale);
 
 const withEntityCircleRadius = (
   paint: CirclePaint | undefined,
@@ -303,7 +312,8 @@ export function animateCircles({
   function animateFrame(time: number) {
     const mapLayer = map.getLayer(layer) as { type?: string } | undefined;
     if (!mapLayer) {
-      return; // reset value if require;
+      animationFrameData.requestId = requestAnimationFrame(animateFrame);
+      return;
     }
     const zoom = Number(map.getZoom().toFixed(1));
     const [startRadius, maxRadius] = getMaxRadius(zoom);
@@ -321,7 +331,7 @@ export function animateCircles({
     }
     const nextOpacity = opacity > opacityMax ? opacityMax : opacity;
     if (mapLayer.type === 'symbol') {
-      map.setLayoutProperty(layer, 'text-size', radius);
+      map.setLayoutProperty(layer, 'text-size', radius * symbolTextSizeScale);
       map.setPaintProperty(layer, 'text-opacity', nextOpacity);
     } else {
       map.setPaintProperty(layer, 'circle-radius', radius);
@@ -334,8 +344,7 @@ export function animateCircles({
     }
     animationFrameData.requestId = requestAnimationFrame(animateFrame);
   }
-  // set handler to reset
-  setTimeout(() => animateFrame(performance.now()), 1000);
+  animationFrameData.requestId = requestAnimationFrame(animateFrame);
   return animationFrameData;
 }
 export const getDynamicUrl = () => 'api/v2/entities/layers/map';
@@ -867,7 +876,7 @@ export const createEntitySymbolLayer = (
     minzoom: 0,
     layout: {
       'text-field': symbol,
-      'text-size': getEntityRadiusExpression(entityConfig, 'symbol'),
+      'text-size': getEntityTextSizeExpression(entityConfig),
       'text-allow-overlap': true,
       'text-ignore-placement': true,
     },
@@ -1076,7 +1085,7 @@ export const createSelectedSymbolLayer = (
       minzoom: 0,
       layout: {
         'text-field': symbol,
-        'text-size': getEntityRadiusExpression(entityConfig, 'symbol'),
+        'text-size': getEntityTextSizeExpression(entityConfig),
         'text-allow-overlap': true,
         'text-ignore-placement': true,
       },
