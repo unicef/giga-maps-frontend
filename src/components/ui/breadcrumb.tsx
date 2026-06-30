@@ -12,7 +12,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
   return (
     <ol
       className={cn(
-        'flex! flex-wrap! items-center! gap-1.5! break-words! text-sm! text-muted-foreground! sm:gap-2.5!',
+        'flex! min-w-0! flex-nowrap! items-center! gap-1! overflow-hidden! text-sm! text-muted-foreground!',
         className,
       )}
       data-slot="breadcrumb-list"
@@ -24,7 +24,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   return (
     <li
-      className={cn('inline-flex! items-center! gap-1.5!', className)}
+      className={cn('inline-flex! min-w-0! max-w-full! items-center! gap-1!', className)}
       data-slot="breadcrumb-item"
       {...props}
     />
@@ -42,7 +42,7 @@ function BreadcrumbLink({
 
   return (
     <Comp
-      className={cn('transition-colors! hover:text-foreground!', className)}
+      className={cn('inline-block! min-w-0! max-w-full! overflow-hidden! text-ellipsis! whitespace-nowrap! align-bottom! transition-colors! hover:text-foreground!', className)}
       data-slot="breadcrumb-link"
       {...props}
     />
@@ -54,7 +54,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
     <span
       aria-current="page"
       aria-disabled="true"
-      className={cn('font-normal! text-foreground!', className)}
+      className={cn('inline-block! min-w-0! max-w-full! overflow-hidden! text-ellipsis! whitespace-nowrap! align-bottom! font-normal! text-foreground!', className)}
       data-slot="breadcrumb-page"
       role="link"
       {...props}
@@ -70,7 +70,7 @@ function BreadcrumbSeparator({
   return (
     <li
       aria-hidden="true"
-      className={cn('[&>svg]:size-3.5!', className)}
+      className={cn('shrink-0! [&>svg]:size-3!', className)}
       data-slot="breadcrumb-separator"
       role="presentation"
       {...props}
@@ -87,7 +87,7 @@ function BreadcrumbEllipsis({
   return (
     <span
       aria-hidden="true"
-      className={cn('flex! size-9! items-center! justify-center!', className)}
+      className={cn('flex! size-6! shrink-0! items-center! justify-center!', className)}
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       {...props}

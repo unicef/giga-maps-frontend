@@ -1,20 +1,16 @@
 import { useStore } from 'effector-react';
 import {
-  Building2,
   Check,
   ChevronDown,
   ChevronRight,
-  Gauge,
   Hash,
-  Info,
   MapPin,
-  Users,
   Wifi,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { $country } from '~/@/country/country.model';
 import {
   $entityRegistry,
   $selectedEntityType,
@@ -22,7 +18,7 @@ import {
 import { $stylePaintData } from '~/@/map/map.model';
 import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { getLiveSchoolDetails, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
+import { getLiveSchoolDetails, getNullValueText, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
 import {
   $currentLayerTypeUtils,
   $getSchoolParams,
@@ -37,6 +33,7 @@ import { ScrollArea } from '~/components/ui/scroll-area';
 import { Separator } from '~/components/ui/separator';
 import { Skeleton } from '~/components/ui/skeleton';
 
+import { getStatisticsConfig, groupOrder, StatisticConfig } from '../../config/school-information-config';
 import { HistoryGraphAccordian } from '../common-components/history-graph/history-graph-accordian.view';
 import WeekSlider from '../global-and-country-view-components/common/week-slider/week-slider.view';
 import LiveAverage from '../global-and-country-view-components/connectivity-layer/live-average.view';
@@ -49,8 +46,29 @@ const getDisplayValue = (value: unknown) => {
   return String(value);
 };
 
-const getEntityIdLabel = (entity: SchoolStatsType) =>
-  entity.giga_id_school ?? entity.external_id ?? entity.id;
+const toTitleCase = (value: string) =>
+  value
+    .replace(/_/g, ' ')
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+const formatStaticFieldValue = (value: unknown) => {
+  const displayValue = getDisplayValue(value);
+  if (displayValue === 'N/A') return displayValue;
+  if (displayValue.toLowerCase() === 'true') return 'Yes';
+  if (displayValue.toLowerCase() === 'false') return 'No';
+  return toTitleCase(displayValue);
+};
+
+const getEntityGigaId = (entity: SchoolStatsType) => {
+  const entityRecord = entity as unknown as Record<string, unknown>;
+  return entity.giga_id_school ?? entityRecord.giga_id;
+};
+
+const getCollapsedEntityIdLabel = (entity: SchoolStatsType) => {
+  const entityRecord = entity as unknown as Record<string, unknown>;
+  return entity.external_id ?? entity.giga_id_school ?? entityRecord.giga_id ?? entity.id;
+};
 
 const connectivityColorClassByStatus: Record<string, string> = {
   good: 'text-success!',
@@ -64,31 +82,69 @@ const getEntityCountLabel = (entity: SchoolStatsType) => {
   const stats = entity.statistics as unknown as Record<string, unknown> | undefined;
   const students = stats?.num_students ?? (entity as unknown as Record<string, unknown>).num_students;
   if (!students) return null;
-  return `${students} Students`;
+  return `${students} students`;
 };
 
-function DetailRow({
-  icon: Icon,
+const groupStatistics = (statistics: StatisticConfig[]) => {
+  const groups = statistics.reduce((acc, stat) => {
+    if (!acc[stat.group]) {
+      acc[stat.group] = [];
+    }
+    acc[stat.group].push(stat);
+    return acc;
+  }, {} as Record<string, StatisticConfig[]>);
+
+  return groupOrder
+    .filter((group) => groups[group]?.length)
+    .map((group) => ({ groupName: group, stats: groups[group] }));
+};
+
+function DetailLine({
+  icon,
   label,
   value,
+  valueClassName = '',
 }: {
-  icon: LucideIcon;
-  label: string;
+  icon?: 'hash' | 'location';
+  label?: string;
   value: unknown;
+  valueClassName?: string;
 }) {
   const displayValue = getDisplayValue(value);
   if (displayValue === 'N/A') return null;
+  const Icon = icon === 'location' ? MapPin : icon === 'hash' ? Hash : null;
 
   return (
-    <div className="flex! min-w-0! items-start! gap-2.5! rounded-md! px-2! py-1.5! text-sm!">
-      <Icon className="mt-0.5! size-4! shrink-0! text-muted-foreground!" />
-      <div className="min-w-0! flex-1!">
-        <div className="text-xs! leading-4! text-muted-foreground!">{label}</div>
-        <div className="break-words! text-sm! leading-5! text-foreground!" title={displayValue}>
-          {displayValue}
-        </div>
-      </div>
+    <div className="flex! min-w-0! items-start! gap-2.5! py-1! text-sm! leading-6! text-foreground!">
+      {Icon && <Icon className="mt-1! size-4! shrink-0! text-muted-foreground!" />}
+      <p className="m-0! min-w-0! break-words!" title={displayValue}>
+        {label ? <>{label}: </> : null}
+        <span className={valueClassName}>{displayValue}</span>
+      </p>
     </div>
+  );
+}
+
+function StatusLine({ label, color }: { label: string; color: string }) {
+  return (
+    <div className="flex! min-w-0! items-center! gap-2.5! py-1! text-sm! leading-6!">
+      <span className="ml-1! size-2.5! shrink-0! rounded-full!" style={{ backgroundColor: color }} />
+      <p className="m-0! min-w-0! break-words!" style={{ color }} title={label}>
+        {label}
+      </p>
+    </div>
+  );
+}
+
+function LayerIcon({ icon }: { icon?: string }) {
+  if (!icon) return null;
+
+  return (
+    <span
+      aria-hidden="true"
+      className="size-3.5! shrink-0! text-muted-foreground! [&_svg]:size-3.5!"
+      dangerouslySetInnerHTML={{ __html: icon }}
+    />
   );
 }
 
@@ -137,72 +193,114 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
           isLoading={isLoading}
           selectedLayerData={selectedLayerData}
         />
-        <FooterDataSourcePopUp isFooter={false} />
       </section>
     );
   }
 
   const statusLabel = t(ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus);
   const unit = entity.benchmark_metadata?.display_unit ?? selectedLayerData?.global_benchmark?.convert_unit ?? '';
-  const metricValue = isStatic
-    ? getDisplayValue(staticDetails.value)
-    : statusLabel;
-  const metricColor = isStatic ? staticDetails.color : connectivityStatusColor;
+
+  if (isStatic) {
+    const formattedValue = formatStaticFieldValue(staticDetails.value);
+
+    return (
+      <section className="mx-4! my-6!">
+        {formattedValue !== 'N/A' && (
+          <div className="relative! flex! w-full! flex-col! pb-6! pt-3!">
+            <p className="m-0! break-words! text-[2rem]! font-normal! leading-tight!" style={{ color: staticDetails.color }}>
+              {formattedValue}{unit ? ` ${unit}` : ''}
+            </p>
+          </div>
+        )}
+      </section>
+    );
+  }
 
   return (
-    <section className="space-y-3! px-3.5! pt-3.5!">
-      <div className="flex! items-start! justify-between! gap-3!">
-        <div className="min-w-0!">
-          <p className="m-0! text-xs! leading-4! text-muted-foreground!">
-            {selectedLayerData?.name ?? t('connectivity-status')}
+    <section className="mx-4! my-6!">
+      <div className="relative! flex! w-full! flex-col! pb-6! pt-3!">
+        {isLoading ? (
+          <Skeleton className="h-11! w-[70%]!" />
+        ) : (
+          <p className="m-0! break-words! text-[2.375rem]! font-normal! leading-tight! capitalize!" style={{ color: connectivityStatusColor }}>
+            {statusLabel}
           </p>
-          <p className="m-0! break-words! text-2xl! font-semibold! leading-8!" style={{ color: metricColor }}>
-            {metricValue}{isStatic && unit ? ` ${unit}` : ''}
-          </p>
-        </div>
-        <div className="mt-1! inline-flex! shrink-0! items-center! gap-1.5! rounded-full! border! border-border! px-2! py-1! text-xs! text-foreground!">
-          <span className="size-2! rounded-full!" style={{ backgroundColor: connectivityStatusColor }} />
-          {statusLabel}
-        </div>
+        )}
       </div>
     </section>
   );
 }
+
 function EntityInformation({ entity }: { entity: SchoolStatsType }) {
   const { t } = useTranslation();
   const selectedEntityType = useStore($selectedEntityType);
   const entityRegistry = useStore($entityRegistry);
+  const stylePaintData = useStore($stylePaintData);
+  const country = useStore($country);
+  const [statisticsConfig, setStatisticsConfig] = useState<StatisticConfig[]>([]);
   const config = entityRegistry[selectedEntityType];
-  const coordinates = entity.geopoint?.coordinates ?? [];
-  const configuredRows = useMemo(
-    () =>
-      (config?.fields ?? [])
-        .filter((field) => field.showInSidebar)
-        .map((field) => ({
-          label: t(field.label),
-          value: (entity as unknown as Record<string, unknown>)[field.name]
-            ?? (entity.statistics as unknown as Record<string, unknown> | undefined)?.[field.name],
-        }))
-        .filter((row) => getDisplayValue(row.value) !== 'N/A'),
-    [config?.fields, entity, t],
-  );
+  const entityRecord = entity as unknown as Record<string, unknown>;
+  const statistics = entity.statistics as unknown as Record<string, unknown> | undefined;
+  const coordinates = (entity.geopoint?.coordinates ?? []).toReversed();
+  const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
+    schoolDetails: entity,
+    stylePaintData,
+  });
+  const statusLabel = t(ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus);
+  const detailTitle = t(`${selectedEntityType}-details`, {
+    defaultValue: `${t(`${selectedEntityType}-entity-label`, { defaultValue: config?.displayName ?? selectedEntityType })} Details`,
+  });
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    if (!country?.id) {
+      setStatisticsConfig([]);
+      return undefined;
+    }
+
+    getStatisticsConfig(country.id).then((nextConfig) => {
+      if (!isCancelled) {
+        setStatisticsConfig(nextConfig);
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [country?.id]);
 
   return (
     <section className="px-3.5! py-3!">
-      <div className="mb-2! flex! items-center! gap-2! text-sm! font-semibold! text-foreground!">
-        <Info className="size-4! text-muted-foreground!" />
-        {t(`${selectedEntityType}-details`, {
-          defaultValue: `${t(`${selectedEntityType}-entity-label`, { defaultValue: config?.displayName ?? selectedEntityType })} Details`,
-        })}
-      </div>
+      <h3 className="m-0! mb-3! text-sm! font-semibold! leading-5! text-foreground!">
+        {detailTitle}
+      </h3>
       <div className="space-y-1!">
-        <DetailRow icon={MapPin} label={t('coordinates', { defaultValue: 'Coordinates' })} value={coordinates.length ? coordinates.toReversed().join(', ') : null} />
-        <DetailRow icon={Hash} label={t('id', { defaultValue: 'ID' })} value={getEntityIdLabel(entity)} />
-        <DetailRow icon={Building2} label={t(entity.admin1_description_ui_label ?? 'admin-1', { defaultValue: entity.admin1_description_ui_label ?? 'Admin 1' })} value={entity.admin1_name} />
-        <DetailRow icon={Building2} label={t(entity.admin2_description_ui_label ?? 'admin-2', { defaultValue: entity.admin2_description_ui_label ?? 'Admin 2' })} value={entity.admin2_name} />
-        {entity.education_level && <DetailRow icon={Users} label={t('education-level')} value={entity.education_level} />}
-        {configuredRows.map((row) => (
-          <DetailRow key={row.label} icon={Gauge} label={row.label} value={row.value} />
+        <DetailLine icon="location" value={coordinates.length ? coordinates.join(', ') : null} />
+        <StatusLine color={connectivityStatusColor} label={statusLabel} />
+        {getEntityGigaId(entity) && (
+          <DetailLine icon="hash" label={t('giga-id')} value={getEntityGigaId(entity)} valueClassName="lowercase!" />
+        )}
+        {entity.admin1_name && entity.admin1_description_ui_label && (
+          <DetailLine icon="hash" label={t(entity.admin1_description_ui_label)} value={entity.admin1_name} />
+        )}
+        {entity.admin2_name && entity.admin2_description_ui_label && (
+          <DetailLine icon="hash" label={t(entity.admin2_description_ui_label)} value={entity.admin2_name} />
+        )}
+        {entity.education_level && (
+          <DetailLine icon="hash" label={t('education-level')} value={entity.education_level} />
+        )}
+        {groupStatistics(statisticsConfig).map(({ groupName, stats }) => (
+          <div key={groupName} className="pt-4!">
+            {stats.map((item) => (
+              <DetailLine
+                key={item.key}
+                icon="hash"
+                label={t(item.label)}
+                value={statistics?.[item.key] ?? entityRecord[item.key]}
+              />
+            ))}
+          </div>
         ))}
       </div>
     </section>
@@ -210,10 +308,13 @@ function EntityInformation({ entity }: { entity: SchoolStatsType }) {
 }
 
 function EntityDetailContent({ entity }: { entity: SchoolStatsType }) {
+  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const showSectionSeparator = isLive || isStatic;
+
   return (
     <div className="min-w-0!">
       <EntityMetricSummary entity={entity} />
-      <Separator className="my-2!" />
+      {showSectionSeparator && <Separator className="my-2!" />}
       <EntityInformation entity={entity} />
     </div>
   );
@@ -240,13 +341,16 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
   });
   const statusLabel = t(ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus);
   const unit = entity.benchmark_metadata?.display_unit ?? selectedLayerData?.global_benchmark?.convert_unit ?? '';
-  const coordinates = entity.geopoint?.coordinates?.toReversed().join(', ');
+  const coordinates = entity.geopoint?.coordinates?.join(', ');
   const countLabel = getEntityCountLabel(entity);
   const metricColor = isLive ? liveDetails.color : staticDetails.color;
+  const staticValue = formatStaticFieldValue(staticDetails.value);
   const metricValue = isLive
-    ? `${getDisplayValue(liveDetails.value)}${unit ? ` ${unit}` : ''}`
-    : isStatic
-      ? getDisplayValue(staticDetails.value)
+    ? liveDetails.value
+      ? `${liveDetails.value}${unit ? ` ${unit}` : ''}`
+      : getNullValueText(connectivityStatus)
+    : isStatic && staticValue !== 'N/A'
+      ? `${staticValue}${unit ? ` ${unit}` : ''}`
       : null;
 
   return (
@@ -254,8 +358,8 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
       <div className="grid! grid-cols-2! gap-x-4! gap-y-2! text-xs! leading-5! text-muted-foreground!">
         <span className="flex! min-w-0! items-center! gap-1.5!">
           <Hash className="size-3.5! shrink-0!" />
-          <span className="truncate!" title={String(getEntityIdLabel(entity))}>
-            {getEntityIdLabel(entity)}
+          <span className="truncate!" title={String(getCollapsedEntityIdLabel(entity))}>
+            {getCollapsedEntityIdLabel(entity)}
           </span>
         </span>
         {coordinates && (
@@ -278,7 +382,7 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
         </span>
         {metricValue && (
           <span className="inline-flex! items-center! gap-2!" style={{ color: metricColor }}>
-            {isLive ? <Wifi className="size-3.5! text-muted-foreground!" /> : <Gauge className="size-3.5! text-muted-foreground!" />}
+            {isLive ? <Wifi className="size-3.5! text-muted-foreground!" /> : <LayerIcon icon={selectedLayerData?.icon} />}
             <span>{metricValue}</span>
           </span>
         )}
@@ -339,6 +443,7 @@ function EntityListItem({
     </div>
   );
 }
+
 function EntityDetailSkeleton({ count = 1 }: { count?: number }) {
   return (
     <div className="space-y-3! px-3.5! py-3!">
@@ -358,48 +463,66 @@ const SchoolView = () => {
   const { schoolIds = [] } = useStore($getSchoolParams);
   const entities = useStore($schoolStats) ?? [];
   const isLoading = useStore($isLoadingSchoolView);
-  const [openEntityId, setOpenEntityId] = useState<number | null>(null);
+  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const showDataSource = isLive || isStatic;
+  const [openEntityIds, setOpenEntityIds] = useState<Set<number>>(() => new Set());
   const selectedEntities = schoolIds.length
     ? schoolIds
       .map((id) => entities.find((entity) => entity.id === id))
       .filter((entity): entity is SchoolStatsType => Boolean(entity))
     : entities;
   const isMulti = selectedEntities.length > 1;
-  const effectiveOpenEntityId = openEntityId ?? selectedEntities[0]?.id ?? null;
 
   return (
-    <ScrollArea
-      className="h-full! w-full!"
-      id="school-sidebar-scroll"
-      viewportClassName="h-full! [&>div]:block! [&>div]:min-w-0! [&>div]:w-full!"
-    >
-      <div className="w-full! min-w-0! px-3.5! pb-4! pt-2!">
-        {isLoading && !selectedEntities.length ? (
-          <EntityDetailSkeleton count={Math.max(schoolIds.length, 1)} />
-        ) : !selectedEntities.length ? (
-          <div className="rounded-lg! border! border-dashed! border-border! px-3! py-6! text-sm! text-muted-foreground!">
-            {t('no-data-available')}
-          </div>
-        ) : isMulti ? (
-          <div className="overflow-hidden! rounded-lg! border! border-border! bg-background!">
-            {selectedEntities.map((entity) => (
-              <EntityListItem
-                key={entity.id}
-                entity={entity}
-                isOpen={effectiveOpenEntityId === entity.id}
-                onToggle={() =>
-                  setOpenEntityId((current) => current === entity.id ? null : entity.id)
-                }
-              />
-            ))}
-          </div>
-        ) : (
-          <div className={isLoading ? 'opacity-70!' : undefined}>
-            <EntityDetailContent entity={selectedEntities[0]!} />
-          </div>
-        )}
-      </div>
-    </ScrollArea>
+    <div className="relative! h-full! min-h-0! w-full!">
+      <ScrollArea
+        className="h-full! w-full!"
+        id="school-sidebar-scroll"
+        viewportClassName="h-full! [&>div]:block! [&>div]:min-w-0! [&>div]:w-full!"
+      >
+        <div className="w-full! min-w-0! px-3.5! pb-28! pt-2!">
+          {isLoading && !selectedEntities.length ? (
+            <EntityDetailSkeleton count={Math.max(schoolIds.length, 1)} />
+          ) : !selectedEntities.length ? (
+            <div className="rounded-lg! border! border-dashed! border-border! px-3! py-6! text-sm! text-muted-foreground!">
+              {t('no-data-available')}
+            </div>
+          ) : isMulti ? (
+            <div className="overflow-hidden! rounded-lg! border! border-border! bg-background!">
+              {selectedEntities.map((entity) => (
+                <EntityListItem
+                  key={entity.id}
+                  entity={entity}
+                  isOpen={openEntityIds.has(entity.id)}
+                  onToggle={() =>
+                    setOpenEntityIds((current) => {
+                      const next = new Set(current);
+                      if (next.has(entity.id)) {
+                        next.delete(entity.id);
+                      } else {
+                        next.add(entity.id);
+                      }
+                      return next;
+                    })
+                  }
+                />
+              ))}
+            </div>
+          ) : (
+            <div className={isLoading ? 'opacity-70!' : undefined}>
+              <EntityDetailContent entity={selectedEntities[0]!} />
+            </div>
+          )}
+        </div>
+      </ScrollArea>
+      {showDataSource && (
+        <div className="absolute! inset-x-0! bottom-0! z-10! bg-background!">
+          <FooterDataSourcePopUp isFooter={false} />
+        </div>
+      )}
+    </div>
   );
 };
+
 export default SchoolView;
+

@@ -196,6 +196,7 @@ const sourceForInfo = combine({
   activeEntityTypes: $activeEntityTypes,
   entityTypesFiltered: $entityTypesFiltered,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
+  statusLayerIdByEntity: $statusLayerIdByEntity,
 });
 
 export const getCurrentQueryId = ({
@@ -309,6 +310,18 @@ const hasSelectedInfoLayer = (
   props: ReturnType<typeof sourceForInfo.getState>,
   entityType: EntityType,
 ) => Boolean(getSelectedInfoLayerId(entityType, props.selectedLayerIdByEntity));
+
+const hasSelectedEntityStatusLayer = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  entityType: EntityType,
+) => Boolean(props.statusLayerIdByEntity[entityType]);
+
+const hasEntityDetailInfoLayer = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  entityType: EntityType,
+) =>
+  hasSelectedInfoLayer(props, entityType) ||
+  hasSelectedEntityStatusLayer(props, entityType);
 
 const hasSelectedInfoLayerType = (
   props: ReturnType<typeof sourceForInfo.getState>,
@@ -708,10 +721,12 @@ const entityPopupInfoFn = (
     allowDublicateSchoolIds,
     entityIds,
     entityType,
+    includeLayerId = true,
   }: {
     allowDublicateSchoolIds?: boolean;
     entityIds: number[];
     entityType: EntityType;
+    includeLayerId?: boolean;
   },
 ) => {
   const {
@@ -746,7 +761,9 @@ const entityPopupInfoFn = (
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  params.set(`${prefix}layer_id`, String(selectedLayerId));
+  if (includeLayerId && selectedLayerId) {
+    params.set(`${prefix}layer_id`, String(selectedLayerId));
+  }
   params.set(
     `${prefix}benchmark`,
     getEntityMapValue(
@@ -849,17 +866,21 @@ sample({
     $countryId,
     $isCheckedLastDate,
     $selectedLayerIdByEntity,
+    $statusLayerIdByEntity,
     $historyIntervalByEntity,
     mapEntity.router.historyUpdate,
     $connectivityBenchMarkByEntity,
   ]),
   source: sourceForInfo,
-  fn: (props) =>
-    entityPopupInfoFn(props, {
+  fn: (props) => {
+    const entityType = props.schoolParams.entityType!;
+    return entityPopupInfoFn(props, {
       entityIds: props.schoolParams.schoolIds ?? [],
-      entityType: props.schoolParams.entityType!,
+      entityType,
       allowDublicateSchoolIds: true,
-    }),
+      includeLayerId: hasSelectedInfoLayer(props, entityType),
+    });
+  },
   filter: (props: ReturnType<typeof sourceForInfo.getState>) => {
     const { mapRoutes, country, isCheckedLastDate, schoolParams } = props;
     return (
@@ -868,7 +889,7 @@ sample({
       !!isCheckedLastDate &&
       !!schoolParams.entityType &&
       !!schoolParams.schoolIds?.length &&
-      hasSelectedInfoLayer(props, schoolParams.entityType)
+      hasEntityDetailInfoLayer(props, schoolParams.entityType)
     );
   },
   target: fetchSchoolLayerInfoFx,
@@ -1261,3 +1282,4 @@ sample({
 // Initialize URL params on app start
 // This applies URL params to stores (connectivity speed, coverage filters, etc.)
 initializeFromUrlParams();
+

@@ -1,5 +1,6 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
+import { EntityType } from "~/@/entities";
 import { $countries, $country, $countryCode } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
 import { $mapRoutes, mapCountry } from "~/core/routes";
@@ -152,10 +153,15 @@ const searchExpandCountry = sample({
 })
 
 // trigger search apply
-const $applySearchSource = combine($searchSchoolIds, /*$currentExpandCountry*/searchExpandCountry, (schoolIds, countryCode) => ({
-  schoolIds: Array.from(schoolIds),
-  countryCode
-}))
+const $applySearchSource = combine(
+  $searchSchoolSelectedList,
+  searchExpandCountry,
+  (selectedEntities, countryCode) => ({
+    countryCode: countryCode ?? '',
+    entityType: EntityType.SCHOOL,
+    schoolIds: selectedEntities?.map((entity) => entity.id) ?? [],
+  }),
+)
 export const onSearchItemClick = createEvent<SearchType>();
 export const removeSearchHistory = createEvent<number>();
 
@@ -221,7 +227,7 @@ sample({
     if (item.type === SEARCH_DATA_TYPE.COUNTRY) {
       mapCountry.navigate({ code: item.countryCode.toLowerCase() });
     } else if (item.type === SEARCH_DATA_TYPE.SCHOOL) {
-      void applySearchFx({ schoolIds: [item.schoolId ?? 0], countryCode: item.countryCode, item })
+      void applySearchFx({ schoolIds: [item.schoolId ?? 0], countryCode: item.countryCode, entityType: item.entityTypetag })
     } else {
       mapCountry.navigate({ code: item.countryCode.toLowerCase(), path: `/${item.adminCode}` });
       // district click

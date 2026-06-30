@@ -31,7 +31,7 @@ export type SearchResultApi = {
   admin1_name: string
   name: string;
   external_id: string;
-  entity_type_code: string;
+  entity_type_code?: EntityType;
 }
 
 export type SearchResultCollection = {
@@ -41,7 +41,7 @@ export type SearchResultCollection = {
   countryId: number
   countryCode: string
   name: string
-  entityTypetag: string
+  entityTypetag?: EntityType
   id: number
 
 }
@@ -64,6 +64,6 @@ export type SearchType = {
   type: string;
   adminName?: string;
   schoolId?: number;
-  entityTypetag: EntityType
+  entityTypetag?: EntityType
 
 } & AdminType
