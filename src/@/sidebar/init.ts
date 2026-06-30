@@ -22,6 +22,7 @@ import {
   $activeEntityTypes,
   $entityTypesFiltered,
   $selectedEntityType,
+  changeActiveEntityTypes,
   changeSelectedEntityType,
 } from '~/@/entities/models/entity.model';
 import {
@@ -816,20 +817,33 @@ const entityPopupInfoFn = (
   };
 };
 // entity detail route selects the entity encoded in the *_ids URL param.
+const entityDetailSelectionSource = combine({
+  mapRoutes: $mapRoutes,
+  schoolParams: $getSchoolParams,
+});
+
+const entityDetailSelectionClock = merge([
+  mapEntity.visible,
+  mapEntity.router.historyUpdate,
+  $getSchoolParams,
+]);
+
 sample({
-  clock: merge([
-    mapEntity.visible,
-    mapEntity.router.historyUpdate,
-    $getSchoolParams,
-  ]),
-  source: combine({
-    mapRoutes: $mapRoutes,
-    schoolParams: $getSchoolParams,
-  }),
+  clock: entityDetailSelectionClock,
+  source: entityDetailSelectionSource,
   filter: ({ mapRoutes, schoolParams }) =>
     mapRoutes.entity && !!schoolParams.entityType,
   fn: ({ schoolParams }) => schoolParams.entityType!,
   target: changeSelectedEntityType,
+});
+
+sample({
+  clock: entityDetailSelectionClock,
+  source: entityDetailSelectionSource,
+  filter: ({ mapRoutes, schoolParams }) =>
+    mapRoutes.entity && !!schoolParams.entityType,
+  fn: ({ schoolParams }) => [schoolParams.entityType!],
+  target: changeActiveEntityTypes,
 });
 // school view info api
 sample({
@@ -1145,9 +1159,10 @@ sample({
 
 sample({
   clock: onSelectEntityMainLayer,
-  filter: (selectedLayerIdByEntity) =>
-    Object.keys(selectedLayerIdByEntity).length > 0,
-  fn: (selectedLayerIdByEntity) =>
+  source: $mapRoutes,
+  filter: (mapRoutes, selectedLayerIdByEntity) =>
+    !mapRoutes.entity && Object.keys(selectedLayerIdByEntity).length > 0,
+  fn: (_, selectedLayerIdByEntity) =>
     Object.keys(selectedLayerIdByEntity)[0] as EntityType,
   target: changeSelectedEntityType,
 });

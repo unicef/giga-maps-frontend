@@ -86,7 +86,7 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   }
   if (isLastSelectionChange || !checkSourceAvailable(map, DEFAULT_SOURCE)) {
     // create source data country and global view;
-    if (mapRoute.map || mapRoute.country || mapRoute.schools) {
+    if (mapRoute.map || mapRoute.country || mapRoute.schools || mapRoute.entity) {
       const next = createSourceForMapAndCountry({
         ...props,
         selectedLayerId: effectiveSelectedLayerId,
@@ -345,3 +345,4 @@ mapRouter.visible.watch((visible) => {
     cancelAnimation();
   }
 });
+
