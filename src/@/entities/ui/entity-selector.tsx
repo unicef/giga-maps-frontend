@@ -12,7 +12,10 @@ import {
 } from '~/@/entities/models/entity.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { Button } from '~/components/ui/button';
+import { $isMobile } from '~/core/media-query';
+import { cn } from '~/lib/cn';
 
 const base =
   'h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5!';
@@ -29,6 +32,7 @@ const handleSelectAllEntityTypes = () => {
  */
 export default function EntityTypeSelector() {
   const { t } = useTranslation();
+  const isMobile = useStore($isMobile);
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityRegistry = useStore($entityRegistry);
   const isGlobalMode = useStore($isGlobalMode);
@@ -55,7 +59,7 @@ export default function EntityTypeSelector() {
   };
 
   return (
-    <div className="fixed top-2 left-86 z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]">
+    <div className={!isMobile ? cn("fixed top-2 left-86 z-[3] flex items-center gap-2 rounded-full") : cn("flex items-center gap-2 p-1! overflow-auto")}>
       <Button
         variant="default"
         size="lg"
@@ -87,6 +91,9 @@ export default function EntityTypeSelector() {
           </Button>
         );
       })}
+      {isMobile &&
+        <FilterButton />
+      }
     </div>
   );
 }

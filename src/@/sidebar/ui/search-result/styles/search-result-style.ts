@@ -542,6 +542,6 @@ export const LayerDetailContainer = styled.div<{ $height?: string; }>`
  overflow: hidden;
 
  @media (max-width: 768px) {
-  height: calc(100% - ${props => props.$height ?? '6rem'});
+  height: calc(100% - ${props => props.$height ?? '1rem'});
  }
 `

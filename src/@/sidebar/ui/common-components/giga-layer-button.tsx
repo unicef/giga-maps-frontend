@@ -29,7 +29,7 @@ export default function GigaLayerButton({
   return (
     <div
       className={cn(
-        'relative! flex! h-[4.25rem]! w-20! max-w-20! flex-col! items-start! justify-start!',
+        'relative! flex! h-[4.25rem]! min-w-1/3! flex-col! items-start! justify-start!',
         popup ? 'min-w-20!' : 'min-w-0! flex-1!',
       )}
     >

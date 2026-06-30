@@ -58,7 +58,7 @@ export const FilterButtonWrapper = styled.div<{ $iconColor?: string }>`
   position: relative;
   .cds--btn:not(.cds--btn--disabled) {
     background: ${props => props.theme.graphWeekMonthBorder};
-    border-radius: 1.875rem;
+    border-radius: 0.380rem;
     padding: 0.3rem 0.8rem;
   }
   .cds--btn svg { 
