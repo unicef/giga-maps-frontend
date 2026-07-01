@@ -7,15 +7,19 @@ import {
   MapPin,
   Wifi,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $country } from '~/@/country/country.model';
+import { $country, $countryCode, setSchoolFocusLatLng } from '~/@/country/country.model';
 import {
   $entityRegistry,
   $selectedEntityType,
 } from '~/@/entities/models/entity.model';
-import { $stylePaintData } from '~/@/map/map.model';
+import {
+  $dublicateSchoolClickData,
+  $stylePaintData,
+  setSchoolIdsOnPopupClickDot,
+} from '~/@/map/map.model';
 import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { getLiveSchoolDetails, getNullValueText, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
@@ -26,8 +30,12 @@ import {
   $schoolStats,
   $selectedLayerDataByEntity,
   onSchoolUncheck,
+  schoolStatsMap,
 } from '~/@/sidebar/sidebar.model';
+import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
+import { PointCoordinates } from '~/core/global-types';
 import { Button } from '~/components/ui/button';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { Separator } from '~/components/ui/separator';
@@ -307,6 +315,274 @@ function EntityInformation({ entity }: { entity: SchoolStatsType }) {
   );
 }
 
+type SameLocationValue = {
+  count?: number;
+  school_ids?: unknown;
+  entity_ids?: unknown;
+  ids?: unknown;
+} & Record<string, unknown>;
+
+const toNumericIds = (value: unknown): number[] => {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((id) => Number(id))
+    .filter((id) => Number.isFinite(id) && id > 0);
+};
+
+const getSameLocationRecordCandidates = (
+  entity: SchoolStatsType,
+  entityType: string,
+): SameLocationValue[] => {
+  const record = entity as unknown as Record<string, unknown>;
+  return [
+    record.schools_at_same_location,
+    record.entities_at_same_location,
+    record[`${entityType}_at_same_location`],
+    record[`${entityType}s_at_same_location`],
+    record.same_location_entities,
+    record.same_location,
+  ].filter(
+    (value): value is SameLocationValue =>
+      Boolean(value) && typeof value === 'object' && !Array.isArray(value),
+  );
+};
+
+const getEntitySameLocationIds = (
+  entity: SchoolStatsType,
+  entityType: string,
+): number[] => {
+  const ids = new Set<number>([entity.id]);
+  const record = entity as unknown as Record<string, unknown>;
+  const idKeys = [
+    'school_ids',
+    'entity_ids',
+    'ids',
+    `${entityType}_ids`,
+    `${entityType}_entity_ids`,
+  ];
+
+  getSameLocationRecordCandidates(entity, entityType).forEach((sameLocation) => {
+    idKeys.forEach((key) => {
+      toNumericIds(sameLocation[key]).forEach((id) => ids.add(id));
+    });
+  });
+
+  idKeys.forEach((key) => {
+    toNumericIds(record[key]).forEach((id) => ids.add(id));
+  });
+
+  return Array.from(ids);
+};
+
+const formatConnectivityValue = (value: number, valueUnit?: string) => {
+  if (!valueUnit) return String(value);
+  return valueUnit === '%' ? `${value}${valueUnit}` : `${value} ${valueUnit}`;
+};
+function EntityDuplicateLocationList({
+  entity,
+  pageSize = 5,
+}: {
+  entity: SchoolStatsType;
+  pageSize?: number;
+}) {
+  const { t } = useTranslation();
+  const selectedEntityType = useStore($selectedEntityType);
+  const entityRegistry = useStore($entityRegistry);
+  const stylePaintData = useStore($stylePaintData);
+  const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
+  const popupEntitiesFromStore = useStore($dublicateSchoolClickData) as
+    | SchoolStatsType[]
+    | undefined;
+  const fetchPending = useStore(fetchDublicateSchoolPopupDataFx.pending);
+  const countryCode = useStore($countryCode);
+  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
+  const unit = selectedLayerData?.global_benchmark?.convert_unit ?? '';
+  const duplicateIds = useMemo(
+    () => getEntitySameLocationIds(entity, selectedEntityType),
+    [entity, selectedEntityType],
+  );
+  const [items, setItems] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
+  const [showAutoLoad, setShowAutoLoad] = useState(false);
+  const nextIndexRef = useRef(0);
+  const isFetchingRef = useRef(false);
+  const requestedIdsRef = useRef<Set<number>>(new Set());
+  const totalIds = duplicateIds.length;
+  const entityLabel = t(`${selectedEntityType}-entity-label`, {
+    defaultValue:
+      entityRegistry[selectedEntityType]?.displayName ?? selectedEntityType,
+  });
+
+  const requestIdsChunk = useCallback(
+    (fromIndex: number) => {
+      if (isFetchingRef.current || !selectedEntityType) return false;
+      const to = Math.min(duplicateIds.length, fromIndex + pageSize);
+      if (fromIndex >= to) return false;
+      const idsToFetch = duplicateIds.slice(fromIndex, to);
+      if (!idsToFetch.length) return false;
+
+      isFetchingRef.current = true;
+      nextIndexRef.current = to;
+      idsToFetch.forEach((id) => requestedIdsRef.current.add(id));
+      setSchoolIdsOnPopupClickDot({
+        ids: idsToFetch,
+        entityType: selectedEntityType,
+        allowDublicateSchoolIds: false,
+      });
+      return true;
+    },
+    [duplicateIds, pageSize, selectedEntityType],
+  );
+
+  useEffect(() => {
+    setItems([]);
+    setShowAutoLoad(false);
+    nextIndexRef.current = 0;
+    isFetchingRef.current = false;
+    requestedIdsRef.current.clear();
+
+    if (duplicateIds.length > 1) {
+      requestIdsChunk(0);
+    }
+  }, [duplicateIds.join(','), requestIdsChunk]);
+
+  useEffect(() => {
+    if (!popupEntitiesFromStore?.length) {
+      if (!fetchPending) isFetchingRef.current = false;
+      return;
+    }
+
+    const existingIds = new Set(items.map((item) => item.id));
+    const nextItems = popupEntitiesFromStore.filter((item) => {
+      const id = Number(item.id);
+      return requestedIdsRef.current.has(id) && !existingIds.has(id);
+    });
+
+    if (nextItems.length) {
+      setItems((current) => [
+        ...current,
+        ...nextItems.map((item) => schoolStatsMap(item)),
+      ]);
+    }
+
+    isFetchingRef.current = false;
+  }, [fetchPending, items, popupEntitiesFromStore]);
+
+  const loadMore = useCallback(() => {
+    if (nextIndexRef.current >= totalIds) return;
+    requestIdsChunk(nextIndexRef.current);
+  }, [requestIdsChunk, totalIds]);
+
+  const handleShowMoreClick = () => {
+    setShowAutoLoad(true);
+    loadMore();
+  };
+
+
+  const getStaticValue = (value: boolean | string | null | undefined) => {
+    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    if (!value || value === UNKNOWN) return t('unknown');
+    return formatStaticFieldValue(value);
+  };
+
+  if (totalIds <= 1) return null;
+
+  return (
+    <section className="border-t! border-border! px-3.5! py-4!">
+      <div className="mb-3! flex! items-center! justify-between! gap-3!">
+        <h3 className="m-0! text-sm! font-semibold! leading-5! text-foreground!">
+          {`(${totalIds}) ${t(`${selectedEntityType}-duplicates`, {
+            defaultValue: `${entityLabel} duplicates`,
+          })}`}
+        </h3>
+        {fetchPending && <Skeleton className="h-3! w-16!" />}
+      </div>
+      <div className="space-y-2!">
+        {items.map((item, index) => {
+          const connectivityColor = stylePaintData[item.connectivityType ?? UNKNOWN];
+          const staticColor = stylePaintData[item.staticType ?? UNKNOWN];
+          const statusColor = stylePaintData[item.connectivityStatus ?? UNKNOWN];
+          const liveValue =
+            isLive && item.isRealTime && item.connectivityType !== UNKNOWN
+              ? formatConnectivityValue(item.liveAvg ?? 0, unit)
+              : t('unknown');
+          const staticValue = getStaticValue(item.staticValue);
+          const statusLabel = t(
+            ConnectivityStatusNames[item.connectivityStatus ?? UNKNOWN] ??
+              item.connectivityStatus ??
+              UNKNOWN,
+          );
+
+          return (
+            <button
+              key={item.id}
+              aria-label={`Open ${item.name}`}
+              className="flex! w-full! items-center! justify-between! gap-3! rounded-md! border! border-border! bg-background! px-3! py-2.5! text-left! hover:bg-muted/40!"
+              onClick={() => {
+                navigateToEntity(selectedEntityType, countryCode, item.id);
+                if (item.geopoint?.coordinates) {
+                  setSchoolFocusLatLng(
+                    item.geopoint.coordinates as PointCoordinates,
+                  );
+                }
+              }}
+              type="button"
+            >
+              <span className="flex! min-w-0! flex-1! items-center! gap-2!">
+                <span className="shrink-0! text-xs! text-muted-foreground!">
+                  {index + 1}.
+                </span>
+                <span className="truncate! text-sm! font-medium! text-foreground!" title={item.name}>
+                  {item.name}
+                </span>
+              </span>
+              <span className="flex! shrink-0! items-center! gap-2! text-xs!">
+                <span
+                  className="size-2.5! rounded-full!"
+                  style={{ backgroundColor: isStatic ? staticColor : statusColor }}
+                />
+                {isLive && item.isRealTime ? (
+                  <span style={{ color: connectivityColor }}>{liveValue}</span>
+                ) : isStatic ? (
+                  <span style={{ color: staticColor }}>{staticValue}</span>
+                ) : (
+                  <span style={{ color: statusColor }}>{statusLabel}</span>
+                )}
+              </span>
+            </button>
+          );
+        })}
+        {fetchPending && !items.length && (
+          <div className="space-y-2!">
+            {Array.from({ length: Math.min(totalIds, pageSize) }).map((_, index) => (
+              <Skeleton key={index} className="h-10! w-full! rounded-md!" />
+            ))}
+          </div>
+        )}
+      </div>
+      {totalIds > pageSize && !showAutoLoad && items.length < totalIds && (
+        <Button
+          className="mt-3! h-auto! px-0! py-1! text-sm!"
+          onClick={handleShowMoreClick}
+          type="button"
+          variant="link"
+        >
+          {t('show-more')}
+        </Button>
+      )}
+      {showAutoLoad && items.length < totalIds && !fetchPending && (
+        <Button
+          className="mt-3! h-auto! px-0! py-1! text-sm!"
+          onClick={loadMore}
+          type="button"
+          variant="link"
+        >
+          {t('show-more')}
+        </Button>
+      )}
+    </section>
+  );
+}
 function EntityDetailContent({ entity }: { entity: SchoolStatsType }) {
   const { isLive, isStatic } = useStore($currentLayerTypeUtils);
   const showSectionSeparator = isLive || isStatic;
@@ -316,6 +592,7 @@ function EntityDetailContent({ entity }: { entity: SchoolStatsType }) {
       <EntityMetricSummary entity={entity} />
       {showSectionSeparator && <Separator className="my-2!" />}
       <EntityInformation entity={entity} />
+      <EntityDuplicateLocationList entity={entity} />
     </div>
   );
 }
