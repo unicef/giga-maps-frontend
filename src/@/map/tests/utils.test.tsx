@@ -7,8 +7,15 @@ import {
   createSelectedSymbolLayer,
   generateLayerUrls,
   getCoveragePaint,
+  onClickOnEntityDots,
 } from '../utils';
-import { LayerDataProps, mapPaintData, stylePaintData } from '../map.constant';
+import {
+  DEFAULT_SOURCE,
+  LayerDataProps,
+  mapPaintData,
+  stylePaintData,
+} from '../map.constant';
+import { $activeSchoolPopup, setPopupOnClickDot } from '../map.model';
 
 describe('getCoveragePaint', () => {
   it('should return the correct paint object', () => {
@@ -175,6 +182,42 @@ describe('animateCircles', () => {
     } finally {
       globalThis.requestAnimationFrame = originalRequestAnimationFrame;
     }
+  });
+});
+
+describe('onClickOnEntityDots', () => {
+  afterEach(() => {
+    setPopupOnClickDot(null);
+  });
+
+  it('uses the clicked entity layer type and id when overlapping map dots exist', () => {
+    const healthLayerId = 'entity-selected-health-72';
+    const handlerRef = { current: null as ((event: any) => void) | null };
+    const map = {
+      on: vi.fn((_event, _id, handler) => {
+        handlerRef.current = handler;
+      }),
+      queryRenderedFeatures: vi.fn(() => [
+        {
+          layer: { id: healthLayerId },
+          properties: { health_entity_id: 685448, id: 685448 },
+          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
+        },
+        {
+          layer: { id: 'entity-selected-school-1' },
+          properties: { id: 123, school_id: 123 },
+          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
+        },
+      ]),
+    } as any;
+
+    onClickOnEntityDots(map, healthLayerId, DEFAULT_SOURCE);
+    handlerRef.current?.({ point: { x: 1, y: 1 } });
+
+    expect($activeSchoolPopup.getState()).toMatchObject({
+      id: 685448,
+      entityType: EntityType.HEALTH,
+    });
   });
 });
 

@@ -919,12 +919,13 @@ sample({
     !info.isMobile &&
     !!activePopup?.id &&
     !!activePopup.entityType &&
-    hasSelectedInfoLayer(info, activePopup.entityType),
+    hasEntityDetailInfoLayer(info, activePopup.entityType),
   fn: ({ info }, activePopup) =>
     entityPopupInfoFn(info, {
       entityIds: [Number(activePopup?.id)],
       entityType: activePopup!.entityType,
       allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(info, activePopup!.entityType),
     }),
   target: fetchSchoolPopupDataFx,
 });
@@ -940,12 +941,13 @@ sample({
     !info.isMobile &&
     !!activePopup?.id &&
     !!activePopup.entityType &&
-    hasSelectedInfoLayer(info, activePopup.entityType),
+    hasEntityDetailInfoLayer(info, activePopup.entityType),
   fn: ({ info, activePopup }) =>
     entityPopupInfoFn(info, {
       entityIds: [Number(activePopup?.id)],
       entityType: activePopup!.entityType,
       allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(info, activePopup!.entityType),
     }),
   target: fetchSchoolPopupDataFx,
 });
@@ -963,7 +965,7 @@ sample({
       !info.isMobile &&
       !!entityIds?.ids?.length &&
       !!entityType &&
-      hasSelectedInfoLayer(info, entityType)
+      hasEntityDetailInfoLayer(info, entityType)
     );
   },
   fn: ({ info, activePopup }, entityIds) =>
@@ -971,6 +973,10 @@ sample({
       entityIds: entityIds?.ids ?? [],
       entityType: (entityIds?.entityType ?? activePopup?.entityType)!,
       allowDublicateSchoolIds: entityIds?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(
+        info,
+        (entityIds?.entityType ?? activePopup?.entityType)!,
+      ),
     }),
   target: fetchDublicateSchoolPopupDataFx,
 });
@@ -990,7 +996,7 @@ sample({
       !info.isMobile &&
       !!duplicateSchoolPopup?.ids?.length &&
       !!entityType &&
-      hasSelectedInfoLayer(info, entityType)
+      hasEntityDetailInfoLayer(info, entityType)
     );
   },
   fn: ({ info, activePopup, duplicateSchoolPopup }) =>
@@ -1000,6 +1006,10 @@ sample({
         activePopup?.entityType)!,
       allowDublicateSchoolIds:
         duplicateSchoolPopup?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(
+        info,
+        (duplicateSchoolPopup?.entityType ?? activePopup?.entityType)!,
+      ),
     }),
   target: fetchDublicateSchoolPopupDataFx,
 });
