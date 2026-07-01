@@ -73,7 +73,8 @@ const LegendPopup = ({
   const isMobile = useStore($isMobile);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
-  const shouldShowControls = !mapLevel.map && !mapLevel.schools;
+  const isEntityDetailView = mapLevel.schools || mapLevel.entity;
+  const shouldShowControls = !mapLevel.map && !isEntityDetailView;
 
   const paintData = useStore($stylePaintData);
   const visibleLegendEntityTypes = useMemo(() => {

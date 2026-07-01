@@ -40,7 +40,7 @@ const LiveLayerLegend = ({
 }) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
-  const { map, schools } = useStore($mapRoutes);
+  const { entity, map, schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const {
     currentLayerLegends,
@@ -69,14 +69,15 @@ const LiveLayerLegend = ({
     entityType
   ];
   const schoolRealTimeStats = useStore($schoolStats);
+  const isEntityDetailView = schools || entity;
   const realtimeStats =
     realtimeStatsFromStore?.real_time_connected_entities ??
     ({} as DefaultLegendValuesType);
   const benchmarkValue = (
-    !schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
+    !isEntityDetailView ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
   )?.benchmark_metadata?.rounded_benchmark_value;
   const unitLabel = (
-    !schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
+    !isEntityDetailView ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
   )?.benchmark_metadata?.display_unit;
   const nationalBenchMarkDescription =
     countryBenchmarkDescriptions?.[metricLayerData?.id ?? 0] ?? '';
@@ -152,6 +153,7 @@ const LiveLayerLegend = ({
               <div className="flex! min-w-0! items-center!">
                 {shouldShowControls ? (
                   <input
+                    aria-label={label}
                     checked={Boolean(connectivitySpeedFilter[key])}
                     className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
                     onChange={() => handleRealtimeLayerChange(key)}
