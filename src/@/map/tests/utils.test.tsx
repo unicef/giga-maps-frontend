@@ -159,6 +159,84 @@ describe('createSelectedLayer', () => {
       25,
     ]);
   });
+
+  it('adds a dev-only white border for multiple-school same-location dots', () => {
+    const devSettings = (globalThis as any).GIGA_MAP_DEV;
+    devSettings.highlightMultipleSchoolOnSameLatLng = true;
+    const map = {
+      addLayer: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      off: vi.fn(),
+      getLayer: vi.fn(() => null),
+      on: vi.fn(),
+      setPaintProperty: vi.fn(),
+    } as any;
+
+    createSelectedLayer(map, {
+      id: 'entity-selected-school-1',
+      isDynamicLayer: true,
+      source: DEFAULT_SOURCE,
+      paintData: stylePaintData.dark,
+      mapRoute: { country: true },
+      options: {},
+      isMobile: false,
+      isLive: true,
+    });
+
+    expect(map.addLayer).toHaveBeenCalledTimes(2);
+    const overlayLayer = map.addLayer.mock.calls[1][0];
+    expect(overlayLayer).toMatchObject({
+      id: 'entity-selected-school-1-dev-multiple-school-same-location-highlight',
+      type: 'circle',
+      source: DEFAULT_SOURCE,
+      layout: { visibility: 'visible' },
+      paint: {
+        'circle-color': 'rgba(255, 255, 255, 0)',
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 4,
+      },
+    });
+    expect(overlayLayer.filter).toEqual([
+      'any',
+      ['==', 'has_multiple_school_on_same_lat_lng', true],
+      ['==', 'has_multiple_school_on_same_lat_lng', 1],
+      ['==', 'has_multiple_school_on_same_lat_lng', '1'],
+      ['==', 'has_multiple_school_on_same_lat_lng', 'true'],
+      ['==', 'has_multiple_school_on_same_lat_lng', 'True'],
+      ['==', 'has_multiple_school_on_same_lat_lng', 'TRUE'],
+    ]);
+
+    devSettings.highlightMultipleSchoolOnSameLatLng = false;
+  });
+
+  it('does not add the dev multiple-school border on global view', () => {
+    const devSettings = (globalThis as any).GIGA_MAP_DEV;
+    devSettings.highlightMultipleSchoolOnSameLatLng = true;
+    const map = {
+      addLayer: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      off: vi.fn(),
+      getLayer: vi.fn(() => null),
+      on: vi.fn(),
+      setPaintProperty: vi.fn(),
+    } as any;
+
+    createSelectedLayer(map, {
+      id: 'entity-selected-school-1',
+      isDynamicLayer: false,
+      source: DEFAULT_SOURCE,
+      paintData: stylePaintData.dark,
+      mapRoute: { map: true },
+      options: {},
+      isMobile: false,
+      isLive: true,
+    });
+
+    expect(map.addLayer).toHaveBeenCalledTimes(1);
+    expect(map.addLayer.mock.calls[0][0].id).toBe('entity-selected-school-1');
+
+    devSettings.highlightMultipleSchoolOnSameLatLng = false;
+  });
 });
 
 describe('animateCircles', () => {

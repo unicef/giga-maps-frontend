@@ -51,6 +51,7 @@ import {
   resetDublicateSchoolClickData,
   setPopupOnClickDot,
 } from './map.model';
+import { registerDevMultipleSchoolSameLocationHighlight } from './dev/multiple-school-same-location-highlight';
 import { ChangeLayerOptions, StylePaintData } from './map.types';
 
 type MapAnimationConfigSource = Pick<
@@ -1027,6 +1028,14 @@ export const createSelectedLayer = (
 ): void => {
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
+    registerDevMultipleSchoolSameLocationHighlight({
+      map,
+      id,
+      source,
+      mapRoute,
+      markerType: 'circle',
+      options,
+    });
     return;
   }
   const paint = withEntityCircleRadius(
@@ -1053,6 +1062,15 @@ export const createSelectedLayer = (
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
     delete mapDotsClickIdsAndHandler[source][id];
   }
+  registerDevMultipleSchoolSameLocationHighlight({
+    map,
+    id,
+    source,
+    mapRoute,
+    markerType: 'circle',
+    options,
+    circleRadius: paint?.['circle-radius'],
+  });
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
@@ -1084,8 +1102,19 @@ export const createSelectedSymbolLayer = (
     mapRoute: ChangeLayerOptions['mapRoute'];
   },
 ): void => {
+  const textSize = getEntityTextSizeExpression(entityConfig);
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
+    registerDevMultipleSchoolSameLocationHighlight({
+      map,
+      id,
+      source,
+      mapRoute,
+      markerType: 'symbol',
+      options,
+      symbol,
+      textSize,
+    });
     return;
   }
   const paint = getPaintData({ isLive, paintData, isDynamicLayer });
@@ -1107,7 +1136,7 @@ export const createSelectedSymbolLayer = (
       minzoom: 0,
       layout: {
         'text-field': symbol,
-        'text-size': getEntityTextSizeExpression(entityConfig),
+        'text-size': textSize,
         'text-allow-overlap': true,
         'text-ignore-placement': true,
       },
@@ -1126,6 +1155,16 @@ export const createSelectedSymbolLayer = (
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
     delete mapDotsClickIdsAndHandler[source][id];
   }
+  registerDevMultipleSchoolSameLocationHighlight({
+    map,
+    id,
+    source,
+    mapRoute,
+    markerType: 'symbol',
+    options,
+    symbol,
+    textSize,
+  });
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
