@@ -150,7 +150,7 @@ sample({
   clock: merge([onLoadPage, map.visible]),
   source: $mapRoutes,
   target: createEffect((routes: ReturnType<typeof $mapRoutes.getState>) => {
-    if (routes.map || routes.country || routes.schools) {
+    if (routes.map || routes.country || routes.schools || routes.entity) {
       void fetchLayerListFx();
       void fetchCountriesFx();
     }
@@ -478,7 +478,7 @@ export const mapMarkerSource = combine({
 });
 
 sample({
-  clock: merge([$schoolStatsMap]),
+  clock: merge([$schoolStatsMap, $map]),
   source: mapMarkerSource,
   target: addSchoolMarkers,
 });

@@ -135,16 +135,16 @@ export const createSourceForMapAndCountry = ({
   if (!layerId) {
     layerId = fallbackLayerId;
   }
-  let admin1Id = mapRoute.schools ? schoolAdminId : admin1Data?.id;
-  if (mapRoute.schools) {
+  const isEntityDetailRoute = mapRoute.schools || mapRoute.entity;
+  let admin1Id = isEntityDetailRoute ? schoolAdminId : admin1Data?.id;
+  if (isEntityDetailRoute) {
     if (admin1Id) {
       admin1Data =
         country?.admin1_metadata?.find((admin) => admin.id === admin1Id) ??
         null;
-    } else if (admin1Id === 0) {
-      admin1Id = undefined;
     } else {
-      return false;
+      admin1Id = undefined;
+      admin1Data = null;
     }
   }
   let url = null;
@@ -438,3 +438,4 @@ export const setAnimationHandler = (
 ) => {
   animateCircleHandlers[entityType] = handler;
 };
+

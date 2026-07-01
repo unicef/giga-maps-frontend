@@ -10,9 +10,9 @@ import { $mapRoutes } from '~/core/routes';
 import { GoToCountry, GoToMap, GoToSchool } from './common-bdb-view';
 
 const SchoolBDB = () => {
-  const { schools } = useStore($mapRoutes);
+  const { entity, schools } = useStore($mapRoutes);
 
-  if (!schools) return;
+  if (!schools && !entity) return;
   return (
     <div className="flex! w-[86%]! justify-start!">
       <div className="w-full!">

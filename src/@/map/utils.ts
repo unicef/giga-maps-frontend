@@ -51,6 +51,7 @@ import {
   resetDublicateSchoolClickData,
   setPopupOnClickDot,
 } from './map.model';
+import { registerDevMultipleSchoolSameLocationHighlight } from './dev/multiple-school-same-location-highlight';
 import { ChangeLayerOptions, StylePaintData } from './map.types';
 
 type MapAnimationConfigSource = Pick<
@@ -210,6 +211,25 @@ const getEntityTypeFromMapLayerId = (layerId?: string): EntityType | null => {
   return null;
 };
 
+const getEntityIdFromFeatureProperties = (
+  properties: MapboxGeoJSONFeature['properties'],
+  entityType: EntityType | null,
+): number | null => {
+  if (!properties) return null;
+
+  const entityId =
+    (entityType ? properties[`${entityType}_entity_id`] : undefined) ??
+    (entityType ? properties[`${entityType}_id`] : undefined) ??
+    properties.entity_id ??
+    properties.id ??
+    (entityType === EntityType.SCHOOL ? properties.school_id : undefined);
+
+  const numericEntityId = Number(entityId);
+  return Number.isFinite(numericEntityId) && numericEntityId > 0
+    ? numericEntityId
+    : null;
+};
+
 export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
   const ids = Object.keys(mapDotsClickIdsAndHandler[source]);
   if (!ids?.length) return;
@@ -240,22 +260,25 @@ export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
     if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
       return;
     }
+    const clickedLayerEntityType = getEntityTypeFromMapLayerId(id);
     const feature =
       features.find((item) => item.layer.id === id) ?? features[0];
     const fallbackFeature = features.find((item) => item !== feature);
-    const entityId = Number(
-      feature?.properties?.id ?? fallbackFeature?.properties?.id,
-    );
     const entityType =
+      clickedLayerEntityType ??
       getEntityTypeFromMapLayerId(feature?.layer?.id) ??
-      getEntityTypeFromMapLayerId(id);
+      getEntityTypeFromMapLayerId(fallbackFeature?.layer?.id);
     if (!entityType) return;
+    const entityId =
+      getEntityIdFromFeatureProperties(feature?.properties, entityType) ??
+      getEntityIdFromFeatureProperties(fallbackFeature?.properties, entityType);
+    if (!entityId) return;
     const activePopup = $activeSchoolPopup.getState();
     if (activePopup?.id === entityId && activePopup.entityType === entityType) {
       setPopupOnClickDot(null);
       return;
     }
-    if (feature?.layer?.id && entityId) {
+    if (feature?.layer?.id) {
       setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
       setPopupOnClickDot({
         id: entityId,
@@ -1005,6 +1028,14 @@ export const createSelectedLayer = (
 ): void => {
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
+    registerDevMultipleSchoolSameLocationHighlight({
+      map,
+      id,
+      source,
+      mapRoute,
+      markerType: 'circle',
+      options,
+    });
     return;
   }
   const paint = withEntityCircleRadius(
@@ -1031,6 +1062,15 @@ export const createSelectedLayer = (
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
     delete mapDotsClickIdsAndHandler[source][id];
   }
+  registerDevMultipleSchoolSameLocationHighlight({
+    map,
+    id,
+    source,
+    mapRoute,
+    markerType: 'circle',
+    options,
+    circleRadius: paint?.['circle-radius'],
+  });
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
@@ -1062,8 +1102,19 @@ export const createSelectedSymbolLayer = (
     mapRoute: ChangeLayerOptions['mapRoute'];
   },
 ): void => {
+  const textSize = getEntityTextSizeExpression(entityConfig);
   if (map.getLayer(id)) {
     map.setLayoutProperty(id, 'visibility', 'visible');
+    registerDevMultipleSchoolSameLocationHighlight({
+      map,
+      id,
+      source,
+      mapRoute,
+      markerType: 'symbol',
+      options,
+      symbol,
+      textSize,
+    });
     return;
   }
   const paint = getPaintData({ isLive, paintData, isDynamicLayer });
@@ -1085,7 +1136,7 @@ export const createSelectedSymbolLayer = (
       minzoom: 0,
       layout: {
         'text-field': symbol,
-        'text-size': getEntityTextSizeExpression(entityConfig),
+        'text-size': textSize,
         'text-allow-overlap': true,
         'text-ignore-placement': true,
       },
@@ -1104,6 +1155,16 @@ export const createSelectedSymbolLayer = (
     map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
     delete mapDotsClickIdsAndHandler[source][id];
   }
+  registerDevMultipleSchoolSameLocationHighlight({
+    map,
+    id,
+    source,
+    mapRoute,
+    markerType: 'symbol',
+    options,
+    symbol,
+    textSize,
+  });
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
