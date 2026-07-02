@@ -80,7 +80,7 @@ export const MapSchoolPopup = () => {
                     <SchoolNameWrapper>
                       <SchoolNameContent>
                         <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
-                        {!feature?.isVerifiedSchool && <SchoolVerificationTag>unverfied</SchoolVerificationTag>}
+                        {feature?.isVerifiedSchool === false && <SchoolVerificationTag>Pending Verification</SchoolVerificationTag>}
                       </SchoolNameContent>
                       <OSMLink
                         href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
