@@ -50,13 +50,13 @@ export const SchoolName = styled.h6`
 `
 export const SchoolVerificationTag = styled.span`
   border-radius: 62.5rem;
-  background: #CDD3DA;
-  padding: 0 0.5rem 0.125rem;
-  color: var(--tag-cool-gray-text, #474747);
+  background: #FFD24D;
+  padding: 0.25rem 0.75rem;
+  color: #1f1f1f;
   font-family: Open Sans;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 400;
-  line-height: 1rem;
+  line-height: 1.125rem;
   text-transform: capitalize;
   white-space: nowrap;
 `
