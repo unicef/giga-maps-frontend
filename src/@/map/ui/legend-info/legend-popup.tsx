@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 import { Maximize2, Minimize2 } from 'lucide-react';
-import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -91,6 +91,19 @@ const LegendPopup = ({
   );
   const [activeTab, setActiveTab] = useState<EntityType>(() =>
     getDefaultLegendTab(visibleLegendEntityTypes),
+  );
+
+  const popoverContentRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node) return;
+      const wrapper: unknown | any = node.closest(
+        '[data-radix-popper-content-wrapper]',
+      );
+      if (wrapper) {
+        wrapper.style.left = isMobile ? '7px' : '';
+      }
+    },
+    [isMobile],
   );
 
   useEffect(() => {
@@ -391,11 +404,12 @@ const LegendPopup = ({
         </div>
       </PopoverAnchor>
       <PopoverContent
+        ref={popoverContentRef}
         align="end"
         className={cn(
-          'z-6002! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
+          'z-1! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
           'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
-          'max-md:w-[min(25rem,calc(100vw-1rem))]! max-md:max-w-[min(25rem,calc(100vw-1rem))]!',
+          'max-md:w-[min(23rem,calc(100vw-1rem))]! max-md:max-w-[min(23rem,calc(100vw-1rem))]!',
           'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}

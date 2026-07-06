@@ -2,6 +2,7 @@ import { useStore } from 'effector-react';
 import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 import { type CSSProperties, type MouseEvent } from 'react';
 
+import EntityTypeSelector from '~/@/entities/ui/entity-selector';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { AccessibilityButton } from '~/@/map/ui/layer-theme/accessibility-button';
 import {
@@ -73,7 +74,7 @@ export default function Sidebar() {
       )}
       onClick={() => onClickSidebar()}
     >
-      <div className="sidebar flex h-inherit w-inherit flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!">
+      <div className="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!">
         {isMobile && (
           <div
             className="-mb-0.25 flex w-full items-center justify-center p-[0.6rem] bg-background"
@@ -88,14 +89,23 @@ export default function Sidebar() {
             )}
           </div>
         )}
-        <SideInfoPanelHeaderLogoAndMenuButton />
-        {isMenuOpen && <SidebarMenuList />}
-        {!(isMobile && isMenuOpen) && (
-          <div className="relative z-12">
-            <TopSearchBar />
-            <SearchResult />
+        <div className={cn(
+          isMobile && 'fixed! top-0! left-0! right-0! z-[6001]!',
+        )}>
+          <div className={cn(isMobile && 'bg-background! pb-5!')}>
+            <SideInfoPanelHeaderLogoAndMenuButton />
+            {isMenuOpen && <SidebarMenuList />}
+            {!(isMenuOpen) && (
+              <div className="relative z-12">
+                <TopSearchBar />
+                <SearchResult />
+              </div>
+            )}
           </div>
-        )}
+          {isMobile && <EntityTypeSelector />}
+
+        </div>
+
         <div className="flex min-h-0 flex-1 flex-col">
           <BreadcrumbInfo />
           {mapRoute ? (
@@ -132,9 +142,10 @@ export default function Sidebar() {
             isTimeplayer && '-translate-x-full',
           )}
         >
-          <BroadcastButton className="broadcast-button">
-            <FilterButton />
-          </BroadcastButton>
+          {!isMobile &&
+            <BroadcastButton className="broadcast-button">
+              <FilterButton />
+            </BroadcastButton>}
           <TakeTourWrapper $bottom={sidebarHeight}>
             {!isMobile && <ZoomButtons />}
             {!sidebarHeight && <TimeplayerButton />}

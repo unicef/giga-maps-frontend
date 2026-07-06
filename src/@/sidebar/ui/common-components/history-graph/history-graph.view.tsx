@@ -145,7 +145,7 @@ function HistoryBarChart({
 
   return (
     <ChartContainer
-      className="h-40! min-h-40! max-w-none! aspect-auto!"
+      className="h-40! min-h-40! max-w-none! w-full! aspect-auto!"
       config={chartConfig}
       style={{ width }}
     >
@@ -235,7 +235,7 @@ const HistoryGraph = ({
     : currentConnectivityStats?.benchmark_metadata;
   const benchmark = toNumber(
     infoBenchmark?.rounded_benchmark_value ??
-      selectedLayerData?.global_benchmark?.value,
+    selectedLayerData?.global_benchmark?.value,
   );
   const unit =
     infoBenchmark?.display_unit ||
@@ -257,7 +257,7 @@ const HistoryGraph = ({
       {isLoading ? (
         <Skeleton className="ml-2.5! h-40! w-full!" />
       ) : (
-        <div className="relative! py-4! pt-2!">
+        <div className="relative! py-4! pt-2! w-full!">
           {!isWeek && (
             <Button
               aria-label="Scroll chart"

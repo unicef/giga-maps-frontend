@@ -1,7 +1,14 @@
+import '~/core/i18n/instance';
+
 import { useStore } from 'effector-react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
+import { changeCountryCode } from '~/@/country/country.model';
+import EntityTypeSelector from '~/@/entities/ui/entity-selector';
 import ProductTour from '~/@/product-tour/ui/product-tour.view';
+import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
+import { $isMobile } from '~/core/media-query';
 import { $mapRoutes, mapCountry } from '~/core/routes';
 import { Layout, Main } from '~/ui';
 
@@ -10,14 +17,9 @@ import Sidebar from '@/sidebar/ui';
 import { Popup } from '../popup/ui';
 import Footer from './footer';
 import Map from './map';
-import Underlay from './underlay';
-import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
-import { useEffect } from 'react';
-import { changeCountryCode } from '~/@/country/country.model';
 import { TimeplayerContainer } from './timeplayer/timeplayer-container';
-import '~/core/i18n/instance';
 import TopLoader from './top-loader';
-import EntityTypeSelector from '~/@/entities/ui/entity-selector';
+import Underlay from './underlay';
 
 const PopupContainer = styled.div`
   display: none;
@@ -25,6 +27,8 @@ const PopupContainer = styled.div`
 
 const MapPage = () => {
   const { code = '' } = useStore(mapCountry.params) ?? {};
+  const isMobile = useStore($isMobile);
+
   const isProductTour = useStore($isProductTour);
   const isTimeplayer = useStore($isTimeplayer);
   const mapRoute = useStore($mapRoutes);
@@ -45,7 +49,7 @@ const MapPage = () => {
           <Popup />
         </PopupContainer>
       </Main>
-      <EntityTypeSelector />
+      {!isMobile && <EntityTypeSelector />}
       <TopLoader />
       <Footer />
       {isProductTour && <ProductTour />}
