@@ -1,4 +1,5 @@
 import { useStore } from 'effector-react';
+import { useMemo, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -16,15 +17,28 @@ import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
+import { mapEntity } from '~/core/routes';
 
 const base =
   'h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5!';
 const active = 'border-primary';
 const inactive =
   'border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground';
+const disabled =
+  'cursor-not-allowed! border-border! bg-background! text-muted-foreground! opacity-50! hover:bg-background! hover:text-muted-foreground!';
 
-const handleSelectAllEntityTypes = () => {
-  selectAllEntityTypes();
+const getEntityTypeFromEntityRoute = (search: string) => {
+  const params = new URLSearchParams(search);
+  const entityIdsParam = Array.from(params.entries()).find(
+    ([key, value]) => key.endsWith('_ids') && key !== 'entity_ids' && !!value,
+  );
+  const entityTypeFromIds = entityIdsParam?.[0].replace(/_ids$/, '') as
+    | EntityType
+    | undefined;
+  const legacyEntityTypeParam = params.get('entity_type') ?? params.get('entity');
+
+  return entityTypeFromIds
+    ?? (legacyEntityTypeParam ? (legacyEntityTypeParam as EntityType) : null);
 };
 
 /**
@@ -36,6 +50,13 @@ export default function EntityTypeSelector() {
   const activeEntityTypes = useStore($activeEntityTypes);
   const entityRegistry = useStore($entityRegistry);
   const isGlobalMode = useStore($isGlobalMode);
+  const isEntityView = useStore(mapEntity.visible);
+  const entitySearch = useStore(mapEntity.router.search);
+  const lockedEntityType = useMemo(
+    () => (isEntityView ? getEntityTypeFromEntityRoute(entitySearch) : null),
+    [entitySearch, isEntityView],
+  );
+  const isEntityViewLocked = Boolean(lockedEntityType);
 
   const entityTypes = Object.entries(entityRegistry);
 
@@ -43,14 +64,21 @@ export default function EntityTypeSelector() {
     return null;
   }
 
-  const allSelected = isGlobalMode;
+  const allSelected = !isEntityViewLocked && isGlobalMode;
 
-  const handleEntityClick = (entityType: EntityType, event: React.MouseEvent) => {
+  const handleSelectAllEntityTypes = () => {
+    if (isEntityViewLocked) return;
+    selectAllEntityTypes();
+  };
+
+  const handleEntityClick = (entityType: EntityType, event: MouseEvent) => {
+    if (isEntityViewLocked && entityType !== lockedEntityType) return;
+
     if (isGlobalMode) {
-      // If we're in global mode, the first click (even with shift) starts a manual selection with this entity
+      // If we're in global mode, the first click starts a manual selection with this entity.
       changeActiveEntityTypes([entityType]);
       changeSelectedEntityType(entityType);
-    } else if (event.shiftKey) {
+    } else if (event.shiftKey && !isEntityViewLocked) {
       toggleEntityType(entityType);
     } else {
       changeActiveEntityTypes([entityType]);
@@ -63,22 +91,28 @@ export default function EntityTypeSelector() {
       <Button
         variant="default"
         size="lg"
-        className={`${base} ${allSelected ? active : inactive}`}
+        className={`${base} ${isEntityViewLocked ? disabled : allSelected ? active : inactive}`}
+        disabled={isEntityViewLocked}
         onClick={handleSelectAllEntityTypes}
       >
         {t('all-entities', 'All entities')}
       </Button>
 
       {entityTypes.map(([type, config]) => {
-        const isActive = activeEntityTypes.includes(type as EntityType) && !isGlobalMode;
+        const entityType = type as EntityType;
+        const isDisabled = isEntityViewLocked && entityType !== lockedEntityType;
+        const isActive = isEntityViewLocked
+          ? entityType === lockedEntityType
+          : activeEntityTypes.includes(entityType) && !isGlobalMode;
 
         return (
           <Button
             key={type}
             variant="default"
             size="lg"
-            className={`${base} ${isActive ? active : inactive}`}
-            onClick={(event) => handleEntityClick(type as EntityType, event)}
+            className={`${base} ${isDisabled ? disabled : isActive ? active : inactive}`}
+            disabled={isDisabled}
+            onClick={(event) => handleEntityClick(entityType, event)}
           >
             <EntityLegendIndicator
               className="ml-0!"

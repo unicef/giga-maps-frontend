@@ -1,6 +1,7 @@
 import { changeLayersFx } from '../effects/add-layers-fx';
 import { clearMapDataFx } from '../effects/add-layers-fx';
 import { updateConnectivityFilter } from '../effects/add-layers-fx';
+import { filterConnectivityList } from '../utils';
 
 vi.mock('../utils')
 describe('changeLayersFx', () => {
@@ -243,6 +244,42 @@ describe('updateConnectivityFilter', () => {
     expect(map.setFilter).toHaveBeenCalled();
   });
 
+  it('updateConnectivityFilter: should use dynamic filter keys for country download layer', async () => {
+    const map = {
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
+    };
+
+    const layerUtils = {
+      selectedLayerId: 1,
+      globalLayerId: 1,
+      selectedLayerIdByEntity: { school: 1 },
+      currentLayerTypeUtils: {
+        isLive: true,
+      },
+    };
+
+    const connectivitySpeedFilter = {
+      good: true,
+      moderate: true,
+      bad: true,
+      unknown: true,
+    };
+
+    await updateConnectivityFilter({
+      map,
+      layerUtils,
+      connectivitySpeedFilter,
+      mapRoute: { country: true },
+      lastSelectedLayer: {},
+    } as any);
+
+    expect(filterConnectivityList).toHaveBeenCalledWith(
+      connectivitySpeedFilter,
+      true,
+    );
+    expect(map.setFilter).toHaveBeenCalled();
+  });
   it('updateConnectivityFilter: should not set filter if layer is not live', () => {
     const map = {
       getLayer: vi.fn(() => true),

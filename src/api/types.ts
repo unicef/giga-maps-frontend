@@ -132,6 +132,7 @@ export type SchoolStatsType = {
   country_name: string;
   coverage_type: string;
   external_id: string;
+  is_verified_school?: boolean;
   environment: string;
   admin1_id?: number;
   admin1_name?: string;

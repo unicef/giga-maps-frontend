@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { combine, createEffect, merge, sample } from 'effector';
+import { combine, merge, sample } from 'effector';
 
 import {
   $admin1Id,
@@ -22,6 +22,7 @@ import {
   $activeEntityTypes,
   $entityTypesFiltered,
   $selectedEntityType,
+  changeActiveEntityTypes,
   changeSelectedEntityType,
 } from '~/@/entities/models/entity.model';
 import {
@@ -95,6 +96,7 @@ import {
   $historyIntervalUnitByEntity,
   $isCheckedLastDate,
   $lastAvailableDates,
+  $lastAvailableDatesByEntity,
 } from './history-graph.model';
 import { ConnectivityBenchMarks } from './sidebar.constant';
 import { getEntityStatusId, isLiveLayer } from './sidebar.util';
@@ -152,16 +154,20 @@ sample({
 
 sample({
   clock: onSchoolUncheck,
-  source: $getSchoolParams,
-  fn: (schoolParams, uncheckId) => {
+  source: combine({
+    mapRoutes: $mapRoutes,
+    schoolParams: $getSchoolParams,
+  }),
+  fn: ({ mapRoutes, schoolParams }, uncheckId) => {
+    const entityType = schoolParams.entityType ?? EntityType.SCHOOL;
+    const nextIds = schoolParams?.schoolIds?.filter(
+      (id) => String(id) !== String(uncheckId),
+    ) ?? [];
     const newParams = new URLSearchParams({
       country: schoolParams.country ?? '',
-      school_ids:
-        schoolParams?.schoolIds?.filter(
-          (id) => String(id) !== String(uncheckId),
-        ) ?? '',
+      [mapRoutes.entity ? `${entityType}_ids` : 'school_ids']: nextIds.join(','),
     } as Record<string, string>).toString();
-    const url = '/map/schools?' + newParams;
+    const url = `${mapRoutes.entity ? '/map/entity/' : '/map/schools'}?${newParams}`;
     router.history.replace(url);
     return url;
   },
@@ -179,6 +185,8 @@ const sourceForInfo = combine({
   intervalUnitByEntity: $historyIntervalUnitByEntity,
   admin1Id: $admin1Id,
   lastAvailableDates: $lastAvailableDates,
+  lastAvailableDatesByEntity: $lastAvailableDatesByEntity,
+  connectivityConfigPending: getEntitiesAvailableDates.pending,
   mapRoutes: $mapRoutes,
   schoolParams: $getSchoolParams,
   lastSelectedLayers: $selectedGigaLayers,
@@ -189,6 +197,7 @@ const sourceForInfo = combine({
   activeEntityTypes: $activeEntityTypes,
   entityTypesFiltered: $entityTypesFiltered,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
+  statusLayerIdByEntity: $statusLayerIdByEntity,
 });
 
 export const getCurrentQueryId = ({
@@ -197,12 +206,10 @@ export const getCurrentQueryId = ({
   intervalByEntity,
   mapRoutes,
   schoolParams,
-  lastSelectedLayers,
   intervalUnit,
   intervalUnitByEntity,
   layersUtils,
   connectivityBenchMark,
-  connectivityBenchMarkByEntity,
   country,
   admin1Id,
   isSchoolClicked,
@@ -215,13 +222,9 @@ export const getCurrentQueryId = ({
     intervalUnitByEntity[EntityType.SCHOOL] ?? intervalUnit;
   const schoolInterval = intervalByEntity[EntityType.SCHOOL] ?? interval;
   const isWeekly = schoolIntervalUnit === IntervalUnit.week;
-  const defaultLayerId = lastSelectedLayers.layerId
-    ? lastSelectedLayers.layerId
-    : layersUtils.coverageLayerId;
-  const selectedLayerId = getEntityMapValue(
-    selectedLayerIdByEntity,
+  const selectedLayerId = getSelectedInfoLayerId(
     EntityType.SCHOOL,
-    defaultLayerId,
+    selectedLayerIdByEntity,
   );
   const isLive = isLiveLayer(
     layersUtils.layers.find((layer) => layer.id === selectedLayerId)?.type,
@@ -278,6 +281,109 @@ const getLayerIdForEntity = (
 ) => {
   return getEntityMapValue(selectedLayerIdByEntity, entityType, defaultLayerId);
 };
+const getInfoEntityTypes = ({
+  activeEntityTypes,
+  entityTypesFiltered,
+}: Pick<
+  ReturnType<typeof sourceForInfo.getState>,
+  'activeEntityTypes' | 'entityTypesFiltered'
+>) => (activeEntityTypes?.length ? activeEntityTypes : entityTypesFiltered);
+
+const getSelectedInfoLayerId = (
+  entityType: EntityType,
+  selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>,
+) => getLayerIdForEntity(entityType, selectedLayerIdByEntity, null);
+
+const getInfoEntityTypesWithSelectedLayer = ({
+  activeEntityTypes,
+  entityTypesFiltered,
+  selectedLayerIdByEntity,
+}: Pick<
+  ReturnType<typeof sourceForInfo.getState>,
+  'activeEntityTypes' | 'entityTypesFiltered' | 'selectedLayerIdByEntity'
+>) =>
+  getInfoEntityTypes({ activeEntityTypes, entityTypesFiltered }).filter(
+    (entityType) =>
+      Boolean(getSelectedInfoLayerId(entityType, selectedLayerIdByEntity)),
+  );
+
+const hasSelectedInfoLayer = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  entityType: EntityType,
+) => Boolean(getSelectedInfoLayerId(entityType, props.selectedLayerIdByEntity));
+
+const hasSelectedEntityStatusLayer = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  entityType: EntityType,
+) => Boolean(props.statusLayerIdByEntity[entityType]);
+
+const hasEntityDetailInfoLayer = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  entityType: EntityType,
+) =>
+  hasSelectedInfoLayer(props, entityType) ||
+  hasSelectedEntityStatusLayer(props, entityType);
+
+const hasSelectedInfoLayerType = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  checkLayerType: (layerTypeUtils: {
+    isLive?: boolean;
+    isStatic?: boolean;
+  }) => boolean,
+) =>
+  getInfoEntityTypesWithSelectedLayer(props).some((entityType) =>
+    checkLayerType(
+      props.layersUtils.currentLayerTypeUtilsByEntity[entityType] ?? {},
+    ),
+  );
+
+const getSelectedInfoEntityTypesByLayerType = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+  checkLayerType: (layerTypeUtils: {
+    isLive?: boolean;
+    isStatic?: boolean;
+  }) => boolean,
+) =>
+  getInfoEntityTypesWithSelectedLayer(props).filter((entityType) =>
+    checkLayerType(
+      props.layersUtils.currentLayerTypeUtilsByEntity[entityType] ?? {},
+    ),
+  );
+
+const getSelectedLiveInfoEntityTypes = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+) =>
+  getSelectedInfoEntityTypesByLayerType(
+    props,
+    (layerTypeUtils) => !!layerTypeUtils.isLive,
+  );
+
+const getSelectedStaticInfoEntityTypes = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+) =>
+  getSelectedInfoEntityTypesByLayerType(
+    props,
+    (layerTypeUtils) => !!layerTypeUtils.isStatic,
+  );
+
+const areSelectedLiveInfoDatesReady = (
+  props: ReturnType<typeof sourceForInfo.getState>,
+) => {
+  const liveEntityTypes = getSelectedLiveInfoEntityTypes(props);
+  return (
+    !!liveEntityTypes.length &&
+    liveEntityTypes.every(
+      (entityType) => !!props.lastAvailableDatesByEntity[entityType],
+    )
+  );
+};
+
+const hasCountryInfoScope = ({
+  mapRoutes,
+  country,
+  admin1Id,
+}: ReturnType<typeof sourceForInfo.getState>) =>
+  mapRoutes.country && (!!country?.id || !!admin1Id);
 type InitialUrlParams = ReturnType<typeof $initialUrlParams.getState>;
 type InitialEntityValue<T> = { hasValue: boolean; value: T | null };
 
@@ -347,14 +453,10 @@ export const getCurrentEntityLayerInfoQuery = ({
   intervalByEntity,
   intervalUnit,
   intervalUnitByEntity,
-  lastSelectedLayers,
   layersUtils,
   entityTypesFiltered,
   selectedLayerIdByEntity,
 }: ReturnType<typeof sourceForInfo.getState>) => {
-  const defaultLayerId = lastSelectedLayers.layerId
-    ? lastSelectedLayers.layerId
-    : layersUtils.coverageLayerId;
   const params = new URLSearchParams();
 
   if (country?.id) {
@@ -364,19 +466,21 @@ export const getCurrentEntityLayerInfoQuery = ({
     params.set('admin1_id', String(admin1Id));
   }
 
-  const entityTypes = activeEntityTypes?.length
-    ? activeEntityTypes
-    : entityTypesFiltered;
+  const entityTypes = getInfoEntityTypesWithSelectedLayer({
+    activeEntityTypes,
+    entityTypesFiltered,
+    selectedLayerIdByEntity,
+  });
+  if (!entityTypes.length) return { query: '' };
   params.set(
     ENTITY_TYPE_CODE_PARAM,
     getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
   );
   entityTypes.forEach((entityType) => {
     const prefix = `${entityType}_`;
-    const entityLayerId = getLayerIdForEntity(
+    const entityLayerId = getSelectedInfoLayerId(
       entityType,
       selectedLayerIdByEntity,
-      defaultLayerId,
     );
     const isLive = isLiveLayer(
       layersUtils.layers.find((layer) => layer.id === entityLayerId)?.type,
@@ -401,9 +505,7 @@ export const getCurrentEntityLayerInfoQuery = ({
       params.set(`${prefix}end_date`, format(entityInterval.end, 'dd-MM-yyyy'));
       params.set(`${prefix}is_weekly`, isWeekly.toString());
     }
-    if (entityLayerId) {
-      params.set(`${prefix}layer_id`, String(entityLayerId));
-    }
+    params.set(`${prefix}layer_id`, String(entityLayerId));
     params.set(
       `${prefix}benchmark`,
       getEntityMapValue(
@@ -431,6 +533,8 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   entityTypesFiltered,
   admin1Id,
   layersUtils,
+  mapRoutes,
+  schoolParams,
   selectedLayerIdByEntity,
 }: ReturnType<typeof sourceForInfo.getState>) => {
   const params = new URLSearchParams();
@@ -440,9 +544,11 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  const entityTypes = activeEntityTypes?.length
-    ? activeEntityTypes
-    : entityTypesFiltered;
+  const entityTypes = mapRoutes.entity && schoolParams.entityType
+    ? [schoolParams.entityType]
+    : activeEntityTypes?.length
+      ? activeEntityTypes
+      : entityTypesFiltered;
   params.set(
     ENTITY_TYPE_CODE_PARAM,
     getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
@@ -503,23 +609,27 @@ sample({
   ]),
   source: sourceForInfo,
   fn: getCurrentEntityConnectivityConfigQuery,
-  filter: ({
-    activeEntityTypes,
-    country,
-    entityTypesFiltered,
-    layersUtils,
-    mapRoutes,
-  }) => {
-    const entityTypes = activeEntityTypes?.length
-      ? activeEntityTypes
-      : entityTypesFiltered;
+  filter: (props) => {
+    const {
+      activeEntityTypes,
+      country,
+      entityTypesFiltered,
+      layersUtils,
+      mapRoutes,
+      schoolParams,
+    } = props;
+    const entityTypes = mapRoutes.entity && schoolParams.entityType
+      ? [schoolParams.entityType]
+      : activeEntityTypes?.length
+        ? activeEntityTypes
+        : entityTypesFiltered;
     return (
-      mapRoutes.country &&
+      (mapRoutes.country || mapRoutes.entity) &&
       !!country?.id &&
       !!layersUtils.layers?.length &&
-      entityTypes.some(
-        (entityType) =>
-          layersUtils.currentLayerTypeUtilsByEntity[entityType]?.isLive,
+      hasSelectedInfoLayerType(
+        props,
+        (layerTypeUtils) => !!layerTypeUtils.isLive,
       )
     );
   },
@@ -546,12 +656,11 @@ sample({
   target: getSchoolAvailableDates,
 });
 
-// for all live layers;
+// for country layers that include at least one selected live layer;
+// wait until connectivity configs have resolved the available dates.
 sample({
   clock: merge([
     $countrySearchString,
-    $country,
-    $admin1Id,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
     $entityTypesFiltered,
@@ -561,26 +670,18 @@ sample({
   ]),
   source: sourceForInfo,
   fn: getCurrentEntityLayerInfoQuery,
-  filter: ({
-    mapRoutes,
-    country,
-    admin1Id,
-    isCheckedLastDate,
-    layersUtils,
-  }: ReturnType<typeof sourceForInfo.getState>) => {
+  filter: (props: ReturnType<typeof sourceForInfo.getState>) => {
     return (
-      mapRoutes.country &&
-      (!!country?.id || !!admin1Id) &&
-      !!isCheckedLastDate &&
-      Object.values(layersUtils.currentLayerTypeUtilsByEntity).some(
-        (layerTypeUtils) => layerTypeUtils?.isLive,
-      )
+      hasCountryInfoScope(props) &&
+      !props.connectivityConfigPending &&
+      areSelectedLiveInfoDatesReady(props)
     );
   },
   target: fetchEntitiesLayerInfoFx,
 });
 
-// for all static layers
+// for country layers where every selected layer is static;
+// static layers do not need dates from connectivity configs.
 sample({
   clock: merge([
     $countrySearchString,
@@ -593,18 +694,11 @@ sample({
   ]),
   source: sourceForInfo,
   fn: getCurrentEntityLayerInfoQuery,
-  filter: ({
-    mapRoutes,
-    country,
-    admin1Id,
-    layersUtils,
-  }: ReturnType<typeof sourceForInfo.getState>) => {
+  filter: (props: ReturnType<typeof sourceForInfo.getState>) => {
     return (
-      mapRoutes.country &&
-      (!!country?.id || !!admin1Id) &&
-      Object.values(layersUtils.currentLayerTypeUtilsByEntity).some(
-        (layerTypeUtils) => layerTypeUtils?.isStatic,
-      )
+      hasCountryInfoScope(props) &&
+      !!getSelectedStaticInfoEntityTypes(props).length &&
+      !getSelectedLiveInfoEntityTypes(props).length
     );
   },
   target: fetchEntitiesLayerInfoFx,
@@ -628,10 +722,12 @@ const entityPopupInfoFn = (
     allowDublicateSchoolIds,
     entityIds,
     entityType,
+    includeLayerId = true,
   }: {
     allowDublicateSchoolIds?: boolean;
     entityIds: number[];
     entityType: EntityType;
+    includeLayerId?: boolean;
   },
 ) => {
   const {
@@ -644,17 +740,12 @@ const entityPopupInfoFn = (
     intervalByEntity,
     intervalUnit,
     intervalUnitByEntity,
-    lastSelectedLayers,
     layersUtils,
     selectedLayerIdByEntity,
   } = props;
-  const defaultLayerId = lastSelectedLayers.layerId
-    ? lastSelectedLayers.layerId
-    : layersUtils.coverageLayerId;
-  const selectedLayerId = getEntityMapValue(
-    selectedLayerIdByEntity,
+  const selectedLayerId = getSelectedInfoLayerId(
     entityType,
-    defaultLayerId,
+    selectedLayerIdByEntity,
   );
   const isLive = isLiveLayer(
     layersUtils.layers.find((layer) => layer.id === selectedLayerId)?.type,
@@ -671,7 +762,7 @@ const entityPopupInfoFn = (
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  if (selectedLayerId) {
+  if (includeLayerId && selectedLayerId) {
     params.set(`${prefix}layer_id`, String(selectedLayerId));
   }
   params.set(
@@ -704,7 +795,10 @@ const entityPopupInfoFn = (
       entityType,
       intervalUnit,
     );
-    params.set(`${prefix}start_date`, format(entityInterval.start, 'dd-MM-yyyy'));
+    params.set(
+      `${prefix}start_date`,
+      format(entityInterval.start, 'dd-MM-yyyy'),
+    );
     params.set(`${prefix}end_date`, format(entityInterval.end, 'dd-MM-yyyy'));
     params.set(
       `${prefix}is_weekly`,
@@ -722,6 +816,35 @@ const entityPopupInfoFn = (
     url: 'api/v2/entities/layers/info/',
   };
 };
+// entity detail route selects the entity encoded in the *_ids URL param.
+const entityDetailSelectionSource = combine({
+  mapRoutes: $mapRoutes,
+  schoolParams: $getSchoolParams,
+});
+
+const entityDetailSelectionClock = merge([
+  mapEntity.visible,
+  mapEntity.router.historyUpdate,
+  $getSchoolParams,
+]);
+
+sample({
+  clock: entityDetailSelectionClock,
+  source: entityDetailSelectionSource,
+  filter: ({ mapRoutes, schoolParams }) =>
+    mapRoutes.entity && !!schoolParams.entityType,
+  fn: ({ schoolParams }) => schoolParams.entityType!,
+  target: changeSelectedEntityType,
+});
+
+sample({
+  clock: entityDetailSelectionClock,
+  source: entityDetailSelectionSource,
+  filter: ({ mapRoutes, schoolParams }) =>
+    mapRoutes.entity && !!schoolParams.entityType,
+  fn: ({ schoolParams }) => [schoolParams.entityType!],
+  target: changeActiveEntityTypes,
+});
 // school view info api
 sample({
   clock: merge([
@@ -735,12 +858,14 @@ sample({
   ]),
   source: sourceForInfo,
   fn: (props) => schoolInfoFn({ ...props, allowDublicateSchoolIds: true }),
-  filter: ({
-    mapRoutes,
-    country,
-    isCheckedLastDate,
-  }: ReturnType<typeof sourceForInfo.getState>) => {
-    return mapRoutes.schools && !!country && !!isCheckedLastDate;
+  filter: (props: ReturnType<typeof sourceForInfo.getState>) => {
+    const { mapRoutes, country, isCheckedLastDate } = props;
+    return (
+      mapRoutes.schools &&
+      !!country &&
+      !!isCheckedLastDate &&
+      hasSelectedInfoLayer(props, EntityType.SCHOOL)
+    );
   },
   target: fetchSchoolLayerInfoFx,
 });
@@ -749,32 +874,36 @@ sample({
 sample({
   clock: merge([
     mapEntity.visible,
+    mapEntity.router.search,
+    $getSchoolParams,
     countryReceived,
+    $countryId,
     $isCheckedLastDate,
     $selectedLayerIdByEntity,
+    $statusLayerIdByEntity,
     $historyIntervalByEntity,
     mapEntity.router.historyUpdate,
     $connectivityBenchMarkByEntity,
   ]),
   source: sourceForInfo,
-  fn: (props) =>
-    entityPopupInfoFn(props, {
+  fn: (props) => {
+    const entityType = props.schoolParams.entityType!;
+    return entityPopupInfoFn(props, {
       entityIds: props.schoolParams.schoolIds ?? [],
-      entityType: props.schoolParams.entityType!,
+      entityType,
       allowDublicateSchoolIds: true,
-    }),
-  filter: ({
-    mapRoutes,
-    country,
-    isCheckedLastDate,
-    schoolParams,
-  }: ReturnType<typeof sourceForInfo.getState>) => {
+      includeLayerId: hasSelectedInfoLayer(props, entityType),
+    });
+  },
+  filter: (props: ReturnType<typeof sourceForInfo.getState>) => {
+    const { mapRoutes, country, isCheckedLastDate, schoolParams } = props;
     return (
       mapRoutes.entity &&
       !!country &&
       !!isCheckedLastDate &&
       !!schoolParams.entityType &&
-      !!schoolParams.schoolIds?.length
+      !!schoolParams.schoolIds?.length &&
+      hasEntityDetailInfoLayer(props, schoolParams.entityType)
     );
   },
   target: fetchSchoolLayerInfoFx,
@@ -787,13 +916,16 @@ sample({
     info: sourceForInfo,
   }),
   filter: ({ info }, activePopup) =>
-    !info.isMobile && !!activePopup?.id && !!activePopup.entityType,
+    !info.isMobile &&
+    !!activePopup?.id &&
+    !!activePopup.entityType &&
+    hasEntityDetailInfoLayer(info, activePopup.entityType),
   fn: ({ info }, activePopup) =>
     entityPopupInfoFn(info, {
       entityIds: [Number(activePopup?.id)],
       entityType: activePopup!.entityType,
-      allowDublicateSchoolIds:
-        activePopup?.allowDublicateSchoolIds ?? false,
+      allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(info, activePopup!.entityType),
     }),
   target: fetchSchoolPopupDataFx,
 });
@@ -806,13 +938,16 @@ sample({
     activePopup: $activeSchoolPopup,
   }),
   filter: ({ info, activePopup }) =>
-    !info.isMobile && !!activePopup?.id && !!activePopup.entityType,
+    !info.isMobile &&
+    !!activePopup?.id &&
+    !!activePopup.entityType &&
+    hasEntityDetailInfoLayer(info, activePopup.entityType),
   fn: ({ info, activePopup }) =>
     entityPopupInfoFn(info, {
       entityIds: [Number(activePopup?.id)],
       entityType: activePopup!.entityType,
-      allowDublicateSchoolIds:
-        activePopup?.allowDublicateSchoolIds ?? false,
+      allowDublicateSchoolIds: activePopup?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(info, activePopup!.entityType),
     }),
   target: fetchSchoolPopupDataFx,
 });
@@ -824,16 +959,24 @@ sample({
     info: sourceForInfo,
     activePopup: $activeSchoolPopup,
   }),
-  filter: ({ info, activePopup }, entityIds) =>
-    !info.isMobile &&
-    !!entityIds?.ids?.length &&
-    !!(entityIds.entityType ?? activePopup?.entityType),
+  filter: ({ info, activePopup }, entityIds) => {
+    const entityType = entityIds?.entityType ?? activePopup?.entityType;
+    return (
+      !info.isMobile &&
+      !!entityIds?.ids?.length &&
+      !!entityType &&
+      hasEntityDetailInfoLayer(info, entityType)
+    );
+  },
   fn: ({ info, activePopup }, entityIds) =>
     entityPopupInfoFn(info, {
       entityIds: entityIds?.ids ?? [],
       entityType: (entityIds?.entityType ?? activePopup?.entityType)!,
-      allowDublicateSchoolIds:
-        entityIds?.allowDublicateSchoolIds ?? false,
+      allowDublicateSchoolIds: entityIds?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(
+        info,
+        (entityIds?.entityType ?? activePopup?.entityType)!,
+      ),
     }),
   target: fetchDublicateSchoolPopupDataFx,
 });
@@ -846,16 +989,27 @@ sample({
     activePopup: $activeSchoolPopup,
     duplicateSchoolPopup: $activeDublicateSchoolsPopup,
   }),
-  filter: ({ info, activePopup, duplicateSchoolPopup }) =>
-    !info.isMobile &&
-    !!duplicateSchoolPopup?.ids?.length &&
-    !!(duplicateSchoolPopup.entityType ?? activePopup?.entityType),
+  filter: ({ info, activePopup, duplicateSchoolPopup }) => {
+    const entityType =
+      duplicateSchoolPopup?.entityType ?? activePopup?.entityType;
+    return (
+      !info.isMobile &&
+      !!duplicateSchoolPopup?.ids?.length &&
+      !!entityType &&
+      hasEntityDetailInfoLayer(info, entityType)
+    );
+  },
   fn: ({ info, activePopup, duplicateSchoolPopup }) =>
     entityPopupInfoFn(info, {
       entityIds: duplicateSchoolPopup?.ids ?? [],
-      entityType: (duplicateSchoolPopup?.entityType ?? activePopup?.entityType)!,
+      entityType: (duplicateSchoolPopup?.entityType ??
+        activePopup?.entityType)!,
       allowDublicateSchoolIds:
         duplicateSchoolPopup?.allowDublicateSchoolIds ?? false,
+      includeLayerId: hasSelectedInfoLayer(
+        info,
+        (duplicateSchoolPopup?.entityType ?? activePopup?.entityType)!,
+      ),
     }),
   target: fetchDublicateSchoolPopupDataFx,
 });
@@ -929,24 +1083,6 @@ const loadedLayersAndCountries = combine(
     );
   },
 );
-
-sample({
-  clock: loadedLayersAndCountries,
-  source: combine({
-    layerUtils: $layerUtils,
-    loadedLayersAndCountries,
-    initialUrlParams: $initialUrlParams,
-    isAppSettled: $isAppSettled,
-  }),
-  fn: ({ layerUtils: { currentDefaultLayerIdByEntity } }) => {
-    // TODO: don't remove fix once url params are fixed with entity layer implementation;
-    // If URL has layer param and it hasn't been applied yet, use it.
-    // Otherwise use default layers.
-    return currentDefaultLayerIdByEntity;
-  },
-  filter: ({ loadedLayersAndCountries: isLoaded }) => isLoaded,
-  target: createEffect(() => { }), // temporary disabled
-});
 
 // On first country code update, preserve URL layer value if present
 sample({
@@ -1033,9 +1169,10 @@ sample({
 
 sample({
   clock: onSelectEntityMainLayer,
-  filter: (selectedLayerIdByEntity) =>
-    Object.keys(selectedLayerIdByEntity).length > 0,
-  fn: (selectedLayerIdByEntity) =>
+  source: $mapRoutes,
+  filter: (mapRoutes, selectedLayerIdByEntity) =>
+    !mapRoutes.entity && Object.keys(selectedLayerIdByEntity).length > 0,
+  fn: (_, selectedLayerIdByEntity) =>
     Object.keys(selectedLayerIdByEntity)[0] as EntityType,
   target: changeSelectedEntityType,
 });
@@ -1170,3 +1307,4 @@ sample({
 // Initialize URL params on app start
 // This applies URL params to stores (connectivity speed, coverage filters, etc.)
 initializeFromUrlParams();
+

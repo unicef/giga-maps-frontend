@@ -92,6 +92,7 @@ import {
   $historyIntervalUnitByEntity,
   $isCheckedLastDate,
   $lastAvailableDates,
+  $lastAvailableDatesByEntity,
 } from '../sidebar/history-graph.model';
 import {
   changeStaticLayerFx,
@@ -149,7 +150,7 @@ sample({
   clock: merge([onLoadPage, map.visible]),
   source: $mapRoutes,
   target: createEffect((routes: ReturnType<typeof $mapRoutes.getState>) => {
-    if (routes.map || routes.country || routes.schools) {
+    if (routes.map || routes.country || routes.schools || routes.entity) {
       void fetchLayerListFx();
       void fetchCountriesFx();
     }
@@ -308,6 +309,7 @@ export const gigaLayerSource = combine({
   connectivityBenchMark: $connectivityBenchMark,
   connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   lastAvailableDates: $lastAvailableDates,
+  lastAvailableDatesByEntity: $lastAvailableDatesByEntity,
   schoolLegends: $staticLegendsSelected,
   schoolLegendsByEntity: $staticLegendsSelectedByEntity,
   coverageFilter: $coverageFilter,
@@ -354,7 +356,6 @@ const $mapRouteVisible = guard(mapOverview.visible, { filter: Boolean });
 
 sample({
   clock: merge([
-    $zoomState,
     $mapRouteVisible,
     $countrySearchString,
     onReloadedMap,
@@ -362,11 +363,23 @@ sample({
     countryReceived,
     $admin1Id,
     $schoolAdminId,
+    $activeEntityTypes,
+  ]),
+  source: gigaLayerSource,
+  fn: combineGigaFn({ refresh: true }),
+  filter: ({ map }) => {
+    return !!map;
+  },
+  target: changeStaticLayerFx,
+});
+
+sample({
+  clock: merge([
+    $zoomState,
     $schoolStatusSelectedLayer,
     $statusLayerIdByEntity,
-    $schoolStatsMap,
+    $staticLegendsSelectedByEntity,
     timePlayerActive,
-    $activeEntityTypes,
   ]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
@@ -395,6 +408,9 @@ sample({
     $schoolStatsMap,
     $countrySearchString,
     $connectivityBenchMarkByEntity,
+    $historyIntervalByEntity,
+    $lastAvailableDates,
+    $lastAvailableDatesByEntity,
     timePlayerActive,
     $zoomState,
     $activeEntityTypes,
@@ -462,7 +478,7 @@ export const mapMarkerSource = combine({
 });
 
 sample({
-  clock: merge([$schoolStatsMap]),
+  clock: merge([$schoolStatsMap, $map]),
   source: mapMarkerSource,
   target: addSchoolMarkers,
 });

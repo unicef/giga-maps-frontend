@@ -716,7 +716,7 @@ export const $activeLayerByCountryCodeByEntity = combine(
           countryDefaultLayerList: {},
         });
         result[entityType] = {
-          ...(result[entityType] ?? {}),
+          ...result[entityType],
           [layer.id]:
             activeLayers.list[layer.id]?.activeCountries?.includes(
               countryCode.toLowerCase(),
@@ -1560,6 +1560,7 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
   id: school?.id,
   externalId: school?.external_id,
+  isVerifiedSchool: school?.is_verified_school,
   schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
   schoolAtSameLocation: {
     count: school.schools_at_same_location?.count ?? 0,

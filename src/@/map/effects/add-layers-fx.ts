@@ -68,12 +68,29 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   const effectiveSelectedLayerId = mapRoute.map
     ? layerUtils.globalLayerId
     : (selectedLayerId ?? firstEntitySelectedLayerId);
+  const entityTypesWithSelectedLayer = getEntityTypesWithSelectedLayer({
+    entityTypes,
+    globalLayerId: layerUtils.globalLayerId,
+    mapRoute,
+    selectedLayerId: effectiveSelectedLayerId,
+    selectedLayerIdByEntity,
+  });
+
+  if (!entityTypesWithSelectedLayer.length) {
+    deleteSourceAndLayers({ map, sourceId: DEFAULT_SOURCE });
+    changeGigaSelection({
+      layerId: null,
+      layerIdByEntity: selectedLayerIdByEntity,
+    });
+    return;
+  }
   if (isLastSelectionChange || !checkSourceAvailable(map, DEFAULT_SOURCE)) {
     // create source data country and global view;
-    if (mapRoute.map || mapRoute.country || mapRoute.schools) {
+    if (mapRoute.map || mapRoute.country || mapRoute.schools || mapRoute.entity) {
       const next = createSourceForMapAndCountry({
         ...props,
         selectedLayerId: effectiveSelectedLayerId,
+        activeEntityTypes: entityTypesWithSelectedLayer,
       });
       if (!next) return;
     }
@@ -82,6 +99,7 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   createAndUpdateMapLayer({
     ...props,
     selectedLayerId: effectiveSelectedLayerId,
+    activeEntityTypes: entityTypesWithSelectedLayer,
     schoolLayerId,
   });
   // update giga selection
@@ -104,6 +122,29 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
 
 const callDelay = delayMethodCall();
 let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
+
+const getEntityTypesWithSelectedLayer = ({
+  entityTypes,
+  globalLayerId,
+  mapRoute,
+  selectedLayerId,
+  selectedLayerIdByEntity,
+}: {
+  entityTypes: EntityType[];
+  globalLayerId: number | null;
+  mapRoute: ChangeLayerOptions['mapRoute'];
+  selectedLayerId: number | null;
+  selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>;
+}) => {
+  if (mapRoute.map) {
+    return globalLayerId ? entityTypes : [];
+  }
+
+  const fallbackLayerId = entityTypes.length === 1 ? selectedLayerId : null;
+  return entityTypes.filter((entityType) =>
+    Boolean(selectedLayerIdByEntity[entityType] ?? fallbackLayerId),
+  );
+};
 
 export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   const {
@@ -132,19 +173,42 @@ export const changeLayersFx = createEffect((props: ChangeLayerOptions) => {
   timerId = callDelay.trigger(timeout, createAndUpdateLayer, props);
 });
 
+const hasSelectedEntityStatusLayer = ({
+  activeEntityTypes,
+  selectedLayerIds,
+}: Pick<ChangeLayerOptions, 'activeEntityTypes' | 'selectedLayerIds'>) => {
+  const { schoolId, schoolIdByEntity = {} } = selectedLayerIds ?? {};
+  const entityTypes = activeEntityTypes?.length
+    ? activeEntityTypes
+    : (Object.keys(schoolIdByEntity) as EntityType[]);
+
+  return entityTypes.length
+    ? entityTypes.some((entityType) => Boolean(schoolIdByEntity[entityType])) ||
+        Boolean(schoolId)
+    : Boolean(schoolId);
+};
 export const changeStaticLayerFx = createEffect((props: ChangeLayerOptions) => {
-  const { map, mapRoute, zoomState } = props;
+  const { map, mapRoute, refresh, zoomState } = props;
   if (!map) return;
   if (mapRoute.map || zoomState !== 'end') {
     deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE });
     return;
   }
-  const next = createSourceForMapAndCountry({
-    ...props,
-    selectedLayerId: null,
-    isConnectivityStatus: true,
-  });
-  if (!next) return;
+  if (!hasSelectedEntityStatusLayer(props)) {
+    deleteSourceAndLayers({ map, sourceId: CONNECTIVITY_STATUS_SOURCE });
+    return;
+  }
+
+  const shouldReloadSource =
+    refresh || !checkSourceAvailable(map, CONNECTIVITY_STATUS_SOURCE);
+  if (shouldReloadSource) {
+    const next = createSourceForMapAndCountry({
+      ...props,
+      selectedLayerId: null,
+      isConnectivityStatus: true,
+    });
+    if (!next) return;
+  }
   createAndUpdateConnectiivtyStatusLayer(props);
 });
 
@@ -222,7 +286,7 @@ export const updateConnectivityFilter = createEffect(
       );
       const mapLayer = map.getLayer(layerId);
       if (!mapLayer) continue;
-      const isDynamicLayer = effectiveSelectedLayerId !== globalLayerId;
+      const isDynamicLayer = !isGlobalMap;
       const filter = filterConnectivityList(
         connectivitySpeedFilterByEntity?.[entityType] ??
           connectivitySpeedFilter,
@@ -281,3 +345,4 @@ mapRouter.visible.watch((visible) => {
     cancelAnimation();
   }
 });
+

@@ -23,6 +23,17 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     visible: true,
     markerType: 'circle',
     symbol: '●',
+    mapAnimation: {
+      zoomRadius: [
+        { zoom: 0, radius: 0.2 },
+        { zoom: 3, radius: 1 },
+        { zoom: 8, radius: 4 },
+        { zoom: 14, radius: 24 },
+      ],
+      growSpeed: 1,
+      glowMinScale: 1,
+      glowMaxScale: 2.5,
+    },
     sidebar: {
       badge: 'GigaMaps',
       estimatedTotalInMillions: 6,
@@ -57,6 +68,17 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     visible: true,
     markerType: 'symbol',
     symbol: '■',
+    mapAnimation: {
+      zoomRadius: [
+        { zoom: 0, radius: 0.2 },
+        { zoom: 3, radius: 2 },
+        { zoom: 8, radius: 6 },
+        { zoom: 14, radius: 40 },
+      ],
+      growSpeed: 0.5,
+      glowMinScale: 1,
+      glowMaxScale: 2.5,
+    },
     sidebar: {
       estimatedTotalInMillions: 3,
     },

@@ -18,7 +18,7 @@ import {
   PopoverTrigger,
 } from '~/components/ui/popover';
 import { Skeleton } from '~/components/ui/skeleton';
-import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
+import { mapCountry, mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
 import { cn } from '~/lib/cn';
 import { Link, useRoute } from '~/lib/router';
 
@@ -58,7 +58,7 @@ export const GoToCountry = ({
   const countryData = useStore($country);
   const isLoading = useStore($allLoadings).country;
   const { name: countryName = '...', code = ' ' } = countryData ?? {};
-  const isSchoolView = useRoute(mapSchools);
+  const isDetailView = useRoute(mapSchools) || useRoute(mapEntity);
 
   return (
     <>
@@ -81,7 +81,7 @@ export const GoToCountry = ({
               <Link
                 className={breadcrumbEllipsisClassName}
                 params={{ code: code.toLocaleLowerCase() }}
-                query={!isSchoolView ? getCurrentCountrySearchPath(code) : ''}
+                query={!isDetailView ? getCurrentCountrySearchPath(code) : ''}
                 style={{ '--breadcrumb-max-width': '5rem' } as CSSProperties}
                 title={countryName}
                 to={mapCountry}
@@ -116,7 +116,7 @@ export const GoToSchool = () => {
   const country = useStore($country);
   const isSchoolGreaterThanOne = schools?.length > 1;
   const schoolName = isSchoolGreaterThanOne
-    ? 'Custom School'
+    ? `${schools.length} selected`
     : schools[0]?.name || '';
   const school = schools[0];
   const admin1 = school?.admin1_name ?? 'Unknown';

@@ -27,6 +27,9 @@ import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
+const getLightGlowColor = (color: string) =>
+  `color-mix(in srgb, ${color} 42%, white)`;
+
 const LiveLayerLegend = ({
   entityType,
   metricSubtitle,
@@ -40,7 +43,7 @@ const LiveLayerLegend = ({
 }) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
-  const { map, schools } = useStore($mapRoutes);
+  const { entity, map, schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const {
     currentLayerLegends,
@@ -69,14 +72,15 @@ const LiveLayerLegend = ({
     entityType
   ];
   const schoolRealTimeStats = useStore($schoolStats);
+  const isEntityDetailView = schools || entity;
   const realtimeStats =
     realtimeStatsFromStore?.real_time_connected_entities ??
     ({} as DefaultLegendValuesType);
   const benchmarkValue = (
-    !schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
+    !isEntityDetailView ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
   )?.benchmark_metadata?.rounded_benchmark_value;
   const unitLabel = (
-    !schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
+    !isEntityDetailView ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
   )?.benchmark_metadata?.display_unit;
   const nationalBenchMarkDescription =
     countryBenchmarkDescriptions?.[metricLayerData?.id ?? 0] ?? '';
@@ -103,7 +107,7 @@ const LiveLayerLegend = ({
       <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
         <div className="flex! items-center! gap-1.5!">
           <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
-            {metricTitle}
+            {metricSubtitle}
           </div>
           {metricLayerData?.description ? (
             <button
@@ -116,7 +120,7 @@ const LiveLayerLegend = ({
           ) : null}
         </div>
         <div className="text-xs! leading-4.5! text-muted-foreground!">
-          {metricSubtitle}
+          {metricTitle}
         </div>
       </div>
       {legends.values.map(
@@ -141,6 +145,10 @@ const LiveLayerLegend = ({
                 unknown: t('unknown'),
               }[key] ?? label)
             : label;
+          const legendColor =
+            legends.colors[key] ?? paintData[key] ?? paintData.unknown;
+          const liveMetricFill =
+            paintData[ConnectivityStatusDistribution.connected];
 
           return (
             <button
@@ -152,6 +160,7 @@ const LiveLayerLegend = ({
               <div className="flex! min-w-0! items-center!">
                 {shouldShowControls ? (
                   <input
+                    aria-label={label}
                     checked={Boolean(connectivitySpeedFilter[key])}
                     className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
                     onChange={() => handleRealtimeLayerChange(key)}
@@ -160,13 +169,9 @@ const LiveLayerLegend = ({
                 ) : null}
                 <div className="flex! min-w-0! items-center! gap-2!">
                   <EntityLegendIndicator
-                    color={
-                      paintData[
-                        ConnectivityStatusDistribution.connected as string
-                      ]
-                    }
+                    color={liveMetricFill}
                     entityType={entityType}
-                    glowColor={legends.colors[key]}
+                    glowColor={getLightGlowColor(legendColor)}
                   />
                   <span className="text-sm! font-normal! leading-5! text-foreground!">
                     {displayLabel}

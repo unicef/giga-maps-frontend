@@ -76,11 +76,24 @@ export const SchoolName = styled.div`
     font-weight: 400;
     color: ${props => props.theme.filterText};
     line-height: 1.75rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-width: 0;
+    flex: 1;
     overflow: hidden;
-    text-overflow: ellipsis;
+    span:first-child {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
 `;
 
 export const SchoolItemCount = styled.div`

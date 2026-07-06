@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
-import { MouseEvent } from 'react';
+import { type CSSProperties, type MouseEvent } from 'react';
 
 import EntityTypeSelector from '~/@/entities/ui/entity-selector';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
@@ -37,7 +37,6 @@ import CommonComponentGigaLayer from '../global-and-country-view-components/comm
 import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
-import { LayerDetailContainer } from '../search-result/styles/search-result-style';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation(),
@@ -53,6 +52,7 @@ export default function Sidebar() {
   const mapRoute = useRoute(mapOverview);
   const isSidebarCollapsed = useStore($isSidebarCollapsed);
   const isTimeplayer = useStore($isTimeplayer);
+  const detailHeightOffset = isMobile && !sidebarHeight ? '0rem' : '6rem';
   return (
     <div
       className={cn(
@@ -111,12 +111,13 @@ export default function Sidebar() {
           {mapRoute ? (
             <LandingPage />
           ) : (
-            <LayerDetailContainer
-              $height={isMobile ? '0rem' : '6rem'}
+            <div
+              className="h-full! min-h-0! flex-1! overflow-hidden! bg-background! max-md:h-[calc(100%-var(--detail-height-offset))]!"
+              style={{ '--detail-height-offset': detailHeightOffset } as CSSProperties}
             >
               {countryRoute && <GlobalAndCountryView />}
               {(schoolRoute || entityRoute) && <SchoolView />}
-            </LayerDetailContainer>
+            </div>
           )}
           {!mapRoute && !countryRoute && <CommonComponentGigaLayer />}
           <button

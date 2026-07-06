@@ -6,7 +6,7 @@ import {
   CountryBasic
 } from '~/api/types';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapOverview, mapSchools } from '~/core/routes';
+import { mapCountry, mapEntity, mapOverview, mapSchools } from '~/core/routes';
 import { setPayload } from '~/lib/effector-kit';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
@@ -120,26 +120,45 @@ const $mapContext = combine({
   isMobile: $isMobile,
 });
 
-// school view
+// detail and country view
 sample({
-  clock: merge([$map, mapSchools.router.historyUpdate, mapCountry.params]),
+  clock: merge([
+    $map,
+    mapSchools.router.historyUpdate,
+    mapEntity.visible,
+    mapEntity.router.historyUpdate,
+    mapEntity.router.search,
+    mapCountry.params,
+  ]),
   source: combine({
     schoolParams: mapSchools.router.search,
+    entityParams: mapEntity.router.search,
     countryParams: mapCountry.params,
     isSchoolView: mapSchools.visible,
+    isEntityView: mapEntity.visible,
     isCountryView: mapCountry.visible,
   }),
-  fn: ({ schoolParams, isCountryView, isSchoolView, countryParams }) => {
+  fn: ({
+    countryParams,
+    entityParams,
+    isCountryView,
+    isEntityView,
+    isSchoolView,
+    schoolParams,
+  }) => {
     let countryCode = '';
     if (isCountryView) {
-      countryCode = countryParams?.code ?? ''
+      countryCode = countryParams?.code ?? '';
+    } else if (isEntityView) {
+      const params = new URLSearchParams(entityParams);
+      countryCode = params.get('country')?.toLowerCase() ?? '';
     } else if (isSchoolView) {
       const params = new URLSearchParams(schoolParams);
       countryCode = params.get('country')?.toLowerCase() ?? '';
     }
     return countryCode;
   },
-  target: changeCountryCode
+  target: changeCountryCode,
 });
 
 // Routing
@@ -258,6 +277,6 @@ sample({
 onLoadPage();
 $countryCode.reset(mapOverview.visible);
 $country.reset($countryCode, fetchCountryFx.fail, mapOverview.visible);
-$schoolFocusLatLng.reset(mapSchools.router.historyUpdated)
+$schoolFocusLatLng.reset(mapSchools.router.historyUpdated, mapEntity.router.historyUpdated)
 $zoomedCountryCode.reset(onRecenterView);
 

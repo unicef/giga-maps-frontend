@@ -1,4 +1,4 @@
-import { VectorSource } from 'mapbox-gl';
+import { Map, VectorSource } from 'mapbox-gl';
 
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
 import { EntityType } from '~/@/entities/types/base-entity.type';
@@ -32,6 +32,22 @@ import {
 let animateCircleHandlers: Record<string, { requestId: number }> = {};
 
 const ignoreCountriesForBounds = ['fj'];
+
+const moveEntityStatusLayersToTop = (map: Map, entityTypes: EntityType[]) => {
+  if (
+    typeof map.getLayer !== 'function' ||
+    typeof map.moveLayer !== 'function'
+  ) {
+    return;
+  }
+
+  entityTypes.forEach((entityType) => {
+    const statusLayerId = getEntityStatusLayerId(entityType);
+    if (map.getLayer(statusLayerId)) {
+      map.moveLayer(statusLayerId);
+    }
+  });
+};
 
 export function cancelAnimation() {
   Object.values(animateCircleHandlers).forEach((handler) => {
@@ -96,7 +112,6 @@ export const createSourceForMapAndCountry = ({
   layerUtils,
   mapRoute,
   country,
-  lastSelectedLayer,
   admin1Data,
   activeEntityTypes,
   entityRegistry,
@@ -116,23 +131,20 @@ export const createSourceForMapAndCountry = ({
   // delete existing source;
   deleteSourceAndLayers({ map, sourceId });
   // create new source
-  const { coverageLayerId } = layerUtils;
-  const fallbackLayerId = mapRoute.map
-    ? layerUtils.globalLayerId
-    : (lastSelectedLayer.layerId ?? coverageLayerId);
+  const fallbackLayerId = mapRoute.map ? layerUtils.globalLayerId : layerId;
   if (!layerId) {
     layerId = fallbackLayerId;
   }
-  let admin1Id = mapRoute.schools ? schoolAdminId : admin1Data?.id;
-  if (mapRoute.schools) {
+  const isEntityDetailRoute = mapRoute.schools || mapRoute.entity;
+  let admin1Id = isEntityDetailRoute ? schoolAdminId : admin1Data?.id;
+  if (isEntityDetailRoute) {
     if (admin1Id) {
       admin1Data =
         country?.admin1_metadata?.find((admin) => admin.id === admin1Id) ??
         null;
-    } else if (admin1Id === 0) {
-      admin1Id = undefined;
     } else {
-      return false;
+      admin1Id = undefined;
+      admin1Data = null;
     }
   }
   let url = null;
@@ -166,8 +178,9 @@ export const createSourceForMapAndCountry = ({
       countrySearch,
     });
   }
+  if (!url) return false;
   const options = {} as VectorSource;
-  if (!!country) {
+  if (country) {
     const removeBounds = ignoreCountriesForBounds.includes(
       country.code.toLocaleLowerCase(),
     );
@@ -194,7 +207,6 @@ export const createAndUpdateMapLayer = ({
   coverageFilter,
   coverageFilterByEntity,
   layerUtils,
-  selectedLayerId,
   selectedLayerIds,
   paintData,
   lastSelectedLayer,
@@ -225,7 +237,7 @@ export const createAndUpdateMapLayer = ({
     Boolean(
       mapRoute.map
         ? globalLayerId
-        : (layerUtils.selectedLayerIdByEntity?.[entityType] ?? selectedLayerId),
+        : layerUtils.selectedLayerIdByEntity?.[entityType],
     ),
   );
 
@@ -234,9 +246,9 @@ export const createAndUpdateMapLayer = ({
     for (const entityType of entityTypes) {
       const entityLayerId = mapRoute.map
         ? globalLayerId
-        : (layerUtils.selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
+        : layerUtils.selectedLayerIdByEntity?.[entityType];
       if (!entityLayerId) continue;
-      const isDynamicLayer = !(entityLayerId === globalLayerId);
+      const isDynamicLayer = !mapRoute.map;
       const sourceLayer = getSourceLayerName(entityType);
       const layerIdStr = getEntitySelectedLayerId(entityType, entityLayerId);
       const entityConnectivityFilter =
@@ -258,6 +270,8 @@ export const createAndUpdateMapLayer = ({
         animateCircleHandlers[entityType] = animateCircles({
           map,
           id: layerIdStr,
+          entityConfig: config,
+          fallbackMarkerType: markerType,
         });
       }
 
@@ -270,6 +284,7 @@ export const createAndUpdateMapLayer = ({
           paintData,
           mapRoute,
           options,
+          entityConfig: config,
         });
       } else {
         createSelectedSymbolLayer(map, {
@@ -281,6 +296,7 @@ export const createAndUpdateMapLayer = ({
           paintData,
           mapRoute,
           options,
+          entityConfig: config,
         });
       }
     }
@@ -294,6 +310,7 @@ export const createAndUpdateMapLayer = ({
     }
   }
 
+  moveEntityStatusLayersToTop(map, entityTypes);
   if (!mapRoute.map) return;
 
   // --- Status layer (connectivity_status dots) per entity type in global view ---
@@ -321,6 +338,7 @@ export const createAndUpdateMapLayer = ({
             'source-layer': sourceLayer,
           },
           mapRoute,
+          entityConfig: config,
         });
       } else {
         // Symbol marker (health, etc.) — text-based symbol layer
@@ -334,9 +352,11 @@ export const createAndUpdateMapLayer = ({
             'source-layer': sourceLayer,
           },
           mapRoute,
+          entityConfig: config,
         });
       }
     }
+    moveEntityStatusLayersToTop(map, entityTypes);
   }
 };
 
@@ -389,6 +409,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           isMobile,
           options,
           mapRoute,
+          entityConfig: config,
         });
       } else {
         createEntitySymbolLayer(map, {
@@ -399,9 +420,11 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           isMobile,
           options,
           mapRoute,
+          entityConfig: config,
         });
       }
     }
+    moveEntityStatusLayersToTop(map, entityTypes);
   } else {
     for (const entityType of entityTypes) {
       hideLayer(map, getEntityStatusLayerId(entityType));
@@ -415,3 +438,4 @@ export const setAnimationHandler = (
 ) => {
   animateCircleHandlers[entityType] = handler;
 };
+

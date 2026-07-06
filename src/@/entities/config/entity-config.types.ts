@@ -49,6 +49,22 @@ export interface EntityStatsConfig {
   realtimeGroupKey: EntityRealtimeGroupKey;
 }
 
+export interface EntityMapZoomRadius {
+  zoom: number;
+  radius: number;
+}
+
+export interface EntityMapAnimationConfig {
+  /** Base marker radius/text-size by zoom before glow scaling is applied */
+  zoomRadius: EntityMapZoomRadius[];
+  /** Pulse speed multiplier. 1 means the default animation duration. */
+  growSpeed: number;
+  /** Minimum glow scale relative to the base zoom radius */
+  glowMinScale: number;
+  /** Maximum glow scale relative to the base zoom radius */
+  glowMaxScale: number;
+}
+
 /**
  * Entity configuration defining visual, API, and field settings.
  * This is the core of the configuration-driven entity system.
@@ -86,6 +102,8 @@ export interface EntityConfig {
     circleMaxZoom: number;
     symbolMinZoom: number;
   };
+  /** Map dot animation and zoom sizing configuration */
+  mapAnimation?: EntityMapAnimationConfig;
 
   /**
    * Whether this entity uses the legacy API system.
