@@ -35,7 +35,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       glowMaxScale: 2.5,
     },
     sidebar: {
-      badge: 'GigaMaps',
       estimatedTotalInMillions: 6,
     },
     colors: {

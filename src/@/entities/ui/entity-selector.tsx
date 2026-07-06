@@ -91,7 +91,7 @@ export default function EntityTypeSelector() {
         disabled={isEntityViewLocked}
         onClick={handleSelectAllEntityTypes}
       >
-        {t('all-entities', 'All entities')}
+        {t('all-facilities')}
       </Button>
 
       {entityTypes.map(([type, config]) => {

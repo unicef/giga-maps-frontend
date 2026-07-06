@@ -282,7 +282,7 @@
   "locations-mapped": "Locations mapped",
   "reporting-internet-quality": "Reporting Internet Quality",
   "health-centers": "Health centers",
-  "all-entities": "All entities",
+  "all-facilities": "All facilities",
   "with-mapped-connectivity-status-tooltip": "{{entity}} with mapped connectivity status.",
   "locations-mapped-from-datasets-tooltip": "{{entity}} locations mapped from currently available datasets.",
   "reporting-internet-quality-tooltip": "{{entity}} reporting internet quality."

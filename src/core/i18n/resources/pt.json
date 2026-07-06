@@ -283,7 +283,7 @@
   "locations-mapped": "Localizações mapeadas",
   "reporting-internet-quality": "Relatório de qualidade da Internet",
   "health-centers": "Centros de saúde",
-  "all-entities": "Todas as entidades",
+  "all-facilities": "Todas as instalações",
   "with-mapped-connectivity-status-tooltip": "{{entity}} com status de conectividade mapeado.",
   "locations-mapped-from-datasets-tooltip": "Localizações de {{entity}} mapeadas a partir de conjuntos de dados disponíveis no momento.",
   "reporting-internet-quality-tooltip": "{{entity}} relatando a qualidade da Internet."

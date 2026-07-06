@@ -53,15 +53,6 @@ const EntitySummaryCard = ({
     >
       <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!">
         <div className="flex! min-w-0! items-center! gap-2.5!">
-          {card.badge ? (
-            <span className="inline-flex! shrink-0! items-center! justify-center! rounded-full! bg-[#0f62fe]! px-2! py-1! text-[10px]! font-semibold! leading-none! text-[#f4f4f4]">
-              <img
-                alt="GigaMaps"
-                className="block h-auto w-[48px]!"
-                src={GigaMapsLogo}
-              />
-            </span>
-          ) : null}
           <div className="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground">
             {card.title}
           </div>
