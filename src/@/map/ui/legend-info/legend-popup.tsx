@@ -109,12 +109,16 @@ const LegendPopup = ({
   const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils;
   const activeEntityLayerData =
     selectedLayerDataByEntity[activeTab] ?? selectedLayerData;
+  const showLiveLegend = isGlobalView || isLive;
+  const showStaticLegend = !isGlobalView && isStatic;
   const activeEntityLayerLegends =
-    currentLayerLegendsByEntity[activeTab] ?? currentLayerLegends;
+    showLiveLegend && isStatic
+      ? currentLayerLegends
+      : (currentLayerLegendsByEntity[activeTab] ?? currentLayerLegends);
   const metricLayerData = isGlobalView
     ? globalLayerData
     : activeEntityLayerData;
-  const legendMetricSubtitle = isStatic
+  const legendMetricSubtitle = showStaticLegend
     ? (metricLayerData?.name ?? t('coverage-data'))
     : (metricLayerData?.name ?? t('average-download-speed'));
   const legendStatusTitle = t('connectivity-status');
@@ -127,24 +131,24 @@ const LegendPopup = ({
     }),
   );
 
-  const activeLayerSummaryItems: LegendSummaryItem[] = activeEntityLayerLegends
-    .values.length
-    ? activeEntityLayerLegends.values.map(({ key, label }) => ({
-        color:
-          activeEntityLayerLegends.colors[key] ??
-          paintData[key] ??
-          paintData.unknown,
-        key,
-        label,
-      }))
-    : [
-        { color: paintData.good, key: 'good', label: t('high') },
-        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-        { color: paintData.bad, key: 'bad', label: t('low') },
-        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-      ];
+  const activeLayerSummaryItems: LegendSummaryItem[] =
+    !isGlobalView && activeEntityLayerLegends.values.length
+      ? activeEntityLayerLegends.values.map(({ key, label }) => ({
+          color:
+            activeEntityLayerLegends.colors[key] ??
+            paintData[key] ??
+            paintData.unknown,
+          key,
+          label,
+        }))
+      : [
+          { color: paintData.good, key: 'good', label: t('high') },
+          { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+          { color: paintData.bad, key: 'bad', label: t('low') },
+          { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+        ];
 
-  const shouldShowMetricSummary = isGlobalView || isLive || isStatic;
+  const shouldShowMetricSummary = showLiveLegend || showStaticLegend;
   const shouldShowGlobalSchoolStatus = isGlobalView;
   const shouldShowStatusSummary =
     isSchoolStatus || shouldShowGlobalSchoolStatus;
@@ -164,13 +168,13 @@ const LegendPopup = ({
         <div
           className={cn(
             'flex! h-1! w-full!',
-            isLive || isGlobalView
+            showLiveLegend
               ? 'gap-2! overflow-visible! max-md:gap-1!'
               : 'gap-0! overflow-hidden!',
           )}
         >
           {activeLayerSummaryItems.map(({ color, key, label }) =>
-            isLive || isGlobalView ? (
+            showLiveLegend ? (
               <span
                 aria-hidden="true"
                 className="relative! block! min-w-0! flex-1! overflow-visible!"
@@ -353,7 +357,7 @@ const LegendPopup = ({
             statusTitle={legendStatusTitle}
           />
         ) : null}
-        {isLive || isGlobalView ? (
+        {showLiveLegend ? (
           <LiveLayerLegend
             entityType={activeTab}
             metricSubtitle={legendMetricSubtitle}
@@ -361,7 +365,7 @@ const LegendPopup = ({
             shouldShowControls={shouldShowControls}
           />
         ) : null}
-        {isStatic ? (
+        {showStaticLegend ? (
           <StaticLayerLegend
             entityType={activeTab}
             metricSubtitle={legendMetricSubtitle}
