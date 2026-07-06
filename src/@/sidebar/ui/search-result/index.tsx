@@ -21,7 +21,7 @@ export default function SearchResult() {
       {isSearchFocus && hasSearchInput &&
         <SearchResultWrapper className='search-results-container'>
           <SearchResultList />
-          <FooterTourContact message={t("not-the-results-you-expected")} />
+          <FooterTourContact message={t("search-input-not-the-results-you-expected")} />
         </SearchResultWrapper>
       }
     </>

@@ -4,7 +4,7 @@ import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 
 import { $entityRegistryFiltered, selectAllEntityTypes } from '~/@/entities/models/entity.model';
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterTourContact from '~/@/sidebar/ui/common-components/footer-tour-contact.view';
 import { SearchCountryList } from '~/@/sidebar/ui/search-result/search-country-list';
 import SearchSchoolPanel from '~/@/sidebar/ui/search-result/search-country-list/search-school-panel-view';
@@ -53,10 +53,11 @@ const TopSearchBar = () => {
     if (!showSuggestions) return [];
     const query = mentionQuery.toLowerCase();
     return entityTagEntries.filter((config) => {
+      //debugger;
       if (selectedTags.includes(config.type)) return false;
       const slug = config.slug.toLowerCase();
       const name = config.displayName.toLowerCase();
-      const translated = t(config.slug, { defaultValue: config.displayName }).toLowerCase();
+      const translated = t(config.slug, { defaultValue: config.displayName, count: config.type === EntityType.SCHOOL ? 2 : 1 }).toLowerCase();
       return !query || slug.includes(query) || name.includes(query) || translated.includes(query);
     });
   }, [showSuggestions, mentionQuery, entityTagEntries, selectedTags, t]);
@@ -121,6 +122,7 @@ const TopSearchBar = () => {
   const dropdownButton = (
     <button
       aria-expanded={showCountries}
+      title={t('country-list')}
       aria-label={t('country-list')}
       className={cn(
         'main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!',
@@ -252,7 +254,7 @@ const TopSearchBar = () => {
                       type="button"
                     >
                       <span style={{ color: config.colors.primary }}>{config.symbol}</span>
-                      <span>@{t(config.slug, { defaultValue: config.displayName })}</span>
+                      <span>@{t(config.slug, { defaultValue: config.displayName, count: (config.type === EntityType.SCHOOL ? 2 : 1) })}</span>
                     </button>
                   ))}
                 </div>
