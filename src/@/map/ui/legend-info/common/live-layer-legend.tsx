@@ -27,6 +27,9 @@ import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
+const getLightGlowColor = (color: string) =>
+  `color-mix(in srgb, ${color} 42%, white)`;
+
 const LiveLayerLegend = ({
   entityType,
   metricSubtitle,
@@ -104,7 +107,7 @@ const LiveLayerLegend = ({
       <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
         <div className="flex! items-center! gap-1.5!">
           <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
-            {metricTitle}
+            {metricSubtitle}
           </div>
           {metricLayerData?.description ? (
             <button
@@ -117,7 +120,7 @@ const LiveLayerLegend = ({
           ) : null}
         </div>
         <div className="text-xs! leading-4.5! text-muted-foreground!">
-          {metricSubtitle}
+          {metricTitle}
         </div>
       </div>
       {legends.values.map(
@@ -142,6 +145,10 @@ const LiveLayerLegend = ({
                 unknown: t('unknown'),
               }[key] ?? label)
             : label;
+          const legendColor =
+            legends.colors[key] ?? paintData[key] ?? paintData.unknown;
+          const liveMetricFill =
+            paintData[ConnectivityStatusDistribution.connected];
 
           return (
             <button
@@ -162,13 +169,9 @@ const LiveLayerLegend = ({
                 ) : null}
                 <div className="flex! min-w-0! items-center! gap-2!">
                   <EntityLegendIndicator
-                    color={
-                      paintData[
-                        ConnectivityStatusDistribution.connected as string
-                      ]
-                    }
+                    color={liveMetricFill}
                     entityType={entityType}
-                    glowColor={legends.colors[key]}
+                    glowColor={getLightGlowColor(legendColor)}
                   />
                   <span className="text-sm! font-normal! leading-5! text-foreground!">
                     {displayLabel}

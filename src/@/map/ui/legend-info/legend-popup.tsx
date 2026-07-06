@@ -39,6 +39,9 @@ type LegendSummaryItem = {
   label: string;
 };
 
+const getLightGlowColor = (color: string) =>
+  `color-mix(in srgb, ${color} 42%, white)`;
+
 const getDefaultLegendTab = (entityTypes: EntityType[]) =>
   entityTypes[0] ?? 'school';
 const getDefaultCollapsedState = (isMobile: boolean) => isMobile;
@@ -127,60 +130,69 @@ const LegendPopup = ({
   const activeLayerSummaryItems: LegendSummaryItem[] = activeEntityLayerLegends
     .values.length
     ? activeEntityLayerLegends.values.map(({ key, label }) => ({
-      color:
-        activeEntityLayerLegends.colors[key] ??
-        paintData[key] ??
-        paintData.unknown,
-      key,
-      label,
-    }))
+        color:
+          activeEntityLayerLegends.colors[key] ??
+          paintData[key] ??
+          paintData.unknown,
+        key,
+        label,
+      }))
     : [
-      { color: paintData.good, key: 'good', label: t('high') },
-      { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-      { color: paintData.bad, key: 'bad', label: t('low') },
-      { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-    ];
+        { color: paintData.good, key: 'good', label: t('high') },
+        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+        { color: paintData.bad, key: 'bad', label: t('low') },
+        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+      ];
 
   const shouldShowMetricSummary = isGlobalView || isLive || isStatic;
   const shouldShowGlobalSchoolStatus = isGlobalView;
   const shouldShowStatusSummary =
     isSchoolStatus || shouldShowGlobalSchoolStatus;
-  const liveMetricFill =
-    paintData[ConnectivityStatusDistribution.connected as string];
+  const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
   const renderMetricSummary = () => (
     <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
       <div className="flex! min-w-0! w-full! flex-col! gap-1!">
         <div className="flex! items-center! justify-between! gap-3!">
           <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
-            {legendMetricTitle}
-          </span>
-          <span className="text-xs! leading-4.5! text-muted-foreground!">
             {legendMetricSubtitle}
           </span>
+          <span className="text-xs! leading-4.5! text-muted-foreground!">
+            {legendMetricTitle}
+          </span>
         </div>
-        <div className="flex! h-1! w-full! gap-0! overflow-hidden! rounded-full!">
+        <div
+          className={cn(
+            'flex! h-1! w-full!',
+            isLive || isGlobalView
+              ? 'gap-2! overflow-visible! max-md:gap-1!'
+              : 'gap-0! overflow-hidden!',
+          )}
+        >
           {activeLayerSummaryItems.map(({ color, key, label }) =>
             isLive || isGlobalView ? (
               <span
                 aria-hidden="true"
-                className="relative! block! min-w-0! flex-1! overflow-hidden! rounded-full! bg-transparent! mr-1.5! last:mr-0!"
+                className="relative! block! min-w-0! flex-1! overflow-visible!"
                 key={key}
+                style={{
+                  boxShadow:
+                    '0 0 2px 0.5px ' +
+                    getLightGlowColor(color) +
+                    ', 0 0 4px 0 ' +
+                    color,
+                }}
                 title={label}
               >
                 <span
-                  className="absolute! inset-px! rounded-full!"
+                  className="absolute! inset-0!"
                   style={{ background: liveMetricFill }}
-                />
-                <span
-                  className="absolute! inset-0! rounded-full! border!"
-                  style={{ borderColor: color }}
                 />
               </span>
             ) : (
               <span
                 aria-hidden="true"
-                className="block! min-w-0! flex-1! overflow-hidden! rounded-full!"
+                className="block! min-w-0! flex-1! overflow-hidden!"
                 key={key}
                 style={{ background: color }}
                 title={label}
@@ -226,7 +238,7 @@ const LegendPopup = ({
                 </span>
               ))}
             </div>
-            <div className="flex! h-1! w-full! overflow-hidden! rounded-full!">
+            <div className="flex! h-1! w-full! overflow-hidden!">
               {schoolSummaryItems.map(({ color, key, label }) => (
                 <span
                   aria-hidden="true"
@@ -295,7 +307,14 @@ const LegendPopup = ({
                   }
                   entityType={entityType}
                 />
-                <span>{t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}</span>
+                <span>
+                  {t(
+                    config.slug,
+                    config.slug === (EntityType.SCHOOL as string)
+                      ? { count: 2 }
+                      : undefined,
+                  )}
+                </span>
                 <span
                   className={cn(
                     'absolute! bottom-0! left-0! right-0! h-0.5! rounded-full!',
