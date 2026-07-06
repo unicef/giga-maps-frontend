@@ -255,7 +255,7 @@ export default function DublicateSchoolPopup({
                 <ItemTopSection>
                   <SchoolName title={s.name}>
                     <span>{s.name ?? s.id}</span>
-                    {s?.isVerifiedSchool === false && <SchoolVerificationTag>Pending Verification</SchoolVerificationTag>}
+                    {s?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
                   </SchoolName>
                   <SchoolItemCount>{`${idx + 1} ${t('of')} (${total})`}</SchoolItemCount>
                 </ItemTopSection>

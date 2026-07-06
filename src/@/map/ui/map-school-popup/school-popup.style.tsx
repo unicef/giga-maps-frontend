@@ -48,16 +48,22 @@ export const SchoolName = styled.h6`
   overflow-wrap: break-word;
   word-break: break-word;
 `
-export const SchoolVerificationTag = styled.span`
-  border-radius: 62.5rem;
-  background: #FFD24D;
-  padding: 0.25rem 0.75rem;
-  color: #1f1f1f;
+export const SchoolVerificationTag = styled.div`
+  min-height: 1.25rem;
+  border-radius: 0.375rem;
+  background: #FCD34D;
+  padding: 0.125rem 0.625rem;
+  color: #44403C;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
   font-family: Open Sans;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 400;
-  line-height: 1.125rem;
-  text-transform: capitalize;
+  line-height: 1rem;
+  text-transform: none;
   white-space: nowrap;
 `
 export const Label = styled.span<{ $color?: string, $size?: string, $textTransform?: string }>`
