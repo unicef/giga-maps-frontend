@@ -1084,9 +1084,9 @@ const loadedLayersAndCountries = combine(
   },
 );
 
-// On first country code update, preserve URL layer value if present
+// Preserve URL layer on initial load, then apply defaults as the active entity scope changes.
 sample({
-  clock: merge([$countryCode, loadedLayersAndCountries]),
+  clock: merge([$countryCode, loadedLayersAndCountries, $activeEntityTypes]),
   source: combine({
     activeEntityTypes: $activeEntityTypes,
     layerUtils: $layerUtils,

@@ -544,7 +544,7 @@ export const $globalLayerId = $globalLayerData.map(
   (layer) => layer?.id ?? null,
 );
 
-// TODO: remove download code in condition when createdBy layer is fix, currently multiple not createdBy layers are there which causing an issue
+// TODO: remove download code in condition when createdBy layer is fix
 export const $globalLayerDataByEntity = $layersList.map((layers) => {
   const result = {} as EntityStoreMap<LayerType | null>;
   layers?.forEach((layer) => {
@@ -552,7 +552,7 @@ export const $globalLayerDataByEntity = $layersList.map((layers) => {
       if (
         layer?.type === LayerTypeChoices.LIVE &&
         !layer.created_by &&
-        layer.code === 'DOWNLOAD'
+        (layer.code === 'DOWNLOAD' || layer.code === `DOWNLOAD_${entityType?.toUpperCase()}`)
       ) {
         result[entityType] = layer;
       }
@@ -587,6 +587,23 @@ export const $coverageLayerData = $layersList.map(
 export const $coverageLayerId = $coverageLayerData.map(
   (layer) => layer?.id ?? null,
 );
+
+export const $coverageLayerDataByEntity = $layersList.map((layers) => {
+  const result = {} as EntityStoreMap<LayerType | null>;
+  layers?.forEach((layer) => {
+    getLayerEntityTypes(layer, []).forEach((entityType) => {
+      if (
+        layer?.type === LayerTypeChoices.STATIC &&
+        layer.created_by &&
+        Object.values(layer.data_source_column ?? {})[0].name ===
+          'coverage_type'
+      ) {
+        result[entityType] = layer;
+      }
+    });
+  });
+  return result;
+});
 
 export const $activeLayerByCountriesByEntity = combine(
   $layersList,
@@ -1136,12 +1153,12 @@ export const $staticPopupActiveLayer = combine(
 export const $staticPopupActiveLayerByEntity = combine(
   $activeLayerByCountryCodeByEntity,
   $staticLayers,
-  $coverageLayerData,
+  $coverageLayerDataByEntity,
   $activeEntityTypes,
   (
     activeLayerByCountryCodeByEntity,
     staticLayers,
-    coverageDynamicLayerData,
+    coverageLayerDataByEntity,
     activeEntityTypes,
   ) => {
     return activeEntityTypes.reduce(
@@ -1154,6 +1171,7 @@ export const $staticPopupActiveLayerByEntity = combine(
         const entityStaticLayers = staticLayers.filter((layer) =>
           getLayerEntityTypes(layer, activeEntityTypes).includes(entityType),
         );
+        const coverageDynamicLayerData = coverageLayerDataByEntity[entityType];
         if (activeLayerByCountryCode[coverageDynamicLayerData?.id ?? '']) {
           acc[entityType] = coverageDynamicLayerData;
           return acc;
@@ -1235,6 +1253,8 @@ export const $layerUtils = combine({
   downloadLayerData: $downloadLayerData,
   coverageLayerId: $coverageLayerId,
   coverageLayerData: $coverageLayerData,
+  coverageLayerDataByEntity: $coverageLayerDataByEntity,
+  globalLayerDataByEntity: $globalLayerDataByEntity,
   currentLayerTypeUtils: $currentLayerTypeUtils,
   currentLayerTypeUtilsByEntity: $currentLayerTypeUtilsByEntity,
   currentLayerLegends: $currentLayerLegends,
