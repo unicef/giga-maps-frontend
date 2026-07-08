@@ -1,7 +1,16 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { $isProductTour, $showLegend, onSelectMainLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
+import { changeCountryCode } from '~/@/country/country.model';
+import {
+  $showAdvancedFilter,
+  $showLegend,
+  $showThemeLayer,
+  onSelectMainLayer,
+  onShowAdvancedFilter,
+  onShowLegend,
+  onShowThemeLayer,
+} from '~/@/sidebar/sidebar.model';
 
 import LegendButton from '../legend-button';
 import { testWrapper } from '~/tests/test-wrapper';
@@ -91,5 +100,42 @@ describe('LegendButton', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect($showLegend.getState()).toBe(false);
   });
-});
 
+  test('reopens legend when filter or theme layer closes', () => {
+    onShowLegend(true);
+    onShowAdvancedFilter(true);
+    expect($showLegend.getState()).toBe(false);
+
+    onShowAdvancedFilter(false);
+    expect($showLegend.getState()).toBe(true);
+
+    onShowThemeLayer(true);
+    expect($showLegend.getState()).toBe(false);
+
+    onShowThemeLayer(false);
+    expect($showLegend.getState()).toBe(true);
+  });
+
+  test('keeps legend closed while switching from theme layer to filter', () => {
+    onShowLegend(true);
+    onShowThemeLayer(true);
+
+    expect($showLegend.getState()).toBe(false);
+    expect($showThemeLayer.getState()).toBe(true);
+
+    onShowAdvancedFilter(true);
+
+    expect($showAdvancedFilter.getState()).toBe(true);
+    expect($showThemeLayer.getState()).toBe(false);
+    expect($showLegend.getState()).toBe(false);
+  });
+
+  test('reopens legend on country change after manual close', () => {
+    onShowLegend(false);
+    expect($showLegend.getState()).toBe(false);
+
+    changeCountryCode('af');
+
+    expect($showLegend.getState()).toBe(true);
+  });
+});

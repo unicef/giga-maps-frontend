@@ -10,6 +10,7 @@ import {
   $countryDefaultNational,
   $countryId,
   $countrySearchString,
+  changeCountryCode,
   countryReceived,
   onRecenterView,
 } from '~/@/country/country.model';
@@ -49,6 +50,7 @@ import {
   $coverageUnknown,
   $currentDefaultLayerIdByEntity,
   $getSchoolParams,
+  $isProductTour,
   $isSidebarCollapsed,
   $isTimeplayer,
   $layersList,
@@ -58,6 +60,8 @@ import {
   $schoolStats,
   $schoolStatusSelectedLayer,
   $selectedLayerIdByEntity,
+  $showAdvancedFilter,
+  $showThemeLayer,
   $statusLayerIdByEntity,
   changeConnectivityBenchmark,
   changeEntityConnectivityBenchmark,
@@ -66,6 +70,9 @@ import {
   onSchoolUncheck,
   onSelectEntityMainLayer,
   onSelectEntityStatusLayer,
+  onShowAdvancedFilter,
+  onShowLegend,
+  onShowThemeLayer,
   resetCoverageFilterSelection,
   resetFilterModal,
   toggleSidebar,
@@ -1163,9 +1170,9 @@ sample({
     )
       ? selectedLayerIdByEntity
       : {
-          ...selectedLayerIdByEntity,
-          [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
-        };
+        ...selectedLayerIdByEntity,
+        [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
+      };
   },
   target: $selectedLayerIdByEntity,
 });
@@ -1208,32 +1215,32 @@ const benchmarkSource = combine({
 });
 const benchmarkFn =
   (isClockId: boolean) =>
-  (
-    {
-      countryDefaultNational = {},
-      selectedEntityType,
-      selectedLayerIdByEntity,
-      connectivityBenchMark,
-      connectivityBenchMarkByEntity,
-    }: ReturnType<typeof benchmarkSource.getState>,
-    clockLayerId: unknown,
-  ) => {
-    let currentBenchmark = getEntityMapValue(
-      connectivityBenchMarkByEntity,
-      selectedEntityType,
-      connectivityBenchMark,
-    );
-    const layerId =
-      isClockId && typeof clockLayerId === 'number'
-        ? clockLayerId
-        : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
-    if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
-      currentBenchmark = ConnectivityBenchMarks.national;
-    } else {
-      currentBenchmark = ConnectivityBenchMarks.global;
-    }
-    return currentBenchmark;
-  };
+    (
+      {
+        countryDefaultNational = {},
+        selectedEntityType,
+        selectedLayerIdByEntity,
+        connectivityBenchMark,
+        connectivityBenchMarkByEntity,
+      }: ReturnType<typeof benchmarkSource.getState>,
+      clockLayerId: unknown,
+    ) => {
+      let currentBenchmark = getEntityMapValue(
+        connectivityBenchMarkByEntity,
+        selectedEntityType,
+        connectivityBenchMark,
+      );
+      const layerId =
+        isClockId && typeof clockLayerId === 'number'
+          ? clockLayerId
+          : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
+      if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+        currentBenchmark = ConnectivityBenchMarks.national;
+      } else {
+        currentBenchmark = ConnectivityBenchMarks.global;
+      }
+      return currentBenchmark;
+    };
 const entityBenchmarkFn = (
   {
     countryDefaultNational = {},
@@ -1308,4 +1315,47 @@ sample({
 });
 // Initialize URL params on app start
 // This applies URL params to stores (connectivity speed, coverage filters, etc.)
+
+// legend open and close behaviour
+sample({
+  clock: $showAdvancedFilter.updates,
+  filter: (isOpen) => isOpen,
+  fn: () => false,
+  target: onShowThemeLayer,
+});
+
+sample({
+  clock: $showThemeLayer.updates,
+  filter: (isOpen) => isOpen,
+  fn: () => false,
+  target: onShowAdvancedFilter,
+});
+
+sample({
+  clock: [$showAdvancedFilter.updates, $showThemeLayer.updates],
+  filter: (isOpen) => isOpen,
+  fn: () => false,
+  target: onShowLegend,
+});
+
+sample({
+  clock: [$showAdvancedFilter.updates, $showThemeLayer.updates],
+  source: {
+    isAdvancedFilterOpen: $showAdvancedFilter,
+    isProductTour: $isProductTour,
+    isThemeLayerOpen: $showThemeLayer,
+  },
+  filter: ({ isAdvancedFilterOpen, isProductTour, isThemeLayerOpen }, isOpen) =>
+    !isProductTour && !isOpen && !isAdvancedFilterOpen && !isThemeLayerOpen,
+  fn: () => true,
+  target: onShowLegend,
+});
+
+sample({
+  clock: changeCountryCode,
+  filter: Boolean,
+  fn: () => true,
+  target: onShowLegend,
+});
+
 initializeFromUrlParams();

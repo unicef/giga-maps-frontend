@@ -3,10 +3,10 @@ import { IconButton, Tag as FilterTag, Button } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useTheme } from 'styled-components';
 
-import { $showAdvancedFilter, $sidebarHeight, onShowAdvancedFilter, onShowLegend } from '~/@/sidebar/sidebar.model';
+import { $showAdvancedFilter, $sidebarHeight, onShowAdvancedFilter } from '~/@/sidebar/sidebar.model';
 import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { FilterButtonWrapper, FilterTagContainer, FilterWrapper, Tag } from './filter-button.style';
 import FilterPopup from './filter-popup';
 import { $mapRoutes, router } from '~/core/routes';
@@ -28,11 +28,6 @@ const FilterButton = () => {
   const showFilter = () => {
     onShowAdvancedFilter(!isOpen);
   };
-  useEffect(() => {
-    if (isOpen) {
-      onShowLegend(false);
-    }
-  }, [isOpen]);
   const isDisabled = useMemo(() => {
     if (routes.schools || !country?.id || !advanceFilterList?.length) {
       return true;

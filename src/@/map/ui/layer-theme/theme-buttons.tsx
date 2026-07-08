@@ -1,9 +1,8 @@
 import { Settings } from 'lucide-react';
 import { useStore } from 'effector-react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $isProductTour, $showThemeLayer, onShowLegend, onShowThemeLayer } from '~/@/sidebar/sidebar.model';
+import { $isProductTour, $showThemeLayer, onShowThemeLayer } from '~/@/sidebar/sidebar.model';
 import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
 import { cn } from '~/lib/cn';
 
@@ -18,11 +17,6 @@ const ThemeButtons = () => {
   const openLayerTheme = () => {
     onShowThemeLayer(!isOpen);
   };
-  useEffect(() => {
-    if (isOpen) {
-      onShowLegend(false);
-    }
-  }, [isOpen]);
 
   return (
     <>
