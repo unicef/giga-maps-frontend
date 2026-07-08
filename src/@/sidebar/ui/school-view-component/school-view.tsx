@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 import { $country, $countryCode, setSchoolFocusLatLng } from '~/@/country/country.model';
 import {
+  $activeEntityTypes,
   $entityRegistry,
   $selectedEntityType,
 } from '~/@/entities/models/entity.model';
@@ -24,7 +25,7 @@ import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { getLiveSchoolDetails, getNullValueText, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
 import {
-  $currentLayerTypeUtils,
+  $currentLayerTypeUtilsByEntity,
   $getSchoolParams,
   $isLoadingSchoolView,
   $schoolStats,
@@ -46,6 +47,7 @@ import { HistoryGraphAccordian } from '../common-components/history-graph/histor
 import WeekSlider from '../global-and-country-view-components/common/week-slider/week-slider.view';
 import LiveAverage from '../global-and-country-view-components/connectivity-layer/live-average.view';
 import { ConnectivityStatusNames } from '../global-and-country-view-components/container/layer-view.constant';
+import { EntityType } from '~/@/entities';
 
 const getDisplayValue = (value: unknown) => {
   if (value === true) return 'Yes';
@@ -162,7 +164,8 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
   const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
   const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
-  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   const isLoading = useStore($isLoadingSchoolView);
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
@@ -395,7 +398,8 @@ function EntityDuplicateLocationList({
     | undefined;
   const fetchPending = useStore(fetchDublicateSchoolPopupDataFx.pending);
   const countryCode = useStore($countryCode);
-  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
   const unit = selectedLayerData?.global_benchmark?.convert_unit ?? '';
   const duplicateIds = useMemo(
@@ -509,8 +513,8 @@ function EntityDuplicateLocationList({
           const staticValue = getStaticValue(item.staticValue);
           const statusLabel = t(
             ConnectivityStatusNames[item.connectivityStatus ?? UNKNOWN] ??
-              item.connectivityStatus ??
-              UNKNOWN,
+            item.connectivityStatus ??
+            UNKNOWN,
           );
 
           return (
@@ -584,7 +588,9 @@ function EntityDuplicateLocationList({
   );
 }
 function EntityDetailContent({ entity }: { entity: SchoolStatsType }) {
-  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const selectedEntityType = useStore($selectedEntityType);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   const showSectionSeparator = isLive || isStatic;
 
   return (
@@ -603,7 +609,8 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
   const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
   const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
-  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
     stylePaintData,
@@ -767,8 +774,11 @@ const SchoolView = () => {
   const { t } = useTranslation();
   const { schoolIds = [] } = useStore($getSchoolParams);
   const entities = useStore($schoolStats) ?? [];
+  const activeEntityType = useStore($activeEntityTypes)
+  const entityType = activeEntityType?.[0] ?? EntityType.SCHOOL;
   const isLoading = useStore($isLoadingSchoolView);
-  const { isLive, isStatic } = useStore($currentLayerTypeUtils);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
   const showDataSource = isLive || isStatic;
   const [openEntityIds, setOpenEntityIds] = useState<Set<number>>(() => new Set());
   const selectedEntities = schoolIds.length
@@ -826,7 +836,7 @@ const SchoolView = () => {
       </ScrollArea>
       {showDataSource && (
         <div className="absolute! inset-x-0! bottom-0! z-10! bg-background!">
-          <FooterDataSourcePopUp isFooter={false} />
+          <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
         </div>
       )}
     </div>

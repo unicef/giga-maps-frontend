@@ -154,7 +154,7 @@ exports[`ApiDocs > renders ApiDocsMain and take a snapshop 1`] = `
         class="c2"
       >
         <div
-          class="flex w-full items-center justify-between border-b border-white/8 bg-[#161616] text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current [&_svg]:!fill-[#f4f4f4]"
+          class="flex w-full items-center justify-between border-b border-white/8 text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current [&_svg]:!fill-[#f4f4f4]"
         >
           <div
             class="flex h-11 w-full items-center justify-start gap-2 px-3.5! py-0"
@@ -189,13 +189,13 @@ exports[`ApiDocs > renders ApiDocsMain and take a snapshop 1`] = `
               </svg>
             </button>
             <a
-              class="flex h-5 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
+              class="flex h-3 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
               href="/map"
             >
               <img
-                alt="Atlas"
-                class="block h-auto w-[48px]!"
-                src="/src/assets/images/atlas-logo.png"
+                alt="Giga logo"
+                class="h-4 w-auto"
+                src="/src/assets/images/giga-logo.png"
               />
             </a>
           </div>

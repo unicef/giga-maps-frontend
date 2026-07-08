@@ -20,12 +20,11 @@ import { formatNumber } from '~/lib/utils';
 
 import LayerNameWithTooltip from '../common/layer-name-with-tooltip.view';
 
-const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
+const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
   const { t } = useTranslation();
   const lng = useStore($lng);
   const coverageStatsByEntity = useStore($coverageStatsByEntity);
-  const currentSelectedEntityType = useStore($selectedEntityType);
-  const selectedEntityType = entityType ?? currentSelectedEntityType;
+  const selectedEntityType = entityType;
   const currentSelectedEntityConfig = useStore($selectedEntityConfig);
   const entityConfigMap = useStore($entityConfigMap);
   const selectedEntityConfig = entityType
@@ -34,11 +33,9 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const coverageStats = coverageStatsByEntity[selectedEntityType];
   const isLoading = useStore($isLoadingCountryAdminView);
   const coverageDistribution = coverageStats?.connected_schools;
-  const { selectedLayerData, selectedLayerDataByEntity } =
+  const { selectedLayerDataByEntity } =
     useStore($layerUtils);
-  const currentSelectedLayerData = entityType
-    ? selectedLayerDataByEntity[entityType]
-    : selectedLayerData;
+  const currentSelectedLayerData = selectedLayerDataByEntity[selectedEntityType];
   const legendsList = useMemo(
     () => Object.entries(coverageDistribution || {}),
     [coverageDistribution],
@@ -103,7 +100,7 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
           )}
         </div>
       </div>
-      <FooterDataSourcePopUp isFooter={false} />
+      <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ import { formatNumber } from '~/lib/utils';
 const SchoolConnectivityLayer = ({
   entityType,
 }: {
-  entityType?: EntityType;
+  entityType: EntityType;
 }) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
@@ -78,6 +78,7 @@ const SchoolConnectivityLayer = ({
       <FooterDataSourcePopUp
         showOldDataSource={true}
         isFooter={false}
+        entityType={entityType}
       />
     </div>
   );

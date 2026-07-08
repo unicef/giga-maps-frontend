@@ -523,12 +523,6 @@ $selectedLayerIdByEntity.on(onSelectEntityMainLayer, (state, payload) => ({
   ...state,
   ...payload,
 }));
-export const $selectedLayerId = combine(
-  $selectedLayerIdByEntity,
-  $selectedEntityType,
-  (selectedLayerIdByEntity, selectedEntityType) =>
-    getEntityValue(selectedLayerIdByEntity, selectedEntityType, null),
-);
 
 // TODO: remove download code in condition when createdBy layer is fix
 export const $globalLayerDataByEntity = $layersList.map((layers) => {
@@ -668,14 +662,6 @@ export const $activeLayerByCountryCodeByEntity = combine(
   },
 );
 
-export const $selectedLayerData = combine(
-  $layersList,
-  $selectedLayerId,
-  (layers, selectedId) => {
-    return layers?.find((item) => item.id === selectedId) ?? null;
-  },
-);
-
 export const $selectedLayerDataByEntity = combine(
   $layersList,
   $selectedLayerIdByEntity,
@@ -702,16 +688,22 @@ export const $selectedLayerDataByEntity = combine(
 );
 
 export const $currentLayerCountryDataSource = combine(
-  $selectedLayerData,
+  $selectedLayerDataByEntity,
+  $activeEntityTypes,
   $country,
-  (selectedData, country) => {
-    if (!selectedData || !country) return null;
-    return (
-      (
-        selectedData?.active_countries_list?.find(
-          (activeLayers) => activeLayers.country === country.id,
-        ) as { data_sources?: unknown } | undefined
-      )?.data_sources || null
+  (selectedLayerDataByEntity, activeEntityTypes, country) => {
+    if (!country) return {} as EntityStoreMap<any>;
+    return activeEntityTypes.reduce(
+      (acc, entityType) => {
+        const selectedData = selectedLayerDataByEntity[entityType];
+        acc[entityType] = (
+          selectedData?.active_countries_list?.find(
+            (activeLayers) => activeLayers.country === country.id,
+          ) as { data_sources?: any } | undefined
+        )?.data_sources || null;
+        return acc;
+      },
+      {} as EntityStoreMap<any>,
     );
   },
 );
@@ -753,20 +745,7 @@ export const $currentLayerTypeUtilsByEntity = combine(
   },
 );
 
-export const $currentLayerTypeUtils = combine(
-  $currentLayerTypeUtilsByEntity,
-  $selectedEntityType,
-  (currentLayerTypeUtilsByEntity, selectedEntityType) =>
-    getEntityValue(currentLayerTypeUtilsByEntity, selectedEntityType, {
-      isLive: false,
-      isStatic: false,
-      isSchoolStatus: false,
-    }),
-);
 
-export const $isCurrentLayerLive = $currentLayerTypeUtils.map(
-  (layerTypeUtils) => layerTypeUtils.isLive,
-);
 const buildCurrentLayerLegends = ({
   connectivityBenchmark,
   countryActiveLayersDataById,
@@ -871,29 +850,6 @@ export const $currentLayerLegendsByEntity = combine(
   },
 );
 
-export const $benchmarkmarkUtils = combine(
-  $countryBenchmark,
-  $selectedLayerData,
-  $connectivityBenchMark,
-  $countryConnectivityNames,
-  (
-    countryBenchmark,
-    selectedLayerData,
-    connectivityBenchMark,
-    countryConnectivityNames,
-  ) => {
-    return buildBenchmarkUtils(
-      countryBenchmark,
-      selectedLayerData,
-      connectivityBenchMark,
-      countryConnectivityNames,
-    );
-  },
-);
-
-export const $isNationalBenchmark = $benchmarkmarkUtils.map(
-  ({ isNational }) => isNational,
-);
 
 function buildBenchmarkUtils(
   countryBenchmark: Record<string, any> | null | undefined,
@@ -1076,15 +1032,12 @@ export const $layerUtils = combine({
   layers: $layersList,
   liveLayers: $connectivityLayers,
   staticLayers: $staticLayers,
-  selectedLayerId: $selectedLayerId,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
-  selectedLayerData: $selectedLayerData,
   selectedLayerDataByEntity: $selectedLayerDataByEntity,
   statusLayerIdByEntity: $statusLayerIdByEntity,
 
   coverageLayerDataByEntity: $coverageLayerDataByEntity,
   globalLayerDataByEntity: $globalLayerDataByEntity,
-  currentLayerTypeUtils: $currentLayerTypeUtils,
   currentLayerTypeUtilsByEntity: $currentLayerTypeUtilsByEntity,
 
   currentLayerLegendsByEntity: $currentLayerLegendsByEntity,

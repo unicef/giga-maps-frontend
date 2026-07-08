@@ -17,7 +17,7 @@ import {
 } from '~/@/sidebar/sidebar.constant';
 import {
   $allLoadings,
-  $currentLayerTypeUtils,
+  $currentLayerTypeUtilsByEntity,
   $schoolStatusSelectedLayer,
   $staticLegendsSelected,
   onSelectEntityStatusLayer,
@@ -60,11 +60,12 @@ const LayerSchoolsConnectivityStatus = () => {
   const { stats, country } = useStore($allLoadings);
   const isLoading = stats || country;
   const schoolConnectedOpenStatus = useStore($schoolConnectedOpenStatus);
-  const { isSchoolStatus } = useStore($currentLayerTypeUtils);
+  const selectedEntityType = useStore($selectedEntityType);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isSchoolStatus } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   const staticLegends = useStore($staticLegendsSelected);
   const connectivityStatusColor = useStore($stylePaintData);
   const schoolStatusSelected = useStore($schoolStatusSelectedLayer);
-  const selectedEntityType = useStore($selectedEntityType);
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
 
   const handleClicked = (buttonId: string) => {

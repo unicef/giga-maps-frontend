@@ -4,9 +4,10 @@ import { type PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSource } from '~/@/country/country.model';
+import { $selectedEntityType, type EntityType } from '~/@/entities';
 import {
   $currentLayerCountryDataSource,
-  $currentLayerTypeUtils,
+  $currentLayerTypeUtilsByEntity,
 } from '~/@/sidebar/sidebar.model';
 import { Button } from '~/components/ui/button';
 import {
@@ -40,6 +41,7 @@ type LayerDataSource = {
 type FooterDataSourcePopUpProps = {
   isFooter?: boolean;
   showOldDataSource?: boolean;
+  entityType: EntityType;
 };
 
 const DataSourceHeader = ({ children }: PropsWithChildren) => (
@@ -72,13 +74,21 @@ const DataSourceInfoTooltip = ({ label }: { label: string }) => (
 const FooterDataSourcePopUp = ({
   isFooter = true,
   showOldDataSource = false,
+  entityType,
 }: FooterDataSourcePopUpProps) => {
   const dataSource = useStore($dataSource);
   const { t } = useTranslation();
-  const { isSchoolStatus } = useStore($currentLayerTypeUtils);
-  const currentDataSource = useStore(
+  const currentEntityType = entityType;
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isSchoolStatus } =
+    currentLayerTypeUtilsByEntity[currentEntityType] ?? {};
+  const currentLayerCountryDataSource = useStore(
     $currentLayerCountryDataSource,
-  ) as LayerDataSource | null;
+  );
+  const currentDataSource =
+    (currentLayerCountryDataSource[currentEntityType] as LayerDataSource | null) ?? null;
   const oldDataSource = dataSource ?? '';
   const dataSourceName = useMemo(() => {
     const data: string[] = currentDataSource?.name

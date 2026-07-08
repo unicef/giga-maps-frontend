@@ -3,7 +3,8 @@ import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
 import { $admin1Code } from '~/@/country/country.model';
-import { $connectivityYears, $currentLayerTypeUtils, $isTimeplayer, onToggleTimeplayer } from '~/@/sidebar/sidebar.model';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
+import { $connectivityYears, $currentLayerTypeUtilsByEntity, $isTimeplayer, onToggleTimeplayer } from '~/@/sidebar/sidebar.model';
 import { mapCountry } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
@@ -16,7 +17,9 @@ const TimeplayerButton = () => {
   const isCountryView = useRoute(mapCountry);
   const admin1 = useStore($admin1Code)
   const connectivityYears = useStore($connectivityYears);
-  const { isLive } = useStore($currentLayerTypeUtils)
+  const selectedEntityType = useStore($selectedEntityType);
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isLive } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   if (!connectivityYears || !isLive || !isCountryView || admin1) return null;
   return (
     <MapControlButton

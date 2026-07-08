@@ -1,7 +1,6 @@
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
-import { $selectedLayerData } from '~/@/sidebar/sidebar.model';
 import type { LayerType } from '~/@/sidebar/types';
 import { Skeleton } from '~/components/ui/skeleton';
 
@@ -19,8 +18,7 @@ export default function LiveAverage({
   readonly currentLayerData?: LayerType | null;
 }) {
   const { t } = useTranslation();
-  const selectedLayerData = useStore($selectedLayerData);
-  const currentLayer = currentLayerData ?? selectedLayerData;
+  const currentLayer = currentLayerData;
   const heading = currentLayer?.name ?? t('average-download-speed');
   const layerDescription = currentLayer?.description;
   const dataSourceId = currentLayer?.data_sources_list?.length

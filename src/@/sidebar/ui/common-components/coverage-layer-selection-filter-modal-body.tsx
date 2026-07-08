@@ -29,9 +29,10 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(
       useState<Record<string, boolean>>(defaultStatus);
     const legends = coverageStats?.connected_schools;
     const selectedEntityType = useStore($selectedEntityType);
-    const { currentLayerLegendsByEntity, selectedLayerData } =
+    const { currentLayerLegendsByEntity, selectedLayerDataByEntity } =
       useStore($layerUtils);
     const entityLayerLegends = currentLayerLegendsByEntity[selectedEntityType]!;
+    const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
     const handleApply = useCallback(() => {
       changeCoverage5g4g(currentStatus.good);
       changeCoverage3g2g(currentStatus.moderate);

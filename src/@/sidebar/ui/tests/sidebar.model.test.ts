@@ -1,5 +1,5 @@
 import { allSettled, fork } from 'effector';
-import { $connectivityLayers, $staticLayers, $layersList, $staticLegendsSelected, staticLegendsSelection, makeEmptyStaticLegendsSelection, selectAllStaticLegendsSelection, $multiSelectionSchoolCheckbox, changeMultiSelectionSchoolCheckbox, $benchmarkmarkUtils, $connectivityBenchMark, $selectedLayerData } from '../../sidebar.model';
+import { $connectivityLayers, $staticLayers, $layersList, $staticLegendsSelected, staticLegendsSelection, makeEmptyStaticLegendsSelection, selectAllStaticLegendsSelection, $multiSelectionSchoolCheckbox, changeMultiSelectionSchoolCheckbox, $benchmarkmarkUtilsByEntity, $connectivityBenchMark, $selectedLayerDataByEntity } from '../../sidebar.model';
 import { LayerType, LayerTypeChoices } from '../../types';
 import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '../../sidebar.constant';
 import { $countryBenchmark, $countryConnectivityNames } from '~/@/country/country.model';
@@ -269,26 +269,26 @@ describe('Benchmark Utils Tests', () => {
   it('should return empty object if layer data is missing or not live', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, null)
+        .set($selectedLayerDataByEntity, { school: null })
         .set($countryBenchmark, mockCountryBenchmark)
         .set($connectivityBenchMark, ConnectivityBenchMarks.global)
         .set($countryConnectivityNames, mockConnectivityNames)
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result).toEqual({});
   });
 
   it('should calculate global benchmark values correctly', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, mockSelectedLayerData)
+        .set($selectedLayerDataByEntity, { school: mockSelectedLayerData })
         .set($countryBenchmark, mockCountryBenchmark)
         .set($connectivityBenchMark, ConnectivityBenchMarks.global)
         .set($countryConnectivityNames, mockConnectivityNames)
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.isReverse).toEqual(false);
     expect(result.baseBenchmark).toEqual("5");
   });
@@ -296,26 +296,26 @@ describe('Benchmark Utils Tests', () => {
   it('should calculate national benchmark values correctly', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, mockSelectedLayerData)
+        .set($selectedLayerDataByEntity, { school: mockSelectedLayerData })
         .set($countryBenchmark, mockCountryBenchmark)
         .set($connectivityBenchMark, ConnectivityBenchMarks.national)
         .set($countryConnectivityNames, mockConnectivityNames)
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.nationalBenchmarkValue).toEqual(0);
   });
 
   it('should handle missing national benchmark value', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, mockSelectedLayerData)
+        .set($selectedLayerDataByEntity, { school: mockSelectedLayerData })
         .set($countryBenchmark, {})
         .set($connectivityBenchMark, ConnectivityBenchMarks.national)
         .set($countryConnectivityNames, mockConnectivityNames)
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.nationalBenchmarkValue).toBe(0);
     expect(result.isNational).toBe(false);
   });
@@ -328,13 +328,13 @@ describe('Benchmark Utils Tests', () => {
 
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, reversedLayerData)
+        .set($selectedLayerDataByEntity, { school: reversedLayerData })
         .set($countryBenchmark, mockCountryBenchmark)
         .set($connectivityBenchMark, ConnectivityBenchMarks.global)
         .set($countryConnectivityNames, mockConnectivityNames)
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.isReverse).toBe(true);
     expect(result.benchmarkLogic).toBeDefined();
   });
@@ -347,13 +347,13 @@ describe('Benchmark Utils Tests', () => {
 
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, layerWithoutMetadata)
+        .set($selectedLayerDataByEntity, { school: layerWithoutMetadata })
         .set($countryBenchmark, mockCountryBenchmark)
         .set($connectivityBenchMark, ConnectivityBenchMarks.global)
         .set($countryConnectivityNames, mockConnectivityNames)
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.baseBenchmark).toBeUndefined();
     expect(result.benchmarkLogic).toBeDefined();
   });

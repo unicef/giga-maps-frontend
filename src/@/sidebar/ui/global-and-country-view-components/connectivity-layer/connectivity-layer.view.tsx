@@ -3,11 +3,11 @@ import { useStore } from 'effector-react';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import {
   $connectivityStats,
   $connectivityStatsByEntity,
   $isLoadingCountryAdminView,
-  $selectedLayerData,
   $selectedLayerDataByEntity,
 } from '~/@/sidebar/sidebar.model';
 
@@ -26,22 +26,21 @@ const connectivityColorClassByStatus: Record<string, string> = {
 export default function ConnectivityLayer({
   entityType,
 }: {
-  entityType?: EntityType;
+  entityType: EntityType;
 }) {
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
-  const selectedLayerData = useStore($selectedLayerData);
+  const selectedEntityType = useStore($selectedEntityType);
   const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
   const currentConnectivityStats = useStore($connectivityStats);
   const connectivityStats = entityType
     ? connectivityStatsByEntity[entityType]
     : currentConnectivityStats;
   const isLoading = useStore($isLoadingCountryAdminView);
-  const currentLayerData = entityType
-    ? selectedLayerDataByEntity[entityType]
-    : selectedLayerData;
+  const currentLayerData =
+    selectedLayerDataByEntity[entityType ?? selectedEntityType];
   const colorClassName =
     connectivityColorClassByStatus[
-      connectivityStats?.live_avg_connectivity ?? UNKNOWN
+    connectivityStats?.live_avg_connectivity ?? UNKNOWN
     ] ?? 'text-neutral!';
 
   return (
@@ -63,7 +62,7 @@ export default function ConnectivityLayer({
         isLoading={isLoading}
         selectedLayerData={currentLayerData}
       />
-      <FooterDataSourcePopUp isFooter={false} />
+      <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </>
   );
 }

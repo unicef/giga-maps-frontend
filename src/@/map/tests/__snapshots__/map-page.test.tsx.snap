@@ -401,41 +401,6 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   border-bottom-color: #383838;
 }
 
-.c1 {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: #808080;
-}
-
-.c1 .mapboxgl-ctrl.mapboxgl-ctrl-attrib .mapboxgl-ctrl-attrib-inner {
-  margin-bottom: 5.5rem;
-}
-
-.c1 .mapboxgl-ctrl.mapboxgl-ctrl-attrib.mapboxgl-compact {
-  margin-bottom: 6rem;
-  display: none;
-}
-
-.c1 .mapboxgl-ctrl .mapboxgl-ctrl-logo {
-  margin-bottom: 1.5rem;
-  display: none;
-}
-
-.c1 .mapboxgl-canvas {
-  outline: none;
-}
-
-.c1 .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
-  height: 1.3rem!important;
-}
-
-.c1 .mapboxgl-popup-content {
-  padding: 0;
-}
-
 .c27 {
   position: fixed;
   top: 0;
@@ -483,6 +448,41 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   transform: translateX(-100%) skewX(-20deg);
   animation: k2 1.8s infinite 0.3s ease-out;
   width: 40%;
+}
+
+.c1 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #808080;
+}
+
+.c1 .mapboxgl-ctrl.mapboxgl-ctrl-attrib .mapboxgl-ctrl-attrib-inner {
+  margin-bottom: 5.5rem;
+}
+
+.c1 .mapboxgl-ctrl.mapboxgl-ctrl-attrib.mapboxgl-compact {
+  margin-bottom: 6rem;
+  display: none;
+}
+
+.c1 .mapboxgl-ctrl .mapboxgl-ctrl-logo {
+  margin-bottom: 1.5rem;
+  display: none;
+}
+
+.c1 .mapboxgl-canvas {
+  outline: none;
+}
+
+.c1 .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  height: 1.3rem!important;
+}
+
+.c1 .mapboxgl-popup-content {
+  padding: 0;
 }
 
 .c9 {
@@ -573,191 +573,204 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       class="content"
     >
       <div
-        class="z-2 flex shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)] fixed top-2 left-2 bottom-[1.8rem] min-[1584px]:bottom-2 w-[288px] min-[1584px]:w-[296px]"
+        class="z-2 flex shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)] fixed top-2 left-2 bottom-[1.8rem] min-[1584px]:bottom-2 w-[320px] min-[1584px]:w-[320px]"
       >
         <div
-          class="sidebar flex h-inherit w-inherit flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
+          class="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
         >
           <div
-            class="flex w-full items-center justify-between border-b border-white/8 bg-[#161616] text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current [&_svg]:!fill-[#f4f4f4]"
+            class=""
           >
             <div
-              class="flex h-11 w-full items-center justify-start gap-2 px-3.5! py-0"
-            >
-              <button
-                aria-label="Menu"
-                class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9"
-                data-size="icon"
-                data-slot="button"
-                data-state="closed"
-                data-variant="icon"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="lucide lucide-menu size-5"
-                  fill="none"
-                  height="24"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 5h16"
-                  />
-                  <path
-                    d="M4 12h16"
-                  />
-                  <path
-                    d="M4 19h16"
-                  />
-                </svg>
-              </button>
-              <a
-                class="flex h-5 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
-                href="/map"
-              >
-                <img
-                  alt="Atlas"
-                  class="block h-auto w-[48px]!"
-                  src="/src/assets/images/atlas-logo.png"
-                />
-              </a>
-            </div>
-          </div>
-          <div
-            class="relative z-12"
-          >
-            <div
-              class="top-search-bar mt-2! flex! h-12! items-center! gap-0! bg-transparent! px-3.5! max-md:w-full!"
+              class=""
             >
               <div
-                class="flex! min-w-0! flex-1! items-center! gap-0!"
-                data-slot="popover-anchor"
+                class="flex w-full items-center justify-between border-b border-white/8 text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current [&_svg]:!fill-[#f4f4f4]"
               >
-                <button
-                  aria-expanded="false"
-                  aria-label="Country List"
-                  class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
-                  data-state="closed"
-                  type="button"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="lucide lucide-earth"
-                    fill="none"
-                    height="18"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    width="18"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M21.54 15H17a2 2 0 0 0-2 2v4.54"
-                    />
-                    <path
-                      d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"
-                    />
-                    <path
-                      d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
-                    />
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="lucide lucide-chevron-down"
-                    fill="none"
-                    height="18"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    width="18"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="m6 9 6 6 6-6"
-                    />
-                  </svg>
-                </button>
                 <div
-                  class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! bg-[#f4f4f4]! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
-                  style="--search-shell-border: #c6c6c6;"
+                  class="flex h-11 w-full items-center justify-start gap-2 px-3.5! py-0"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="lucide lucide-search pointer-events-none! absolute! left-3.5! top-1/2! z-1! -translate-y-1/2!"
-                    fill="none"
-                    height="16"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="m21 21-4.34-4.34"
-                    />
-                    <circle
-                      cx="11"
-                      cy="11"
-                      r="8"
-                    />
-                  </svg>
-                  <input
-                    aria-label="Search country, region"
-                    autocapitalize="none"
-                    autocomplete="off"
-                    autocorrect="off"
-                    class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! border-0! bg-transparent! px-11! pr-11! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
-                    data-slot="input"
-                    id="main-search-bar"
-                    inputmode="search"
-                    placeholder="Search country, region"
-                    spellcheck="false"
-                    value=""
-                  />
                   <button
-                    aria-label="clear-search"
-                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 h-9 px-4 py-2 has-[>svg]:px-3 main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! hidden!"
-                    data-size="default"
+                    aria-label="Menu"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9"
+                    data-size="icon"
                     data-slot="button"
+                    data-state="closed"
                     data-variant="icon"
                   >
                     <svg
                       aria-hidden="true"
-                      class="lucide lucide-x fill-current"
+                      class="lucide lucide-menu size-5"
                       fill="none"
-                      height="16"
+                      height="24"
                       stroke="currentColor"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
                       viewBox="0 0 24 24"
-                      width="16"
+                      width="24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M18 6 6 18"
+                        d="M4 5h16"
                       />
                       <path
-                        d="m6 6 12 12"
+                        d="M4 12h16"
+                      />
+                      <path
+                        d="M4 19h16"
                       />
                     </svg>
                   </button>
+                  <a
+                    class="flex h-3 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
+                    href="/map"
+                  >
+                    <img
+                      alt="Giga logo"
+                      class="h-4 w-auto"
+                      src="/src/assets/images/giga-logo.png"
+                    />
+                  </a>
+                </div>
+              </div>
+              <div
+                class="relative z-12"
+              >
+                <div
+                  class="top-search-bar mt-2! flex! h-12! items-center! gap-0! bg-transparent! px-3.5! max-md:w-full!"
+                >
+                  <div
+                    class="flex! min-w-0! flex-1! items-center! gap-0!"
+                    data-slot="popover-anchor"
+                  >
+                    <button
+                      aria-expanded="false"
+                      aria-label="Country List"
+                      class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
+                      data-state="closed"
+                      title="Country List"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-earth"
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M21.54 15H17a2 2 0 0 0-2 2v4.54"
+                        />
+                        <path
+                          d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"
+                        />
+                        <path
+                          d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                        />
+                      </svg>
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-chevron-down"
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m6 9 6 6 6-6"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! bg-[#f4f4f4]! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
+                      style="--search-shell-border: #c6c6c6;"
+                    >
+                      <div
+                        class="flex! h-12! items-center!"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-search pointer-events-none! ml-3.5! shrink-0! text-[#525252]!"
+                          fill="none"
+                          height="16"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m21 21-4.34-4.34"
+                          />
+                          <circle
+                            cx="11"
+                            cy="11"
+                            r="8"
+                          />
+                        </svg>
+                        <input
+                          aria-label="Search for country, region and entities"
+                          autocapitalize="none"
+                          autocomplete="off"
+                          autocorrect="off"
+                          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-10! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                          data-slot="input"
+                          id="main-search-bar"
+                          inputmode="search"
+                          placeholder="Search for country, region and entities"
+                          spellcheck="false"
+                          value=""
+                        />
+                      </div>
+                      <button
+                        aria-label="clear-search"
+                        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 h-9 px-4 py-2 has-[>svg]:px-3 main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! hidden!"
+                        data-size="default"
+                        data-slot="button"
+                        data-variant="icon"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-x fill-current"
+                          fill="none"
+                          height="16"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M18 6 6 18"
+                          />
+                          <path
+                            d="m6 6 12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -766,280 +779,268 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             class="flex min-h-0 flex-1 flex-col"
           >
             <div
-              class="scrollbar-container h-auto! max-h-none! ps"
+              class="relative! overflow-hidden! h-auto! max-h-none!"
+              data-slot="scroll-area"
+              dir="ltr"
+              style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"
             >
+              <style>
+                [data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}
+              </style>
               <div
-                class="w-full! px-3.5! pt-4! pb-2.5!"
+                class="h-full! w-full! rounded-[inherit]!"
+                data-radix-scroll-area-viewport=""
+                data-slot="scroll-area-viewport"
+                style="overflow-x: hidden; overflow-y: scroll;"
               >
                 <div
-                  class="flex! flex-col! gap-1!"
+                  style="min-width: 100%; display: table;"
                 >
                   <div
-                    class="flex! items-start! justify-between! gap-1!"
-                  >
-                    <p
-                      class="m-0! max-w-56! font-manrope! text-2xl! font-extralight! leading-[36px]! text-foreground!"
-                    >
-                      Global connectivity map for children
-                    </p>
-                    <button
-                      aria-label="Share content"
-                      class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 text-foreground!"
-                      data-size="icon"
-                      data-slot="button"
-                      data-state="closed"
-                      data-variant="icon"
-                      type="button"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="lucide lucide-share2 lucide-share-2 size-4"
-                        fill="none"
-                        height="24"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle
-                          cx="18"
-                          cy="5"
-                          r="3"
-                        />
-                        <circle
-                          cx="6"
-                          cy="12"
-                          r="3"
-                        />
-                        <circle
-                          cx="18"
-                          cy="19"
-                          r="3"
-                        />
-                        <line
-                          x1="8.59"
-                          x2="15.42"
-                          y1="13.51"
-                          y2="17.49"
-                        />
-                        <line
-                          x1="15.41"
-                          x2="8.59"
-                          y1="6.51"
-                          y2="10.49"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <p
-                    class="m-0! text-xs! font-normal! leading-4.5! tracking-[0.01rem]! text-muted-foreground!"
-                  >
-                    An open & live global map of mapped entities and their connectivity
-                  </p>
-                </div>
-                <div
-                  class="mt-4! flex! flex-col! gap-3!"
-                >
-                  <div
-                    data-orientation="vertical"
-                    data-slot="accordion"
+                    class="w-full! px-3.5! pt-4! pb-2.5!"
                   >
                     <div
-                      class="flex! flex-col! gap-3!"
+                      class="flex! flex-col! gap-1!"
                     >
                       <div
-                        class="overflow-visible! rounded-lg! border! border-border!"
-                        data-orientation="vertical"
-                        data-slot="accordion-item"
-                        data-state="closed"
+                        class="flex! items-start! justify-between! gap-1!"
                       >
-                        <h3
-                          class="flex!"
-                          data-orientation="vertical"
-                          data-slot="accordion-header"
-                          data-state="closed"
+                        <p
+                          class="m-0! max-w-56! font-manrope! text-2xl! font-extralight! leading-[36px]! text-foreground!"
                         >
-                          <button
-                            aria-controls="radix-:r5:"
-                            aria-expanded="false"
-                            class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
-                            data-orientation="vertical"
-                            data-radix-collection-item=""
-                            data-slot="accordion-trigger"
-                            data-state="closed"
-                            id="radix-:r4:"
-                            type="button"
+                          Global connectivity map for children
+                        </p>
+                        <button
+                          aria-label="Share content"
+                          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 text-foreground!"
+                          data-size="icon"
+                          data-slot="button"
+                          data-state="closed"
+                          data-variant="icon"
+                          type="button"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-share2 lucide-share-2 size-4"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
                           >
-                            <div
-                              class="flex! min-w-0! items-center! gap-2.5!"
-                            >
-                              <span
-                                class="inline-flex! shrink-0! items-center! justify-center! rounded-full! bg-[#0f62fe]! px-2! py-1! text-[10px]! font-semibold! leading-none! text-[#f4f4f4]"
-                              >
-                                <img
-                                  alt="GigaMaps"
-                                  class="block h-auto w-[48px]!"
-                                  src="/src/assets/images/giga-logo.png"
-                                />
-                              </span>
-                              <div
-                                class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
-                              >
-                                Schools
-                              </div>
-                            </div>
-                            <svg
-                              aria-hidden="true"
-                              class="lucide lucide-chevron-down"
-                              fill="none"
-                              height="16"
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              viewBox="0 0 24 24"
-                              width="16"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="m6 9 6 6 6-6"
-                              />
-                            </svg>
-                          </button>
-                        </h3>
-                        <div
-                          class="space-y-3! px-4! pb-3!"
-                        >
-                          <div
-                            class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
-                            data-slot="skeleton"
-                          />
-                          <div
-                            class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
-                            data-slot="skeleton"
-                          />
-                          <div
-                            class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
-                            data-slot="skeleton"
-                          />
-                        </div>
-                        <div
-                          aria-labelledby="radix-:r4:"
-                          class="hidden!"
-                          data-orientation="vertical"
-                          data-slot="accordion-content"
-                          data-state="closed"
-                          hidden=""
-                          id="radix-:r5:"
-                          role="region"
-                          style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
-                        />
+                            <circle
+                              cx="18"
+                              cy="5"
+                              r="3"
+                            />
+                            <circle
+                              cx="6"
+                              cy="12"
+                              r="3"
+                            />
+                            <circle
+                              cx="18"
+                              cy="19"
+                              r="3"
+                            />
+                            <line
+                              x1="8.59"
+                              x2="15.42"
+                              y1="13.51"
+                              y2="17.49"
+                            />
+                            <line
+                              x1="15.41"
+                              x2="8.59"
+                              y1="6.51"
+                              y2="10.49"
+                            />
+                          </svg>
+                        </button>
                       </div>
-                      <div
-                        class="overflow-visible! rounded-lg! border! border-border!"
-                        data-orientation="vertical"
-                        data-slot="accordion-item"
-                        data-state="closed"
+                      <p
+                        class="m-0! text-xs! font-normal! leading-4.5! tracking-[0.01rem]! text-muted-foreground!"
                       >
-                        <h3
-                          class="flex!"
-                          data-orientation="vertical"
-                          data-slot="accordion-header"
-                          data-state="closed"
+                        An open & live global map of mapped entities and their connectivity
+                      </p>
+                    </div>
+                    <div
+                      class="mt-4! flex! flex-col! gap-3!"
+                    >
+                      <div
+                        data-orientation="vertical"
+                        data-slot="accordion"
+                      >
+                        <div
+                          class="flex! flex-col! gap-3!"
                         >
-                          <button
-                            aria-controls="radix-:r7:"
-                            aria-expanded="false"
-                            class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
+                          <div
+                            class="overflow-visible! rounded-lg! border! border-border!"
                             data-orientation="vertical"
-                            data-radix-collection-item=""
-                            data-slot="accordion-trigger"
+                            data-slot="accordion-item"
                             data-state="closed"
-                            id="radix-:r6:"
-                            type="button"
                           >
+                            <h3
+                              class="flex!"
+                              data-orientation="vertical"
+                              data-slot="accordion-header"
+                              data-state="closed"
+                            >
+                              <button
+                                aria-controls="radix-:r5:"
+                                aria-expanded="false"
+                                class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
+                                data-orientation="vertical"
+                                data-radix-collection-item=""
+                                data-slot="accordion-trigger"
+                                data-state="closed"
+                                id="radix-:r4:"
+                                type="button"
+                              >
+                                <div
+                                  class="flex! min-w-0! items-center! gap-2.5!"
+                                >
+                                  <div
+                                    class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
+                                  >
+                                    Schools
+                                  </div>
+                                </div>
+                                <svg
+                                  aria-hidden="true"
+                                  class="lucide lucide-chevron-down"
+                                  fill="none"
+                                  height="16"
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  viewBox="0 0 24 24"
+                                  width="16"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="m6 9 6 6 6-6"
+                                  />
+                                </svg>
+                              </button>
+                            </h3>
                             <div
-                              class="flex! min-w-0! items-center! gap-2.5!"
+                              class="space-y-3! px-4! pb-3!"
                             >
                               <div
-                                class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
-                              >
-                                Health centers
-                              </div>
-                            </div>
-                            <svg
-                              aria-hidden="true"
-                              class="lucide lucide-chevron-down"
-                              fill="none"
-                              height="16"
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              viewBox="0 0 24 24"
-                              width="16"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="m6 9 6 6 6-6"
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
                               />
-                            </svg>
-                          </button>
-                        </h3>
-                        <div
-                          class="space-y-3! px-4! pb-3!"
-                        >
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                            </div>
+                            <div
+                              aria-labelledby="radix-:r4:"
+                              class="hidden!"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              data-state="closed"
+                              hidden=""
+                              id="radix-:r5:"
+                              role="region"
+                              style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
+                            />
+                          </div>
                           <div
-                            class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
-                            data-slot="skeleton"
-                          />
-                          <div
-                            class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
-                            data-slot="skeleton"
-                          />
-                          <div
-                            class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
-                            data-slot="skeleton"
-                          />
+                            class="overflow-visible! rounded-lg! border! border-border!"
+                            data-orientation="vertical"
+                            data-slot="accordion-item"
+                            data-state="closed"
+                          >
+                            <h3
+                              class="flex!"
+                              data-orientation="vertical"
+                              data-slot="accordion-header"
+                              data-state="closed"
+                            >
+                              <button
+                                aria-controls="radix-:r7:"
+                                aria-expanded="false"
+                                class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
+                                data-orientation="vertical"
+                                data-radix-collection-item=""
+                                data-slot="accordion-trigger"
+                                data-state="closed"
+                                id="radix-:r6:"
+                                type="button"
+                              >
+                                <div
+                                  class="flex! min-w-0! items-center! gap-2.5!"
+                                >
+                                  <div
+                                    class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
+                                  >
+                                    Health centers
+                                  </div>
+                                </div>
+                                <svg
+                                  aria-hidden="true"
+                                  class="lucide lucide-chevron-down"
+                                  fill="none"
+                                  height="16"
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  viewBox="0 0 24 24"
+                                  width="16"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="m6 9 6 6 6-6"
+                                  />
+                                </svg>
+                              </button>
+                            </h3>
+                            <div
+                              class="space-y-3! px-4! pb-3!"
+                            >
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                            </div>
+                            <div
+                              aria-labelledby="radix-:r6:"
+                              class="hidden!"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              data-state="closed"
+                              hidden=""
+                              id="radix-:r7:"
+                              role="region"
+                              style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
+                            />
+                          </div>
                         </div>
-                        <div
-                          aria-labelledby="radix-:r6:"
-                          class="hidden!"
-                          data-orientation="vertical"
-                          data-slot="accordion-content"
-                          data-state="closed"
-                          hidden=""
-                          id="radix-:r7:"
-                          role="region"
-                          style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
-                        />
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                class="ps__rail-x"
-                style="left: 0px; top: 0px;"
-              >
-                <div
-                  class="ps__thumb-x"
-                  style="left: 0px; width: 0px;"
-                  tabindex="0"
-                />
-              </div>
-              <div
-                class="ps__rail-y"
-                style="top: 0px; left: 0px;"
-              >
-                <div
-                  class="ps__thumb-y"
-                  style="top: 0px; height: 0px;"
-                  tabindex="0"
-                />
               </div>
             </div>
             <div
@@ -1978,25 +1979,25 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       </div>
     </main>
     <div
-      class="fixed top-2 left-80 z-[3] flex items-center gap-2 rounded-full max-[768px]:top-auto max-[768px]:bottom-[33vh]"
+      class="fixed top-2 left-86 z-[3] flex items-center gap-2 rounded-full"
     >
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-10 !rounded-md has-[>svg]:px-4 px-4 py-2 rounded-lg border border-border"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5! border-primary"
         data-size="lg"
         data-slot="button"
         data-variant="default"
       >
-        All entities
+        All facilities
       </button>
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 !rounded-md has-[>svg]:px-4 px-4 py-2 rounded-lg border border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5! border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground"
         data-size="lg"
         data-slot="button"
         data-variant="default"
       >
         <span
-          class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-[-4px]!"
-          style="height: 20px; width: 20px;"
+          class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-0!"
+          style="height: 11px; width: 11px;"
         >
           <span
             class="relative! z-1! inline-flex! items-center! justify-center!"
@@ -2004,16 +2005,16 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             <svg
               class="block! shrink-0! overflow-visible!"
               focusable="false"
-              style="height: 20px; width: 20px;"
-              viewBox="0 0 20 20"
+              style="height: 11px; width: 11px;"
+              viewBox="0 0 11 11"
             >
               <text
                 fill="#d9d9d9"
                 font-family=""Open Sans", sans-serif"
-                font-size="20"
+                font-size="11"
                 text-anchor="start"
-                x="10"
-                y="10"
+                x="0"
+                y="0"
               >
                 ●
               </text>
@@ -2023,14 +2024,14 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         Schools
       </button>
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 !rounded-md has-[>svg]:px-4 px-4 py-2 rounded-lg border border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5! border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground"
         data-size="lg"
         data-slot="button"
         data-variant="default"
       >
         <span
-          class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-[-4px]!"
-          style="height: 20px; width: 20px;"
+          class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-0!"
+          style="height: 11px; width: 11px;"
         >
           <span
             class="relative! z-1! inline-flex! items-center! justify-center!"
@@ -2038,16 +2039,16 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             <svg
               class="block! shrink-0! overflow-visible!"
               focusable="false"
-              style="height: 20px; width: 20px;"
-              viewBox="0 0 20 20"
+              style="height: 11px; width: 11px;"
+              viewBox="0 0 11 11"
             >
               <text
                 fill="#d9d9d9"
                 font-family=""Open Sans", sans-serif"
-                font-size="20"
+                font-size="11"
                 text-anchor="start"
-                x="10"
-                y="10"
+                x="0"
+                y="0"
               >
                 ■
               </text>

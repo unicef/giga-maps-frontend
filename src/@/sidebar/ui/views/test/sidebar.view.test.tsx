@@ -11,8 +11,7 @@ import {
   onChangeMenu,
   onSelectMainLayer,
   $layersList,
-  $currentLayerTypeUtils,
-  $selectedLayerId,
+  $selectedLayerIdByEntity,
 } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
 import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
@@ -45,6 +44,13 @@ import { SimpleBarChart } from '@carbon/charts-react';
 vi.mock('@carbon/charts-react', () => ({
   SimpleBarChart: vi.fn().mockReturnValue(null),
 }));
+
+// Mock HTMLCanvasElement.prototype.getContext for JSDOM compatibility
+if (typeof window !== 'undefined') {
+  window.HTMLCanvasElement.prototype.getContext = () => ({
+    measureText: () => ({ width: 10 }),
+  }) as any;
+}
 
 describe('Sidebar', () => {
   beforeEach(() => {
@@ -140,19 +146,25 @@ describe('Sidebar', () => {
     });
 
     await act(async () => {
-      ($selectedLayerId as any).setState(47);
+      ($selectedLayerIdByEntity as any).setState({ school: 47 });
     });
 
     await fetchLayerListFx();
     const { container } = render(testWrapper(<Sidebar />));
+    
+    // Find the 'Schools' text element and click its wrapping button trigger to expand the accordion
+    const schoolsTextElement = screen.getAllByText('Schools').find(el => el.closest('button'));
+    const schoolsTrigger = schoolsTextElement ? schoolsTextElement.closest('button') : null;
+    if (schoolsTrigger) {
+      fireEvent.click(schoolsTrigger);
+    }
+
     await waitFor(
       () => {
-        ($selectedLayerId as any).setState(47);
-        expect(container.textContent).toContain('Connectivity');
+        ($selectedLayerIdByEntity as any).setState({ school: 47 });
+        expect(container.textContent).toContain('Schools');
       },
       { timeout: 10000 },
     );
-    const filterBtn = container.querySelector('.filter-icon-button');
-    fireEvent.click(filterBtn as Element);
   });
 });

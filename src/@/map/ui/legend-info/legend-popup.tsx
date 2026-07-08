@@ -75,7 +75,6 @@ const LegendPopup = ({
     currentLayerTypeUtils,
     currentLayerTypeUtilsByEntity,
     globalLayerDataByEntity,
-    selectedLayerData,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
@@ -126,7 +125,7 @@ const LegendPopup = ({
     currentLayerTypeUtilsByEntity[activeTab] ?? currentLayerTypeUtils;
   const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils;
   const activeEntityLayerData =
-    selectedLayerDataByEntity[activeTab] ?? selectedLayerData;
+    selectedLayerDataByEntity[activeTab] ?? null;
   const showLiveLegend = isGlobalView || isLive;
   const showStaticLegend = !isGlobalView && isStatic;
   const activeEntityLayerLegends = currentLayerLegendsByEntity[activeTab]!;

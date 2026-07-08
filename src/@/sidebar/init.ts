@@ -48,7 +48,6 @@ import {
   $coverageStatusAllByEntity,
   $coverageUnknown,
   $currentDefaultLayerIdByEntity,
-  $currentLayerTypeUtils,
   $getSchoolParams,
   $isSidebarCollapsed,
   $isTimeplayer,
@@ -1204,7 +1203,6 @@ const benchmarkSource = combine({
   connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   countryDefaultNational: $countryDefaultNational,
   country: $country,
-  currentLayerTypeUtils: $currentLayerTypeUtils,
   selectedEntityType: $selectedEntityType,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
 });

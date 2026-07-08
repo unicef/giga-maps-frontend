@@ -40,7 +40,6 @@ const GigaLayerButtonIcons = ({
     currentDefaultLayerIdByEntity,
     globalLayerDataByEntity,
     layers,
-    selectedLayerId,
     staticLayers,
     activeLayerByCountryCodeByEntity,
   } = useStore($layerUtils);
@@ -74,13 +73,11 @@ const GigaLayerButtonIcons = ({
     currentDefaultLayerIdByEntity[targetEntityType] ??
     null;
 
-  const targetSelectedLayerId = entityType
-    ? getEntityMapValue(
-        selectedLayerIdByEntity,
-        targetEntityType,
-        targetDefaultLayerId,
-      )
-    : selectedLayerId;
+  const targetSelectedLayerId = getEntityMapValue(
+    selectedLayerIdByEntity,
+    targetEntityType,
+    targetDefaultLayerId,
+  );
   const targetLayerData = layers.find(
     (layer) => layer.id === targetSelectedLayerId,
   );
