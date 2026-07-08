@@ -1,6 +1,12 @@
 import { useStore } from 'effector-react';
 import { Maximize2, Minimize2 } from 'lucide-react';
-import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -65,11 +71,10 @@ const LegendPopup = ({
   const entityConfigMap = useStore($entityConfigMap);
   const entityTypesFiltered = useStore($entityTypesFiltered);
   const {
-    currentLayerLegends,
     currentLayerLegendsByEntity,
     currentLayerTypeUtils,
     currentLayerTypeUtilsByEntity,
-    globalLayerData,
+    globalLayerDataByEntity,
     selectedLayerData,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
@@ -124,12 +129,9 @@ const LegendPopup = ({
     selectedLayerDataByEntity[activeTab] ?? selectedLayerData;
   const showLiveLegend = isGlobalView || isLive;
   const showStaticLegend = !isGlobalView && isStatic;
-  const activeEntityLayerLegends =
-    showLiveLegend && isStatic
-      ? currentLayerLegends
-      : (currentLayerLegendsByEntity[activeTab] ?? currentLayerLegends);
+  const activeEntityLayerLegends = currentLayerLegendsByEntity[activeTab]!;
   const metricLayerData = isGlobalView
-    ? globalLayerData
+    ? globalLayerDataByEntity[activeTab]
     : activeEntityLayerData;
   const legendMetricSubtitle = showStaticLegend
     ? (metricLayerData?.name ?? t('coverage-data'))

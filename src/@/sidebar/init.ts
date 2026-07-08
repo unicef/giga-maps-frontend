@@ -160,12 +160,14 @@ sample({
   }),
   fn: ({ mapRoutes, schoolParams }, uncheckId) => {
     const entityType = schoolParams.entityType ?? EntityType.SCHOOL;
-    const nextIds = schoolParams?.schoolIds?.filter(
-      (id) => String(id) !== String(uncheckId),
-    ) ?? [];
+    const nextIds =
+      schoolParams?.schoolIds?.filter(
+        (id) => String(id) !== String(uncheckId),
+      ) ?? [];
     const newParams = new URLSearchParams({
       country: schoolParams.country ?? '',
-      [mapRoutes.entity ? `${entityType}_ids` : 'school_ids']: nextIds.join(','),
+      [mapRoutes.entity ? `${entityType}_ids` : 'school_ids']:
+        nextIds.join(','),
     } as Record<string, string>).toString();
     const url = `${mapRoutes.entity ? '/map/entity/' : '/map/schools'}?${newParams}`;
     router.history.replace(url);
@@ -544,11 +546,12 @@ export const getCurrentEntityConnectivityConfigQuery = ({
   if (admin1Id) {
     params.set('admin1_id', String(admin1Id));
   }
-  const entityTypes = mapRoutes.entity && schoolParams.entityType
-    ? [schoolParams.entityType]
-    : activeEntityTypes?.length
-      ? activeEntityTypes
-      : entityTypesFiltered;
+  const entityTypes =
+    mapRoutes.entity && schoolParams.entityType
+      ? [schoolParams.entityType]
+      : activeEntityTypes?.length
+        ? activeEntityTypes
+        : entityTypesFiltered;
   params.set(
     ENTITY_TYPE_CODE_PARAM,
     getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
@@ -580,7 +583,7 @@ const getCurrentSchoolConnectivityConfigQuery = ({
   const selectedLayerId = getEntityMapValue(
     selectedLayerIdByEntity,
     EntityType.SCHOOL,
-    layersUtils.globalLayerId,
+    layersUtils.globalLayerDataByEntity?.[EntityType.SCHOOL]?.id ?? null,
   );
   if (selectedLayerId) {
     params.set('layer_id', String(selectedLayerId));
@@ -618,11 +621,12 @@ sample({
       mapRoutes,
       schoolParams,
     } = props;
-    const entityTypes = mapRoutes.entity && schoolParams.entityType
-      ? [schoolParams.entityType]
-      : activeEntityTypes?.length
-        ? activeEntityTypes
-        : entityTypesFiltered;
+    const entityTypes =
+      mapRoutes.entity && schoolParams.entityType
+        ? [schoolParams.entityType]
+        : activeEntityTypes?.length
+          ? activeEntityTypes
+          : entityTypesFiltered;
     return (
       (mapRoutes.country || mapRoutes.entity) &&
       !!country?.id &&
@@ -1084,9 +1088,9 @@ const loadedLayersAndCountries = combine(
   },
 );
 
-// On first country code update, preserve URL layer value if present
+// Preserve URL layer on initial load, then apply defaults as the active entity scope changes.
 sample({
-  clock: merge([$countryCode, loadedLayersAndCountries]),
+  clock: merge([$countryCode, loadedLayersAndCountries, $activeEntityTypes]),
   source: combine({
     activeEntityTypes: $activeEntityTypes,
     layerUtils: $layerUtils,
@@ -1113,8 +1117,8 @@ sample({
     activeEntityTypes.forEach((entityType) => {
       let nextLayerId = selectedLayerIdByEntity[entityType] ?? null;
       const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[entityType];
-      const isActiveCurrentLayer = isActiveCurrentLayerByEntity[entityType];
-      const currentDefaultLayerId = currentDefaultLayerIdByEntity[entityType];
+      const entityLayerIsActive = isActiveCurrentLayerByEntity[entityType];
+      const entityDefaultLayerId = currentDefaultLayerIdByEntity[entityType];
       const initialLayerId = getInitialLayerIdForEntity(
         initialUrlParams,
         entityType,
@@ -1126,15 +1130,15 @@ sample({
         return;
       }
       if (
-        (currentLayerTypeUtils?.isLive && !isActiveCurrentLayer) ||
-        (currentLayerTypeUtils?.isStatic && !isActiveCurrentLayer)
+        (currentLayerTypeUtils?.isLive && !entityLayerIsActive) ||
+        (currentLayerTypeUtils?.isStatic && !entityLayerIsActive)
       ) {
         nextLayerId = null;
       }
-      if (currentLayerTypeUtils?.isLive && currentDefaultLayerId) {
-        nextLayerId = currentDefaultLayerId;
+      if (currentLayerTypeUtils?.isLive && entityDefaultLayerId) {
+        nextLayerId = entityDefaultLayerId;
       }
-      result[entityType] = nextLayerId ?? currentDefaultLayerId ?? null;
+      result[entityType] = nextLayerId ?? entityDefaultLayerId ?? null;
     });
     return result;
   },
@@ -1160,9 +1164,9 @@ sample({
     )
       ? selectedLayerIdByEntity
       : {
-        ...selectedLayerIdByEntity,
-        [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
-      };
+          ...selectedLayerIdByEntity,
+          [entityType]: currentDefaultLayerIdByEntity[entityType] ?? null,
+        };
   },
   target: $selectedLayerIdByEntity,
 });
@@ -1206,32 +1210,32 @@ const benchmarkSource = combine({
 });
 const benchmarkFn =
   (isClockId: boolean) =>
-    (
-      {
-        countryDefaultNational = {},
-        selectedEntityType,
-        selectedLayerIdByEntity,
-        connectivityBenchMark,
-        connectivityBenchMarkByEntity,
-      }: ReturnType<typeof benchmarkSource.getState>,
-      clockLayerId: unknown,
-    ) => {
-      let currentBenchmark = getEntityMapValue(
-        connectivityBenchMarkByEntity,
-        selectedEntityType,
-        connectivityBenchMark,
-      );
-      const layerId =
-        isClockId && typeof clockLayerId === 'number'
-          ? clockLayerId
-          : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
-      if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
-        currentBenchmark = ConnectivityBenchMarks.national;
-      } else {
-        currentBenchmark = ConnectivityBenchMarks.global;
-      }
-      return currentBenchmark;
-    };
+  (
+    {
+      countryDefaultNational = {},
+      selectedEntityType,
+      selectedLayerIdByEntity,
+      connectivityBenchMark,
+      connectivityBenchMarkByEntity,
+    }: ReturnType<typeof benchmarkSource.getState>,
+    clockLayerId: unknown,
+  ) => {
+    let currentBenchmark = getEntityMapValue(
+      connectivityBenchMarkByEntity,
+      selectedEntityType,
+      connectivityBenchMark,
+    );
+    const layerId =
+      isClockId && typeof clockLayerId === 'number'
+        ? clockLayerId
+        : getEntityMapValue(selectedLayerIdByEntity, selectedEntityType, null);
+    if (countryDefaultNational && countryDefaultNational[layerId ?? '']) {
+      currentBenchmark = ConnectivityBenchMarks.national;
+    } else {
+      currentBenchmark = ConnectivityBenchMarks.global;
+    }
+    return currentBenchmark;
+  };
 const entityBenchmarkFn = (
   {
     countryDefaultNational = {},
@@ -1307,4 +1311,3 @@ sample({
 // Initialize URL params on app start
 // This applies URL params to stores (connectivity speed, coverage filters, etc.)
 initializeFromUrlParams();
-

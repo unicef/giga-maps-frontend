@@ -46,14 +46,12 @@ const LiveLayerLegend = ({
   const { entity, map, schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const {
-    currentLayerLegends,
     currentLayerLegendsByEntity,
-    globalLayerData,
+    globalLayerDataByEntity,
     selectedLayerData,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
-  const legends =
-    currentLayerLegendsByEntity[entityType] ?? currentLayerLegends;
+  const legends = currentLayerLegendsByEntity[entityType]!;
   const { benchmarkLogic } =
     useStore($benchmarkmarkUtilsByEntity)[entityType] ?? {};
   const connectivitySpeedFilter = (useStore($connectivitySpeedFilterByEntity)[
@@ -66,7 +64,7 @@ const LiveLayerLegend = ({
   const countryBenchmarkDescriptions =
     countryObj?.benchmark_metadata?.layer_descriptions;
   const metricLayerData = map
-    ? globalLayerData
+    ? globalLayerDataByEntity[entityType]
     : (selectedLayerDataByEntity[entityType] ?? selectedLayerData);
   const realtimeStatsFromStore = useStore($connectivityStatsByEntity)[
     entityType

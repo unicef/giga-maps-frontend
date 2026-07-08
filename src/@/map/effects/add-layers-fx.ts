@@ -32,6 +32,8 @@ import {
   createAndUpdateConnectiivtyStatusLayer,
   createAndUpdateMapLayer,
   createSourceForMapAndCountry,
+  getEntityGlobalLayerId,
+  getFirstGlobalLayerId,
   getLayerIdsAndLastChange,
 } from './add-layers-utils';
 
@@ -58,19 +60,27 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
     refresh,
     lastSelectedLayer,
   });
+  const selectedEntityTypes = Object.keys(
+    selectedLayerIdByEntity,
+  ) as EntityType[];
+  const globalEntityTypes = Object.keys(
+    layerUtils.globalLayerDataByEntity ?? {},
+  ) as EntityType[];
   const entityTypes = activeEntityTypes?.length
     ? activeEntityTypes
-    : (Object.keys(selectedLayerIdByEntity) as EntityType[]);
+    : selectedEntityTypes.length
+      ? selectedEntityTypes
+      : globalEntityTypes;
   const firstEntitySelectedLayerId =
     entityTypes
       .map((entityType) => selectedLayerIdByEntity[entityType])
       .find((id): id is number => Boolean(id)) ?? null;
   const effectiveSelectedLayerId = mapRoute.map
-    ? layerUtils.globalLayerId
+    ? getFirstGlobalLayerId(layerUtils, entityTypes)
     : (selectedLayerId ?? firstEntitySelectedLayerId);
   const entityTypesWithSelectedLayer = getEntityTypesWithSelectedLayer({
     entityTypes,
-    globalLayerId: layerUtils.globalLayerId,
+    layerUtils,
     mapRoute,
     selectedLayerId: effectiveSelectedLayerId,
     selectedLayerIdByEntity,
@@ -86,7 +96,12 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   }
   if (isLastSelectionChange || !checkSourceAvailable(map, DEFAULT_SOURCE)) {
     // create source data country and global view;
-    if (mapRoute.map || mapRoute.country || mapRoute.schools || mapRoute.entity) {
+    if (
+      mapRoute.map ||
+      mapRoute.country ||
+      mapRoute.schools ||
+      mapRoute.entity
+    ) {
       const next = createSourceForMapAndCountry({
         ...props,
         selectedLayerId: effectiveSelectedLayerId,
@@ -106,13 +121,10 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   changeGigaSelection({
     layerId: effectiveSelectedLayerId ?? lastSelectedLayer?.layerId ?? null,
     layerIdByEntity: mapRoute.map
-      ? (activeEntityTypes?.length
-          ? activeEntityTypes
-          : [EntityType.SCHOOL]
-        ).reduce(
+      ? (activeEntityTypes?.length ? activeEntityTypes : entityTypes).reduce(
           (acc, entityType) => ({
             ...acc,
-            [entityType]: effectiveSelectedLayerId,
+            [entityType]: getEntityGlobalLayerId(layerUtils, entityType),
           }),
           {} as Partial<Record<EntityType, number | null>>,
         )
@@ -125,19 +137,21 @@ let timerId: ReturnType<typeof setTimeout> | undefined = undefined;
 
 const getEntityTypesWithSelectedLayer = ({
   entityTypes,
-  globalLayerId,
+  layerUtils,
   mapRoute,
   selectedLayerId,
   selectedLayerIdByEntity,
 }: {
   entityTypes: EntityType[];
-  globalLayerId: number | null;
+  layerUtils: ChangeLayerOptions['layerUtils'];
   mapRoute: ChangeLayerOptions['mapRoute'];
   selectedLayerId: number | null;
   selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>;
 }) => {
   if (mapRoute.map) {
-    return globalLayerId ? entityTypes : [];
+    return entityTypes.filter((entityType) =>
+      Boolean(getEntityGlobalLayerId(layerUtils, entityType)),
+    );
   }
 
   const fallbackLayerId = entityTypes.length === 1 ? selectedLayerId : null;
@@ -258,7 +272,6 @@ export const updateConnectivityFilter = createEffect(
     if (!map) return;
     const {
       selectedLayerId,
-      globalLayerId,
       selectedLayerIdByEntity,
       currentLayerTypeUtils,
       currentLayerTypeUtilsByEntity,
@@ -272,7 +285,7 @@ export const updateConnectivityFilter = createEffect(
     const isGlobalMap = Boolean(mapRoute?.map);
     for (const entityType of activeEntityTypes) {
       const effectiveSelectedLayerId = isGlobalMap
-        ? globalLayerId
+        ? getEntityGlobalLayerId(layerUtils, entityType)
         : (selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
       if (!effectiveSelectedLayerId) continue;
       const isEntityLive =
@@ -345,4 +358,3 @@ mapRouter.visible.watch((visible) => {
     cancelAnimation();
   }
 });
-

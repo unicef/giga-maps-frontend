@@ -65,8 +65,8 @@ const LegendBenchmarkDropdown = ({
   valueLabel,
 }: LegendBenchmarkDropdownProps) => {
   const { t } = useTranslation();
-  const { globalLayerId, selectedLayerId } = useStore($layerUtils);
-  const { selectedLayerIdByEntity } = useStore($layerUtils);
+  const { globalLayerDataByEntity, selectedLayerId, selectedLayerIdByEntity } =
+    useStore($layerUtils);
   const { map } = useStore($mapRoutes);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
   const connectivityBenchMark =
@@ -79,7 +79,7 @@ const LegendBenchmarkDropdown = ({
 
   const layerId =
     (map
-      ? globalLayerId
+      ? globalLayerDataByEntity[entityType]?.id
       : (selectedLayerIdByEntity[entityType] ?? selectedLayerId)) ?? 0;
   const currentLegendConfig = (countryActiveLayersDataById[layerId]
     ?.legend_configs ?? {}) as Record<string, unknown>;

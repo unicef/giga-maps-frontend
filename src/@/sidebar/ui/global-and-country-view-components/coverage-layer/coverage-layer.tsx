@@ -18,6 +18,8 @@ import { Skeleton } from '~/components/ui/skeleton';
 import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
 
+import LayerNameWithTooltip from '../common/layer-name-with-tooltip.view';
+
 const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
   const { t } = useTranslation();
   const lng = useStore($lng);
@@ -41,6 +43,8 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
     () => Object.entries(coverageDistribution || {}),
     [coverageDistribution],
   );
+  const layerName = currentSelectedLayerData?.name ?? t('cellular-coverage');
+  const layerDescription = currentSelectedLayerData?.description;
 
   const [displayNumber, setDisplayNumber] = useState(0);
   const [displayText, setDisplayText] = useState('');
@@ -57,7 +61,6 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
       const thirdValue = legendsList[2] ? legendsList[2][1] : 0;
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
-      const layerName = currentSelectedLayerData?.name ?? t('coverage');
       setDisplayNumber(firstValue + secondValue + thirdValue);
       setDisplayText(
         `${entityLabel} with ${layerName} data out of ${formatNumber(
@@ -69,12 +72,16 @@ const CoverageLayer = ({ entityType }: { entityType?: EntityType }) => {
       setDisplayNumber(0);
       setDisplayText(t('insufficient-data'));
     }
-  }, [entityLabel, legendsList, currentSelectedLayerData?.name, lng, t]);
+  }, [entityLabel, legendsList, layerName, lng, t]);
 
   return (
     <div className="flex! h-full! flex-col! justify-between! max-md:h-auto!">
       <div>
-        <div className="mt-4! mb-3! ml-4! flex! items-center!">
+        <div className="mt-4! mb-3! ml-4!">
+          <LayerNameWithTooltip
+            description={layerDescription}
+            name={layerName}
+          />
           {isLoading ? (
             <Skeleton className="h-4! w-4/5!" />
           ) : (
