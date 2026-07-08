@@ -65,6 +65,7 @@ import {
   router,
 } from '~/core/routes';
 import { $theme } from '~/core/theme.model';
+import { $urlParamsConsumed } from '~/@/sidebar/url-params.model';
 
 import {
   changeLayersFx,
@@ -251,21 +252,30 @@ const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
+  activeEntityTypes: $activeEntityTypes,
+  selectedEntityType: $selectedEntityType,
+  urlParamsConsumed: $urlParamsConsumed,
 });
 
 // guard: apply default country filters only when:
 // - filter data is loaded
 // - no school is focused
-// - URL has no existing filter params (to avoid overriding shared URLs)
+// - URL has no existing filter params on first load
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
-  clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
+  clock: merge([
+    fetchCountryFx.doneData,
+    fetchAdvanceFilterFx.doneData,
+    $activeEntityTypes,
+    $selectedEntityType,
+  ]),
   filter: ({
     countryActiveFiltersList,
     activeFiltersList,
     schoolFocusLatLng,
+    urlParamsConsumed,
   }) => {
-    if (hasFilterParams()) return false; // 🚨 IMPORTANT FIX
+    if (!urlParamsConsumed && hasFilterParams()) return false;
 
     return (
       countryActiveFiltersList != null &&
@@ -278,10 +288,12 @@ const activeFiltersListClock = guard({
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList }) =>
+  fn: ({ countryActiveFiltersList, activeFiltersList, activeEntityTypes, selectedEntityType }) =>
     buildFilterQueryFromSelections(
       countryActiveFiltersList!,
       activeFiltersList,
+      activeEntityTypes,
+      selectedEntityType,
     ),
   target: router.navigate,
 });
@@ -335,10 +347,10 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-    ...source,
-    ...data,
-  });
+    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+      ...source,
+      ...data,
+    });
 
 const mapLayerFilter = ({
   isCheckedLastDate,

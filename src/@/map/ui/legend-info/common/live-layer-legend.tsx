@@ -130,7 +130,6 @@ const LiveLayerLegend = ({
           label: string;
           tooltip?: string;
         }) => {
-          console.log('benchmarkLogic', benchmarkLogic, key);
           const logicLabel = `${(benchmarkLogic && key) !== 'unknown' ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
           const tooltipLabel = tooltip || logicLabel;
           const displayLabel = metricLayerData?.name

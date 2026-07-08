@@ -7,7 +7,7 @@ import { MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'rea
 import { useTranslation } from "react-i18next";
 
 import { $country, $countrySearchParams } from "~/@/country/country.model";
-import { $activeEntityTypes, $selectedEntityType, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
+import { $activeEntityTypes, $entityRegistry, $selectedEntityType, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import { Badge } from '~/components/ui/badge';
@@ -40,6 +40,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const activeEntityTypes = useStore($activeEntityTypes);
   const advanceFilterList = useStore($advanceFilterList);
   const { urlFieldList } = useStore($countrySearchParams);
+  const entityRegistry = useStore($entityRegistry);
   const [openItems, setOpenItems] = useState<EntityType | null>(null);
   const [selectedFields, setSelectedFields] = useState<Record<string, string | {
     none_range: boolean;
@@ -134,6 +135,12 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     }, {} as Record<string, number>)
   }, [activeEntityTypes, selectedFields])
 
+  const entitiesWithFilters = useMemo(() => {
+    return activeEntityTypes
+      .filter(el => advanceFilterList.some(item => item.entity_type === el))
+      .sort((a, b) => a < b ? 1 : -1);
+  }, [activeEntityTypes, advanceFilterList])
+
   const activeFilterBadges = useMemo(() => {
     if (Object.keys(selectedFields).length === 0) return [];
     const filteredAdvanceFilterList = advanceFilterList
@@ -147,7 +154,11 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       });
 
     const mapedfilteredAdvanceFilterList = filteredAdvanceFilterList.map(item => ({
-      entity: item.entity_type,
+      entity: t(`${item.entity_type}-entity-label`, {
+        defaultValue: t(entityRegistry[item?.entity_type]?.slug ?? item?.entity_type, {
+          count: 1,
+        }),
+      }),
       label: item.name,
       itemKey: `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`,
     }));
@@ -218,15 +229,16 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
                 </Badge>
               ))}
               <Badge
-                className="flex! justify-between! bg-[#393939]! h-[22px]! w-auto! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-white! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3! cursor-pointer!"
+                className="flex! justify-between! bg-[#393939]! h-[22px]! w-auto! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-white! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-1.5! cursor-pointer! items-center!"
                 onClick={(e) => clearAllBadges(e)}
               >
                 <span>{t('clear-all')}</span>
+                <Close size={12} className="fill-current!" />
               </Badge>
             </div>
           )}
 
-          {activeEntityTypes.sort((a, b) => a < b ? 1 : -1).map((el, index) => {
+          {entitiesWithFilters.map((el, index) => {
             return (<><Accordion type="single"
               collapsible
               key={'accordian' + el}
@@ -255,7 +267,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-              {index < activeEntityTypes.length - 1 && <Separator className="my-2!" />}
+              {index < entitiesWithFilters.length - 1 && <Separator className="my-2!" />}
             </>)
           })}
 

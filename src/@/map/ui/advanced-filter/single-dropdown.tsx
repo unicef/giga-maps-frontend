@@ -1,7 +1,6 @@
-import { Information } from '@carbon/icons-react';
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { FilterTooltip } from "./filter-tooltip";
 import { AdvanceFilterType } from "~/api/types";
 import { StyledDropdownSingleSelect } from "./filter-button.style";
 
@@ -16,11 +15,7 @@ const SingleDropdown = ({ name, column_configuration: parameter, options, itemKe
       label={name}
       id={`dropdown-${parameter.name}`}
       titleText={<>{name}
-        {!!description && <TooltipStyle $maxWidth="12rem" autoAlign={true} align="bottom-left" label={description}>
-          <button type="button">
-            <Information />
-          </button>
-        </TooltipStyle>}
+        {!!description && <FilterTooltip label={description} />}
       </>}
       initialSelectedItem={items[0]}
       items={items}

@@ -1,7 +1,6 @@
-import { Information } from '@carbon/icons-react';
 import { TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
-import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { FilterTooltip } from "./filter-tooltip";
 import { AdvanceFilterType } from "~/api/types";
 import { evaluateExpression } from "~/lib/utils";
 import { StyledTextInputWrapper } from "./filter-button.style";
@@ -20,11 +19,7 @@ const TextField = ({ value, itemKey, options, column_configuration: parameter, n
         type="text"
         labelText={<>
           {name}
-          {!!description && <TooltipStyle align="bottom" label={description}>
-            <button type="button">
-              <Information />
-            </button>
-          </TooltipStyle>}
+          {!!description && <FilterTooltip label={description} />}
         </>}
         placeholder={options?.placeholder ?? `Enter ${name}`}
         onChange={(e) => {

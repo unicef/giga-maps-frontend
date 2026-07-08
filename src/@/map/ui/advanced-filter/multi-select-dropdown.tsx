@@ -1,7 +1,6 @@
-import { Information } from '@carbon/icons-react';
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { FilterTooltip } from "./filter-tooltip";
 import { AdvanceFilterType } from "~/api/types";
 import { StyledMultiSelectFilterConfig } from "./filter-button.style";
 
@@ -18,11 +17,7 @@ const MultiSelectDropdown = ({ name, description, column_configuration: paramete
       direction='bottom'
       titleText={<>
         {name}
-        {!!description && <TooltipStyle align="bottom" label={description}>
-          <button type="button">
-            <Information />
-          </button>
-        </TooltipStyle>}
+        {!!description && <FilterTooltip label={description} />}
       </>}
       id={`mutli-select-dropdown-${parameter.name}`}
       items={items}

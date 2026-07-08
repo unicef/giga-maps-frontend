@@ -5,6 +5,8 @@ import { router } from "~/core/routes";
 export function buildFilterQueryFromSelections(
   selections: ActiveFilterListType[],
   filters: AdvanceFilterType[],
+  activeEntityTypes?: string[],
+  selectedEntityType?: string | null,
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
@@ -28,6 +30,16 @@ export function buildFilterQueryFromSelections(
     const id = sel.advance_filter_id;
     const filter = filtersById.get(id);
     if (!filter) continue;
+
+    // Apply default filters only for active entities; if multiple entities are active, restrict to selectedEntityType
+    if (activeEntityTypes) {
+      if (!activeEntityTypes.includes(filter.entity_type)) {
+        continue;
+      }
+      if (activeEntityTypes.length > 1 && selectedEntityType && filter.entity_type !== selectedEntityType) {
+        continue;
+      }
+    }
 
     const colName = filter.column_configuration?.name ?? String(id);
     const qFilter = filter.query_param_filter ?? "iexact";

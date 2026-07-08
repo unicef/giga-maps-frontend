@@ -1,8 +1,7 @@
-import { Information } from '@carbon/icons-react';
 import { FormLabel, TextInput } from "@carbon/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TooltipStyle } from "~/@/common/style/styled-component-style";
+import { FilterTooltip } from "./filter-tooltip";
 import { AdvanceFilterType } from "~/api/types";
 import { evaluateExpression } from "~/lib/utils";
 import { StyledCheckbox, StyledTextInputContainer, StyledTextInputWrapper } from "./filter-button.style";
@@ -38,11 +37,7 @@ const RangeTextInput = ({ name, description, options, value: rangeValue, column_
       <FormLabel>
         <>
           {name}
-          {!!description && <TooltipStyle align="bottom" label={description}>
-            <button type="button">
-              <Information />
-            </button>
-          </TooltipStyle>}
+          {!!description && <FilterTooltip label={description} />}
         </>
       </FormLabel>
       <StyledTextInputWrapper className="group-input" light={light}>
