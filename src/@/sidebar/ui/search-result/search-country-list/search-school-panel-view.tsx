@@ -24,7 +24,8 @@ export default function SearchSchoolPanel() {
   if (!isExpanded) return null;
   return (
     <SchoolListWrapper className="school-list-wrapper">
-      <ScrollArea viewportRef={scrollRef}>
+      <ScrollArea viewportRef={scrollRef} className='h-full!'>
+
         <SearchSchoolList />
       </ScrollArea>
       <SearchButtonGroup />

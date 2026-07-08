@@ -221,7 +221,8 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
                 className="flex! justify-between! bg-[#393939]! h-[22px]! w-auto! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-white! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3! cursor-pointer!"
                 onClick={(e) => clearAllBadges(e)}
               >
-                <span>{t('clear-all')}</span>
+                <span className='flex! items-center! gap-1!'> {t('clear-all')} <Close size={12} /></span>
+
               </Badge>
             </div>
           )}

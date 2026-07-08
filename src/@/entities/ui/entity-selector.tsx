@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import { useMemo, type MouseEvent } from 'react';
+import { type MouseEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -16,8 +16,8 @@ import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
-import { cn } from '~/lib/cn';
 import { mapEntity } from '~/core/routes';
+import { cn } from '~/lib/cn';
 
 const base =
   'h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5!';
@@ -88,15 +88,14 @@ export default function EntityTypeSelector() {
 
   return (
     <div className={!isMobile ? cn("fixed top-2 left-86 z-[3] flex items-center gap-2 rounded-full") : cn("flex items-center gap-2 p-1! overflow-auto")}>
-      <Button
+      {!isEntityViewLocked && <Button
         variant="default"
         size="lg"
         className={`${base} ${isEntityViewLocked ? disabled : allSelected ? active : inactive}`}
-        disabled={isEntityViewLocked}
         onClick={handleSelectAllEntityTypes}
       >
         {t('all-facilities')}
-      </Button>
+      </Button>}
 
       {entityTypes.map(([type, config]) => {
         const entityType = type as EntityType;
@@ -104,26 +103,27 @@ export default function EntityTypeSelector() {
         const isActive = isEntityViewLocked
           ? entityType === lockedEntityType
           : activeEntityTypes.includes(entityType) && !isGlobalMode;
-
-        return (
-          <Button
-            key={type}
-            variant="default"
-            size="lg"
-            className={`${base} ${isDisabled ? disabled : isActive ? active : inactive}`}
-            disabled={isDisabled}
-            onClick={(event) => handleEntityClick(entityType, event)}
-          >
-            <EntityLegendIndicator
-              className="ml-0!"
-              color={isActive ? '#f4f4f4' : '#d9d9d9'}
-              entityType={type}
-              fitToViewBox
-              size={11}
-            />
-            {t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}
-          </Button>
-        );
+        if (!isEntityViewLocked || isActive)
+          return (
+            <Button
+              key={type}
+              variant="default"
+              size="lg"
+              className={`${base} ${isDisabled ? disabled : isActive ? active : inactive}`}
+              disabled={isDisabled}
+              onClick={(event) => handleEntityClick(entityType, event)}
+            >
+              <EntityLegendIndicator
+                className="ml-0!"
+                color={isActive ? '#f4f4f4' : '#d9d9d9'}
+                entityType={type}
+                fitToViewBox
+                size={11}
+              />
+              {t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}
+            </Button>
+          );
+        else return (<></>);
       })}
       {isMobile &&
         <FilterButton />
