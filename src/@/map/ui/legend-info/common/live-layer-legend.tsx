@@ -48,7 +48,6 @@ const LiveLayerLegend = ({
   const {
     currentLayerLegendsByEntity,
     globalLayerDataByEntity,
-    selectedLayerData,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const legends = currentLayerLegendsByEntity[entityType]!;
@@ -65,7 +64,7 @@ const LiveLayerLegend = ({
     countryObj?.benchmark_metadata?.layer_descriptions;
   const metricLayerData = map
     ? globalLayerDataByEntity[entityType]
-    : (selectedLayerDataByEntity[entityType] ?? selectedLayerData);
+    : selectedLayerDataByEntity[entityType];
   const realtimeStatsFromStore = useStore($connectivityStatsByEntity)[
     entityType
   ];
@@ -131,17 +130,18 @@ const LiveLayerLegend = ({
           label: string;
           tooltip?: string;
         }) => {
+          console.log('benchmarkLogic', benchmarkLogic, key);
           const logicLabel = `${(benchmarkLogic && key) !== 'unknown' ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
           const tooltipLabel = tooltip || logicLabel;
           const displayLabel = metricLayerData?.name
             ?.toLowerCase()
             .includes('download')
             ? ({
-                good: t('high'),
-                moderate: t('moderate'),
-                bad: t('low'),
-                unknown: t('unknown'),
-              }[key] ?? label)
+              good: t('high'),
+              moderate: t('moderate'),
+              bad: t('low'),
+              unknown: t('unknown'),
+            }[key] ?? label)
             : label;
           const legendColor =
             legends.colors[key] ?? paintData[key] ?? paintData.unknown;

@@ -42,7 +42,7 @@ import {
   SchoolStatsType,
 } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
-import { mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
+import { $mapRoutes, mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 import { evaluateExpression } from '~/lib/utils';
 import {
@@ -856,13 +856,25 @@ function buildBenchmarkUtils(
   selectedLayerData: LayerType | null | undefined,
   connectivityBenchMark: ConnectivityBenchMarks,
   countryConnectivityNames: Record<string, string>,
+  mapRoutes: typeof $mapRoutes extends { getState: () => infer T } ? T : never
 ) {
-  if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
+  if (!mapRoutes.map && (!selectedLayerData || !isLiveLayer(selectedLayerData?.type))) return {};
   const {
+    id,
     global_benchmark,
     is_reverse: isReverse,
     benchmark_metadata,
-  } = selectedLayerData;
+  } = selectedLayerData ?? {
+    id: 0,
+    benchmark_metadata: {
+      base_benchmark: "1000000",
+      round_unit_value: "{val} / (1000 * 1000)",
+    },
+    global_benchmark: {
+      value: "20000000",
+      convert_unit: "mbps",
+    },
+  };
   const {
     convert_unit: unit,
     value,
@@ -880,7 +892,7 @@ function buildBenchmarkUtils(
     Number(
       evaluateExpression(
         formula,
-        countryBenchmark?.[selectedLayerData.id] ?? 0,
+        countryBenchmark?.[id] ?? 0,
       ),
     ) || 0;
   const currentBenchmarkValue =
@@ -910,11 +922,13 @@ export const $benchmarkmarkUtilsByEntity = combine(
   $selectedLayerDataByEntity,
   $connectivityBenchMarkByEntity,
   $countryConnectivityNames,
+  $mapRoutes,
   (
     countryBenchmark,
     selectedLayerDataByEntity,
     connectivityBenchMarkByEntity,
     countryConnectivityNames,
+    mapRoutes,
   ) => {
     return Object.entries(selectedLayerDataByEntity).reduce(
       (acc, [entityType, selectedLayerData]) => {
@@ -928,6 +942,7 @@ export const $benchmarkmarkUtilsByEntity = combine(
             ConnectivityBenchMarks.global,
           ),
           countryConnectivityNames,
+          mapRoutes
         );
         return acc;
       },

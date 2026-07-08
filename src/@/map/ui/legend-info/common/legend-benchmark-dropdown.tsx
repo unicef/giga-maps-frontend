@@ -65,7 +65,7 @@ const LegendBenchmarkDropdown = ({
   valueLabel,
 }: LegendBenchmarkDropdownProps) => {
   const { t } = useTranslation();
-  const { globalLayerDataByEntity, selectedLayerId, selectedLayerIdByEntity } =
+  const { globalLayerDataByEntity, selectedLayerIdByEntity } =
     useStore($layerUtils);
   const { map } = useStore($mapRoutes);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
@@ -80,7 +80,7 @@ const LegendBenchmarkDropdown = ({
   const layerId =
     (map
       ? globalLayerDataByEntity[entityType]?.id
-      : (selectedLayerIdByEntity[entityType] ?? selectedLayerId)) ?? 0;
+      : selectedLayerIdByEntity[entityType]) ?? 0;
   const currentLegendConfig = (countryActiveLayersDataById[layerId]
     ?.legend_configs ?? {}) as Record<string, unknown>;
   const isCountryNationalBenchmark =
@@ -107,7 +107,7 @@ const LegendBenchmarkDropdown = ({
   const selectedValue = map
     ? ConnectivityBenchMarks.global
     : connectivityBenchMark === ConnectivityBenchMarks.national &&
-        isCountryNationalBenchmark
+      isCountryNationalBenchmark
       ? ConnectivityBenchMarks.national
       : ConnectivityBenchMarks.global;
   const selectedLabel =
@@ -185,11 +185,11 @@ const LegendBenchmarkDropdown = ({
                   option.disabled
                     ? 'cursor-not-allowed! opacity-55! text-muted-foreground!'
                     : cn(
-                        'cursor-pointer! hover:bg-white/8!',
-                        isSelected
-                          ? 'bg-accent! text-accent-foreground!'
-                          : 'text-foreground!',
-                      ),
+                      'cursor-pointer! hover:bg-white/8!',
+                      isSelected
+                        ? 'bg-accent! text-accent-foreground!'
+                        : 'text-foreground!',
+                    ),
                 )}
                 disabled={option.disabled}
                 key={option.value}

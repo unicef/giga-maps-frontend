@@ -72,7 +72,6 @@ const LegendPopup = ({
   const entityTypesFiltered = useStore($entityTypesFiltered);
   const {
     currentLayerLegendsByEntity,
-    currentLayerTypeUtils,
     currentLayerTypeUtilsByEntity,
     globalLayerDataByEntity,
     selectedLayerDataByEntity,
@@ -122,8 +121,12 @@ const LegendPopup = ({
 
   const legendMetricTitle = t('internet-quality');
   const activeLayerTypeUtils =
-    currentLayerTypeUtilsByEntity[activeTab] ?? currentLayerTypeUtils;
-  const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils;
+    currentLayerTypeUtilsByEntity[activeTab];
+  const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils ?? {
+    isStatic: false,
+    isLive: false,
+    isSchoolStatus: false,
+  };
   const activeEntityLayerData =
     selectedLayerDataByEntity[activeTab] ?? null;
   const showLiveLegend = isGlobalView || isLive;
@@ -148,19 +151,19 @@ const LegendPopup = ({
   const activeLayerSummaryItems: LegendSummaryItem[] =
     !isGlobalView && activeEntityLayerLegends.values.length
       ? activeEntityLayerLegends.values.map(({ key, label }) => ({
-          color:
-            activeEntityLayerLegends.colors[key] ??
-            paintData[key] ??
-            paintData.unknown,
-          key,
-          label,
-        }))
+        color:
+          activeEntityLayerLegends.colors[key] ??
+          paintData[key] ??
+          paintData.unknown,
+        key,
+        label,
+      }))
       : [
-          { color: paintData.good, key: 'good', label: t('high') },
-          { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-          { color: paintData.bad, key: 'bad', label: t('low') },
-          { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-        ];
+        { color: paintData.good, key: 'good', label: t('high') },
+        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+        { color: paintData.bad, key: 'bad', label: t('low') },
+        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+      ];
 
   const shouldShowMetricSummary = showLiveLegend || showStaticLegend;
   const shouldShowGlobalSchoolStatus = isGlobalView;
