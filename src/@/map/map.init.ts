@@ -119,6 +119,7 @@ import {
   $popup,
   $reloadStyle,
   $schoolClickData,
+  $schoolClickedEntityType,
   $schoolClickedId,
   $schoolMarkers,
   $selectedGigaLayers,
@@ -334,10 +335,10 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-      ...source,
-      ...data,
-    });
+  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+    ...source,
+    ...data,
+  });
 
 const mapLayerFilter = ({
   isCheckedLastDate,
@@ -501,14 +502,21 @@ sample({
     isMobile: $isMobile,
   }),
   filter: ({ country, isMobile }, activePopup) =>
-    isMobile && !!country?.code && !!activePopup?.entityType && !!activePopup.id,
+    isMobile &&
+    !!country?.code &&
+    !!activePopup?.entityType &&
+    !!activePopup.id,
   fn: ({ country }, activePopup) => ({
     countryCode: country!.code,
     entityId: activePopup!.id,
     entityType: activePopup!.entityType,
   }),
   target: createEffect(
-    ({ countryCode, entityId, entityType }: {
+    ({
+      countryCode,
+      entityId,
+      entityType,
+    }: {
       countryCode: string;
       entityId: number;
       entityType: EntityType;
@@ -520,6 +528,7 @@ export const $schoolPopupConnectivityMap = $schoolClickData.map((data) =>
   data?.length ? schoolStatsMap(data[0]) : null,
 );
 export const $schoolPopupData = combine({
+  entityType: $schoolClickedEntityType,
   feature: $schoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
