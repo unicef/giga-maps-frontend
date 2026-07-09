@@ -12,7 +12,12 @@ import { StatisticsStatus } from '../styles/school-information.style';
 import { SchoolDetailTitle, SingleInfoContainer } from '../styles/school-view-style';
 import { $country } from '~/@/country/country.model';
 import { $isLoadingSchoolView } from '~/@/sidebar/sidebar.model';
-import { getStatisticsConfig, StatisticConfig, groupOrder } from '../../../config/school-information-config';
+import {
+  getStatisticsConfig,
+  resetCountryConfigCache,
+  StatisticConfig,
+  groupOrder,
+} from '../../../config/school-information-config';
 import { useTranslation } from 'react-i18next';
 
 const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => {
@@ -23,18 +28,18 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchConfig = async () => {
+    const loadStatisticsConfig = async () => {
       if (country?.id) {
+        resetCountryConfigCache();
         const config = await getStatisticsConfig(country.id);
         setStatisticsConfig(config);
       }
     };
 
-    fetchConfig();
-  }, [country?.id]);
+    loadStatisticsConfig();
+  }, [country?.id, schoolData?.id]);
 
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({ schoolDetails: schoolData, stylePaintData });
-  // 
   const schoolCoordinates = (JSON.parse(JSON.stringify(schoolData?.geopoint?.coordinates ?? []))).reverse();
 
   const groupStatistics = (statistics: StatisticConfig[]) => {

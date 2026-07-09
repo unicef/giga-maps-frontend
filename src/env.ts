@@ -17,10 +17,6 @@ export const API_BASE_URL =
 
 export const GIGA_MERTER_API_HOST = process.env.GIGA_METER_API_HOST ?? 'https://uni-ooi-giga-meter-backend-dev.azurewebsites.net';
 
-export const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY ?? '';
-
-// export const RECAPTCHA_KEY = process.env.RECAPTCHA_KEY ?? '';
-
 export const B2C_CLIENT_ID = process.env.B2C_CLIENT_ID ?? ''
 
 export const ENV = process.env.ENV;
