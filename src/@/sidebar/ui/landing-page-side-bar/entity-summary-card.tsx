@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import GigaMapsLogo from '~/assets/images/giga-logo.png';
+import HealthCentersAccordionFooterLogo from '~/assets/images/health-centers-accordion-footer-logo.svg';
 import SchoolAccordionFooterLogo from '~/assets/images/school-accordion-footer-logo.svg';
 import {
   AccordionContent,
@@ -46,6 +47,7 @@ const EntitySummaryCard = ({
   const loadingRowLabelSet = new Set(loadingRowLabels);
   const shouldShowSchoolFooter = card.value === EntityType.SCHOOL;
 
+
   return (
     <AccordionItem
       className="overflow-visible! rounded-lg! border! border-border!"
@@ -84,7 +86,7 @@ const EntitySummaryCard = ({
                   </span>
                 )}
                 <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">
-                  {row.label}
+                  {row.label.replace(/(^\w|\s\w)/g, match => match.toUpperCase())}
                 </span>
               </div>
               {card.collapsedRows.length > index + 1 || expanded ? <MetricDivider /> : null}
@@ -97,10 +99,17 @@ const EntitySummaryCard = ({
         {children}
       </AccordionContent>
 
-      {!isLoading && shouldShowSchoolFooter ? (
+      {!isLoading && EntityType.SCHOOL === card.value ? (
         <div className="flex! items-center! justify-center! gap-3! rounded-b-lg! bg-[#0f62fe]! px-3.5! py-[0.35rem]! text-[#f4f4f4]! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
           <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
             <SchoolAccordionFooterLogo />
+          </div>
+        </div>
+      ) : null}
+      {!isLoading && EntityType.HEALTH === card.value ? (
+        <div className="flex! items-center! justify-center! gap-3! rounded-b-lg! bg-[#01AEEF]! px-3.5! py-[0.35rem]! text-[#f4f4f4]! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-6 [&_svg]:!w-auto [&_svg_circle]:!fill-[#f4f4f4] [&_svg_g]:!fill-[#f4f4f4] [&_svg_path]:!fill-[#f4f4f4] [&_svg_polygon]:!fill-[#f4f4f4] [&_svg_rect]:!fill-[#f4f4f4]">
+          <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
+            <HealthCentersAccordionFooterLogo />
           </div>
         </div>
       ) : null}

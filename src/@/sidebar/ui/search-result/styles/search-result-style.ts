@@ -225,10 +225,10 @@ export const ButtonGroup = styled.div<{ $hide: boolean; }>`
 `}
 `
 
-export const FooterWrapper = styled.div`
-  position: absolute;
+export const FooterWrapper = styled.div<{ $isMobile: boolean }>`
+  position: absolute ${props => props.$isMobile ? '!important' : ''};
   background:${props => props.theme.main};
-  bottom: 0;
+  bottom: ${props => props.$isMobile ? '20px' : '0px'};
   left: 0;
   width: 100%;
 
