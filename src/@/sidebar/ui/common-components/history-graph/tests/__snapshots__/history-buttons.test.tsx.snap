@@ -2,7 +2,7 @@
 
 exports[`Layer schools connectivity status > calls changeHistoryIntervalUnit with IntervalUnit.month when "Monthly" button is clicked 1`] = `
 <button
-  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! bg-transparent! p-[0.6rem]! font-manrope! text-[0.6rem]! font-bold! uppercase! outline-none! hover:bg-transparent! border-b-foreground! text-foreground!"
+  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! bg-transparent! p-[0.6rem]! text-[0.6rem]! font-bold! uppercase! outline-none! hover:bg-transparent! border-b-foreground! text-foreground!"
   type="button"
 >
   Monthly
@@ -11,7 +11,7 @@ exports[`Layer schools connectivity status > calls changeHistoryIntervalUnit wit
 
 exports[`Layer schools connectivity status > calls changeHistoryIntervalUnit with IntervalUnit.week when "Weekly" button is clicked 1`] = `
 <button
-  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! bg-transparent! p-[0.6rem]! font-manrope! text-[0.6rem]! font-bold! uppercase! outline-none! hover:bg-transparent! border-b-foreground! text-foreground!"
+  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! bg-transparent! p-[0.6rem]! text-[0.6rem]! font-bold! uppercase! outline-none! hover:bg-transparent! border-b-foreground! text-foreground!"
   type="button"
 >
   Weekly
@@ -20,7 +20,7 @@ exports[`Layer schools connectivity status > calls changeHistoryIntervalUnit wit
 
 exports[`Layer schools connectivity status > renders "Weekly" and "Monthly" buttons correctly 1`] = `
 <button
-  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! bg-transparent! p-[0.6rem]! font-manrope! text-[0.6rem]! font-bold! uppercase! outline-none! hover:bg-transparent! border-b-foreground! text-foreground!"
+  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! bg-transparent! p-[0.6rem]! text-[0.6rem]! font-bold! uppercase! outline-none! hover:bg-transparent! border-b-foreground! text-foreground!"
   type="button"
 >
   Weekly
@@ -29,7 +29,7 @@ exports[`Layer schools connectivity status > renders "Weekly" and "Monthly" butt
 
 exports[`Layer schools connectivity status > renders "Weekly" and "Monthly" buttons correctly 2`] = `
 <button
-  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! border-b-muted-foreground! bg-transparent! p-[0.6rem]! font-manrope! text-[0.6rem]! font-bold! uppercase! text-muted-foreground! outline-none! hover:bg-transparent!"
+  class="flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! border-b-muted-foreground! bg-transparent! p-[0.6rem]! text-[0.6rem]! font-bold! uppercase! text-muted-foreground! outline-none! hover:bg-transparent!"
   type="button"
 >
   Monthly

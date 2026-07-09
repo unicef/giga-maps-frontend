@@ -63,7 +63,7 @@ describe('Sidebar Init', () => {
 
     try {
       onLoadPage();
-      expect(calls).toEqual(expect.arrayContaining([{ query: '' }]));
+      expect(calls).toEqual(expect.arrayContaining([{ query: '?entity_type__code=all' }]));
     } finally {
       unwatch();
     }

@@ -65,6 +65,7 @@ import {
   router,
 } from '~/core/routes';
 import { $theme } from '~/core/theme.model';
+import { $urlParamsConsumed } from '~/@/sidebar/url-params.model';
 
 import {
   changeLayersFx,
@@ -119,6 +120,7 @@ import {
   $popup,
   $reloadStyle,
   $schoolClickData,
+  $schoolClickedEntityType,
   $schoolClickedId,
   $schoolMarkers,
   $selectedGigaLayers,
@@ -250,21 +252,30 @@ const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
+  activeEntityTypes: $activeEntityTypes,
+  selectedEntityType: $selectedEntityType,
+  urlParamsConsumed: $urlParamsConsumed,
 });
 
 // guard: apply default country filters only when:
 // - filter data is loaded
 // - no school is focused
-// - URL has no existing filter params (to avoid overriding shared URLs)
+// - URL has no existing filter params on first load
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
-  clock: merge([fetchCountryFx.doneData, fetchAdvanceFilterFx.doneData]),
+  clock: merge([
+    fetchCountryFx.doneData,
+    fetchAdvanceFilterFx.doneData,
+    $activeEntityTypes,
+    $selectedEntityType,
+  ]),
   filter: ({
     countryActiveFiltersList,
     activeFiltersList,
     schoolFocusLatLng,
+    urlParamsConsumed,
   }) => {
-    if (hasFilterParams()) return false; // 🚨 IMPORTANT FIX
+    if (!urlParamsConsumed && hasFilterParams()) return false;
 
     return (
       countryActiveFiltersList != null &&
@@ -277,10 +288,12 @@ const activeFiltersListClock = guard({
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList }) =>
+  fn: ({ countryActiveFiltersList, activeFiltersList, activeEntityTypes, selectedEntityType }) =>
     buildFilterQueryFromSelections(
       countryActiveFiltersList!,
       activeFiltersList,
+      activeEntityTypes,
+      selectedEntityType,
     ),
   target: router.navigate,
 });
@@ -501,14 +514,21 @@ sample({
     isMobile: $isMobile,
   }),
   filter: ({ country, isMobile }, activePopup) =>
-    isMobile && !!country?.code && !!activePopup?.entityType && !!activePopup.id,
+    isMobile &&
+    !!country?.code &&
+    !!activePopup?.entityType &&
+    !!activePopup.id,
   fn: ({ country }, activePopup) => ({
     countryCode: country!.code,
     entityId: activePopup!.id,
     entityType: activePopup!.entityType,
   }),
   target: createEffect(
-    ({ countryCode, entityId, entityType }: {
+    ({
+      countryCode,
+      entityId,
+      entityType,
+    }: {
       countryCode: string;
       entityId: number;
       entityType: EntityType;
@@ -520,6 +540,7 @@ export const $schoolPopupConnectivityMap = $schoolClickData.map((data) =>
   data?.length ? schoolStatsMap(data[0]) : null,
 );
 export const $schoolPopupData = combine({
+  entityType: $schoolClickedEntityType,
   feature: $schoolPopupConnectivityMap,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,

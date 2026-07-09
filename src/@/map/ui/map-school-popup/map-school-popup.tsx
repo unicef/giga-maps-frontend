@@ -39,7 +39,7 @@ export const MapSchoolPopup = () => {
     isLoading,
     features,
     isLive,
-    isSchoolBenchmark,
+    isEntityBenchmark,
     getFeatureInfo,
     isStatic,
     countryCode,
@@ -51,8 +51,10 @@ export const MapSchoolPopup = () => {
 
   const entityLabel = entityType
     ? t(`${entityType}-entity-label`, {
-      defaultValue: t(entityRegistry[entityType]?.slug ?? entityType, { count: 1 }),
-    })
+        defaultValue: t(entityRegistry[entityType]?.slug ?? entityType, {
+          count: 1,
+        }),
+      })
     : '';
 
   return (
@@ -68,7 +70,7 @@ export const MapSchoolPopup = () => {
           staticValue,
           staticColor,
           schoolAtSameLocation,
-          schoolId
+          schoolId,
         } = getFeatureInfo(feature);
 
         const duplicateSchoolIds = schoolAtSameLocation?.schoolIds ?? [];
@@ -79,20 +81,27 @@ export const MapSchoolPopup = () => {
             <SchoolPopupLoading />
           ) : (
             <div className="school-popup-data">
-              {(!isLoading && isClicked && hasDublicateSchools && entityType) ?
+              {!isLoading && isClicked && hasDublicateSchools && entityType ? (
                 <DublicateSchoolPopup
                   schoolIds={[schoolId, ...duplicateSchoolIds]}
                   entityType={entityType}
                   countryCode={countryCode}
                   scrollableTargetId="parentPopupScrollContainer"
                   batchSize={10}
-                /> :
+                />
+              ) : (
                 <div className="map-popup-template">
                   <PopupTemplate>
                     <SchoolNameWrapper>
                       <SchoolNameContent>
-                        <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
-                        {feature?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
+                        <SchoolName className="map-school-name">
+                          {feature?.name?.toLocaleLowerCase()}
+                        </SchoolName>
+                        {feature?.isVerifiedSchool === false && (
+                          <SchoolVerificationTag>
+                            Unverified
+                          </SchoolVerificationTag>
+                        )}
                       </SchoolNameContent>
                       <OSMLink
                         href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
@@ -106,32 +115,79 @@ export const MapSchoolPopup = () => {
                     <SchoolInfoWrapper className="live-container">
                       <LiveContainer>
                         <ConnectivityCircleWrapper className="map-school-status-circle">
-                          {!isStatic && feature?.isRealTime && <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />}
-                          <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
+                          {!isStatic && feature?.isRealTime && (
+                            <InnerCircleConnectivity
+                              className="outer-circle"
+                              $backColor={connecitivityColor}
+                            />
+                          )}
+                          <InnerCircle
+                            className="inner-circle"
+                            $margin="0.35rem 0 0 0"
+                            $backColor={
+                              isStatic ? staticColor : connecitivityStatusColor
+                            }
+                          />
                         </ConnectivityCircleWrapper>
                         <LiveContent>
-                          {isLive && feature?.isRealTime && <LiveStatusRow>
-                            <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                            <Label $size="0.875rem" $textTransform="none" $color={theme.filterText}>{formattedInterval}</Label>
-                          </LiveStatusRow>}
-                          {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
-                          {!isStatic && (!isLive || !feature?.isRealTime) &&
-                            <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[connectivityStatusValue])}</Label>
-                          }
+                          {isLive && feature?.isRealTime && (
+                            <LiveStatusRow>
+                              <Label
+                                $color={connecitivityColor}
+                                style={{ whiteSpace: 'nowrap' }}
+                              >
+                                {connectivityValue}
+                              </Label>
+                              <Label
+                                $size="0.875rem"
+                                $textTransform="none"
+                                $color={theme.filterText}
+                              >
+                                {formattedInterval}
+                              </Label>
+                            </LiveStatusRow>
+                          )}
+                          {isStatic && (
+                            <Label $color={staticColor}>{staticValue}</Label>
+                          )}
+                          {!isStatic && (!isLive || !feature?.isRealTime) && (
+                            <Label
+                              $color={connecitivityStatusColor}
+                              style={{ whiteSpace: 'nowrap' }}
+                            >
+                              {t(
+                                ConnectivityStatusNames[
+                                  connectivityStatusValue
+                                ],
+                              )}
+                            </Label>
+                          )}
                         </LiveContent>
                       </LiveContainer>
-                      {isSchoolBenchmark && benchmarkTitle && <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
+                      {isEntityBenchmark && benchmarkTitle && (
+                        <Label style={{ marginTop: '0.5rem' }} $size=".875rem">
+                          {benchmarkTitle} - {feature?.schoolBenchmark}
+                        </Label>
+                      )}
                     </SchoolInfoWrapper>
-
                   </PopupTemplate>
-                  {isClicked && entityType && feature?.id && <GoToSchoolButton className="go-to-school" onClick={() => {
-                    navigateToEntity(entityType, countryCode, feature.id);
-                    setSchoolFocusLatLng(feature?.geopoint.coordinates as PointCoordinates);
-                  }} type="button"
-                    renderIcon={ArrowRight} >
-                    {t('go-to-entity-page', { entity: entityLabel })}
-                  </GoToSchoolButton>}
-                </div>}
+                  {isClicked && entityType && feature?.id && (
+                    <GoToSchoolButton
+                      className="go-to-school"
+                      onClick={() => {
+                        navigateToEntity(entityType, countryCode, feature.id);
+                        setSchoolFocusLatLng(
+                          feature?.geopoint.coordinates as PointCoordinates,
+                        );
+                      }}
+                      type="button"
+                      renderIcon={ArrowRight}
+                    >
+                      {t('go-to-entity-page', { entity: entityLabel })}
+                    </GoToSchoolButton>
+                  )}
+                </div>
+              )}
             </div>
           ),
           element,

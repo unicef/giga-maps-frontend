@@ -3,13 +3,13 @@ import { clearMapDataFx } from '../effects/add-layers-fx';
 import { updateConnectivityFilter } from '../effects/add-layers-fx';
 import { filterConnectivityList } from '../utils';
 
-vi.mock('../utils')
+vi.mock('../utils');
 describe('changeLayersFx', () => {
   let map: any;
   beforeEach(() => {
     map = {
       getStyle: vi.fn(),
-    }
+    };
   });
 
   it('should return early if map not provided', async () => {
@@ -24,8 +24,8 @@ describe('changeLayersFx', () => {
       lastSelectedLayer: null,
       refresh: true,
       mapRoute: {
-        map: false
-      }
+        map: false,
+      },
     } as any);
     expect(result).toBeUndefined();
   });
@@ -36,16 +36,14 @@ describe('changeLayersFx', () => {
       selectedLayerIds: [1],
       lastSelectedLayer: null,
       mapRoute: {
-        map: true
-      }
+        map: true,
+      },
     } as any);
     expect(result).toBeUndefined();
   });
-
 });
 
 describe('clearMapDataFx', () => {
-
   let map: any;
   beforeEach(() => {
     map = {
@@ -53,10 +51,10 @@ describe('clearMapDataFx', () => {
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
-          layers: []
-        }
-      })
-    }
+          layers: [],
+        },
+      }),
+    };
   });
 
   it('should return early if map is not provided', async () => {
@@ -67,19 +65,17 @@ describe('clearMapDataFx', () => {
   it('should call cancelAnimation', () => {
     clearMapDataFx({ map });
   });
-
 });
 
 import { updateCoverageFilter } from '../effects/add-layers-fx';
 import { DEFAULT_SOURCE } from '../map.constant';
 
 describe('updateCoverageFilter', () => {
-
   it('should return early if map is not provided', async () => {
     const result = await updateCoverageFilter({
       layerUtils: {},
       coverageFilter: {},
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(result).toBeUndefined();
@@ -88,14 +84,14 @@ describe('updateCoverageFilter', () => {
   it('should set filter on map layer if static layer', () => {
     const map = {
       getLayer: vi.fn(() => true),
-      setFilter: vi.fn()
+      setFilter: vi.fn(),
     };
     const layerUtils = {
       selectedLayerId: 1,
-      coverageLayerId: 2,
+      coverageLayerDataByEntity: { school: { id: 2 } },
       currentLayerTypeUtils: {
-        isStatic: true
-      }
+        isStatic: true,
+      },
     };
     const coverageFilter = {};
     const lastSelectedLayer = {};
@@ -104,7 +100,7 @@ describe('updateCoverageFilter', () => {
       map,
       layerUtils,
       coverageFilter,
-      lastSelectedLayer
+      lastSelectedLayer,
     } as any);
 
     expect(map.setFilter).toHaveBeenCalled();
@@ -113,14 +109,14 @@ describe('updateCoverageFilter', () => {
   it('should not set filter if not static layer', () => {
     const map = {
       getLayer: vi.fn(() => true),
-      setFilter: vi.fn()
+      setFilter: vi.fn(),
     };
     const layerUtils = {
       selectedLayerId: 1,
-      coverageLayerId: 2,
+      coverageLayerDataByEntity: { school: { id: 2 } },
       currentLayerTypeUtils: {
-        isStatic: false
-      }
+        isStatic: false,
+      },
     };
     const coverageFilter = {};
     const lastSelectedLayer = {};
@@ -129,22 +125,20 @@ describe('updateCoverageFilter', () => {
       map,
       layerUtils,
       coverageFilter,
-      lastSelectedLayer
+      lastSelectedLayer,
     } as any);
 
     expect(map.setFilter).not.toHaveBeenCalled();
   });
-
 });
 
 describe('updateConnectivityFilter', () => {
-
   it('should return early if map is not provided', async () => {
     const result = await updateConnectivityFilter({
       map: null,
       layerUtils: {},
       connectivitySpeedFilter: {},
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(result).toBeUndefined();
@@ -153,27 +147,27 @@ describe('updateConnectivityFilter', () => {
   it('should set filter on live layer if map and layer provided', () => {
     const map = {
       getLayer: vi.fn(() => true),
-      setFilter: vi.fn()
+      setFilter: vi.fn(),
     };
     const layerUtils = {
       selectedLayerId: 1,
-      globalLayerId: 2,
+      globalLayerDataByEntity: { school: { id: 2 } },
       currentLayerTypeUtils: {
-        isLive: true
-      }
+        isLive: true,
+      },
     };
     const connectivitySpeedFilter = {
       range: {
         start: 1000,
-        end: 2000
-      }
+        end: 2000,
+      },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
       connectivitySpeedFilter,
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).toHaveBeenCalled();
@@ -182,21 +176,21 @@ describe('updateConnectivityFilter', () => {
   it('should not set filter on static layer', () => {
     const map = {
       getLayer: vi.fn(() => true),
-      setFilter: vi.fn()
+      setFilter: vi.fn(),
     };
     const layerUtils = {
       selectedLayerId: 1,
-      globalLayerId: 2,
+      globalLayerDataByEntity: { school: { id: 2 } },
       currentLayerTypeUtils: {
-        isLive: false
-      }
+        isLive: false,
+      },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
       connectivitySpeedFilter: {},
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).not.toHaveBeenCalled();
@@ -207,7 +201,7 @@ describe('updateConnectivityFilter', () => {
       map: null,
       layerUtils: {},
       connectivitySpeedFilter: null,
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(result).toBeUndefined();
@@ -216,29 +210,29 @@ describe('updateConnectivityFilter', () => {
   it('updateConnectivityFilter: should set correct filter if live layer', async () => {
     const map = {
       getLayer: vi.fn(() => true),
-      setFilter: vi.fn()
+      setFilter: vi.fn(),
     };
 
     const layerUtils = {
       selectedLayerId: 1,
-      globalLayerId: 2,
+      globalLayerDataByEntity: { school: { id: 2 } },
       currentLayerTypeUtils: {
-        isLive: true
-      }
+        isLive: true,
+      },
     };
 
     const connectivitySpeedFilter = {
       range: {
         start: 1000,
-        end: 2000
-      }
+        end: 2000,
+      },
     };
 
     await updateConnectivityFilter({
       map,
       layerUtils,
       connectivitySpeedFilter,
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).toHaveBeenCalled();
@@ -252,7 +246,7 @@ describe('updateConnectivityFilter', () => {
 
     const layerUtils = {
       selectedLayerId: 1,
-      globalLayerId: 1,
+      globalLayerDataByEntity: { school: { id: 1 } },
       selectedLayerIdByEntity: { school: 1 },
       currentLayerTypeUtils: {
         isLive: true,
@@ -283,32 +277,31 @@ describe('updateConnectivityFilter', () => {
   it('updateConnectivityFilter: should not set filter if layer is not live', () => {
     const map = {
       getLayer: vi.fn(() => true),
-      setFilter: vi.fn()
+      setFilter: vi.fn(),
     };
 
     const layerUtils = {
       selectedLayerId: 1,
-      globalLayerId: 2,
+      globalLayerDataByEntity: { school: { id: 2 } },
       currentLayerTypeUtils: {
-        isLive: false
-      }
+        isLive: false,
+      },
     };
 
     const connectivitySpeedFilter = {
       range: {
         start: 1000,
-        end: 2000
-      }
+        end: 2000,
+      },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
       connectivitySpeedFilter,
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).not.toHaveBeenCalled();
   });
-
 });

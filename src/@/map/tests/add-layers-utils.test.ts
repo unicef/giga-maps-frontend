@@ -1,20 +1,24 @@
-import { createAndUpdateMapLayer, createSourceForMapAndCountry, getLayerIdsAndLastChange } from '../effects/add-layers-utils';
+import {
+  createAndUpdateMapLayer,
+  createSourceForMapAndCountry,
+  getLayerIdsAndLastChange,
+} from '../effects/add-layers-utils';
 
 describe('addLayerUtils', () => {
-
   it('should return schoolLayerId, selectedLayerId, and isLastSelectionChange', () => {
     const lastSelectedLayer = {
       layerId: 2,
       schoolId: 1,
     };
-    const { schoolLayerId, selectedLayerId, isLastSelectionChange } = getLayerIdsAndLastChange({
-      lastSelectedLayer,
-      refresh: false,
-      selectedLayerIds: {
-        schoolId: 1,
-        selectedId: 3
-      }
-    });
+    const { schoolLayerId, selectedLayerId, isLastSelectionChange } =
+      getLayerIdsAndLastChange({
+        lastSelectedLayer,
+        refresh: false,
+        selectedLayerIds: {
+          schoolId: 1,
+          selectedId: 3,
+        },
+      });
 
     expect(schoolLayerId).toBe(1);
     expect(selectedLayerId).toBe(3);
@@ -24,15 +28,15 @@ describe('addLayerUtils', () => {
   it('should set isLastSelectionChange to false if selectedLayerId matches lastSelectedLayer.layerId', () => {
     const selectedLayerIds = {
       schoolId: 1,
-      selectedId: 2
+      selectedId: 2,
     };
     const lastSelectedLayer = {
       layerId: 2,
-      schoolId: 0
+      schoolId: 0,
     };
     const { isLastSelectionChange } = getLayerIdsAndLastChange({
       selectedLayerIds,
-      lastSelectedLayer
+      lastSelectedLayer,
     });
 
     expect(isLastSelectionChange).toBe(false);
@@ -41,16 +45,16 @@ describe('addLayerUtils', () => {
   it('should set isLastSelectionChange to true if refresh is true', () => {
     const selectedLayerIds = {
       schoolId: 1,
-      selectedId: 2
+      selectedId: 2,
     };
     const lastSelectedLayer = {
       layerId: 2,
-      schoolId: 0
+      schoolId: 0,
     };
     const { isLastSelectionChange } = getLayerIdsAndLastChange({
       selectedLayerIds,
       lastSelectedLayer,
-      refresh: true
+      refresh: true,
     });
 
     expect(isLastSelectionChange).toBe(true);
@@ -60,29 +64,29 @@ describe('addLayerUtils', () => {
     const map = {
       addSource: vi.fn(),
       getStyle: () => ({
-        sources: {}
-      })
+        sources: {},
+      }),
     } as any;
 
     const selectedLayerId = 1;
 
     const layerUtils = {
-      coverageLayerId: 1,
+      coverageLayerDataByEntity: { school: { id: 1 } },
       currentLayerTypeUtils: {
-        isLive: true
-      }
+        isLive: true,
+      },
     } as any;
 
     const mapRoute = {
-      country: true
+      country: true,
     } as any;
 
     const country = {
       id: 1,
       code: 'AI',
       admin_metadata: {
-        bbox: [1, 2, 3, 4]
-      }
+        bbox: [1, 2, 3, 4],
+      },
     };
 
     createSourceForMapAndCountry({
@@ -94,20 +98,18 @@ describe('addLayerUtils', () => {
       connectivityFilter: {
         range: {
           start: 324242424,
-          end: 3232342424
+          end: 3232342424,
         },
-        isWeek: true
+        isWeek: true,
       },
       lastSelectedLayer: {
         layerId: 1,
-        schoolId: 0
-      }
+        schoolId: 0,
+      },
     } as any);
 
     expect(map.addSource).toHaveBeenCalled();
   });
-
-
 
   it('createAndUpdateMapLayers: should return empty createAndUpdateMapLayers', () => {
     const func = createAndUpdateMapLayer({} as any);
@@ -118,10 +120,10 @@ describe('addLayerUtils', () => {
     const map = {
       addLayer: vi.fn(),
       getStyle: () => ({
-        sources: {}
+        sources: {},
       }),
-      getLayer: vi.fn(() => false)
-    }
+      getLayer: vi.fn(() => false),
+    };
     createAndUpdateMapLayer({
       map,
       mapRoute: {},
@@ -129,19 +131,18 @@ describe('addLayerUtils', () => {
       coverageFilter: {},
       layerUtils: {
         currentLayerTypeUtils: {
-          isLive: true
-        }
+          isLive: true,
+        },
       },
       selectedLayerId: 1,
       paintData: {},
       schoolLayerId: 1,
       lastSelectedLayer: {
         layerId: 0,
-        schoolId: 0
+        schoolId: 0,
       },
-      schoolLegends: {}
+      schoolLegends: {},
     } as any);
     expect(map.getLayer).toHaveBeenCalled();
   });
-
 });

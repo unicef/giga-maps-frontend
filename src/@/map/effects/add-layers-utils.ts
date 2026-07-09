@@ -33,6 +33,19 @@ let animateCircleHandlers: Record<string, { requestId: number }> = {};
 
 const ignoreCountriesForBounds = ['fj'];
 
+export const getEntityGlobalLayerId = (
+  layerUtils: ChangeLayerOptions['layerUtils'],
+  entityType: EntityType,
+) => layerUtils.globalLayerDataByEntity?.[entityType]?.id ?? null;
+
+export const getFirstGlobalLayerId = (
+  layerUtils: ChangeLayerOptions['layerUtils'],
+  entityTypes: EntityType[],
+) =>
+  entityTypes
+    .map((entityType) => getEntityGlobalLayerId(layerUtils, entityType))
+    .find((id): id is number => Boolean(id)) ?? null;
+
 const moveEntityStatusLayersToTop = (map: Map, entityTypes: EntityType[]) => {
   if (
     typeof map.getLayer !== 'function' ||
@@ -131,7 +144,12 @@ export const createSourceForMapAndCountry = ({
   // delete existing source;
   deleteSourceAndLayers({ map, sourceId });
   // create new source
-  const fallbackLayerId = mapRoute.map ? layerUtils.globalLayerId : layerId;
+  const fallbackLayerId = mapRoute.map
+    ? getFirstGlobalLayerId(
+        layerUtils,
+        activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL],
+      )
+    : layerId;
   if (!layerId) {
     layerId = fallbackLayerId;
   }
@@ -218,7 +236,7 @@ export const createAndUpdateMapLayer = ({
   schoolLayerId: number | string | null;
 }) => {
   if (!map) return;
-  const { currentLayerTypeUtils, globalLayerId } = layerUtils;
+  const { currentLayerTypeUtils } = layerUtils;
   const getIsEntityLive = (entityType: EntityType) =>
     mapRoute.map ||
     (layerUtils.currentLayerTypeUtilsByEntity?.[entityType]?.isLive ??
@@ -236,7 +254,7 @@ export const createAndUpdateMapLayer = ({
   const hasSelectedEntityLayer = entityTypes.some((entityType) =>
     Boolean(
       mapRoute.map
-        ? globalLayerId
+        ? getEntityGlobalLayerId(layerUtils, entityType)
         : layerUtils.selectedLayerIdByEntity?.[entityType],
     ),
   );
@@ -245,7 +263,7 @@ export const createAndUpdateMapLayer = ({
   if (isSourceAvailable && hasSelectedEntityLayer) {
     for (const entityType of entityTypes) {
       const entityLayerId = mapRoute.map
-        ? globalLayerId
+        ? getEntityGlobalLayerId(layerUtils, entityType)
         : layerUtils.selectedLayerIdByEntity?.[entityType];
       if (!entityLayerId) continue;
       const isDynamicLayer = !mapRoute.map;
@@ -438,4 +456,3 @@ export const setAnimationHandler = (
 ) => {
   animateCircleHandlers[entityType] = handler;
 };
-

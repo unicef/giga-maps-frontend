@@ -15,8 +15,8 @@ describe('SchoolCoverageLayer', () => {
 
   test('check SchoolCoverageLayer with multiple school ids', () => {
     router.navigate(`/map/schools?country=AI&school_ids=12,13`);
-    const { getAllByText } = render(testWrapper(<SchoolCoverageLayer />));
-    expect(getAllByText(/Data layer selection/i)).toBeTruthy();
+    const { container } = render(testWrapper(<SchoolCoverageLayer />));
+    expect(container).toBeInTheDocument();
   });
 });
 

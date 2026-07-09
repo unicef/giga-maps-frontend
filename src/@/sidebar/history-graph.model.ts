@@ -14,7 +14,7 @@ import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
 import {
   $connectivityAvailabilityByEntity,
-  $currentLayerTypeUtils,
+  $currentLayerTypeUtilsByEntity,
 } from './sidebar.model';
 import { createHistoryIntervalFormat } from './sidebar.util';
 
@@ -131,9 +131,9 @@ export const $lastAvailableDatesByEntity = createStore<
 >({});
 
 export const $isCheckedLastDate = combine(
-  [$lastAvailableDates, $currentLayerTypeUtils, $mapRoutes],
-  ([lastAvailableDates, currentLayerTypeUtils, mapRoutes]) => {
-    const { isLive } = currentLayerTypeUtils;
+  [$lastAvailableDates, $currentLayerTypeUtilsByEntity, $selectedEntityType, $mapRoutes],
+  ([lastAvailableDates, currentLayerTypeUtilsByEntity, selectedEntityType, mapRoutes]) => {
+    const { isLive } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
     if (mapRoutes.map) return true;
     if (isLive) {
       return !!lastAvailableDates;

@@ -28,17 +28,18 @@ const FilterButton = () => {
   const showFilter = () => {
     onShowAdvancedFilter(!isOpen);
   };
-  useEffect(() => {
-    if (isOpen) {
-      onShowLegend(false);
-    }
-  }, [isOpen]);
   const isDisabled = useMemo(() => {
-    if (routes.schools || !country?.id || !advanceFilterList?.length) {
+    if (
+      routes.schools ||
+      routes.entity ||
+      routes.entityView ||
+      !country?.id ||
+      !advanceFilterList?.length
+    ) {
       return true;
     }
     return false;
-  }, [advanceFilterList, country?.id, routes.schools]);
+  }, [advanceFilterList, country?.id, routes.schools, routes.entity, routes.entityView]);
 
   const sidebarHeight = useStore($sidebarHeight)
   if (isDisabled) return null;

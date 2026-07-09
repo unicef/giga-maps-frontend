@@ -37,7 +37,7 @@ describe('SearchResultList', () => {
             }
           }
         }]))
-      } else if (req.url.includes('/locations/gsearch/')) {
+      } else if (req.url.includes('/entities/gentity-search/')) {
         return Promise.resolve(JSON.stringify({
           results: [{
             "country_name": "Argentina",
@@ -49,6 +49,7 @@ describe('SearchResultList', () => {
             "external_id": "",
             "name": "ESCUELA REPUBLICA DE LA INDIA",
             "country_code": "AR",
+            "entity_type_code": "school",
             "@search.score": 1.0,
             "@search.highlights": null
           }]

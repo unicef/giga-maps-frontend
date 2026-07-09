@@ -121,7 +121,9 @@ describe('add-layers-utils', () => {
         connectivityBenchMark: 10,
         selectedLayerId: 1,
         connectivityFilter: [],
-        layerUtils: { coverageLayerId: 'coverage' },
+        layerUtils: {
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
+        },
         mapRoute: { schools: true },
         country,
         lastSelectedLayer: { layerId: null },
@@ -163,7 +165,9 @@ describe('add-layers-utils', () => {
         connectivityBenchMark: 10,
         selectedLayerId: 1,
         connectivityFilter: [],
-        layerUtils: { coverageLayerId: 'coverage' },
+        layerUtils: {
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
+        },
         mapRoute: { schools: true },
         country: null,
         lastSelectedLayer: { layerId: null },
@@ -183,8 +187,7 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
-          downloadLayerId: 'download',
-          coverageLayerId: 'coverage',
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
           selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
         },
         selectedLayerId: 1,
@@ -209,7 +212,7 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
-          globalLayerId: 1,
+          globalLayerDataByEntity: { school: { id: 1 } },
           selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
         },
         selectedLayerId: 1,
@@ -233,7 +236,7 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
-          globalLayerId: 1,
+          globalLayerDataByEntity: { school: { id: 1 } },
         },
         selectedLayerId: 1,
         paintData: {},
@@ -255,9 +258,11 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: false },
-          downloadLayerId: 'download',
-          coverageLayerId: 'coverage',
-          globalLayerId: 1,
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
+          globalLayerDataByEntity: {
+            [EntityType.SCHOOL]: { id: 1 },
+            [EntityType.HEALTH]: { id: 1 },
+          },
         },
         selectedLayerId: 1,
         paintData: {},
@@ -281,8 +286,7 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
-          downloadLayerId: 'download',
-          coverageLayerId: 'coverage',
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
           selectedLayerIdByEntity: {},
         },
         selectedLayerId: null,
@@ -312,8 +316,7 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
-          downloadLayerId: 'download',
-          coverageLayerId: 'coverage',
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
         },
         selectedLayerId: 1,
         paintData: {},
@@ -357,8 +360,7 @@ describe('add-layers-utils', () => {
         coverageFilter: [],
         layerUtils: {
           currentLayerTypeUtils: { isLive: true },
-          downloadLayerId: 'download',
-          coverageLayerId: 'coverage',
+          coverageLayerDataByEntity: { school: { id: 'coverage' } },
         },
         selectedLayerId: 1,
         paintData: {},

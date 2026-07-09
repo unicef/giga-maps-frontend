@@ -4,10 +4,11 @@ import { Div } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { getLiveSchoolDetails } from '~/@/sidebar/school-view.utils';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import {
   $isLoadingSchoolView,
   $schoolStats,
-  $selectedLayerData,
+  $selectedLayerDataByEntity,
 } from '~/@/sidebar/sidebar.model';
 
 import { HistoryGraphAccordian } from '../../common-components/history-graph';
@@ -20,8 +21,10 @@ import { SchoolInformation } from './school-information.view';
 const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
   const isLoading = useStore($isLoadingSchoolView);
   const SchoolStatsTypes = useStore($schoolStats);
+  const selectedEntityType = useStore($selectedEntityType);
+  const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
   const { global_benchmark: globalBenchmark, icon } =
-    useStore($selectedLayerData) ?? {};
+    selectedLayerDataByEntity[selectedEntityType] ?? {};
   const schoolDetails = SchoolStatsTypes?.find((info) => info.id === schoolId);
   const stylePaintData = useStore($stylePaintData);
   const { value, color } = getLiveSchoolDetails({

@@ -35,13 +35,11 @@ const StaticLayerLegend = ({
   const lng = useStore($lng);
   const { t } = useTranslation();
   const {
-    currentLayerLegends,
     currentLayerLegendsByEntity,
     selectedLayerData,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
-  const legends =
-    currentLayerLegendsByEntity[entityType] ?? currentLayerLegends;
+  const legends = currentLayerLegendsByEntity[entityType]!;
   const currentSelectedLayerData =
     selectedLayerDataByEntity[entityType] ?? selectedLayerData;
   const coverageStats = useStore($coverageStatsByEntity)[entityType] as {

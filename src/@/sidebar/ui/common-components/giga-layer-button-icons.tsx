@@ -36,13 +36,11 @@ const GigaLayerButtonIcons = ({
 }) => {
   const { t } = useTranslation();
   const {
+    coverageLayerDataByEntity,
     currentDefaultLayerIdByEntity,
+    globalLayerDataByEntity,
     layers,
-    selectedLayerId,
-    staticPopupActiveLayer,
-    staticPopupActiveLayerByEntity,
     staticLayers,
-    activeLayerByCountryCode,
     activeLayerByCountryCodeByEntity,
   } = useStore($layerUtils);
   const statusLayerIdByEntity = useStore($statusLayerIdByEntity);
@@ -55,8 +53,7 @@ const GigaLayerButtonIcons = ({
     getEntityStatusId(targetEntityType),
   );
   const targetActiveLayerByCountryCode =
-    activeLayerByCountryCodeByEntity[targetEntityType] ??
-    activeLayerByCountryCode;
+    activeLayerByCountryCodeByEntity[targetEntityType] ?? {};
   const entityLayers = layers.filter((layer) =>
     isLayerForEntity(layer, targetEntityType),
   );
@@ -75,26 +72,40 @@ const GigaLayerButtonIcons = ({
     )?.id ??
     currentDefaultLayerIdByEntity[targetEntityType] ??
     null;
-  const targetStaticPopupActiveLayer =
-    entityStaticLayers.find(
-      (layer) => layer.created_by && targetActiveLayerByCountryCode[layer.id],
-    ) ??
-    entityStaticLayers.find(
-      (layer) => targetActiveLayerByCountryCode[layer.id],
-    ) ??
-    staticPopupActiveLayerByEntity[targetEntityType] ??
-    staticPopupActiveLayer;
-  const targetSelectedLayerId = entityType
-    ? getEntityMapValue(
-        selectedLayerIdByEntity,
-        targetEntityType,
-        targetDefaultLayerId,
-      )
-    : selectedLayerId;
+
+  const targetSelectedLayerId = getEntityMapValue(
+    selectedLayerIdByEntity,
+    targetEntityType,
+    targetDefaultLayerId,
+  );
   const targetLayerData = layers.find(
     (layer) => layer.id === targetSelectedLayerId,
   );
-  const isLive = targetLayerData?.type === LayerTypeChoices.LIVE;
+  const selectedLiveLayerData =
+    targetLayerData?.type === LayerTypeChoices.LIVE ? targetLayerData : null;
+  const targetDefaultLayerData =
+    layers.find(
+      (layer) =>
+        layer.id === targetDefaultLayerId &&
+        layer.type === LayerTypeChoices.LIVE,
+    ) ?? null;
+  const targetGlobalLayerData = getEntityMapValue(
+    globalLayerDataByEntity,
+    targetEntityType,
+    null,
+  );
+  const targetLiveButtonLayer =
+    selectedLiveLayerData ?? targetDefaultLayerData ?? targetGlobalLayerData;
+  const isLive = !!selectedLiveLayerData;
+  const selectedStaticLayerData =
+    targetLayerData?.type === LayerTypeChoices.STATIC ? targetLayerData : null;
+  const targetCoverageLayerData = getEntityMapValue(
+    coverageLayerDataByEntity,
+    targetEntityType,
+    null,
+  );
+  const targetStaticButtonLayer =
+    selectedStaticLayerData ?? targetCoverageLayerData;
   const isConnectivityStatus = !!targetStatusSelectedLayer;
   const entityStatusLabel = `${formatEntityTypeLabel(targetEntityType)} ${t('status')}`;
   const updateLayer = useCallback(
@@ -222,42 +233,39 @@ const GigaLayerButtonIcons = ({
           }}
         />
         <GigaLayerButton
-          label={t('real-time-connectivity')}
+          label={targetLiveButtonLayer?.name ?? t('average-download-speed')}
           disabled={
-            !targetActiveLayerByCountryCode[String(targetDefaultLayerId)]
+            !targetLiveButtonLayer ||
+            !targetActiveLayerByCountryCode[String(targetLiveButtonLayer.id)]
           }
           popup={popup}
           isActive={isLive}
           icon={<Wifi />}
           onClick={() => {
-            if (isLive) {
-              updateLayer(null);
-            } else {
-              updateLayer(targetDefaultLayerId);
+            if (targetLiveButtonLayer) {
+              updateLayer(targetLiveButtonLayer.id);
             }
           }}
         />
         <GigaLayerButton
-          label={targetStaticPopupActiveLayer?.name ?? t('cellular-coverage')}
+          label={targetStaticButtonLayer?.name ?? t('cellular-coverage')}
           popup={popup}
           disabled={
-            !targetStaticPopupActiveLayer ||
-            !targetActiveLayerByCountryCode[
-              String(targetStaticPopupActiveLayer?.id)
-            ]
+            !targetStaticButtonLayer ||
+            !targetActiveLayerByCountryCode[String(targetStaticButtonLayer.id)]
           }
-          isActive={targetStaticPopupActiveLayer?.id === targetSelectedLayerId}
+          isActive={targetStaticButtonLayer?.id === targetSelectedLayerId}
           icon={
             <span
               className=""
               dangerouslySetInnerHTML={{
-                __html: targetStaticPopupActiveLayer?.icon ?? '',
+                __html: targetStaticButtonLayer?.icon ?? '',
               }}
             />
           }
           onClick={() => {
-            if (targetStaticPopupActiveLayer) {
-              updateLayer(targetStaticPopupActiveLayer.id);
+            if (targetStaticButtonLayer) {
+              updateLayer(targetStaticButtonLayer.id);
               resetCoverageFilterSelection();
             }
           }}
@@ -266,7 +274,7 @@ const GigaLayerButtonIcons = ({
           entityStaticLayers.map(
             (layer) =>
               layer.created_by &&
-              layer.id !== targetStaticPopupActiveLayer?.id && (
+              layer.id !== targetStaticButtonLayer?.id && (
                 <GigaLayerButton
                   key={layer.name}
                   disabled={!targetActiveLayerByCountryCode[layer.id]}

@@ -22,6 +22,8 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
 
 .c5 {
   font-size: 0.75rem;
+  white-space: pre-line;
+  text-align: center;
 }
 
 .c7 {

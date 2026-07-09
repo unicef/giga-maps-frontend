@@ -42,7 +42,7 @@ import {
   SchoolStatsType,
 } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
-import { mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
+import { $mapRoutes, mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 import { evaluateExpression } from '~/lib/utils';
 import {
@@ -523,28 +523,8 @@ $selectedLayerIdByEntity.on(onSelectEntityMainLayer, (state, payload) => ({
   ...state,
   ...payload,
 }));
-export const $selectedLayerId = combine(
-  $selectedLayerIdByEntity,
-  $selectedEntityType,
-  (selectedLayerIdByEntity, selectedEntityType) =>
-    getEntityValue(selectedLayerIdByEntity, selectedEntityType, null),
-);
 
-// TODO: remove $selectedLayerId compatibility selector and use $selectedLayerIdByEntity directly by resolving the target entity type.
-export const $globalLayerData = $layersList.map(
-  (layers) =>
-    layers?.find(
-      (layer) =>
-        layer?.type === LayerTypeChoices.LIVE &&
-        !layer.created_by &&
-        (layer as LayerType & { code?: string }).code === 'DOWNLOAD',
-    ) ?? null,
-);
-export const $globalLayerId = $globalLayerData.map(
-  (layer) => layer?.id ?? null,
-);
-
-// TODO: remove download code in condition when createdBy layer is fix, currently multiple not createdBy layers are there which causing an issue
+// TODO: remove download code in condition when createdBy layer is fix
 export const $globalLayerDataByEntity = $layersList.map((layers) => {
   const result = {} as EntityStoreMap<LayerType | null>;
   layers?.forEach((layer) => {
@@ -552,7 +532,8 @@ export const $globalLayerDataByEntity = $layersList.map((layers) => {
       if (
         layer?.type === LayerTypeChoices.LIVE &&
         !layer.created_by &&
-        layer.code === 'DOWNLOAD'
+        (layer.code === 'DOWNLOAD' ||
+          layer.code === `DOWNLOAD_${entityType?.toUpperCase()}`)
       ) {
         result[entityType] = layer;
       }
@@ -561,32 +542,22 @@ export const $globalLayerDataByEntity = $layersList.map((layers) => {
   return result;
 });
 
-export const $downloadLayerData = $layersList.map(
-  (layers) =>
-    layers?.find(
-      (layer) =>
-        layer?.type === LayerTypeChoices.LIVE &&
-        layer.created_by &&
-        Object.values(layer.data_source_column ?? {})[0].name ===
-        'connectivity_speed',
-    ) ?? null,
-);
-export const $downloadLayerId = $downloadLayerData.map(
-  (layer) => layer?.id ?? null,
-);
-export const $coverageLayerData = $layersList.map(
-  (layers) =>
-    layers?.find(
-      (layer) =>
+export const $coverageLayerDataByEntity = $layersList.map((layers) => {
+  const result = {} as EntityStoreMap<LayerType | null>;
+  layers?.forEach((layer) => {
+    getLayerEntityTypes(layer, []).forEach((entityType) => {
+      if (
         layer?.type === LayerTypeChoices.STATIC &&
         layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-        'coverage_type',
-    ) ?? null,
-);
-export const $coverageLayerId = $coverageLayerData.map(
-  (layer) => layer?.id ?? null,
-);
+        'coverage_type'
+      ) {
+        result[entityType] = layer;
+      }
+    });
+  });
+  return result;
+});
 
 export const $activeLayerByCountriesByEntity = combine(
   $layersList,
@@ -620,18 +591,6 @@ export const $activeLayerByCountriesByEntity = combine(
   },
 );
 
-// TODO: remove this store and use $activeLayerByCountriesByEntity directly in the component by passing selectedEntityType as argument to get the value, this will avoid unnecessary store and combine
-export const $activeLayerByCountries = combine(
-  $activeLayerByCountriesByEntity,
-  $selectedEntityType,
-  (activeLayersByEntity, selectedEntityType) => {
-    return getEntityValue(activeLayersByEntity, selectedEntityType, {
-      list: {},
-      countryDefaultLayerList: {},
-    });
-  },
-);
-
 export const $currentDefaultLayerIdByEntity = combine(
   $countryCode,
   $activeLayerByCountriesByEntity,
@@ -650,19 +609,6 @@ export const $currentDefaultLayerIdByEntity = combine(
         return acc;
       },
       {} as EntityStoreMap<number | null>,
-    );
-  },
-);
-
-// TODO: remove this store and use $currentDefaultLayerIdByEntity directly in the component by passing selectedEntityType as argument to get the value, this will avoid unnecessary store and combine
-export const $currentDefaultLayerId = combine(
-  $currentDefaultLayerIdByEntity,
-  $selectedEntityType,
-  (currentDefaultLayerIdByEntity, selectedEntityType) => {
-    return getEntityValue(
-      currentDefaultLayerIdByEntity,
-      selectedEntityType,
-      null,
     );
   },
 );
@@ -686,18 +632,6 @@ export const $isActiveCurrentLayerByEntity = combine(
         return acc;
       },
       {} as EntityStoreMap<boolean>,
-    );
-  },
-);
-
-export const $isActiveCurrentLayer = combine(
-  $isActiveCurrentLayerByEntity,
-  $selectedEntityType,
-  (isActiveCurrentLayerByEntity, selectedEntityType) => {
-    return getEntityValue(
-      isActiveCurrentLayerByEntity,
-      selectedEntityType,
-      false,
     );
   },
 );
@@ -728,26 +662,6 @@ export const $activeLayerByCountryCodeByEntity = combine(
   },
 );
 
-export const $activeLayerByCountryCode = combine(
-  $activeLayerByCountryCodeByEntity,
-  $selectedEntityType,
-  (activeLayerByCountryCodeByEntity, selectedEntityType) => {
-    return getEntityValue(
-      activeLayerByCountryCodeByEntity,
-      selectedEntityType,
-      {},
-    );
-  },
-);
-
-export const $selectedLayerData = combine(
-  $layersList,
-  $selectedLayerId,
-  (layers, selectedId) => {
-    return layers?.find((item) => item.id === selectedId) ?? null;
-  },
-);
-
 export const $selectedLayerDataByEntity = combine(
   $layersList,
   $selectedLayerIdByEntity,
@@ -774,16 +688,22 @@ export const $selectedLayerDataByEntity = combine(
 );
 
 export const $currentLayerCountryDataSource = combine(
-  $selectedLayerData,
+  $selectedLayerDataByEntity,
+  $activeEntityTypes,
   $country,
-  (selectedData, country) => {
-    if (!selectedData || !country) return null;
-    return (
-      (
-        selectedData?.active_countries_list?.find(
-          (activeLayers) => activeLayers.country === country.id,
-        ) as { data_sources?: unknown } | undefined
-      )?.data_sources || null
+  (selectedLayerDataByEntity, activeEntityTypes, country) => {
+    if (!country) return {} as EntityStoreMap<any>;
+    return activeEntityTypes.reduce(
+      (acc, entityType) => {
+        const selectedData = selectedLayerDataByEntity[entityType];
+        acc[entityType] = (
+          selectedData?.active_countries_list?.find(
+            (activeLayers) => activeLayers.country === country.id,
+          ) as { data_sources?: any } | undefined
+        )?.data_sources || null;
+        return acc;
+      },
+      {} as EntityStoreMap<any>,
     );
   },
 );
@@ -825,78 +745,6 @@ export const $currentLayerTypeUtilsByEntity = combine(
   },
 );
 
-export const $currentLayerTypeUtils = combine(
-  $currentLayerTypeUtilsByEntity,
-  $selectedEntityType,
-  (currentLayerTypeUtilsByEntity, selectedEntityType) =>
-    getEntityValue(currentLayerTypeUtilsByEntity, selectedEntityType, {
-      isLive: false,
-      isStatic: false,
-      isSchoolStatus: false,
-    }),
-);
-
-export const $isCurrentLayerLive = $currentLayerTypeUtils.map(
-  (layerTypeUtils) => layerTypeUtils.isLive,
-);
-export const $currentLayerLegends = combine(
-  {
-    selectedLayerData: $selectedLayerData,
-    stylePaintData: $stylePaintData,
-    currentLayerTypeUtils: $currentLayerTypeUtils,
-    countryActiveLayersDataById: $countryActiveLayersDataById,
-    connectivityBenchmark: $connectivityBenchMark,
-    lng: $lng,
-  },
-  ({
-    selectedLayerData,
-    currentLayerTypeUtils,
-    stylePaintData,
-    connectivityBenchmark,
-    countryActiveLayersDataById,
-  }) => {
-    let apiLegends = selectedLayerData?.legend_configs;
-    if (connectivityBenchmark === ConnectivityBenchMarks.national) {
-      apiLegends =
-        countryActiveLayersDataById[selectedLayerData?.id ?? '']
-          ?.legend_configs;
-    }
-    const legends = {
-      colors: {
-        good: stylePaintData.good,
-        moderate: stylePaintData.moderate,
-        bad: stylePaintData.bad,
-        unknown: stylePaintData.unknown,
-      },
-      values: [],
-      reverseMapping: {},
-    } as {
-      colors: Record<string, string>;
-      values: { key: string; label: string; tooltip?: string }[];
-      reverseMapping: Record<string, string>;
-    };
-    if (!Object.values(apiLegends || {}).length) {
-      legends.values = LayerDistributionUnit.map((key) => ({
-        key,
-        label: i18next.t(ConnectivityDistributionNames[key]),
-      }));
-    } else {
-      const reverseMapping = {} as Record<string, string>;
-      legends.values = Object.entries(apiLegends ?? {}).map(
-        ([key, item]: [string, any]) => {
-          reverseMapping[item.labels] = key;
-          return {
-            key,
-            label: item.labels,
-            tooltip: item.tooltip,
-          };
-        },
-      );
-      legends.reverseMapping = reverseMapping;
-    }
-    return legends;
-  },
-);
 
 const buildCurrentLayerLegends = ({
   connectivityBenchmark,
@@ -965,6 +813,8 @@ export const $currentLayerLegendsByEntity = combine(
     currentLayerTypeUtilsByEntity: $currentLayerTypeUtilsByEntity,
     countryActiveLayersDataById: $countryActiveLayersDataById,
     connectivityBenchmarkByEntity: $connectivityBenchMarkByEntity,
+    activeEntityTypes: $activeEntityTypes,
+    entityTypesFiltered: $entityTypesFiltered,
   },
   ({
     selectedLayerDataByEntity,
@@ -972,12 +822,17 @@ export const $currentLayerLegendsByEntity = combine(
     stylePaintData,
     connectivityBenchmarkByEntity,
     countryActiveLayersDataById,
+    activeEntityTypes,
+    entityTypesFiltered,
   }) => {
-    return Object.entries(selectedLayerDataByEntity).reduce(
-      (acc, [entityType, selectedLayerData]) => {
-        const currentEntityType = entityType as EntityType;
-        acc[entityType as EntityType] = buildCurrentLayerLegends({
-          selectedLayerData,
+    const entityTypes = new Set<EntityType>([
+      ...(activeEntityTypes.length ? activeEntityTypes : entityTypesFiltered),
+      ...(Object.keys(selectedLayerDataByEntity) as EntityType[]),
+    ]);
+    return Array.from(entityTypes).reduce(
+      (acc, currentEntityType) => {
+        acc[currentEntityType] = buildCurrentLayerLegends({
+          selectedLayerData: selectedLayerDataByEntity[currentEntityType],
           currentLayerTypeUtils:
             currentLayerTypeUtilsByEntity[currentEntityType],
           stylePaintData,
@@ -995,42 +850,31 @@ export const $currentLayerLegendsByEntity = combine(
   },
 );
 
-export const $benchmarkmarkUtils = combine(
-  $countryBenchmark,
-  $selectedLayerData,
-  $connectivityBenchMark,
-  $countryConnectivityNames,
-  (
-    countryBenchmark,
-    selectedLayerData,
-    connectivityBenchMark,
-    countryConnectivityNames,
-  ) => {
-    return buildBenchmarkUtils(
-      countryBenchmark,
-      selectedLayerData,
-      connectivityBenchMark,
-      countryConnectivityNames,
-    );
-  },
-);
-
-export const $isNationalBenchmark = $benchmarkmarkUtils.map(
-  ({ isNational }) => isNational,
-);
 
 function buildBenchmarkUtils(
   countryBenchmark: Record<string, any> | null | undefined,
   selectedLayerData: LayerType | null | undefined,
   connectivityBenchMark: ConnectivityBenchMarks,
   countryConnectivityNames: Record<string, string>,
+  mapRoutes: typeof $mapRoutes extends { getState: () => infer T } ? T : never
 ) {
-  if (!selectedLayerData || !isLiveLayer(selectedLayerData?.type)) return {};
+  if (!mapRoutes.map && (!selectedLayerData || !isLiveLayer(selectedLayerData?.type))) return {};
   const {
+    id,
     global_benchmark,
     is_reverse: isReverse,
     benchmark_metadata,
-  } = selectedLayerData;
+  } = selectedLayerData ?? {
+    id: 0,
+    benchmark_metadata: {
+      base_benchmark: "1000000",
+      round_unit_value: "{val} / (1000 * 1000)",
+    },
+    global_benchmark: {
+      value: "20000000",
+      convert_unit: "mbps",
+    },
+  };
   const {
     convert_unit: unit,
     value,
@@ -1048,7 +892,7 @@ function buildBenchmarkUtils(
     Number(
       evaluateExpression(
         formula,
-        countryBenchmark?.[selectedLayerData.id] ?? 0,
+        countryBenchmark?.[id] ?? 0,
       ),
     ) || 0;
   const currentBenchmarkValue =
@@ -1078,11 +922,13 @@ export const $benchmarkmarkUtilsByEntity = combine(
   $selectedLayerDataByEntity,
   $connectivityBenchMarkByEntity,
   $countryConnectivityNames,
+  $mapRoutes,
   (
     countryBenchmark,
     selectedLayerDataByEntity,
     connectivityBenchMarkByEntity,
     countryConnectivityNames,
+    mapRoutes,
   ) => {
     return Object.entries(selectedLayerDataByEntity).reduce(
       (acc, [entityType, selectedLayerData]) => {
@@ -1096,6 +942,7 @@ export const $benchmarkmarkUtilsByEntity = combine(
             ConnectivityBenchMarks.global,
           ),
           countryConnectivityNames,
+          mapRoutes
         );
         return acc;
       },
@@ -1116,37 +963,20 @@ export const $isNationalBenchmarkByEntity = $benchmarkmarkUtilsByEntity.map(
   },
 );
 
-export const $staticPopupActiveLayer = combine(
-  $activeLayerByCountryCode,
-  $staticLayers,
-  $coverageLayerData,
-  (activeLayerByCountryCode, staticLayers, coverageDynamicLayerData) => {
-    if (activeLayerByCountryCode[coverageDynamicLayerData?.id ?? ''])
-      return coverageDynamicLayerData;
-    if (staticLayers?.length > 0) {
-      return (
-        staticLayers.find((item) => activeLayerByCountryCode[item?.id ?? '']) ??
-        null
-      );
-    }
-    return null;
-  },
-);
-
 export const $staticPopupActiveLayerByEntity = combine(
   $activeLayerByCountryCodeByEntity,
   $staticLayers,
-  $coverageLayerData,
+  $coverageLayerDataByEntity,
   $activeEntityTypes,
   (
     activeLayerByCountryCodeByEntity,
     staticLayers,
-    coverageDynamicLayerData,
+    coverageLayerDataByEntity,
     activeEntityTypes,
   ) => {
     return activeEntityTypes.reduce(
       (acc, entityType) => {
-        const activeLayerByCountryCode = getEntityValue(
+        const entityActiveLayerByCountryCode = getEntityValue(
           activeLayerByCountryCodeByEntity,
           entityType,
           {},
@@ -1154,13 +984,16 @@ export const $staticPopupActiveLayerByEntity = combine(
         const entityStaticLayers = staticLayers.filter((layer) =>
           getLayerEntityTypes(layer, activeEntityTypes).includes(entityType),
         );
-        if (activeLayerByCountryCode[coverageDynamicLayerData?.id ?? '']) {
+        const coverageDynamicLayerData = coverageLayerDataByEntity[entityType];
+        if (
+          entityActiveLayerByCountryCode[coverageDynamicLayerData?.id ?? '']
+        ) {
           acc[entityType] = coverageDynamicLayerData;
           return acc;
         }
         acc[entityType] =
           entityStaticLayers.find(
-            (item) => activeLayerByCountryCode[item?.id ?? ''],
+            (item) => entityActiveLayerByCountryCode[item?.id ?? ''],
           ) ?? null;
         return acc;
       },
@@ -1169,21 +1002,11 @@ export const $staticPopupActiveLayerByEntity = combine(
   },
 );
 
-export const $isSchoolBenchmark = combine(
-  $selectedLayerData,
-  $connectivityBenchMark,
-  $country,
-  (selectedLayer, conntectivityBenchmark, country) => {
-    const isLive = isLiveLayer(selectedLayer?.type);
-    if (!isLive) return false;
-    if (conntectivityBenchmark === ConnectivityBenchMarks.global) {
-      return selectedLayer?.global_benchmark?.value?.startsWith('SQL:');
-    } else if (conntectivityBenchmark === ConnectivityBenchMarks.national) {
-      return country?.benchmark_metadata?.live_layer?.[
-        selectedLayer?.id ?? ''
-      ]?.startsWith('SQL:');
-    }
-  },
+export const $staticPopupActiveLayer = combine(
+  $staticPopupActiveLayerByEntity,
+  $selectedEntityType,
+  (staticPopupActiveLayerByEntity, selectedEntityType) =>
+    getEntityValue(staticPopupActiveLayerByEntity, selectedEntityType, null),
 );
 
 export const $isSchoolBenchmarkByEntity = combine(
@@ -1224,37 +1047,31 @@ export const $layerUtils = combine({
   layers: $layersList,
   liveLayers: $connectivityLayers,
   staticLayers: $staticLayers,
-  selectedLayerId: $selectedLayerId,
   selectedLayerIdByEntity: $selectedLayerIdByEntity,
-  selectedLayerData: $selectedLayerData,
   selectedLayerDataByEntity: $selectedLayerDataByEntity,
   statusLayerIdByEntity: $statusLayerIdByEntity,
-  globalLayerId: $globalLayerId,
-  globalLayerData: $globalLayerData,
-  downloadLayerId: $downloadLayerId,
-  downloadLayerData: $downloadLayerData,
-  coverageLayerId: $coverageLayerId,
-  coverageLayerData: $coverageLayerData,
-  currentLayerTypeUtils: $currentLayerTypeUtils,
+
+  coverageLayerDataByEntity: $coverageLayerDataByEntity,
+  globalLayerDataByEntity: $globalLayerDataByEntity,
   currentLayerTypeUtilsByEntity: $currentLayerTypeUtilsByEntity,
-  currentLayerLegends: $currentLayerLegends,
+
   currentLayerLegendsByEntity: $currentLayerLegendsByEntity,
-  isActiveCurrentLayer: $isActiveCurrentLayer,
+
   isActiveCurrentLayerByEntity: $isActiveCurrentLayerByEntity,
-  activeLayerByCountryCode: $activeLayerByCountryCode,
+
   activeLayerByCountryCodeByEntity: $activeLayerByCountryCodeByEntity,
   activeLayerByCountriesByEntity: $activeLayerByCountriesByEntity,
-  currentDefaultLayerId: $currentDefaultLayerId,
+
   currentDefaultLayerIdByEntity: $currentDefaultLayerIdByEntity,
   staticPopupActiveLayer: $staticPopupActiveLayer,
   staticPopupActiveLayerByEntity: $staticPopupActiveLayerByEntity,
-  isSchoolBenchmark: $isSchoolBenchmark,
+
   isSchoolBenchmarkByEntity: $isSchoolBenchmarkByEntity,
   benchmarkmarkUtilsByEntity: $benchmarkmarkUtilsByEntity,
   isNationalBenchmarkByEntity: $isNationalBenchmarkByEntity,
   benchmarkNamesAllLayers: $benchmarkNamesAllLayers,
   countryConnectivityNames: $countryConnectivityNames,
-  connectivityBenchMarks: $connectivityBenchMark,
+
   connectivityBenchMarksByEntity: $connectivityBenchMarkByEntity,
 });
 
@@ -1555,7 +1372,9 @@ export const schoolStatsMap = (school: SchoolStatsType) => ({
   staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
   staticType: school?.field_status ?? school?.coverage_status,
   connectivityStatus:
-    school.connectivity_status ?? school.statistics?.connectivity_status ?? UNKNOWN,
+    school.connectivity_status ??
+    school.statistics?.connectivity_status ??
+    UNKNOWN,
   isRealTime: school.is_rt_connected,
   connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
   id: school?.id,
@@ -1720,33 +1539,43 @@ export const $timePlayerInfo = combine({
 export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
-export const $getSchoolParams = combine({
-  entitySearch: mapEntity.router.search,
-  entityVisible: mapEntity.visible,
-  schoolSearch: mapSchools.router.search,
-  schoolVisible: mapSchools.visible,
-}, ({ entitySearch, entityVisible, schoolSearch, schoolVisible }) => {
-  const params = new URLSearchParams(entityVisible ? entitySearch : schoolSearch);
-  const entityIdsParam = Array.from(params.entries()).find(
-    ([key, value]) => key.endsWith('_ids') && key !== 'entity_ids' && !!value,
-  );
-  const entityTypeFromIds = entityIdsParam?.[0].replace(/_ids$/, '') as
-    | EntityType
-    | undefined;
-  const legacyEntityTypeParam = params.get('entity_type') ?? params.get('entity');
-  const entityType = entityTypeFromIds
-    ?? (legacyEntityTypeParam ? (legacyEntityTypeParam as EntityType) : undefined)
-    ?? (schoolVisible ? EntityType.SCHOOL : undefined);
-  const idsParam = entityIdsParam?.[1]
-    ?? (entityType ? params.get(`${entityType}_ids`) : null)
-    ?? params.get('entity_ids');
+export const $getSchoolParams = combine(
+  {
+    entitySearch: mapEntity.router.search,
+    entityVisible: mapEntity.visible,
+    schoolSearch: mapSchools.router.search,
+    schoolVisible: mapSchools.visible,
+  },
+  ({ entitySearch, entityVisible, schoolSearch, schoolVisible }) => {
+    const params = new URLSearchParams(
+      entityVisible ? entitySearch : schoolSearch,
+    );
+    const entityIdsParam = Array.from(params.entries()).find(
+      ([key, value]) => key.endsWith('_ids') && key !== 'entity_ids' && !!value,
+    );
+    const entityTypeFromIds = entityIdsParam?.[0].replace(/_ids$/, '') as
+      | EntityType
+      | undefined;
+    const legacyEntityTypeParam =
+      params.get('entity_type') ?? params.get('entity');
+    const entityType =
+      entityTypeFromIds ??
+      (legacyEntityTypeParam
+        ? (legacyEntityTypeParam as EntityType)
+        : undefined) ??
+      (schoolVisible ? EntityType.SCHOOL : undefined);
+    const idsParam =
+      entityIdsParam?.[1] ??
+      (entityType ? params.get(`${entityType}_ids`) : null) ??
+      params.get('entity_ids');
 
-  return {
-    country: params.get('country'),
-    entityType,
-    schoolIds: idsParam?.split(',').map(Number),
-  };
-});
+    return {
+      country: params.get('country'),
+      entityType,
+      schoolIds: idsParam?.split(',').map(Number),
+    };
+  },
+);
 
 export const $selectedSchoolIds = $getSchoolParams.map(
   (data) => data?.schoolIds ?? null,
@@ -1762,7 +1591,12 @@ $coverageStatusAllByEntity.reset([
   mapOverview.visible,
 ]);
 $potentialCoverageOpenStatus.reset(onSelectEntityMainLayer);
-$schoolStats.reset(mapSchools.visible, mapEntity.visible, $countryCode, $selectedLayerIdByEntity);
+$schoolStats.reset(
+  mapSchools.visible,
+  mapEntity.visible,
+  $countryCode,
+  $selectedLayerIdByEntity,
+);
 $isMenuOpen.reset(router.historyUpdated);
 // on history update, clear connectivity dates;
 $connectivityAvailabilityByEntity.reset(router.historyUpdated);

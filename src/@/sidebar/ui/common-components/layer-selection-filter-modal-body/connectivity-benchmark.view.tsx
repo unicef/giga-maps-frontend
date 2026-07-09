@@ -4,10 +4,10 @@ import { useStore } from 'effector-react';
 import { forwardRef, useEffect, useState } from 'react'
 import { Information } from '@carbon/icons-react'
 
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
 import {
   $benchmarkNamesAllLayers,
-  $benchmarkmarkUtils,
   $connectivityBenchMark,
   $layerUtils,
   changeConnectivityBenchmark,
@@ -22,8 +22,11 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
   const { t } = useTranslation();
   const countryConnectivityNames = useStore($countryConnectivityNames)
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
-  const { selectedLayerId, currentLayerTypeUtils } = useStore($layerUtils);
-  const { isLive } = currentLayerTypeUtils;
+  const selectedEntityType = useStore($selectedEntityType);
+  const { selectedLayerIdByEntity, currentLayerTypeUtilsByEntity } = useStore($layerUtils);
+  const selectedLayerId = selectedLayerIdByEntity[selectedEntityType] ?? null;
+  const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+  const { isLive } = currentLayerTypeUtils
   const connectivityBenchMark = useStore($connectivityBenchMark);
   const countryBenchmark = useStore($countryBenchmark)
   const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] = useState<ConnectivityBenchMarks>(connectivityBenchMark);

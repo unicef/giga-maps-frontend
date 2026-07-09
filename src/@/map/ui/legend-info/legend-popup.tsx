@@ -1,6 +1,12 @@
 import { useStore } from 'effector-react';
 import { Maximize2, Minimize2 } from 'lucide-react';
-import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -65,12 +71,9 @@ const LegendPopup = ({
   const entityConfigMap = useStore($entityConfigMap);
   const entityTypesFiltered = useStore($entityTypesFiltered);
   const {
-    currentLayerLegends,
     currentLayerLegendsByEntity,
-    currentLayerTypeUtils,
     currentLayerTypeUtilsByEntity,
-    globalLayerData,
-    selectedLayerData,
+    globalLayerDataByEntity,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
@@ -118,18 +121,19 @@ const LegendPopup = ({
 
   const legendMetricTitle = t('internet-quality');
   const activeLayerTypeUtils =
-    currentLayerTypeUtilsByEntity[activeTab] ?? currentLayerTypeUtils;
-  const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils;
+    currentLayerTypeUtilsByEntity[activeTab];
+  const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils ?? {
+    isStatic: false,
+    isLive: false,
+    isSchoolStatus: false,
+  };
   const activeEntityLayerData =
-    selectedLayerDataByEntity[activeTab] ?? selectedLayerData;
+    selectedLayerDataByEntity[activeTab] ?? null;
   const showLiveLegend = isGlobalView || isLive;
   const showStaticLegend = !isGlobalView && isStatic;
-  const activeEntityLayerLegends =
-    showLiveLegend && isStatic
-      ? currentLayerLegends
-      : (currentLayerLegendsByEntity[activeTab] ?? currentLayerLegends);
+  const activeEntityLayerLegends = currentLayerLegendsByEntity[activeTab]!;
   const metricLayerData = isGlobalView
-    ? globalLayerData
+    ? globalLayerDataByEntity[activeTab]
     : activeEntityLayerData;
   const legendMetricSubtitle = showStaticLegend
     ? (metricLayerData?.name ?? t('coverage-data'))
@@ -147,19 +151,19 @@ const LegendPopup = ({
   const activeLayerSummaryItems: LegendSummaryItem[] =
     !isGlobalView && activeEntityLayerLegends.values.length
       ? activeEntityLayerLegends.values.map(({ key, label }) => ({
-          color:
-            activeEntityLayerLegends.colors[key] ??
-            paintData[key] ??
-            paintData.unknown,
-          key,
-          label,
-        }))
+        color:
+          activeEntityLayerLegends.colors[key] ??
+          paintData[key] ??
+          paintData.unknown,
+        key,
+        label,
+      }))
       : [
-          { color: paintData.good, key: 'good', label: t('high') },
-          { color: paintData.moderate, key: 'moderate', label: t('moderate') },
-          { color: paintData.bad, key: 'bad', label: t('low') },
-          { color: paintData.unknown, key: 'unknown', label: t('unknown') },
-        ];
+        { color: paintData.good, key: 'good', label: t('high') },
+        { color: paintData.moderate, key: 'moderate', label: t('moderate') },
+        { color: paintData.bad, key: 'bad', label: t('low') },
+        { color: paintData.unknown, key: 'unknown', label: t('unknown') },
+      ];
 
   const shouldShowMetricSummary = showLiveLegend || showStaticLegend;
   const shouldShowGlobalSchoolStatus = isGlobalView;

@@ -6,7 +6,11 @@ import styled from 'styled-components';
 
 import { Chip, TooltipButton } from '~/@/common/style/styled-component-style';
 import { $dataSource } from '~/@/country/country.model';
-import { $currentLayerCountryDataSource, $currentLayerTypeUtils } from '~/@/sidebar/sidebar.model';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
+import {
+  $currentLayerCountryDataSource,
+  $currentLayerTypeUtilsByEntity,
+} from '~/@/sidebar/sidebar.model';
 
 import {
   ensureAbsoluteUrl,
@@ -80,8 +84,12 @@ const SOURCE_LINKS: Record<string, string> = {
 const SchoolPopupDataSource = () => {
   const { t } = useTranslation();
   const dataSource = useStore($dataSource);
-  const { isSchoolStatus } = useStore($currentLayerTypeUtils);
-  const currentDataSource = useStore($currentLayerCountryDataSource);
+  const selectedEntityType = useStore($selectedEntityType);
+  const currentEntityType = selectedEntityType || 'school';
+  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
+  const { isSchoolStatus } = currentLayerTypeUtilsByEntity[currentEntityType] ?? {};
+  const currentLayerCountryDataSource = useStore($currentLayerCountryDataSource);
+  const currentDataSource = currentLayerCountryDataSource[currentEntityType];
 
   const { dataSourceName, dataSourceDescription } = useMemo(() => {
     const names = currentDataSource?.name ? splitOutsideParens(currentDataSource.name) : [] as string[];

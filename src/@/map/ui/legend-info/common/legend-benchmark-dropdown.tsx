@@ -65,8 +65,8 @@ const LegendBenchmarkDropdown = ({
   valueLabel,
 }: LegendBenchmarkDropdownProps) => {
   const { t } = useTranslation();
-  const { globalLayerId, selectedLayerId } = useStore($layerUtils);
-  const { selectedLayerIdByEntity } = useStore($layerUtils);
+  const { globalLayerDataByEntity, selectedLayerIdByEntity } =
+    useStore($layerUtils);
   const { map } = useStore($mapRoutes);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
   const connectivityBenchMark =
@@ -79,8 +79,8 @@ const LegendBenchmarkDropdown = ({
 
   const layerId =
     (map
-      ? globalLayerId
-      : (selectedLayerIdByEntity[entityType] ?? selectedLayerId)) ?? 0;
+      ? globalLayerDataByEntity[entityType]?.id
+      : selectedLayerIdByEntity[entityType]) ?? 0;
   const currentLegendConfig = (countryActiveLayersDataById[layerId]
     ?.legend_configs ?? {}) as Record<string, unknown>;
   const isCountryNationalBenchmark =
@@ -107,7 +107,7 @@ const LegendBenchmarkDropdown = ({
   const selectedValue = map
     ? ConnectivityBenchMarks.global
     : connectivityBenchMark === ConnectivityBenchMarks.national &&
-        isCountryNationalBenchmark
+      isCountryNationalBenchmark
       ? ConnectivityBenchMarks.national
       : ConnectivityBenchMarks.global;
   const selectedLabel =
@@ -185,11 +185,11 @@ const LegendBenchmarkDropdown = ({
                   option.disabled
                     ? 'cursor-not-allowed! opacity-55! text-muted-foreground!'
                     : cn(
-                        'cursor-pointer! hover:bg-white/8!',
-                        isSelected
-                          ? 'bg-accent! text-accent-foreground!'
-                          : 'text-foreground!',
-                      ),
+                      'cursor-pointer! hover:bg-white/8!',
+                      isSelected
+                        ? 'bg-accent! text-accent-foreground!'
+                        : 'text-foreground!',
+                    ),
                 )}
                 disabled={option.disabled}
                 key={option.value}

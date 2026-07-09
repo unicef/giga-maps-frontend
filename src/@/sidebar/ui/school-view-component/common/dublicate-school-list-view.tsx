@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { $countryCode, setSchoolFocusLatLng } from '~/@/country/country.model';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
 import { UNKNOWN } from '~/@/map/map.types';
 import { InnerCircle, InnerCircleConnectivity } from '~/@/map/ui/legend-info/legend-button.style';
@@ -39,10 +40,13 @@ export default function SidebarDublicateSchoolList({
   const stylePaintData = useStore($stylePaintData);
   const layerUtils = useStore($layerUtils);
   const countryCode = useStore($countryCode);
+  const selectedEntityType = useStore($selectedEntityType);
   const { entityType } = useStore($getSchoolParams);
 
   // derived from layer utils (kept from your code)
-  const { currentLayerTypeUtils, selectedLayerData } = layerUtils ?? {};
+  const activeEntityType = entityType ?? selectedEntityType;
+  const currentLayerTypeUtils = layerUtils?.currentLayerTypeUtilsByEntity?.[activeEntityType] ?? {};
+  const selectedLayerData = layerUtils?.selectedLayerDataByEntity?.[activeEntityType];
   const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';

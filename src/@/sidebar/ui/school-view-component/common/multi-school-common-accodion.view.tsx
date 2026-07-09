@@ -6,6 +6,7 @@ import { PropsWithChildren } from 'react';
 import { CustomIcon } from '~/@/common/style/styled-component-style';
 import { $stylePaintData } from '~/@/map/map.model';
 import { getLiveSchoolDetails, getNullValueText, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
+import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import { $layerUtils } from '~/@/sidebar/sidebar.model';
 import { SchoolStatsType } from '~/api/types';
 
@@ -18,7 +19,10 @@ import SingleSchoolConnectivityLayer from './single-school-connectivity-layer.vi
 import SingleSchoolCoverageLayer from './single-school-coverage-layer';
 
 const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWithChildren<{ schoolDetails: SchoolStatsType; isOpen: boolean; onToggle: () => void }>) => {
-  const { currentLayerTypeUtils, selectedLayerData } = useStore($layerUtils);
+  const selectedEntityType = useStore($selectedEntityType);
+  const { currentLayerTypeUtilsByEntity, selectedLayerDataByEntity } = useStore($layerUtils);
+  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
+  const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
   const { global_benchmark, icon } = selectedLayerData ?? {};
   const { isLive, isStatic } = currentLayerTypeUtils;
   const unit = global_benchmark?.convert_unit;

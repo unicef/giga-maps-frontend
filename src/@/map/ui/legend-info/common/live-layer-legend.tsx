@@ -46,14 +46,11 @@ const LiveLayerLegend = ({
   const { entity, map, schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
   const {
-    currentLayerLegends,
     currentLayerLegendsByEntity,
-    globalLayerData,
-    selectedLayerData,
+    globalLayerDataByEntity,
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
-  const legends =
-    currentLayerLegendsByEntity[entityType] ?? currentLayerLegends;
+  const legends = currentLayerLegendsByEntity[entityType]!;
   const { benchmarkLogic } =
     useStore($benchmarkmarkUtilsByEntity)[entityType] ?? {};
   const connectivitySpeedFilter = (useStore($connectivitySpeedFilterByEntity)[
@@ -66,8 +63,8 @@ const LiveLayerLegend = ({
   const countryBenchmarkDescriptions =
     countryObj?.benchmark_metadata?.layer_descriptions;
   const metricLayerData = map
-    ? globalLayerData
-    : (selectedLayerDataByEntity[entityType] ?? selectedLayerData);
+    ? globalLayerDataByEntity[entityType]
+    : selectedLayerDataByEntity[entityType];
   const realtimeStatsFromStore = useStore($connectivityStatsByEntity)[
     entityType
   ];
@@ -139,11 +136,11 @@ const LiveLayerLegend = ({
             ?.toLowerCase()
             .includes('download')
             ? ({
-                good: t('high'),
-                moderate: t('moderate'),
-                bad: t('low'),
-                unknown: t('unknown'),
-              }[key] ?? label)
+              good: t('high'),
+              moderate: t('moderate'),
+              bad: t('low'),
+              unknown: t('unknown'),
+            }[key] ?? label)
             : label;
           const legendColor =
             legends.colors[key] ?? paintData[key] ?? paintData.unknown;

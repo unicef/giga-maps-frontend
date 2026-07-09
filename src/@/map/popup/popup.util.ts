@@ -1,68 +1,115 @@
-import { Popup, PopupOptions } from "mapbox-gl"
+import { Popup, PopupOptions } from 'mapbox-gl';
 
-import { setSchoolFocusLatLng } from "~/@/country/country.model";
-import { router } from "~/core/routes";
+import { setSchoolFocusLatLng } from '~/@/country/country.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import { router } from '~/core/routes';
 
-import { $schoolPopupData } from "../map.init";
+import { $schoolPopupData } from '../map.init';
 import { UNKNOWN } from '../map.types';
-import { PointCoordinates } from "~/core/global-types";
-import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
-import { t } from "~/core/i18n/store";
+import { PointCoordinates } from '~/core/global-types';
+import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
+import { t } from '~/core/i18n/store';
 
-type SchoolPopupDataType = ReturnType<typeof $schoolPopupData.getState>
+type SchoolPopupDataType = ReturnType<typeof $schoolPopupData.getState>;
 
 export const createPopup = (options?: PopupOptions) => {
-  return new Popup({ offset: 8, anchor: 'top', closeButton: false, focusAfterOpen: true, closeOnMove: true, ...options, maxWidth: '317px' })
-}
+  return new Popup({
+    offset: 8,
+    anchor: 'top',
+    closeButton: false,
+    focusAfterOpen: true,
+    closeOnMove: true,
+    ...options,
+    maxWidth: '317px',
+  });
+};
 
 export const getPopupElement = () => {
   return document.querySelector('.map-popup-template') as HTMLElement;
-}
+};
 
 export const getLoadingPopupElm = () => {
   return document.querySelector('.popup-template-loading') as HTMLElement;
-}
+};
 
 const findElement = (el: HTMLElement, className = '') => {
-  const element = el.querySelector(className)
+  const element = el.querySelector(className);
   return element as HTMLElement;
-}
+};
 const showElement = (el: HTMLElement, className = '') => {
-  const element = el.querySelector(className)
+  const element = el.querySelector(className);
   if (element) {
     element.classList.remove('hide');
   }
-}
+};
 
 const setContentHTML = (el: HTMLElement, className = '', content = '') => {
-  const element = el.querySelector(className)
+  const element = el.querySelector(className);
   if (element) {
     element.textContent = content;
   }
   return element as HTMLElement;
-}
+};
 
-export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintData, layerUtils, isGotoSchool, countryCode }: { popupElement: HTMLElement, isGotoSchool?: boolean; countryCode?: string; unit?: string; } & SchoolPopupDataType) => {
-  const { selectedLayerData, currentLayerTypeUtils, isSchoolBenchmark, benchmarkNamesAllLayers, countryConnectivityNames,
-    connectivityBenchMarks } = layerUtils;
-  const { isLive, isStatic } = currentLayerTypeUtils
+export const createAndSetPopupTemplate = ({
+  popupElement,
+  feature,
+  stylePaintData,
+  layerUtils,
+  isGotoSchool,
+  countryCode,
+  entityType,
+}: {
+  popupElement: HTMLElement;
+  isGotoSchool?: boolean;
+  countryCode?: string;
+  unit?: string;
+} & SchoolPopupDataType) => {
+  const currentEntityType = entityType ?? EntityType.SCHOOL;
+  const {
+    selectedLayerDataByEntity,
+    currentLayerTypeUtilsByEntity,
+    isSchoolBenchmarkByEntity,
+    benchmarkNamesAllLayers,
+    countryConnectivityNames,
+    connectivityBenchMarksByEntity,
+  } = layerUtils;
+  const selectedLayerData = selectedLayerDataByEntity[currentEntityType];
+  const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[
+    currentEntityType
+  ] ?? {
+    isLive: false,
+    isStatic: false,
+    isSchoolStatus: false,
+  };
+  const isEntityBenchmark =
+    isSchoolBenchmarkByEntity[currentEntityType] ?? false;
+  const entityConnectivityBenchmark =
+    connectivityBenchMarksByEntity[currentEntityType] ??
+    ConnectivityBenchMarks.global;
+  const { isLive, isStatic } = currentLayerTypeUtils;
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit;
-  const connecitivityStatusColor = stylePaintData[feature?.connectivityStatus ?? UNKNOWN]
+  const connecitivityStatusColor =
+    stylePaintData[feature?.connectivityStatus ?? UNKNOWN];
   const popupTemplate = popupElement.cloneNode(true) as HTMLElement;
   const outerCircle = findElement(popupTemplate, '.outer-circle');
   const innerCircle = findElement(popupTemplate, '.inner-circle');
   innerCircle.style.backgroundColor = connecitivityStatusColor;
   if (isGotoSchool && countryCode) {
-    const gotoSchoolBtn = popupTemplate.querySelector('.go-to-school')
+    const gotoSchoolBtn = popupTemplate.querySelector('.go-to-school');
     gotoSchoolBtn?.classList.remove('hide');
     gotoSchoolBtn?.addEventListener('click', () => {
-      router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
+      router.navigate(
+        `/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`,
+      );
       setSchoolFocusLatLng(feature?.geopoint.coordinates as PointCoordinates);
-    })
+    });
   }
 
-  const schoolCoords = JSON.parse(JSON.stringify((feature?.geopoint?.coordinates ?? [])));
+  const schoolCoords = JSON.parse(
+    JSON.stringify(feature?.geopoint?.coordinates ?? []),
+  );
   const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
   const connectivityValue = isLiveNotUnknown
     ? `${feature?.liveAvg ?? 0}${unit === '%' ? unit : ` ${unit}`}`
@@ -70,34 +117,57 @@ export const createAndSetPopupTemplate = ({ popupElement, feature, stylePaintDat
 
   setContentHTML(popupTemplate, '.map-school-name', feature?.name);
   setContentHTML(popupTemplate, '.map-school-id', `${feature?.externalId}`);
-  setContentHTML(popupTemplate, '.map-school-geo', schoolCoords.toReversed().join(', '));
+  setContentHTML(
+    popupTemplate,
+    '.map-school-geo',
+    schoolCoords.toReversed().join(', '),
+  );
   if (isLive) {
     showElement(popupTemplate, '.live-container');
-    const connectivityElm = setContentHTML(popupTemplate, '.map-school-connectivity-speed', connectivityValue);
+    const connectivityElm = setContentHTML(
+      popupTemplate,
+      '.map-school-connectivity-speed',
+      connectivityValue,
+    );
     if (connectivityElm) {
-      connectivityElm.style.color = stylePaintData[feature?.connectivityType ?? UNKNOWN];
+      connectivityElm.style.color =
+        stylePaintData[feature?.connectivityType ?? UNKNOWN];
     }
     if (outerCircle && feature?.isRealTime) {
-      outerCircle.style.backgroundColor = stylePaintData[feature?.connectivityType ?? UNKNOWN];
+      outerCircle.style.backgroundColor =
+        stylePaintData[feature?.connectivityType ?? UNKNOWN];
     }
-    if (isSchoolBenchmark) {
-      const benchmarkTitle = connectivityBenchMarks === ConnectivityBenchMarks.global ? benchmarkNamesAllLayers[selectedLayerData?.id ?? ""] : countryConnectivityNames[selectedLayerData?.id ?? ""]
-      setContentHTML(popupTemplate, '.benchmark-value-label', `${benchmarkTitle} - ${feature?.schoolBenchmark}`);
-      showElement(popupTemplate, '.benchmark-value-label')
+    if (isEntityBenchmark) {
+      const benchmarkTitle =
+        entityConnectivityBenchmark === ConnectivityBenchMarks.global
+          ? benchmarkNamesAllLayers[selectedLayerData?.id ?? '']
+          : countryConnectivityNames[selectedLayerData?.id ?? ''];
+      setContentHTML(
+        popupTemplate,
+        '.benchmark-value-label',
+        `${benchmarkTitle} - ${feature?.schoolBenchmark}`,
+      );
+      showElement(popupTemplate, '.benchmark-value-label');
     }
   } else if (isStatic) {
     showElement(popupTemplate, '.static-container');
 
     const staticValue = feature?.staticValue as boolean | undefined;
-    let displayValue = staticValue === true ? 'yes' : staticValue === false ? 'no' : staticValue
+    let displayValue =
+      staticValue === true ? 'yes' : staticValue === false ? 'no' : staticValue;
     if (!displayValue || displayValue?.toLocaleLowerCase?.() === 'unknown') {
-      displayValue = t.getState()('unknown')
+      displayValue = t.getState()('unknown');
     }
-    const staticElm = setContentHTML(popupTemplate, '.map-school-school-coverage', displayValue);
+    const staticElm = setContentHTML(
+      popupTemplate,
+      '.map-school-school-coverage',
+      displayValue,
+    );
 
     staticElm.style.color = stylePaintData[feature?.staticType ?? UNKNOWN];
     outerCircle.style.display = 'none';
-    innerCircle.style.backgroundColor = stylePaintData[feature?.staticType ?? UNKNOWN];
+    innerCircle.style.backgroundColor =
+      stylePaintData[feature?.staticType ?? UNKNOWN];
   }
   return popupTemplate;
-}
+};

@@ -1,7 +1,13 @@
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
-import { $isProductTour, $showLegend, onShowLegend } from '~/@/sidebar/sidebar.model';
+import {
+  $isProductTour,
+  $showLegend,
+  onShowAdvancedFilter,
+  onShowLegend,
+  onShowThemeLayer,
+} from '~/@/sidebar/sidebar.model';
 
 import MapControlButton from '../layer-theme/map-control-button';
 import LegendPopup from './legend-popup';
@@ -37,6 +43,17 @@ const LegendButton = () => {
     onShowLegend(nextOpen);
   };
 
+  const handleLegendClick = () => {
+    const nextOpen = !showLegend;
+
+    if (!isProductTour) {
+      onShowAdvancedFilter(false);
+      onShowThemeLayer(false);
+    }
+
+    handleLegendOpenChange(nextOpen);
+  };
+
   return (
     <div className="relative! legend-container">
       <LegendPopup onOpenChange={handleLegendOpenChange} open={showLegend}>
@@ -45,7 +62,7 @@ const LegendButton = () => {
           aria-label={t('legend')}
           className="legend-open-button"
           label={t('legend')}
-          onClick={() => handleLegendOpenChange(!showLegend)}
+          onClick={handleLegendClick}
         >
           <LegendControlIcon />
         </MapControlButton>
