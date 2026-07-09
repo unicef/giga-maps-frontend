@@ -6,7 +6,7 @@ import { $countryCode, setSchoolFocusLatLng } from '~/@/country/country.model';
 import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
 import { UNKNOWN } from '~/@/map/map.types';
-import { InnerCircle, InnerCircleConnectivity } from '~/@/map/ui/legend-info/legend-button.style';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import DublicateSchoolLoader from '~/@/map/ui/map-school-popup/dublicate-school-popup-loader.view';
 import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from '~/@/map/ui/map-school-popup/school-popup.style';
 import { $getSchoolParams, $layerUtils, $schoolStats, schoolStatsMap } from '~/@/sidebar/sidebar.model';
@@ -235,11 +235,17 @@ export default function SidebarDublicateSchoolList({
                   {s.name}
                 </SchoolName>
                 <SchoolInternetSpeed>
-                  <ConnectivityCircleWrapper className="map-school-status-circle">
-                    {!isStatic && s?.isRealTime && (
-                      <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
-                    )}
-                    <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
+                  <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
+                    <EntityLegendIndicator
+                      color={isStatic ? staticColor : connecitivityStatusColor}
+                      entityType={activeEntityType}
+                      glowColor={
+                        !isStatic && s?.isRealTime
+                          ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
+                          : undefined
+                      }
+                      size={16}
+                    />
                   </ConnectivityCircleWrapper>
                   <LiveContent>
                     {isLive && s?.isRealTime && (

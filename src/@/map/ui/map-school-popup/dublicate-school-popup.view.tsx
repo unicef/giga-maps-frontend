@@ -16,10 +16,7 @@ import { SchoolStatsType } from '~/api/types';
 import { PointCoordinates } from '~/core/global-types';
 import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '../../map.model';
 import { UNKNOWN } from '../../map.types';
-import {
-  InnerCircle,
-  InnerCircleConnectivity
-} from '../legend-info/legend-button.style';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import DublicateSchoolLoader from './dublicate-school-popup-loader.view';
 import {
   DublicateSchoolList,
@@ -258,11 +255,17 @@ export default function DublicateSchoolPopup({
 
                 <ItemBottomSection>
                   <SchoolInternetSpeed>
-                    <ConnectivityCircleWrapper className="map-school-status-circle">
-                      {!isStatic && s?.isRealTime && (
-                        <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
-                      )}
-                      <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
+                    <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
+                      <EntityLegendIndicator
+                        color={isStatic ? staticColor : connecitivityStatusColor}
+                        entityType={entityType}
+                        glowColor={
+                          !isStatic && s?.isRealTime
+                            ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
+                            : undefined
+                        }
+                        size={16}
+                      />
                     </ConnectivityCircleWrapper>
                     <LiveContent>
                       {isLive && s?.isRealTime && (

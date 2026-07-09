@@ -38,7 +38,11 @@ const getMeasurementContext = () => {
     return measurementContext;
   }
 
-  measurementContext = document.createElement('canvas').getContext('2d');
+  const canvas = document.createElement('canvas');
+  measurementContext =
+    canvas && typeof canvas.getContext === 'function'
+      ? canvas.getContext('2d')
+      : null;
 
   return measurementContext;
 };

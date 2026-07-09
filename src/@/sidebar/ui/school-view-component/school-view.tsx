@@ -38,6 +38,7 @@ import { SchoolStatsType } from '~/api/types';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { PointCoordinates } from '~/core/global-types';
 import { Button } from '~/components/ui/button';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { Separator } from '~/components/ui/separator';
 import { Skeleton } from '~/components/ui/skeleton';
@@ -125,9 +126,9 @@ function DetailLine({
   const Icon = icon === 'location' ? MapPin : icon === 'hash' ? Hash : null;
 
   return (
-    <div className="flex! min-w-0! items-start! gap-2.5! py-1! text-sm! leading-6! text-foreground!">
-      {Icon && <Icon className="mt-1! size-4! shrink-0! text-muted-foreground!" />}
-      <p className="m-0! min-w-0! break-words!" title={displayValue}>
+    <div className="flex! min-w-0! items-center! gap-1! mt-3! text-muted-foreground!">
+      {Icon && <Icon className="size-3! shrink-0! text-foreground!" />}
+      <p className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!" title={displayValue}>
         {label ? <>{label}: </> : null}
         <span className={valueClassName}>{displayValue}</span>
       </p>
@@ -135,11 +136,29 @@ function DetailLine({
   );
 }
 
-function StatusLine({ label, color }: { label: string; color: string }) {
+function StatusLine({
+  label,
+  color,
+  entityType,
+}: {
+  label: string;
+  color: string;
+  entityType?: string;
+}) {
   return (
-    <div className="flex! min-w-0! items-center! gap-2.5! py-1! text-sm! leading-6!">
-      <span className="ml-1! size-2.5! shrink-0! rounded-full!" style={{ backgroundColor: color }} />
-      <p className="m-0! min-w-0! break-words!" style={{ color }} title={label}>
+    <div className="flex! min-w-0! items-center! gap-1! mt-3!">
+      {entityType ? (
+        <span className="flex! shrink-0! items-center! justify-center! mr-1!">
+          <EntityLegendIndicator
+            color={color}
+            entityType={entityType}
+            size={16}
+          />
+        </span>
+      ) : (
+        <span className="mr-1! size-2! shrink-0! rounded-full!" style={{ backgroundColor: color }} />
+      )}
+      <p className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!" style={{ color }} title={label}>
         {label}
       </p>
     </div>
@@ -288,7 +307,7 @@ function EntityInformation({ entity }: { entity: SchoolStatsType }) {
       </h3>
       <div className="space-y-1!">
         <DetailLine icon="location" value={coordinates.length ? coordinates.join(', ') : null} />
-        <StatusLine color={connectivityStatusColor} label={statusLabel} />
+        <StatusLine color={connectivityStatusColor} label={statusLabel} entityType={selectedEntityType} />
         {getEntityGigaId(entity) && (
           <DetailLine icon="hash" label={t('giga-id')} value={getEntityGigaId(entity)} valueClassName="lowercase!" />
         )}
@@ -303,14 +322,25 @@ function EntityInformation({ entity }: { entity: SchoolStatsType }) {
         )}
         {groupStatistics(statisticsConfig).map(({ groupName, stats }) => (
           <div key={groupName} className="pt-4!">
-            {stats.map((item) => (
-              <DetailLine
-                key={item.key}
-                icon="hash"
-                label={t(item.label)}
-                value={statistics?.[item.key] ?? entityRecord[item.key]}
-              />
-            ))}
+            {stats.map((item) => {
+              const rawValue = statistics?.[item.key] ?? entityRecord[item.key];
+              const displayValue =
+                typeof rawValue === 'boolean'
+                  ? rawValue
+                    ? 'Yes'
+                    : 'No'
+                  : rawValue !== undefined && rawValue !== null
+                    ? String(rawValue)
+                    : 'N/A';
+              return (
+                <DetailLine
+                  key={item.key}
+                  icon="hash"
+                  label={t(item.label)}
+                  value={displayValue}
+                />
+              );
+            })}
           </div>
         ))}
       </div>
@@ -661,7 +691,13 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
       </div>
       <div className="flex! flex-wrap! items-center! gap-x-6! gap-y-2! text-sm! leading-5!">
         <span className="inline-flex! items-center! gap-2!" style={{ color: connectivityStatusColor }}>
-          <span className="size-2.5! rounded-full!" style={{ backgroundColor: connectivityStatusColor }} />
+          <span className="flex! shrink-0! items-center! justify-center!">
+            <EntityLegendIndicator
+              color={connectivityStatusColor}
+              entityType={selectedEntityType}
+              size={16}
+            />
+          </span>
           {statusLabel}
         </span>
         {metricValue && (
@@ -685,6 +721,7 @@ function EntityListItem({
   onToggle: () => void;
 }) {
   const stylePaintData = useStore($stylePaintData);
+  const selectedEntityType = useStore($selectedEntityType);
   const { connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
     stylePaintData,
@@ -693,31 +730,39 @@ function EntityListItem({
 
   return (
     <div className="border-b! border-border! bg-background! last:border-b-0!">
-      <div className="flex! min-w-0! gap-3! px-3.5! py-4!">
-        <Button
-          aria-label="Remove selected entity"
-          className="mt-0.5! size-5! shrink-0! rounded-sm! bg-foreground! p-0! text-background! hover:bg-foreground/90!"
-          onClick={() => onSchoolUncheck(entity.id)}
-          size="icon-xs"
-          type="button"
-          variant="icon"
-        >
-          <Check className="size-3.5!" />
-        </Button>
-        <div className="min-w-0! flex-1!">
-          <button
-            className="flex! w-full! items-center! gap-2! border-0! bg-transparent! p-0! text-left! text-foreground!"
-            onClick={onToggle}
+      <div className="px-3.5! py-4!">
+        <div className="flex! min-w-0! gap-3!">
+          <Button
+            aria-label="Remove selected entity"
+            className="mt-0.5! size-5! shrink-0! rounded-sm! bg-foreground! p-0! text-background! hover:bg-foreground/90!"
+            onClick={() => onSchoolUncheck(entity.id)}
+            size="icon-xs"
             type="button"
+            variant="icon"
           >
-            <span className="min-w-0! flex-1! truncate! text-sm! font-semibold! leading-5!" title={entity.name}>
-              {entity.name}
-            </span>
-            <span className="size-2.5! shrink-0! rounded-full!" style={{ backgroundColor: connectivityStatusColor }} />
-            <Icon className="size-4! shrink-0! text-muted-foreground!" />
-          </button>
-          {!isOpen && <EntityCollapsedSummary entity={entity} />}
+            <Check className="size-3.5!" />
+          </Button>
+          <div className="min-w-0! flex-1!">
+            <button
+              className="flex! w-full! items-center! gap-2! border-0! bg-transparent! p-0! text-left! text-foreground!"
+              onClick={onToggle}
+              type="button"
+            >
+              <span className="min-w-0! flex-1! truncate! text-sm! font-semibold! leading-5!" title={entity.name}>
+                {entity.name}
+              </span>
+              <span className="flex! shrink-0! items-center! justify-center!">
+                <EntityLegendIndicator
+                  color={connectivityStatusColor}
+                  entityType={selectedEntityType}
+                  size={16}
+                />
+              </span>
+              <Icon className="size-4! shrink-0! text-muted-foreground!" />
+            </button>
+          </div>
         </div>
+        {!isOpen && <EntityCollapsedSummary entity={entity} />}
       </div>
       {isOpen && (
         <div className="border-t! border-border!">
@@ -795,7 +840,7 @@ const SchoolView = () => {
         id="school-sidebar-scroll"
         viewportClassName="h-full! [&>div]:block! [&>div]:min-w-0! [&>div]:w-full!"
       >
-        <div className="w-full! min-w-0! px-3.5! pb-28! pt-2!">
+        <div className="w-full! min-w-0! px-3.5! pb-12! pt-2!">
           {isLoading && !selectedEntities.length ? (
             schoolIds.length > 1 ? (
               <EntityDetailSkeleton count={schoolIds.length} />
@@ -832,13 +877,13 @@ const SchoolView = () => {
               <EntityDetailContent entity={selectedEntities[0]!} />
             </div>
           )}
+          {showDataSource && (
+            <div className="sticky! bottom-0! z-10! bg-background! mt-4!">
+              <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
+            </div>
+          )}
         </div>
       </ScrollArea>
-      {showDataSource && (
-        <div className="absolute! inset-x-0! bottom-0! z-10! bg-background!">
-          <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
-        </div>
-      )}
     </div>
   );
 };

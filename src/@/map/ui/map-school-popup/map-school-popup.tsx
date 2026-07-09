@@ -8,10 +8,7 @@ import { $entityRegistry } from '~/@/entities/models/entity.model';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { PointCoordinates } from '~/core/global-types';
-import {
-  InnerCircle,
-  InnerCircleConnectivity,
-} from '../legend-info/legend-button.style';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import DublicateSchoolPopup from './dublicate-school-popup.view';
 import useSchoolPopupData from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
@@ -114,19 +111,16 @@ export const MapSchoolPopup = () => {
                     </SchoolNameWrapper>
                     <SchoolInfoWrapper className="live-container">
                       <LiveContainer>
-                        <ConnectivityCircleWrapper className="map-school-status-circle">
-                          {!isStatic && feature?.isRealTime && (
-                            <InnerCircleConnectivity
-                              className="outer-circle"
-                              $backColor={connecitivityColor}
-                            />
-                          )}
-                          <InnerCircle
-                            className="inner-circle"
-                            $margin="0.35rem 0 0 0"
-                            $backColor={
-                              isStatic ? staticColor : connecitivityStatusColor
+                        <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
+                          <EntityLegendIndicator
+                            color={isStatic ? staticColor : connecitivityStatusColor}
+                            entityType={entityType}
+                            glowColor={
+                              !isStatic && feature?.isRealTime
+                                ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
+                                : undefined
                             }
+                            size={16}
                           />
                         </ConnectivityCircleWrapper>
                         <LiveContent>
