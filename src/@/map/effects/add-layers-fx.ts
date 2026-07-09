@@ -149,9 +149,7 @@ const getEntityTypesWithSelectedLayer = ({
   selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>;
 }) => {
   if (mapRoute.map) {
-    return entityTypes.filter((entityType) =>
-      Boolean(getEntityGlobalLayerId(layerUtils, entityType)),
-    );
+    return entityTypes;
   }
 
   const fallbackLayerId = entityTypes.length === 1 ? selectedLayerId : null;
@@ -268,6 +266,7 @@ export const updateConnectivityFilter = createEffect(
     connectivitySpeedFilter,
     connectivitySpeedFilterByEntity,
     mapRoute,
+    activeEntityTypes,
   }: UpdateConnectivityFilterOptions) => {
     if (!map) return;
     const {
@@ -279,15 +278,18 @@ export const updateConnectivityFilter = createEffect(
     const selectedEntityTypes = Object.keys(
       selectedLayerIdByEntity ?? {},
     ) as EntityType[];
-    const activeEntityTypes = selectedEntityTypes.length
-      ? selectedEntityTypes
-      : [EntityType.SCHOOL];
     const isGlobalMap = Boolean(mapRoute?.map);
-    for (const entityType of activeEntityTypes) {
+    const entityTypes =
+      isGlobalMap && activeEntityTypes?.length
+        ? activeEntityTypes
+        : selectedEntityTypes.length
+          ? selectedEntityTypes
+          : [EntityType.SCHOOL];
+    for (const entityType of entityTypes) {
       const effectiveSelectedLayerId = isGlobalMap
         ? getEntityGlobalLayerId(layerUtils, entityType)
         : (selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
-      if (!effectiveSelectedLayerId) continue;
+      if (!isGlobalMap && !effectiveSelectedLayerId) continue;
       const isEntityLive =
         isGlobalMap ||
         (currentLayerTypeUtilsByEntity?.[entityType]?.isLive ??

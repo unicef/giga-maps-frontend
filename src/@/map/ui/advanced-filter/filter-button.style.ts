@@ -34,8 +34,8 @@ export const FilterPopover = styled(Popover)`
       }
 `
 
-export const FilterWrapper = styled.div<{ $zIndex: number, $bottom: boolean }>`
-  z-index: 99;
+export const FilterWrapper = styled.div<{ $zIndex: number, $bottom: boolean, $isMobile: boolean }>`
+  ${({ $isMobile }) => $isMobile ? "z-index: 0;" : "z-index: 99;"}
   // background: ${props => props.theme.main};
   right: .5rem;
   border-radius: 62.5rem;

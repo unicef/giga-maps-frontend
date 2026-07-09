@@ -191,6 +191,7 @@ export const TooltipStyle = styled(Tooltip) <{ $maxWidth?: string }>`
   }
   .cds--popover-content {
     max-inline-size: ${props => props.$maxWidth ?? "18rem"};
+    max-width: 200px;
   }
 `
 

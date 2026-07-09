@@ -251,13 +251,11 @@ export const createAndUpdateMapLayer = ({
     ? activeEntityTypes
     : [EntityType.SCHOOL];
 
-  const hasSelectedEntityLayer = entityTypes.some((entityType) =>
-    Boolean(
-      mapRoute.map
-        ? getEntityGlobalLayerId(layerUtils, entityType)
-        : layerUtils.selectedLayerIdByEntity?.[entityType],
-    ),
-  );
+  const hasSelectedEntityLayer = mapRoute.map
+    ? entityTypes.length > 0
+    : entityTypes.some((entityType) =>
+        Boolean(layerUtils.selectedLayerIdByEntity?.[entityType]),
+      );
 
   // --- Selected layer (connectivity/coverage) per entity type ---
   if (isSourceAvailable && hasSelectedEntityLayer) {
@@ -265,7 +263,7 @@ export const createAndUpdateMapLayer = ({
       const entityLayerId = mapRoute.map
         ? getEntityGlobalLayerId(layerUtils, entityType)
         : layerUtils.selectedLayerIdByEntity?.[entityType];
-      if (!entityLayerId) continue;
+      if (!mapRoute.map && !entityLayerId) continue;
       const isDynamicLayer = !mapRoute.map;
       const sourceLayer = getSourceLayerName(entityType);
       const layerIdStr = getEntitySelectedLayerId(entityType, entityLayerId);

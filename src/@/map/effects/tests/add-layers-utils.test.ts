@@ -250,6 +250,35 @@ describe('add-layers-utils', () => {
 
       expect(filterConnectivityList).toHaveBeenCalledWith([], false);
     });
+    it('should create a health global layer without global layer metadata', () => {
+      createAndUpdateMapLayer({
+        map: mockMap,
+        mapRoute: { map: true },
+        connectivitySpeedFilter: [],
+        coverageFilter: [],
+        layerUtils: {
+          currentLayerTypeUtils: { isLive: true },
+          globalLayerDataByEntity: {},
+        },
+        selectedLayerId: null,
+        paintData: {},
+        schoolLayerId: null,
+        lastSelectedLayer: { layerId: null },
+        schoolLegends: [],
+        isMobile: false,
+        activeEntityTypes: [EntityType.HEALTH],
+        entityRegistry: {},
+      });
+
+      expect(createSelectedLayer).toHaveBeenCalledWith(
+        mockMap,
+        expect.objectContaining({
+          id: 'entity-selected-health-null',
+          options: expect.objectContaining({ 'source-layer': 'entities' }),
+        }),
+      );
+      expect(filterConnectivityList).toHaveBeenCalledWith([], false);
+    });
     it('should create layers for multiple entity types', () => {
       createAndUpdateMapLayer({
         map: mockMap,

@@ -1,3 +1,5 @@
+import { EntityType } from '~/@/entities/types/base-entity.type';
+
 import { changeLayersFx } from '../effects/add-layers-fx';
 import { clearMapDataFx } from '../effects/add-layers-fx';
 import { updateConnectivityFilter } from '../effects/add-layers-fx';
@@ -271,6 +273,43 @@ describe('updateConnectivityFilter', () => {
     expect(filterConnectivityList).toHaveBeenCalledWith(
       connectivitySpeedFilter,
       true,
+    );
+    expect(map.setFilter).toHaveBeenCalled();
+  });
+
+  it('updateConnectivityFilter: should use active health entity on global map without layer metadata', async () => {
+    const connectivitySpeedFilter = {
+      good: true,
+      moderate: true,
+      bad: true,
+      unknown: true,
+    };
+    const map = {
+      getLayer: vi.fn((id) => id === 'entity-selected-health-null'),
+      setFilter: vi.fn(),
+    };
+
+    await updateConnectivityFilter({
+      map,
+      layerUtils: {
+        selectedLayerId: null,
+        selectedLayerIdByEntity: {},
+        globalLayerDataByEntity: {},
+        currentLayerTypeUtils: {
+          isLive: false,
+        },
+        currentLayerTypeUtilsByEntity: {},
+      },
+      connectivitySpeedFilter,
+      mapRoute: { map: true },
+      activeEntityTypes: [EntityType.HEALTH],
+      lastSelectedLayer: {},
+    } as any);
+
+    expect(map.getLayer).toHaveBeenCalledWith('entity-selected-health-null');
+    expect(filterConnectivityList).toHaveBeenCalledWith(
+      connectivitySpeedFilter,
+      false,
     );
     expect(map.setFilter).toHaveBeenCalled();
   });

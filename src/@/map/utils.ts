@@ -636,14 +636,12 @@ export const generateLayerUrls = ({
   );
   const isGlobalView = mapRoute.map;
   const requestEntityTypes = isGlobalView
-    ? layerId
-      ? entityTypes
-      : []
+    ? entityTypes
     : getEntityTypesWithLayerId({
-      entityTypes,
-      layerUtils,
-      fallbackLayerId: layerId,
-    });
+        entityTypes,
+        layerUtils,
+        fallbackLayerId: layerId,
+      });
   if (!requestEntityTypes.length) return '';
 
   const entityParams =
@@ -652,25 +650,25 @@ export const generateLayerUrls = ({
   const url = isGlobalView ? CONNECTIVITY_URL : getDynamicUrl();
   const requestParams = isGlobalView
     ? generateMapParams({
-      connectivityFilter,
-      mapRoute,
-      isLive: true,
-      schoolPageIds,
-      connectivityBenchMark,
-      countrySearch,
-    })
+        connectivityFilter,
+        mapRoute,
+        isLive: true,
+        schoolPageIds,
+        connectivityBenchMark,
+        countrySearch,
+      })
     : generateEntityMapParams({
-      entityTypes: requestEntityTypes,
-      layerUtils,
-      fallbackLayerId: requestEntityTypes.length === 1 ? layerId : null,
-      connectivityFilter,
-      interval,
-      intervalByEntity,
-      intervalUnit,
-      intervalUnitByEntity,
-      connectivityBenchMark,
-      connectivityBenchMarkByEntity,
-    });
+        entityTypes: requestEntityTypes,
+        layerUtils,
+        fallbackLayerId: requestEntityTypes.length === 1 ? layerId : null,
+        connectivityFilter,
+        interval,
+        intervalByEntity,
+        intervalUnit,
+        intervalUnitByEntity,
+        connectivityBenchMark,
+        connectivityBenchMarkByEntity,
+      });
   const normalizedParams = requestParams.startsWith('&')
     ? requestParams.slice(1)
     : requestParams;

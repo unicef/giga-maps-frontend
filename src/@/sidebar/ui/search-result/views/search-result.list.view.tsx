@@ -3,7 +3,7 @@ import { PropsWithChildren, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import { DEFAULT_ENTITY_REGISTRY } from "~/@/entities";
+import { $entityRegistry, DEFAULT_ENTITY_REGISTRY, EntityType } from "~/@/entities";
 
 import { $searchInput, setSearchInMobile } from "../../common-components/top-search-bar/top-search-bar.model";
 import { SEARCH_DATA_TYPE } from "../container/search-result.constant";
@@ -39,7 +39,7 @@ export default function SearchResultList() {
   const { t } = useTranslation();
   const page = useStore($searchPage)
   const scrollRef = useRef()
-
+  const entityRegistry = useStore($entityRegistry);
   useEffect(() => {
     if (scrollRef.current && page === 0) {
       scrollRef.current.scrollTop = 0;
@@ -71,7 +71,12 @@ export default function SearchResultList() {
           <HighlightedText query={searchInput}>{t(item?.name)}</HighlightedText>
           {item.type === SEARCH_DATA_TYPE.COUNTRY && <span className="type-name">{t('country')}</span>}
           {item.type === SEARCH_DATA_TYPE.SCHOOL && <span className="type-name">
-            {t(DEFAULT_ENTITY_REGISTRY[item.entityTypetag].slug)} <span className="light">{' '}{t('in')}{' '}</span>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */}
+            {t(`${item.entityTypetag}-entity-label`, {
+              defaultValue: t(entityRegistry[item?.entityTypetag]?.slug ?? item?.entityTypetag, {
+                count: 1,
+              }),
+            })} <span className="light">{' '}{t('in')}{' '}</span>
             <span className="highlight">{item?.adminName}{' '}/{' '}{t(item.countryName)}</span>
           </span>}
           {item.type === SEARCH_DATA_TYPE.ADMIN1 && <span className="type-name">

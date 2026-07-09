@@ -300,6 +300,57 @@ describe('onClickOnEntityDots', () => {
 });
 
 describe('generateLayerUrls', () => {
+  it('should generate global health connectivity tile URL without selected layer', () => {
+    const result = generateLayerUrls({
+      layerId: null,
+      activeEntityTypes: [EntityType.HEALTH],
+      connectivityBenchMark: 'global',
+      connectivityFilter: {
+        isWeek: false,
+        range: { start: new Date('2026-01-01'), end: new Date('2026-01-31') },
+      },
+      layerUtils: {
+        selectedLayerIdByEntity: {},
+        currentLayerTypeUtilsByEntity: {},
+      },
+      mapRoute: { map: true },
+      country: null,
+      entityRegistry: {
+        [EntityType.SCHOOL]: { visible: true },
+        [EntityType.HEALTH]: { visible: true },
+      },
+    } as any);
+
+    expect(result).toContain('api/v2/entities/tiles/connectivity/?');
+    expect(result).toContain('entity_type__code=health');
+    expect(result).not.toContain('entity_type__code=school');
+  });
+
+  it('should generate all-entity global connectivity tile URL without selected layer', () => {
+    const result = generateLayerUrls({
+      layerId: null,
+      activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
+      connectivityBenchMark: 'global',
+      connectivityFilter: {
+        isWeek: false,
+        range: { start: new Date('2026-01-01'), end: new Date('2026-01-31') },
+      },
+      layerUtils: {
+        selectedLayerIdByEntity: {},
+        currentLayerTypeUtilsByEntity: {},
+      },
+      mapRoute: { map: true },
+      country: null,
+      entityRegistry: {
+        [EntityType.SCHOOL]: { visible: true },
+        [EntityType.HEALTH]: { visible: true },
+      },
+    } as any);
+
+    expect(result).toContain('api/v2/entities/tiles/connectivity/?');
+    expect(result).toContain('entity_type__code=all');
+  });
+
   it('should not generate map tile URL when no entity has a selected layer', () => {
     const result = generateLayerUrls({
       layerId: null,
