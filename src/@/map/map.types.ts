@@ -55,6 +55,7 @@ export type UpdateConnectivityFilterOptions = Pick<
   | 'lastSelectedLayer'
   | 'layerUtils'
   | 'mapRoute'
+  | 'activeEntityTypes'
 >;
 
 export type UpdateConnectivityType = Pick<
