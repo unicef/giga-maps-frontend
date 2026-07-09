@@ -9,7 +9,7 @@ import { cn } from '~/lib/cn';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
 const periodButtonClassName =
-  'flex! h-8! w-1/2! cursor-pointer! items-center! justify-center! border-0! border-b-2! border-b-muted-foreground! bg-transparent! p-[0.6rem]! text-[0.6rem]! font-bold! uppercase! text-muted-foreground! outline-none! hover:bg-transparent!';
+  'flex! cursor-pointer! items-center! justify-start! border-0! border-b-2! bg-transparent! px-4! py-2! text-[0.6rem]! font-bold! outline-none! hover:bg-transparent! gap-2! leading-5!';
 
 export default function HistoryButtons({
   entityType,
@@ -28,11 +28,13 @@ export default function HistoryButtons({
   };
 
   return (
-    <div className="mb-4! mt-3! flex! w-1/2! flex-row! items-center!">
+    <div className="inline-flex! justify-start! items-start!">
       <button
         className={cn(
           periodButtonClassName,
-          isWeek && 'border-b-foreground! text-foreground!',
+          isWeek
+            ? 'border-b-foreground! text-foreground!'
+            : 'border-b-border! text-muted-foreground!',
         )}
         onClick={() => {
           changeUnit(IntervalUnit.week);
@@ -44,7 +46,9 @@ export default function HistoryButtons({
       <button
         className={cn(
           periodButtonClassName,
-          !isWeek && 'border-b-foreground! text-foreground!',
+          !isWeek
+            ? 'border-b-foreground! text-foreground!'
+            : 'border-b-border! text-muted-foreground!',
         )}
         onClick={() => changeUnit(IntervalUnit.month)}
         type="button"

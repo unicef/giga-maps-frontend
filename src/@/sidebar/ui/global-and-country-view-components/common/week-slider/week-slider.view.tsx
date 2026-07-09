@@ -62,65 +62,63 @@ export default function WeekSlider({
     : defaultInterval();
 
   return (
-    <div className="flex! flex-row! items-center! justify-between!">
-      <div className="week_control_style flex! h-8! flex-row! flex-nowrap! items-center! gap-1! ml-[-0.5rem]!">
-        <Button
-          aria-label="Previous week"
-          className="previous_week_button size-8! p-0! text-foreground!"
-          onClick={() => {
-            if (entityType) {
-              previousEntityHistoryInterval(entityType);
-              return;
-            }
-            previousHistoryInterval();
-          }}
-          size="icon-sm"
-          type="button"
-          variant="icon"
-        >
-          <ChevronLeft aria-hidden="true" className="size-4!" />
-        </Button>
-        <div className="week_control_text inline-flex! flex-1! items-center! justify-center! text-xs! font-normal! uppercase! leading-4! tracking-[0.1rem]! text-foreground!">
-          {formattedInterval}
-        </div>
-        <Button
-          aria-label="Next week"
-          className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground!"
-          onClick={() => {
-            if (entityType) {
-              nextEntityHistoryInterval(entityType);
-              return;
-            }
-            nextHistoryInterval();
-          }}
-          disabled={!isNextIntervalAvailable}
-          size="icon-sm"
-          type="button"
-          variant="icon"
-        >
-          <ChevronRight aria-hidden="true" className="size-4!" />
-        </Button>
-        <Button
-          aria-label="Latest week"
-          className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground!"
-          onClick={() => {
-            if (entityType) {
-              changeEntityHistoryInterval({
-                entityType,
-                interval: currentAvailableDate,
-              });
-              return;
-            }
-            changeHistoryInterval(currentAvailableDate);
-          }}
-          disabled={historyInterval === currentAvailableDate}
-          size="icon-sm"
-          type="button"
-          variant="icon"
-        >
-          <ChevronsRight aria-hidden="true" className="size-4!" />
-        </Button>
+    <div className="inline-flex! justify-start! items-center! gap-2! h-8!">
+      <Button
+        aria-label="Previous week"
+        className="previous_week_button size-8! p-0! text-foreground! hover:bg-transparent!"
+        onClick={() => {
+          if (entityType) {
+            previousEntityHistoryInterval(entityType);
+            return;
+          }
+          previousHistoryInterval();
+        }}
+        size="icon-sm"
+        type="button"
+        variant="icon"
+      >
+        <ChevronLeft aria-hidden="true" className="size-4!" />
+      </Button>
+      <div className="inline-flex! items-center! justify-center! text-xs! font-normal! uppercase! leading-4! text-foreground!">
+        {formattedInterval}
       </div>
+      <Button
+        aria-label="Next week"
+        className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground! hover:bg-transparent!"
+        onClick={() => {
+          if (entityType) {
+            nextEntityHistoryInterval(entityType);
+            return;
+          }
+          nextHistoryInterval();
+        }}
+        disabled={!isNextIntervalAvailable}
+        size="icon-sm"
+        type="button"
+        variant="icon"
+      >
+        <ChevronRight aria-hidden="true" className="size-4!" />
+      </Button>
+      <Button
+        aria-label="Latest week"
+        className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground! hover:bg-transparent!"
+        onClick={() => {
+          if (entityType) {
+            changeEntityHistoryInterval({
+              entityType,
+              interval: currentAvailableDate,
+            });
+            return;
+          }
+          changeHistoryInterval(currentAvailableDate);
+        }}
+        disabled={historyInterval === currentAvailableDate}
+        size="icon-sm"
+        type="button"
+        variant="icon"
+      >
+        <ChevronsRight aria-hidden="true" className="size-4!" />
+      </Button>
     </div>
   );
 }

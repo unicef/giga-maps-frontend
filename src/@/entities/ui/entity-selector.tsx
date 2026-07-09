@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import { useMemo, type MouseEvent } from 'react';
+import { type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -13,6 +13,7 @@ import {
 } from '~/@/entities/models/entity.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+import { $isSidebarCollapsed } from '~/@/sidebar/sidebar.model';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
@@ -24,22 +25,6 @@ const base =
 const active = 'border-primary';
 const inactive =
   'border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground';
-const disabled =
-  'cursor-not-allowed! border-border! bg-background! text-muted-foreground! opacity-50! hover:bg-background! hover:text-muted-foreground!';
-
-const getEntityTypeFromEntityRoute = (search: string) => {
-  const params = new URLSearchParams(search);
-  const entityIdsParam = Array.from(params.entries()).find(
-    ([key, value]) => key.endsWith('_ids') && key !== 'entity_ids' && !!value,
-  );
-  const entityTypeFromIds = entityIdsParam?.[0].replace(/_ids$/, '') as
-    | EntityType
-    | undefined;
-  const legacyEntityTypeParam = params.get('entity_type') ?? params.get('entity');
-
-  return entityTypeFromIds
-    ?? (legacyEntityTypeParam ? (legacyEntityTypeParam as EntityType) : null);
-};
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -51,34 +36,26 @@ export default function EntityTypeSelector() {
   const entityRegistry = useStore($entityRegistry);
   const isGlobalMode = useStore($isGlobalMode);
   const isEntityView = useStore(mapEntity.visible);
-  const entitySearch = useStore(mapEntity.router.search);
-  const lockedEntityType = useMemo(
-    () => (isEntityView ? getEntityTypeFromEntityRoute(entitySearch) : null),
-    [entitySearch, isEntityView],
-  );
-  const isEntityViewLocked = Boolean(lockedEntityType);
+  const isSidebarCollapsed = useStore($isSidebarCollapsed);
 
   const entityTypes = Object.entries(entityRegistry);
 
-  if (entityTypes.length <= 1) {
+  if (entityTypes.length <= 1 || isEntityView) {
     return null;
   }
 
-  const allSelected = !isEntityViewLocked && isGlobalMode;
+  const allSelected = isGlobalMode;
 
   const handleSelectAllEntityTypes = () => {
-    if (isEntityViewLocked) return;
     selectAllEntityTypes();
   };
 
   const handleEntityClick = (entityType: EntityType, event: MouseEvent) => {
-    if (isEntityViewLocked && entityType !== lockedEntityType) return;
-
     if (isGlobalMode) {
       // If we're in global mode, the first click starts a manual selection with this entity.
       changeActiveEntityTypes([entityType]);
       changeSelectedEntityType(entityType);
-    } else if (event.shiftKey && !isEntityViewLocked) {
+    } else if (event.shiftKey) {
       toggleEntityType(entityType);
     } else {
       changeActiveEntityTypes([entityType]);
@@ -87,12 +64,20 @@ export default function EntityTypeSelector() {
   };
 
   return (
-    <div className={!isMobile ? cn("fixed top-2 left-86 z-[3] flex items-center gap-2 rounded-full") : cn("flex items-center gap-2 p-1! overflow-auto")}>
+    <div
+      className={
+        !isMobile
+          ? cn(
+              'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
+              isSidebarCollapsed ? 'left-4!' : 'left-86!',
+            )
+          : cn('flex items-center gap-2 p-1! overflow-auto')
+      }
+    >
       <Button
         variant="default"
         size="lg"
-        className={`${base} ${isEntityViewLocked ? disabled : allSelected ? active : inactive}`}
-        disabled={isEntityViewLocked}
+        className={`${base} ${allSelected ? active : inactive}`}
         onClick={handleSelectAllEntityTypes}
       >
         {t('all-facilities')}
@@ -100,18 +85,14 @@ export default function EntityTypeSelector() {
 
       {entityTypes.map(([type, config]) => {
         const entityType = type as EntityType;
-        const isDisabled = isEntityViewLocked && entityType !== lockedEntityType;
-        const isActive = isEntityViewLocked
-          ? entityType === lockedEntityType
-          : activeEntityTypes.includes(entityType) && !isGlobalMode;
+        const isActive = activeEntityTypes.includes(entityType) && !isGlobalMode;
 
         return (
           <Button
             key={type}
             variant="default"
             size="lg"
-            className={`${base} ${isDisabled ? disabled : isActive ? active : inactive}`}
-            disabled={isDisabled}
+            className={`${base} ${isActive ? active : inactive}`}
             onClick={(event) => handleEntityClick(entityType, event)}
           >
             <EntityLegendIndicator
@@ -125,9 +106,7 @@ export default function EntityTypeSelector() {
           </Button>
         );
       })}
-      {isMobile &&
-        <FilterButton />
-      }
+      {isMobile && <FilterButton />}
     </div>
   );
 }

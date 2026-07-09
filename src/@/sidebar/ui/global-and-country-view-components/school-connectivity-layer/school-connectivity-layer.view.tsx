@@ -44,36 +44,34 @@ const SchoolConnectivityLayer = ({
     count: 2,
   });
   return (
-    <div className="flex! h-full! flex-col! justify-between! max-md:h-auto!">
-      <div>
-        <div className="mt-5! ml-4!">
-          {isLoading ? (
-            <>
-              <Skeleton className="h-[3.5625rem]! w-16!" />
-              <Skeleton className="mt-2! h-2! w-full!" />
-            </>
-          ) : (
-            <div className="mr-4!">
-              <p
-                className={
-                  isConnected
-                    ? 'my-2! text-[2.375rem]! font-normal! leading-none! text-success!'
-                    : 'my-2! text-[2.375rem]! font-normal! leading-none! text-foreground!'
-                }
-                data-title={t('int', {
-                  val: (isConnected ? connectedValue : totalMappedValue) ?? 0,
-                })}
-              >
-                {isConnected ? connectedNumber : totalMappedNumber}
-              </p>
-              <p className="my-2! text-xs! font-normal! leading-4! text-muted-foreground!">
-                {isConnected
-                  ? `${t('connected')} ${entityLabel} / ${totalMappedNumber} ${entityLabel} mapped`
-                  : `${entityLabel} mapped`}
-              </p>
-            </div>
-          )}
-        </div>
+    <div className="mx-4! py-4! flex! flex-col! justify-start! items-start! gap-6! h-full! max-md:h-auto!">
+      <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4!">
+        {isLoading ? (
+          <div className="self-stretch! flex! flex-col! gap-2!">
+            <Skeleton className="h-10! w-24!" />
+            <Skeleton className="h-4! w-full!" />
+          </div>
+        ) : (
+          <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-2!">
+            <p
+              className={
+                isConnected
+                  ? 'm-0! text-3xl! font-bold! font-manrope! leading-9! text-success!'
+                  : 'm-0! text-3xl! font-bold! font-manrope! leading-9! text-foreground!'
+              }
+              data-title={t('int', {
+                val: (isConnected ? connectedValue : totalMappedValue) ?? 0,
+              })}
+            >
+              {isConnected ? connectedNumber : totalMappedNumber}
+            </p>
+            <p className="m-0! text-xs! font-normal! leading-4! text-muted-foreground!">
+              {isConnected
+                ? `${t('connected')} ${entityLabel} / ${totalMappedNumber} ${entityLabel} mapped`
+                : `${entityLabel} mapped`}
+            </p>
+          </div>
+        )}
       </div>
       <FooterDataSourcePopUp
         showOldDataSource={true}

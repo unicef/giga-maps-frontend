@@ -290,7 +290,7 @@ exports[`Sidebar > renders Sidebar and take a snapshop 1`] = `
 }
 
 <div
-    class="z-2 flex shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)] fixed top-2 left-2 bottom-[1.8rem] min-[1584px]:bottom-2 w-[320px] min-[1584px]:w-[320px]"
+    class="z-2 flex shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)] fixed top-2 left-2! bottom-[1.8rem] min-[1584px]:bottom-2 w-[320px] min-[1584px]:w-[320px]"
   >
     <div
       class="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
@@ -1152,7 +1152,7 @@ exports[`Sidebar > renders Sidebar and take a snapshop 1`] = `
           </div>
         </div>
         <button
-          class="sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border-0 p-0 outline-none max-md:hidden cursor-pointer bg-background"
+          class="sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border border-l-0 border-border rounded-r-md shadow-md p-0 outline-none max-md:hidden cursor-pointer bg-background"
           type="button"
         >
           <svg

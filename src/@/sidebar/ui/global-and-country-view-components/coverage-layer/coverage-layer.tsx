@@ -72,33 +72,34 @@ const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
   }, [entityLabel, legendsList, layerName, lng, t]);
 
   return (
-    <div className="flex! h-full! flex-col! justify-between! max-md:h-auto!">
-      <div>
-        <div className="mt-4! mb-3! ml-4!">
-          <LayerNameWithTooltip
-            description={layerDescription}
-            name={layerName}
-          />
-          {isLoading ? (
-            <Skeleton className="h-4! w-4/5!" />
-          ) : (
-            <div className="mr-0.5!">
-              <p
-                className={
-                  isDataAvailable
-                    ? 'my-2! text-[2.375rem]! font-normal! leading-none! text-success!'
-                    : 'my-2! text-[2.375rem]! font-normal! leading-none! text-foreground!'
-                }
-                data-title={t('int', { val: displayNumber })}
-              >
-                {isDataAvailable ? formatNumber(displayNumber, lng) : ''}
-              </p>
-              <p className="my-2! text-xs! font-normal! leading-4! text-muted-foreground!">
-                {displayText}
-              </p>
-            </div>
-          )}
-        </div>
+    <div className="mx-4! py-4! flex! flex-col! justify-start! items-start! gap-6! h-full! max-md:h-auto!">
+      <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4!">
+        <LayerNameWithTooltip
+          description={layerDescription}
+          name={layerName}
+        />
+        {isLoading ? (
+          <div className="self-stretch! flex! flex-col! gap-2!">
+            <Skeleton className="h-10! w-24!" />
+            <Skeleton className="h-4! w-full!" />
+          </div>
+        ) : (
+          <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-2!">
+            <p
+              className={
+                isDataAvailable
+                  ? 'm-0! text-3xl! font-bold! font-manrope! leading-9! text-success!'
+                  : 'm-0! text-3xl! font-bold! font-manrope! leading-9! text-foreground!'
+              }
+              data-title={t('int', { val: displayNumber })}
+            >
+              {isDataAvailable ? formatNumber(displayNumber, lng) : ''}
+            </p>
+            <p className="m-0! text-xs! font-normal! leading-4! text-muted-foreground!">
+              {displayText}
+            </p>
+          </div>
+        )}
       </div>
       <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </div>

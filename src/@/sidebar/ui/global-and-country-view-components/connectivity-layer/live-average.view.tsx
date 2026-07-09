@@ -27,19 +27,19 @@ export default function LiveAverage({
   const unitLabel =
     currentLayer?.data_source_column[dataSourceId ?? '']?.display_unit;
   return (
-    <div className="flex! w-full! flex-col!">
+    <div className="flex! w-full! flex-col! gap-2!">
       <LayerNameWithTooltip description={layerDescription} name={heading} />
       {isLoading ? (
         <Skeleton className="mb-2! h-10! w-44!" />
       ) : value ? (
-        <div className="flex! items-baseline!">
+        <div className="inline-flex! justify-start! items-end! gap-1!">
           <p
-            className={`m-0! text-[2rem]! font-normal! leading-tight! ${colorClassName}`}
+            className={`m-0! text-3xl! font-bold! font-manrope! leading-9! ${colorClassName}`}
           >
             {value}
           </p>
           <p className="m-0! text-base! font-normal! leading-6! text-muted-foreground!">
-            &nbsp;<span>{unitLabel}</span>
+            <span>{unitLabel}</span>
           </p>
         </div>
       ) : (

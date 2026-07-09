@@ -11,7 +11,7 @@ import {
   $selectedLayerDataByEntity,
 } from '~/@/sidebar/sidebar.model';
 
-import { HistoryGraphAccordian } from '../../common-components/history-graph';
+import HistoryGraph from '../../common-components/history-graph';
 import WeekSlider from '../common/week-slider/week-slider.view';
 import LiveAverage from './live-average.view';
 
@@ -45,8 +45,8 @@ export default function ConnectivityLayer({
 
   return (
     <>
-      <div className="mx-4!">
-        <div className="relative! flex! w-full! flex-col! pt-3! pb-6! gap-3!">
+      <div className="mx-4! py-4! flex! flex-col! justify-start! items-start! gap-6!">
+        <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4!">
           <LiveAverage
             isLoading={isLoading}
             colorClassName={colorClassName}
@@ -55,14 +55,14 @@ export default function ConnectivityLayer({
           />
           <WeekSlider entityType={entityType} />
         </div>
+        <HistoryGraph
+          connectivityStats={connectivityStats}
+          entityType={entityType}
+          isLoading={isLoading}
+          selectedLayerData={currentLayerData}
+        />
+        <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
       </div>
-      <HistoryGraphAccordian
-        connectivityStats={connectivityStats}
-        entityType={entityType}
-        isLoading={isLoading}
-        selectedLayerData={currentLayerData}
-      />
-      <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </>
   );
 }

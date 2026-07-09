@@ -218,7 +218,7 @@ const GigaLayerButtonIcons = ({
       <div
         className={cn(
           'flex! h-full! w-full! min-w-0!',
-          popup ? 'flex-wrap!' : 'flex-nowrap! gap-2!',
+          popup ? 'flex-wrap!' : 'flex-nowrap! gap-1!',
         )}
       >
         <GigaLayerButton

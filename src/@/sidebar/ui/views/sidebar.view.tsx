@@ -66,8 +66,8 @@ export default function Sidebar() {
           : cn(
             'fixed top-2',
             isSidebarCollapsed
-              ? '-left-68 min-[1584px]:left-[-18.2rem]'
-              : 'left-2',
+              ? 'left-[-320px]!'
+              : 'left-2!',
             'bottom-[1.8rem] min-[1584px]:bottom-2',
             'w-[320px] min-[1584px]:w-[320px]',
           ),
@@ -122,7 +122,7 @@ export default function Sidebar() {
           {!mapRoute && !countryRoute && <CommonComponentGigaLayer />}
           <button
             className={cn(
-              'sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border-0 p-0 outline-none max-md:hidden',
+              'sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border border-l-0 border-border rounded-r-md shadow-md p-0 outline-none max-md:hidden',
               'cursor-pointer bg-background',
             )}
             type="button"

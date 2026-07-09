@@ -72,7 +72,6 @@ const EntitySummaryCard = ({
         <div className="px-3.5! pb-2!">
           {card.collapsedRows.map((row, index) => (
             <div key={row.label}>
-              {index > 0 ? <MetricDivider /> : null}
               <div className="grid! grid-cols-[auto_1fr]! items-center! gap-x-3! py-2.5!">
                 {loadingRowLabelSet.has(row.label) ? (
                   <Skeleton className="h-5! w-12! rounded-sm!" />
@@ -88,6 +87,7 @@ const EntitySummaryCard = ({
                   {row.label}
                 </span>
               </div>
+              {card.collapsedRows.length > index + 1 || expanded ? <MetricDivider /> : null}
             </div>
           ))}
         </div>

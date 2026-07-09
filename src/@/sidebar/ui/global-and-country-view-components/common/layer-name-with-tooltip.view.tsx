@@ -23,7 +23,7 @@ export default function LayerNameWithTooltip({
   return (
     <TooltipProvider>
       <div className={cn('flex! items-center! mb-4!', className)}>
-        <p className="m-0! text-sm! leading-5! text-muted-foreground!">
+        <p className="m-0! text-sm! leading-5! text-foreground!">
           {name}
         </p>
         {description && (

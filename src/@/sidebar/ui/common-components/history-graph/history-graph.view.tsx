@@ -28,7 +28,6 @@ import { Skeleton } from '~/components/ui/skeleton';
 import { mapSchools } from '~/core/routes';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { useRoute } from '~/lib/router';
-
 import HistoryButtons from './history-buttons.view';
 
 type HistoryChartData = {
@@ -139,15 +138,13 @@ function HistoryBarChart({
   );
   const firstLabel = chartData[0]?.key;
   const lastLabel = chartData.at(-1)?.key;
-  const width = isWeek
-    ? minimumChartWidth
-    : Math.max(minimumChartWidth, chartData.length * monthlyPointWidth);
+  const calculatedWidth = chartData.length * monthlyPointWidth;
 
   return (
     <ChartContainer
       className="h-40! min-h-40! max-w-none! w-full! aspect-auto!"
       config={chartConfig}
-      style={{ width }}
+      style={{ minWidth: isWeek ? '100%' : `max(100%, ${calculatedWidth}px)` }}
     >
       <BarChart
         accessibilityLayer
@@ -176,7 +173,7 @@ function HistoryBarChart({
           tickFormatter={(value: number) => String(Math.round(value))}
           tickLine={false}
           ticks={getYTicks(maxValue)}
-          width={38}
+          width={28}
         />
         {benchmark > 0 && (
           <ReferenceLine
@@ -252,12 +249,12 @@ const HistoryGraph = ({
   ]);
 
   return (
-    <div className="overflow-hidden!">
+    <div className="flex! flex-col! justify-start! items-start! gap-6! w-full! overflow-hidden!">
       <HistoryButtons entityType={entityType} isWeek={isWeek} />
       {isLoading ? (
         <Skeleton className="ml-2.5! h-40! w-full!" />
       ) : (
-        <div className="relative! py-4! pt-2! w-full!">
+        <div className="relative! pr-2! pl-0! w-full!">
           {!isWeek && (
             <Button
               aria-label="Scroll chart"
@@ -291,7 +288,7 @@ const HistoryGraph = ({
             />
           ) : (
             <ScrollArea
-              className="overflow-y-hidden! pr-[1.7rem]!"
+              className="overflow-y-hidden! w-full!"
               scrollbars="horizontal"
               viewportClassName="overflow-y-hidden!"
               viewportRef={scrollRef}

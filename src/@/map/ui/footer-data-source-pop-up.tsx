@@ -109,6 +109,24 @@ const FooterDataSourcePopUp = ({
   );
 
   if (showOldDataSource) {
+    if (!isFooter) {
+      return (
+        <TooltipProvider>
+          <div className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-row! justify-start! items-start! gap-2! flex-wrap! w-full!">
+            <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
+              <span className="leading-4!">{t('data-source')}</span>
+              <DataSourceInfoTooltip
+                label={t('data-is-sourced-research-institutions')}
+              />
+            </div>
+            <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
+              <span>{oldDataSource}</span>
+            </div>
+          </div>
+        </TooltipProvider>
+      );
+    }
+
     return (
       <TooltipProvider>
         <div className={footerContainerClassName}>
@@ -135,19 +153,65 @@ const FooterDataSourcePopUp = ({
 
   if (!dataSourceName?.length) return null;
 
-  return (
-    <TooltipProvider>
-      <div className={footerContainerClassName}>
-        {!isFooter && (
-          <DataSourceHeader>
-            <p className="m-0! text-[0.85rem]! text-foreground!">
-              {t('data-source')}
-            </p>
+  if (!isFooter) {
+    return (
+      <TooltipProvider>
+        <div className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-row! justify-start! items-start! gap-2! flex-wrap! w-full!">
+          <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
+            <span className="leading-4!">{t('data-source')}</span>
             <DataSourceInfoTooltip
               label={t('data-is-sourced-research-institutions')}
             />
-          </DataSourceHeader>
-        )}
+          </div>
+          <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
+            {dataSourceName?.map((sourceName: string, index: number) => {
+              const isLast = index === dataSourceName?.length - 1;
+              const { name, url } = parseNameAndUrl(sourceName);
+              const description = dataSourceDescription[index];
+              const sourceButton = (
+                <button
+                  className={cn(
+                    'cursor-pointer! bg-transparent! p-0! text-left! text-xs! font-normal! text-muted-foreground! hover:text-foreground! border-0! inline!',
+                    url && 'underline!',
+                  )}
+                  onClick={() =>
+                    url &&
+                    window.open(
+                      ensureAbsoluteUrl(url),
+                      '_blank',
+                      'noopener,noreferrer',
+                    )
+                  }
+                  type="button"
+                >
+                  {replaceSourceName(name)}
+                </button>
+              );
+              return (
+                <span key={sourceName} className="inline!">
+                  {description ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>{sourceButton}</TooltipTrigger>
+                      <TooltipContent align="end" side="top">
+                        {description}
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    sourceButton
+                  )}
+                  {!isLast && `, `}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      </TooltipProvider>
+    );
+  }
+
+  return (
+    <TooltipProvider>
+      <div className={footerContainerClassName}>
         <DataSourceContainer>
           <div className="mr-0.5! text-xs!">
             {isFooter && (
