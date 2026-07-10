@@ -90,7 +90,7 @@ yarn start
 - ENV: (optional, default: development) Current environment variable.
 - MATOMO_SITE_ID: (optional) Analytics site ID.
 - POSTHOG_KEY: (optional) PostHog project API key. When unset, PostHog analytics is disabled.
-- POSTHOG_HOST: (optional, default: `https://us.i.posthog.com`) PostHog API host. Use `https://eu.i.posthog.com` for EU cloud.
+- POSTHOG_HOST: (optional, default: `https://eu.i.posthog.com`) PostHog API host. Use `https://us.i.posthog.com` for US cloud.
 
 #### Technology Stack
 
