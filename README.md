@@ -89,6 +89,8 @@ yarn start
 - B2C_CLIENT_ID: (required) Client ID for login.
 - ENV: (optional, default: development) Current environment variable.
 - MATOMO_SITE_ID: (optional) Analytics site ID.
+- POSTHOG_KEY: (optional) PostHog project API key. When unset, PostHog analytics is disabled.
+- POSTHOG_HOST: (optional, default: `https://us.i.posthog.com`) PostHog API host. Use `https://eu.i.posthog.com` for EU cloud.
 
 #### Technology Stack
 
