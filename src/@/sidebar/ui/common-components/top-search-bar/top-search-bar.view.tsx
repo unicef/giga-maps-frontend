@@ -122,7 +122,6 @@ const TopSearchBar = () => {
   const dropdownButton = (
     <button
       aria-expanded={showCountries}
-      title={t('country-list')}
       aria-label={t('country-list')}
       className={cn(
         'main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!',
