@@ -88,7 +88,7 @@ const CommonComponentGigaLayer = ({
               sideOffset={20}
             >
               <ScrollArea
-                className="w-[calc(100%+0.625rem)]!"
+                className="w-[calc(100%+0.7rem)]!"
                 style={{ height: 'min(24.5rem, calc(100vh - 8rem))' }}
                 viewportClassName="h-full! pr-2.5!"
               >

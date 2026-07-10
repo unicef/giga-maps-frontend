@@ -140,7 +140,7 @@ const GigaLayerButtonIcons = ({
   if (popup) {
     return (
       <TooltipProvider>
-        <div className="inline-flex! flex-col! items-start! gap-4!">
+        <div className="inline-flex! flex-col! items-start! gap-4! pr-2!">
           <section className="flex! flex-col! items-start! gap-2!">
             <p className="text-sm! font-normal! leading-5! text-[#f4f4f4]!">
               {t('real-time-layers')}
