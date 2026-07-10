@@ -2,11 +2,7 @@ import { useStore } from 'effector-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  $entityConfigMap,
-  $selectedEntityConfig,
-  $selectedEntityType,
-} from '~/@/entities/models/entity.model';
+import { $entityConfigMap } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import {
@@ -24,18 +20,14 @@ const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
   const { t } = useTranslation();
   const lng = useStore($lng);
   const coverageStatsByEntity = useStore($coverageStatsByEntity);
-  const selectedEntityType = entityType;
-  const currentSelectedEntityConfig = useStore($selectedEntityConfig);
   const entityConfigMap = useStore($entityConfigMap);
-  const selectedEntityConfig = entityType
-    ? entityConfigMap[entityType]
-    : currentSelectedEntityConfig;
-  const coverageStats = coverageStatsByEntity[selectedEntityType];
+  const entityConfig = entityConfigMap[entityType];
+  const coverageStats = coverageStatsByEntity[entityType];
   const isLoading = useStore($isLoadingCountryAdminView);
   const coverageDistribution = coverageStats?.connected_schools;
   const { selectedLayerDataByEntity } =
     useStore($layerUtils);
-  const currentSelectedLayerData = selectedLayerDataByEntity[selectedEntityType];
+  const currentSelectedLayerData = selectedLayerDataByEntity[entityType];
   const legendsList = useMemo(
     () => Object.entries(coverageDistribution || {}),
     [coverageDistribution],
@@ -47,7 +39,7 @@ const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
   const [displayText, setDisplayText] = useState('');
 
   const isDataAvailable = legendsList.length;
-  const entityLabel = t(selectedEntityConfig?.slug ?? selectedEntityType, {
+  const entityLabel = t(entityConfig?.slug ?? entityType, {
     count: 2,
   });
   // this block of useEffect needs refactoring, all this logic should come from column config

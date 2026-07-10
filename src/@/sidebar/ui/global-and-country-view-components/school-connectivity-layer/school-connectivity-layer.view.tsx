@@ -1,11 +1,7 @@
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  $entityConfigMap,
-  $selectedEntityConfig,
-  $selectedEntityType,
-} from '~/@/entities/models/entity.model';
+import { $entityConfigMap } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { $globalStatsByEntity } from '~/@/map/map.model';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
@@ -22,14 +18,9 @@ const SchoolConnectivityLayer = ({
   const lng = useStore($lng);
   const { t } = useTranslation();
   const globalStatsByEntity = useStore($globalStatsByEntity);
-  const currentSelectedEntityType = useStore($selectedEntityType);
-  const selectedEntityType = entityType ?? currentSelectedEntityType;
-  const currentSelectedEntityConfig = useStore($selectedEntityConfig);
   const entityConfigMap = useStore($entityConfigMap);
-  const selectedEntityConfig = entityType
-    ? entityConfigMap[entityType]
-    : currentSelectedEntityConfig;
-  const selectedEntityGlobalStats = globalStatsByEntity[selectedEntityType];
+  const entityConfig = entityConfigMap[entityType];
+  const selectedEntityGlobalStats = globalStatsByEntity[entityType];
   const isLoading = useStore($isLoadingCountryAdminView);
   const connectedValue =
     selectedEntityGlobalStats?.connected_entities?.connected ?? 0;
@@ -40,7 +31,7 @@ const SchoolConnectivityLayer = ({
   const connectedNumber = formatNumber(connectedValue, lng);
   const totalMappedNumber = formatNumber(totalMappedValue, lng);
   const isConnected = connectedValue > 0;
-  const entityLabel = t(selectedEntityConfig?.slug ?? selectedEntityType, {
+  const entityLabel = t(entityConfig?.slug ?? entityType, {
     count: 2,
   });
   return (

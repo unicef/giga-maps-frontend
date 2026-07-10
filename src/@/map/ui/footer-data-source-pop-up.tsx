@@ -4,7 +4,7 @@ import { type PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSource } from '~/@/country/country.model';
-import { $selectedEntityType, type EntityType } from '~/@/entities';
+import { type EntityType } from '~/@/entities';
 import {
   $currentLayerCountryDataSource,
   $currentLayerTypeUtilsByEntity,

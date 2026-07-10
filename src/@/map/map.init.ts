@@ -253,7 +253,6 @@ const $derivedCountryActiveFilterList = combine({
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
   activeEntityTypes: $activeEntityTypes,
-  selectedEntityType: $selectedEntityType,
   urlParamsConsumed: $urlParamsConsumed,
 });
 
@@ -267,7 +266,6 @@ const activeFiltersListClock = guard({
     fetchCountryFx.doneData,
     fetchAdvanceFilterFx.doneData,
     $activeEntityTypes,
-    $selectedEntityType,
   ]),
   filter: ({
     countryActiveFiltersList,
@@ -288,12 +286,11 @@ const activeFiltersListClock = guard({
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList, activeEntityTypes, selectedEntityType }) =>
+  fn: ({ countryActiveFiltersList, activeFiltersList, activeEntityTypes }) =>
     buildFilterQueryFromSelections(
       countryActiveFiltersList!,
       activeFiltersList,
       activeEntityTypes,
-      selectedEntityType,
     ),
   target: router.navigate,
 });

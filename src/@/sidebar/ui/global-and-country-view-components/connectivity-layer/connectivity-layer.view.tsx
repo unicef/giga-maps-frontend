@@ -3,9 +3,7 @@ import { useStore } from 'effector-react';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import {
-  $connectivityStats,
   $connectivityStatsByEntity,
   $isLoadingCountryAdminView,
   $selectedLayerDataByEntity,
@@ -29,15 +27,10 @@ export default function ConnectivityLayer({
   entityType: EntityType;
 }) {
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
-  const selectedEntityType = useStore($selectedEntityType);
   const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
-  const currentConnectivityStats = useStore($connectivityStats);
-  const connectivityStats = entityType
-    ? connectivityStatsByEntity[entityType]
-    : currentConnectivityStats;
+  const connectivityStats = connectivityStatsByEntity[entityType];
   const isLoading = useStore($isLoadingCountryAdminView);
-  const currentLayerData =
-    selectedLayerDataByEntity[entityType ?? selectedEntityType];
+  const currentLayerData = selectedLayerDataByEntity[entityType];
   const colorClassName =
     connectivityColorClassByStatus[
     connectivityStats?.live_avg_connectivity ?? UNKNOWN

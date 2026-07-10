@@ -7,7 +7,7 @@ import { MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'rea
 import { useTranslation } from "react-i18next";
 
 import { $country, $countrySearchParams } from "~/@/country/country.model";
-import { $activeEntityTypes, $entityRegistry, $selectedEntityType, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
+import { $activeEntityTypes, $entityRegistry, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import { Badge } from '~/components/ui/badge';
@@ -36,7 +36,6 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const [isReady, setIsReady] = useState(false);
 
   const isMobile = useStore($isMobile);
-  const selectedEntityType = useStore($selectedEntityType);
   const activeEntityTypes = useStore($activeEntityTypes);
   const advanceFilterList = useStore($advanceFilterList);
   const { urlFieldList } = useStore($countrySearchParams);

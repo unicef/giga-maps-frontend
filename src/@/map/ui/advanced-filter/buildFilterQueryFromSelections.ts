@@ -1,12 +1,9 @@
-import { FilterListType } from "~/@/admin/types/filter-list.type";
 import { ActiveFilterListType, AdvanceFilterType } from "~/api/types";
-import { router } from "~/core/routes";
 
 export function buildFilterQueryFromSelections(
   selections: ActiveFilterListType[],
   filters: AdvanceFilterType[],
   activeEntityTypes?: string[],
-  selectedEntityType?: string | null,
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
@@ -31,12 +28,10 @@ export function buildFilterQueryFromSelections(
     const filter = filtersById.get(id);
     if (!filter) continue;
 
-    // Apply default filters only for active entities; if multiple entities are active, restrict to selectedEntityType
+    // Apply defaults for every active entity. Multi-entity mode must not be
+    // narrowed to a separate single-entity selection.
     if (activeEntityTypes) {
       if (!activeEntityTypes.includes(filter.entity_type)) {
-        continue;
-      }
-      if (activeEntityTypes.length > 1 && selectedEntityType && filter.entity_type !== selectedEntityType) {
         continue;
       }
     }
