@@ -40,6 +40,8 @@ declare namespace NodeJS {
       ENV: string;
       WEBPACK_DEV_SERVER: string;
       B2C_CLIENT_ID: string;
+      POSTHOG_KEY: string;
+      POSTHOG_HOST: string;
     };
 
   }

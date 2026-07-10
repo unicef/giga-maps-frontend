@@ -19,6 +19,11 @@ export const GIGA_MERTER_API_HOST = process.env.GIGA_METER_API_HOST ?? 'https://
 
 export const B2C_CLIENT_ID = process.env.B2C_CLIENT_ID ?? ''
 
+export const POSTHOG_KEY = process.env.POSTHOG_KEY ?? '';
+
+export const POSTHOG_HOST =
+  process.env.POSTHOG_HOST ?? 'https://us.i.posthog.com';
+
 export const ENV = process.env.ENV;
 
 export const isDevelopment = ENV === Enviroment.development;
