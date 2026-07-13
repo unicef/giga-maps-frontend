@@ -1,10 +1,13 @@
 import posthog from 'posthog-js';
 
-import { POSTHOG_HOST, POSTHOG_KEY } from '~/env';
+import { ENV, isProduction, isStaging, POSTHOG_HOST, POSTHOG_KEY } from '~/env';
 
 import { UserInfoType } from '../auth/types/user.type';
 
-export const isPostHogEnabled = Boolean(POSTHOG_KEY);
+// Only track staging and production. Local dev is intentionally excluded to
+// keep test traffic out of the analytics data (a missing POSTHOG_KEY would
+// also disable it, but this guards even when a dev key is configured).
+export const isPostHogEnabled = Boolean(POSTHOG_KEY) && (isStaging || isProduction);
 
 // Analytics must never break the app. Every PostHog interaction is wrapped so
 // that a failure (script blocked by an ad-blocker, network error, SDK throw)
@@ -28,6 +31,10 @@ export const initPostHog = (): void => {
       capture_pageleave: true,
       persistence: 'localStorage+cookie',
     });
+
+    // Stamp every event with the environment so staging and prod stay
+    // distinguishable even within a single PostHog project.
+    posthog.register({ environment: ENV ?? 'unknown' });
   });
 };
 
