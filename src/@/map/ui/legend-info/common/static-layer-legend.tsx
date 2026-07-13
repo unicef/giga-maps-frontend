@@ -89,7 +89,7 @@ const StaticLayerLegend = ({
         ) : null}
       </div>
 
-      {legends.values.map(({ key, label, tooltip }) => {
+      {legends?.values?.map(({ key, label, tooltip }) => {
         const tooltipLabel =
           key === 'unknown' ? tooltip || `Doesn't match any criteria` : tooltip;
 
