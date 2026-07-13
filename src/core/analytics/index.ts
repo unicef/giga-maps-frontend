@@ -25,6 +25,10 @@ const resetUserFx = createEffect(() => {
   resetUser();
 });
 
+// Capture the landing pageview. A `source`-only sample fires on store
+// *updates* only, so the initial pathname would otherwise be missed.
+trackPageviewFx(router.pathname.getState());
+
 sample({
   source: router.pathname,
   target: trackPageviewFx,
