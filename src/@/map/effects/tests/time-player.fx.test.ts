@@ -1,8 +1,27 @@
 import { Map } from 'mapbox-gl';
-import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from '../time-player.fx';
+import {
+  clearTimeplayer,
+  nextTimePlayerIteration,
+  onLoadStartTimePlayer,
+  onPausePlayTimeplayerFx,
+  timePlayerFx,
+  timePlayerSourceFx,
+} from '../time-player.fx';
 import { clearMapDataFx } from '../add-layers-fx';
 import { createSource } from '../../utils';
-import { onToggleTimeplayer, setLoaderTimePlayer } from '~/@/sidebar/sidebar.model';
+import {
+  onToggleTimeplayer,
+  setLoaderTimePlayer,
+} from '~/@/sidebar/sidebar.model';
+import { EntityType } from '~/@/entities';
+
+const activeEntityTypes = [EntityType.SCHOOL];
+const createTimeplayerInfo = (years: number[] | null) => ({
+  yearsByEntity: { [EntityType.SCHOOL]: years },
+  activeYear: 0,
+  isLoading: false,
+  isLoaded: false,
+});
 
 vi.mock('../add-layers-fx');
 vi.mock('../../utils');
@@ -87,20 +106,20 @@ describe('timePlayerFx', () => {
   });
 
   it('should not add layer when map is not available', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map: null, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map: null, timeplayerInfo, activeEntityTypes } as any);
     expect(map.addLayer).not.toHaveBeenCalled();
   });
 
   it('should not add layer when years are not available', () => {
-    const timeplayerInfo = { years: null };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo(null);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
     expect(map.addLayer).not.toHaveBeenCalled();
   });
 
   it('should add circle layer with correct properties', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
 
     expect(map.addLayer).toHaveBeenCalledWith({
       id: 'timePlayerLayer',
@@ -113,26 +132,32 @@ describe('timePlayerFx', () => {
           'interpolate',
           ['linear'],
           ['zoom'],
-          0, 0.3,
-          2, 1.5,
-          4, 4,
-          5, 5,
-          8, 10,
-          10, 12
+          0,
+          0.3,
+          2,
+          1.5,
+          4,
+          4,
+          5,
+          5,
+          8,
+          10,
+          10,
+          12,
         ],
-      }
+      },
     });
   });
   it('should setup data load event listener', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
 
     expect(map.on).toHaveBeenCalledWith('data', expect.any(Function));
   });
 
   it('should not remove event listener when tiles are not loaded', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
 
     map.isSourceLoaded.mockReturnValue(true);
     map.areTilesLoaded.mockReturnValue(false);
@@ -150,7 +175,7 @@ describe('onLoadStartTimePlayer', () => {
   beforeEach(() => {
     map = {
       setPaintProperty: vi.fn(),
-      setLayoutProperty: vi.fn()
+      setLayoutProperty: vi.fn(),
     } as any;
 
     global.onSetTimePlayerCurrentYear = vi.fn();
@@ -159,20 +184,30 @@ describe('onLoadStartTimePlayer', () => {
   });
 
   it('should not execute when map is null', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
     const paintData = { colors: ['#000'] };
 
-    onLoadStartTimePlayer({ map: null, timeplayerInfo, paintData });
+    onLoadStartTimePlayer({
+      map: null,
+      timeplayerInfo,
+      paintData,
+      activeEntityTypes,
+    } as any);
 
     expect(map.setPaintProperty).not.toHaveBeenCalled();
     expect(map.setLayoutProperty).not.toHaveBeenCalled();
   });
 
   it('should not execute when years array is empty', () => {
-    const timeplayerInfo = { years: [] };
+    const timeplayerInfo = createTimeplayerInfo([]);
     const paintData = { colors: ['#000'] };
 
-    onLoadStartTimePlayer({ map, timeplayerInfo, paintData });
+    onLoadStartTimePlayer({
+      map,
+      timeplayerInfo,
+      paintData,
+      activeEntityTypes,
+    } as any);
 
     expect(global.onSetTimePlayerCurrentYear).not.toHaveBeenCalled();
     expect(global.runIntervalCheck).not.toHaveBeenCalled();
@@ -180,20 +215,25 @@ describe('onLoadStartTimePlayer', () => {
   });
 
   it('should set correct paint and layout properties', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
     const paintData = { colors: ['#000'] };
 
-    onLoadStartTimePlayer({ map, timeplayerInfo, paintData });
+    onLoadStartTimePlayer({
+      map,
+      timeplayerInfo,
+      paintData,
+      activeEntityTypes,
+    } as any);
 
     expect(map.setPaintProperty).toHaveBeenCalledWith(
       'timePlayerLayer',
       'circle-color',
-      expect.any(Object)
+      expect.any(Object),
     );
     expect(map.setLayoutProperty).toHaveBeenCalledWith(
       'timePlayerLayer',
       'visibility',
-      'visible'
+      'visible',
     );
   });
 });
@@ -213,12 +253,17 @@ describe('nextTimePlayerIteration', () => {
 
   it('should not execute when map is null', () => {
     const timeplayerInfo = {
+      ...createTimeplayerInfo([2020, 2021]),
       activeYear: 2020,
-      years: [2020, 2021]
     };
     const paintData = { colors: ['#000'] };
 
-    nextTimePlayerIteration({ map: null, paintData, timeplayerInfo });
+    nextTimePlayerIteration({
+      map: null,
+      paintData,
+      timeplayerInfo,
+      activeEntityTypes,
+    } as any);
 
     expect(onSetTimePlayerCurrentYear).not.toHaveBeenCalled();
     expect(runIntervalCheck).not.toHaveBeenCalled();
@@ -227,19 +272,24 @@ describe('nextTimePlayerIteration', () => {
 
   it('should not execute when years array is null', () => {
     const timeplayerInfo = {
+      ...createTimeplayerInfo(null),
       activeYear: 2020,
-      years: null
     };
     const paintData = { colors: ['#000'] };
 
-    nextTimePlayerIteration({ map, paintData, timeplayerInfo });
+    nextTimePlayerIteration({
+      map,
+      paintData,
+      timeplayerInfo,
+      activeEntityTypes,
+    } as any);
 
     expect(onSetTimePlayerCurrentYear).not.toHaveBeenCalled();
     expect(map.setPaintProperty).not.toHaveBeenCalled();
     expect(runIntervalCheck).not.toHaveBeenCalled();
     expect(onToggleTimeplayer).not.toHaveBeenCalled();
   });
-})
+});
 describe('clearTimeplayer', () => {
   let map: vi.Mocked<Map>;
   let mockClearTimeout: vi.Mock;
@@ -294,7 +344,7 @@ describe('clearTimeplayer', () => {
       'removeListener',
       'clearTimeout',
       'clearTimeout',
-      'toggleOff'
+      'toggleOff',
     ]);
   });
 });
@@ -327,4 +377,3 @@ describe('onPausePlayTimeplayerFx', () => {
     expect(clearTimeout).toHaveBeenCalled();
   });
 });
-

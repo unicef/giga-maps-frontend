@@ -40,17 +40,12 @@ export type ChangeLayerOptions = {
 
 export type UpdateCoverageFilterOptions = Pick<
   ChangeLayerOptions,
-  | 'map'
-  | 'coverageFilter'
-  | 'coverageFilterByEntity'
-  | 'lastSelectedLayer'
-  | 'layerUtils'
+  'map' | 'coverageFilterByEntity' | 'lastSelectedLayer' | 'layerUtils'
 >;
 
 export type UpdateConnectivityFilterOptions = Pick<
   ChangeLayerOptions,
   | 'map'
-  | 'connectivitySpeedFilter'
   | 'connectivitySpeedFilterByEntity'
   | 'lastSelectedLayer'
   | 'layerUtils'

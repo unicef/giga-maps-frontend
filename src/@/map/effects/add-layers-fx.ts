@@ -35,6 +35,7 @@ import {
   getEntityGlobalLayerId,
   getFirstGlobalLayerId,
   getLayerIdsAndLastChange,
+  DEFAULT_ENTITY_DISTRIBUTION_FILTER,
 } from './add-layers-utils';
 
 const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
@@ -50,16 +51,12 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
     layerUtils,
     activeEntityTypes,
   } = props;
-  const {
-    schoolLayerId,
-    selectedLayerId,
-    selectedLayerIdByEntity,
-    isLastSelectionChange,
-  } = getLayerIdsAndLastChange({
-    selectedLayerIds,
-    refresh,
-    lastSelectedLayer,
-  });
+  const { selectedLayerIdByEntity, isLastSelectionChange } =
+    getLayerIdsAndLastChange({
+      selectedLayerIds,
+      refresh,
+      lastSelectedLayer,
+    });
   const selectedEntityTypes = Object.keys(
     selectedLayerIdByEntity,
   ) as EntityType[];
@@ -71,13 +68,9 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
     : selectedEntityTypes.length
       ? selectedEntityTypes
       : globalEntityTypes;
-  const firstEntitySelectedLayerId =
-    entityTypes
-      .map((entityType) => selectedLayerIdByEntity[entityType])
-      .find((id): id is number => Boolean(id)) ?? null;
   const effectiveSelectedLayerId = mapRoute.map
     ? getFirstGlobalLayerId(layerUtils, entityTypes)
-    : (selectedLayerId ?? firstEntitySelectedLayerId);
+    : null;
   const entityTypesWithSelectedLayer = getEntityTypesWithSelectedLayer({
     entityTypes,
     layerUtils,
@@ -89,7 +82,6 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
   if (!entityTypesWithSelectedLayer.length) {
     deleteSourceAndLayers({ map, sourceId: DEFAULT_SOURCE });
     changeGigaSelection({
-      layerId: null,
       layerIdByEntity: selectedLayerIdByEntity,
     });
     return;
@@ -115,11 +107,9 @@ const createAndUpdateLayer = (props: ChangeLayerOptions): void => {
     ...props,
     selectedLayerId: effectiveSelectedLayerId,
     activeEntityTypes: entityTypesWithSelectedLayer,
-    schoolLayerId,
   });
   // update giga selection
   changeGigaSelection({
-    layerId: effectiveSelectedLayerId ?? lastSelectedLayer?.layerId ?? null,
     layerIdByEntity: mapRoute.map
       ? (activeEntityTypes?.length ? activeEntityTypes : entityTypes).reduce(
           (acc, entityType) => ({
@@ -152,9 +142,8 @@ const getEntityTypesWithSelectedLayer = ({
     return entityTypes;
   }
 
-  const fallbackLayerId = entityTypes.length === 1 ? selectedLayerId : null;
   return entityTypes.filter((entityType) =>
-    Boolean(selectedLayerIdByEntity[entityType] ?? fallbackLayerId),
+    Boolean(selectedLayerIdByEntity[entityType]),
   );
 };
 
@@ -189,15 +178,14 @@ const hasSelectedEntityStatusLayer = ({
   activeEntityTypes,
   selectedLayerIds,
 }: Pick<ChangeLayerOptions, 'activeEntityTypes' | 'selectedLayerIds'>) => {
-  const { schoolId, schoolIdByEntity = {} } = selectedLayerIds ?? {};
+  const { schoolIdByEntity = {} } = selectedLayerIds ?? {};
   const entityTypes = activeEntityTypes?.length
     ? activeEntityTypes
     : (Object.keys(schoolIdByEntity) as EntityType[]);
 
-  return entityTypes.length
-    ? entityTypes.some((entityType) => Boolean(schoolIdByEntity[entityType])) ||
-        Boolean(schoolId)
-    : Boolean(schoolId);
+  return entityTypes.some((entityType) =>
+    Boolean(schoolIdByEntity[entityType]),
+  );
 };
 export const changeStaticLayerFx = createEffect((props: ChangeLayerOptions) => {
   const { map, mapRoute, refresh, zoomState } = props;
@@ -228,21 +216,18 @@ export const updateCoverageFilter = createEffect(
   ({
     map,
     layerUtils,
-    coverageFilter,
     coverageFilterByEntity,
   }: UpdateCoverageFilterOptions) => {
     if (!map) return;
-    const { selectedLayerId, selectedLayerIdByEntity } = layerUtils;
-    const activeEntityTypes = Object.keys(
-      selectedLayerIdByEntity ?? { [EntityType.SCHOOL]: selectedLayerId },
+    const { selectedLayerIdByEntity, currentLayerTypeUtilsByEntity } =
+      layerUtils;
+    const entityTypes = Object.keys(
+      selectedLayerIdByEntity ?? {},
     ) as EntityType[];
-    const { isStatic } = layerUtils.currentLayerTypeUtils;
-    if (isStatic) {
-      for (const entityType of activeEntityTypes.length
-        ? activeEntityTypes
-        : [EntityType.SCHOOL]) {
-        const effectiveSelectedLayerId =
-          selectedLayerIdByEntity?.[entityType] ?? selectedLayerId;
+    for (const entityType of entityTypes) {
+      if (currentLayerTypeUtilsByEntity?.[entityType]?.isStatic) {
+        const effectiveSelectedLayerId = selectedLayerIdByEntity?.[entityType];
+        if (!effectiveSelectedLayerId) continue;
         const layerId = getEntitySelectedLayerId(
           entityType,
           effectiveSelectedLayerId,
@@ -250,7 +235,8 @@ export const updateCoverageFilter = createEffect(
         const mapLayer = map.getLayer(layerId);
         if (!mapLayer) continue;
         const filter = filterCoverageList(
-          coverageFilterByEntity?.[entityType] ?? coverageFilter,
+          coverageFilterByEntity?.[entityType] ??
+            DEFAULT_ENTITY_DISTRIBUTION_FILTER,
           true,
         );
         map.setFilter(layerId, filter);
@@ -263,18 +249,13 @@ export const updateConnectivityFilter = createEffect(
   ({
     map,
     layerUtils,
-    connectivitySpeedFilter,
     connectivitySpeedFilterByEntity,
     mapRoute,
     activeEntityTypes,
   }: UpdateConnectivityFilterOptions) => {
     if (!map) return;
-    const {
-      selectedLayerId,
-      selectedLayerIdByEntity,
-      currentLayerTypeUtils,
-      currentLayerTypeUtilsByEntity,
-    } = layerUtils;
+    const { selectedLayerIdByEntity, currentLayerTypeUtilsByEntity } =
+      layerUtils;
     const selectedEntityTypes = Object.keys(
       selectedLayerIdByEntity ?? {},
     ) as EntityType[];
@@ -284,16 +265,14 @@ export const updateConnectivityFilter = createEffect(
         ? activeEntityTypes
         : selectedEntityTypes.length
           ? selectedEntityTypes
-          : [EntityType.SCHOOL];
+          : [];
     for (const entityType of entityTypes) {
       const effectiveSelectedLayerId = isGlobalMap
         ? getEntityGlobalLayerId(layerUtils, entityType)
-        : (selectedLayerIdByEntity?.[entityType] ?? selectedLayerId);
-      if (!isGlobalMap && !effectiveSelectedLayerId) continue;
+        : selectedLayerIdByEntity?.[entityType];
+      if (!effectiveSelectedLayerId) continue;
       const isEntityLive =
-        isGlobalMap ||
-        (currentLayerTypeUtilsByEntity?.[entityType]?.isLive ??
-          currentLayerTypeUtils.isLive);
+        isGlobalMap || currentLayerTypeUtilsByEntity?.[entityType]?.isLive;
       if (!isEntityLive) continue;
       const layerId = getEntitySelectedLayerId(
         entityType,
@@ -304,7 +283,7 @@ export const updateConnectivityFilter = createEffect(
       const isDynamicLayer = !isGlobalMap;
       const filter = filterConnectivityList(
         connectivitySpeedFilterByEntity?.[entityType] ??
-          connectivitySpeedFilter,
+          DEFAULT_ENTITY_DISTRIBUTION_FILTER,
         isDynamicLayer,
       );
       map.setFilter(layerId, filter);
@@ -314,24 +293,20 @@ export const updateConnectivityFilter = createEffect(
 export const updateConnectivityStatus = createEffect(
   ({
     map,
-    lengendsSelected,
     legendsSelectedByEntity,
     activeEntityTypes,
   }: Pick<UpdateConnectivityType, 'map'> & {
-    lengendsSelected?: string[];
     legendsSelectedByEntity?: Record<string, string[]>;
     activeEntityTypes?: string[];
   }) => {
     if (!map) return;
-    const entityTypes = activeEntityTypes?.length
-      ? activeEntityTypes
-      : [EntityType.SCHOOL];
+    const entityTypes = activeEntityTypes ?? [];
     for (const entityType of entityTypes) {
       const layerId = getEntityStatusLayerId(entityType);
       const layer = map.getLayer(layerId);
       if (layer) {
         const filter = filterSchoolStatus(
-          legendsSelectedByEntity?.[entityType] ?? lengendsSelected ?? [],
+          legendsSelectedByEntity?.[entityType] ?? [],
         );
         map.setFilter(layerId, filter);
       }

@@ -4,7 +4,11 @@ import { setPayload } from '~/lib/effector-kit';
 
 import type { EntityConfig } from '../config/entity-config.types';
 import { DEFAULT_ENTITY_REGISTRY } from '../config/entity-registry';
-import { BaseEntity, EntityStatistics, EntityType } from '../types/base-entity.type';
+import {
+  BaseEntity,
+  EntityStatistics,
+  EntityType,
+} from '../types/base-entity.type';
 
 /**
  * Entity system Effector stores.
@@ -22,13 +26,18 @@ import { BaseEntity, EntityStatistics, EntityType } from '../types/base-entity.t
  * All components and resolvers read from this store.
  */
 export const updateEntityRegistry = createEvent<Record<string, EntityConfig>>();
-export const mergeEntityRegistryFromApi = createEvent<Partial<Record<string, Partial<EntityConfig>>>>();
+export const mergeEntityRegistryFromApi =
+  createEvent<Partial<Record<string, Partial<EntityConfig>>>>();
 
-export const $entityRegistry = createStore<Record<string, EntityConfig>>({ ...DEFAULT_ENTITY_REGISTRY });
+export const $entityRegistry = createStore<Record<string, EntityConfig>>({
+  ...DEFAULT_ENTITY_REGISTRY,
+});
 
 /** Registry filtered to only active entities (from config.active flag), in registry order */
 export const $entityRegistryFiltered = $entityRegistry.map((registry) => {
-  const entries = Object.entries(registry).filter(([, config]) => config.visible);
+  const entries = Object.entries(registry).filter(
+    ([, config]) => config.visible,
+  );
   return Object.fromEntries(entries) as Record<EntityType, EntityConfig>;
 });
 
@@ -76,8 +85,8 @@ $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
 // ─────────────────────────────────────────────────
 
 /** All registered entity type keys */
-export const $registeredEntityTypes = $entityRegistry.map(
-  registry => Object.keys(registry)
+export const $registeredEntityTypes = $entityRegistry.map((registry) =>
+  Object.keys(registry),
 );
 
 /** Get config for a specific entity type (use with combine or .map) */
@@ -89,12 +98,17 @@ export const $entityConfigMap = $entityRegistry;
 
 /**
  * Currently active entity types visible on the map.
- * Default: only schools (to preserve current behavior).
+ * The set is never empty; callers must provide at least one explicit entity.
  */
 export const changeActiveEntityTypes = createEvent<EntityType[]>();
 export const setActiveEntityTypes = changeActiveEntityTypes; // alias for route model sync
-export const $activeEntityTypes = createStore<EntityType[]>([EntityType.HEALTH, EntityType.SCHOOL]);
-$activeEntityTypes.on(changeActiveEntityTypes, setPayload);
+export const $activeEntityTypes = createStore<EntityType[]>([
+  EntityType.HEALTH,
+  EntityType.SCHOOL,
+]);
+$activeEntityTypes.on(changeActiveEntityTypes, (current, next) =>
+  next.length ? next : current,
+);
 
 /**
  * Toggle a single entity type on/off in the active list.
@@ -104,7 +118,7 @@ export const toggleEntityType = createEvent<EntityType>();
 $activeEntityTypes.on(toggleEntityType, (current, entityType) => {
   if (current.includes(entityType)) {
     if (current.length <= 1) return current;
-    return current.filter(t => t !== entityType);
+    return current.filter((t) => t !== entityType);
   }
   return [...current, entityType];
 });
@@ -117,14 +131,6 @@ $activeEntityTypes.on(selectAllEntityTypes, () => {
   const registry = $entityRegistry.getState();
   return Object.keys(registry) as EntityType[];
 });
-
-// ─────────────────────────────────────────────────
-// Selected entity type (for sidebar, filters, stats)
-// ─────────────────────────────────────────────────
-
-export const changeSelectedEntityType = createEvent<EntityType>();
-export const $selectedEntityType = createStore<EntityType>(EntityType.SCHOOL);
-$selectedEntityType.on(changeSelectedEntityType, setPayload);
 
 // ─────────────────────────────────────────────────
 // Global Mode (Selection state)
@@ -143,7 +149,6 @@ $isGlobalMode
   .on(changeActiveEntityTypes, () => false)
   .on(toggleEntityType, () => false);
 
-
 // ─────────────────────────────────────────────────
 // Loading state
 // ─────────────────────────────────────────────────
@@ -156,26 +161,25 @@ $entityLoading.on(setEntityLoading, setPayload);
 // Derived / computed stores
 // ─────────────────────────────────────────────────
 
-/** Config for the currently selected entity type */
-export const $selectedEntityConfig = combine(
-  $entityRegistry,
-  $selectedEntityType,
-  (registry, selectedType) => registry[selectedType] ?? null
+/** Check if a specific entity type is active on the map */
+export const $isSchoolActive = $activeEntityTypes.map((types) =>
+  types.includes(EntityType.SCHOOL),
+);
+export const $isHealthActive = $activeEntityTypes.map((types) =>
+  types.includes(EntityType.HEALTH),
 );
 
-/** Check if a specific entity type is active on the map */
-export const $isSchoolActive = $activeEntityTypes.map(types => types.includes(EntityType.SCHOOL));
-export const $isHealthActive = $activeEntityTypes.map(types => types.includes(EntityType.HEALTH));
-
 /** Check if we're in multi-entity view mode */
-export const $isMultiEntityView = $activeEntityTypes.map(types => types.length > 1);
+export const $isMultiEntityView = $activeEntityTypes.map(
+  (types) => types.length > 1,
+);
 
 /** Configs for all currently active entity types */
 export const $activeEntityConfigs = combine(
   $entityRegistry,
   $activeEntityTypes,
-  (registry, activeTypes) => activeTypes
-    .map(type => registry[type])
-    .filter((config): config is EntityConfig => Boolean(config))
+  (registry, activeTypes) =>
+    activeTypes
+      .map((type) => registry[type])
+      .filter((config): config is EntityConfig => Boolean(config)),
 );
-

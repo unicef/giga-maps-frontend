@@ -10,6 +10,13 @@ import {
   getEntityStatusLayerId,
   getSourceLayerName,
 } from '../map.constant';
+
+export const DEFAULT_ENTITY_DISTRIBUTION_FILTER = {
+  good: true,
+  moderate: true,
+  bad: true,
+  unknown: true,
+};
 import { ChangeLayerOptions } from '../map.types';
 import {
   animateCircles,
@@ -77,16 +84,10 @@ export const getLayerIdsAndLastChange = ({
   ChangeLayerOptions,
   'selectedLayerIds' | 'refresh' | 'lastSelectedLayer'
 >) => {
-  const { schoolId: schoolLayerId, selectedId: selectedLayerId } =
-    selectedLayerIds ?? {};
   const selectedLayerIdByEntity: Partial<Record<EntityType, number | null>> =
-    selectedLayerIds?.selectedIdByEntity ??
-    (selectedLayerId ? { [EntityType.SCHOOL]: selectedLayerId } : {});
+    selectedLayerIds?.selectedIdByEntity ?? {};
   const lastLayerIdByEntity: Partial<Record<EntityType, number | null>> =
-    lastSelectedLayer?.layerIdByEntity ??
-    (lastSelectedLayer?.layerId
-      ? { [EntityType.SCHOOL]: lastSelectedLayer.layerId }
-      : {});
+    lastSelectedLayer?.layerIdByEntity ?? {};
   const entityTypes = new Set([
     ...Object.keys(selectedLayerIdByEntity),
     ...Object.keys(lastLayerIdByEntity),
@@ -99,11 +100,9 @@ export const getLayerIdsAndLastChange = ({
           lastLayerIdByEntity[typedEntityType]
         );
       })
-    : !!(selectedLayerId && selectedLayerId !== lastSelectedLayer?.layerId);
+    : false;
   const isLastSelectionChange = refresh || checkSelectionChange;
   return {
-    schoolLayerId,
-    selectedLayerId,
     selectedLayerIdByEntity,
     isLastSelectionChange,
   };
@@ -114,13 +113,9 @@ export const createSourceForMapAndCountry = ({
   schoolPageIds,
   schoolAdminId,
   countrySearch,
-  connectivityBenchMark,
   connectivityBenchMarkByEntity,
   selectedLayerId: layerId,
-  connectivityFilter,
-  interval,
   intervalByEntity,
-  intervalUnit,
   intervalUnitByEntity,
   layerUtils,
   mapRoute,
@@ -145,10 +140,7 @@ export const createSourceForMapAndCountry = ({
   deleteSourceAndLayers({ map, sourceId });
   // create new source
   const fallbackLayerId = mapRoute.map
-    ? getFirstGlobalLayerId(
-        layerUtils,
-        activeEntityTypes?.length ? activeEntityTypes : [EntityType.SCHOOL],
-      )
+    ? getFirstGlobalLayerId(layerUtils, activeEntityTypes ?? [])
     : layerId;
   if (!layerId) {
     layerId = fallbackLayerId;
@@ -170,14 +162,10 @@ export const createSourceForMapAndCountry = ({
     url = generateLayerUrls({
       layerId: fallbackLayerId,
       activeEntityTypes,
-      connectivityBenchMark,
       connectivityBenchMarkByEntity,
       schoolPageIds,
       layerUtils,
-      connectivityFilter,
-      interval,
       intervalByEntity,
-      intervalUnit,
       intervalUnitByEntity,
       mapRoute,
       country,
@@ -220,9 +208,7 @@ export const createSourceForMapAndCountry = ({
 export const createAndUpdateMapLayer = ({
   map,
   mapRoute,
-  connectivitySpeedFilter,
   connectivitySpeedFilterByEntity,
-  coverageFilter,
   coverageFilterByEntity,
   layerUtils,
   selectedLayerIds,
@@ -233,23 +219,17 @@ export const createAndUpdateMapLayer = ({
   entityRegistry,
 }: ChangeLayerOptions & {
   selectedLayerId: number | null;
-  schoolLayerId: number | string | null;
 }) => {
   if (!map) return;
-  const { currentLayerTypeUtils } = layerUtils;
   const getIsEntityLive = (entityType: EntityType) =>
     mapRoute.map ||
-    (layerUtils.currentLayerTypeUtilsByEntity?.[entityType]?.isLive ??
-      currentLayerTypeUtils.isLive);
+    !!layerUtils.currentLayerTypeUtilsByEntity?.[entityType]?.isLive;
   const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
 
   // Cancel all previous entity animations
   cancelAnimation();
 
-  // Determine active entity types (fallback to school-only for backward compat)
-  const entityTypes = activeEntityTypes?.length
-    ? activeEntityTypes
-    : [EntityType.SCHOOL];
+  const entityTypes = activeEntityTypes ?? [];
 
   const hasSelectedEntityLayer = mapRoute.map
     ? entityTypes.length > 0
@@ -263,15 +243,16 @@ export const createAndUpdateMapLayer = ({
       const entityLayerId = mapRoute.map
         ? getEntityGlobalLayerId(layerUtils, entityType)
         : layerUtils.selectedLayerIdByEntity?.[entityType];
-      if (!mapRoute.map && !entityLayerId) continue;
+      if (!entityLayerId) continue;
       const isDynamicLayer = !mapRoute.map;
       const sourceLayer = getSourceLayerName(entityType);
       const layerIdStr = getEntitySelectedLayerId(entityType, entityLayerId);
       const entityConnectivityFilter =
         connectivitySpeedFilterByEntity?.[entityType] ??
-        connectivitySpeedFilter;
+        DEFAULT_ENTITY_DISTRIBUTION_FILTER;
       const entityCoverageFilter =
-        coverageFilterByEntity?.[entityType] ?? coverageFilter;
+        coverageFilterByEntity?.[entityType] ??
+        DEFAULT_ENTITY_DISTRIBUTION_FILTER;
       const options: Record<string, unknown> = {
         filter: getIsEntityLive(entityType)
           ? filterConnectivityList(entityConnectivityFilter, isDynamicLayer)
@@ -321,7 +302,10 @@ export const createAndUpdateMapLayer = ({
     for (const entityType of entityTypes) {
       hideLayer(
         map,
-        getEntitySelectedLayerId(entityType, lastSelectedLayer.layerId),
+        getEntitySelectedLayerId(
+          entityType,
+          lastSelectedLayer.layerIdByEntity?.[entityType] ?? null,
+        ),
       );
     }
   }
@@ -332,9 +316,7 @@ export const createAndUpdateMapLayer = ({
   // --- Status layer (connectivity_status dots) per entity type in global view ---
   if (isSourceAvailable) {
     for (const entityType of entityTypes) {
-      const isStatusSelected =
-        selectedLayerIds?.schoolIdByEntity?.[entityType] ??
-        selectedLayerIds?.schoolId;
+      const isStatusSelected = selectedLayerIds?.schoolIdByEntity?.[entityType];
       if (!isStatusSelected) {
         hideLayer(map, getEntityStatusLayerId(entityType));
         continue;
@@ -381,29 +363,24 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
   mapRoute,
   paintData,
   selectedLayerIds,
-  schoolLegends,
   schoolLegendsByEntity,
   isMobile,
   activeEntityTypes,
   entityRegistry,
 }: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
-  const { schoolId: schoolLayerId, schoolIdByEntity = {} } = selectedLayerIds;
+  const { schoolIdByEntity = {} } = selectedLayerIds;
   const isSourceAvailable = checkSourceAvailable(
     map,
     CONNECTIVITY_STATUS_SOURCE,
   );
-  const entityTypes = activeEntityTypes?.length
-    ? activeEntityTypes
-    : [EntityType.SCHOOL];
+  const entityTypes = activeEntityTypes ?? [];
   if (
     isSourceAvailable &&
-    entityTypes.some(
-      (entityType) => schoolIdByEntity[entityType] ?? schoolLayerId,
-    )
+    entityTypes.some((entityType) => schoolIdByEntity[entityType])
   ) {
     for (const entityType of entityTypes) {
-      const entityStatusLayerId = schoolIdByEntity[entityType] ?? schoolLayerId;
+      const entityStatusLayerId = schoolIdByEntity[entityType];
       if (!entityStatusLayerId) {
         hideLayer(map, getEntityStatusLayerId(entityType));
         continue;
@@ -412,9 +389,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
       const markerType = config?.markerType ?? 'circle';
       const options = {
         'source-layer': getSourceLayerName(entityType),
-        filter: filterSchoolStatus(
-          schoolLegendsByEntity?.[entityType] ?? schoolLegends,
-        ),
+        filter: filterSchoolStatus(schoolLegendsByEntity?.[entityType] ?? []),
       };
 
       if (markerType === 'circle') {

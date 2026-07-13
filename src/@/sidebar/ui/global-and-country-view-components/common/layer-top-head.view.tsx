@@ -3,7 +3,7 @@ import { SlidersHorizontal } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $selectedEntityType, getEntityMapValue } from '~/@/entities';
+import type { EntityType } from '~/@/entities';
 import { $selectedLayerIdByEntity } from '~/@/sidebar/sidebar.model';
 import { Button } from '~/components/ui/button';
 import {
@@ -15,24 +15,23 @@ import {
 
 export default function LayerTopHead({
   label,
+  entityType,
   children,
   disabled = true,
   onClickSetting,
   hideSetting,
 }: PropsWithChildren<{
   label: string;
+  entityType?: EntityType;
   disabled?: boolean;
   onClickSetting?: () => void;
   hideSetting?: boolean;
 }>) {
   const { t } = useTranslation();
-  const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
-  const selectedLayerId = getEntityMapValue(
-    selectedLayerIdByEntity,
-    selectedEntityType,
-    null,
-  );
+  const selectedLayerId = entityType
+    ? (selectedLayerIdByEntity[entityType] ?? null)
+    : null;
   const isDisabled = disabled && !selectedLayerId;
 
   return (

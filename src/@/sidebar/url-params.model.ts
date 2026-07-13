@@ -22,7 +22,6 @@ import {
   $entityRegistry,
   $isGlobalMode,
   changeActiveEntityTypes,
-  changeSelectedEntityType,
   setGlobalMode,
 } from '../entities/models/entity.model';
 import type { EntityType } from '../entities/types/base-entity.type';
@@ -622,10 +621,6 @@ const applyUrlParamsToStoresFx = createEffect(() => {
   if (params.entityTypes.length > 0) {
     changeActiveEntityTypes(params.entityTypes);
   }
-  if (targetEntityTypes[0]) {
-    changeSelectedEntityType(targetEntityTypes[0]);
-  }
-
   // Apply global mode after active entities because changeActiveEntityTypes marks it false.
   setGlobalMode(params.isGlobal);
 

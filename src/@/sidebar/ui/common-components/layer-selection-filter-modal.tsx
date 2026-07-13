@@ -1,28 +1,50 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
-import { Modal, ModalFooter, ModalHeader } from "~/@/common/modal";
+import { Modal, ModalFooter, ModalHeader } from '~/@/common/modal';
 
 import { Scroll } from '@/scroll';
 
-import LayerSelectionFilterModalBody from "./layer-selection-filter-modal-body";
-import { $layerFilterFooterStyle, $layerFilterHeadingStyle, $layerFilterModalStyle } from "./styles/layer-filter-modal.style";
-import { useTranslation } from "react-i18next";
+import LayerSelectionFilterModalBody from './layer-selection-filter-modal-body';
+import {
+  $layerFilterFooterStyle,
+  $layerFilterHeadingStyle,
+  $layerFilterModalStyle,
+} from './styles/layer-filter-modal.style';
+import { useTranslation } from 'react-i18next';
 
 const LayerSelectionFilterModal = ({
-  open, setOpen
-}: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+  entityType,
+  open,
+  setOpen,
+}: {
+  entityType: import('~/@/entities').EntityType;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const layerFilterButtonRef = useRef(null);
   const filterModalRef = useRef<{ apply: () => void } | null>(null);
   const { t } = useTranslation();
 
   return (
-    <Modal open={open} $containerStyle={$layerFilterModalStyle} preventCloseOnClickOutside id='layer-selection-filter-modal' launcherButtonRef={layerFilterButtonRef}
+    <Modal
+      open={open}
+      $containerStyle={$layerFilterModalStyle}
+      preventCloseOnClickOutside
+      id="layer-selection-filter-modal"
+      launcherButtonRef={layerFilterButtonRef}
     >
-      <ModalHeader title={t("data-layer-selection")} $headingStyle={$layerFilterHeadingStyle}
+      <ModalHeader
+        title={t('data-layer-selection')}
+        $headingStyle={$layerFilterHeadingStyle}
         closeModal={() => setOpen(false)}
       />
-      <Scroll className="layer-selection-filter-body-scroll" >
-        {open && <LayerSelectionFilterModalBody ref={filterModalRef} />}
+      <Scroll className="layer-selection-filter-body-scroll">
+        {open && (
+          <LayerSelectionFilterModalBody
+            entityType={entityType}
+            ref={filterModalRef}
+          />
+        )}
       </Scroll>
       <ModalFooter
         $style={$layerFilterFooterStyle}
@@ -31,14 +53,15 @@ const LayerSelectionFilterModal = ({
           setOpen(false);
         }}
         onRequestClose={() => {
-          setOpen(false)
+          setOpen(false);
         }}
-        primaryButtonText={t("apply")}
-        secondaryButtonText={t("reset")}>
+        primaryButtonText={t('apply')}
+        secondaryButtonText={t('reset')}
+      >
         {''}
       </ModalFooter>
     </Modal>
-  )
-}
+  );
+};
 
 export default LayerSelectionFilterModal;

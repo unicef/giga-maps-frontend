@@ -4,7 +4,6 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  $selectedEntityType,
   EntityType,
   formatEntityTypeLabel,
   getEntityMapValue,
@@ -17,7 +16,7 @@ import {
   checkEntityConnectivityBenchmark,
   onSelectEntityMainLayer,
   onSelectEntityStatusLayer,
-  resetCoverageFilterSelection,
+  resetEntityCoverageFilterSelection,
   selectAllEntityStaticLegendsSelection,
 } from '~/@/sidebar/sidebar.model';
 import { TooltipProvider } from '~/components/ui/tooltip';
@@ -31,7 +30,7 @@ const GigaLayerButtonIcons = ({
   entityType,
   popup,
 }: {
-  entityType?: EntityType;
+  entityType: EntityType;
   popup?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -45,8 +44,7 @@ const GigaLayerButtonIcons = ({
   } = useStore($layerUtils);
   const statusLayerIdByEntity = useStore($statusLayerIdByEntity);
   const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
-  const selectedEntityType = useStore($selectedEntityType);
-  const targetEntityType = entityType ?? selectedEntityType;
+  const targetEntityType = entityType;
   const targetStatusSelectedLayer = getEntityMapValue(
     statusLayerIdByEntity,
     targetEntityType,
@@ -201,7 +199,7 @@ const GigaLayerButtonIcons = ({
                   label={layer.name}
                   onClick={() => {
                     updateLayer(layer.id);
-                    resetCoverageFilterSelection();
+                    resetEntityCoverageFilterSelection(targetEntityType);
                   }}
                   popup={true}
                 />
@@ -266,7 +264,7 @@ const GigaLayerButtonIcons = ({
           onClick={() => {
             if (targetStaticButtonLayer) {
               updateLayer(targetStaticButtonLayer.id);
-              resetCoverageFilterSelection();
+              resetEntityCoverageFilterSelection(targetEntityType);
             }
           }}
         />
@@ -289,7 +287,7 @@ const GigaLayerButtonIcons = ({
                   }
                   onClick={() => {
                     updateLayer(layer.id);
-                    resetCoverageFilterSelection();
+                    resetEntityCoverageFilterSelection(targetEntityType);
                   }}
                 />
               ),

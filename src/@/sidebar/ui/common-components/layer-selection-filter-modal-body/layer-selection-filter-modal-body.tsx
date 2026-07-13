@@ -1,34 +1,46 @@
-import { ModalBody } from "@carbon/react";
-import { forwardRef, useRef, useState } from 'react'
-import { imperativeHandle } from "~/lib/utils/react.util";
+import { ModalBody } from '@carbon/react';
+import { forwardRef, useRef, useState } from 'react';
+import { imperativeHandle } from '~/lib/utils/react.util';
 
-import ConnectivityBenchmark from "./connectivity-benchmark.view";
-import LiveConnectivityType from "./live-connectivity-type.view";
-import { $selectedEntityType } from "~/@/entities/models/entity.model";
-import { $currentLayerTypeUtilsByEntity } from "~/@/sidebar/sidebar.model";
-import { useStore } from "effector-react";
+import ConnectivityBenchmark from './connectivity-benchmark.view';
+import LiveConnectivityType from './live-connectivity-type.view';
+import { $currentLayerTypeUtilsByEntity } from '~/@/sidebar/sidebar.model';
+import { useStore } from 'effector-react';
 
 type RefType = { apply: () => void } | null;
-export default forwardRef(function LayerSelectionFilterModalBody(_props, ref) {
+export default forwardRef(function LayerSelectionFilterModalBody(
+  { entityType }: { entityType: import('~/@/entities').EntityType },
+  ref,
+) {
   const [currentLayerId, setCurrentLayerId] = useState<number | null>(null);
   const liveConnectivityRef = useRef<RefType>(null);
   const connectvityBenchmarkRef = useRef<RefType>(null);
-  const selectedEntityType = useStore($selectedEntityType);
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isLive } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isLive } = currentLayerTypeUtilsByEntity[entityType] ?? {};
 
   const handleApply = () => {
     liveConnectivityRef.current?.apply();
     connectvityBenchmarkRef.current?.apply();
   };
 
-  imperativeHandle(ref, handleApply)
+  imperativeHandle(ref, handleApply);
 
   return (
-    <ModalBody className='layer-selection-filter-body'>
-      {isLive && <LiveConnectivityType ref={liveConnectivityRef} setCurrentLayer={setCurrentLayerId} />}
-      <ConnectivityBenchmark ref={connectvityBenchmarkRef} layerId={currentLayerId} />
+    <ModalBody className="layer-selection-filter-body">
+      {isLive && (
+        <LiveConnectivityType
+          entityType={entityType}
+          ref={liveConnectivityRef}
+          setCurrentLayer={setCurrentLayerId}
+        />
+      )}
+      <ConnectivityBenchmark
+        entityType={entityType}
+        ref={connectvityBenchmarkRef}
+        layerId={currentLayerId}
+      />
     </ModalBody>
-  )
+  );
 });
-

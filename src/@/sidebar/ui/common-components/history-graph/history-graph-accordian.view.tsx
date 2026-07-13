@@ -16,7 +16,7 @@ export function HistoryGraphAccordian({
   selectedLayerData,
 }: {
   readonly connectivityStats?: ConnectivityStat | EntityConnectivityStat | null;
-  readonly entityType?: EntityType;
+  readonly entityType: EntityType;
   readonly schoolData?: SchoolStatsType;
   readonly isLoading?: boolean;
   readonly selectedLayerData?: LayerType | null;

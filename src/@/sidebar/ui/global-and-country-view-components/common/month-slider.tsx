@@ -2,18 +2,30 @@ import { useStore } from 'effector-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import {
-  $historyInterval,
-  $isNextHistoryIntervalAvailable,
-  nextHistoryInterval,
-  previousHistoryInterval,
+  $historyIntervalByEntity,
+  $isNextHistoryIntervalAvailableByEntity,
+  nextEntityHistoryInterval,
+  previousEntityHistoryInterval,
 } from '~/@/sidebar/history-graph.model';
+import { defaultInterval } from '~/@/sidebar/sidebar.constant';
 import { Button } from '~/components/ui/button';
 import { formatDateInterval } from '~/lib/date-fns-kit/format-date-interval';
+import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
-const MonthSlider = () => {
-  const interval = useStore($historyInterval);
-  const isNextIntervalAvailable = useStore($isNextHistoryIntervalAvailable);
-  const formattedInterval = formatDateInterval(interval, 'month', false);
+const MonthSlider = ({
+  entityType,
+}: {
+  entityType: import('~/@/entities').EntityType;
+}) => {
+  const interval =
+    useStore($historyIntervalByEntity)[entityType] ?? defaultInterval();
+  const isNextIntervalAvailable =
+    useStore($isNextHistoryIntervalAvailableByEntity)[entityType] ?? true;
+  const formattedInterval = formatDateInterval(
+    interval,
+    IntervalUnit.month,
+    false,
+  );
 
   return (
     <div className="week_control-container flex! flex-row! items-center!">
@@ -21,7 +33,7 @@ const MonthSlider = () => {
         <Button
           aria-label="Previous month"
           className="previous_week_button size-8! p-0! text-foreground! hover:bg-transparent!"
-          onClick={() => previousHistoryInterval()}
+          onClick={() => previousEntityHistoryInterval(entityType)}
           size="icon-sm"
           type="button"
           variant="icon"
@@ -36,7 +48,7 @@ const MonthSlider = () => {
         <Button
           aria-label="Next month"
           className="period-picker__button size-8! p-0! text-foreground! hover:bg-transparent! disabled:text-muted-foreground!"
-          onClick={() => nextHistoryInterval()}
+          onClick={() => nextEntityHistoryInterval(entityType)}
           disabled={!isNextIntervalAvailable}
           size="icon-sm"
           type="button"

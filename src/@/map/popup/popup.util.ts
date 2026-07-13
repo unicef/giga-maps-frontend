@@ -65,7 +65,8 @@ export const createAndSetPopupTemplate = ({
   countryCode?: string;
   unit?: string;
 } & SchoolPopupDataType) => {
-  const currentEntityType = entityType ?? EntityType.SCHOOL;
+  if (!entityType) return;
+  const currentEntityType = entityType;
   const {
     selectedLayerDataByEntity,
     currentLayerTypeUtilsByEntity,

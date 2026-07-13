@@ -15,12 +15,14 @@ const CurrentLayerNameIcon = ({
   isLiveLayer,
   isSchoolStatus,
   icon,
+  entityType,
   showFilter = true,
 }: {
   label?: string;
   isLiveLayer?: boolean;
   isSchoolStatus?: boolean;
   icon?: string;
+  entityType?: import('~/@/entities').EntityType;
   showFilter?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -53,7 +55,9 @@ const CurrentLayerNameIcon = ({
             </TooltipContent>
           </Tooltip>
         </div>
-        {showFilter && <LayerSelectionTextAndFilter />}
+        {showFilter && entityType && (
+          <LayerSelectionTextAndFilter entityType={entityType} />
+        )}
       </div>
     </TooltipProvider>
   );

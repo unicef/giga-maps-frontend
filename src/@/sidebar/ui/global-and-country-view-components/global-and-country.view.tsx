@@ -55,7 +55,6 @@ const GlobalAndCountryView = () => {
       <div className="w-full! px-3.5! pb-2.5!">
         <EntitySummaryAccordion
           connectivityStatsByEntity={connectivityStatsByEntity}
-          selectEntityOnExpand={false}
           showSummaryRowsWhenExpanded={true}
         >
           {(card) => (

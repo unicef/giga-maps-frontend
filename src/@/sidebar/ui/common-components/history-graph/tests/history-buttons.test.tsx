@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import HistoryButtons from '../history-buttons.view';
-import "~/core/i18n/instance"
+import { EntityType } from '~/@/entities';
+import '~/core/i18n/instance';
 
 describe('Layer schools connectivity status', () => {
   beforeEach(() => {
@@ -8,7 +9,7 @@ describe('Layer schools connectivity status', () => {
   });
 
   it('renders "Weekly" and "Monthly" buttons correctly', () => {
-    render(<HistoryButtons isWeek={true} />);
+    render(<HistoryButtons entityType={EntityType.SCHOOL} isWeek={true} />);
     const weeklyButton = screen.getByText('Weekly');
     const monthlyButton = screen.getByText('Monthly');
     expect(weeklyButton).toMatchSnapshot();
@@ -16,16 +17,15 @@ describe('Layer schools connectivity status', () => {
   });
 
   it('calls changeHistoryIntervalUnit with IntervalUnit.week when "Weekly" button is clicked', () => {
-    render(<HistoryButtons isWeek={true} />);
+    render(<HistoryButtons entityType={EntityType.SCHOOL} isWeek={true} />);
 
     const weeklyButton = screen.getByText('Weekly');
     expect(weeklyButton).toMatchSnapshot();
   });
 
   it('calls changeHistoryIntervalUnit with IntervalUnit.month when "Monthly" button is clicked', () => {
-    render(<HistoryButtons isWeek={false} />);
+    render(<HistoryButtons entityType={EntityType.SCHOOL} isWeek={false} />);
     const monthlyButton = screen.getByText('Monthly');
     expect(monthlyButton).toMatchSnapshot();
   });
 });
-

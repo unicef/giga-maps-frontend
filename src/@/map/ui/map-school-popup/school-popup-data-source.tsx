@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { Chip, TooltipButton } from '~/@/common/style/styled-component-style';
 import { $dataSource } from '~/@/country/country.model';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
+import { $activeSchoolPopup } from '~/@/map/map.model';
 import {
   $currentLayerCountryDataSource,
   $currentLayerTypeUtilsByEntity,
@@ -54,12 +54,12 @@ const Chips = styled.div`
   gap: 0.3rem;
 `;
 
-const SourceChip = styled(Chip) <{ $underline?: boolean }>`
+const SourceChip = styled(Chip)<{ $underline?: boolean }>`
   background: #2b2b2b;
   color: ${(props) => props.theme.grey60};
   border-radius: 8px;
   padding: 0.35rem 0.75rem;
-  font-size: 0.70rem;
+  font-size: 0.7rem;
   line-height: 1.4;
   text-decoration: ${(props) => (props.$underline ? 'underline' : 'none')};
   white-space: normal;
@@ -84,23 +84,40 @@ const SOURCE_LINKS: Record<string, string> = {
 const SchoolPopupDataSource = () => {
   const { t } = useTranslation();
   const dataSource = useStore($dataSource);
-  const selectedEntityType = useStore($selectedEntityType);
-  const currentEntityType = selectedEntityType || 'school';
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isSchoolStatus } = currentLayerTypeUtilsByEntity[currentEntityType] ?? {};
-  const currentLayerCountryDataSource = useStore($currentLayerCountryDataSource);
-  const currentDataSource = currentLayerCountryDataSource[currentEntityType];
+  const currentEntityType = useStore($activeSchoolPopup)?.entityType;
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isSchoolStatus } = currentEntityType
+    ? (currentLayerTypeUtilsByEntity[currentEntityType] ?? {})
+    : {};
+  const currentLayerCountryDataSource = useStore(
+    $currentLayerCountryDataSource,
+  );
+  const currentDataSource = currentEntityType
+    ? currentLayerCountryDataSource[currentEntityType]
+    : null;
 
   const { dataSourceName, dataSourceDescription } = useMemo(() => {
-    const names = currentDataSource?.name ? splitOutsideParens(currentDataSource.name) : [] as string[];
+    const names = currentDataSource?.name
+      ? splitOutsideParens(currentDataSource.name)
+      : ([] as string[]);
     if (names && isSchoolStatus) {
       splitOutsideParens(dataSource || '').forEach((item) => {
         if (item && !names.includes(item)) names.push(item);
       });
     }
     const desc = currentDataSource?.description?.split(';');
-    return { dataSourceName: names.filter(Boolean), dataSourceDescription: desc };
-  }, [currentDataSource?.name, currentDataSource?.description, dataSource, isSchoolStatus]);
+    return {
+      dataSourceName: names.filter(Boolean),
+      dataSourceDescription: desc,
+    };
+  }, [
+    currentDataSource?.name,
+    currentDataSource?.description,
+    dataSource,
+    isSchoolStatus,
+  ]);
 
   if (!dataSourceName?.length) return null;
 
@@ -116,7 +133,10 @@ const SchoolPopupDataSource = () => {
       <Header>
         <DataBase width={14} height={14} />
         <span>{t('data-source')}</span>
-        <TooltipButton align="top" label={t('data-is-sourced-research-institutions')}>
+        <TooltipButton
+          align="top"
+          label={t('data-is-sourced-research-institutions')}
+        >
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>
@@ -126,12 +146,19 @@ const SchoolPopupDataSource = () => {
         {dataSourceName.map((raw: string, index: number) => {
           const { name, url } = parseNameAndUrl(raw);
           return (
-            <TooltipButton key={`${raw}-${index}`} $hideLabel={!dataSourceDescription?.[index]} label={dataSourceDescription?.[index]} align="top-right">
+            <TooltipButton
+              key={`${raw}-${index}`}
+              $hideLabel={!dataSourceDescription?.[index]}
+              label={dataSourceDescription?.[index]}
+              align="top-right"
+            >
               <ChipButton type="button" onClick={() => handleClick(raw)}>
-                <SourceChip as="span" $underline={Boolean(url)}>{replaceSourceName(name)}</SourceChip>
+                <SourceChip as="span" $underline={Boolean(url)}>
+                  {replaceSourceName(name)}
+                </SourceChip>
               </ChipButton>
             </TooltipButton>
-          )
+          );
         })}
       </Chips>
     </Container>
@@ -139,5 +166,3 @@ const SchoolPopupDataSource = () => {
 };
 
 export default SchoolPopupDataSource;
-
-

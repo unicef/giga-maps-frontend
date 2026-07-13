@@ -14,7 +14,11 @@ import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
 import { PointCoordinates } from '~/core/global-types';
-import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '../../map.model';
+import {
+  $dublicateSchoolClickData,
+  $stylePaintData,
+  setSchoolIdsOnPopupClickDot,
+} from '../../map.model';
 import { UNKNOWN } from '../../map.types';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import DublicateSchoolLoader from './dublicate-school-popup-loader.view';
@@ -28,9 +32,15 @@ import {
   SchoolItemCount,
   SchoolListItem,
   SchoolName,
-  TotalCountLabel
+  TotalCountLabel,
 } from './dublicate-school-popup.style';
-import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow, SchoolVerificationTag } from './school-popup.style';
+import {
+  ConnectivityCircleWrapper,
+  Label,
+  LiveContent,
+  LiveStatusRow,
+  SchoolVerificationTag,
+} from './school-popup.style';
 
 type Props = {
   schoolIds: number[];
@@ -45,7 +55,9 @@ type Props = {
   batchSize?: number;
 };
 
-export function getStaticValue(staticValue: boolean | undefined | string | null) {
+export function getStaticValue(
+  staticValue: boolean | undefined | string | null,
+) {
   if (typeof staticValue === 'boolean') {
     return staticValue ? 'yes' : 'no';
   }
@@ -64,7 +76,9 @@ export default function DublicateSchoolPopup({
 }: Props) {
   const { t } = useTranslation();
   const total = schoolIds?.length ?? 0;
-  const [visibleSchools, setVisibleSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
+  const [visibleSchools, setVisibleSchools] = useState<
+    ReturnType<typeof schoolStatsMap>[]
+  >([]);
   const requestedCountRef = useRef<number>(0);
   const lastRequestedIdsRef = useRef<number[] | null>(null);
   const isLoadingRef = useRef<boolean>(false);
@@ -78,8 +92,11 @@ export default function DublicateSchoolPopup({
   const layerUtils = useStore($layerUtils);
 
   // derived from layer utils (kept from your code)
-  const { currentLayerTypeUtils, selectedLayerData } = layerUtils ?? {};
-  const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
+  const currentLayerTypeUtils =
+    layerUtils.currentLayerTypeUtilsByEntity[entityType];
+  const selectedLayerData = layerUtils.selectedLayerDataByEntity[entityType];
+  const isLive = currentLayerTypeUtils?.isLive ?? false;
+  const isStatic = currentLayerTypeUtils?.isStatic ?? false;
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';
   const formatConnectivityValue = (value: number, valueUnit?: string) => {
@@ -100,7 +117,8 @@ export default function DublicateSchoolPopup({
     const changed =
       prev === null ||
       prev.length !== schoolIds.length ||
-      (prev.length === schoolIds.length && prev.some((v, i) => v !== schoolIds[i]));
+      (prev.length === schoolIds.length &&
+        prev.some((v, i) => v !== schoolIds[i]));
 
     if (changed) {
       prevSchoolIdsRef.current = [...schoolIds];
@@ -149,7 +167,10 @@ export default function DublicateSchoolPopup({
     if (!mountedRef.current) return;
 
     try {
-      const payloadArr = normalizeEntityLayerInfoList<SchoolStatsType>(globalFetchStore, entityType);
+      const payloadArr = normalizeEntityLayerInfoList<SchoolStatsType>(
+        globalFetchStore,
+        entityType,
+      );
 
       if (payloadArr.length === 0) {
         // if there's no payload and no pending request, clear loading trackers
@@ -161,10 +182,14 @@ export default function DublicateSchoolPopup({
       }
 
       // Build set of currently visible IDs to avoid duplicates
-      const existingIdsSet = new Set(visibleSchools.map((s) => Number((s as any).id)));
+      const existingIdsSet = new Set(
+        visibleSchools.map((s) => Number((s as any).id)),
+      );
 
       // Filter payload for items not already in UI
-      const newItemsRaw = payloadArr.filter((s) => !existingIdsSet.has(Number((s as any).id)));
+      const newItemsRaw = payloadArr.filter(
+        (s) => !existingIdsSet.has(Number((s as any).id)),
+      );
 
       if (newItemsRaw.length === 0) {
         // nothing to add; clear loading if not pending
@@ -180,7 +205,9 @@ export default function DublicateSchoolPopup({
 
       setVisibleSchools((prev) => {
         const prevIds = new Set(prev.map((p) => Number((p as any).id)));
-        const toAdd = mappedNew.filter((n) => !prevIds.has(Number((n as any).id)));
+        const toAdd = mappedNew.filter(
+          (n) => !prevIds.has(Number((n as any).id)),
+        );
         return [...prev, ...toAdd];
       });
 
@@ -216,9 +243,17 @@ export default function DublicateSchoolPopup({
     <DublicateSchoolListWrapper>
       <TotalCountLabel>
         {`(${schoolIds.length}) ${t('school-location-duplicates')}`}{' '}
-        <Tooltip className='info-icon' align="top" label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}>
+        <Tooltip
+          className="info-icon"
+          align="top"
+          label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+        >
           <button className="sb-tooltip-trigger" type="button">
-            <Information size={16} color={'#7e7e7e'} style={{ verticalAlign: 'middle' }} />
+            <Information
+              size={16}
+              color={'#7e7e7e'}
+              style={{ verticalAlign: 'middle' }}
+            />
           </button>
         </Tooltip>
       </TotalCountLabel>
@@ -229,26 +264,30 @@ export default function DublicateSchoolPopup({
           dataLength={visibleSchools.length}
           next={loadMore}
           hasMore={hasMore}
-          loader={
-            <DublicateSchoolLoader />
-          }
+          loader={<DublicateSchoolLoader />}
           scrollableTarget={scrollableTargetId}
         >
           {visibleSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
-            const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(s?.liveAvg ?? 0, unit) : t('unknown');
+            const connectivityValue = isLiveNotUnknown
+              ? formatConnectivityValue(s?.liveAvg ?? 0, unit)
+              : t('unknown');
             const staticValue = getStaticValue(s?.staticValue);
 
-            const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
+            const connecitivityColor =
+              stylePaintData[s?.connectivityType ?? UNKNOWN];
             const staticColor = stylePaintData[s?.staticType ?? UNKNOWN];
-            const connecitivityStatusColor = stylePaintData[s?.connectivityStatus ?? UNKNOWN];
+            const connecitivityStatusColor =
+              stylePaintData[s?.connectivityStatus ?? UNKNOWN];
 
             return (
               <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
                 <ItemTopSection>
                   <SchoolName title={s.name}>
                     <span>{s.name ?? s.id}</span>
-                    {s?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
+                    {s?.isVerifiedSchool === false && (
+                      <SchoolVerificationTag>Unverified</SchoolVerificationTag>
+                    )}
                   </SchoolName>
                   <SchoolItemCount>{`${idx + 1} ${t('of')} (${total})`}</SchoolItemCount>
                 </ItemTopSection>
@@ -257,7 +296,9 @@ export default function DublicateSchoolPopup({
                   <SchoolInternetSpeed>
                     <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
                       <EntityLegendIndicator
-                        color={isStatic ? staticColor : connecitivityStatusColor}
+                        color={
+                          isStatic ? staticColor : connecitivityStatusColor
+                        }
                         entityType={entityType}
                         glowColor={
                           !isStatic && s?.isRealTime
@@ -270,12 +311,24 @@ export default function DublicateSchoolPopup({
                     <LiveContent>
                       {isLive && s?.isRealTime && (
                         <LiveStatusRow>
-                          <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
+                          <Label
+                            $color={connecitivityColor}
+                            style={{ whiteSpace: 'nowrap' }}
+                          >
+                            {connectivityValue}
+                          </Label>
                         </LiveStatusRow>
                       )}
-                      {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
+                      {isStatic && (
+                        <Label $color={staticColor}>{staticValue}</Label>
+                      )}
                       {!isStatic && (!isLive || !s?.isRealTime) && (
-                        <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[s?.connectivityStatus])}</Label>
+                        <Label
+                          $color={connecitivityStatusColor}
+                          style={{ whiteSpace: 'nowrap' }}
+                        >
+                          {t(ConnectivityStatusNames[s?.connectivityStatus])}
+                        </Label>
                       )}
                     </LiveContent>
                   </SchoolInternetSpeed>
@@ -283,7 +336,9 @@ export default function DublicateSchoolPopup({
                     className="cds--btn cds--btn--primary"
                     onClick={() => {
                       navigateToEntity(entityType, countryCode, s.id);
-                      setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
+                      setSchoolFocusLatLng(
+                        s.geopoint.coordinates as PointCoordinates,
+                      );
                     }}
                     aria-label={`View ${s.name}`}
                     type="button"
@@ -298,4 +353,4 @@ export default function DublicateSchoolPopup({
       </DublicateSchoolList>
     </DublicateSchoolListWrapper>
   );
-};
+}

@@ -57,14 +57,17 @@ describe('add-layers-utils', () => {
   describe('getLayerIdsAndLastChange', () => {
     it('should return correct layer ids and change status when refresh is true', () => {
       const result = getLayerIdsAndLastChange({
-        selectedLayerIds: { schoolId: 1, selectedId: 2 },
+        selectedLayerIds: {
+          schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
+          selectedIdByEntity: { [EntityType.SCHOOL]: 2 },
+        },
         refresh: true,
-        lastSelectedLayer: { layerId: 2 },
+        lastSelectedLayer: {
+          layerIdByEntity: { [EntityType.SCHOOL]: 2 },
+        },
       });
 
       expect(result).toEqual({
-        schoolLayerId: 1,
-        selectedLayerId: 2,
         selectedLayerIdByEntity: {
           [EntityType.SCHOOL]: 2,
         },
@@ -74,9 +77,14 @@ describe('add-layers-utils', () => {
 
     it('should detect selection change when selectedId differs from lastSelectedLayer', () => {
       const result = getLayerIdsAndLastChange({
-        selectedLayerIds: { schoolId: 1, selectedId: 3 },
+        selectedLayerIds: {
+          schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
+          selectedIdByEntity: { [EntityType.SCHOOL]: 3 },
+        },
         refresh: false,
-        lastSelectedLayer: { layerId: 2 },
+        lastSelectedLayer: {
+          layerIdByEntity: { [EntityType.SCHOOL]: 2 },
+        },
       });
 
       expect(result.isLastSelectionChange).toBe(true);
@@ -85,8 +93,7 @@ describe('add-layers-utils', () => {
     it('should detect selection change for entity-specific layer ids', () => {
       const result = getLayerIdsAndLastChange({
         selectedLayerIds: {
-          schoolId: 1,
-          selectedId: 2,
+          schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
           selectedIdByEntity: {
             [EntityType.SCHOOL]: 2,
             [EntityType.HEALTH]: 5,
@@ -183,17 +190,19 @@ describe('add-layers-utils', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { schools: false },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: [] },
+        coverageFilterByEntity: { [EntityType.SCHOOL]: [] },
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {
+            [EntityType.SCHOOL]: { isLive: true },
+          },
           coverageLayerDataByEntity: { school: { id: 'coverage' } },
           selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
         },
         selectedLayerId: 1,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL],
@@ -208,17 +217,19 @@ describe('add-layers-utils', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { country: true },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: [] },
+        coverageFilterByEntity: { [EntityType.SCHOOL]: [] },
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {
+            [EntityType.SCHOOL]: { isLive: true },
+          },
           globalLayerDataByEntity: { school: { id: 1 } },
           selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
         },
         selectedLayerId: 1,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL],
@@ -232,16 +243,18 @@ describe('add-layers-utils', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { map: true },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: [] },
+        coverageFilterByEntity: { [EntityType.SCHOOL]: [] },
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {
+            [EntityType.SCHOOL]: { isLive: true },
+          },
           globalLayerDataByEntity: { school: { id: 1 } },
         },
         selectedLayerId: 1,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL],
@@ -250,43 +263,44 @@ describe('add-layers-utils', () => {
 
       expect(filterConnectivityList).toHaveBeenCalledWith([], false);
     });
-    it('should create a health global layer without global layer metadata', () => {
+    it('should skip a health global layer without entity layer metadata', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { map: true },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: { [EntityType.HEALTH]: [] },
+        coverageFilterByEntity: { [EntityType.HEALTH]: [] },
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {
+            [EntityType.HEALTH]: { isLive: true },
+          },
           globalLayerDataByEntity: {},
         },
         selectedLayerId: null,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.HEALTH],
         entityRegistry: {},
       });
 
-      expect(createSelectedLayer).toHaveBeenCalledWith(
-        mockMap,
-        expect.objectContaining({
-          id: 'entity-selected-health-null',
-          options: expect.objectContaining({ 'source-layer': 'entities' }),
-        }),
-      );
-      expect(filterConnectivityList).toHaveBeenCalledWith([], false);
+      expect(createSelectedLayer).not.toHaveBeenCalled();
     });
     it('should create layers for multiple entity types', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { map: true },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: {
+          [EntityType.SCHOOL]: [],
+          [EntityType.HEALTH]: [],
+        },
+        coverageFilterByEntity: {
+          [EntityType.SCHOOL]: [],
+          [EntityType.HEALTH]: [],
+        },
         layerUtils: {
-          currentLayerTypeUtils: { isLive: false },
+          currentLayerTypeUtilsByEntity: {},
           coverageLayerDataByEntity: { school: { id: 'coverage' } },
           globalLayerDataByEntity: {
             [EntityType.SCHOOL]: { id: 1 },
@@ -296,7 +310,7 @@ describe('add-layers-utils', () => {
         selectedLayerId: 1,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
@@ -311,17 +325,17 @@ describe('add-layers-utils', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { schools: false },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: {},
+        coverageFilterByEntity: {},
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {},
           coverageLayerDataByEntity: { school: { id: 'coverage' } },
           selectedLayerIdByEntity: {},
         },
         selectedLayerId: null,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
@@ -341,16 +355,19 @@ describe('add-layers-utils', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { schools: false },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: [] },
+        coverageFilterByEntity: { [EntityType.SCHOOL]: [] },
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {
+            [EntityType.SCHOOL]: { isLive: true },
+          },
           coverageLayerDataByEntity: { school: { id: 'coverage' } },
+          selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
         },
         selectedLayerId: 1,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL],
@@ -371,9 +388,13 @@ describe('add-layers-utils', () => {
         map: mockMap,
         mapRoute: { country: true },
         paintData: {},
-        selectedLayerIds: { schoolId: 1 },
-        schoolLegends: ['connected'],
-        schoolLegendsByEntity: {},
+        selectedLayerIds: {
+          schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
+          selectedIdByEntity: {},
+        },
+        schoolLegendsByEntity: {
+          [EntityType.SCHOOL]: ['connected'],
+        },
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL],
         entityRegistry: {},
@@ -385,16 +406,16 @@ describe('add-layers-utils', () => {
       createAndUpdateMapLayer({
         map: null as any,
         mapRoute: { schools: false },
-        connectivitySpeedFilter: [],
-        coverageFilter: [],
+        connectivitySpeedFilterByEntity: {},
+        coverageFilterByEntity: {},
         layerUtils: {
-          currentLayerTypeUtils: { isLive: true },
+          currentLayerTypeUtilsByEntity: {},
           coverageLayerDataByEntity: { school: { id: 'coverage' } },
         },
         selectedLayerId: 1,
         paintData: {},
         schoolLayerId: null,
-        lastSelectedLayer: { layerId: null },
+        lastSelectedLayer: { layerIdByEntity: {} },
         schoolLegends: [],
         isMobile: false,
         activeEntityTypes: [EntityType.SCHOOL],

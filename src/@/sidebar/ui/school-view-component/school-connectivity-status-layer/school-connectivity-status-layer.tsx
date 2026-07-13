@@ -11,9 +11,10 @@ import MultiSchoolLayerView from '../common/multi-school-layer.view';
 
 const SchoolStatsTypeus = () => {
   const { t } = useTranslation();
-  const { schoolIds } = useStore($getSchoolParams);
+  const { entityType, schoolIds } = useStore($getSchoolParams);
   const SchoolStatsTypeus = useStore($schoolStats);
   const singleSchool = schoolIds?.length === 1;
+  if (!entityType) return null;
   return (
     <>
       {/* <CurrentLayerNameIcon label={t('school-status')} isSchoolStatus={true} /> */}
@@ -23,11 +24,21 @@ const SchoolStatsTypeus = () => {
           <SidebarDublicateSchoolList scrollableTargetId="school-sidebar-scroll" />
         </>
       )}
-      {!singleSchool && <MultiSchoolLayerView schoolLength={schoolIds?.length} schoolLayerList={SchoolStatsTypeus} />}
+      {!singleSchool && (
+        <MultiSchoolLayerView
+          entityType={entityType}
+          schoolLength={schoolIds?.length}
+          schoolLayerList={SchoolStatsTypeus}
+        />
+      )}
 
-      <FooterDataSourcePopUp showOldDataSource={true} isFooter={false} />
+      <FooterDataSourcePopUp
+        showOldDataSource={true}
+        isFooter={false}
+        entityType={entityType}
+      />
     </>
   );
-}
+};
 
-export default SchoolStatsTypeus
+export default SchoolStatsTypeus;

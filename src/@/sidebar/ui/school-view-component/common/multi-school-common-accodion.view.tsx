@@ -4,35 +4,66 @@ import { useStore } from 'effector-react';
 import { PropsWithChildren } from 'react';
 
 import { CustomIcon } from '~/@/common/style/styled-component-style';
+import type { EntityType } from '~/@/entities';
 import { $stylePaintData } from '~/@/map/map.model';
-import { getLiveSchoolDetails, getNullValueText, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
+import {
+  getLiveSchoolDetails,
+  getNullValueText,
+  getSchoolStatus,
+  getStaticSchoolDetails,
+} from '~/@/sidebar/school-view.utils';
 import { $layerUtils } from '~/@/sidebar/sidebar.model';
 import { SchoolStatsType } from '~/api/types';
 
 import { ConnectivityStatusNames } from '../../global-and-country-view-components/container/layer-view.constant';
 import { StatisticsStatus } from '../styles/school-information.style';
-import { AccordionTitle, ConnectivityStatusCircle, MultiSchoolAccodion, MultischoolBottomInfo, MultischoolBottomInfoItem, MultiSchoolContainer, SchoolInfoContainer, SchoolMultiAccordion, SchoolTitleWrapper, SingleInfoContainer } from '../styles/school-view-style';
+import {
+  AccordionTitle,
+  ConnectivityStatusCircle,
+  MultiSchoolAccodion,
+  MultischoolBottomInfo,
+  MultischoolBottomInfoItem,
+  MultiSchoolContainer,
+  SchoolInfoContainer,
+  SchoolMultiAccordion,
+  SchoolTitleWrapper,
+  SingleInfoContainer,
+} from '../styles/school-view-style';
 import CommonUIOnlySchoolConnectivityLayer from './common-ui-only-school-connectivity-layer';
 import SchoolCheckbox from './school-checkbox.view';
 import SingleSchoolConnectivityLayer from './single-school-connectivity-layer.view';
 import SingleSchoolCoverageLayer from './single-school-coverage-layer';
 
-const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWithChildren<{ schoolDetails: SchoolStatsType; isOpen: boolean; onToggle: () => void }>) => {
-  const selectedEntityType = useStore($selectedEntityType);
-  const { currentLayerTypeUtilsByEntity, selectedLayerDataByEntity } = useStore($layerUtils);
-  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
-  const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+const MultiSchoolCommonAccodion = ({
+  entityType,
+  schoolDetails,
+  isOpen,
+  onToggle,
+}: PropsWithChildren<{
+  entityType: EntityType;
+  schoolDetails: SchoolStatsType;
+  isOpen: boolean;
+  onToggle: () => void;
+}>) => {
+  const { currentLayerTypeUtilsByEntity, selectedLayerDataByEntity } =
+    useStore($layerUtils);
+  const selectedLayerData = selectedLayerDataByEntity[entityType];
+  const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[entityType];
   const { global_benchmark, icon } = selectedLayerData ?? {};
-  const { isLive, isStatic } = currentLayerTypeUtils;
+  const isLive = currentLayerTypeUtils?.isLive ?? false;
+  const isStatic = currentLayerTypeUtils?.isStatic ?? false;
   const unit = global_benchmark?.convert_unit;
   const stylePaintData = useStore($stylePaintData);
-  const { value, color } = isLive ? getLiveSchoolDetails({ schoolDetails, stylePaintData }) : getStaticSchoolDetails({ schoolDetails, stylePaintData });
-  const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({ schoolDetails, stylePaintData });
+  const { value, color } = isLive
+    ? getLiveSchoolDetails({ schoolDetails, stylePaintData })
+    : getStaticSchoolDetails({ schoolDetails, stylePaintData });
+  const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
+    schoolDetails,
+    stylePaintData,
+  });
   const { num_students: numStudents } = schoolDetails.statistics || {};
   return (
-    <MultiSchoolContainer
-      key={schoolDetails.id}>
+    <MultiSchoolContainer key={schoolDetails.id}>
       <SchoolCheckbox schoolDetails={schoolDetails} />
       <MultiSchoolAccodion>
         <SchoolMultiAccordion>
@@ -42,11 +73,12 @@ const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWit
                 <AccordionTitle title={schoolDetails.name}>
                   <SchoolTitleWrapper>
                     <p>{schoolDetails.name}</p>
-                    <ConnectivityStatusCircle $color={connectivityStatusColor}>
-                    </ConnectivityStatusCircle>
+                    <ConnectivityStatusCircle
+                      $color={connectivityStatusColor}
+                    ></ConnectivityStatusCircle>
                   </SchoolTitleWrapper>
                 </AccordionTitle>
-                {!isOpen &&
+                {!isOpen && (
                   <MultischoolBottomInfo>
                     <SchoolInfoContainer>
                       <SingleInfoContainer>
@@ -55,7 +87,13 @@ const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWit
                       </SingleInfoContainer>
                       <SingleInfoContainer>
                         <Location />
-                        <p title={schoolDetails?.geopoint?.coordinates.join(', ')}>{schoolDetails?.geopoint?.coordinates.join(', ')}</p>
+                        <p
+                          title={schoolDetails?.geopoint?.coordinates.join(
+                            ', ',
+                          )}
+                        >
+                          {schoolDetails?.geopoint?.coordinates.join(', ')}
+                        </p>
                       </SingleInfoContainer>
                       {
                         <SingleInfoContainer>
@@ -64,42 +102,65 @@ const MultiSchoolCommonAccodion = ({ schoolDetails, isOpen, onToggle }: PropsWit
                         </SingleInfoContainer>
                       }
                     </SchoolInfoContainer>
-                    <div className='multi-school-bottom-info'>
+                    <div className="multi-school-bottom-info">
                       <MultischoolBottomInfoItem>
-                        {connectivityStatus &&
+                        {connectivityStatus && (
                           <>
-                            <ConnectivityStatusCircle $color={connectivityStatusColor}>
-                            </ConnectivityStatusCircle>&nbsp;&nbsp;
-                            <StatisticsStatus $color={connectivityStatusColor}>{ConnectivityStatusNames[connectivityStatus]}</StatisticsStatus>
+                            <ConnectivityStatusCircle
+                              $color={connectivityStatusColor}
+                            ></ConnectivityStatusCircle>
+                            &nbsp;&nbsp;
+                            <StatisticsStatus $color={connectivityStatusColor}>
+                              {ConnectivityStatusNames[connectivityStatus]}
+                            </StatisticsStatus>
                           </>
-                        }
+                        )}
                       </MultischoolBottomInfoItem>
-                      {(isLive || isStatic) && <MultischoolBottomInfoItem>
-                        {isLive && <Wifi size={20} />}
-                        {isStatic && <CustomIcon dangerouslySetInnerHTML={{ __html: (icon ?? "") }} $size={20} />}
-                        &nbsp;&nbsp;
-                        <StatisticsStatus $color={color}>
-                          {isLive ? `${value ? `${value} ${unit}` : getNullValueText(connectivityStatus)}` : String(value)}
-                        </StatisticsStatus>
-                      </MultischoolBottomInfoItem>}
+                      {(isLive || isStatic) && (
+                        <MultischoolBottomInfoItem>
+                          {isLive && <Wifi size={20} />}
+                          {isStatic && (
+                            <CustomIcon
+                              dangerouslySetInnerHTML={{ __html: icon ?? '' }}
+                              $size={20}
+                            />
+                          )}
+                          &nbsp;&nbsp;
+                          <StatisticsStatus $color={color}>
+                            {isLive
+                              ? `${value ? `${value} ${unit}` : getNullValueText(connectivityStatus)}`
+                              : String(value)}
+                          </StatisticsStatus>
+                        </MultischoolBottomInfoItem>
+                      )}
                     </div>
-                  </MultischoolBottomInfo>}
+                  </MultischoolBottomInfo>
+                )}
               </>
             }
-            onHeadingClick={onToggle} open={isOpen}
-          >
-          </AccordionItem>
+            onHeadingClick={onToggle}
+            open={isOpen}
+          ></AccordionItem>
         </SchoolMultiAccordion>
       </MultiSchoolAccodion>
       {isOpen && (
         <>
-          {isLive && <SingleSchoolConnectivityLayer schoolId={schoolDetails.id} />}
-          {isStatic && <SingleSchoolCoverageLayer schoolId={schoolDetails.id} />}
-          {!isLive && !isStatic && <CommonUIOnlySchoolConnectivityLayer schoolId={schoolDetails.id} />}
+          {isLive && (
+            <SingleSchoolConnectivityLayer
+              entityType={entityType}
+              schoolId={schoolDetails.id}
+            />
+          )}
+          {isStatic && (
+            <SingleSchoolCoverageLayer schoolId={schoolDetails.id} />
+          )}
+          {!isLive && !isStatic && (
+            <CommonUIOnlySchoolConnectivityLayer schoolId={schoolDetails.id} />
+          )}
         </>
       )}
     </MultiSchoolContainer>
-  )
-}
+  );
+};
 
 export default MultiSchoolCommonAccodion;

@@ -4,11 +4,7 @@ import { forwardRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $country } from '~/@/country/country.model';
-import {
-  $selectedEntityType,
-  getEntityMapValue,
-  isLayerForEntity,
-} from '~/@/entities';
+import { getEntityMapValue, isLayerForEntity } from '~/@/entities';
 import {
   $activeLayerByCountryCodeByEntity,
   $connectivityLayers,
@@ -21,15 +17,20 @@ import { imperativeHandle } from '~/lib/utils/react.util';
 import { PopoverFilterContentConnectivitytype } from '../styles/layer-filter-modal.style';
 
 export default forwardRef(function LiveConnectivityType(
-  { setCurrentLayer }: { setCurrentLayer: (id: null | number) => void },
+  {
+    entityType,
+    setCurrentLayer,
+  }: {
+    entityType: import('~/@/entities').EntityType;
+    setCurrentLayer: (id: null | number) => void;
+  },
   ref,
 ) {
   const { t } = useTranslation();
-  const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
   const selectedIndicatorId = getEntityMapValue(
     selectedLayerIdByEntity,
-    selectedEntityType,
+    entityType,
     null,
   );
   const [selectedId, setSelectedId] = useState(selectedIndicatorId);
@@ -37,12 +38,11 @@ export default forwardRef(function LiveConnectivityType(
   const activeLayersByCountryByEntity = useStore(
     $activeLayerByCountryCodeByEntity,
   );
-  const activeLayersByCountry =
-    activeLayersByCountryByEntity[selectedEntityType] ?? {};
+  const activeLayersByCountry = activeLayersByCountryByEntity[entityType] ?? {};
   const country = useStore($country) ?? { id: 0 };
   const handleConnectivityTypeChange = () => {
     onSelectEntityMainLayer({
-      [selectedEntityType]: selectedId,
+      [entityType]: selectedId,
     });
   };
 
@@ -68,7 +68,7 @@ export default forwardRef(function LiveConnectivityType(
         }}
       >
         {connectivityLayers
-          .filter((layer) => isLayerForEntity(layer, selectedEntityType))
+          .filter((layer) => isLayerForEntity(layer, entityType))
           .map((layer: LayerType) => {
             if (
               (!layer.created_by && layer.type === LayerTypeChoices.LIVE) ||

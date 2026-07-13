@@ -2,8 +2,7 @@ import { add, Interval, sub } from 'date-fns';
 import { combine, createEvent, createStore, merge, sample } from 'effector';
 
 import { $admin1Code } from '~/@/country/country.model';
-import { EntityType } from '~/@/entities';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
+import { $activeEntityTypes, EntityType } from '~/@/entities';
 import {
   defaultInterval,
   defaultIntervalMonth,
@@ -18,17 +17,13 @@ import {
 } from './sidebar.model';
 import { createHistoryIntervalFormat } from './sidebar.util';
 
-export const changeHistoryIntervalUnit = createEvent<IntervalUnit>();
 export const changeEntityHistoryIntervalUnit = createEvent<{
   entityType: EntityType;
   unit: IntervalUnit;
 }>();
-export const nextHistoryInterval = createEvent();
 export const nextEntityHistoryInterval = createEvent<EntityType>();
-export const previousHistoryInterval = createEvent();
 export const previousEntityHistoryInterval = createEvent<EntityType>();
 
-export const changeHistoryInterval = createEvent<Interval>();
 export const changeEntityHistoryInterval = createEvent<{
   entityType: EntityType;
   interval: Interval;
@@ -59,20 +54,6 @@ $historyIntervalUnitByEntity.on(
   }),
 );
 
-export const $historyInterval = combine(
-  $historyIntervalByEntity,
-  $selectedEntityType,
-  (historyIntervalByEntity, selectedEntityType) =>
-    historyIntervalByEntity[selectedEntityType] ?? defaultInterval(),
-);
-
-export const $historyIntervalUnit = combine(
-  $historyIntervalUnitByEntity,
-  $selectedEntityType,
-  (historyIntervalUnitByEntity, selectedEntityType) =>
-    historyIntervalUnitByEntity[selectedEntityType] ?? IntervalUnit.week,
-);
-
 export const $isCurrentHistoryIntervalByEntity = combine(
   $historyIntervalByEntity,
   $historyIntervalUnitByEntity,
@@ -94,13 +75,6 @@ export const $isCurrentHistoryIntervalByEntity = combine(
   },
 );
 
-export const $isCurrentHistoryInterval = combine(
-  $isCurrentHistoryIntervalByEntity,
-  $selectedEntityType,
-  (isCurrentHistoryIntervalByEntity, selectedEntityType) =>
-    isCurrentHistoryIntervalByEntity[selectedEntityType] ?? false,
-);
-
 export const $isNextHistoryIntervalAvailableByEntity =
   $isCurrentHistoryIntervalByEntity.map((isCurrentHistoryIntervalByEntity) => {
     return Object.entries(isCurrentHistoryIntervalByEntity).reduce(
@@ -112,48 +86,34 @@ export const $isNextHistoryIntervalAvailableByEntity =
     );
   });
 
-export const $isNextHistoryIntervalAvailable = combine(
-  $isNextHistoryIntervalAvailableByEntity,
-  $selectedEntityType,
-  (isNextHistoryIntervalAvailableByEntity, selectedEntityType) =>
-    isNextHistoryIntervalAvailableByEntity[selectedEntityType] ?? true,
-);
-export const $isPreviousHistoryIntervalAvailable = createStore(false);
-export const $lastAvailableDates = createStore<null | {
+type LastAvailableDates = {
   [IntervalUnit.week]: Interval;
   [IntervalUnit.month]: Interval;
-}>(null);
-type LastAvailableDates = NonNullable<
-  ReturnType<typeof $lastAvailableDates.getState>
->;
+};
 export const $lastAvailableDatesByEntity = createStore<
   Partial<Record<EntityType, LastAvailableDates | null>>
 >({});
 
 export const $isCheckedLastDate = combine(
-  [$lastAvailableDates, $currentLayerTypeUtilsByEntity, $selectedEntityType, $mapRoutes],
-  ([lastAvailableDates, currentLayerTypeUtilsByEntity, selectedEntityType, mapRoutes]) => {
-    const { isLive } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+  [
+    $lastAvailableDatesByEntity,
+    $currentLayerTypeUtilsByEntity,
+    $activeEntityTypes,
+    $mapRoutes,
+  ],
+  ([
+    lastAvailableDatesByEntity,
+    currentLayerTypeUtilsByEntity,
+    activeEntityTypes,
+    mapRoutes,
+  ]) => {
     if (mapRoutes.map) return true;
-    if (isLive) {
-      return !!lastAvailableDates;
-    }
-    return true;
+    return activeEntityTypes.every((entityType) => {
+      const { isLive } = currentLayerTypeUtilsByEntity[entityType] ?? {};
+      return !isLive || !!lastAvailableDatesByEntity[entityType];
+    });
   },
 );
-sample({
-  clock: changeHistoryInterval,
-  source: $selectedEntityType,
-  fn: (entityType, interval) => ({ entityType, interval }),
-  target: changeEntityHistoryInterval,
-});
-
-sample({
-  clock: changeHistoryIntervalUnit,
-  source: $selectedEntityType,
-  fn: (entityType, unit) => ({ entityType, unit }),
-  target: changeEntityHistoryIntervalUnit,
-});
 
 sample({
   clock: changeEntityHistoryIntervalUnit,
@@ -169,12 +129,6 @@ sample({
     };
   },
   target: changeEntityHistoryInterval,
-});
-
-sample({
-  clock: nextHistoryInterval,
-  source: $selectedEntityType,
-  target: nextEntityHistoryInterval,
 });
 
 sample({
@@ -195,12 +149,6 @@ sample({
     };
   },
   target: changeEntityHistoryInterval,
-});
-
-sample({
-  clock: previousHistoryInterval,
-  source: $selectedEntityType,
-  target: previousEntityHistoryInterval,
 });
 
 sample({
@@ -274,18 +222,7 @@ sample({
   target: setHistoryIntervalByEntity,
 });
 
-sample({
-  clock: merge([$lastAvailableDatesByEntity, $selectedEntityType]),
-  source: combine({
-    lastAvailableDatesByEntity: $lastAvailableDatesByEntity,
-    selectedEntityType: $selectedEntityType,
-  }),
-  fn: ({ lastAvailableDatesByEntity, selectedEntityType }) =>
-    lastAvailableDatesByEntity[selectedEntityType] ?? null,
-  target: $lastAvailableDates,
-});
 // reset
 $historyIntervalByEntity.reset(router.historyUpdated);
 $historyIntervalUnitByEntity.reset(router.historyUpdated);
-$lastAvailableDates.reset(router.historyUpdated);
 $lastAvailableDatesByEntity.reset(router.historyUpdated);

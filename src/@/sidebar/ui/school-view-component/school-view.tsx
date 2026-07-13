@@ -10,11 +10,14 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $country, $countryCode, setSchoolFocusLatLng } from '~/@/country/country.model';
+import {
+  $country,
+  $countryCode,
+  setSchoolFocusLatLng,
+} from '~/@/country/country.model';
 import {
   $activeEntityTypes,
   $entityRegistry,
-  $selectedEntityType,
 } from '~/@/entities/models/entity.model';
 import {
   $dublicateSchoolClickData,
@@ -23,7 +26,12 @@ import {
 } from '~/@/map/map.model';
 import { UNKNOWN } from '~/@/map/map.types';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { getLiveSchoolDetails, getNullValueText, getSchoolStatus, getStaticSchoolDetails } from '~/@/sidebar/school-view.utils';
+import {
+  getLiveSchoolDetails,
+  getNullValueText,
+  getSchoolStatus,
+  getStaticSchoolDetails,
+} from '~/@/sidebar/school-view.utils';
 import {
   $currentLayerTypeUtilsByEntity,
   $getSchoolParams,
@@ -43,7 +51,11 @@ import { ScrollArea } from '~/components/ui/scroll-area';
 import { Separator } from '~/components/ui/separator';
 import { Skeleton } from '~/components/ui/skeleton';
 
-import { getStatisticsConfig, groupOrder, StatisticConfig } from '../../config/school-information-config';
+import {
+  getStatisticsConfig,
+  groupOrder,
+  StatisticConfig,
+} from '../../config/school-information-config';
 import { HistoryGraphAccordian } from '../common-components/history-graph/history-graph-accordian.view';
 import WeekSlider from '../global-and-country-view-components/common/week-slider/week-slider.view';
 import LiveAverage from '../global-and-country-view-components/connectivity-layer/live-average.view';
@@ -78,7 +90,12 @@ const getEntityGigaId = (entity: SchoolStatsType) => {
 
 const getCollapsedEntityIdLabel = (entity: SchoolStatsType) => {
   const entityRecord = entity as unknown as Record<string, unknown>;
-  return entity.external_id ?? entity.giga_id_school ?? entityRecord.giga_id ?? entity.id;
+  return (
+    entity.external_id ??
+    entity.giga_id_school ??
+    entityRecord.giga_id ??
+    entity.id
+  );
 };
 
 const connectivityColorClassByStatus: Record<string, string> = {
@@ -90,20 +107,27 @@ const connectivityColorClassByStatus: Record<string, string> = {
 };
 
 const getEntityCountLabel = (entity: SchoolStatsType) => {
-  const stats = entity.statistics as unknown as Record<string, unknown> | undefined;
-  const students = stats?.num_students ?? (entity as unknown as Record<string, unknown>).num_students;
+  const stats = entity.statistics as unknown as
+    | Record<string, unknown>
+    | undefined;
+  const students =
+    stats?.num_students ??
+    (entity as unknown as Record<string, unknown>).num_students;
   if (!students) return null;
   return `${students} students`;
 };
 
 const groupStatistics = (statistics: StatisticConfig[]) => {
-  const groups = statistics.reduce((acc, stat) => {
-    if (!acc[stat.group]) {
-      acc[stat.group] = [];
-    }
-    acc[stat.group].push(stat);
-    return acc;
-  }, {} as Record<string, StatisticConfig[]>);
+  const groups = statistics.reduce(
+    (acc, stat) => {
+      if (!acc[stat.group]) {
+        acc[stat.group] = [];
+      }
+      acc[stat.group].push(stat);
+      return acc;
+    },
+    {} as Record<string, StatisticConfig[]>,
+  );
 
   return groupOrder
     .filter((group) => groups[group]?.length)
@@ -128,7 +152,10 @@ function DetailLine({
   return (
     <div className="flex! min-w-0! items-center! gap-1! mt-3! text-muted-foreground!">
       {Icon && <Icon className="size-3! shrink-0! text-foreground!" />}
-      <p className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!" title={displayValue}>
+      <p
+        className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!"
+        title={displayValue}
+      >
         {label ? <>{label}: </> : null}
         <span className={valueClassName}>{displayValue}</span>
       </p>
@@ -156,9 +183,16 @@ function StatusLine({
           />
         </span>
       ) : (
-        <span className="mr-1! size-2! shrink-0! rounded-full!" style={{ backgroundColor: color }} />
+        <span
+          className="mr-1! size-2! shrink-0! rounded-full!"
+          style={{ backgroundColor: color }}
+        />
       )}
-      <p className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!" style={{ color }} title={label}>
+      <p
+        className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!"
+        style={{ color }}
+        title={label}
+      >
         {label}
       </p>
     </div>
@@ -177,14 +211,21 @@ function LayerIcon({ icon }: { icon?: string }) {
   );
 }
 
-function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
+function EntityMetricSummary({
+  entity,
+  entityType,
+}: {
+  entity: SchoolStatsType;
+  entityType: EntityType;
+}) {
   const { t } = useTranslation();
   const stylePaintData = useStore($stylePaintData);
-  const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
-  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+  const selectedLayerData = selectedLayerDataByEntity[entityType];
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
   const isLoading = useStore($isLoadingSchoolView);
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
@@ -214,12 +255,12 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
               isLoading={isLoading}
               value={Number(liveDetails.value ?? 0)}
             />
-            <WeekSlider entityType={selectedEntityType} />
+            <WeekSlider entityType={entityType} />
           </div>
         </div>
         <HistoryGraphAccordian
           connectivityStats={entity as never}
-          entityType={selectedEntityType}
+          entityType={entityType}
           isLoading={isLoading}
           selectedLayerData={selectedLayerData}
         />
@@ -227,8 +268,13 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
     );
   }
 
-  const statusLabel = t(ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus);
-  const unit = entity.benchmark_metadata?.display_unit ?? selectedLayerData?.global_benchmark?.convert_unit ?? '';
+  const statusLabel = t(
+    ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus,
+  );
+  const unit =
+    entity.benchmark_metadata?.display_unit ??
+    selectedLayerData?.global_benchmark?.convert_unit ??
+    '';
 
   if (isStatic) {
     const formattedValue = formatStaticFieldValue(staticDetails.value);
@@ -237,8 +283,12 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
       <section className="mx-4! my-6!">
         {formattedValue !== 'N/A' && (
           <div className="relative! flex! w-full! flex-col! pb-6! pt-3!">
-            <p className="m-0! break-words! text-[2rem]! font-normal! leading-tight!" style={{ color: staticDetails.color }}>
-              {formattedValue}{unit ? ` ${unit}` : ''}
+            <p
+              className="m-0! break-words! text-[2rem]! font-normal! leading-tight!"
+              style={{ color: staticDetails.color }}
+            >
+              {formattedValue}
+              {unit ? ` ${unit}` : ''}
             </p>
           </div>
         )}
@@ -252,7 +302,10 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
         {isLoading ? (
           <Skeleton className="h-11! w-[70%]!" />
         ) : (
-          <p className="m-0! break-words! text-[2.375rem]! font-normal! leading-tight! capitalize!" style={{ color: connectivityStatusColor }}>
+          <p
+            className="m-0! break-words! text-[2.375rem]! font-normal! leading-tight! capitalize!"
+            style={{ color: connectivityStatusColor }}
+          >
             {statusLabel}
           </p>
         )}
@@ -261,24 +314,35 @@ function EntityMetricSummary({ entity }: { entity: SchoolStatsType }) {
   );
 }
 
-function EntityInformation({ entity }: { entity: SchoolStatsType }) {
+function EntityInformation({
+  entity,
+  entityType,
+}: {
+  entity: SchoolStatsType;
+  entityType: EntityType;
+}) {
   const { t } = useTranslation();
-  const selectedEntityType = useStore($selectedEntityType);
   const entityRegistry = useStore($entityRegistry);
   const stylePaintData = useStore($stylePaintData);
   const country = useStore($country);
-  const [statisticsConfig, setStatisticsConfig] = useState<StatisticConfig[]>([]);
-  const config = entityRegistry[selectedEntityType];
+  const [statisticsConfig, setStatisticsConfig] = useState<StatisticConfig[]>(
+    [],
+  );
+  const config = entityRegistry[entityType];
   const entityRecord = entity as unknown as Record<string, unknown>;
-  const statistics = entity.statistics as unknown as Record<string, unknown> | undefined;
+  const statistics = entity.statistics as unknown as
+    | Record<string, unknown>
+    | undefined;
   const coordinates = (entity.geopoint?.coordinates ?? []).toReversed();
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
     stylePaintData,
   });
-  const statusLabel = t(ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus);
-  const detailTitle = t(`${selectedEntityType}-details`, {
-    defaultValue: `${t(`${selectedEntityType}-entity-label`, { defaultValue: config?.displayName ?? selectedEntityType })} Details`,
+  const statusLabel = t(
+    ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus,
+  );
+  const detailTitle = t(`${entityType}-details`, {
+    defaultValue: `${t(`${entityType}-entity-label`, { defaultValue: config?.displayName ?? entityType })} Details`,
   });
 
   useEffect(() => {
@@ -306,19 +370,43 @@ function EntityInformation({ entity }: { entity: SchoolStatsType }) {
         {detailTitle}
       </h3>
       <div className="space-y-1!">
-        <DetailLine icon="location" value={coordinates.length ? coordinates.join(', ') : null} />
-        <StatusLine color={connectivityStatusColor} label={statusLabel} entityType={selectedEntityType} />
+        <DetailLine
+          icon="location"
+          value={coordinates.length ? coordinates.join(', ') : null}
+        />
+        <StatusLine
+          color={connectivityStatusColor}
+          label={statusLabel}
+          entityType={entityType}
+        />
         {getEntityGigaId(entity) && (
-          <DetailLine icon="hash" label={t('giga-id')} value={getEntityGigaId(entity)} valueClassName="lowercase!" />
+          <DetailLine
+            icon="hash"
+            label={t('giga-id')}
+            value={getEntityGigaId(entity)}
+            valueClassName="lowercase!"
+          />
         )}
         {entity.admin1_name && entity.admin1_description_ui_label && (
-          <DetailLine icon="hash" label={t(entity.admin1_description_ui_label)} value={entity.admin1_name} />
+          <DetailLine
+            icon="hash"
+            label={t(entity.admin1_description_ui_label)}
+            value={entity.admin1_name}
+          />
         )}
         {entity.admin2_name && entity.admin2_description_ui_label && (
-          <DetailLine icon="hash" label={t(entity.admin2_description_ui_label)} value={entity.admin2_name} />
+          <DetailLine
+            icon="hash"
+            label={t(entity.admin2_description_ui_label)}
+            value={entity.admin2_name}
+          />
         )}
         {entity.education_level && (
-          <DetailLine icon="hash" label={t('education-level')} value={entity.education_level} />
+          <DetailLine
+            icon="hash"
+            label={t('education-level')}
+            value={entity.education_level}
+          />
         )}
         {groupStatistics(statisticsConfig).map(({ groupName, stats }) => (
           <div key={groupName} className="pt-4!">
@@ -394,11 +482,13 @@ const getEntitySameLocationIds = (
     `${entityType}_entity_ids`,
   ];
 
-  getSameLocationRecordCandidates(entity, entityType).forEach((sameLocation) => {
-    idKeys.forEach((key) => {
-      toNumericIds(sameLocation[key]).forEach((id) => ids.add(id));
-    });
-  });
+  getSameLocationRecordCandidates(entity, entityType).forEach(
+    (sameLocation) => {
+      idKeys.forEach((key) => {
+        toNumericIds(sameLocation[key]).forEach((id) => ids.add(id));
+      });
+    },
+  );
 
   idKeys.forEach((key) => {
     toNumericIds(record[key]).forEach((id) => ids.add(id));
@@ -413,13 +503,14 @@ const formatConnectivityValue = (value: number, valueUnit?: string) => {
 };
 function EntityDuplicateLocationList({
   entity,
+  entityType,
   pageSize = 5,
 }: {
   entity: SchoolStatsType;
+  entityType: EntityType;
   pageSize?: number;
 }) {
   const { t } = useTranslation();
-  const selectedEntityType = useStore($selectedEntityType);
   const entityRegistry = useStore($entityRegistry);
   const stylePaintData = useStore($stylePaintData);
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
@@ -428,13 +519,15 @@ function EntityDuplicateLocationList({
     | undefined;
   const fetchPending = useStore(fetchDublicateSchoolPopupDataFx.pending);
   const countryCode = useStore($countryCode);
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
-  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
+  const selectedLayerData = selectedLayerDataByEntity[entityType];
   const unit = selectedLayerData?.global_benchmark?.convert_unit ?? '';
   const duplicateIds = useMemo(
-    () => getEntitySameLocationIds(entity, selectedEntityType),
-    [entity, selectedEntityType],
+    () => getEntitySameLocationIds(entity, entityType),
+    [entity, entityType],
   );
   const [items, setItems] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
   const [showAutoLoad, setShowAutoLoad] = useState(false);
@@ -442,14 +535,13 @@ function EntityDuplicateLocationList({
   const isFetchingRef = useRef(false);
   const requestedIdsRef = useRef<Set<number>>(new Set());
   const totalIds = duplicateIds.length;
-  const entityLabel = t(`${selectedEntityType}-entity-label`, {
-    defaultValue:
-      entityRegistry[selectedEntityType]?.displayName ?? selectedEntityType,
+  const entityLabel = t(`${entityType}-entity-label`, {
+    defaultValue: entityRegistry[entityType]?.displayName ?? entityType,
   });
 
   const requestIdsChunk = useCallback(
     (fromIndex: number) => {
-      if (isFetchingRef.current || !selectedEntityType) return false;
+      if (isFetchingRef.current) return false;
       const to = Math.min(duplicateIds.length, fromIndex + pageSize);
       if (fromIndex >= to) return false;
       const idsToFetch = duplicateIds.slice(fromIndex, to);
@@ -460,12 +552,12 @@ function EntityDuplicateLocationList({
       idsToFetch.forEach((id) => requestedIdsRef.current.add(id));
       setSchoolIdsOnPopupClickDot({
         ids: idsToFetch,
-        entityType: selectedEntityType,
+        entityType,
         allowDublicateSchoolIds: false,
       });
       return true;
     },
-    [duplicateIds, pageSize, selectedEntityType],
+    [duplicateIds, pageSize, entityType],
   );
 
   useEffect(() => {
@@ -512,7 +604,6 @@ function EntityDuplicateLocationList({
     loadMore();
   };
 
-
   const getStaticValue = (value: boolean | string | null | undefined) => {
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (!value || value === UNKNOWN) return t('unknown');
@@ -525,7 +616,7 @@ function EntityDuplicateLocationList({
     <section className="border-t! border-border! px-3.5! py-4!">
       <div className="mb-3! flex! items-center! justify-between! gap-3!">
         <h3 className="m-0! text-sm! font-semibold! leading-5! text-foreground!">
-          {`(${totalIds}) ${t(`${selectedEntityType}-duplicates`, {
+          {`(${totalIds}) ${t(`${entityType}-duplicates`, {
             defaultValue: `${entityLabel} duplicates`,
           })}`}
         </h3>
@@ -533,9 +624,11 @@ function EntityDuplicateLocationList({
       </div>
       <div className="space-y-2!">
         {items.map((item, index) => {
-          const connectivityColor = stylePaintData[item.connectivityType ?? UNKNOWN];
+          const connectivityColor =
+            stylePaintData[item.connectivityType ?? UNKNOWN];
           const staticColor = stylePaintData[item.staticType ?? UNKNOWN];
-          const statusColor = stylePaintData[item.connectivityStatus ?? UNKNOWN];
+          const statusColor =
+            stylePaintData[item.connectivityStatus ?? UNKNOWN];
           const liveValue =
             isLive && item.isRealTime && item.connectivityType !== UNKNOWN
               ? formatConnectivityValue(item.liveAvg ?? 0, unit)
@@ -543,8 +636,8 @@ function EntityDuplicateLocationList({
           const staticValue = getStaticValue(item.staticValue);
           const statusLabel = t(
             ConnectivityStatusNames[item.connectivityStatus ?? UNKNOWN] ??
-            item.connectivityStatus ??
-            UNKNOWN,
+              item.connectivityStatus ??
+              UNKNOWN,
           );
 
           return (
@@ -553,7 +646,7 @@ function EntityDuplicateLocationList({
               aria-label={`Open ${item.name}`}
               className="flex! w-full! items-center! justify-between! gap-3! rounded-md! border! border-border! bg-background! px-3! py-2.5! text-left! hover:bg-muted/40!"
               onClick={() => {
-                navigateToEntity(selectedEntityType, countryCode, item.id);
+                navigateToEntity(entityType, countryCode, item.id);
                 if (item.geopoint?.coordinates) {
                   setSchoolFocusLatLng(
                     item.geopoint.coordinates as PointCoordinates,
@@ -566,14 +659,19 @@ function EntityDuplicateLocationList({
                 <span className="shrink-0! text-xs! text-muted-foreground!">
                   {index + 1}.
                 </span>
-                <span className="truncate! text-sm! font-medium! text-foreground!" title={item.name}>
+                <span
+                  className="truncate! text-sm! font-medium! text-foreground!"
+                  title={item.name}
+                >
                   {item.name}
                 </span>
               </span>
               <span className="flex! shrink-0! items-center! gap-2! text-xs!">
                 <span
                   className="size-2.5! rounded-full!"
-                  style={{ backgroundColor: isStatic ? staticColor : statusColor }}
+                  style={{
+                    backgroundColor: isStatic ? staticColor : statusColor,
+                  }}
                 />
                 {isLive && item.isRealTime ? (
                   <span style={{ color: connectivityColor }}>{liveValue}</span>
@@ -588,9 +686,11 @@ function EntityDuplicateLocationList({
         })}
         {fetchPending && !items.length && (
           <div className="space-y-2!">
-            {Array.from({ length: Math.min(totalIds, pageSize) }).map((_, index) => (
-              <Skeleton key={index} className="h-10! w-full! rounded-md!" />
-            ))}
+            {Array.from({ length: Math.min(totalIds, pageSize) }).map(
+              (_, index) => (
+                <Skeleton key={index} className="h-10! w-full! rounded-md!" />
+              ),
+            )}
           </div>
         )}
       </div>
@@ -617,30 +717,44 @@ function EntityDuplicateLocationList({
     </section>
   );
 }
-function EntityDetailContent({ entity }: { entity: SchoolStatsType }) {
-  const selectedEntityType = useStore($selectedEntityType);
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+function EntityDetailContent({
+  entity,
+  entityType,
+}: {
+  entity: SchoolStatsType;
+  entityType: EntityType;
+}) {
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
   const showSectionSeparator = isLive || isStatic;
 
   return (
     <div className="min-w-0!">
-      <EntityMetricSummary entity={entity} />
+      <EntityMetricSummary entity={entity} entityType={entityType} />
       {showSectionSeparator && <Separator className="my-2!" />}
-      <EntityInformation entity={entity} />
-      <EntityDuplicateLocationList entity={entity} />
+      <EntityInformation entity={entity} entityType={entityType} />
+      <EntityDuplicateLocationList entity={entity} entityType={entityType} />
     </div>
   );
 }
 
-function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
+function EntityCollapsedSummary({
+  entity,
+  entityType,
+}: {
+  entity: SchoolStatsType;
+  entityType: EntityType;
+}) {
   const { t } = useTranslation();
   const stylePaintData = useStore($stylePaintData);
-  const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
-  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
+  const selectedLayerData = selectedLayerDataByEntity[entityType];
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
     stylePaintData,
@@ -653,8 +767,13 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
     schoolDetails: entity,
     stylePaintData,
   });
-  const statusLabel = t(ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus);
-  const unit = entity.benchmark_metadata?.display_unit ?? selectedLayerData?.global_benchmark?.convert_unit ?? '';
+  const statusLabel = t(
+    ConnectivityStatusNames[connectivityStatus] ?? connectivityStatus,
+  );
+  const unit =
+    entity.benchmark_metadata?.display_unit ??
+    selectedLayerData?.global_benchmark?.convert_unit ??
+    '';
   const coordinates = entity.geopoint?.coordinates?.join(', ');
   const countLabel = getEntityCountLabel(entity);
   const metricColor = isLive ? liveDetails.color : staticDetails.color;
@@ -672,37 +791,54 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
       <div className="grid! grid-cols-2! gap-x-4! gap-y-2! text-xs! leading-5! text-muted-foreground!">
         <span className="flex! min-w-0! items-center! gap-1.5!">
           <Hash className="size-3.5! shrink-0!" />
-          <span className="truncate!" title={String(getCollapsedEntityIdLabel(entity))}>
+          <span
+            className="truncate!"
+            title={String(getCollapsedEntityIdLabel(entity))}
+          >
             {getCollapsedEntityIdLabel(entity)}
           </span>
         </span>
         {coordinates && (
           <span className="flex! min-w-0! items-center! gap-1.5!">
             <MapPin className="size-3.5! shrink-0!" />
-            <span className="truncate!" title={coordinates}>{coordinates}</span>
+            <span className="truncate!" title={coordinates}>
+              {coordinates}
+            </span>
           </span>
         )}
         {countLabel && (
           <span className="col-span-2! flex! min-w-0! items-center! gap-1.5!">
             <Hash className="size-3.5! shrink-0!" />
-            <span className="truncate!" title={countLabel}>{countLabel}</span>
+            <span className="truncate!" title={countLabel}>
+              {countLabel}
+            </span>
           </span>
         )}
       </div>
       <div className="flex! flex-wrap! items-center! gap-x-6! gap-y-2! text-sm! leading-5!">
-        <span className="inline-flex! items-center! gap-2!" style={{ color: connectivityStatusColor }}>
+        <span
+          className="inline-flex! items-center! gap-2!"
+          style={{ color: connectivityStatusColor }}
+        >
           <span className="flex! shrink-0! items-center! justify-center!">
             <EntityLegendIndicator
               color={connectivityStatusColor}
-              entityType={selectedEntityType}
+              entityType={entityType}
               size={16}
             />
           </span>
           {statusLabel}
         </span>
         {metricValue && (
-          <span className="inline-flex! items-center! gap-2!" style={{ color: metricColor }}>
-            {isLive ? <Wifi className="size-3.5! text-muted-foreground!" /> : <LayerIcon icon={selectedLayerData?.icon} />}
+          <span
+            className="inline-flex! items-center! gap-2!"
+            style={{ color: metricColor }}
+          >
+            {isLive ? (
+              <Wifi className="size-3.5! text-muted-foreground!" />
+            ) : (
+              <LayerIcon icon={selectedLayerData?.icon} />
+            )}
             <span>{metricValue}</span>
           </span>
         )}
@@ -713,15 +849,16 @@ function EntityCollapsedSummary({ entity }: { entity: SchoolStatsType }) {
 
 function EntityListItem({
   entity,
+  entityType,
   isOpen,
   onToggle,
 }: {
   entity: SchoolStatsType;
+  entityType: EntityType;
   isOpen: boolean;
   onToggle: () => void;
 }) {
   const stylePaintData = useStore($stylePaintData);
-  const selectedEntityType = useStore($selectedEntityType);
   const { connectivityStatusColor } = getSchoolStatus({
     schoolDetails: entity,
     stylePaintData,
@@ -748,13 +885,16 @@ function EntityListItem({
               onClick={onToggle}
               type="button"
             >
-              <span className="min-w-0! flex-1! truncate! text-sm! font-semibold! leading-5!" title={entity.name}>
+              <span
+                className="min-w-0! flex-1! truncate! text-sm! font-semibold! leading-5!"
+                title={entity.name}
+              >
                 {entity.name}
               </span>
               <span className="flex! shrink-0! items-center! justify-center!">
                 <EntityLegendIndicator
                   color={connectivityStatusColor}
-                  entityType={selectedEntityType}
+                  entityType={entityType}
                   size={16}
                 />
               </span>
@@ -762,11 +902,13 @@ function EntityListItem({
             </button>
           </div>
         </div>
-        {!isOpen && <EntityCollapsedSummary entity={entity} />}
+        {!isOpen && (
+          <EntityCollapsedSummary entity={entity} entityType={entityType} />
+        )}
       </div>
       {isOpen && (
         <div className="border-t! border-border!">
-          <EntityDetailContent entity={entity} />
+          <EntityDetailContent entity={entity} entityType={entityType} />
         </div>
       )}
     </div>
@@ -819,20 +961,28 @@ const SchoolView = () => {
   const { t } = useTranslation();
   const { schoolIds = [] } = useStore($getSchoolParams);
   const entities = useStore($schoolStats) ?? [];
-  const activeEntityType = useStore($activeEntityTypes)
-  const entityType = activeEntityType?.[0] ?? EntityType.SCHOOL;
+  const activeEntityTypes = useStore($activeEntityTypes);
+  const entityType =
+    activeEntityTypes.length === 1 ? activeEntityTypes[0] : null;
   const isLoading = useStore($isLoadingSchoolView);
-  const currentLayerTypeUtilsByEntity = useStore($currentLayerTypeUtilsByEntity);
-  const { isLive, isStatic } = currentLayerTypeUtilsByEntity[entityType] ?? {};
+  const currentLayerTypeUtilsByEntity = useStore(
+    $currentLayerTypeUtilsByEntity,
+  );
+  const { isLive, isStatic } = entityType
+    ? (currentLayerTypeUtilsByEntity[entityType] ?? {})
+    : {};
   const showDataSource = isLive || isStatic;
-  const [openEntityIds, setOpenEntityIds] = useState<Set<number>>(() => new Set());
+  const [openEntityIds, setOpenEntityIds] = useState<Set<number>>(
+    () => new Set(),
+  );
   const selectedEntities = schoolIds.length
     ? schoolIds
-      .map((id) => entities.find((entity) => entity.id === id))
-      .filter((entity): entity is SchoolStatsType => Boolean(entity))
+        .map((id) => entities.find((entity) => entity.id === id))
+        .filter((entity): entity is SchoolStatsType => Boolean(entity))
     : entities;
   const isMulti = selectedEntities.length > 1;
 
+  if (!entityType) return null;
   return (
     <div className="relative! h-full! min-h-0! w-full!">
       <ScrollArea
@@ -857,6 +1007,7 @@ const SchoolView = () => {
                 <EntityListItem
                   key={entity.id}
                   entity={entity}
+                  entityType={entityType}
                   isOpen={openEntityIds.has(entity.id)}
                   onToggle={() =>
                     setOpenEntityIds((current) => {
@@ -874,7 +1025,10 @@ const SchoolView = () => {
             </div>
           ) : (
             <div className={isLoading ? 'opacity-70!' : undefined}>
-              <EntityDetailContent entity={selectedEntities[0]!} />
+              <EntityDetailContent
+                entity={selectedEntities[0]!}
+                entityType={entityType}
+              />
             </div>
           )}
           {showDataSource && (
@@ -889,4 +1043,3 @@ const SchoolView = () => {
 };
 
 export default SchoolView;
-

@@ -7,7 +7,6 @@ import {
   $entityRegistry,
   $isGlobalMode,
   changeActiveEntityTypes,
-  changeSelectedEntityType,
   selectAllEntityTypes,
   toggleEntityType,
 } from '~/@/entities/models/entity.model';
@@ -54,12 +53,10 @@ export default function EntityTypeSelector() {
     if (isGlobalMode) {
       // If we're in global mode, the first click starts a manual selection with this entity.
       changeActiveEntityTypes([entityType]);
-      changeSelectedEntityType(entityType);
     } else if (event.shiftKey) {
       toggleEntityType(entityType);
     } else {
       changeActiveEntityTypes([entityType]);
-      changeSelectedEntityType(entityType);
     }
   };
 
@@ -85,7 +82,8 @@ export default function EntityTypeSelector() {
 
       {entityTypes.map(([type, config]) => {
         const entityType = type as EntityType;
-        const isActive = activeEntityTypes.includes(entityType) && !isGlobalMode;
+        const isActive =
+          activeEntityTypes.includes(entityType) && !isGlobalMode;
 
         return (
           <Button
@@ -102,7 +100,12 @@ export default function EntityTypeSelector() {
               fitToViewBox
               size={11}
             />
-            {t(config.slug, config.slug === (EntityType.SCHOOL as string) ? { count: 2 } : undefined)}
+            {t(
+              config.slug,
+              config.slug === (EntityType.SCHOOL as string)
+                ? { count: 2 }
+                : undefined,
+            )}
           </Button>
         );
       })}

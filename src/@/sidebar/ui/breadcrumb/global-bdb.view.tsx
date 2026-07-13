@@ -1,7 +1,8 @@
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
-import { $globalStats } from '~/@/map/map.model';
+import { $activeEntityTypes } from '~/@/entities';
+import { $globalStatsByEntity } from '~/@/map/map.model';
 import { Skeleton } from '~/components/ui/skeleton';
 import { $mapRoutes } from '~/core/routes';
 
@@ -10,7 +11,13 @@ import { $allLoadings } from '../../sidebar.model';
 const GlobalBDB = () => {
   const { t } = useTranslation();
   const { map } = useStore($mapRoutes);
-  const { no_of_countries: noOfCounties = 0 } = useStore($globalStats);
+  const activeEntityTypes = useStore($activeEntityTypes);
+  const globalStatsByEntity = useStore($globalStatsByEntity);
+  const noOfCounties = activeEntityTypes.reduce(
+    (max, entityType) =>
+      Math.max(max, globalStatsByEntity[entityType]?.no_of_countries ?? 0),
+    0,
+  );
   const isLoading = useStore($allLoadings).stats;
   if (!map) return;
   if (isLoading) return <Skeleton className="h-4! w-20!" />;
