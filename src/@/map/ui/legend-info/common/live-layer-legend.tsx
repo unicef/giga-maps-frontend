@@ -27,8 +27,6 @@ import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
-const getLightGlowColor = (color: string) =>
-  `color-mix(in srgb, ${color} 42%, white)`;
 
 const LiveLayerLegend = ({
   entityType,
@@ -168,7 +166,7 @@ const LiveLayerLegend = ({
                   <EntityLegendIndicator
                     color={liveMetricFill}
                     entityType={entityType}
-                    glowColor={getLightGlowColor(legendColor)}
+                    glowColor={legendColor}
                   />
                   <span className="text-sm! font-normal! leading-5! text-foreground!">
                     {displayLabel}
