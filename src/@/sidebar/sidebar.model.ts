@@ -256,10 +256,10 @@ $isMenuOpen.on(onChangeMenu, setPayload);
 export const changeEntityConnectivitySpeed = createEvent<{
   entityType: EntityType;
   key:
-    | ConnectivityDistribution.good
-    | ConnectivityDistribution.moderate
-    | ConnectivityDistribution.bad
-    | ConnectivityDistribution.unknown;
+  | ConnectivityDistribution.good
+  | ConnectivityDistribution.moderate
+  | ConnectivityDistribution.bad
+  | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultConnectivitySpeedFilter = {
@@ -351,7 +351,6 @@ export const $globalLayerDataByEntity = $layersList.map((layers) => {
     getLayerEntityTypes(layer, []).forEach((entityType) => {
       if (
         layer?.type === LayerTypeChoices.LIVE &&
-        !layer.created_by &&
         (layer.code === 'DOWNLOAD' ||
           layer.code === `DOWNLOAD_${entityType?.toUpperCase()}`)
       ) {
@@ -368,9 +367,8 @@ export const $coverageLayerDataByEntity = $layersList.map((layers) => {
     getLayerEntityTypes(layer, []).forEach((entityType) => {
       if (
         layer?.type === LayerTypeChoices.STATIC &&
-        layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-          'coverage_type'
+        'coverage_type'
       ) {
         result[entityType] = layer;
       }
@@ -579,8 +577,8 @@ const buildCurrentLayerLegends = ({
   };
   selectedLayerData?: LayerType | null;
   stylePaintData: typeof $stylePaintData extends { getState: () => infer T }
-    ? T
-    : never;
+  ? T
+  : never;
 }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -964,10 +962,10 @@ export const checkEntityConnectivityBenchmark = createEvent<{
 export const changeEntityCoverageStatus = createEvent<{
   entityType: EntityType;
   key:
-    | ConnectivityDistribution.good
-    | ConnectivityDistribution.moderate
-    | ConnectivityDistribution.bad
-    | ConnectivityDistribution.unknown;
+  | ConnectivityDistribution.good
+  | ConnectivityDistribution.moderate
+  | ConnectivityDistribution.bad
+  | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultCoverageStatusAll = {
