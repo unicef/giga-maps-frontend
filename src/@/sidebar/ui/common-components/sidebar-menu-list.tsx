@@ -69,11 +69,11 @@ const SidebarMenuList = () => {
         <MenuItemBlank onClick={() => onChangeMenu(false)} renderIcon={InformationSquare} href={'/about'} target="_blank">
           {t('about-giga-maps', 'About Giga Maps')}
         </MenuItemBlank>
-        <MenuItem onClick={() => {
+        {/* <MenuItem onClick={() => {
           router.navigate(`/map?popover=tour`)
         }} renderIcon={WatsonHealthThumbnailPreview} >
           {t('tour', 'Tour')}
-        </MenuItem>
+        </MenuItem> */}
       </SideNavItems>
       {isMapView && <LanguageDropdown
         id="language"
