@@ -412,9 +412,9 @@ const LegendPopup = ({
         align="end"
         className={cn(
           'z-1! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
-          'w-[min(28.125rem,calc(100vw-1rem))]! max-w-[min(28.125rem,calc(100vw-1rem))]!',
-          'max-md:w-[min(23rem,calc(100vw-1rem))]! max-md:max-w-[min(23rem,calc(100vw-1rem))]!',
-          'max-[560px]:w-[min(18.5rem,calc(100vw-1rem))]! max-[560px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
+          'min-[420px]:w-[min(18.5rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(18.5rem,calc(100vw-1rem))]!',
+          'min-[560px]:w-[min(23rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(23rem,calc(100vw-1rem))]!',
+          'min-[768px]:w-[min(28.125rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(28.125rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

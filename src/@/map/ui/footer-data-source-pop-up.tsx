@@ -31,7 +31,7 @@ const dataSourceHeaderClassName =
 const dataSourceContainerClassName =
   'flex! items-center! px-4! pb-4! text-xs! text-muted-foreground!';
 const dataSourceButtonClassName =
-  'h-auto! min-h-0! cursor-pointer! justify-start! rounded-none! border-0! bg-transparent! p-0! text-left! text-xs! font-normal! text-muted-foreground! shadow-none! hover:bg-transparent! hover:text-foreground!';
+  'h-auto! min-h-0! cursor-pointer! justify-start! rounded-none! border-0! bg-transparent! p-0! text-left! text-xs! font-normal! text-muted-foreground! shadow-none! hover:bg-transparent! hover:text-foreground! text-wrap! break-all!';
 
 type LayerDataSource = {
   description?: string;

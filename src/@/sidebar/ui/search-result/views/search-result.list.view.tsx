@@ -73,10 +73,9 @@ export default function SearchResultList() {
           {item.type === SEARCH_DATA_TYPE.SCHOOL && <span className="type-name">
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */}
             {t(`${item.entityTypetag}-entity-label`, {
-              defaultValue: t(entityRegistry[item?.entityTypetag]?.slug ?? item?.entityTypetag, {
-                count: 1,
-              }),
-            })} <span className="light">{' '}{t('in')}{' '}</span>
+              count: 1,
+            })
+            } <span className="light">{' '}{t('in')}{' '}</span>
             <span className="highlight">{item?.adminName}{' '}/{' '}{t(item.countryName)}</span>
           </span>}
           {item.type === SEARCH_DATA_TYPE.ADMIN1 && <span className="type-name">
