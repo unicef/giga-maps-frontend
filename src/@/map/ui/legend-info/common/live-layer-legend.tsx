@@ -118,7 +118,7 @@ const LiveLayerLegend = ({
           {metricTitle}
         </div>
       </div>
-      {legends.values.map(
+      {legends?.values?.map(
         ({
           key,
           label,

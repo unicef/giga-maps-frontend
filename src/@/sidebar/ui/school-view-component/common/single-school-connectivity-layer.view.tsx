@@ -1,10 +1,10 @@
 import { useStore } from 'effector-react';
 
 import { Div } from '~/@/common/style/styled-component-style';
+import type { EntityType } from '~/@/entities';
 import { $stylePaintData } from '~/@/map/map.model';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import { getLiveSchoolDetails } from '~/@/sidebar/school-view.utils';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
 import {
   $isLoadingSchoolView,
   $schoolStats,
@@ -18,13 +18,18 @@ import { SchoolInformationWrapper } from '../styles/school-view-style';
 import CommonUIOnlySchoolConnectivityLayer from './common-ui-only-school-connectivity-layer';
 import { SchoolInformation } from './school-information.view';
 
-const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
+const SingleSchoolConnectivityLayer = ({
+  entityType,
+  schoolId,
+}: {
+  entityType: EntityType;
+  schoolId?: number;
+}) => {
   const isLoading = useStore($isLoadingSchoolView);
   const SchoolStatsTypes = useStore($schoolStats);
-  const selectedEntityType = useStore($selectedEntityType);
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
   const { global_benchmark: globalBenchmark, icon } =
-    selectedLayerDataByEntity[selectedEntityType] ?? {};
+    selectedLayerDataByEntity[entityType] ?? {};
   const schoolDetails = SchoolStatsTypes?.find((info) => info.id === schoolId);
   const stylePaintData = useStore($stylePaintData);
   const { value, color } = getLiveSchoolDetails({
@@ -47,12 +52,13 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
             unit={globalBenchmark?.convert_unit ?? ''}
             value={value}
           />
-          <WeekSlider />
+          <WeekSlider entityType={entityType} />
         </div>
       </Div>
       {schoolDetails && (
         <HistoryGraphAccordian
           schoolData={schoolDetails}
+          entityType={entityType}
           isLoading={isLoading}
         />
       )}
@@ -60,7 +66,7 @@ const SingleSchoolConnectivityLayer = ({ schoolId }: { schoolId?: number }) => {
       <SchoolInformationWrapper>
         <SchoolInformation schoolData={schoolDetails} />
       </SchoolInformationWrapper>
-      <FooterDataSourcePopUp isFooter={false} />
+      <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </div>
   );
 };

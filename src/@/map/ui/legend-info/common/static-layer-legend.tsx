@@ -34,14 +34,10 @@ const StaticLayerLegend = ({
 }) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
-  const {
-    currentLayerLegendsByEntity,
-    selectedLayerData,
-    selectedLayerDataByEntity,
-  } = useStore($layerUtils);
+  const { currentLayerLegendsByEntity, selectedLayerDataByEntity } =
+    useStore($layerUtils);
   const legends = currentLayerLegendsByEntity[entityType]!;
-  const currentSelectedLayerData =
-    selectedLayerDataByEntity[entityType] ?? selectedLayerData;
+  const currentSelectedLayerData = selectedLayerDataByEntity[entityType];
   const coverageStats = useStore($coverageStatsByEntity)[entityType] as {
     connected_schools?: Record<string, number>;
   } | null;
@@ -93,7 +89,7 @@ const StaticLayerLegend = ({
         ) : null}
       </div>
 
-      {legends.values.map(({ key, label, tooltip }) => {
+      {legends?.values?.map(({ key, label, tooltip }) => {
         const tooltipLabel =
           key === 'unknown' ? tooltip || `Doesn't match any criteria` : tooltip;
 

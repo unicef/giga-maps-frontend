@@ -21,7 +21,7 @@ import Sidebar from '../sidebar.view';
 import { fetchMockResponse } from '~/tests/fetchMock';
 import '~/core/i18n/instance';
 import { $country, $countryCode, $countries } from '~/@/country/country.model';
-import { $globalStats } from '~/@/map/map.model';
+import { $globalStatsByEntity } from '~/@/map/map.model';
 import layersData from '~/tests/data/layers-data';
 import countrySingleData from '~/tests/data/country.single.data';
 import globalStatusData from '~/tests/data/globalStatus.data';
@@ -47,9 +47,10 @@ vi.mock('@carbon/charts-react', () => ({
 
 // Mock HTMLCanvasElement.prototype.getContext for JSDOM compatibility
 if (typeof window !== 'undefined') {
-  window.HTMLCanvasElement.prototype.getContext = () => ({
-    measureText: () => ({ width: 10 }),
-  }) as any;
+  window.HTMLCanvasElement.prototype.getContext = () =>
+    ({
+      measureText: () => ({ width: 10 }),
+    }) as any;
 }
 
 describe('Sidebar', () => {
@@ -138,7 +139,15 @@ describe('Sidebar', () => {
 
     await act(async () => {
       ($country as any).setState(countrySingleData);
-      ($globalStats as any).setState(globalStatusData);
+      ($globalStatsByEntity as any).setState({
+        school: {
+          no_of_countries: globalStatusData.no_of_countries,
+          entities_total: globalStatusData.schools_connected,
+          connected_entities: globalStatusData.connected_schools,
+          connectivity_global_benchmark:
+            globalStatusData.connectivity_global_benchmark,
+        },
+      });
     });
 
     await act(async () => {
@@ -151,10 +160,14 @@ describe('Sidebar', () => {
 
     await fetchLayerListFx();
     const { container } = render(testWrapper(<Sidebar />));
-    
+
     // Find the 'Schools' text element and click its wrapping button trigger to expand the accordion
-    const schoolsTextElement = screen.getAllByText('Schools').find(el => el.closest('button'));
-    const schoolsTrigger = schoolsTextElement ? schoolsTextElement.closest('button') : null;
+    const schoolsTextElement = screen
+      .getAllByText('Schools')
+      .find((el) => el.closest('button'));
+    const schoolsTrigger = schoolsTextElement
+      ? schoolsTextElement.closest('button')
+      : null;
     if (schoolsTrigger) {
       fireEvent.click(schoolsTrigger);
     }

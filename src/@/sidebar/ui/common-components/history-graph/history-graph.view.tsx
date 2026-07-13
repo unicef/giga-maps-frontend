@@ -4,11 +4,7 @@ import { type ReactNode, useMemo, useRef } from 'react';
 import { Bar, BarChart, ReferenceLine, XAxis, YAxis } from 'recharts';
 
 import type { EntityType } from '~/@/entities';
-import {
-  $historyIntervalUnit,
-  $historyIntervalUnitByEntity,
-} from '~/@/sidebar/history-graph.model';
-import { $connectivityStats } from '~/@/sidebar/sidebar.model';
+import { $historyIntervalUnitByEntity } from '~/@/sidebar/history-graph.model';
 import type { LayerType } from '~/@/sidebar/types';
 import {
   ConnectivityStat,
@@ -210,29 +206,25 @@ const HistoryGraph = ({
   selectedLayerData,
 }: {
   connectivityStats?: ConnectivityStat | EntityConnectivityStat | null;
-  entityType?: EntityType;
+  entityType: EntityType;
   schoolData?: SchoolStatsType;
   isLoading?: boolean;
   selectedLayerData?: LayerType | null;
 }) => {
-  const selectedIntervalUnit = useStore($historyIntervalUnit);
   const historyIntervalUnitByEntity = useStore($historyIntervalUnitByEntity);
-  const intervalUnit = entityType
-    ? (historyIntervalUnitByEntity[entityType] ?? IntervalUnit.week)
-    : selectedIntervalUnit;
-  const fallbackConnectivityStats = useStore($connectivityStats);
+  const intervalUnit =
+    historyIntervalUnitByEntity[entityType] ?? IntervalUnit.week;
   const schoolView = useRoute(mapSchools);
   const useSchoolData = !entityType && schoolView;
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const isWeek = intervalUnit === IntervalUnit.week;
-  const currentConnectivityStats =
-    connectivityStats ?? fallbackConnectivityStats;
+  const currentConnectivityStats = connectivityStats;
   const infoBenchmark = useSchoolData
     ? schoolData?.benchmark_metadata
     : currentConnectivityStats?.benchmark_metadata;
   const benchmark = toNumber(
     infoBenchmark?.rounded_benchmark_value ??
-    selectedLayerData?.global_benchmark?.value,
+      selectedLayerData?.global_benchmark?.value,
   );
   const unit =
     infoBenchmark?.display_unit ||

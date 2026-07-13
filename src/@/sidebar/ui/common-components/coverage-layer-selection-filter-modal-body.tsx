@@ -1,17 +1,14 @@
 import { Checkbox, ModalBody } from '@carbon/react';
-import { $selectedEntityType } from '~/@/entities';
 import { useStore } from 'effector-react';
 import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
 import {
-  $coverageStats,
-  $coverageStatusAll,
+  $coverageStatsByEntity,
+  $coverageStatusAllByEntity,
   $layerUtils,
-  changeCoverage3g2g,
-  changeCoverage5g4g,
-  changeCoverageNoCoverage,
-  changeCoverageUnknown,
+  changeEntityCoverageStatus,
 } from '~/@/sidebar/sidebar.model';
+import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
 
 import { PopoverFilterContentCoverageConnectivityStatus } from './styles/layer-filter-modal.style';
 import {
@@ -21,24 +18,34 @@ import {
 import { useTranslation } from 'react-i18next';
 
 const CoverageLayerSelectionFilterModalBody = forwardRef(
-  function CoverageFilterBody(_props, ref) {
+  function CoverageFilterBody(
+    { entityType }: { entityType: import('~/@/entities').EntityType },
+    ref,
+  ) {
     const { t } = useTranslation();
-    const coverageStats = useStore($coverageStats);
-    const defaultStatus = useStore($coverageStatusAll);
+    const coverageStats = useStore($coverageStatsByEntity)[entityType];
+    const defaultStatus =
+      useStore($coverageStatusAllByEntity)[entityType] ?? {};
     const [currentStatus, setCurrentStatus] =
       useState<Record<string, boolean>>(defaultStatus);
     const legends = coverageStats?.connected_schools;
-    const selectedEntityType = useStore($selectedEntityType);
     const { currentLayerLegendsByEntity, selectedLayerDataByEntity } =
       useStore($layerUtils);
-    const entityLayerLegends = currentLayerLegendsByEntity[selectedEntityType]!;
-    const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
+    const entityLayerLegends = currentLayerLegendsByEntity[entityType]!;
+    const selectedLayerData = selectedLayerDataByEntity[entityType];
     const handleApply = useCallback(() => {
-      changeCoverage5g4g(currentStatus.good);
-      changeCoverage3g2g(currentStatus.moderate);
-      changeCoverageNoCoverage(currentStatus.bad);
-      changeCoverageUnknown(currentStatus.unknown);
-    }, [currentStatus]);
+      Object.entries(currentStatus).forEach(([key, value]) => {
+        changeEntityCoverageStatus({
+          entityType,
+          key: key as
+            | ConnectivityDistribution.good
+            | ConnectivityDistribution.moderate
+            | ConnectivityDistribution.bad
+            | ConnectivityDistribution.unknown,
+          value,
+        });
+      });
+    }, [currentStatus, entityType]);
 
     useImperativeHandle(ref, () => {
       return {

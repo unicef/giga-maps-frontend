@@ -149,7 +149,7 @@ const LegendPopup = ({
   );
 
   const activeLayerSummaryItems: LegendSummaryItem[] =
-    !isGlobalView && activeEntityLayerLegends.values.length
+    !isGlobalView && activeEntityLayerLegends?.values?.length
       ? activeEntityLayerLegends.values.map(({ key, label }) => ({
         color:
           activeEntityLayerLegends.colors[key] ??

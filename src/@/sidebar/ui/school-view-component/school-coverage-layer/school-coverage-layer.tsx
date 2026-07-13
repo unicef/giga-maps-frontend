@@ -1,30 +1,39 @@
-
-
 import { useStore } from 'effector-react';
 
 import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
 import SingleSchoolCoverageLayer from '../common/single-school-coverage-layer';
 import MultiSchoolLayerView from '../common/multi-school-layer.view';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
-import { $getSchoolParams, $layerUtils, $schoolStats } from '~/@/sidebar/sidebar.model';
+import {
+  $getSchoolParams,
+  $layerUtils,
+  $schoolStats,
+} from '~/@/sidebar/sidebar.model';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 
 const SchoolCoverageLayer = () => {
-  const { schoolIds = [0] } = useStore($getSchoolParams);
+  const { entityType, schoolIds = [0] } = useStore($getSchoolParams);
   const schoolStats = useStore($schoolStats);
-  const selectedEntityType = useStore($selectedEntityType);
   const { selectedLayerDataByEntity } = useStore($layerUtils);
-  const selectedLayerData = selectedLayerDataByEntity[selectedEntityType];
-  const isMoreThenOne = (schoolIds?.length || 0) > 1
+  const selectedLayerData = entityType
+    ? selectedLayerDataByEntity[entityType]
+    : null;
+  const isMoreThenOne = (schoolIds?.length || 0) > 1;
 
+  if (!entityType) return null;
   return (
     <>
       {/* <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} /> */}
       {!isMoreThenOne && <SingleSchoolCoverageLayer schoolId={schoolIds[0]} />}
-      {isMoreThenOne && <MultiSchoolLayerView schoolLength={schoolIds.length} schoolLayerList={schoolStats} />}
-      <FooterDataSourcePopUp isFooter={false} />
+      {isMoreThenOne && (
+        <MultiSchoolLayerView
+          entityType={entityType}
+          schoolLength={schoolIds.length}
+          schoolLayerList={schoolStats}
+        />
+      )}
+      <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </>
-  )
-}
+  );
+};
 
-export default SchoolCoverageLayer
+export default SchoolCoverageLayer;

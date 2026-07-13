@@ -4,54 +4,32 @@ import { ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
 import { EntityType } from '~/@/entities';
 import {
   $historyIntervalByEntity,
-  $historyInterval,
-  $historyIntervalUnit,
   $historyIntervalUnitByEntity,
   $isNextHistoryIntervalAvailableByEntity,
-  $isNextHistoryIntervalAvailable,
-  $lastAvailableDates,
   $lastAvailableDatesByEntity,
   changeEntityHistoryInterval,
-  changeHistoryInterval,
   nextEntityHistoryInterval,
-  nextHistoryInterval,
   previousEntityHistoryInterval,
-  previousHistoryInterval,
 } from '~/@/sidebar/history-graph.model';
 import { defaultInterval } from '~/@/sidebar/sidebar.constant';
 import { Button } from '~/components/ui/button';
 import { formatDateInterval } from '~/lib/date-fns-kit/format-date-interval';
+import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
-export default function WeekSlider({
-  entityType,
-}: {
-  entityType?: EntityType;
-}) {
-  const selectedIntervalUnit = useStore($historyIntervalUnit);
+export default function WeekSlider({ entityType }: { entityType: EntityType }) {
   const historyIntervalUnitByEntity = useStore($historyIntervalUnitByEntity);
-  const intervalUnit = entityType
-    ? (historyIntervalUnitByEntity[entityType] ?? selectedIntervalUnit)
-    : selectedIntervalUnit;
-  const selectedInterval = useStore($historyInterval);
+  const intervalUnit =
+    historyIntervalUnitByEntity[entityType] ?? IntervalUnit.week;
   const historyIntervalByEntity = useStore($historyIntervalByEntity);
-  const historyInterval = entityType
-    ? (historyIntervalByEntity[entityType] ?? selectedInterval)
-    : selectedInterval;
-  const selectedLastAvailableDates = useStore($lastAvailableDates);
+  const historyInterval =
+    historyIntervalByEntity[entityType] ?? defaultInterval();
   const lastAvailableDatesByEntity = useStore($lastAvailableDatesByEntity);
-  const lastAvailableDates = entityType
-    ? lastAvailableDatesByEntity[entityType]
-    : selectedLastAvailableDates;
-  const selectedIsNextIntervalAvailable = useStore(
-    $isNextHistoryIntervalAvailable,
-  );
+  const lastAvailableDates = lastAvailableDatesByEntity[entityType];
   const isNextIntervalAvailableByEntity = useStore(
     $isNextHistoryIntervalAvailableByEntity,
   );
-  const isNextIntervalAvailable = entityType
-    ? (isNextIntervalAvailableByEntity[entityType] ??
-      selectedIsNextIntervalAvailable)
-    : selectedIsNextIntervalAvailable;
+  const isNextIntervalAvailable =
+    isNextIntervalAvailableByEntity[entityType] ?? true;
   const formattedInterval = formatDateInterval(
     historyInterval,
     intervalUnit,
@@ -67,11 +45,7 @@ export default function WeekSlider({
         aria-label="Previous week"
         className="previous_week_button size-8! p-0! text-foreground! hover:bg-transparent!"
         onClick={() => {
-          if (entityType) {
-            previousEntityHistoryInterval(entityType);
-            return;
-          }
-          previousHistoryInterval();
+          previousEntityHistoryInterval(entityType);
         }}
         size="icon-sm"
         type="button"
@@ -86,11 +60,7 @@ export default function WeekSlider({
         aria-label="Next week"
         className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground! hover:bg-transparent!"
         onClick={() => {
-          if (entityType) {
-            nextEntityHistoryInterval(entityType);
-            return;
-          }
-          nextHistoryInterval();
+          nextEntityHistoryInterval(entityType);
         }}
         disabled={!isNextIntervalAvailable}
         size="icon-sm"
@@ -103,14 +73,10 @@ export default function WeekSlider({
         aria-label="Latest week"
         className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground! hover:bg-transparent!"
         onClick={() => {
-          if (entityType) {
-            changeEntityHistoryInterval({
-              entityType,
-              interval: currentAvailableDate,
-            });
-            return;
-          }
-          changeHistoryInterval(currentAvailableDate);
+          changeEntityHistoryInterval({
+            entityType,
+            interval: currentAvailableDate,
+          });
         }}
         disabled={historyInterval === currentAvailableDate}
         size="icon-sm"

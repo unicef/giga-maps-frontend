@@ -2,7 +2,12 @@ import { render, screen } from '@testing-library/react';
 import { testWrapper } from '~/tests/test-wrapper';
 import { useRoute } from '~/lib/router-effector';
 import { fetchLayerListFx } from '~/api/project-connect';
-import { $layersList, onSelectMainLayer, onToggleTimeplayer } from '~/@/sidebar/sidebar.model';
+import {
+  $layersList,
+  onSelectEntityMainLayer,
+  onToggleTimeplayer,
+} from '~/@/sidebar/sidebar.model';
+import { changeActiveEntityTypes, EntityType } from '~/@/entities';
 import { LayerTypeChoices } from '~/@/sidebar/types';
 import TimeplayerButton from '../timeplayer-button';
 import { fetchMockResponse } from '~/tests/fetchMock';
@@ -11,24 +16,41 @@ import { getSchoolAvailableDates } from '~/@/sidebar/effects/search-country-fx';
 
 describe('TimeplayerButton', () => {
   beforeEach(() => {
-    fetchMock.mockResponse(fetchMockResponse)
+    fetchMock.mockResponse(fetchMockResponse);
   });
 
   test('does not render when admin1 is present', async () => {
-    mapCountry.navigate({ code: 'AR', path: "Admin1" });
+    mapCountry.navigate({ code: 'AR', path: 'Admin1' });
     await fetchLayerListFx();
-    await onSelectMainLayer(5);
-    await getSchoolAvailableDates({ query: "" });
+    changeActiveEntityTypes([EntityType.SCHOOL]);
+    await onSelectEntityMainLayer({ [EntityType.SCHOOL]: 5 });
+    await getSchoolAvailableDates({ query: '' });
     render(testWrapper(<TimeplayerButton />));
     expect(screen.queryByText('Timeplayer')).not.toBeInTheDocument();
   });
 
   test('renders TimeplayerButton when all conditions are met', async () => {
     mapCountry.navigate({ code: 'BR' });
-    $layersList.setState([{ id: 1, type: LayerTypeChoices.LIVE } as any]);
-    onSelectMainLayer(1);
-    await getSchoolAvailableDates({ query: "" });
+    changeActiveEntityTypes([EntityType.SCHOOL]);
+    $layersList.setState([
+      {
+        id: 1,
+        type: LayerTypeChoices.LIVE,
+        entity_type__code: EntityType.SCHOOL,
+      } as any,
+    ]);
+    onSelectEntityMainLayer({ [EntityType.SCHOOL]: 1 });
+    await getSchoolAvailableDates({ query: '' });
     render(testWrapper(<TimeplayerButton />));
     expect(screen.getByLabelText(/timeplayer/i)).toBeInTheDocument();
+  });
+
+  test('does not choose one entity when multiple entities are active', () => {
+    mapCountry.navigate({ code: 'BR' });
+    changeActiveEntityTypes([EntityType.SCHOOL, EntityType.HEALTH]);
+
+    render(testWrapper(<TimeplayerButton />));
+
+    expect(screen.queryByLabelText(/timeplayer/i)).not.toBeInTheDocument();
   });
 });

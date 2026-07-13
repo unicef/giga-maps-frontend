@@ -13,8 +13,8 @@ export const getEntityTypeCodeParam = (
 
   const selectedEntityTypes = allEntityTypes.length
     ? allEntityTypes.filter((entityType) =>
-        activeEntityTypes.includes(entityType),
-      )
+      activeEntityTypes.includes(entityType),
+    )
     : activeEntityTypes;
   const allEntitiesSelected =
     Boolean(allEntityTypes.length) &&

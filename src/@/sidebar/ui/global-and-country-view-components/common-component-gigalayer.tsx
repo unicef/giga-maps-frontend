@@ -27,7 +27,7 @@ const CommonComponentGigaLayer = ({
   entityType,
   isCountryView = false,
 }: {
-  entityType?: EntityType;
+  entityType: EntityType;
   isCountryView?: boolean;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);

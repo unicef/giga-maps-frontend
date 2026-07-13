@@ -9,7 +9,10 @@ interface LayerWithEntityCode {
  * Returns true if the layer has no specific entity type code,
  * or if it matches the target entity type.
  */
-export const isLayerForEntity = (layer: LayerWithEntityCode, entityType: EntityType): boolean => {
+export const isLayerForEntity = (
+  layer: LayerWithEntityCode,
+  entityType: EntityType,
+): boolean => {
   return (
     !layer.entity_type__code ||
     layer.entity_type__code.toLowerCase() === String(entityType)
@@ -37,14 +40,14 @@ export const formatEntityTypeLabel = (entityType: EntityType): string =>
 
 /**
  * Resolves the list of entity types associated with a given layer.
- * Falls back to activeEntityTypes or [EntityType.SCHOOL] if no specific entity type is defined on the layer.
+ * Uses activeEntityTypes when no specific entity type is defined on the layer.
  */
 export const getLayerEntityTypes = (
   layer: LayerWithEntityCode,
-  activeEntityTypes: EntityType[]
+  activeEntityTypes: EntityType[],
 ): EntityType[] => {
   if (layer.entity_type__code) {
     return [layer.entity_type__code.toLowerCase() as EntityType];
   }
-  return activeEntityTypes.length ? activeEntityTypes : [EntityType.SCHOOL];
+  return activeEntityTypes;
 };

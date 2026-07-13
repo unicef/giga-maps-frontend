@@ -7,7 +7,6 @@ import {
   $activeEntityTypes,
   $entityConfigMap,
   $entityTypesFiltered,
-  changeSelectedEntityType,
 } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
@@ -43,7 +42,6 @@ type EntitySummaryAccordionProps = {
   ) => ReactNode;
   connectivityStatsByEntity: EntitiesConnectivityStatsResponse | null;
   isLoadingConnectivityStats?: boolean;
-  selectEntityOnExpand?: boolean;
   showSummaryRowsWhenExpanded?: boolean;
 };
 
@@ -51,7 +49,6 @@ const EntitySummaryAccordion = ({
   children,
   connectivityStatsByEntity,
   isLoadingConnectivityStats = false,
-  selectEntityOnExpand = true,
   showSummaryRowsWhenExpanded = false,
 }: EntitySummaryAccordionProps) => {
   const globalStatsByEntity = useStore($globalStatsByEntity);
@@ -115,10 +112,6 @@ const EntitySummaryAccordion = ({
   const handleAccordionChange = (nextValue?: string) => {
     const nextAccordion = nextValue ? (nextValue as EntityType) : null;
     setActiveAccordion(nextAccordion);
-
-    if (nextAccordion && selectEntityOnExpand) {
-      changeSelectedEntityType(nextAccordion);
-    }
   };
 
   return (

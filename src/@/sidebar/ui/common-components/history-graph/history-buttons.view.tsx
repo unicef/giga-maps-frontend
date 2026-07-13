@@ -1,10 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '~/@/entities';
-import {
-  changeEntityHistoryIntervalUnit,
-  changeHistoryIntervalUnit,
-} from '~/@/sidebar/history-graph.model';
+import { changeEntityHistoryIntervalUnit } from '~/@/sidebar/history-graph.model';
 import { cn } from '~/lib/cn';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
@@ -15,16 +12,12 @@ export default function HistoryButtons({
   entityType,
   isWeek,
 }: {
-  readonly entityType?: EntityType;
+  readonly entityType: EntityType;
   readonly isWeek: boolean;
 }) {
   const { t } = useTranslation();
   const changeUnit = (unit: IntervalUnit) => {
-    if (entityType) {
-      changeEntityHistoryIntervalUnit({ entityType, unit });
-      return;
-    }
-    changeHistoryIntervalUnit(unit);
+    changeEntityHistoryIntervalUnit({ entityType, unit });
   };
 
   return (

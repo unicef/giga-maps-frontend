@@ -1,20 +1,48 @@
 import { useStore } from 'effector-react';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { $countryCode, setSchoolFocusLatLng } from '~/@/country/country.model';
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
-import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '~/@/map/map.model';
+import {
+  $dublicateSchoolClickData,
+  $stylePaintData,
+  setSchoolIdsOnPopupClickDot,
+} from '~/@/map/map.model';
 import { UNKNOWN } from '~/@/map/map.types';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import DublicateSchoolLoader from '~/@/map/ui/map-school-popup/dublicate-school-popup-loader.view';
-import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from '~/@/map/ui/map-school-popup/school-popup.style';
-import { $getSchoolParams, $layerUtils, $schoolStats, schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import {
+  ConnectivityCircleWrapper,
+  Label,
+  LiveContent,
+  LiveStatusRow,
+} from '~/@/map/ui/map-school-popup/school-popup.style';
+import {
+  $getSchoolParams,
+  $layerUtils,
+  $schoolStats,
+  schoolStatsMap,
+} from '~/@/sidebar/sidebar.model';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
 import { PointCoordinates } from '~/core/global-types';
 import { ConnectivityStatusNames } from '../../global-and-country-view-components/container/layer-view.constant';
-import { DublicateSchoolList, SchoolInternetSpeed, SchoolItemCount, SchoolListItem, SchoolName, SidebarDublicateSchoolWrapper, ToggleLink, TotalCountLabel } from './dublicate-school-list.style';
+import {
+  DublicateSchoolList,
+  SchoolInternetSpeed,
+  SchoolItemCount,
+  SchoolListItem,
+  SchoolName,
+  SidebarDublicateSchoolWrapper,
+  ToggleLink,
+  TotalCountLabel,
+} from './dublicate-school-list.style';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 
 type Props = {
@@ -33,21 +61,26 @@ export default function SidebarDublicateSchoolList({
   const schoolStats = useStore($schoolStats); // raw clicked school payload
   const selectedSchool = useMemo(() => schoolStats?.[0], [schoolStats]);
 
-  const popupSchoolsFromStore = useStore($dublicateSchoolClickData) as SchoolStatsType[] | undefined;
+  const popupSchoolsFromStore = useStore($dublicateSchoolClickData) as
+    | SchoolStatsType[]
+    | undefined;
   const fetchPending = useStore(fetchDublicateSchoolPopupDataFx.pending);
 
   // effector stores & flags
   const stylePaintData = useStore($stylePaintData);
   const layerUtils = useStore($layerUtils);
   const countryCode = useStore($countryCode);
-  const selectedEntityType = useStore($selectedEntityType);
   const { entityType } = useStore($getSchoolParams);
 
   // derived from layer utils (kept from your code)
-  const activeEntityType = entityType ?? selectedEntityType;
-  const currentLayerTypeUtils = layerUtils?.currentLayerTypeUtilsByEntity?.[activeEntityType] ?? {};
-  const selectedLayerData = layerUtils?.selectedLayerDataByEntity?.[activeEntityType];
-  const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
+  const currentLayerTypeUtils = entityType
+    ? layerUtils?.currentLayerTypeUtilsByEntity?.[entityType]
+    : undefined;
+  const selectedLayerData = entityType
+    ? layerUtils?.selectedLayerDataByEntity?.[entityType]
+    : null;
+  const isLive = currentLayerTypeUtils?.isLive ?? false;
+  const isStatic = currentLayerTypeUtils?.isStatic ?? false;
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';
   const formatConnectivityValue = (value: number, valueUnit?: string) => {
@@ -58,16 +91,23 @@ export default function SidebarDublicateSchoolList({
   // derive duplicateIds from the first schoolClickData item (like your old logic)
   const duplicateIds: number[] = React.useMemo(() => {
     if (!selectedSchool) return [];
-    const ids = [selectedSchool.id, ...selectedSchool?.schools_at_same_location?.school_ids ?? []];
+    const ids = [
+      selectedSchool.id,
+      ...(selectedSchool?.schools_at_same_location?.school_ids ?? []),
+    ];
     return ids;
   }, [selectedSchool]);
 
   const totalIds = duplicateIds.length;
   // local state: accumulated fetched schools (mapped SchoolStatsType objects)
-  const [accumulatedSchools, setAccumulatedSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
+  const [accumulatedSchools, setAccumulatedSchools] = useState<
+    ReturnType<typeof schoolStatsMap>[]
+  >([]);
   const nextIndexRef = useRef<number>(0); // pointer to next id index to request
   const isFetchingRef = useRef<boolean>(false); // guard
-  const lastRequestedRangeRef = useRef<{ from: number; to: number } | null>(null);
+  const lastRequestedRangeRef = useRef<{ from: number; to: number } | null>(
+    null,
+  );
 
   // track which ids we have asked for (so we ignore stale payloads that belong to previous popup)
   const requestedIdsSetRef = useRef<Set<number>>(new Set());
@@ -157,7 +197,9 @@ export default function SidebarDublicateSchoolList({
 
       if (relevantNewItems.length > 0) {
         setAccumulatedSchools((prev) => {
-          const normalized = relevantNewItems.map((item) => schoolStatsMap(item));
+          const normalized = relevantNewItems.map((item) =>
+            schoolStatsMap(item),
+          );
           const merged = [...prev, ...normalized];
           return merged;
         });
@@ -170,7 +212,9 @@ export default function SidebarDublicateSchoolList({
   }, [popupSchoolsFromStore?.length, fetchPending]);
 
   // If Show more button visible dont allow infinite scroll to show loader
-  const hasMore = isShowMoreButton ? false : accumulatedSchools.length < totalIds;
+  const hasMore = isShowMoreButton
+    ? false
+    : accumulatedSchools.length < totalIds;
 
   // UI click: Show more (when infinite disabled)
   const handleShowMoreClick = () => {
@@ -212,12 +256,16 @@ export default function SidebarDublicateSchoolList({
         >
           {accumulatedSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
-            const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(s?.liveAvg ?? 0, unit) : t('unknown');
+            const connectivityValue = isLiveNotUnknown
+              ? formatConnectivityValue(s?.liveAvg ?? 0, unit)
+              : t('unknown');
             const staticValue = getStaticValue(s?.staticValue);
 
-            const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
+            const connecitivityColor =
+              stylePaintData[s?.connectivityType ?? UNKNOWN];
             const staticColor = stylePaintData[s?.staticType ?? UNKNOWN];
-            const connecitivityStatusColor = stylePaintData[s?.connectivityStatus ?? UNKNOWN];
+            const connecitivityStatusColor =
+              stylePaintData[s?.connectivityStatus ?? UNKNOWN];
 
             return (
               <SchoolListItem key={s.id} aria-label={`Open ${s.name}`}>
@@ -226,7 +274,9 @@ export default function SidebarDublicateSchoolList({
                     handleGoTop();
                     if (!entityType) return;
                     navigateToEntity(entityType, countryCode, s.id);
-                    setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
+                    setSchoolFocusLatLng(
+                      s.geopoint.coordinates as PointCoordinates,
+                    );
                   }}
                   aria-label={`Open ${s.name}`}
                   title={s.name}
@@ -238,7 +288,7 @@ export default function SidebarDublicateSchoolList({
                   <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
                     <EntityLegendIndicator
                       color={isStatic ? staticColor : connecitivityStatusColor}
-                      entityType={activeEntityType}
+                      entityType={entityType!}
                       glowColor={
                         !isStatic && s?.isRealTime
                           ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
@@ -250,12 +300,24 @@ export default function SidebarDublicateSchoolList({
                   <LiveContent>
                     {isLive && s?.isRealTime && (
                       <LiveStatusRow>
-                        <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
+                        <Label
+                          $color={connecitivityColor}
+                          style={{ whiteSpace: 'nowrap' }}
+                        >
+                          {connectivityValue}
+                        </Label>
                       </LiveStatusRow>
                     )}
-                    {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
+                    {isStatic && (
+                      <Label $color={staticColor}>{staticValue}</Label>
+                    )}
                     {!isStatic && (!isLive || !s?.isRealTime) && (
-                      <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[s?.connectivityStatus])}</Label>
+                      <Label
+                        $color={connecitivityStatusColor}
+                        style={{ whiteSpace: 'nowrap' }}
+                      >
+                        {t(ConnectivityStatusNames[s?.connectivityStatus])}
+                      </Label>
                     )}
                   </LiveContent>
                 </SchoolInternetSpeed>
@@ -265,8 +327,12 @@ export default function SidebarDublicateSchoolList({
         </InfiniteScroll>
 
         {totalIds > 5 && isShowMoreButton && (
-          <ToggleLink onClick={() => handleShowMoreClick()} aria-label={t("show-more")} type="button">
-            {t("show-more")}
+          <ToggleLink
+            onClick={() => handleShowMoreClick()}
+            aria-label={t('show-more')}
+            type="button"
+          >
+            {t('show-more')}
           </ToggleLink>
         )}
       </DublicateSchoolList>

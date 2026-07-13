@@ -6,14 +6,25 @@
 
 // Types
 export { EntityType } from './types/base-entity.type';
-export type { BaseEntity, EntityStatistics, EntityInfoType } from './types/base-entity.type';
+export type {
+  BaseEntity,
+  EntityStatistics,
+  EntityInfoType,
+} from './types/base-entity.type';
 export type { AnyEntityType } from './types/entity-types';
-export type { SchoolEntityType, SchoolStatistics } from './types/school-entity.type';
+export type {
+  SchoolEntityType,
+  SchoolStatistics,
+} from './types/school-entity.type';
 export type { HealthFacilityType } from './types/health-entity.type';
 export { ENTITY_TYPES, isValidEntityType } from './types/entity-types';
 
 // Config
-export type { EntityConfig, EntityFieldConfig, MarkerType } from './config/entity-config.types';
+export type {
+  EntityConfig,
+  EntityFieldConfig,
+  MarkerType,
+} from './config/entity-config.types';
 export { DEFAULT_ENTITY_REGISTRY } from './config/entity-registry';
 
 // Utils
@@ -54,10 +65,6 @@ export {
   $activeEntityTypes,
   changeActiveEntityTypes,
   toggleEntityType,
-  // Selected entity type
-  $selectedEntityType,
-  changeSelectedEntityType,
-  $selectedEntityConfig,
   // Popup data
   // Loading
   $entityLoading,

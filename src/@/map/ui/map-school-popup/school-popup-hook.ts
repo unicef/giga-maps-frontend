@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { $countryCode } from '~/@/country/country.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
-  $historyInterval,
-  $historyIntervalUnit,
+  $historyIntervalByEntity,
+  $historyIntervalUnitByEntity,
 } from '~/@/sidebar/history-graph.model';
 import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
+import { defaultInterval } from '~/@/sidebar/sidebar.constant';
 import { $schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { $mapRoutes } from '~/core/routes';
@@ -34,7 +35,7 @@ const useSchoolPopupData = () => {
     stylePaintData,
     feature: schoolStats,
   } = useStore($schoolPopupData);
-  const currentEntityType = activePopup?.entityType ?? EntityType.SCHOOL;
+  const currentEntityType = activePopup?.entityType;
   const {
     selectedLayerDataByEntity,
     currentLayerTypeUtilsByEntity,
@@ -43,23 +44,34 @@ const useSchoolPopupData = () => {
     connectivityBenchMarksByEntity,
     isSchoolBenchmarkByEntity,
   } = layerUtils;
-  const selectedLayerData = selectedLayerDataByEntity[currentEntityType];
+  const selectedLayerData = currentEntityType
+    ? selectedLayerDataByEntity[currentEntityType]
+    : undefined;
   const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[
-    currentEntityType
+    currentEntityType ?? ('' as EntityType)
   ] ?? {
     isLive: false,
     isStatic: false,
     isSchoolStatus: false,
   };
   const entityConnectivityBenchmark =
-    connectivityBenchMarksByEntity[currentEntityType] ??
-    ConnectivityBenchMarks.global;
+    (currentEntityType
+      ? connectivityBenchMarksByEntity[currentEntityType]
+      : undefined) ?? ConnectivityBenchMarks.global;
   const isEntityBenchmark =
-    isSchoolBenchmarkByEntity[currentEntityType] ?? false;
+    (currentEntityType
+      ? isSchoolBenchmarkByEntity[currentEntityType]
+      : false) ?? false;
   const { isLive, isStatic } = currentLayerTypeUtils;
   const { global_benchmark } = selectedLayerData ?? {};
-  const intervalUnit = useStore($historyIntervalUnit);
-  const interval = useStore($historyInterval);
+  const intervalUnitByEntity = useStore($historyIntervalUnitByEntity);
+  const intervalByEntity = useStore($historyIntervalByEntity);
+  const intervalUnit = currentEntityType
+    ? (intervalUnitByEntity[currentEntityType] ?? 'week')
+    : 'week';
+  const interval = currentEntityType
+    ? (intervalByEntity[currentEntityType] ?? defaultInterval())
+    : defaultInterval();
   const formattedInterval = formatDateInterval(interval, intervalUnit, false);
   const formatConnectivityValue = (value: number, unit?: string) => {
     if (!unit) return String(value);

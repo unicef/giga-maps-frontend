@@ -44,7 +44,7 @@ export const MapSchoolPopup = () => {
     entityType,
   } = useSchoolPopupData();
 
-  if (!features?.length) return null;
+  if (!entityType || !features?.length) return null;
 
   const entityLabel = entityType
     ? t(`${entityType}-entity-label`, {
@@ -113,7 +113,9 @@ export const MapSchoolPopup = () => {
                       <LiveContainer>
                         <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
                           <EntityLegendIndicator
-                            color={isStatic ? staticColor : connecitivityStatusColor}
+                            color={
+                              isStatic ? staticColor : connecitivityStatusColor
+                            }
                             entityType={entityType}
                             glowColor={
                               !isStatic && feature?.isRealTime

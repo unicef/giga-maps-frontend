@@ -19,12 +19,9 @@ import {
 import {
   $activeEntityTypes,
   $entityTypesFiltered,
-  $selectedEntityType,
-  changeSelectedEntityType,
 } from '~/@/entities/models/entity.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import {
-  fetchConnectivityLayerFx,
   fetchCountriesFx,
   fetchCountryFx,
   fetchEntitiesConnectivityStatsFx,
@@ -35,14 +32,19 @@ import {
   fetchSchoolLayerInfoFx,
 } from '~/api/project-connect';
 import {
-  ConnectivityStat,
   CountryBasic,
   EntitiesConnectivityStatsResponse,
   EntitiesLayerInfoResponse,
   SchoolStatsType,
 } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
-import { $mapRoutes, mapEntity, mapOverview, mapSchools, router } from '~/core/routes';
+import {
+  $mapRoutes,
+  mapEntity,
+  mapOverview,
+  mapSchools,
+  router,
+} from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 import { evaluateExpression } from '~/lib/utils';
 import {
@@ -115,12 +117,12 @@ export const $countriesPending = fetchCountriesFx.pending;
 
 export const changeConnectivityIndicator = createEvent<Layers>();
 
-export const changeConnectivityBenchmark =
-  createEvent<ConnectivityBenchMarks>();
 export const changeEntityConnectivityBenchmark = createEvent<{
   entityType: EntityType;
   benchmark: ConnectivityBenchMarks;
 }>();
+export const setConnectivityBenchmarksByEntity =
+  createEvent<EntityStoreMap<ConnectivityBenchMarks>>();
 const defaultConnectivityBenchmarkByEntity = {
   [EntityType.SCHOOL]: ConnectivityBenchMarks.global,
   [EntityType.HEALTH]: ConnectivityBenchMarks.global,
@@ -129,33 +131,12 @@ export const $connectivityBenchMarkByEntity = createStore<
   EntityStoreMap<ConnectivityBenchMarks>
 >(defaultConnectivityBenchmarkByEntity);
 $connectivityBenchMarkByEntity.on(
-  changeConnectivityBenchmark,
-  (state, benchmark) => {
-    const selectedEntityType = $selectedEntityType.getState();
-    return {
-      ...state,
-      [selectedEntityType]: benchmark,
-    };
-  },
-);
-$connectivityBenchMarkByEntity.on(
   changeEntityConnectivityBenchmark,
   (state, { entityType, benchmark }) => ({
     ...state,
     [entityType]: benchmark,
   }),
 );
-export const $connectivityBenchMark = combine(
-  $connectivityBenchMarkByEntity,
-  $selectedEntityType,
-  (connectivityBenchMarkByEntity, selectedEntityType) =>
-    getEntityValue(
-      connectivityBenchMarkByEntity,
-      selectedEntityType,
-      ConnectivityBenchMarks.global,
-    ),
-);
-
 export const $isMapTab = createStore(true);
 
 export const $connectivityStatsByEntity =
@@ -225,42 +206,6 @@ $connectivityStatsByEntity.on(
   },
 );
 
-export const $connectivityStats = createStore<ConnectivityStat | null>(null);
-$connectivityStats.on(fetchConnectivityLayerFx.doneData, setPayload);
-
-const toConnectivityStat = (
-  stat: Record<string, any> | null | undefined,
-): ConnectivityStat | null => {
-  if (!stat) return null;
-
-  return {
-    benchmark_metadata: stat.benchmark_metadata,
-    countries_with_realtime_data: stat.countries_with_realtime_data ?? 0,
-    graph_data: stat.graph_data ?? [],
-    is_data_synced: stat.is_data_synced ?? false,
-    live_avg: stat.live_avg ?? 0,
-    live_avg_connectivity: stat.live_avg_connectivity ?? UNKNOWN,
-    no_of_schools_measure:
-      stat.no_of_schools_measure ?? stat.no_of_entities_measure ?? 0,
-    real_time_connected_schools:
-      stat.real_time_connected_schools ??
-      stat.real_time_connected_entities ??
-      {},
-    school_with_realtime_data:
-      stat.school_with_realtime_data ?? stat.entity_with_realtime_data ?? 0,
-  };
-};
-
-$connectivityStats.on(fetchEntitiesLayerInfoFx.doneData, (state, payload) => {
-  const stat = payload?.[$selectedEntityType.getState()];
-  return hasConnectivityLayerInfo(stat) ? toConnectivityStat(stat) : state;
-});
-$connectivityStats.on(changeSelectedEntityType, (_, entityType) => {
-  return toConnectivityStat($countryLayerInfoByEntity.getState()?.[entityType]);
-});
-
-export const $coverageStats = createStore<CoverageStat | null>(null);
-
 export const $coverageStatsByEntity = createStore<
   Partial<Record<EntityType, CoverageStat>>
 >({});
@@ -304,22 +249,10 @@ $coverageStatsByEntity.on(
     );
   },
 );
-// $coverageStats.on(fetchEntitiesLayerInfoFx.doneData, (state, payload) => {
-//   const stat = payload?.[$selectedEntityType.getState()];
-//   return hasCoverageLayerInfo(stat) ? toCoverageStat(stat) : state;
-// });
-// $coverageStats.on(changeSelectedEntityType, (_, entityType) => {
-//   return toCoverageStat($coverageStatsByEntity.getState()?.[entityType]);
-// });
-
 export const onChangeMenu = createEvent<boolean>();
 export const $isMenuOpen = createStore(false);
 $isMenuOpen.on(onChangeMenu, setPayload);
 
-export const changeConnectivitySpeedGood = createEvent<boolean>();
-export const changeConnectivitySpeedModerate = createEvent<boolean>();
-export const changeConnectivitySpeednoInternet = createEvent<boolean>();
-export const changeConnectivitySpeedUnknown = createEvent<boolean>();
 export const changeEntityConnectivitySpeed = createEvent<{
   entityType: EntityType;
   key:
@@ -342,74 +275,6 @@ export const $connectivitySpeedFilterByEntity = createStore<
   [EntityType.HEALTH]: defaultConnectivitySpeedFilter,
 });
 $connectivitySpeedFilterByEntity.on(
-  changeConnectivitySpeedGood,
-  (state, value) => {
-    const selectedEntityType = $selectedEntityType.getState();
-    return {
-      ...state,
-      [selectedEntityType]: {
-        ...getEntityValue(
-          state,
-          selectedEntityType,
-          defaultConnectivitySpeedFilter,
-        ),
-        [ConnectivityDistribution.good]: value,
-      },
-    };
-  },
-);
-$connectivitySpeedFilterByEntity.on(
-  changeConnectivitySpeedModerate,
-  (state, value) => {
-    const selectedEntityType = $selectedEntityType.getState();
-    return {
-      ...state,
-      [selectedEntityType]: {
-        ...getEntityValue(
-          state,
-          selectedEntityType,
-          defaultConnectivitySpeedFilter,
-        ),
-        [ConnectivityDistribution.moderate]: value,
-      },
-    };
-  },
-);
-$connectivitySpeedFilterByEntity.on(
-  changeConnectivitySpeednoInternet,
-  (state, value) => {
-    const selectedEntityType = $selectedEntityType.getState();
-    return {
-      ...state,
-      [selectedEntityType]: {
-        ...getEntityValue(
-          state,
-          selectedEntityType,
-          defaultConnectivitySpeedFilter,
-        ),
-        [ConnectivityDistribution.bad]: value,
-      },
-    };
-  },
-);
-$connectivitySpeedFilterByEntity.on(
-  changeConnectivitySpeedUnknown,
-  (state, value) => {
-    const selectedEntityType = $selectedEntityType.getState();
-    return {
-      ...state,
-      [selectedEntityType]: {
-        ...getEntityValue(
-          state,
-          selectedEntityType,
-          defaultConnectivitySpeedFilter,
-        ),
-        [ConnectivityDistribution.unknown]: value,
-      },
-    };
-  },
-);
-$connectivitySpeedFilterByEntity.on(
   changeEntityConnectivitySpeed,
   (state, { entityType, key, value }) => ({
     ...state,
@@ -419,40 +284,6 @@ $connectivitySpeedFilterByEntity.on(
     },
   }),
 );
-const getSelectedConnectivitySpeedValue =
-  (key: keyof typeof defaultConnectivitySpeedFilter) =>
-    (
-      connectivitySpeedFilterByEntity: EntityStoreMap<
-        typeof defaultConnectivitySpeedFilter
-      >,
-      selectedEntityType: EntityType,
-    ) =>
-      getEntityValue(
-        connectivitySpeedFilterByEntity,
-        selectedEntityType,
-        defaultConnectivitySpeedFilter,
-      )[key];
-export const $connectivitySpeedGood = combine(
-  $connectivitySpeedFilterByEntity,
-  $selectedEntityType,
-  getSelectedConnectivitySpeedValue(ConnectivityDistribution.good),
-);
-export const $connectivitySpeedModerate = combine(
-  $connectivitySpeedFilterByEntity,
-  $selectedEntityType,
-  getSelectedConnectivitySpeedValue(ConnectivityDistribution.moderate),
-);
-export const $connectivitySpeednoInternet = combine(
-  $connectivitySpeedFilterByEntity,
-  $selectedEntityType,
-  getSelectedConnectivitySpeedValue(ConnectivityDistribution.bad),
-);
-export const $connectivitySpeedUnknown = combine(
-  $connectivitySpeedFilterByEntity,
-  $selectedEntityType,
-  getSelectedConnectivitySpeedValue(ConnectivityDistribution.unknown),
-);
-
 // layer model
 export const $layersList = createStore<LayerType[]>([]);
 $layersList.on(fetchLayerListFx.doneData, setPayloadResults);
@@ -499,17 +330,6 @@ $statusLayerIdByEntity.on(onSelectEntityStatusLayer, (state, payload) => ({
   ...state,
   ...payload,
 }));
-export const $schoolStatusSelectedLayer = combine(
-  $statusLayerIdByEntity,
-  $selectedEntityType,
-  (statusLayerIdByEntity, selectedEntityType) =>
-    getEntityValue(
-      statusLayerIdByEntity,
-      selectedEntityType,
-      getEntityStatusId(selectedEntityType),
-    ),
-);
-
 // TODO: remove onSelectMainLayer compatibility event when remaining tests move to onSelectEntityMainLayer.
 export const onSelectMainLayer = createEvent<number | null>();
 export const onSelectEntityMainLayer =
@@ -531,7 +351,6 @@ export const $globalLayerDataByEntity = $layersList.map((layers) => {
     getLayerEntityTypes(layer, []).forEach((entityType) => {
       if (
         layer?.type === LayerTypeChoices.LIVE &&
-        !layer.created_by &&
         (layer.code === 'DOWNLOAD' ||
           layer.code === `DOWNLOAD_${entityType?.toUpperCase()}`)
       ) {
@@ -548,7 +367,6 @@ export const $coverageLayerDataByEntity = $layersList.map((layers) => {
     getLayerEntityTypes(layer, []).forEach((entityType) => {
       if (
         layer?.type === LayerTypeChoices.STATIC &&
-        layer.created_by &&
         Object.values(layer.data_source_column ?? {})[0].name ===
         'coverage_type'
       ) {
@@ -693,18 +511,16 @@ export const $currentLayerCountryDataSource = combine(
   $country,
   (selectedLayerDataByEntity, activeEntityTypes, country) => {
     if (!country) return {} as EntityStoreMap<any>;
-    return activeEntityTypes.reduce(
-      (acc, entityType) => {
-        const selectedData = selectedLayerDataByEntity[entityType];
-        acc[entityType] = (
+    return activeEntityTypes.reduce((acc, entityType) => {
+      const selectedData = selectedLayerDataByEntity[entityType];
+      acc[entityType] =
+        (
           selectedData?.active_countries_list?.find(
             (activeLayers) => activeLayers.country === country.id,
           ) as { data_sources?: any } | undefined
         )?.data_sources || null;
-        return acc;
-      },
-      {} as EntityStoreMap<any>,
-    );
+      return acc;
+    }, {} as EntityStoreMap<any>);
   },
 );
 
@@ -744,7 +560,6 @@ export const $currentLayerTypeUtilsByEntity = combine(
     );
   },
 );
-
 
 const buildCurrentLayerLegends = ({
   connectivityBenchmark,
@@ -814,7 +629,6 @@ export const $currentLayerLegendsByEntity = combine(
     countryActiveLayersDataById: $countryActiveLayersDataById,
     connectivityBenchmarkByEntity: $connectivityBenchMarkByEntity,
     activeEntityTypes: $activeEntityTypes,
-    entityTypesFiltered: $entityTypesFiltered,
   },
   ({
     selectedLayerDataByEntity,
@@ -823,13 +637,8 @@ export const $currentLayerLegendsByEntity = combine(
     connectivityBenchmarkByEntity,
     countryActiveLayersDataById,
     activeEntityTypes,
-    entityTypesFiltered,
   }) => {
-    const entityTypes = new Set<EntityType>([
-      ...(activeEntityTypes.length ? activeEntityTypes : entityTypesFiltered),
-      ...(Object.keys(selectedLayerDataByEntity) as EntityType[]),
-    ]);
-    return Array.from(entityTypes).reduce(
+    return activeEntityTypes.reduce(
       (acc, currentEntityType) => {
         acc[currentEntityType] = buildCurrentLayerLegends({
           selectedLayerData: selectedLayerDataByEntity[currentEntityType],
@@ -850,15 +659,18 @@ export const $currentLayerLegendsByEntity = combine(
   },
 );
 
-
-function buildBenchmarkUtils(
+export function buildBenchmarkUtils(
   countryBenchmark: Record<string, any> | null | undefined,
   selectedLayerData: LayerType | null | undefined,
   connectivityBenchMark: ConnectivityBenchMarks,
   countryConnectivityNames: Record<string, string>,
-  mapRoutes: typeof $mapRoutes extends { getState: () => infer T } ? T : never
+  mapRoutes: typeof $mapRoutes extends { getState: () => infer T } ? T : never,
 ) {
-  if (!mapRoutes.map && (!selectedLayerData || !isLiveLayer(selectedLayerData?.type))) return {};
+  if (
+    !mapRoutes.map &&
+    (!selectedLayerData || !isLiveLayer(selectedLayerData?.type))
+  )
+    return {};
   const {
     id,
     global_benchmark,
@@ -867,12 +679,12 @@ function buildBenchmarkUtils(
   } = selectedLayerData ?? {
     id: 0,
     benchmark_metadata: {
-      base_benchmark: "1000000",
-      round_unit_value: "{val} / (1000 * 1000)",
+      base_benchmark: '1000000',
+      round_unit_value: '{val} / (1000 * 1000)',
     },
     global_benchmark: {
-      value: "20000000",
-      convert_unit: "mbps",
+      value: '20000000',
+      convert_unit: 'mbps',
     },
   };
   const {
@@ -889,12 +701,7 @@ function buildBenchmarkUtils(
   );
   const globalBenchmarkValue = evaluateExpression(formula, value ?? 0);
   const nationalBenchmarkValue =
-    Number(
-      evaluateExpression(
-        formula,
-        countryBenchmark?.[id] ?? 0,
-      ),
-    ) || 0;
+    Number(evaluateExpression(formula, countryBenchmark?.[id] ?? 0)) || 0;
   const currentBenchmarkValue =
     connectivityBenchMark === ConnectivityBenchMarks.national
       ? nationalBenchmarkValue
@@ -942,7 +749,7 @@ export const $benchmarkmarkUtilsByEntity = combine(
             ConnectivityBenchMarks.global,
           ),
           countryConnectivityNames,
-          mapRoutes
+          mapRoutes,
         );
         return acc;
       },
@@ -1002,13 +809,6 @@ export const $staticPopupActiveLayerByEntity = combine(
   },
 );
 
-export const $staticPopupActiveLayer = combine(
-  $staticPopupActiveLayerByEntity,
-  $selectedEntityType,
-  (staticPopupActiveLayerByEntity, selectedEntityType) =>
-    getEntityValue(staticPopupActiveLayerByEntity, selectedEntityType, null),
-);
-
 export const $isSchoolBenchmarkByEntity = combine(
   $selectedLayerDataByEntity,
   $connectivityBenchMarkByEntity,
@@ -1063,7 +863,6 @@ export const $layerUtils = combine({
   activeLayerByCountriesByEntity: $activeLayerByCountriesByEntity,
 
   currentDefaultLayerIdByEntity: $currentDefaultLayerIdByEntity,
-  staticPopupActiveLayer: $staticPopupActiveLayer,
   staticPopupActiveLayerByEntity: $staticPopupActiveLayerByEntity,
 
   isSchoolBenchmarkByEntity: $isSchoolBenchmarkByEntity,
@@ -1079,17 +878,14 @@ export const openHistoryChart = createEvent<boolean>();
 export const $historyChartOpen = createStore(false);
 $historyChartOpen.on(openHistoryChart, setPayload);
 
-export const staticLegendsSelection = createEvent<string | string[]>();
 export const entityStaticLegendsSelection = createEvent<{
   entityType: EntityType;
   legends: string | string[];
 }>();
-export const selectAllStaticLegendsSelection = createEvent<string[]>();
 export const selectAllEntityStaticLegendsSelection = createEvent<{
   entityType: EntityType;
   legends?: string[];
 }>();
-export const makeEmptyStaticLegendsSelection = createEvent<string[]>();
 export const makeEmptyEntityStaticLegendsSelection = createEvent<{
   entityType: EntityType;
 }>();
@@ -1121,16 +917,6 @@ export const $staticLegendsSelectedByEntity = createStore<
   [EntityType.SCHOOL]: defaultStatusLegendsSelection,
   [EntityType.HEALTH]: defaultStatusLegendsSelection,
 });
-$staticLegendsSelectedByEntity.on(staticLegendsSelection, (state, payload) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  return {
-    ...state,
-    [selectedEntityType]: updateStaticLegendsSelection(
-      getEntityValue(state, selectedEntityType, defaultStatusLegendsSelection),
-      payload,
-    ),
-  };
-});
 $staticLegendsSelectedByEntity.on(
   entityStaticLegendsSelection,
   (state, { entityType, legends }) => ({
@@ -1141,13 +927,6 @@ $staticLegendsSelectedByEntity.on(
     ),
   }),
 );
-$staticLegendsSelectedByEntity.on(makeEmptyStaticLegendsSelection, (state) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  return {
-    ...state,
-    [selectedEntityType]: [],
-  };
-});
 $staticLegendsSelectedByEntity.on(
   makeEmptyEntityStaticLegendsSelection,
   (state, { entityType }) => ({
@@ -1155,21 +934,6 @@ $staticLegendsSelectedByEntity.on(
     [entityType]: [],
   }),
 );
-$staticLegendsSelectedByEntity.on(selectAllStaticLegendsSelection, (state) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  const currentState = getEntityValue(
-    state,
-    selectedEntityType,
-    defaultStatusLegendsSelection,
-  );
-  if (currentState.length === 3) {
-    return state;
-  }
-  return {
-    ...state,
-    [selectedEntityType]: defaultStatusLegendsSelection,
-  };
-});
 $staticLegendsSelectedByEntity.on(
   selectAllEntityStaticLegendsSelection,
   (state, { entityType, legends }) => {
@@ -1188,29 +952,13 @@ $staticLegendsSelectedByEntity.on(
   },
 );
 
-export const $staticLegendsSelected = combine(
-  $staticLegendsSelectedByEntity,
-  $selectedEntityType,
-  (staticLegendsSelectedByEntity, selectedEntityType) => {
-    return getEntityValue(
-      staticLegendsSelectedByEntity,
-      selectedEntityType,
-      defaultStatusLegendsSelection,
-    );
-  },
-);
-
 export const resetCoverageFilterSelection = createEvent();
-export const checkConnectivityBenchmark = createEvent<number>();
+export const resetEntityCoverageFilterSelection = createEvent<EntityType>();
 export const checkEntityConnectivityBenchmark = createEvent<{
   entityType: EntityType;
   layerId: number;
 }>();
 
-export const changeCoverage5g4g = createEvent<boolean>();
-export const changeCoverage3g2g = createEvent<boolean>();
-export const changeCoverageNoCoverage = createEvent<boolean>();
-export const changeCoverageUnknown = createEvent<boolean>();
 export const changeEntityCoverageStatus = createEvent<{
   entityType: EntityType;
   key:
@@ -1232,46 +980,17 @@ export const $coverageStatusAllByEntity = createStore<
   [EntityType.SCHOOL]: defaultCoverageStatusAll,
   [EntityType.HEALTH]: defaultCoverageStatusAll,
 });
-$coverageStatusAllByEntity.on(changeCoverage5g4g, (state, value) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  return {
+$coverageStatusAllByEntity.on(
+  resetEntityCoverageFilterSelection,
+  (state, entityType) => ({
     ...state,
-    [selectedEntityType]: {
-      ...getEntityValue(state, selectedEntityType, defaultCoverageStatusAll),
-      [ConnectivityDistribution.good]: value,
-    },
-  };
-});
-$coverageStatusAllByEntity.on(changeCoverage3g2g, (state, value) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  return {
-    ...state,
-    [selectedEntityType]: {
-      ...getEntityValue(state, selectedEntityType, defaultCoverageStatusAll),
-      [ConnectivityDistribution.moderate]: value,
-    },
-  };
-});
-$coverageStatusAllByEntity.on(changeCoverageNoCoverage, (state, value) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  return {
-    ...state,
-    [selectedEntityType]: {
-      ...getEntityValue(state, selectedEntityType, defaultCoverageStatusAll),
-      [ConnectivityDistribution.bad]: value,
-    },
-  };
-});
-$coverageStatusAllByEntity.on(changeCoverageUnknown, (state, value) => {
-  const selectedEntityType = $selectedEntityType.getState();
-  return {
-    ...state,
-    [selectedEntityType]: {
-      ...getEntityValue(state, selectedEntityType, defaultCoverageStatusAll),
-      [ConnectivityDistribution.unknown]: value,
-    },
-  };
-});
+    [entityType]: { ...defaultCoverageStatusAll },
+  }),
+);
+$connectivityBenchMarkByEntity.on(
+  setConnectivityBenchmarksByEntity,
+  (state, payload) => ({ ...state, ...payload }),
+);
 $coverageStatusAllByEntity.on(
   changeEntityCoverageStatus,
   (state, { entityType, key, value }) => ({
@@ -1282,65 +1001,34 @@ $coverageStatusAllByEntity.on(
     },
   }),
 );
-const getSelectedCoverageStatusValue =
-  (key: keyof typeof defaultCoverageStatusAll) =>
-    (
-      coverageStatusAllByEntity: EntityStoreMap<typeof defaultCoverageStatusAll>,
-      selectedEntityType: EntityType,
-    ) =>
-      getEntityValue(
-        coverageStatusAllByEntity,
-        selectedEntityType,
-        defaultCoverageStatusAll,
-      )[key];
-export const $coverage5g4g = combine(
-  $coverageStatusAllByEntity,
-  $selectedEntityType,
-  getSelectedCoverageStatusValue(ConnectivityDistribution.good),
-);
-export const $coverage3g2g = combine(
-  $coverageStatusAllByEntity,
-  $selectedEntityType,
-  getSelectedCoverageStatusValue(ConnectivityDistribution.moderate),
-);
-export const $coverageNoCoverage = combine(
-  $coverageStatusAllByEntity,
-  $selectedEntityType,
-  getSelectedCoverageStatusValue(ConnectivityDistribution.bad),
-);
-export const $coverageUnknown = combine(
-  $coverageStatusAllByEntity,
-  $selectedEntityType,
-  getSelectedCoverageStatusValue(ConnectivityDistribution.unknown),
-);
-export const $coverageStatusAll = combine({
-  [ConnectivityDistribution.good]: $coverage5g4g,
-  [ConnectivityDistribution.moderate]: $coverage3g2g,
-  [ConnectivityDistribution.bad]: $coverageNoCoverage,
-  [ConnectivityDistribution.unknown]: $coverageUnknown,
-});
-
 export const changePotentialCoverageOpenStatus = createEvent<boolean>();
 export const $potentialCoverageOpenStatus = createStore<boolean>(true);
 $potentialCoverageOpenStatus.on(changePotentialCoverageOpenStatus, setPayload);
 
-export const changeMultiSelectionSchoolCheckbox = createEvent<SelectedSchool>();
-export const changeDefaultMultiSelectionSchoolCheckbox =
-  createEvent<MultischoolSelectionStats>();
-export const $multiSelectionSchoolCheckbox =
-  createStore<MultischoolSelectionStats>(multiSchoolSelection);
-$multiSelectionSchoolCheckbox.on(
+export const changeMultiSelectionSchoolCheckbox = createEvent<
+  SelectedSchool & { entityType: EntityType }
+>();
+export const changeDefaultMultiSelectionSchoolCheckbox = createEvent<
+  MultischoolSelectionStats & { entityType: EntityType }
+>();
+export const $multiSelectionSchoolCheckboxByEntity = createStore<
+  EntityStoreMap<MultischoolSelectionStats>
+>({
+  [EntityType.SCHOOL]: multiSchoolSelection,
+});
+$multiSelectionSchoolCheckboxByEntity.on(
   changeDefaultMultiSelectionSchoolCheckbox,
-  setPayload,
+  (state, { entityType, ...selection }) => ({
+    ...state,
+    [entityType]: selection,
+  }),
 );
 
-$multiSelectionSchoolCheckbox.on(
+$multiSelectionSchoolCheckboxByEntity.on(
   changeMultiSelectionSchoolCheckbox,
-  (state: MultischoolSelectionStats, payload: SelectedSchool) => {
-    if (!payload) return state;
-    const { countryId, schoolIds } = payload;
-
-    const newState = { ...state };
+  (state, { entityType, countryId, schoolIds }) => {
+    const current = state[entityType] ?? multiSchoolSelection;
+    const newState = { ...current, schoolIds: [...current.schoolIds] };
 
     if (newState.schoolIds.includes(schoolIds)) {
       newState.schoolIds = newState.schoolIds.filter((id) => id !== schoolIds);
@@ -1351,15 +1039,8 @@ $multiSelectionSchoolCheckbox.on(
 
     newState.countryId = countryId;
 
-    return newState;
+    return { ...state, [entityType]: newState };
   },
-);
-export const $multiSelectionSchoolCheckboxByEntity = combine(
-  $multiSelectionSchoolCheckbox,
-  (multiSelectionSchoolCheckbox) =>
-    ({
-      [EntityType.SCHOOL]: multiSelectionSchoolCheckbox,
-    }) as EntityStoreMap<MultischoolSelectionStats>,
 );
 
 export const onSchoolUncheck = createEvent<number>();
@@ -1398,21 +1079,14 @@ export const $schoolAdminId = $schoolStats.map((schools) => {
   return null;
 });
 
-export const $connectivityColorsWithBenchmark = combine(
+export const $connectivityColorsWithBenchmarkByEntity = combine(
   $stylePaintData,
-  (style) => {
-    return {
+  $activeEntityTypes,
+  (style, activeEntityTypes) => {
+    const connectivityColorsWithBenchmark = {
       connectivityColors: style.connectivity,
     };
-  },
-);
-export const $connectivityColorsWithBenchmarkByEntity = combine(
-  $connectivityColorsWithBenchmark,
-  $activeEntityTypes,
-  (connectivityColorsWithBenchmark, activeEntityTypes) => {
-    return (
-      activeEntityTypes.length ? activeEntityTypes : [EntityType.SCHOOL]
-    ).reduce(
+    return activeEntityTypes.reduce(
       (acc, entityType) => {
         acc[entityType] = connectivityColorsWithBenchmark;
         return acc;
@@ -1442,9 +1116,6 @@ $connectivityAvailabilityByEntity.on(
       ...$activeEntityTypes.getState(),
       ...(Object.keys(payloadByEntity) as EntityType[]),
     ]);
-    if (!entityTypes.size) {
-      entityTypes.add(EntityType.SCHOOL);
-    }
     return Array.from(entityTypes).reduce(
       (acc, entityType) => {
         acc[entityType] = payloadByEntity[entityType] ?? null;
@@ -1454,18 +1125,17 @@ $connectivityAvailabilityByEntity.on(
     );
   },
 );
-export const $connectivityAvailability = combine(
-  $connectivityAvailabilityByEntity,
-  $selectedEntityType,
-  (connectivityAvailabilityByEntity, selectedEntityType) =>
-    connectivityAvailabilityByEntity[selectedEntityType] ?? null,
+export const $connectivityYearsByEntity = $connectivityAvailabilityByEntity.map(
+  (availabilityByEntity) =>
+    Object.entries(availabilityByEntity).reduce(
+      (acc, [entityType, data]) => {
+        acc[entityType as EntityType] =
+          data?.years && data.years.length >= 2 ? data.years : null;
+        return acc;
+      },
+      {} as EntityStoreMap<number[] | null>,
+    ),
 );
-export const $connectivityYears = $connectivityAvailability.map((data) => {
-  if (data?.years && data.years.length >= 2) {
-    return data.years;
-  }
-  return null;
-});
 
 export const $allLoadings = combine({
   country: fetchCountryFx.pending,
@@ -1530,7 +1200,7 @@ export const onSetTimePlayerCurrentYear = createEvent<number>();
 export const $timePlayerCurrentYear = restore(onSetTimePlayerCurrentYear, 0);
 export const onTimeoutTimePlayer = createEvent();
 export const $timePlayerInfo = combine({
-  years: $connectivityYears,
+  yearsByEntity: $connectivityYearsByEntity,
   activeYear: $timePlayerCurrentYear,
   isLoading: $isLoadingTimeplayer,
   isLoaded: $isLoadedTimePlayer,

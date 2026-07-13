@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
-import {
-  $globalStats,
-  $globalStatsByEntity,
-  $stylePaintData,
-} from '~/@/map/map.model';
+import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $currentLayerTypeUtilsByEntity,
@@ -48,17 +44,11 @@ const SchoolStatusLegend = ({
   const [schoolStatusCheckedStatus, setSchoolStatusCheckedStatus] =
     useState<CheckedStatus>({});
   const { connected, notConnected, unknown } = ConnectivityStatusDistribution;
-  const globalStatsFromStore = useStore($globalStats);
   const globalStatsByEntity = useStore($globalStatsByEntity);
   const staticLegendsByEntity = useStore($staticLegendsSelectedByEntity);
   const staticLegends = staticLegendsByEntity[currentEntityType] ?? [];
-  const entityStatusStats =
-    globalStatsByEntity[currentEntityType]?.connected_entities;
   const schoolStatusStats =
-    entityStatusStats ??
-    (globalStatsFromStore?.connected_schools as
-      | Record<string, number>
-      | undefined);
+    globalStatsByEntity[currentEntityType]?.connected_entities;
 
   const handleSchoolStatusLayerChange = (key: string) => {
     const newStatus = !schoolStatusCheckedStatus[key];

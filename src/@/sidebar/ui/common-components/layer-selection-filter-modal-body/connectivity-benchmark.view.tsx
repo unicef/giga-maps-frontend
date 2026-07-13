@@ -1,40 +1,59 @@
 // this is depricated component, will be removed in future, please use legend benchmark dropdown instead of this component for connectivity benchmark selection in layer filter modal
-import { RadioButton, RadioButtonGroup, Tooltip } from "@carbon/react";
+import { RadioButton, RadioButtonGroup, Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { forwardRef, useEffect, useState } from 'react'
-import { Information } from '@carbon/icons-react'
+import { forwardRef, useEffect, useState } from 'react';
+import { Information } from '@carbon/icons-react';
 
-import { $selectedEntityType } from '~/@/entities/models/entity.model';
-import { ConnectivityBenchMarks } from "~/@/sidebar/sidebar.constant";
+import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
 import {
   $benchmarkNamesAllLayers,
-  $connectivityBenchMark,
+  $connectivityBenchMarkByEntity,
   $layerUtils,
-  changeConnectivityBenchmark,
+  changeEntityConnectivityBenchmark,
 } from '~/@/sidebar/sidebar.model';
-import { imperativeHandle } from "~/lib/utils/react.util";
+import { imperativeHandle } from '~/lib/utils/react.util';
 
-import { PopoverFilterContentBenchmark } from "../styles/layer-filter-modal.style";
-import { $countryActiveLayersDataById, $countryBenchmark, $countryConnectivityNames, $countryDefaultNational } from "~/@/country/country.model";
-import { useTranslation } from "react-i18next";
+import { PopoverFilterContentBenchmark } from '../styles/layer-filter-modal.style';
+import {
+  $countryActiveLayersDataById,
+  $countryBenchmark,
+  $countryConnectivityNames,
+  $countryDefaultNational,
+} from '~/@/country/country.model';
+import { useTranslation } from 'react-i18next';
 
-export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId: null | number }, ref) {
+export default forwardRef(function ConnectivityBenchmark(
+  {
+    entityType,
+    layerId,
+  }: { entityType: import('~/@/entities').EntityType; layerId: null | number },
+  ref,
+) {
   const { t } = useTranslation();
-  const countryConnectivityNames = useStore($countryConnectivityNames)
+  const countryConnectivityNames = useStore($countryConnectivityNames);
   const benchmarkNames = useStore($benchmarkNamesAllLayers);
-  const selectedEntityType = useStore($selectedEntityType);
-  const { selectedLayerIdByEntity, currentLayerTypeUtilsByEntity } = useStore($layerUtils);
-  const selectedLayerId = selectedLayerIdByEntity[selectedEntityType] ?? null;
-  const currentLayerTypeUtils = currentLayerTypeUtilsByEntity[selectedEntityType] ?? {};
-  const { isLive } = currentLayerTypeUtils
-  const connectivityBenchMark = useStore($connectivityBenchMark);
-  const countryBenchmark = useStore($countryBenchmark)
-  const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] = useState<ConnectivityBenchMarks>(connectivityBenchMark);
+  const { selectedLayerIdByEntity, currentLayerTypeUtilsByEntity } =
+    useStore($layerUtils);
+  const selectedLayerId = selectedLayerIdByEntity[entityType] ?? null;
+  const isLive = currentLayerTypeUtilsByEntity[entityType]?.isLive ?? false;
+  const connectivityBenchMark =
+    useStore($connectivityBenchMarkByEntity)[entityType] ??
+    ConnectivityBenchMarks.global;
+  const countryBenchmark = useStore($countryBenchmark);
+  const [connectivityBenchmarkValue, setConnectivityBenchmarkValue] =
+    useState<ConnectivityBenchMarks>(connectivityBenchMark);
   const defaultNationalBenchmark = useStore($countryDefaultNational);
-  const currentLegendConfig = useStore($countryActiveLayersDataById)[layerId ?? selectedLayerId ?? ""]?.legend_configs ?? {};
-  const isCountryNationalBenchmark = !!countryBenchmark[layerId ?? selectedLayerId ?? 0] || Object.keys(currentLegendConfig).length > 0;
+  const currentLegendConfig =
+    useStore($countryActiveLayersDataById)[layerId ?? selectedLayerId ?? '']
+      ?.legend_configs ?? {};
+  const isCountryNationalBenchmark =
+    !!countryBenchmark[layerId ?? selectedLayerId ?? 0] ||
+    Object.keys(currentLegendConfig).length > 0;
   const handleBenchmarkChange = () => {
-    changeConnectivityBenchmark(connectivityBenchmarkValue)
+    changeEntityConnectivityBenchmark({
+      entityType,
+      benchmark: connectivityBenchmarkValue,
+    });
   };
 
   imperativeHandle(ref, handleBenchmarkChange);
@@ -42,51 +61,89 @@ export default forwardRef(function ConnectivityBenchmark({ layerId }: { layerId:
   useEffect(() => {
     if (layerId) {
       let currentBenchmarkValue = connectivityBenchmarkValue;
-      const hasDefaultNationalBenchmark = !!defaultNationalBenchmark[layerId ?? 0];
-      if (currentBenchmarkValue === ConnectivityBenchMarks.national && (!isCountryNationalBenchmark || !hasDefaultNationalBenchmark)) {
+      const hasDefaultNationalBenchmark =
+        !!defaultNationalBenchmark[layerId ?? 0];
+      if (
+        currentBenchmarkValue === ConnectivityBenchMarks.national &&
+        (!isCountryNationalBenchmark || !hasDefaultNationalBenchmark)
+      ) {
         currentBenchmarkValue = ConnectivityBenchMarks.global;
       }
-      if (currentBenchmarkValue === ConnectivityBenchMarks.global && hasDefaultNationalBenchmark) {
+      if (
+        currentBenchmarkValue === ConnectivityBenchMarks.global &&
+        hasDefaultNationalBenchmark
+      ) {
         currentBenchmarkValue = ConnectivityBenchMarks.national;
       }
-      setConnectivityBenchmarkValue(currentBenchmarkValue)
+      setConnectivityBenchmarkValue(currentBenchmarkValue);
     }
-  }, [layerId, defaultNationalBenchmark, setConnectivityBenchmarkValue])
+  }, [layerId, defaultNationalBenchmark, setConnectivityBenchmarkValue]);
 
   return (
     <PopoverFilterContentBenchmark>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
-        <h2 className="filter-popover-title">{isLive ? 'Real-time connectivity ' : 'Static '} {t('data-layer-benchmark')}</h2>
-        <Tooltip className='info-icon' align="left-top" autoAlign={true} label={t("you-will-for-schools-between-global-or-national-level-of-connectivity")}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <h2 className="filter-popover-title">
+          {isLive ? 'Real-time connectivity ' : 'Static '}{' '}
+          {t('data-layer-benchmark')}
+        </h2>
+        <Tooltip
+          className="info-icon"
+          align="left-top"
+          autoAlign={true}
+          label={t(
+            'you-will-for-schools-between-global-or-national-level-of-connectivity',
+          )}
+        >
           <button className="sb-tooltip-trigger" type="button">
             <Information />
           </button>
         </Tooltip>
       </div>
-      {isLive && <p className="filter-popover-explanation">{t('please-select-if-you-wish-to-view-the-selected-real-time-connectivity-data-layer-as-per-giga-s-global-connectivity-standard-or-the-national-standard-of-the-country-selected')}</p>}
-      {!isLive && <p className="filter-popover-explanation">{t('please-select-if-you-wish-to-view-the-selected-static-data-layer-as-per-giga-s-global-standard-or-the-national-standard-of-the-country-selected')}</p>}
+      {isLive && (
+        <p className="filter-popover-explanation">
+          {t(
+            'please-select-if-you-wish-to-view-the-selected-real-time-connectivity-data-layer-as-per-giga-s-global-connectivity-standard-or-the-national-standard-of-the-country-selected',
+          )}
+        </p>
+      )}
+      {!isLive && (
+        <p className="filter-popover-explanation">
+          {t(
+            'please-select-if-you-wish-to-view-the-selected-static-data-layer-as-per-giga-s-global-standard-or-the-national-standard-of-the-country-selected',
+          )}
+        </p>
+      )}
       <RadioButtonGroup
         name="radio-button-group"
         defaultSelected={connectivityBenchmarkValue}
         valueSelected={connectivityBenchmarkValue}
-        onChange={(selection) => setConnectivityBenchmarkValue(selection as ConnectivityBenchMarks)}
+        onChange={(selection) =>
+          setConnectivityBenchmarkValue(selection as ConnectivityBenchMarks)
+        }
       >
         <RadioButton
-          labelText={benchmarkNames[layerId ?? selectedLayerId ?? ""] ?? t('global')}
+          labelText={
+            benchmarkNames[layerId ?? selectedLayerId ?? ''] ?? t('global')
+          }
           value={ConnectivityBenchMarks.global}
           id="globalId"
         />
         <RadioButton
-          labelText={countryConnectivityNames?.[layerId ?? selectedLayerId ?? ""] ?? t('national')}
+          labelText={
+            countryConnectivityNames?.[layerId ?? selectedLayerId ?? ''] ??
+            t('national')
+          }
           value={ConnectivityBenchMarks.national}
           id="nationalId"
           disabled={!isCountryNationalBenchmark}
         />
       </RadioButtonGroup>
     </PopoverFilterContentBenchmark>
-  )
+  );
 });

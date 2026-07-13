@@ -18,7 +18,6 @@ import {
   $activeEntityTypes,
   $entityRegistry,
   $entityTypesFiltered,
-  $selectedEntityType,
 } from '~/@/entities/models/entity.model';
 import {
   ENTITY_TYPE_CODE_PARAM,
@@ -26,7 +25,6 @@ import {
 } from '~/@/entities/utils/entity-query-params';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import {
-  $connectivityBenchMark,
   $connectivityBenchMarkByEntity,
   $connectivitySpeedFilterByEntity,
   $isLoadedTimePlayer,
@@ -36,10 +34,8 @@ import {
   $layerUtils,
   $schoolAdminId,
   $schoolStatsMap,
-  $schoolStatusSelectedLayer,
   $selectedLayerIdByEntity,
   $selectedSchoolIds,
-  $staticLegendsSelected,
   $staticLegendsSelectedByEntity,
   $statusLayerIdByEntity,
   $timePlayerInfo,
@@ -72,13 +68,7 @@ import {
   changeStyleFx,
   updateCoverageFilter,
 } from '@/map/effects';
-import {
-  $connectivityFilter,
-  $connectivitySpeedFilter,
-  $coverageFilter,
-  $coverageFilterByEntity,
-  $selectedLayers,
-} from '@/sidebar/init';
+import { $coverageFilterByEntity, $selectedLayers } from '@/sidebar/init';
 
 import { $isMobile } from '../admin/models/media-query';
 import { mapLabelLayerList } from '../country/country.constant';
@@ -87,12 +77,9 @@ import {
   filterTranslationFx,
 } from '../sidebar/effects/all-translation-fx';
 import {
-  $historyInterval,
   $historyIntervalByEntity,
-  $historyIntervalUnit,
   $historyIntervalUnitByEntity,
   $isCheckedLastDate,
-  $lastAvailableDates,
   $lastAvailableDatesByEntity,
 } from '../sidebar/history-graph.model';
 import {
@@ -311,21 +298,13 @@ export const gigaLayerSource = combine({
   selectedLayerIds: $selectedLayers,
   map: $map,
   isCheckedLastDate: $isCheckedLastDate,
-  connectivityFilter: $connectivityFilter,
-  interval: $historyInterval,
   intervalByEntity: $historyIntervalByEntity,
-  intervalUnit: $historyIntervalUnit,
   intervalUnitByEntity: $historyIntervalUnitByEntity,
-  connectivityBenchMark: $connectivityBenchMark,
   connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
-  lastAvailableDates: $lastAvailableDates,
   lastAvailableDatesByEntity: $lastAvailableDatesByEntity,
-  schoolLegends: $staticLegendsSelected,
   schoolLegendsByEntity: $staticLegendsSelectedByEntity,
-  coverageFilter: $coverageFilter,
   coverageFilterByEntity: $coverageFilterByEntity,
   layerUtils: $layerUtils,
-  connectivitySpeedFilter: $connectivitySpeedFilter,
   connectivitySpeedFilterByEntity: $connectivitySpeedFilterByEntity,
   lastSelectedLayer: $selectedGigaLayers,
   paintData: $stylePaintData,
@@ -344,17 +323,12 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-      ...source,
-      ...data,
-    });
+  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+    ...source,
+    ...data,
+  });
 
-const mapLayerFilter = ({
-  isCheckedLastDate,
-  mapRoute,
-}: ReturnType<typeof gigaLayerSource.getState>) => {
-  return true; //isCheckedLastDate || mapRoute.map;
-};
+const mapLayerFilter = () => true;
 
 const timePlayerActive = sample({
   clock: $isTimeplayer,
@@ -386,7 +360,6 @@ sample({
 sample({
   clock: merge([
     $zoomState,
-    $schoolStatusSelectedLayer,
     $statusLayerIdByEntity,
     $staticLegendsSelectedByEntity,
     timePlayerActive,
@@ -419,7 +392,6 @@ sample({
     $countrySearchString,
     $connectivityBenchMarkByEntity,
     $historyIntervalByEntity,
-    $lastAvailableDates,
     $lastAvailableDatesByEntity,
     timePlayerActive,
     $zoomState,
@@ -435,16 +407,8 @@ sample({
 sample({
   clock: $map,
   source: mapOverview.visible,
-  fn: () => 'end',
+  fn: () => 'end' as const,
   target: onZoomStateChange,
-});
-
-sample({
-  clock: $connectivityFilter,
-  source: gigaLayerSource,
-  fn: combineGigaFn({ refresh: true, timeout: 1000 }),
-  filter: mapLayerFilter,
-  target: changeLayersFx,
 });
 
 // update dots, change on coverage filter
@@ -594,21 +558,22 @@ sample({
   }),
   source: combine({
     country: $country,
-    selectedEntityType: $selectedEntityType,
+    activeEntityTypes: $activeEntityTypes,
     selectedLayerIdByEntity: $selectedLayerIdByEntity,
     map: $map,
   }),
-  fn: ({ map, country, selectedEntityType, selectedLayerIdByEntity }) => {
-    const selectedLayerId = getEntityMapValue(
-      selectedLayerIdByEntity,
-      selectedEntityType,
-      selectedLayerIdByEntity[EntityType.SCHOOL] ?? null,
-    );
+  filter: ({ map, activeEntityTypes, selectedLayerIdByEntity }) =>
+    !!map &&
+    activeEntityTypes.length === 1 &&
+    selectedLayerIdByEntity[activeEntityTypes[0]] != null,
+  fn: ({ map, country, activeEntityTypes, selectedLayerIdByEntity }) => {
+    const entityType = activeEntityTypes[0];
+    const selectedLayerId = selectedLayerIdByEntity[entityType];
     const params = `country_id=${country?.id}&layer_id=${selectedLayerId}&start_year=2020`;
     const url = getBaseUrl(
       `api/accounts/time-players/v2/?${params}&z={z}&x={x}&y={y}.mvt`,
     );
-    return { url, map };
+    return { url, map: map! };
   },
   target: timePlayerSourceFx,
 });
@@ -617,6 +582,7 @@ export const timePlayerData = combine({
   map: $map,
   paintData: $stylePaintData,
   timeplayerInfo: $timePlayerInfo,
+  activeEntityTypes: $activeEntityTypes,
 });
 sample({
   clock: timePlayerSourceFx.doneData,

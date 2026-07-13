@@ -8,20 +8,29 @@ import SingleSchoolConnnectivityLayer from '../common/single-school-connectivity
 
 export default function SchoolViewConnectivityLayer() {
   const { t } = useTranslation();
-  const { schoolIds = [0] } = useStore($getSchoolParams);
+  const { entityType, schoolIds = [0] } = useStore($getSchoolParams);
   const SchoolStatsTypes = useStore($schoolStats);
-  const isMoreThenOne = (schoolIds?.length) > 1
+  const isMoreThenOne = schoolIds?.length > 1;
+  if (!entityType) return null;
   return (
     <>
       {/* <CurrentLayerNameIcon label={t("real-time-connectivity")} isLiveLayer={true} /> */}
       {!isMoreThenOne && (
         <>
-          <SingleSchoolConnnectivityLayer schoolId={schoolIds[0]} />
+          <SingleSchoolConnnectivityLayer
+            entityType={entityType}
+            schoolId={schoolIds[0]}
+          />
           <SidebarDublicateSchoolList scrollableTargetId="school-sidebar-scroll" />
         </>
       )}
-      {isMoreThenOne && <MultiSchoolLayerView schoolLength={schoolIds.length} schoolLayerList={SchoolStatsTypes} />}
+      {isMoreThenOne && (
+        <MultiSchoolLayerView
+          entityType={entityType}
+          schoolLength={schoolIds.length}
+          schoolLayerList={SchoolStatsTypes}
+        />
+      )}
     </>
   );
-};
-
+}
