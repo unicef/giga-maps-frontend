@@ -40,6 +40,8 @@ export const capturePageview = (pathname: string): void => {
 };
 
 export const identifyUser = (user: UserInfoType): void => {
+  if (!user?.id) return;
+
   safely('identifyUser', () => {
     posthog.identify(String(user.id), {
       email: user.email,
