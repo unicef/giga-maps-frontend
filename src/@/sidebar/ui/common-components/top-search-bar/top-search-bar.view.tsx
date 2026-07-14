@@ -57,7 +57,7 @@ const TopSearchBar = () => {
       if (selectedTags.includes(config.type)) return false;
       const slug = config.slug.toLowerCase();
       const name = config.displayName.toLowerCase();
-      const translated = t(config.slug, { defaultValue: config.displayName, count: config.type === EntityType.SCHOOL ? 2 : 1 }).toLowerCase();
+      const translated = t(config.slug).toLowerCase();
       return !query || slug.includes(query) || name.includes(query) || translated.includes(query);
     });
   }, [showSuggestions, mentionQuery, entityTagEntries, selectedTags, t]);
@@ -253,7 +253,7 @@ const TopSearchBar = () => {
                       type="button"
                     >
                       <span style={{ color: config.colors.primary }}>{config.symbol}</span>
-                      <span>@{t(config.slug, { defaultValue: config.displayName, count: (config.type === EntityType.SCHOOL ? 2 : 1) })}</span>
+                      <span>@{t(config.slug, { defaultValue: config.displayName })}</span>
                     </button>
                   ))}
                 </div>
