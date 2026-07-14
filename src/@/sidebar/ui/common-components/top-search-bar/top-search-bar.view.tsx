@@ -194,7 +194,7 @@ const TopSearchBar = () => {
                   autoFocus={isMobile}
                   autoCorrect="off"
                   spellCheck={false}
-                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                  className={cn(`h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!`, selectedTagConfigs.length || searchText.length > 0 ? 'pr-10!' : '')}
                   id="main-search-bar"
                   inputMode="search"
                   onBlur={onBlurSearch}
@@ -216,7 +216,7 @@ const TopSearchBar = () => {
                     onShowCountriesAdminList(false);
                     changeIsSearchFocused(true);
                   }}
-                  placeholder={t("search-country-region-school-id")}
+                  placeholder={selectedTagConfigs.length > 0 ? '' : t("search-country-region-school-id")}
                   value={searchText}
                 />
               </div>
