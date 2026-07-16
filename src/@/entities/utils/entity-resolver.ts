@@ -32,19 +32,6 @@ export const isLegacyEntity = (
 };
 
 /**
- * Get the API endpoint for an entity type.
- * Returns null for legacy entities (they use their own API functions).
- */
-export const getEntityApiEndpoint = (
-  registry: Record<string, EntityConfig>,
-  entityType: string
-): string | null => {
-  const config = registry[entityType];
-  if (!config || config.useLegacyApi) return null;
-  return config.apiEndpoint;
-};
-
-/**
  * Get the marker type for an entity.
  */
 export const getEntityMarkerType = (
@@ -64,17 +51,6 @@ export const getPopupFields = (
 ) => {
   const config = registry[entityType];
   return config?.fields.filter(f => f.showInPopup) ?? [];
-};
-
-/**
- * Get fields configured for sidebar display.
- */
-export const getSidebarFields = (
-  registry: Record<string, EntityConfig>,
-  entityType: string
-) => {
-  const config = registry[entityType];
-  return config?.fields.filter(f => f.showInSidebar) ?? [];
 };
 
 /**

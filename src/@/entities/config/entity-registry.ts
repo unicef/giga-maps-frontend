@@ -37,31 +37,13 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     sidebar: {
       estimatedTotalInMillions: 6,
     },
-    colors: {
-      primary: '#0062FF',
-      connected: '#24A148',
-      not_connected: '#DA1E28',
-      unknown: '#8D8D8D',
-    },
     useLegacyApi: true,
-    apiEndpoint: null,
-    fields: [
-      { name: 'education_level', label: 'Education Level', type: 'string', showInPopup: true, showInSidebar: true },
-      { name: 'school_type', label: 'School Type', type: 'string', showInPopup: true, showInSidebar: true },
-      { name: 'environment', label: 'Environment', type: 'string', showInPopup: false, showInSidebar: true },
-      { name: 'num_students', label: 'Students', type: 'number', showInPopup: true, showInSidebar: true },
-      { name: 'num_teachers', label: 'Teachers', type: 'number', showInPopup: false, showInSidebar: true },
-      { name: 'num_classroom', label: 'Classrooms', type: 'number', showInPopup: false, showInSidebar: true },
-      { name: 'connectivity_speed', label: 'Connectivity Speed', type: 'number', showInPopup: true, showInSidebar: true, unit: 'Mbps' },
-      { name: 'connectivity_latency', label: 'Latency', type: 'number', showInPopup: false, showInSidebar: true, unit: 'ms' },
-      { name: 'electricity_availability', label: 'Electricity', type: 'boolean', showInPopup: false, showInSidebar: true },
-    ],
   },
 
   [EntityType.HEALTH]: {
     type: EntityType.HEALTH,
-    displayName: 'Health centers',
-    slug: 'health-centers',
+    displayName: 'Health facilities',
+    slug: 'health-facilities',
     icon: 'Hospital',
     active: true,
     visible: true,
@@ -81,18 +63,10 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     sidebar: {
       estimatedTotalInMillions: 3,
     },
-    colors: {
-      primary: '#0F62FE',
-      connected: '#198038',
-      not_connected: '#A2191F',
-      unknown: '#525252',
-    },
     zoomLevels: {
       circleMaxZoom: 7.99,
       symbolMinZoom: 8,
     },
     useLegacyApi: false,
-    apiEndpoint: '/api/entities/health/',
-    fields: [],
   },
 };

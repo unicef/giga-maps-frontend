@@ -9,6 +9,7 @@ import { $isLoadingCountryAdminView } from '~/@/sidebar/sidebar.model';
 import { Skeleton } from '~/components/ui/skeleton';
 import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
+import LayerNameWithTooltip from '../common/layer-name-with-tooltip.view';
 
 const SchoolConnectivityLayer = ({
   entityType,
@@ -44,6 +45,7 @@ const SchoolConnectivityLayer = ({
           </div>
         ) : (
           <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-2!">
+            <LayerNameWithTooltip description={t('connectivity-status')} name={t('connectivity-status')} />
             <p
               className={
                 isConnected

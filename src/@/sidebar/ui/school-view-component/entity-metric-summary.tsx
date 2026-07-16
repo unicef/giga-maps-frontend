@@ -26,6 +26,7 @@ import {
   connectivityColorClassByStatus,
   formatStaticFieldValue,
 } from './school-view.utils';
+import LayerNameWithTooltip from '../global-and-country-view-components/common/layer-name-with-tooltip.view';
 
 export function EntityMetricSummary({
   entity,
@@ -117,14 +118,15 @@ export function EntityMetricSummary({
       <div className="relative! flex! w-full! flex-col! pb-6! pt-3!">
         {isLoading ? (
           <Skeleton className="h-11! w-[70%]!" />
-        ) : (
+        ) : (<>
+          <LayerNameWithTooltip description={t('connectivity-status')} name={t('connectivity-status')} />
           <p
             className="m-0! break-words! text-[2.375rem]! font-normal! leading-tight! capitalize!"
             style={{ color: connectivityStatusColor }}
           >
             {statusLabel}
           </p>
-        )}
+        </>)}
       </div>
     </section>
   );

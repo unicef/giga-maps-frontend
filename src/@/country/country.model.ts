@@ -85,7 +85,7 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
   // iterate over all params and try to parse them to numbers
   const filterSearchParams = new URLSearchParams();
   let actualSelectedCount = 0;
-  const urlFieldList: Record<string, { field: string; filter: string; value: string }> = {};
+  const urlFieldList: Record<string, { field: string; filter: string; value: string; entity: string }> = {};
   const searchEntires = searchParams.entries();
   for (const [key, value] of searchEntires) {
     try {

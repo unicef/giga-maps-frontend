@@ -31,10 +31,8 @@ export { DEFAULT_ENTITY_REGISTRY } from './config/entity-registry';
 export {
   getEntityConfig,
   isLegacyEntity,
-  getEntityApiEndpoint,
   getEntityMarkerType,
   getPopupFields,
-  getSidebarFields,
   getNewEntityTypes,
   getLegacyEntityTypes,
 } from './utils/entity-resolver';

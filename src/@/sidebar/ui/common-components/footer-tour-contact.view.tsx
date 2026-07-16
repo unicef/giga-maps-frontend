@@ -2,8 +2,6 @@ import { Link as CarbonLink } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import { styled } from "styled-components"
 
-import { router } from "~/core/routes"
-
 const RootWrapper = styled.div`
   padding: 1rem 0;
   display: flex;
@@ -31,6 +29,7 @@ const Message = styled.p`
     font-size: 0.75rem;
     white-space: pre-line;
     text-align: center;
+    margin-right: 0.5rem;
 `
 const Link = styled(CarbonLink)`
 font-size: 0.75rem !important;
@@ -46,8 +45,11 @@ export default function FooterTourContact({ message }: { readonly message?: stri
   return (<RootWrapper>
     {message && <Message>{message}</Message>}
     <LinkButtons>
+<<<<<<< HEAD
       {/* <Link onClick={() => router.navigate(`/map?popover=tour`)} >{t('take-the-tour')}</Link>
       <span>&nbsp;{t('or')}&nbsp;</span> */}
+=======
+>>>>>>> 5b37309cd35777b797ae145e6c693cf472961baa
       <Link href='/about#live-map-get-in-touch' target='_blank'>{t('contact-us')}</Link>
 
     </LinkButtons>

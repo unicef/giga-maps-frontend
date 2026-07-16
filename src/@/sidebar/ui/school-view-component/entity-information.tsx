@@ -1,7 +1,6 @@
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { $country } from '~/@/country/country.model';
 import { $entityRegistry } from '~/@/entities/models/entity.model';
 import { $stylePaintData } from '~/@/map/map.model';
@@ -20,6 +19,7 @@ import {
   getEntityGigaId,
   groupStatistics,
 } from './school-view.utils';
+import { Hash, MapPin, RadioTower } from 'lucide-react';
 
 export function EntityInformation({
   entity,
@@ -78,17 +78,18 @@ export function EntityInformation({
       </h3>
       <div className="space-y-1!">
         <DetailLine
-          icon="location"
+          icon={MapPin}
           value={coordinates.length ? coordinates.join(', ') : null}
         />
         <StatusLine
+          icon={RadioTower}
           color={connectivityStatusColor}
           label={statusLabel}
           entityType={entityType}
         />
         {Boolean(getEntityGigaId(entity)) && (
           <DetailLine
-            icon="hash"
+            icon={Hash}
             label={t('giga-id')}
             value={getEntityGigaId(entity)}
             valueClassName="lowercase!"
@@ -96,21 +97,21 @@ export function EntityInformation({
         )}
         {entity.admin1_name && entity.admin1_description_ui_label && (
           <DetailLine
-            icon="hash"
+            icon={Hash}
             label={t(entity.admin1_description_ui_label)}
             value={entity.admin1_name}
           />
         )}
         {entity.admin2_name && entity.admin2_description_ui_label && (
           <DetailLine
-            icon="hash"
+            icon={Hash}
             label={t(entity.admin2_description_ui_label)}
             value={entity.admin2_name}
           />
         )}
         {entity.education_level && (
           <DetailLine
-            icon="hash"
+            icon={Hash}
             label={t('education-level')}
             value={entity.education_level}
           />
@@ -130,7 +131,7 @@ export function EntityInformation({
               return (
                 <DetailLine
                   key={item.key}
-                  icon="hash"
+                  icon={Hash}
                   label={t(item.label)}
                   value={displayValue}
                 />
