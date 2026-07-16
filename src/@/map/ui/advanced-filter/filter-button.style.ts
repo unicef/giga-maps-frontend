@@ -16,7 +16,7 @@ export const FilterPopover = styled(Popover)`
         top: -1rem;
         position: fixed;
         right: 0;
-        width: 18rem;
+        width: 20rem;
     }
     .cds--popover .cds--popover-caret{
       display:none;
@@ -95,7 +95,7 @@ export const FilterHeaderWrapper = styled.div`
   justify-content: space-between;
   padding: 1rem;
   @media (min-width: 769px) {
-    min-width: 18rem;
+    min-width: 20rem;
   }
   >h3{
     color: ${props => props.theme.filterText};
