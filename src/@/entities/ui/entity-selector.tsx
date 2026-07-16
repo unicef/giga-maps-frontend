@@ -20,7 +20,7 @@ import { cn } from '~/lib/cn';
 import { mapEntity } from '~/core/routes';
 
 const base =
-  'h-9! gap-2! rounded-lg! border px-3! py-2! text-sm! font-medium! leading-5! shadow-none!';
+  'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap!';
 const active =
   'border-[#525252]! bg-[#525252]! text-white! hover:bg-[#6f6f6f]! hover:text-white!';
 const inactive =
@@ -101,12 +101,10 @@ export default function EntityTypeSelector() {
               fitToViewBox
               size={11}
             />
-            {t(
-              config.slug,
-              config.slug === (EntityType.SCHOOL as string)
-                ? { count: 2 }
-                : undefined,
-            )}
+            {t(config.slug, {
+              count: 2,
+              defaultValue: config.displayName,
+            })}
           </Button>
         );
       })}

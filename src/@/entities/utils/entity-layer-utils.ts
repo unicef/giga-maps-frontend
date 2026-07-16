@@ -35,8 +35,11 @@ export const getEntityMapValue = <T>(
 /**
  * Formats the entity type for display labels (e.g. 'school' -> 'School').
  */
-export const formatEntityTypeLabel = (entityType: EntityType): string =>
-  `${entityType.charAt(0).toUpperCase()}${entityType.slice(1)}`;
+export const formatEntityTypeLabel = (entityType: EntityType): string => {
+  if (entityType === EntityType.HEALTH) return 'Health facility';
+  if (entityType === EntityType.SCHOOL) return 'School';
+  return `${entityType.charAt(0).toUpperCase()}${entityType.slice(1)}`;
+};
 
 /**
  * Resolves the list of entity types associated with a given layer.

@@ -217,7 +217,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   type="button"
                 >
                   <span>
-                    Health centers 
+                    Health facilities 
                   </span>
                   <svg
                     aria-hidden="true"
@@ -514,7 +514,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   type="button"
                 >
                   <span>
-                    Health centers 
+                    Health facilities 
                   </span>
                   <svg
                     aria-hidden="true"
