@@ -12,12 +12,12 @@ import {
 } from '~/@/entities/models/entity.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
-import { $isSidebarCollapsed } from '~/@/sidebar/sidebar.model';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
+import { $isSidebarCollapsed } from '~/@/sidebar/sidebar.model';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
-import { cn } from '~/lib/cn';
 import { mapEntity } from '~/core/routes';
+import { cn } from '~/lib/cn';
 
 const base =
   'h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5!';
@@ -65,9 +65,9 @@ export default function EntityTypeSelector() {
       className={
         !isMobile
           ? cn(
-              'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
-              isSidebarCollapsed ? 'left-4!' : 'left-86!',
-            )
+            'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
+            isSidebarCollapsed ? 'left-4!' : 'left-86!',
+          )
           : cn('flex items-center gap-2 p-1! overflow-auto')
       }
     >
@@ -98,7 +98,7 @@ export default function EntityTypeSelector() {
               color={isActive ? '#f4f4f4' : '#d9d9d9'}
               entityType={type}
               fitToViewBox
-              size={11}
+              size={8}
             />
             {t(
               config.slug,

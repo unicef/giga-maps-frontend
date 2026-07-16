@@ -89,13 +89,6 @@ export interface EntityConfig {
   symbol: string;
   /** Sidebar/accordion labels and auxiliary UI behavior */
   sidebar: EntitySidebarConfig;
-  /** Color configuration for connectivity status */
-  colors: {
-    primary: string;
-    connected: string;
-    not_connected: string;
-    unknown: string;
-  };
 
   /** Zoom level thresholds (for circle → symbol transitions) */
   zoomLevels?: {
@@ -111,15 +104,6 @@ export interface EntityConfig {
    * - false: Uses new generic entity API (src/api/entities.ts)
    */
   useLegacyApi: boolean;
-
-  /**
-   * API endpoint for new entities (used when useLegacyApi is false).
-   * e.g., '/api/entities/health/'
-   */
-  apiEndpoint: string | null;
-
-  /** Fields to display in entity popups and sidebar */
-  fields: EntityFieldConfig[];
 
   visible: boolean;
 }

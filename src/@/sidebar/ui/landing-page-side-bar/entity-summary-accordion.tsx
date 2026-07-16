@@ -1,6 +1,5 @@
 import { useStore } from 'effector-react';
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -10,7 +9,11 @@ import {
 } from '~/@/entities/models/entity.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
-import { $currentLayerTypeUtilsByEntity } from '~/@/sidebar/sidebar.model';
+import {
+  $accordionExpandedEntities,
+  $currentLayerTypeUtilsByEntity,
+  toggleAccordionEntity,
+} from '~/@/sidebar/sidebar.model';
 import {
   fetchEntitiesConnectivityStatsFx,
   fetchEntitiesLayerInfoFx,
@@ -69,9 +72,7 @@ const EntitySummaryAccordion = ({
   const visibleEntityTypes = entityTypesFiltered.filter((type) =>
     activeEntityTypes.includes(type),
   );
-  const [activeAccordion, setActiveAccordion] = useState<EntityType | null>(
-    null,
-  );
+  const activeAccordion = useStore($accordionExpandedEntities);
 
   const isLoading =
     isLoadingGlobalStats ||
@@ -98,29 +99,22 @@ const EntitySummaryAccordion = ({
     t,
   });
 
-  useEffect(() => {
-    if (activeAccordion && !activeEntityTypes.includes(activeAccordion)) {
-      setActiveAccordion(null);
-      return;
-    }
-
-    if (!activeEntityTypes.length) {
-      setActiveAccordion(null);
-    }
-  }, [activeAccordion, activeEntityTypes]);
-
-  const handleAccordionChange = (nextValue?: string) => {
-    const nextAccordion = nextValue ? (nextValue as EntityType) : null;
-    setActiveAccordion(nextAccordion);
+  const handleAccordionChange = (nextValue: string[]) => {
+    const currentSet = new Set(activeAccordion);
+    const nextSet = new Set(nextValue as EntityType[]);
+    const added = [...nextSet].filter((v) => !currentSet.has(v));
+    const removed = [...currentSet].filter((v) => !nextSet.has(v));
+    [...added, ...removed].forEach((entityType) => {
+      toggleAccordionEntity(entityType);
+    });
   };
 
   return (
     <div className="mt-4! flex! flex-col! gap-3!">
       <Accordion
-        collapsible
         onValueChange={handleAccordionChange}
-        type="single"
-        value={activeAccordion ?? undefined}
+        type="multiple"
+        value={activeAccordion}
       >
         <div className="flex! flex-col! gap-3!">
           {entityCards.map((card) => {
@@ -129,7 +123,7 @@ const EntitySummaryAccordion = ({
             return (
               <EntitySummaryCard
                 card={accordionItem}
-                expanded={activeAccordion === accordionItem.value}
+                expanded={activeAccordion.includes(accordionItem.value)}
                 isLoading={isLoading}
                 key={accordionItem.value}
                 loadingRowLabels={infoLoadingMetricLabels}
