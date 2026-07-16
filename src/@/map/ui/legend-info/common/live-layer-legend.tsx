@@ -147,7 +147,7 @@ const LiveLayerLegend = ({
 
           return (
             <button
-              className="mt-1! flex! w-full! items-center! justify-between! border-0! bg-transparent! p-0! text-left!"
+              className="mt-1! flex! w-full! items-center! justify-start! border-0! bg-transparent! p-0! text-left!"
               key={key}
               title={tooltipLabel}
               type="button"
@@ -175,7 +175,7 @@ const LiveLayerLegend = ({
               </div>
               {shouldShowControls ? (
                 <div
-                  className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+                  className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
                   data-title={t('int', {
                     val:
                       key === 'bad'

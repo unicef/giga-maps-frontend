@@ -1,4 +1,3 @@
-import { color } from '@carbon/charts';
 import { Close } from '@carbon/icons-react'
 import { Button, Form, IconButton, PopoverContent } from "@carbon/react";
 import { useStore } from 'effector-react';
@@ -7,12 +6,11 @@ import { MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'rea
 import { useTranslation } from "react-i18next";
 
 import { $country, $countrySearchParams } from "~/@/country/country.model";
-import { $activeEntityTypes, $entityRegistry, DEFAULT_ENTITY_REGISTRY } from '~/@/entities';
+import { $activeEntityTypes, $entityRegistry } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import { Badge } from '~/components/ui/badge';
 import { Separator } from '~/components/ui/separator';
-import { $isMobile } from "~/core/media-query";
 import { router } from "~/core/routes";
 
 import { $advanceFilterList } from "../../map.model";
@@ -35,12 +33,10 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
 
-  const isMobile = useStore($isMobile);
   const activeEntityTypes = useStore($activeEntityTypes);
   const advanceFilterList = useStore($advanceFilterList);
   const { urlFieldList } = useStore($countrySearchParams);
-  const entityRegistry = useStore($entityRegistry);
-  const [openItems, setOpenItems] = useState<EntityType | null>(null);
+  const [openItems, setOpenItems] = useState<EntityType[]>([]);
   const [selectedFields, setSelectedFields] = useState<Record<string, string | {
     none_range: boolean;
     value: string;
@@ -153,11 +149,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       });
 
     const mapedfilteredAdvanceFilterList = filteredAdvanceFilterList.map(item => ({
-      entity: t(item.entity_type === EntityType.HEALTH ? entityRegistry[item?.entity_type]?.slug : `${item.entity_type}-entity-label`, {
-        defaultValue: t(entityRegistry[item?.entity_type]?.slug ?? item?.entity_type, {
-          count: 1,
-        }),
-      }),
+      entity: t(`${item.entity_type}-entity-label`, { count: 1 }),
       label: item.name,
       itemKey: `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`,
     }));
@@ -190,7 +182,11 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     });
   };
 
-  // const items = ['All data layers']
+  useEffect(() => {
+    if (entitiesWithFilters.length > 0 && openItems.length === 0) {
+      setOpenItems([...entitiesWithFilters]);
+    }
+  }, [entitiesWithFilters, openItems.length]);
   if (!isReady) return null;
   return (
     <PopoverContent className="filter-popover-content">
@@ -238,19 +234,18 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           )}
 
           {entitiesWithFilters.map((el, index) => {
-            return (<><Accordion type="single"
-              collapsible
+            return (<><Accordion type="multiple"
               key={'accordian' + el}
-              value={openItems === el ? el : undefined}
-              onValueChange={(eventAccordion: EntityType) => {
-                setOpenItems(eventAccordion || null);
+              value={openItems}
+              onValueChange={(eventAccordion: string[]) => {
+                setOpenItems(eventAccordion as EntityType[]);
               }}
               className="flex! flex-col! gap-3!">
 
               <AccordionItem value={el}>
                 <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
-                  <span >{t(DEFAULT_ENTITY_REGISTRY[el].slug, DEFAULT_ENTITY_REGISTRY[el].slug === (EntityType.SCHOOL as string) ? { count: 1 } : { count: 2 })} {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
-                  {openItems === el ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  <span >{t(`${el}-entity-label`, { count: 1 })}  {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
+                  {openItems.includes(el) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </AccordionTrigger>
                 <AccordionContent>
                   {advanceFilterList.filter(elAdvanceFilter => elAdvanceFilter.entity_type === el).map((item, index) => {

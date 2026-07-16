@@ -99,7 +99,7 @@ const SchoolStatusLegend = ({
       </div>
       {Object.values(ConnectivityStatusDistribution).map((key) => (
         <div
-          className="mt-3! flex! w-full! items-center! justify-between!"
+          className="mt-3! flex! w-full! items-center! justify-start!"
           key={key}
         >
           <div className="flex! min-w-0! items-center!">
@@ -123,7 +123,7 @@ const SchoolStatusLegend = ({
           </div>
           {shouldShowControls ? (
             <div
-              className="ml-1.5! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+              className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
               data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}
             >
               {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}

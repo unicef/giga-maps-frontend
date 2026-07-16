@@ -54,7 +54,7 @@ const LandingPage = () => {
           <LandingPageHeader
             onShareClicked={handleShareClicked}
             subtitle={
-              'an-open-live-global-map-of-mapped-entities-and-their-connectivity'
+              'an-open-live-global-map-of-mapped-facilities-and-their-connectivity'
             }
             title={'global-connectivity-map-for-children'}
           />
