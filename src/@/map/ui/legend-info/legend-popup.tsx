@@ -184,20 +184,19 @@ const LegendPopup = ({
         </div>
         <div
           className={cn(
-            'flex! h-1! w-full!',
+            'flex! h-4! w-full! items-center!',
             showLiveLegend
               ? 'gap-2! overflow-visible! max-md:gap-1!'
-              : 'gap-0! overflow-hidden!',
+              : 'gap-0! overflow-visible!',
           )}
         >
           {activeLayerSummaryItems.map(({ color, key, label }) =>
             showLiveLegend ? (
               <span
                 aria-hidden="true"
-                className="relative! block! min-w-0! flex-1! overflow-visible!"
+                className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
                 key={key}
-
-                title={label}
+                data-title={label}
               >
                 {/* Pulsing outer glow bar */}
                 <span
@@ -207,18 +206,22 @@ const LegendPopup = ({
                 />
                 {/* Solid center bar */}
                 <span
-                  className="absolute! inset-0!"
+                  className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
                   style={{ background: liveMetricFill }}
                 />
               </span>
             ) : (
               <span
                 aria-hidden="true"
-                className="block! min-w-0! flex-1! overflow-hidden!"
+                className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
                 key={key}
-                style={{ background: color }}
-                title={label}
-              />
+                data-title={label}
+              >
+                <span
+                  className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                  style={{ background: color }}
+                />
+              </span>
             ),
           )}
         </div>
@@ -259,21 +262,25 @@ const LegendPopup = ({
                 <span
                   className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-muted-foreground! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!"
                   key={key}
-                  title={label}
+                  data-title={label}
                 >
                   {label}
                 </span>
               ))}
             </div>
-            <div className="flex! h-1! w-full! overflow-hidden!">
+            <div className="flex! h-4! w-full! items-center! overflow-visible!">
               {schoolSummaryItems.map(({ color, key, label }) => (
                 <span
                   aria-hidden="true"
-                  className="block! min-w-0! flex-1!"
+                  className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
                   key={key}
-                  style={{ background: color }}
-                  title={label}
-                />
+                  data-title={label}
+                >
+                  <span
+                    className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                    style={{ background: color }}
+                  />
+                </span>
               ))}
             </div>
           </div>

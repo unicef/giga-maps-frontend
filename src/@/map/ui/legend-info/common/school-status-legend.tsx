@@ -111,7 +111,10 @@ const SchoolStatusLegend = ({
                 type="checkbox"
               />
             ) : null}
-            <div className="flex! min-w-0! items-center! gap-2!">
+            <div
+              className="flex! min-w-0! items-center! gap-2!"
+              data-title={t(ConnectivityStatusNames[key])}
+            >
               <EntityLegendIndicator
                 color={paintData[key]}
                 entityType={entityType}

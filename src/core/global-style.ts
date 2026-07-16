@@ -175,7 +175,7 @@ a{
     z-index: 1000;
     pointer-events: none;
     opacity: 0;
-    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+    animation: tooltipFadeIn 0.2s ease-in-out 0.5s forwards;
   }
 
   [data-title]:hover::before {
@@ -189,7 +189,7 @@ a{
     z-index: 1000;
     pointer-events: none;
     opacity: 0;
-    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+    animation: tooltipFadeIn 0.2s ease-in-out 0.5s forwards;
   }
 
   @keyframes tooltipFadeIn {
