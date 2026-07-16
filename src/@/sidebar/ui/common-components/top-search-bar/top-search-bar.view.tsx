@@ -268,10 +268,12 @@ const TopSearchBar = () => {
           sideOffset={2}
           style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}
         >
-          <SearchResultScroll className="search-container max-h-[calc(80vh-4.5rem)] bg-[#161616]">
-            <SearchCountryList />
-          </SearchResultScroll>
-          <FooterTourContact message={t("not-the-results-you-expected")} />
+          <div className='!border  !rounded-lg !overflow-hidden !border-solid !border-[#277aff]'>
+            <SearchResultScroll className="search-container max-h-[calc(80vh-6.5rem)] bg-[#161616]">
+              <SearchCountryList />
+            </SearchResultScroll>
+            <FooterTourContact message={t("not-the-results-you-expected")} />
+          </div>
           <SearchSchoolPanel />
         </PopoverContent>
       </Popover>

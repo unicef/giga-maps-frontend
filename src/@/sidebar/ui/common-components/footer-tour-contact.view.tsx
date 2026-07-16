@@ -10,13 +10,16 @@ const RootWrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
+  flex-wrap:wrap;
   color: ${props => props.theme.schoolId};
-  flex-direction: column;
+  flex-direction: row;
   background:${props => props.theme.main};
+  gap:0.15rem;
 `
 const LinkButtons = styled.div`
   display: flex;
   align-items: center;
+  line-height:12px;
   a:hover{
     text-decoration: underline !important;
   }
@@ -31,8 +34,10 @@ const Message = styled.p`
 `
 const Link = styled(CarbonLink)`
 font-size: 0.75rem !important;
-font-style: normal;
-font-weight: 400;
+white-space: pre-line;
+    text-align: center;
+    font-weight: 400;
+    
 cursor: pointer;
 `
 
@@ -41,9 +46,10 @@ export default function FooterTourContact({ message }: { readonly message?: stri
   return (<RootWrapper>
     {message && <Message>{message}</Message>}
     <LinkButtons>
-      <Link onClick={() => router.navigate(`/map?popover=tour`)} >{t('take-the-tour')}</Link>
-      <span>&nbsp;{t('or')}&nbsp;</span>
+      {/* <Link onClick={() => router.navigate(`/map?popover=tour`)} >{t('take-the-tour')}</Link>
+      <span>&nbsp;{t('or')}&nbsp;</span> */}
       <Link href='/about#live-map-get-in-touch' target='_blank'>{t('contact-us')}</Link>
+
     </LinkButtons>
   </RootWrapper>)
 }
