@@ -24,7 +24,9 @@ import {
   PopupTemplate,
   SchoolInfoWrapper,
   SchoolName,
+  SchoolNameContent,
   SchoolNameWrapper,
+  SchoolVerificationTag,
 } from './school-popup.style';
 
 export const MapSchoolPopup = () => {
@@ -76,7 +78,10 @@ export const MapSchoolPopup = () => {
                 <div className="map-popup-template">
                   <PopupTemplate>
                     <SchoolNameWrapper>
-                      <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
+                      <SchoolNameContent>
+                        <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
+                        {feature?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
+                      </SchoolNameContent>
                       <OSMLink
                         href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
                         target="_blank"

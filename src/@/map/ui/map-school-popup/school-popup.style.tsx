@@ -15,9 +15,18 @@ export const PopupTemplate = styled.div`
 `
 export const SchoolNameWrapper = styled.div`
 display:flex;
-align-items:center;
+align-items:flex-start;
 margin-bottom: 1rem;
 justify-content: space-between;
+gap: 0.75rem;
+`
+export const SchoolNameContent = styled.div`
+display:flex;
+align-items:center;
+gap: 0.5rem;
+flex-wrap: wrap;
+min-width: 0;
+flex: 1;
 `
 export const SchoolInfoWrapper = styled.div`
 display:flex;
@@ -33,11 +42,29 @@ export const SchoolName = styled.h6`
   font-weight: 400;
   line-height: 1.75rem;
   margin-bottom: 2px;
-  max-width: 85%;
-  margin-right: 1rem;
+  max-width: 100%;
+  margin-right: 0;
   text-transform: capitalize;
   overflow-wrap: break-word;
   word-break: break-word;
+`
+export const SchoolVerificationTag = styled.div`
+  min-height: 1.25rem;
+  border-radius: 0.375rem;
+  background: #FCD34D;
+  padding: 0.125rem 0.625rem;
+  color: #44403C;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  font-family: Open Sans;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  text-transform: none;
+  white-space: nowrap;
 `
 export const Label = styled.span<{ $color?: string, $size?: string, $textTransform?: string }>`
 color: ${props => props.$color || props.theme.titleDesc};

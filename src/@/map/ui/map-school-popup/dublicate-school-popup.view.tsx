@@ -30,7 +30,7 @@ import {
   SchoolName,
   TotalCountLabel
 } from './dublicate-school-popup.style';
-import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow } from './school-popup.style';
+import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow, SchoolVerificationTag } from './school-popup.style';
 
 type Props = {
   schoolIds: number[];
@@ -253,7 +253,10 @@ export default function DublicateSchoolPopup({
             return (
               <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
                 <ItemTopSection>
-                  <SchoolName title={s.name}>{s.name ?? s.id}</SchoolName>
+                  <SchoolName title={s.name}>
+                    <span>{s.name ?? s.id}</span>
+                    {s?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
+                  </SchoolName>
                   <SchoolItemCount>{`${idx + 1} ${t('of')} (${total})`}</SchoolItemCount>
                 </ItemTopSection>
 
