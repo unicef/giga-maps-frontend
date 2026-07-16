@@ -22,7 +22,7 @@ import { mapEntity } from '~/core/routes';
 const base =
   'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap!';
 const active =
-  'border-[#525252]! bg-[#525252]! text-white! hover:bg-[#6f6f6f]! hover:text-white!';
+  'border-[#393939]! bg-[#393939]! text-white! hover:bg-[#4c4c4c]! hover:text-white!';
 const inactive =
   'border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!';
 

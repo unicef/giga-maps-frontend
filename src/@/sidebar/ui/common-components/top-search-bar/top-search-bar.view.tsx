@@ -15,6 +15,7 @@ import { Input } from '~/components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { mapOverview } from '~/core/routes';
+import { $theme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
@@ -37,6 +38,9 @@ const TopSearchBar = () => {
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const { t } = useTranslation();
   const isGlobalView = useRoute(mapOverview);
+  const isLight = useStore($theme) === ThemeType.light;
+  const searchFill = isLight ? '#f4f4f4' : '#242424';
+  const searchBorder = isActiveSearchBar ? '#0f62fe' : isLight ? '#c6c6c6' : '#161616';
 
   const entityTagEntries = useMemo(
     () => Object.values(entityRegistry).filter((config) => config.active),
@@ -135,9 +139,13 @@ const TopSearchBar = () => {
       aria-expanded={showCountries}
       aria-label={t('country-list')}
       className={cn(
-        'main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!',
+        'main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! px-2! py-0! text-foreground! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!',
         ''
       )}
+      style={{
+        backgroundColor: searchFill,
+        '--country-trigger-border': searchBorder,
+      } as CSSProperties}
       onClick={() => {
         changeIsSearchFocused(false)
         onShowCountriesAdminList(!showCountries)
@@ -176,11 +184,13 @@ const TopSearchBar = () => {
               )}
             </TooltipProvider>
             <div
-              className="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! bg-[#f4f4f4]! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
-              style={{ '--search-shell-border': isActiveSearchBar ? '#0f62fe' : '#c6c6c6' } as CSSProperties}
+              className="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
+              style={{
+                backgroundColor: searchFill,
+                '--search-shell-border': searchBorder,
+              } as CSSProperties}
             >
               <div className="flex! h-12! items-center!">
-                <Search size={16} className="pointer-events-none! ml-3.5! shrink-0! text-[#525252]!" />
                 {selectedTagConfigs.map((config) => (
                   <Badge
                     key={config.type}
@@ -205,7 +215,7 @@ const TopSearchBar = () => {
                   autoFocus
                   autoCorrect="off"
                   spellCheck={false}
-                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-3.5! pr-10! text-[0.9375rem]! font-normal! leading-5! text-foreground! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
                   id="main-search-bar"
                   inputMode="search"
                   onBlur={onBlurSearch}
@@ -230,6 +240,12 @@ const TopSearchBar = () => {
                   placeholder={t("search-country-region-school-id")}
                   value={searchText}
                 />
+                {!searchText && selectedTags.length === 0 ? (
+                  <Search
+                    size={16}
+                    className="pointer-events-none! absolute! right-3.5! top-1/2! shrink-0! -translate-y-1/2! text-foreground!"
+                  />
+                ) : null}
               </div>
               <Button
                 aria-label={t('clear-search')}
