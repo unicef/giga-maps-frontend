@@ -132,7 +132,7 @@ const LegendBenchmarkDropdown = ({
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="mt-1! inline-flex! max-w-full! items-center! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground!">
+          <div className="mt-1! inline-flex! w-fit items-center! rounded-md! border! border-border! px-2.5! py-0.5! text-left! text-xs! leading-4.5! text-muted-foreground!">
             <span className="truncate!">{nonInteractiveLabel}</span>
           </div>
         </TooltipTrigger>

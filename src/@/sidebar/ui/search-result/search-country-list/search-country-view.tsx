@@ -1,5 +1,6 @@
 import { useStore } from "effector-react"
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { CountryIntegrationStatusColor } from "~/@/country/country.constant";
 import { mapCountry } from "~/core/routes";
@@ -9,7 +10,6 @@ import { $currentExpandCountry, $searchSchoolIds, setSearchCountryExpand } from 
 import { CountryWithDistrictCount } from "../container/search-result.type";
 import { ChevronDownIcon, ChevronUpIcon, Dot, LeftItem, LinkItem, RightItem, SearchItem } from "../styles/search-result-style"
 import { SearchDistrict } from "./search-district-view"
-import { useTranslation } from "react-i18next";
 
 
 export const expandCountry = (countryId: string, isExpanded: boolean) => {
@@ -30,7 +30,7 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
       <SearchItem
         $border={!isExpanded}>
         <LeftItem $bold={isExpanded}>
-          <Dot $color={CountryIntegrationStatusColor[integrationStatus]} style={{ left: '-1.2rem', top: '0.5rem', position: 'absolute' }} />
+          <Dot $color={CountryIntegrationStatusColor[integrationStatus]} style={{ left: '-1.0rem', top: '0.5rem', position: 'absolute' }} />
           <Link to={mapCountry} params={{ code: code.toLowerCase() }}>
             {t(name)}
           </Link>
