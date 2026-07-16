@@ -38,7 +38,7 @@ export default function ConnectivityLayer({
 
   return (
     <>
-      <div className="mx-4! py-2! flex! flex-col! justify-start! items-start! gap-1!">
+      <div className="mx-4! py-4! flex! flex-col! justify-start! items-start! gap-6!">
         <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4!">
           <LiveAverage
             isLoading={isLoading}
