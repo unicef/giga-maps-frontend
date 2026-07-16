@@ -14,9 +14,11 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
+import { mapOverview } from '~/core/routes';
 import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
+import { useRoute } from '~/lib/router';
 
 import { $isActiveSearchBar, $searchInput, $selectedSearchEntityTags, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, toggleSearchEntityTag } from './top-search-bar.model';
 
@@ -34,6 +36,7 @@ const TopSearchBar = () => {
   const searchShellRef = useRef<HTMLDivElement>(null);
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const { t } = useTranslation();
+  const isGlobalView = useRoute(mapOverview);
 
   const entityTagEntries = useMemo(
     () => Object.values(entityRegistry).filter((config) => config.active),
@@ -75,12 +78,14 @@ const TopSearchBar = () => {
   }, []);
 
   useEffect(() => {
+    if (!isGlobalView) return;
+
     const input = document.getElementById('main-search-bar') as HTMLInputElement | null;
     if (!input) return;
 
     input.focus();
     changeIsSearchFocused(true);
-  }, []);
+  }, [isGlobalView]);
 
   const onBlurSearch = (e: React.FocusEvent<HTMLInputElement>) => {
     // Check if the newly focused element is inside our search results
@@ -200,7 +205,7 @@ const TopSearchBar = () => {
                   autoFocus
                   autoCorrect="off"
                   spellCheck={false}
-                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
                   id="main-search-bar"
                   inputMode="search"
                   onBlur={onBlurSearch}
