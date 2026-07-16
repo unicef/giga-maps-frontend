@@ -25,6 +25,7 @@ const FilterButton = () => {
   const isMobile = useStore($isMobile);
   const countrySearchString = useStore($countrySearchString);
   const advanceFilterList = useStore($advanceFilterList);
+  const { selectedCount } = useStore($countrySearchParams);
   const showFilter = () => {
     onShowAdvancedFilter(!isOpen);
   };
@@ -49,20 +50,28 @@ const FilterButton = () => {
 
         <FilterPopup caret={false} open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left"}>
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <FilterSelectedChips />
+            {/* <FilterSelectedChips /> */}
             <FilterButtonWrapper $iconColor={theme.white}>
               <Button
                 align="left"
                 onClick={showFilter}
                 disabled={isDisabled}
                 size="sm"
-                label="Filter"
-                tooltipText='Filters'
+                label={t('filters')}
+                tooltipText={t('filters')}
               >
                 <Tuning fill={theme.white} />
                 <span>{t('filters')}</span>
+                {selectedCount > 0 && (
+                  <span className="h-5! px-2.5! py-0.5! bg-connectivity-green-200! rounded-md! inline-flex! justify-center! items-center! gap-1! ml-1!">
+                    <div className="h-4! flex justify-center! items-center! gap-2.5!">
+                      <div className="justify-start! text-grey-900! text-xs! font-normal! leading-4!">
+                        {selectedCount}
+                      </div>
+                    </div>
+                  </span>
+                )}
               </Button>
-              {!!countrySearchString && <Tag />}
             </FilterButtonWrapper>
           </div>
         </FilterPopup>

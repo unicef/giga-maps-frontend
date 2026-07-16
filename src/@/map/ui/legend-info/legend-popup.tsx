@@ -53,9 +53,9 @@ const getDefaultLegendTab = (entityTypes: EntityType[]) =>
 const getDefaultCollapsedState = (isMobile: boolean) => isMobile;
 
 const schoolSummaryOrder = [
-  ConnectivityStatusDistribution.unknown,
-  ConnectivityStatusDistribution.notConnected,
   ConnectivityStatusDistribution.connected,
+  ConnectivityStatusDistribution.notConnected,
+  ConnectivityStatusDistribution.unknown,
 ] as const;
 
 const LegendPopup = ({
@@ -178,9 +178,9 @@ const LegendPopup = ({
           <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
             {legendMetricSubtitle}
           </span>
-          <span className="text-xs! leading-4.5! text-muted-foreground!">
+          {/* <span className="text-xs! leading-4.5! text-muted-foreground!">
             {legendMetricTitle}
-          </span>
+          </span> */}
         </div>
         <div
           className={cn(
@@ -196,15 +196,16 @@ const LegendPopup = ({
                 aria-hidden="true"
                 className="relative! block! min-w-0! flex-1! overflow-visible!"
                 key={key}
-                style={{
-                  boxShadow:
-                    '0 0 2px 0.5px ' +
-                    getLightGlowColor(color) +
-                    ', 0 0 4px 0 ' +
-                    color,
-                }}
+
                 title={label}
               >
+                {/* Pulsing outer glow bar */}
+                <span
+                  aria-hidden="true"
+                  className="absolute! left-1/2! top-1/2! w-full! h-1! pointer-events-none! animate-[legend-bar-glow_1.2s_infinite_alternate_0.2s]"
+                  style={{ background: color }}
+                />
+                {/* Solid center bar */}
                 <span
                   className="absolute! inset-0!"
                   style={{ background: liveMetricFill }}
@@ -248,6 +249,11 @@ const LegendPopup = ({
       {shouldShowStatusSummary ? (
         <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
           <div className="flex! min-w-0! w-full! flex-col! gap-1!">
+            <div className="flex! items-center! justify-between! gap-3!">
+              <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
+                {legendStatusTitle}
+              </span>
+            </div>
             <div className="flex! min-w-0! w-full! gap-0!">
               {schoolSummaryItems.map(({ key, label }) => (
                 <span

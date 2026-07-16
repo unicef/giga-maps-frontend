@@ -190,6 +190,9 @@
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
 
+  --color-connectivity-green-200: #85FFBC;
+  --color-grey-900: #161616;
+
   --font-manrope: "Manrope", sans-serif;
 }
 
@@ -202,5 +205,17 @@
   to {
     opacity: 0.35;
     transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+@keyframes legend-bar-glow {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(1.09, 2);
   }
 }
