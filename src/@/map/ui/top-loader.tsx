@@ -21,11 +21,10 @@ import {
   $selectedLayerIdByEntity,
   $selectedSchoolIds,
 } from '~/@/sidebar/sidebar.model';
+import { $isMapLoading, setMapLoadingState } from '../loading.model';
 
-const setMapLoadingState = createEvent<boolean>();
 const setDataChecking = createEvent<boolean>();
 const $dataChecking = restore(setDataChecking, false);
-const $isMapLoading = restore(setMapLoadingState, true);
 const setMapPercentage = createEvent<number>();
 const $mapPercent = restore(setMapPercentage, 20);
 const setLoadingState = createEvent<

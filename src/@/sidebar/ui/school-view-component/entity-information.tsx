@@ -93,6 +93,7 @@ export function EntityInformation({
             label={t('giga-id')}
             value={getEntityGigaId(entity)}
             valueClassName="lowercase!"
+            preventTruncate={true}
           />
         )}
         {entity.admin1_name && entity.admin1_description_ui_label && (

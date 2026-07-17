@@ -1,4 +1,4 @@
-import { combine, createEffect, guard, merge, sample } from 'effector';
+import { combine, createEffect, createStore, guard, merge, sample } from 'effector';
 import type { Map as MapboxMap } from 'mapbox-gl';
 
 import {
@@ -6,6 +6,7 @@ import {
   $admin1Id,
   $country,
   $countryActiveFiltersList,
+  $countryCode,
   $countryId,
   $countryMapping,
   $countrySearchString,
@@ -61,7 +62,7 @@ import {
   router,
 } from '~/core/routes';
 import { $theme } from '~/core/theme.model';
-import { $urlParamsConsumed } from '~/@/sidebar/url-params.model';
+import { $urlParamsConsumed, $isAppSettled } from '~/@/sidebar/url-params.model';
 
 import {
   changeLayersFx,
@@ -235,12 +236,23 @@ const hasFilterParams = () => {
   return Array.from(params.keys()).some((key) => key.startsWith('filter__'));
 };
 
+const $hadFiltersOnLoad = createStore(hasFilterParams());
+
+sample({
+  clock: $countryCode,
+  source: $isAppSettled,
+  filter: (isAppSettled) => isAppSettled,
+  fn: () => false,
+  target: $hadFiltersOnLoad,
+});
+
 const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
   activeEntityTypes: $activeEntityTypes,
   urlParamsConsumed: $urlParamsConsumed,
+  hadFiltersOnLoad: $hadFiltersOnLoad,
 });
 
 // guard: apply default country filters only when:
@@ -258,9 +270,9 @@ const activeFiltersListClock = guard({
     countryActiveFiltersList,
     activeFiltersList,
     schoolFocusLatLng,
-    urlParamsConsumed,
+    hadFiltersOnLoad,
   }) => {
-    if (!urlParamsConsumed && hasFilterParams()) return false;
+    if (hadFiltersOnLoad) return false;
 
     return (
       countryActiveFiltersList != null &&

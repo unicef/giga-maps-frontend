@@ -8,7 +8,7 @@ import {
   VectorSource,
 } from 'mapbox-gl';
 
-import { EntityType, getEntityMapValue } from '~/@/entities';
+import { EntityType } from '~/@/entities';
 import type {
   EntityConfig,
   EntityMapAnimationConfig,
@@ -53,6 +53,7 @@ import {
 } from './map.model';
 import { registerDevMultipleSchoolSameLocationHighlight } from './dev/multiple-school-same-location-highlight';
 import { ChangeLayerOptions, StylePaintData } from './map.types';
+import { $isMapLoading } from './loading.model';
 
 type MapAnimationConfigSource = Pick<
   EntityConfig,
@@ -337,6 +338,11 @@ export function animateCircles({
   let isGrowing = true;
   const getMaxRadius = setCurrentRadius(entityConfig, fallbackMarkerType);
   function animateFrame(time: number) {
+    if ($isMapLoading.getState()) {
+      startTime = time;
+      animationFrameData.requestId = requestAnimationFrame(animateFrame);
+      return;
+    }
     const mapLayer = map.getLayer(layer) as { type?: string } | undefined;
     if (!mapLayer) {
       animationFrameData.requestId = requestAnimationFrame(animateFrame);
@@ -449,9 +455,9 @@ const generateEntityMapParams = ({
     const entityLayerId = isGlobalView
       ? (layerUtils.globalLayerDataByEntity?.[entityType]?.id ?? null)
       : getEntityLayerId({
-          entityType,
-          selectedLayerIdByEntity: layerUtils.selectedLayerIdByEntity,
-        });
+        entityType,
+        selectedLayerIdByEntity: layerUtils.selectedLayerIdByEntity,
+      });
     const isLive = Boolean(
       layerUtils.currentLayerTypeUtilsByEntity?.[entityType]?.isLive,
     );
@@ -483,7 +489,7 @@ const generateEntityMapParams = ({
     params.set(
       prefix + 'benchmark',
       connectivityBenchMarkByEntity?.[entityType] ??
-        ConnectivityBenchMarks.global,
+      ConnectivityBenchMarks.global,
     );
     params.set(prefix + 'include_same_location', 'false');
   });
@@ -573,9 +579,9 @@ export const generateLayerUrls = ({
   const requestEntityTypes = isGlobalView
     ? entityTypes
     : getEntityTypesWithLayerId({
-        entityTypes,
-        layerUtils,
-      });
+      entityTypes,
+      layerUtils,
+    });
   if (!requestEntityTypes.length) return '';
 
   const entityParams =
@@ -734,7 +740,7 @@ export const createSchoolLayer = (
   const countryCode = $countryCode.getState();
   const currentCountryPaintData =
     CountryPaintData[
-      countryCode?.toLowerCase() as keyof typeof CountryPaintData
+    countryCode?.toLowerCase() as keyof typeof CountryPaintData
     ];
   const paint = withEntityCircleRadius(
     {
@@ -847,7 +853,7 @@ const getConnectivityPaint = (
   const countryCode = $countryCode.getState();
   const currentCountryPaintData =
     CountryPaintData[
-      countryCode?.toLowerCase() as keyof typeof CountryPaintData
+    countryCode?.toLowerCase() as keyof typeof CountryPaintData
     ];
   return {
     ...mapPaintData.connectivity,

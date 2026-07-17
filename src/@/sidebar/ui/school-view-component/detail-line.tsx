@@ -9,11 +9,13 @@ export function DetailLine({
   label,
   value,
   valueClassName = '',
+  preventTruncate = false,
 }: {
   icon?: LucideIcon;
   label?: string;
   value: unknown;
   valueClassName?: string;
+  preventTruncate?: boolean;
 }) {
   const displayValue = getDisplayValue(value);
   if (displayValue === 'N/A') return null;
@@ -22,7 +24,7 @@ export function DetailLine({
     <div className="flex! min-w-0! items-center! gap-1! mt-3! text-muted-foreground!">
       {Icon && <Icon className="size-3! shrink-0! text-foreground!" />}
       <p
-        className="m-0! min-w-0! truncate! capitalize! text-[12px]! leading-[1.125rem]!"
+        className={`m-0! min-w-0! capitalize! text-[12px]! leading-[1.125rem]! ${preventTruncate ? 'whitespace-normal! break-all!' : 'truncate!'}`}
         title={displayValue}
       >
         {label ? <>{label}: </> : null}
