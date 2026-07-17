@@ -22,6 +22,7 @@ import {
 } from '~/@/entities/models/entity.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import {
+  fetchAdvanceFilterFx,
   fetchCountriesFx,
   fetchCountryFx,
   fetchEntitiesConnectivityStatsFx,
@@ -1161,6 +1162,46 @@ export const $isLoadingCountryAdminView = $allLoadings.map(
       Boolean,
     ),
 );
+
+export const $isGlobalLegendLoading = fetchLayerListFx.pending;
+
+export const $isLiveLegendLoading = combine(
+  fetchLayerListFx.pending,
+  // fetchAdvanceFilterFx.pending,
+  fetchCountryFx.pending,
+  fetchCountriesFx.pending,
+  getEntitiesAvailableDates.pending,
+  fetchEntitiesLayerInfoFx.pending,
+  (...pendingFlags) => pendingFlags.some(Boolean)
+);
+
+combine({
+  layer: fetchLayerListFx.pending,
+  advance: fetchAdvanceFilterFx.pending,
+  countries: fetchCountriesFx.pending,
+  country: fetchCountryFx.pending,
+  availability: getEntitiesAvailableDates.pending,
+  info: fetchEntitiesLayerInfoFx.pending,
+},
+  (object) =>
+    console.log(Object.entries(object), new Date())
+);
+
+export const $isStaticLegendLoading = combine(
+  fetchLayerListFx.pending,
+  fetchAdvanceFilterFx.pending,
+  fetchCountryFx.pending,
+  fetchCountriesFx.pending,
+  fetchEntitiesLayerInfoFx.pending,
+  (...pendingFlags) => pendingFlags.some(Boolean));
+
+export const $isStatusLegendLoading = combine(
+  fetchLayerListFx.pending,
+  fetchAdvanceFilterFx.pending,
+  fetchCountryFx.pending,
+  fetchCountriesFx.pending,
+  fetchEntityGlobalStatsFx.pending,
+  (...pendingFlags) => pendingFlags.some(Boolean));
 
 export const onShowLegend = createEvent<boolean>();
 export const $showLegend = restore(onShowLegend, true);

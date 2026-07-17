@@ -23,11 +23,13 @@ import { Info } from 'lucide-react';
 
 const StaticLayerLegend = ({
   entityType,
+  isLoading = false,
   metricSubtitle,
   metricTitle,
   shouldShowControls,
 }: {
   entityType: EntityType;
+  isLoading?: boolean;
   metricSubtitle: string;
   metricTitle: string;
   shouldShowControls: boolean;
@@ -118,23 +120,31 @@ const StaticLayerLegend = ({
                   color={legends.colors[key]}
                   entityType={entityType}
                 />
-                <span className="text-sm! font-normal! leading-5! text-foreground!">
-                  {label}
-                </span>
+                {isLoading ? (
+                  <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                ) : (
+                  <span className="text-sm! font-normal! leading-5! text-foreground!">
+                    {label}
+                  </span>
+                )}
               </div>
             </div>
             {shouldShowControls ? (
-              <div
-                className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
-                data-title={t('int', {
-                  val: coverageStats?.connected_schools?.[label] ?? 0,
-                })}
-              >
-                {formatNumber(
-                  coverageStats?.connected_schools?.[label] ?? 0,
-                  lng,
-                )}
-              </div>
+              isLoading ? (
+                <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
+              ) : (
+                <div
+                  className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+                  data-title={t('int', {
+                    val: coverageStats?.connected_schools?.[label] ?? 0,
+                  })}
+                >
+                  {formatNumber(
+                    coverageStats?.connected_schools?.[label] ?? 0,
+                    lng,
+                  )}
+                </div>
+              )
             ) : null}
           </button>
         ) : null;

@@ -18,7 +18,13 @@ import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
-import { $layerUtils } from '~/@/sidebar/sidebar.model';
+import {
+  $layerUtils,
+  $isGlobalLegendLoading,
+  $isLiveLegendLoading,
+  $isStaticLegendLoading,
+  $isStatusLegendLoading,
+} from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { Button } from '~/components/ui/button';
 import {
@@ -34,7 +40,6 @@ import {
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes } from '~/core/routes';
 import { cn } from '~/lib/cn';
-
 import LiveLayerLegend from './common/live-layer-legend';
 import SchoolStatusLegend from './common/school-status-legend';
 import StaticLayerLegend from './common/static-layer-legend';
@@ -83,6 +88,10 @@ const LegendPopup = ({
   const shouldShowControls = !mapLevel.map && !isEntityDetailView;
 
   const paintData = useStore($stylePaintData);
+  const isGlobalLegendLoading = useStore($isGlobalLegendLoading);
+  const isLiveLegendLoading = useStore($isLiveLegendLoading);
+  const isStaticLegendLoading = useStore($isStaticLegendLoading);
+  const isStatusLegendLoading = useStore($isStatusLegendLoading);
   const visibleLegendEntityTypes = useMemo(() => {
     // Filter to only types that are both active AND visible in config, maintain registry order
     return entityTypesFiltered.filter((type) =>
@@ -171,78 +180,90 @@ const LegendPopup = ({
     isSchoolStatus || shouldShowGlobalSchoolStatus;
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
-  const renderMetricSummary = () => (
-    <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
-      <div className="flex! min-w-0! w-full! flex-col! gap-1!">
-        <div className="flex! items-center! justify-between! gap-3!">
-          <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
-            {legendMetricSubtitle}
-          </span>
-          {/* <span className="text-xs! leading-4.5! text-muted-foreground!">
-            {legendMetricTitle}
-          </span> */}
-        </div>
-        <div
-          className={cn(
-            'flex! h-4! w-full! items-center!',
-            showLiveLegend
-              ? 'gap-2! overflow-visible! max-md:gap-1!'
-              : 'gap-0! overflow-visible!',
-          )}
-        >
-          {activeLayerSummaryItems.map(({ color, key, label }) =>
-            showLiveLegend ? (
-              <span
-                aria-hidden="true"
-                className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
-                key={key}
-                data-title={label}
-              >
-                {/* Pulsing outer glow bar */}
+  const renderMetricSummary = () => {
+    const isMetricLoading = isGlobalView
+      ? isGlobalLegendLoading
+      : showLiveLegend
+        ? isLiveLegendLoading
+        : isStaticLegendLoading;
+
+    return (
+      <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
+        <div className="flex! min-w-0! w-full! flex-col! gap-1!">
+          <div className="flex! items-center! justify-between! gap-3!">
+            {isMetricLoading ? (
+              <div className="h-4! w-32! animate-pulse! rounded! bg-muted-foreground/20!" />
+            ) : (
+              <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
+                {legendMetricSubtitle}
+              </span>
+            )}
+            {/* <span className="text-xs! leading-4.5! text-muted-foreground!">
+              {legendMetricTitle}
+            </span> */}
+          </div>
+          <div
+            className={cn(
+              'flex! h-4! w-full! items-center!',
+              showLiveLegend
+                ? 'gap-2! overflow-visible! max-md:gap-1!'
+                : 'gap-0! overflow-visible!',
+            )}
+          >
+            {activeLayerSummaryItems.map(({ color, key, label }) =>
+              showLiveLegend ? (
                 <span
                   aria-hidden="true"
-                  className="absolute! left-1/2! top-1/2! w-full! h-1! pointer-events-none! animate-[legend-bar-glow_1.2s_infinite_alternate_0.2s]"
-                  style={{ background: color }}
-                />
-                {/* Solid center bar */}
+                  className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
+                  key={key}
+                  data-title={label}
+                >
+                  {/* Pulsing outer glow bar */}
+                  <span
+                    aria-hidden="true"
+                    className="absolute! left-1/2! top-1/2! w-full! h-1! pointer-events-none! animate-[legend-bar-glow_1.2s_infinite_alternate_0.2s]"
+                    style={{ background: color }}
+                  />
+                  {/* Solid center bar */}
+                  <span
+                    className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                    style={{ background: liveMetricFill }}
+                  />
+                </span>
+              ) : (
                 <span
-                  className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
-                  style={{ background: liveMetricFill }}
-                />
-              </span>
-            ) : (
-              <span
-                aria-hidden="true"
-                className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
-                key={key}
-                data-title={label}
-              >
-                <span
-                  className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
-                  style={{ background: color }}
-                />
-              </span>
-            ),
-          )}
+                  aria-hidden="true"
+                  className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
+                  key={key}
+                  data-title={label}
+                >
+                  <span
+                    className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                    style={{ background: color }}
+                  />
+                </span>
+              ),
+            )}
+          </div>
         </div>
+        {!shouldShowStatusSummary ? (
+          <Button
+            className="absolute! top-1! right-1!"
+            aria-label={t('expand-legend')}
+            data-testid="legend-expand-button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setCollapsed(false);
+            }}
+            size="icon"
+            variant="icon"
+          >
+            <Maximize2 size={14} className="text-foreground/60!" />
+          </Button>
+        ) : null}
       </div>
-      {!shouldShowStatusSummary ? (
-        <Button
-          className="absolute! top-1! right-1!"
-          aria-label={t('expand-legend')}
-          data-testid="legend-expand-button"
-          onClick={(event) => {
-            event.stopPropagation();
-            setCollapsed(false);
-          }}
-          size="icon"
-          variant="icon"
-        >
-          <Maximize2 size={14} className="text-foreground/60!" />
-        </Button>
-      ) : null}
-    </div>
-  );
+    );
+  };
 
   const collapsedContent = (
     <div
@@ -383,6 +404,7 @@ const LegendPopup = ({
           <SchoolStatusLegend
             entityType={activeTab}
             forceVisible={shouldShowGlobalSchoolStatus}
+            isLoading={isGlobalView ? isGlobalLegendLoading : isStatusLegendLoading}
             shouldShowControls={shouldShowControls}
             statusTitle={legendStatusTitle}
           />
@@ -390,6 +412,7 @@ const LegendPopup = ({
         {showLiveLegend ? (
           <LiveLayerLegend
             entityType={activeTab}
+            isLoading={isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading}
             metricSubtitle={legendMetricSubtitle}
             metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
@@ -398,6 +421,7 @@ const LegendPopup = ({
         {showStaticLegend ? (
           <StaticLayerLegend
             entityType={activeTab}
+            isLoading={isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading}
             metricSubtitle={legendMetricSubtitle}
             metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}

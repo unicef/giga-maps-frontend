@@ -23,11 +23,13 @@ interface CheckedStatus {
 const SchoolStatusLegend = ({
   entityType,
   forceVisible = false,
+  isLoading = false,
   shouldShowControls,
   statusTitle,
 }: {
   entityType: EntityType;
   forceVisible?: boolean;
+  isLoading?: boolean;
   shouldShowControls: boolean;
   statusTitle: string;
 }) => {
@@ -119,18 +121,26 @@ const SchoolStatusLegend = ({
                 color={paintData[key]}
                 entityType={entityType}
               />
-              <span className="text-sm! font-normal! leading-5! text-foreground!">
-                {t(ConnectivityStatusNames[key])}
-              </span>
+              {isLoading ? (
+                <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+              ) : (
+                <span className="text-sm! font-normal! leading-5! text-foreground!">
+                  {t(ConnectivityStatusNames[key])}
+                </span>
+              )}
             </div>
           </div>
           {shouldShowControls ? (
-            <div
-              className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
-              data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}
-            >
-              {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
-            </div>
+            isLoading ? (
+              <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
+            ) : (
+              <div
+                className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+                data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}
+              >
+                {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
+              </div>
+            )
           ) : null}
         </div>
       ))}
