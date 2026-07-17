@@ -20,10 +20,11 @@ import { mapEntity } from '~/core/routes';
 import { cn } from '~/lib/cn';
 
 const base =
-  'h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5!';
-const active = 'border-primary';
+  'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap!';
+const active =
+  'border-[#525252]! bg-[#525252]! text-white! hover:bg-[#6f6f6f]! hover:text-white!';
 const inactive =
-  'border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground';
+  'border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!';
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -72,7 +73,7 @@ export default function EntityTypeSelector() {
       }
     >
       <Button
-        variant="default"
+        variant="outline"
         size="lg"
         className={`${base} ${allSelected ? active : inactive}`}
         onClick={handleSelectAllEntityTypes}
@@ -88,7 +89,7 @@ export default function EntityTypeSelector() {
         return (
           <Button
             key={type}
-            variant="default"
+            variant="outline"
             size="lg"
             className={`${base} ${isActive ? active : inactive}`}
             onClick={(event) => handleEntityClick(entityType, event)}
@@ -100,12 +101,10 @@ export default function EntityTypeSelector() {
               fitToViewBox
               size={8}
             />
-            {t(
-              config.slug,
-              config.slug === (EntityType.SCHOOL as string)
-                ? { count: 2 }
-                : undefined,
-            )}
+            {t(config.slug, {
+              count: 2,
+              defaultValue: config.displayName,
+            })}
           </Button>
         );
       })}

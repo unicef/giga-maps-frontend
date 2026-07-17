@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import { Earth, MoreHorizontal } from 'lucide-react';
+import { Home, MoreHorizontal } from 'lucide-react';
 import { type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -40,7 +40,7 @@ export const GoToMap = () => {
           className="inline-flex! text-foreground!"
           to={mapOverview}
         >
-          <Earth size={18} />
+          <Home size={18} />
         </Link>
       </BreadcrumbLink>
     </BreadcrumbItem>

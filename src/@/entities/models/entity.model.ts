@@ -57,9 +57,13 @@ $entityRegistry.on(mergeEntityRegistryFromApi, (current, apiConfigs) => {
   const merged = { ...current };
   Object.entries(apiConfigs).forEach(([type, config]) => {
     if (merged[type]) {
+      const defaults = DEFAULT_ENTITY_REGISTRY[type as EntityType];
       merged[type] = {
         ...merged[type],
         ...config,
+        // Keep local naming so API "Health centers" cannot override UI copy
+        displayName: defaults?.displayName ?? config?.displayName ?? merged[type].displayName,
+        slug: defaults?.slug ?? config?.slug ?? merged[type].slug,
         mapAnimation: config?.mapAnimation
           ? {
             ...merged[type].mapAnimation,

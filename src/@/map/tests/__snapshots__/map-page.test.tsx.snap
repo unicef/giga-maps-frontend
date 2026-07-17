@@ -986,7 +986,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                   <div
                                     class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
                                   >
-                                    Health centers
+                                    Health facilities
                                   </div>
                                 </div>
                                 <svg
@@ -2055,7 +2055,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             </svg>
           </span>
         </span>
-        Health centers
+        Health facilities
       </button>
     </div>
     <div

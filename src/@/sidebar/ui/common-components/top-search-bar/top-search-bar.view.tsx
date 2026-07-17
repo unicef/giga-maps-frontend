@@ -14,7 +14,6 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
-import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
 import { getInputValue } from '~/lib/event-reducers';
@@ -29,7 +28,6 @@ const TopSearchBar = () => {
   const searchText = useStore($searchInput);
   const isActiveSearchBar = useStore($isActiveSearchBar);
   const showCountries = useStore($showCountries)
-  const isMobile = useStore($isMobile)
   const entityRegistry = useStore($entityRegistryFiltered);
   const selectedTags = useStore($selectedSearchEntityTags);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -74,6 +72,14 @@ const TopSearchBar = () => {
     return () => {
       window.removeEventListener('resize', updateWidth);
     };
+  }, []);
+
+  useEffect(() => {
+    const input = document.getElementById('main-search-bar') as HTMLInputElement | null;
+    if (!input) return;
+
+    input.focus();
+    changeIsSearchFocused(true);
   }, []);
 
   const onBlurSearch = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -191,7 +197,7 @@ const TopSearchBar = () => {
                   aria-label={t('search-country-region-school-id')}
                   autoCapitalize="none"
                   autoComplete="off"
-                  autoFocus={isMobile}
+                  autoFocus
                   autoCorrect="off"
                   spellCheck={false}
                   className={cn(`h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!`, selectedTagConfigs.length || searchText.length > 0 ? 'pr-10!' : '')}
