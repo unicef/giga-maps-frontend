@@ -14,9 +14,16 @@ describe('AdvancedFilter', () => {
 
   beforeEach(() => {
     fetchMock.mockResponse((req) => {
-      if (req.url.includes('accounts/adv_filters')) {
-        return Promise.resolve(JSON.stringify(filterData))
-      } else if (req.url.includes('api/locations/countries/br')) {
+      if (req.url.includes('accounts/adv_filters') || req.url.includes('api/v2/entities/filters')) {
+        const enrichedResults = filterData.results.map((item) => ({
+          ...item,
+          entity_type: 'school',
+        }));
+        return Promise.resolve(JSON.stringify({
+          ...filterData,
+          results: enrichedResults,
+        }));
+      } else if (req.url.includes('api/locations/countries/br') || req.url.includes('api/v2/entities/countries/br')) {
         return Promise.resolve(JSON.stringify({
           id: 1,
           name: 'Brazil',
@@ -51,7 +58,7 @@ describe('AdvancedFilter', () => {
     await fetchCountryFx('br')
     await fetchAdvanceFilterFx()
     render(testWrapper(<FilterButton />))
-    const button = (await screen.findByText("Filters")).parentNode as HTMLElement;
+    const button = (await screen.findByText("Filter by")).parentNode as HTMLElement;
     await userEvent.click(button);
 
     const textInput = (await screen.findByPlaceholderText("Enter building id"))

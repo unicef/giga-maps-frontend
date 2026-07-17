@@ -57,11 +57,11 @@ const FilterButton = () => {
                 onClick={showFilter}
                 disabled={isDisabled}
                 size="sm"
-                label={t('filters')}
-                tooltipText={t('filters')}
+                label={t('filter-by')}
+                tooltipText={t('filter-by')}
               >
                 <Tuning fill={theme.white} />
-                <span>{t('filters')}</span>
+                <span>{t('filter-by')}</span>
                 {selectedCount > 0 && (
                   <span className="h-5! px-2.5! py-0.5! bg-connectivity-green-200! rounded-md! inline-flex! justify-center! items-center! gap-1! ml-1!">
                     <div className="h-4! flex justify-center! items-center! gap-2.5!">

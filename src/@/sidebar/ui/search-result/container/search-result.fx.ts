@@ -28,7 +28,7 @@ export const fetchSchoolListFx = createRequestFx(
     }
 
     return request({
-      url: `api/v2/entities/gentity-search/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,external_id&page=${page}&page_size=${limit}&country_id__in=${countryId}&ordering=name${admin2 ? '&admin2_id__exact=' + admin2 : ''}${admin1 ? `&${admin1Abbr}=${admin1}` : ''}${query ? `&q=${query}*&search_fields=name,giga_id_school,external_id&entity_type__code=${EntityType.SCHOOL}` : ''}`,
+      url: `api/v2/entities/gentity-search/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,external_id&page=${page}&page_size=${limit}&country_id__in=${countryId}&ordering=name${admin2 ? '&admin2_id__exact=' + admin2 : ''}${admin1 ? `&${admin1Abbr}=${admin1}` : ''}&entity_type__code=${EntityType.SCHOOL}${query ? `&q=${query}*&search_fields=name,giga_id_school,external_id` : ''}`,
       signal: controller?.getSignal(),
     })
   }
