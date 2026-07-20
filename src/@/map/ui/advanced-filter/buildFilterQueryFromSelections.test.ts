@@ -1,7 +1,10 @@
 import { EntityType } from '~/@/entities';
 import type { ActiveFilterListType, AdvanceFilterType } from '~/api/types';
 
-import { buildFilterQueryFromSelections } from './buildFilterQueryFromSelections';
+import {
+  buildActiveEntityFilterUrl,
+  buildFilterQueryFromSelections,
+} from './buildFilterQueryFromSelections';
 
 const createFilter = (
   id: number,
@@ -88,5 +91,24 @@ describe('buildFilterQueryFromSelections', () => {
     const url = new URL(result, window.location.origin);
     expect(url.searchParams.has('entity')).toBe(false);
     expect(url.searchParams.has('global')).toBe(false);
+  });
+
+  it('removes filters belonging to inactive entities', () => {
+    window.history.replaceState(
+      {},
+      '',
+      '/map/country/test?filter__school__environment__iexact=urban&filter__health__ownership__iexact=public',
+    );
+
+    const result = buildActiveEntityFilterUrl([EntityType.SCHOOL], false);
+    const url = new URL(result, window.location.origin);
+
+    expect(url.searchParams.get('filter__school__environment__iexact')).toBe(
+      'urban',
+    );
+    expect(
+      url.searchParams.has('filter__health__ownership__iexact'),
+    ).toBe(false);
+    expect(url.searchParams.get('entity')).toBe('school');
   });
 });

@@ -128,7 +128,10 @@ import {
 } from './map.model';
 import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
-import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
+import {
+  buildActiveEntityFilterUrl,
+  buildFilterQueryFromSelections,
+} from './ui/advanced-filter/buildFilterQueryFromSelections';
 
 sample({
   source: $theme,
@@ -258,6 +261,21 @@ const $derivedCountryActiveFilterList = combine({
   hadFiltersOnLoad: $hadFiltersOnLoad,
 });
 
+// User-applied filters are entity-scoped. When the entity selection narrows,
+// remove filters belonging to inactive entities while keeping active values.
+sample({
+  clock: merge([$activeEntityTypes, $isGlobalMode]),
+  source: combine({
+    activeEntityTypes: $activeEntityTypes,
+    isAllEntitiesMode: $isGlobalMode,
+    isCountryView: mapCountry.visible,
+  }),
+  filter: ({ isCountryView }) => isCountryView && hasFilterParams(),
+  fn: ({ activeEntityTypes, isAllEntitiesMode }) =>
+    buildActiveEntityFilterUrl(activeEntityTypes, isAllEntitiesMode),
+  target: router.navigate,
+});
+
 // guard: apply default country filters only when:
 // - filter data is loaded
 // - no school is focused
@@ -276,7 +294,9 @@ const activeFiltersListClock = guard({
     hadFiltersOnLoad,
     isCountryView,
   }) => {
-    if (!isCountryView || hadFiltersOnLoad) return false;
+    // Existing URL filters may have been applied after the initial page load.
+    // Preserve those user selections when the active entity scope changes.
+    if (!isCountryView || hadFiltersOnLoad || hasFilterParams()) return false;
 
     return (
       countryActiveFiltersList != null &&

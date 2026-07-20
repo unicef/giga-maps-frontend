@@ -11,6 +11,7 @@ import { setPayload } from '~/lib/effector-kit';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
 import { PointCoordinates } from "../../core/global-types";
+import { $activeEntityTypes } from '../entities/models/entity.model';
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
 import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
@@ -109,7 +110,23 @@ export const $countrySearchParams = mapCountry.router.search.map(search => {
   };
 });
 
-export const $countrySearchString = $countrySearchParams.map(params => params.searchParams);
+export const $countrySearchString = combine(
+  $countrySearchParams,
+  $activeEntityTypes,
+  (params, activeEntityTypes) => {
+    const activeEntitySet = new Set<string>(activeEntityTypes);
+    const activeSearchParams = new URLSearchParams();
+
+    for (const [key, value] of new URLSearchParams(params.searchParams)) {
+      const [entityType] = key.split('__');
+      if (activeEntitySet.has(entityType)) {
+        activeSearchParams.set(key, value);
+      }
+    }
+
+    return activeSearchParams.toString();
+  },
+);
 
 const $mapContext = combine({
   map: $map,
