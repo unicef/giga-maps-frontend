@@ -83,7 +83,7 @@ const EntitySummaryCard = ({
                   </span>
                 )}
                 <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">
-                  {row.label.replace(/(^\w|\s\w)/g, match => match.toUpperCase())}
+                  {row.label.charAt(0).toUpperCase() + row.label.slice(1)}
                 </span>
               </div>
               {card.collapsedRows.length > index + 1 || expanded ? <MetricDivider /> : null}
