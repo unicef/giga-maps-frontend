@@ -1,8 +1,8 @@
 import { Close } from '@carbon/icons-react'
 import { Button, Form, IconButton, PopoverContent } from "@carbon/react";
 import { useStore } from 'effector-react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { Fragment, MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 
 import { $country, $countrySearchParams } from "~/@/country/country.model";
@@ -182,11 +182,13 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     });
   };
 
+  const [hasInitializedOpenItems, setHasInitializedOpenItems] = useState(false);
   useEffect(() => {
-    if (entitiesWithFilters.length > 0 && openItems.length === 0) {
+    if (entitiesWithFilters.length > 0 && !hasInitializedOpenItems) {
       setOpenItems([...entitiesWithFilters]);
+      setHasInitializedOpenItems(true);
     }
-  }, [entitiesWithFilters, openItems.length]);
+  }, [entitiesWithFilters, hasInitializedOpenItems]);
   if (!isReady) return null;
   return (
     <PopoverContent className="filter-popover-content">
@@ -233,37 +235,44 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
             </div>
           )}
 
-          {entitiesWithFilters.map((el, index) => {
-            return (<><Accordion type="multiple"
-              key={'accordian' + el}
-              value={openItems}
-              onValueChange={(eventAccordion: string[]) => {
-                setOpenItems(eventAccordion as EntityType[]);
-              }}
-              className="flex! flex-col! gap-3!">
-
-              <AccordionItem value={el}>
-                <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
-                  <span className="whitespace-nowrap!">{t(`${el}-entity-label`, { count: 1 })}  {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
-                  {openItems.includes(el) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </AccordionTrigger>
-                <AccordionContent>
-                  {advanceFilterList.filter(elAdvanceFilter => elAdvanceFilter.entity_type === el).map((item, index) => {
-                    const Component = components[item.type] as React.JSXElementConstructor<any>;
-                    if (!Component) return null;
-                    const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
-                    const extraItemKey = `ignore_${itemKey}`;
-                    const extraValue = selectedFields[extraItemKey];
-                    return (
-                      <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
-                    )
-                  })}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-              {index < entitiesWithFilters.length - 1 && <Separator className="my-2!" />}
-            </>)
-          })}
+          <Accordion type="multiple"
+            value={openItems}
+            onValueChange={(eventAccordion: string[]) => {
+              setOpenItems(eventAccordion as EntityType[]);
+            }}
+            className="flex! flex-col! gap-3!">
+            {entitiesWithFilters.map((el, index) => {
+              return (
+                <Fragment key={'accordion-item-' + el}>
+                  <AccordionItem value={el}>
+                    <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
+                      <span className="whitespace-nowrap!">{t(`${el}-entity-label`, { count: 1 })}  {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
+                      <ChevronDown
+                        size={16}
+                        style={{
+                          transform: openItems.includes(el) ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.2s ease',
+                        }}
+                      />
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {advanceFilterList.filter(elAdvanceFilter => elAdvanceFilter.entity_type === el).map((item, index) => {
+                        const Component = components[item.type] as React.JSXElementConstructor<any>;
+                        if (!Component) return null;
+                        const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+                        const extraItemKey = `ignore_${itemKey}`;
+                        const extraValue = selectedFields[extraItemKey];
+                        return (
+                          <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
+                        )
+                      })}
+                    </AccordionContent>
+                  </AccordionItem>
+                  {index < entitiesWithFilters.length - 1 && <Separator className="my-2!" />}
+                </Fragment>
+              )
+            })}
+          </Accordion>
 
         </ScrollableContainer>
         <FilterActionButtonWrapper>
