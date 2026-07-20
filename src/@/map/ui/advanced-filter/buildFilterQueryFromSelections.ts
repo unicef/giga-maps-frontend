@@ -4,6 +4,7 @@ export function buildFilterQueryFromSelections(
   selections: ActiveFilterListType[],
   filters: AdvanceFilterType[],
   activeEntityTypes?: string[],
+  isAllEntitiesMode = false,
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
@@ -17,6 +18,15 @@ export function buildFilterQueryFromSelections(
     }
   }
 
+  // Entity changes also trigger this country-filter navigation. Keep the
+  // selection in the URL here so this navigation cannot restore a stale query.
+  if (isAllEntitiesMode) {
+    params.delete('entity');
+    params.delete('global');
+  } else if (activeEntityTypes?.length) {
+    params.set('entity', activeEntityTypes.join(','));
+    params.set('global', '0');
+  }
   // 2) Build a map of filters for lookup
   const filtersById = new Map<number, AdvanceFilterType>();
   filters.forEach((f) => filtersById.set(f.id, f));

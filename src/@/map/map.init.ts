@@ -19,6 +19,7 @@ import {
   $activeEntityTypes,
   $entityRegistry,
   $entityTypesFiltered,
+  $isGlobalMode,
 } from '~/@/entities/models/entity.model';
 import {
   ENTITY_TYPE_CODE_PARAM,
@@ -251,6 +252,8 @@ const $derivedCountryActiveFilterList = combine({
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
   activeEntityTypes: $activeEntityTypes,
+  isAllEntitiesMode: $isGlobalMode,
+  isCountryView: mapCountry.visible,
   urlParamsConsumed: $urlParamsConsumed,
   hadFiltersOnLoad: $hadFiltersOnLoad,
 });
@@ -271,8 +274,9 @@ const activeFiltersListClock = guard({
     activeFiltersList,
     schoolFocusLatLng,
     hadFiltersOnLoad,
+    isCountryView,
   }) => {
-    if (hadFiltersOnLoad) return false;
+    if (!isCountryView || hadFiltersOnLoad) return false;
 
     return (
       countryActiveFiltersList != null &&
@@ -285,11 +289,17 @@ const activeFiltersListClock = guard({
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList, activeEntityTypes }) =>
+  fn: ({
+    countryActiveFiltersList,
+    activeFiltersList,
+    activeEntityTypes,
+    isAllEntitiesMode,
+  }) =>
     buildFilterQueryFromSelections(
       countryActiveFiltersList!,
       activeFiltersList,
       activeEntityTypes,
+      isAllEntitiesMode,
     ),
   target: router.navigate,
 });
