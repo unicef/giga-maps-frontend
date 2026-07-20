@@ -121,18 +121,32 @@ const GigaLayerButtonIcons = ({
       onSelectEntityMainLayer({
         [targetEntityType]: selectedId,
       });
+      onSelectEntityStatusLayer({
+        [targetEntityType]: selectedId
+          ? null
+          : getEntityStatusId(targetEntityType),
+      });
     },
     [targetEntityType, targetSelectedLayerId],
   );
 
   const handleConnectivityStatusClicked = useCallback(
     (selectedId: string) => {
+      if (targetStatusSelectedLayer && !targetSelectedLayerId) {
+        return;
+      }
+
+      if (!targetStatusSelectedLayer) {
+        onSelectEntityMainLayer({
+          [targetEntityType]: null,
+        });
+      }
       onSelectEntityStatusLayer({
         [targetEntityType]: targetStatusSelectedLayer ? null : selectedId,
       });
       selectAllEntityStaticLegendsSelection({ entityType: targetEntityType });
     },
-    [targetEntityType, targetStatusSelectedLayer],
+    [targetEntityType, targetSelectedLayerId, targetStatusSelectedLayer],
   );
 
   if (popup) {
