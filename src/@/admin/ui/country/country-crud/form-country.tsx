@@ -167,49 +167,60 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
   }, [id, countryList])
 
   useEffect(() => {
-    if (formDataCountry?.active_layers_list) {
-      const dataSourceList = {} as Record<string, { name: string, description: string }>;
-      const legendConfigDefault = {} as Record<string, LegendConfigType>;
-      const currentDefaultLayersByEntity = {} as Record<string, number>;
-      const activeLayerList = formDataCountry.active_layers_list.map((layer: { data_layer_id: number; is_default: boolean; data_sources: { name?: string, description?: string }, legend_configs?: LegendConfigType; }) => {
-        const layerInfo = layersNames[String(layer.data_layer_id)];
-        const entityTypeCode = getEntityTypeCode(layerInfo);
-        dataSourceList[String(layer.data_layer_id)] = {
-          name: '',
-          description: '',
-          ...layer.data_sources
-        }
-        legendConfigDefault[String(layer.data_layer_id)] = layer.legend_configs || {};
-        if (layer.is_default) {
-          currentDefaultLayersByEntity[entityTypeCode] = layer.data_layer_id;
-        }
-        return {
-          id: layer.data_layer_id,
-          name: layerInfo?.name ?? '',
-          code: layerInfo?.code,
-          entity_type__code: layerInfo?.entity_type__code
-        }
-      });
-      setSelectedActiveLayers(activeLayerList);
-      setDataSource(dataSourceList);
-      setDefaultLayersByEntity(currentDefaultLayersByEntity);
-      setLegendConfigList(legendConfigDefault);
+    if (!formDataCountry?.active_layers_list) return;
+
+    // Wait for the published catalog so selectedItems are exact MultiSelect option
+    // objects (Carbon matches with lodash.isEqual against `items`).
+    if (!layerListAvailablility.length) return;
+
+    const availableById = new Map(layerListAvailablility.map((item) => [item.id, item]));
+    const dataSourceList = {} as Record<string, { name: string, description: string }>;
+    const legendConfigDefault = {} as Record<string, LegendConfigType>;
+    const currentDefaultLayersByEntity = {} as Record<string, number>;
+    const activeLayerList: SelectOption[] = [];
+
+    for (const layer of formDataCountry.active_layers_list as {
+      data_layer_id: number;
+      is_default: boolean;
+      data_sources: { name?: string, description?: string };
+      legend_configs?: LegendConfigType;
+    }[]) {
+      const availableLayer = availableById.get(layer.data_layer_id);
+      // Skip layers no longer in the published catalog so count, checkmarks,
+      // and Associated Giga layers all share the same set.
+      if (!availableLayer) continue;
+
+      const layerInfo = layersNames[String(layer.data_layer_id)];
+      const entityTypeCode = getEntityTypeCode(layerInfo ?? availableLayer);
+      dataSourceList[String(layer.data_layer_id)] = {
+        name: '',
+        description: '',
+        ...layer.data_sources
+      };
+      legendConfigDefault[String(layer.data_layer_id)] = layer.legend_configs || {};
+      if (layer.is_default) {
+        currentDefaultLayersByEntity[entityTypeCode] = layer.data_layer_id;
+      }
+      activeLayerList.push(availableLayer);
     }
-  }, [formDataCountry?.active_layers_list, layersNames]);
+
+    setSelectedActiveLayers(activeLayerList);
+    setDataSource(dataSourceList);
+    setDefaultLayersByEntity(currentDefaultLayersByEntity);
+    setLegendConfigList(legendConfigDefault);
+  }, [formDataCountry?.active_layers_list, layerListAvailablility, layersNames]);
 
   useEffect(() => {
-    if (formDataCountry?.active_filters_list && filterListAvailablility.length) {
-      const activeFilterList = formDataCountry.active_filters_list.map((filter: { advance_filter_id: number; }) => {
-        const foundFilter = filterListAvailablility.find((item) => item.id === filter.advance_filter_id);
-        return {
-          id: filter.advance_filter_id,
-          name: foundFilter?.name ?? '',
-          code: foundFilter?.code ?? '',
-          entity_type__code: foundFilter?.entity_type__code
-        }
-      })
-      setSelectedActiveFilters(activeFilterList);
-    }
+    if (!formDataCountry?.active_filters_list || !filterListAvailablility.length) return;
+
+    const availableById = new Map(filterListAvailablility.map((item) => [item.id, item]));
+    // Only keep filters present in the published catalog so MultiSelect
+    // selectedItems deep-equal the option objects in `items`.
+    const activeFilterList = formDataCountry.active_filters_list
+      .map((filter: { advance_filter_id: number }) => availableById.get(filter.advance_filter_id))
+      .filter((item): item is SelectOption => !!item);
+
+    setSelectedActiveFilters(activeFilterList);
   }, [formDataCountry?.active_filters_list, filterListAvailablility])
   useEffect(() => {
     const { live_layer = {}, layer_descriptions = {}, default_national_benchmark = {}, benchmark_name = {} } = formDataCountry?.benchmark_metadata || {};
@@ -743,7 +754,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
             >
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', padding: '1.25rem 0rem 1.25rem' }}>
                 <h3 style={{ margin: 0, padding: 0 }}>Associated Giga layers</h3>
-                <div>({selectedActiveLayers.length})</div>
+                {/* Same set as entity groups below (intersection with published catalog). */}
+                <div>({selectedActiveLayerDetails.length})</div>
               </div>
               <div>
                 {openAccordion === 'layers' ? <ChevronUp /> : <ChevronDown />}
