@@ -38,11 +38,11 @@ export const getEntitySelectedLayerId = (
 ): string => `entity-selected-${entityType}-${layerId}`;
 
 export const styleUrls: { [style in Style]: string } = {
-  light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
-  dark: 'mapbox://styles/gigamapbox/clradfsin005z01pifl2j5tee',
-  accessible: 'mapbox://styles/gigamapbox/cls342q3h00sj01qseasb49ul',
-  satellite: 'mapbox://styles/gigamapbox/cls34bmbm011301pla5rrfety',
-  street: 'mapbox://styles/gigamapbox/cls337tpy016b01qyd46ybhcs',
+  light: 'mapbox://styles/gigamapbox/cmrvoj0c5007g01sg7di86ql0',
+  dark: 'mapbox://styles/gigamapbox/cmrvo760i00gj01qzdhki9s2w',
+  accessible: 'mapbox://styles/gigamapbox/cmrvoins6007f01sgg4gvbcj7',
+  satellite: 'mapbox://styles/gigamapbox/cmrvoivbb00fw01sc850vavp1',
+  street: 'mapbox://styles/gigamapbox/cmrvojdo000h401qtfzalgjsi',
 };
 
 export const Colors = {
@@ -160,11 +160,11 @@ if (storeStyling) {
 export const getDefaultCountryOpacity = (
   paintData: StylePaintData,
 ): Expression => [
-  'case',
-  ['boolean', ['feature-state', 'hover'], false],
-  mapCountryOpacity.active,
-  mapCountryOpacity.active,
-];
+    'case',
+    ['boolean', ['feature-state', 'hover'], false],
+    mapCountryOpacity.active,
+    mapCountryOpacity.active,
+  ];
 
 export const getDefaultCountryColor = (paintData: StylePaintData): string =>
   paintData.allCountryColor;
