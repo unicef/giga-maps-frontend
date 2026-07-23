@@ -72,7 +72,10 @@ const EntitySummaryAccordion = ({
   const visibleEntityTypes = entityTypesFiltered.filter((type) =>
     activeEntityTypes.includes(type),
   );
-  const activeAccordion = useStore($accordionExpandedEntities);
+  const accordionExpandedEntitiesMap = useStore($accordionExpandedEntities);
+  const activeAccordion = Object.entries(accordionExpandedEntitiesMap)
+    .filter(([_, isExpanded]) => Boolean(isExpanded))
+    .map(([entityType]) => entityType);
 
   const isLoading =
     isLoadingGlobalStats ||
@@ -123,7 +126,11 @@ const EntitySummaryAccordion = ({
             return (
               <EntitySummaryCard
                 card={accordionItem}
-                expanded={activeAccordion.includes(accordionItem.value)}
+                expanded={Boolean(
+                  accordionExpandedEntitiesMap[
+                    accordionItem.value as EntityType
+                  ],
+                )}
                 isLoading={isLoading}
                 key={accordionItem.value}
                 loadingRowLabels={infoLoadingMetricLabels}

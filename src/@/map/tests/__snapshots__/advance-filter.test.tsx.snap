@@ -124,7 +124,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
         class="c0"
       >
         <h3>
-          Filter(s)
+          Filter by
         </h3>
         <span
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
@@ -1307,7 +1307,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
         class="c0"
       >
         <h3>
-          Filter(s)
+          Filter by
         </h3>
         <span
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
@@ -2462,8 +2462,8 @@ exports[`AdvancedFilter > should render Advance filter button  1`] = `
           <button
             align="left"
             class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-            label="Filter by"
-            tooltiptext="Filter by"
+            label="Filter(s)"
+            tooltiptext="Filter(s)"
             type="button"
           >
             <svg
@@ -2481,7 +2481,7 @@ exports[`AdvancedFilter > should render Advance filter button  1`] = `
               />
             </svg>
             <span>
-              Filter by
+              Filter(s)
             </span>
           </button>
         </div>

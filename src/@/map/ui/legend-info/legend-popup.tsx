@@ -278,17 +278,6 @@ const LegendPopup = ({
                 {legendStatusTitle}
               </span>
             </div>
-            <div className="flex! min-w-0! w-full! gap-0!">
-              {schoolSummaryItems.map(({ key, label }) => (
-                <span
-                  className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-muted-foreground! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!"
-                  key={key}
-                  data-title={label}
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
             <div className="flex! h-4! w-full! items-center! overflow-visible!">
               {schoolSummaryItems.map(({ color, key, label }) => (
                 <span

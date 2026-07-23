@@ -58,7 +58,7 @@ describe('AdvancedFilter', () => {
     await fetchCountryFx('br')
     await fetchAdvanceFilterFx()
     render(testWrapper(<FilterButton />))
-    const button = (await screen.findByText("Filter by")).parentNode as HTMLElement;
+    const button = (await screen.findByText("Filter(s)")).parentNode as HTMLElement;
     await userEvent.click(button);
 
     const textInput = (await screen.findByPlaceholderText("Enter building id"))

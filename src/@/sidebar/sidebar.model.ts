@@ -1251,31 +1251,28 @@ export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
 export const toggleAccordionEntity = createEvent<EntityType>();
-export const $accordionExpandedEntities = createStore<EntityType[]>([]);
-$accordionExpandedEntities.on(toggleAccordionEntity, (state, entityType) =>
-  state.includes(entityType)
-    ? state.filter((e) => e !== entityType)
-    : [...state, entityType],
-);
+export const $accordionExpandedEntities = createStore<
+  Partial<Record<EntityType, boolean>>
+>({});
+
+$accordionExpandedEntities.on(toggleAccordionEntity, (state, entityType) => ({
+  ...state,
+  [entityType]: !state[entityType],
+}));
 
 sample({
-  source: $activeEntityTypes,
-  filter: (activeTypes) => activeTypes.length === 1,
-  fn: (activeTypes) => activeTypes,
-  target: $accordionExpandedEntities,
-});
-
-sample({
-  source: {
-    expandedEntities: $accordionExpandedEntities,
-    activeTypes: $activeEntityTypes,
+  clock: $activeEntityTypes,
+  source: $accordionExpandedEntities,
+  fn: (expandedEntities, activeTypes) => {
+    if (activeTypes.length === 1) {
+      const singleType = activeTypes[0];
+      return {
+        ...expandedEntities,
+        [singleType]: true,
+      };
+    }
+    return expandedEntities;
   },
-  filter: ({ expandedEntities, activeTypes }) =>
-    activeTypes.length > 0 &&
-    expandedEntities.length > 0 &&
-    expandedEntities.some((e) => !activeTypes.includes(e)),
-  fn: ({ expandedEntities, activeTypes }) =>
-    expandedEntities.filter((e) => activeTypes.includes(e)),
   target: $accordionExpandedEntities,
 });
 
