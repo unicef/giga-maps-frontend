@@ -45,7 +45,7 @@ const TopSearchBar = () => {
   // Independent focus: blue on search OR world icon, never both
   const searchBorder = isActiveSearchBar && !showCountries ? activeBorder : idleBorder;
   const countryTriggerBorder = showCountries ? activeBorder : idleBorder;
-  const countriesPanelBg = isLight ? '#fff' : '#242424';
+  const countriesPanelBg = isLight ? '#f4f4f4' : '#242424';
 
   const entityTagEntries = useMemo(
     () => Object.values(entityRegistry).filter((config) => config.active),

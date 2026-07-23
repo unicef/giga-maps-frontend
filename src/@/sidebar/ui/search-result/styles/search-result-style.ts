@@ -13,7 +13,7 @@ const ButtonBase = styled.button`
 `
 
 export const SearchResultWrapper = styled.div`
-    background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
+    background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
     position: absolute;
     left: 0.875rem;
     right: 0.875rem;
@@ -23,7 +23,9 @@ export const SearchResultWrapper = styled.div`
     max-height: 80vh;
     border: 1px solid ${props => (props.theme.main === '#fff' ? '#E0E0E0' : '#393939')};
     border-radius: 0.5rem;
-    box-shadow:#212020 0px 14px 40px 0px;
+    box-shadow: ${props => (props.theme.main === '#fff'
+      ? '0 14px 40px 0 rgba(0, 0, 0, 0.12)'
+      : '#212020 0px 14px 40px 0px')};
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -34,7 +36,7 @@ export const SearchResultWrapper = styled.div`
 `
 
 export const SearchListWrapper = styled.div`
-  background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
+  background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
   position: absolute;
   left: 0.875rem;
   right: 0.875rem;
@@ -44,7 +46,9 @@ export const SearchListWrapper = styled.div`
   max-height: 80vh;
   border: 1px solid ${props => (props.theme.main === '#fff' ? '#E0E0E0' : '#393939')};
   border-radius: 0.5rem;
-  box-shadow:#212020 0px 14px 40px 0px;
+  box-shadow: ${props => (props.theme.main === '#fff'
+    ? '0 14px 40px 0 rgba(0, 0, 0, 0.12)'
+    : '#212020 0px 14px 40px 0px')};
   overflow: hidden;
 
   @media (max-width:768px){
@@ -52,7 +56,7 @@ export const SearchListWrapper = styled.div`
   }
 `
 export const SearchResultScroll = styled(Scroll)`
-  background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
+  background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
   max-height: calc(80vh - 4.5rem);
 `
 export const SearchTopHead = styled.span`
@@ -60,7 +64,7 @@ export const SearchTopHead = styled.span`
   align-items: center;
   min-height: 2.75rem;
   padding: 0.625rem 1rem;
-  background: ${props => (props.theme.main === '#fff' ? props.theme.schoolListBack : '#242424')};
+  background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
   color: ${props => props.theme.grey60};
   font-size: 0.75rem;
   border-radius: 0.5rem 0.5rem 0 0;
@@ -122,7 +126,7 @@ export const SchoolItem = styled(SearchItem)`
 
 export const DistictWrapper = styled.div`
   padding-left: 0.5rem;
-  background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
+  background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
 `
 
 export const LeftItem = styled.h4<{ $recent?: boolean; $bold?: boolean; $highlight?: boolean; $fullWidth?: boolean }>`
@@ -513,7 +517,7 @@ justify-content: center;
 flex-direction: column;
 
   h3{
-      color: ${props => (props.theme.main === '#fff' ? props.theme.text : '#C6C6C6')};
+      color: ${props => (props.theme.main === '#fff' ? '#525252' : '#C6C6C6')};
       text-align: center;
       font-size: 0.875rem;
       font-weight: 500;
@@ -522,7 +526,7 @@ flex-direction: column;
     }
 
   p{
-      color: ${props => props.theme.grey60};
+      color: ${props => (props.theme.main === '#fff' ? '#8d8d8d' : props.theme.grey60)};
       text-align: center;
       font-size: 0.875rem;
       font-style: normal;

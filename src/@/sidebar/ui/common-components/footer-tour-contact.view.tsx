@@ -11,10 +11,10 @@ const RootWrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
-  color: ${props => (props.theme.main === '#fff' ? props.theme.schoolId : '#F4F4F4')};
+  color: ${props => (props.theme.main === '#fff' ? '#161616' : '#F4F4F4')};
   flex-direction: row;
   gap: 0.15rem;
-  background:${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
+  background:${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
 `
 const LinkButtons = styled.div`
   display: flex;
