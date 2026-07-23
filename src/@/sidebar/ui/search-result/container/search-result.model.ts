@@ -103,7 +103,6 @@ $searchResultResponse.on(getSearchResultsFx.doneData, (state, payload) => {
   if (countryId && !hasLoadedAllForCurrentCountry && (list.length + (state?.length || 0)) >= count) {
     setHasLoadedAllForCurrentCountry(true);
   }
-  console.log(countryId, hasLoadedAllForCurrentCountry, list.length, count, $searchPage.getState())
   if (countryId && !hasLoadedAllForCurrentCountry && list.length < 15 && $searchPage.getState() === 0) {
     loadMoreResults();
   }

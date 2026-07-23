@@ -209,8 +209,7 @@ const TopSearchBar = () => {
                 {selectedTagConfigs.map((config) => (
                   <Badge
                     key={config.type}
-                    className="ml-1! shrink-0! cursor-default! rounded-md! border-0! px-1.5! py-1! text-[11px]! font-medium! text-white!"
-                    style={{ backgroundColor: config.colors.primary }}
+                    className="ml-1! shrink-0! cursor-default! rounded-md! bg-primary border-0! px-1.5! py-1! text-[11px]! font-medium! text-white!"
                   >
                     {t(config.slug, { defaultValue: config.displayName })}
                     {/* <button
@@ -294,7 +293,7 @@ const TopSearchBar = () => {
                       onClick={() => handleSelectEntityTag(config.type as EntityType)}
                       type="button"
                     >
-                      <span style={{ color: config.colors.primary }}>{config.symbol}</span>
+                      <span className="text-primary">{config.symbol}</span>
                       <span>@{t(config.slug, { defaultValue: config.displayName })}</span>
                     </button>
                   ))}

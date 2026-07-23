@@ -20,7 +20,9 @@ export const getFilterListFx = createEffect(({ page, pageSize, search }: { page:
 
 export const getFilterPublishedListFx = createEffect(() => {
   return createRequestAuthFx({
-    url: `v2/entities/filters/?status=PUBLISHED`
+    // page_size must cover the full published catalog; default pagination
+    // only returns the first page and breaks country active-filter selection.
+    url: `v2/entities/filters/?status=PUBLISHED&page_size=1000`
   }) as Promise<APIListType<FilterListType>>
 })
 

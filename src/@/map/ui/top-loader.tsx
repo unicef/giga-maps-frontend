@@ -14,24 +14,24 @@ import {
 } from '~/@/country/country.model';
 import { $map } from '../map.model';
 import { Map, MapEventType } from 'mapbox-gl';
-import { DEFAULT_SOURCE } from '../map.constant';
+import { DEFAULT_SOURCE, CONNECTIVITY_STATUS_SOURCE } from '../map.constant';
 import { useStore } from 'effector-react';
 import ProgressBar from './progress-bar';
 import {
   $selectedLayerIdByEntity,
   $selectedSchoolIds,
 } from '~/@/sidebar/sidebar.model';
+import { $isMapLoading, setMapLoadingState } from '../loading.model';
 
-const setMapLoadingState = createEvent<boolean>();
 const setDataChecking = createEvent<boolean>();
 const $dataChecking = restore(setDataChecking, false);
-const $isMapLoading = restore(setMapLoadingState, true);
 const setMapPercentage = createEvent<number>();
 const $mapPercent = restore(setMapPercentage, 20);
 const setLoadingState = createEvent<
   'active' | 'finished' | 'loading' | 'error'
 >();
 const $loadingStatus = restore(setLoadingState, 'active');
+
 // check for data load
 let timeout: ReturnType<typeof setTimeout>;
 let mapDataTilesOnLoad = (e: MapEventType) => {};
@@ -56,10 +56,17 @@ sample({
           setMapPercentage($mapPercent.getState() + 4);
         }
         timeout = setTimeout(() => {
+          const hasDefaultSource = !!map.getSource(DEFAULT_SOURCE);
+          const hasStaticSource = !!map.getSource(CONNECTIVITY_STATUS_SOURCE);
+          const defaultSourceLoaded = !hasDefaultSource || map.isSourceLoaded(DEFAULT_SOURCE);
+          const staticSourceLoaded = !hasStaticSource || map.isSourceLoaded(CONNECTIVITY_STATUS_SOURCE);
+          const areTilesLoaded = map.areTilesLoaded();
+
           if (
-            map.getSource(DEFAULT_SOURCE) &&
-            map.isSourceLoaded(DEFAULT_SOURCE) &&
-            map.areTilesLoaded()
+            (hasDefaultSource || hasStaticSource) &&
+            defaultSourceLoaded &&
+            staticSourceLoaded &&
+            areTilesLoaded
           ) {
             setMapLoadingState(false);
             setMapPercentage(100);

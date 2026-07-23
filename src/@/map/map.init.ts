@@ -1,4 +1,4 @@
-import { combine, createEffect, guard, merge, sample } from 'effector';
+import { combine, createEffect, createStore, guard, merge, sample } from 'effector';
 import type { Map as MapboxMap } from 'mapbox-gl';
 
 import {
@@ -6,6 +6,7 @@ import {
   $admin1Id,
   $country,
   $countryActiveFiltersList,
+  $countryCode,
   $countryId,
   $countryMapping,
   $countrySearchString,
@@ -18,6 +19,7 @@ import {
   $activeEntityTypes,
   $entityRegistry,
   $entityTypesFiltered,
+  $isGlobalMode,
 } from '~/@/entities/models/entity.model';
 import {
   ENTITY_TYPE_CODE_PARAM,
@@ -61,7 +63,7 @@ import {
   router,
 } from '~/core/routes';
 import { $theme } from '~/core/theme.model';
-import { $urlParamsConsumed } from '~/@/sidebar/url-params.model';
+import { $urlParamsConsumed, $isAppSettled } from '~/@/sidebar/url-params.model';
 
 import {
   changeLayersFx,
@@ -126,7 +128,10 @@ import {
 } from './map.model';
 import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
-import { buildFilterQueryFromSelections } from './ui/advanced-filter/buildFilterQueryFromSelections';
+import {
+  buildActiveEntityFilterUrl,
+  buildFilterQueryFromSelections,
+} from './ui/advanced-filter/buildFilterQueryFromSelections';
 
 sample({
   source: $theme,
@@ -235,12 +240,40 @@ const hasFilterParams = () => {
   return Array.from(params.keys()).some((key) => key.startsWith('filter__'));
 };
 
+const $hadFiltersOnLoad = createStore(hasFilterParams());
+
+sample({
+  clock: $countryCode,
+  source: $isAppSettled,
+  filter: (isAppSettled) => isAppSettled,
+  fn: () => false,
+  target: $hadFiltersOnLoad,
+});
+
 const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
   schoolFocusLatLng: $schoolFocusLatLng,
   activeEntityTypes: $activeEntityTypes,
+  isAllEntitiesMode: $isGlobalMode,
+  isCountryView: mapCountry.visible,
   urlParamsConsumed: $urlParamsConsumed,
+  hadFiltersOnLoad: $hadFiltersOnLoad,
+});
+
+// User-applied filters are entity-scoped. When the entity selection narrows,
+// remove filters belonging to inactive entities while keeping active values.
+sample({
+  clock: merge([$activeEntityTypes, $isGlobalMode]),
+  source: combine({
+    activeEntityTypes: $activeEntityTypes,
+    isAllEntitiesMode: $isGlobalMode,
+    isCountryView: mapCountry.visible,
+  }),
+  filter: ({ isCountryView }) => isCountryView && hasFilterParams(),
+  fn: ({ activeEntityTypes, isAllEntitiesMode }) =>
+    buildActiveEntityFilterUrl(activeEntityTypes, isAllEntitiesMode),
+  target: router.navigate,
 });
 
 // guard: apply default country filters only when:
@@ -258,9 +291,12 @@ const activeFiltersListClock = guard({
     countryActiveFiltersList,
     activeFiltersList,
     schoolFocusLatLng,
-    urlParamsConsumed,
+    hadFiltersOnLoad,
+    isCountryView,
   }) => {
-    if (!urlParamsConsumed && hasFilterParams()) return false;
+    // Existing URL filters may have been applied after the initial page load.
+    // Preserve those user selections when the active entity scope changes.
+    if (!isCountryView || hadFiltersOnLoad || hasFilterParams()) return false;
 
     return (
       countryActiveFiltersList != null &&
@@ -273,11 +309,17 @@ const activeFiltersListClock = guard({
 sample({
   source: $derivedCountryActiveFilterList,
   clock: activeFiltersListClock,
-  fn: ({ countryActiveFiltersList, activeFiltersList, activeEntityTypes }) =>
+  fn: ({
+    countryActiveFiltersList,
+    activeFiltersList,
+    activeEntityTypes,
+    isAllEntitiesMode,
+  }) =>
     buildFilterQueryFromSelections(
       countryActiveFiltersList!,
       activeFiltersList,
       activeEntityTypes,
+      isAllEntitiesMode,
     ),
   target: router.navigate,
 });

@@ -1,9 +1,39 @@
 import { ActiveFilterListType, AdvanceFilterType } from "~/api/types";
 
+export function buildActiveEntityFilterUrl(
+  activeEntityTypes: string[],
+  isAllEntitiesMode: boolean,
+): string {
+  const params = new URLSearchParams(window.location.search);
+  const activeEntitySet = new Set(activeEntityTypes);
+
+  for (const key of Array.from(params.keys())) {
+    if (!key.startsWith('filter__')) continue;
+    const [, entityType] = key.split('__');
+    if (!activeEntitySet.has(entityType)) {
+      params.delete(key);
+    }
+  }
+
+  if (isAllEntitiesMode) {
+    params.delete('entity');
+    params.delete('global');
+  } else {
+    params.set('entity', activeEntityTypes.join(','));
+    params.set('global', '0');
+  }
+
+  const queryString = params.toString();
+  return queryString
+    ? window.location.pathname + '?' + queryString
+    : window.location.pathname;
+}
+
 export function buildFilterQueryFromSelections(
   selections: ActiveFilterListType[],
   filters: AdvanceFilterType[],
   activeEntityTypes?: string[],
+  isAllEntitiesMode = false,
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
@@ -17,6 +47,15 @@ export function buildFilterQueryFromSelections(
     }
   }
 
+  // Entity changes also trigger this country-filter navigation. Keep the
+  // selection in the URL here so this navigation cannot restore a stale query.
+  if (isAllEntitiesMode) {
+    params.delete('entity');
+    params.delete('global');
+  } else if (activeEntityTypes?.length) {
+    params.set('entity', activeEntityTypes.join(','));
+    params.set('global', '0');
+  }
   // 2) Build a map of filters for lookup
   const filtersById = new Map<number, AdvanceFilterType>();
   filters.forEach((f) => filtersById.set(f.id, f));

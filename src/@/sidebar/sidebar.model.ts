@@ -22,6 +22,7 @@ import {
 } from '~/@/entities/models/entity.model';
 import { $stylePaintData } from '~/@/map/map.model';
 import {
+  fetchAdvanceFilterFx,
   fetchCountriesFx,
   fetchCountryFx,
   fetchEntitiesConnectivityStatsFx,
@@ -1162,6 +1163,46 @@ export const $isLoadingCountryAdminView = $allLoadings.map(
     ),
 );
 
+export const $isGlobalLegendLoading = fetchLayerListFx.pending;
+
+export const $isLiveLegendLoading = combine(
+  fetchLayerListFx.pending,
+  // fetchAdvanceFilterFx.pending,
+  fetchCountryFx.pending,
+  fetchCountriesFx.pending,
+  getEntitiesAvailableDates.pending,
+  fetchEntitiesLayerInfoFx.pending,
+  (...pendingFlags) => pendingFlags.some(Boolean)
+);
+
+combine({
+  layer: fetchLayerListFx.pending,
+  advance: fetchAdvanceFilterFx.pending,
+  countries: fetchCountriesFx.pending,
+  country: fetchCountryFx.pending,
+  availability: getEntitiesAvailableDates.pending,
+  info: fetchEntitiesLayerInfoFx.pending,
+},
+  (object) =>
+    console.log(Object.entries(object), new Date())
+);
+
+export const $isStaticLegendLoading = combine(
+  fetchLayerListFx.pending,
+  fetchAdvanceFilterFx.pending,
+  fetchCountryFx.pending,
+  fetchCountriesFx.pending,
+  fetchEntitiesLayerInfoFx.pending,
+  (...pendingFlags) => pendingFlags.some(Boolean));
+
+export const $isStatusLegendLoading = combine(
+  fetchLayerListFx.pending,
+  fetchAdvanceFilterFx.pending,
+  fetchCountryFx.pending,
+  fetchCountriesFx.pending,
+  fetchEntityGlobalStatsFx.pending,
+  (...pendingFlags) => pendingFlags.some(Boolean));
+
 export const onShowLegend = createEvent<boolean>();
 export const $showLegend = restore(onShowLegend, true);
 
@@ -1210,31 +1251,28 @@ export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
 export const toggleAccordionEntity = createEvent<EntityType>();
-export const $accordionExpandedEntities = createStore<EntityType[]>([]);
-$accordionExpandedEntities.on(toggleAccordionEntity, (state, entityType) =>
-  state.includes(entityType)
-    ? state.filter((e) => e !== entityType)
-    : [...state, entityType],
-);
+export const $accordionExpandedEntities = createStore<
+  Partial<Record<EntityType, boolean>>
+>({});
+
+$accordionExpandedEntities.on(toggleAccordionEntity, (state, entityType) => ({
+  ...state,
+  [entityType]: !state[entityType],
+}));
 
 sample({
-  source: $activeEntityTypes,
-  filter: (activeTypes) => activeTypes.length === 1,
-  fn: (activeTypes) => activeTypes,
-  target: $accordionExpandedEntities,
-});
-
-sample({
-  source: {
-    expandedEntities: $accordionExpandedEntities,
-    activeTypes: $activeEntityTypes,
+  clock: $activeEntityTypes,
+  source: $accordionExpandedEntities,
+  fn: (expandedEntities, activeTypes) => {
+    if (activeTypes.length === 1) {
+      const singleType = activeTypes[0];
+      return {
+        ...expandedEntities,
+        [singleType]: true,
+      };
+    }
+    return expandedEntities;
   },
-  filter: ({ expandedEntities, activeTypes }) =>
-    activeTypes.length > 0 &&
-    expandedEntities.length > 0 &&
-    expandedEntities.some((e) => !activeTypes.includes(e)),
-  fn: ({ expandedEntities, activeTypes }) =>
-    expandedEntities.filter((e) => activeTypes.includes(e)),
   target: $accordionExpandedEntities,
 });
 

@@ -362,7 +362,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
 }
 
 .c29 .footer-content a {
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 
 .c29 .footer-content .link:hover {
@@ -501,7 +501,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   }
 }
 
-@media (max-width:786px) {
+@media (max-width: 786px) {
   .c29 {
     display: none;
   }
@@ -623,14 +623,23 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                     </svg>
                   </button>
                   <a
-                    class="flex h-3 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
+                    aria-label="Giga Maps"
+                    class="flex h-4 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
                     href="/map"
                   >
-                    <img
-                      alt="Giga logo"
-                      class="h-4 w-auto"
-                      src="/src/assets/images/giga-logo.png"
-                    />
+                    <svg
+                      class="h-3.5! w-auto! max-w-[7.5rem]! [&_path]:fill-[#f4f4f4]!"
+                      fill="none"
+                      height="16"
+                      viewBox="0 0 76 16"
+                      width="76"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.3125 5.77344H9.4375V11.4062C8.83854 11.6094 8.22135 11.763 7.58594 11.8672C6.95052 11.9714 6.23698 12.0234 5.44531 12.0234C4.26823 12.0234 3.27604 11.7891 2.46875 11.3203C1.66146 10.8516 1.04688 10.1797 0.625 9.30469C0.208333 8.42969 0 7.3776 0 6.14844C0 4.96615 0.231771 3.9349 0.695312 3.05469C1.15885 2.17448 1.83333 1.49219 2.71875 1.00781C3.60417 0.523438 4.67188 0.28125 5.92188 0.28125C6.54688 0.28125 7.14583 0.341146 7.71875 0.460938C8.29688 0.580729 8.82812 0.747396 9.3125 0.960938L8.73438 2.3125C8.32812 2.13021 7.8776 1.97656 7.38281 1.85156C6.89323 1.72135 6.38542 1.65625 5.85938 1.65625C4.98438 1.65625 4.23177 1.84115 3.60156 2.21094C2.97656 2.58073 2.49479 3.10156 2.15625 3.77344C1.82292 4.44531 1.65625 5.24219 1.65625 6.16406C1.65625 7.0651 1.79688 7.85156 2.07812 8.52344C2.35938 9.19531 2.79948 9.71875 3.39844 10.0938C3.9974 10.4688 4.76823 10.6562 5.71094 10.6562C6.1849 10.6562 6.58854 10.6302 6.92188 10.5781C7.26042 10.526 7.57031 10.4635 7.85156 10.3906V7.17188H5.3125V5.77344ZM13.5625 3.25781V11.8672H11.9922V3.25781H13.5625ZM12.7891 0C13.0391 0 13.2526 0.0729167 13.4297 0.21875C13.612 0.364583 13.7031 0.601562 13.7031 0.929688C13.7031 1.25781 13.612 1.4974 13.4297 1.64844C13.2526 1.79427 13.0391 1.86719 12.7891 1.86719C12.5339 1.86719 12.3177 1.79427 12.1406 1.64844C11.9688 1.4974 11.8828 1.25781 11.8828 0.929688C11.8828 0.601562 11.9688 0.364583 12.1406 0.21875C12.3177 0.0729167 12.5339 0 12.7891 0ZM18.6797 15.7109C17.5286 15.7109 16.6432 15.5 16.0234 15.0781C15.4089 14.6562 15.1016 14.0677 15.1016 13.3125C15.1016 12.776 15.2708 12.3203 15.6094 11.9453C15.9479 11.5755 16.4219 11.3255 17.0312 11.1953C16.8021 11.0911 16.6042 10.9323 16.4375 10.7188C16.276 10.5 16.1953 10.2552 16.1953 9.98438C16.1953 9.66667 16.2839 9.39323 16.4609 9.16406C16.6432 8.92969 16.9141 8.70312 17.2734 8.48438C16.8203 8.29688 16.4557 7.98698 16.1797 7.55469C15.9036 7.11719 15.7656 6.60677 15.7656 6.02344C15.7656 5.40365 15.8958 4.875 16.1562 4.4375C16.4219 4 16.8021 3.66667 17.2969 3.4375C17.7917 3.20833 18.3932 3.09375 19.1016 3.09375C19.2578 3.09375 19.4193 3.10156 19.5859 3.11719C19.7526 3.1276 19.9115 3.14583 20.0625 3.17188C20.2135 3.19792 20.3359 3.22396 20.4297 3.25H23.3984V4.17969L21.8672 4.41406C22.0182 4.61198 22.1406 4.84635 22.2344 5.11719C22.3281 5.38802 22.375 5.6849 22.375 6.00781C22.375 6.88281 22.0755 7.57552 21.4766 8.08594C20.8828 8.59115 20.0599 8.84375 19.0078 8.84375C18.763 8.83854 18.5156 8.81771 18.2656 8.78125C18.0417 8.91146 17.8724 9.05469 17.7578 9.21094C17.6432 9.36198 17.5859 9.53646 17.5859 9.73438C17.5859 9.88542 17.6354 10.0078 17.7344 10.1016C17.8385 10.1953 17.987 10.2656 18.1797 10.3125C18.3724 10.3542 18.6068 10.375 18.8828 10.375H20.3828C21.3203 10.375 22.0391 10.5729 22.5391 10.9688C23.0391 11.3646 23.2891 11.9427 23.2891 12.7031C23.2891 13.6667 22.8932 14.4089 22.1016 14.9297C21.3099 15.4505 20.1693 15.7109 18.6797 15.7109ZM18.7344 14.5625C19.4062 14.5625 19.9661 14.4948 20.4141 14.3594C20.8672 14.224 21.2083 14.0312 21.4375 13.7812C21.6667 13.5312 21.7812 13.2344 21.7812 12.8906C21.7812 12.5781 21.7057 12.3385 21.5547 12.1719C21.4089 12.0104 21.1901 11.901 20.8984 11.8438C20.6068 11.7865 20.2474 11.7578 19.8203 11.7578H18.3984C18.0339 11.7578 17.7161 11.8151 17.4453 11.9297C17.1745 12.0443 16.9635 12.2083 16.8125 12.4219C16.6615 12.6406 16.5859 12.9089 16.5859 13.2266C16.5859 13.6589 16.7708 13.9896 17.1406 14.2188C17.5156 14.4479 18.0469 14.5625 18.7344 14.5625ZM19.0781 7.77344C19.6562 7.77344 20.0885 7.6224 20.375 7.32031C20.6615 7.01302 20.8047 6.57552 20.8047 6.00781C20.8047 5.39844 20.6589 4.9401 20.3672 4.63281C20.0755 4.32552 19.6432 4.17188 19.0703 4.17188C18.513 4.17188 18.0859 4.33073 17.7891 4.64844C17.4974 4.96094 17.3516 5.41927 17.3516 6.02344C17.3516 6.58073 17.5 7.01302 17.7969 7.32031C18.0938 7.6224 18.5208 7.77344 19.0781 7.77344ZM28.3203 3.10938C29.3828 3.10938 30.1771 3.34635 30.7031 3.82031C31.2292 4.28906 31.4922 5.03125 31.4922 6.04688V11.8672H30.3672L30.0625 10.6172H30C29.7604 10.9297 29.5104 11.1901 29.25 11.3984C28.9896 11.6068 28.6875 11.763 28.3438 11.8672C28.0052 11.9714 27.5911 12.0234 27.1016 12.0234C26.5807 12.0234 26.1172 11.9297 25.7109 11.7422C25.3047 11.5547 24.9844 11.2734 24.75 10.8984C24.5208 10.5182 24.4062 10.0365 24.4062 9.45312C24.4062 8.57812 24.7422 7.91406 25.4141 7.46094C26.0859 7.00781 27.1042 6.76042 28.4688 6.71875L29.9531 6.65625V6.17188C29.9531 5.5 29.8021 5.02604 29.5 4.75C29.2031 4.47396 28.7865 4.33594 28.25 4.33594C27.8073 4.33594 27.3828 4.40104 26.9766 4.53125C26.5703 4.65625 26.1797 4.80729 25.8047 4.98438L25.3047 3.84375C25.7109 3.63542 26.1719 3.46094 26.6875 3.32031C27.2083 3.17969 27.7526 3.10938 28.3203 3.10938ZM29.9375 7.6875L28.7344 7.74219C27.7396 7.77865 27.0391 7.94531 26.6328 8.24219C26.2318 8.53385 26.0312 8.94271 26.0312 9.46875C26.0312 9.92708 26.1693 10.263 26.4453 10.4766C26.7214 10.6901 27.0859 10.7969 27.5391 10.7969C28.237 10.7969 28.8099 10.6016 29.2578 10.2109C29.7109 9.8151 29.9375 9.23177 29.9375 8.46094V7.6875ZM39.0547 11.8672L36.3047 2.90625H36.2344C36.2448 3.11979 36.2604 3.44271 36.2812 3.875C36.3073 4.30208 36.3307 4.75781 36.3516 5.24219C36.3724 5.72656 36.3828 6.16406 36.3828 6.55469V11.8672H34.2188V0.445312H37.5156L40.2188 9.17969H40.2656L43.1328 0.445312H46.4297V11.8672H44.1719V6.46094C44.1719 6.10156 44.1771 5.6875 44.1875 5.21875C44.2031 4.75 44.2214 4.30469 44.2422 3.88281C44.263 3.45573 44.2786 3.13542 44.2891 2.92188H44.2188L41.2734 11.8672H39.0547ZM52.7031 2.95312C53.875 2.95312 54.7734 3.20833 55.3984 3.71875C56.0234 4.22917 56.3359 5.00521 56.3359 6.04688V11.8672H54.6719L54.2109 10.6797H54.1484C53.8984 10.9922 53.6432 11.2474 53.3828 11.4453C53.1224 11.6432 52.8229 11.7891 52.4844 11.8828C52.1458 11.9766 51.7344 12.0234 51.25 12.0234C50.7344 12.0234 50.2708 11.9245 49.8594 11.7266C49.4531 11.5286 49.1328 11.2266 48.8984 10.8203C48.6641 10.4089 48.5469 9.88802 48.5469 9.25781C48.5469 8.33073 48.8724 7.64844 49.5234 7.21094C50.1745 6.76823 51.151 6.52344 52.4531 6.47656L53.9688 6.42969V6.04688C53.9688 5.58854 53.849 5.2526 53.6094 5.03906C53.3698 4.82552 53.0365 4.71875 52.6094 4.71875C52.1875 4.71875 51.7734 4.77865 51.3672 4.89844C50.9609 5.01823 50.5547 5.16927 50.1484 5.35156L49.3594 3.74219C49.8229 3.4974 50.3411 3.30469 50.9141 3.16406C51.4922 3.02344 52.0885 2.95312 52.7031 2.95312ZM53.9688 7.82031L53.0469 7.85156C52.276 7.8724 51.7396 8.01042 51.4375 8.26562C51.1406 8.52083 50.9922 8.85677 50.9922 9.27344C50.9922 9.63802 51.099 9.89844 51.3125 10.0547C51.526 10.2057 51.8047 10.2812 52.1484 10.2812C52.6589 10.2812 53.0885 10.1302 53.4375 9.82812C53.7917 9.52604 53.9688 9.09635 53.9688 8.53906V7.82031ZM63.6562 2.96875C64.6406 2.96875 65.4349 3.35156 66.0391 4.11719C66.6484 4.88281 66.9531 6.00521 66.9531 7.48438C66.9531 8.47396 66.8099 9.30729 66.5234 9.98438C66.237 10.6562 65.8411 11.1641 65.3359 11.5078C64.8307 11.8516 64.25 12.0234 63.5938 12.0234C63.1719 12.0234 62.8099 11.9714 62.5078 11.8672C62.2057 11.7578 61.9479 11.6198 61.7344 11.4531C61.5208 11.2812 61.3359 11.099 61.1797 10.9062H61.0547C61.0964 11.1146 61.1276 11.3281 61.1484 11.5469C61.1693 11.7656 61.1797 11.9792 61.1797 12.1875V15.7109H58.7969V3.13281H60.7344L61.0703 4.26562H61.1797C61.3359 4.03125 61.526 3.8151 61.75 3.61719C61.974 3.41927 62.2422 3.26302 62.5547 3.14844C62.8724 3.02865 63.2396 2.96875 63.6562 2.96875ZM62.8906 4.875C62.474 4.875 62.1432 4.96094 61.8984 5.13281C61.6536 5.30469 61.474 5.5625 61.3594 5.90625C61.25 6.25 61.1901 6.6849 61.1797 7.21094V7.46875C61.1797 8.03125 61.2318 8.50781 61.3359 8.89844C61.4453 9.28906 61.625 9.58594 61.875 9.78906C62.1302 9.99219 62.4792 10.0938 62.9219 10.0938C63.2865 10.0938 63.5859 9.99219 63.8203 9.78906C64.0547 9.58594 64.2292 9.28906 64.3438 8.89844C64.4635 8.5026 64.5234 8.02083 64.5234 7.45312C64.5234 6.59896 64.3906 5.95573 64.125 5.52344C63.8594 5.09115 63.4479 4.875 62.8906 4.875ZM75.0156 9.27344C75.0156 9.86719 74.875 10.3698 74.5938 10.7812C74.3177 11.1875 73.9036 11.4974 73.3516 11.7109C72.7995 11.9193 72.112 12.0234 71.2891 12.0234C70.6797 12.0234 70.1562 11.9844 69.7188 11.9062C69.2865 11.8281 68.849 11.6979 68.4062 11.5156V9.54688C68.8802 9.76042 69.388 9.9375 69.9297 10.0781C70.4766 10.2135 70.9557 10.2812 71.3672 10.2812C71.8307 10.2812 72.1615 10.2135 72.3594 10.0781C72.5625 9.9375 72.6641 9.75521 72.6641 9.53125C72.6641 9.38542 72.6224 9.25521 72.5391 9.14062C72.4609 9.02083 72.2891 8.88802 72.0234 8.74219C71.7578 8.59115 71.3411 8.39583 70.7734 8.15625C70.2266 7.92708 69.776 7.69531 69.4219 7.46094C69.0729 7.22656 68.8125 6.95052 68.6406 6.63281C68.474 6.3099 68.3906 5.90104 68.3906 5.40625C68.3906 4.59896 68.7031 3.99219 69.3281 3.58594C69.9583 3.17448 70.7995 2.96875 71.8516 2.96875C72.3932 2.96875 72.9089 3.02344 73.3984 3.13281C73.8932 3.24219 74.401 3.41667 74.9219 3.65625L74.2031 5.375C73.7708 5.1875 73.362 5.03385 72.9766 4.91406C72.5964 4.79427 72.2083 4.73438 71.8125 4.73438C71.4635 4.73438 71.2005 4.78125 71.0234 4.875C70.8464 4.96875 70.7578 5.11198 70.7578 5.30469C70.7578 5.44531 70.8021 5.57031 70.8906 5.67969C70.9844 5.78906 71.1615 5.91146 71.4219 6.04688C71.6875 6.17708 72.0755 6.34635 72.5859 6.55469C73.0807 6.75781 73.5104 6.97135 73.875 7.19531C74.2396 7.41406 74.5208 7.6875 74.7188 8.01562C74.9167 8.33854 75.0156 8.75781 75.0156 9.27344Z"
+                        fill="white"
+                      />
+                    </svg>
                   </a>
                 </div>
               </div>
@@ -649,7 +658,6 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                       aria-label="Country List"
                       class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
                       data-state="closed"
-                      title="Country List"
                       type="button"
                     >
                       <svg
@@ -700,7 +708,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                     </button>
                     <div
                       class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! bg-[#f4f4f4]! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
-                      style="--search-shell-border: #c6c6c6;"
+                      style="--search-shell-border: #0f62fe;"
                     >
                       <div
                         class="flex! h-12! items-center!"
@@ -728,15 +736,15 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                           />
                         </svg>
                         <input
-                          aria-label="Search for country, region and entities"
+                          aria-label="Search country, region or facilities"
                           autocapitalize="none"
                           autocomplete="off"
                           autocorrect="off"
-                          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-10! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
                           data-slot="input"
                           id="main-search-bar"
                           inputmode="search"
-                          placeholder="Search for country, region and entities"
+                          placeholder="Search country, region or facilities"
                           spellcheck="false"
                           value=""
                         />
@@ -779,7 +787,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             class="flex min-h-0 flex-1 flex-col"
           >
             <div
-              class="relative! overflow-hidden! h-auto! max-h-none!"
+              class="relative! overflow-auto! h-auto! max-h-none!"
               data-slot="scroll-area"
               dir="ltr"
               style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"
@@ -865,7 +873,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                       <p
                         class="m-0! text-xs! font-normal! leading-4.5! tracking-[0.01rem]! text-muted-foreground!"
                       >
-                        An open & live global map of mapped entities and their connectivity
+                        An open & live global map of mapped facilities and their connectivity
                       </p>
                     </div>
                     <div
@@ -1214,7 +1222,6 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                   type="button"
                                 >
                                   <svg
-                                    class="twitter-icon"
                                     fill="none"
                                     height="24"
                                     viewBox="0 0 1200 1227"
@@ -1226,7 +1233,6 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                     >
                                       <path
                                         d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
-                                        fill="none"
                                       />
                                     </g>
                                     <defs>
@@ -1234,7 +1240,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                         id="clip0_1_2"
                                       >
                                         <rect
-                                          fill="none"
+                                          fill="black"
                                           height="1227"
                                           width="1200"
                                         />
@@ -1616,50 +1622,34 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                     >
                       <svg
                         aria-hidden="true"
-                        class="!block"
+                        class="lucide lucide-list"
                         fill="none"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        width="16"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M4 4H12"
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-width="1.6"
+                          d="M3 5h.01"
                         />
                         <path
-                          d="M4 8H12"
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-width="1.6"
+                          d="M3 12h.01"
                         />
                         <path
-                          d="M4 12H12"
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-width="1.6"
-                        />
-                        <rect
-                          fill="currentColor"
-                          height="2.4"
-                          rx="0.5"
-                          width="2.4"
-                          x="2"
-                          y="2.8"
+                          d="M3 19h.01"
                         />
                         <path
-                          d="M10.4 6.8L12 9.4H8.8L10.4 6.8Z"
-                          fill="currentColor"
+                          d="M8 5h13"
                         />
-                        <rect
-                          fill="currentColor"
-                          height="2.4"
-                          rx="0.5"
-                          width="2.4"
-                          x="2"
-                          y="10.8"
+                        <path
+                          d="M8 12h13"
+                        />
+                        <path
+                          d="M8 19h13"
                         />
                       </svg>
                     </button>
@@ -1982,22 +1972,22 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       class="fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300 left-86!"
     >
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5! border-primary"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#525252]! bg-[#525252]! text-white! hover:bg-[#6f6f6f]! hover:text-white!"
         data-size="lg"
         data-slot="button"
-        data-variant="default"
+        data-variant="outline"
       >
         All facilities
       </button>
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5! border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!"
         data-size="lg"
         data-slot="button"
-        data-variant="default"
+        data-variant="outline"
       >
         <span
           class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-0!"
-          style="height: 11px; width: 11px;"
+          style="height: 8px; width: 8px;"
         >
           <span
             class="relative! z-1! inline-flex! items-center! justify-center!"
@@ -2005,13 +1995,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             <svg
               class="block! shrink-0! overflow-visible!"
               focusable="false"
-              style="height: 11px; width: 11px;"
-              viewBox="0 0 11 11"
+              style="height: 8px; width: 8px;"
+              viewBox="0 0 8 8"
             >
               <text
                 fill="#d9d9d9"
                 font-family=""Open Sans", sans-serif"
-                font-size="11"
+                font-size="8"
                 text-anchor="start"
                 x="0"
                 y="0"
@@ -2024,14 +2014,14 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         Schools
       </button>
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-[6px]! border px-3! py-2! text-sm! font-medium! leading-5! border-border bg-background text-foreground hover:bg-background/80 hover:text-foreground"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!"
         data-size="lg"
         data-slot="button"
-        data-variant="default"
+        data-variant="outline"
       >
         <span
           class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-0!"
-          style="height: 11px; width: 11px;"
+          style="height: 8px; width: 8px;"
         >
           <span
             class="relative! z-1! inline-flex! items-center! justify-center!"
@@ -2039,13 +2029,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             <svg
               class="block! shrink-0! overflow-visible!"
               focusable="false"
-              style="height: 11px; width: 11px;"
-              viewBox="0 0 11 11"
+              style="height: 8px; width: 8px;"
+              viewBox="0 0 8 8"
             >
               <text
                 fill="#d9d9d9"
                 font-family=""Open Sans", sans-serif"
-                font-size="11"
+                font-size="8"
                 text-anchor="start"
                 x="0"
                 y="0"

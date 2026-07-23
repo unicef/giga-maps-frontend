@@ -30,11 +30,13 @@ import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
 const LiveLayerLegend = ({
   entityType,
+  isLoading = false,
   metricSubtitle,
   metricTitle,
   shouldShowControls,
 }: {
   entityType: EntityType;
+  isLoading?: boolean;
   metricSubtitle: string;
   metricTitle: string;
   shouldShowControls: boolean;
@@ -149,7 +151,6 @@ const LiveLayerLegend = ({
             <button
               className="mt-1! flex! w-full! items-center! justify-start! border-0! bg-transparent! p-0! text-left!"
               key={key}
-              title={tooltipLabel}
               type="button"
             >
               <div className="flex! min-w-0! items-center!">
@@ -162,34 +163,45 @@ const LiveLayerLegend = ({
                     type="checkbox"
                   />
                 ) : null}
-                <div className="flex! min-w-0! items-center! gap-2!">
+                <div
+                  className="flex! min-w-0! items-center! gap-2!"
+                  data-title={tooltipLabel}
+                >
                   <EntityLegendIndicator
                     color={liveMetricFill}
                     entityType={entityType}
                     glowColor={legendColor}
                   />
-                  <span className="text-sm! font-normal! leading-5! text-foreground!">
-                    {displayLabel}
-                  </span>
+                  {isLoading ? (
+                    <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                  ) : (
+                    <span className="text-sm! font-normal! leading-5! text-foreground!">
+                      {displayLabel}
+                    </span>
+                  )}
                 </div>
               </div>
               {shouldShowControls ? (
-                <div
-                  className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
-                  data-title={t('int', {
-                    val:
+                isLoading ? (
+                  <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
+                ) : (
+                  <div
+                    className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+                    data-title={t('int', {
+                      val:
+                        key === 'bad'
+                          ? (realtimeStats?.no_internet ?? 0)
+                          : (realtimeStats?.[key] ?? 0),
+                    })}
+                  >
+                    {formatNumber(
                       key === 'bad'
                         ? (realtimeStats?.no_internet ?? 0)
                         : (realtimeStats?.[key] ?? 0),
-                  })}
-                >
-                  {formatNumber(
-                    key === 'bad'
-                      ? (realtimeStats?.no_internet ?? 0)
-                      : (realtimeStats?.[key] ?? 0),
-                    lng,
-                  )}
-                </div>
+                      lng,
+                    )}
+                  </div>
+                )
               ) : null}
             </button>
           );

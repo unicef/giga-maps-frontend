@@ -18,7 +18,14 @@ import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
-import { $layerUtils } from '~/@/sidebar/sidebar.model';
+import {
+  $layerUtils,
+  $sidebarHeight,
+  $isGlobalLegendLoading,
+  $isLiveLegendLoading,
+  $isStaticLegendLoading,
+  $isStatusLegendLoading,
+} from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { Button } from '~/components/ui/button';
 import {
@@ -34,7 +41,6 @@ import {
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes } from '~/core/routes';
 import { cn } from '~/lib/cn';
-
 import LiveLayerLegend from './common/live-layer-legend';
 import SchoolStatusLegend from './common/school-status-legend';
 import StaticLayerLegend from './common/static-layer-legend';
@@ -53,9 +59,9 @@ const getDefaultLegendTab = (entityTypes: EntityType[]) =>
 const getDefaultCollapsedState = (isMobile: boolean) => isMobile;
 
 const schoolSummaryOrder = [
-  ConnectivityStatusDistribution.unknown,
-  ConnectivityStatusDistribution.notConnected,
   ConnectivityStatusDistribution.connected,
+  ConnectivityStatusDistribution.notConnected,
+  ConnectivityStatusDistribution.unknown,
 ] as const;
 
 const LegendPopup = ({
@@ -77,12 +83,17 @@ const LegendPopup = ({
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
+  const sidebarHeight = useStore($sidebarHeight);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
   const isEntityDetailView = mapLevel.schools || mapLevel.entity;
   const shouldShowControls = !mapLevel.map && !isEntityDetailView;
 
   const paintData = useStore($stylePaintData);
+  const isGlobalLegendLoading = useStore($isGlobalLegendLoading);
+  const isLiveLegendLoading = useStore($isLiveLegendLoading);
+  const isStaticLegendLoading = useStore($isStaticLegendLoading);
+  const isStatusLegendLoading = useStore($isStatusLegendLoading);
   const visibleLegendEntityTypes = useMemo(() => {
     // Filter to only types that are both active AND visible in config, maintain registry order
     return entityTypesFiltered.filter((type) =>
@@ -99,14 +110,14 @@ const LegendPopup = ({
   const popoverContentRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (!node) return;
-      const wrapper: unknown | any = node.closest(
+      const wrapper = node.closest<HTMLElement>(
         '[data-radix-popper-content-wrapper]',
       );
       if (wrapper) {
-        wrapper.style.left = isMobile ? '7px' : '';
+        wrapper.style.setProperty('z-index', '10000', 'important');
       }
     },
-    [isMobile],
+    [],
   );
 
   useEffect(() => {
@@ -171,74 +182,90 @@ const LegendPopup = ({
     isSchoolStatus || shouldShowGlobalSchoolStatus;
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
-  const renderMetricSummary = () => (
-    <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
-      <div className="flex! min-w-0! w-full! flex-col! gap-1!">
-        <div className="flex! items-center! justify-between! gap-3!">
-          <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
-            {legendMetricSubtitle}
-          </span>
-          <span className="text-xs! leading-4.5! text-muted-foreground!">
-            {legendMetricTitle}
-          </span>
-        </div>
-        <div
-          className={cn(
-            'flex! h-1! w-full!',
-            showLiveLegend
-              ? 'gap-2! overflow-visible! max-md:gap-1!'
-              : 'gap-0! overflow-hidden!',
-          )}
-        >
-          {activeLayerSummaryItems.map(({ color, key, label }) =>
-            showLiveLegend ? (
-              <span
-                aria-hidden="true"
-                className="relative! block! min-w-0! flex-1! overflow-visible!"
-                key={key}
-                style={{
-                  boxShadow:
-                    '0 0 2px 0.5px ' +
-                    getLightGlowColor(color) +
-                    ', 0 0 4px 0 ' +
-                    color,
-                }}
-                title={label}
-              >
-                <span
-                  className="absolute! inset-0!"
-                  style={{ background: liveMetricFill }}
-                />
-              </span>
+  const renderMetricSummary = () => {
+    const isMetricLoading = isGlobalView
+      ? isGlobalLegendLoading
+      : showLiveLegend
+        ? isLiveLegendLoading
+        : isStaticLegendLoading;
+
+    return (
+      <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
+        <div className="flex! min-w-0! w-full! flex-col! gap-1!">
+          <div className="flex! items-center! justify-between! gap-3!">
+            {isMetricLoading ? (
+              <div className="h-4! w-32! animate-pulse! rounded! bg-muted-foreground/20!" />
             ) : (
-              <span
-                aria-hidden="true"
-                className="block! min-w-0! flex-1! overflow-hidden!"
-                key={key}
-                style={{ background: color }}
-                title={label}
-              />
-            ),
-          )}
+              <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
+                {legendMetricSubtitle}
+              </span>
+            )}
+            {/* <span className="text-xs! leading-4.5! text-muted-foreground!">
+              {legendMetricTitle}
+            </span> */}
+          </div>
+          <div
+            className={cn(
+              'flex! h-4! w-full! items-center!',
+              showLiveLegend
+                ? 'gap-2! overflow-visible! max-md:gap-1!'
+                : 'gap-0! overflow-visible!',
+            )}
+          >
+            {activeLayerSummaryItems.map(({ color, key, label }) =>
+              showLiveLegend ? (
+                <span
+                  aria-hidden="true"
+                  className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
+                  key={key}
+                  data-title={label}
+                >
+                  {/* Pulsing outer glow bar */}
+                  <span
+                    aria-hidden="true"
+                    className="absolute! left-1/2! top-1/2! w-full! h-1! pointer-events-none! animate-[legend-bar-glow_1.2s_infinite_alternate_0.2s]"
+                    style={{ background: color }}
+                  />
+                  {/* Solid center bar */}
+                  <span
+                    className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                    style={{ background: liveMetricFill }}
+                  />
+                </span>
+              ) : (
+                <span
+                  aria-hidden="true"
+                  className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
+                  key={key}
+                  data-title={label}
+                >
+                  <span
+                    className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                    style={{ background: color }}
+                  />
+                </span>
+              ),
+            )}
+          </div>
         </div>
+        {!shouldShowStatusSummary ? (
+          <Button
+            className="absolute! top-1! right-1!"
+            aria-label={t('expand-legend')}
+            data-testid="legend-expand-button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setCollapsed(false);
+            }}
+            size="icon"
+            variant="icon"
+          >
+            <Maximize2 size={14} className="text-foreground/60!" />
+          </Button>
+        ) : null}
       </div>
-      {!shouldShowStatusSummary ? (
-        <Button
-          className="absolute! top-1! right-1!"
-          aria-label={t('expand-legend')}
-          data-testid="legend-expand-button"
-          onClick={(event) => {
-            event.stopPropagation();
-            setCollapsed(false);
-          }}
-          size="icon"
-          variant="icon"
-        >
-          <Maximize2 size={14} className="text-foreground/60!" />
-        </Button>
-      ) : null}
-    </div>
-  );
+    );
+  };
 
   const collapsedContent = (
     <div
@@ -248,26 +275,24 @@ const LegendPopup = ({
       {shouldShowStatusSummary ? (
         <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
           <div className="flex! min-w-0! w-full! flex-col! gap-1!">
-            <div className="flex! min-w-0! w-full! gap-0!">
-              {schoolSummaryItems.map(({ key, label }) => (
-                <span
-                  className="min-w-0! flex-1! overflow-hidden! pr-2! text-sm! leading-5! text-muted-foreground! text-ellipsis! whitespace-nowrap! last:pr-0! max-md:pr-1.5! max-md:text-xs! max-md:leading-4.5!"
-                  key={key}
-                  title={label}
-                >
-                  {label}
-                </span>
-              ))}
+            <div className="flex! items-center! justify-between! gap-3!">
+              <span className="text-sm! leading-5! text-foreground! max-md:text-xs! max-md:leading-4.5!">
+                {legendStatusTitle}
+              </span>
             </div>
-            <div className="flex! h-1! w-full! overflow-hidden!">
+            <div className="flex! h-4! w-full! items-center! overflow-visible!">
               {schoolSummaryItems.map(({ color, key, label }) => (
                 <span
                   aria-hidden="true"
-                  className="block! min-w-0! flex-1!"
+                  className="relative! block! min-w-0! flex-1! h-4! overflow-visible!"
                   key={key}
-                  style={{ background: color }}
-                  title={label}
-                />
+                  data-title={label}
+                >
+                  <span
+                    className="absolute! left-0! right-0! top-1/2! -translate-y-1/2! h-1!"
+                    style={{ background: color }}
+                  />
+                </span>
               ))}
             </div>
           </div>
@@ -368,6 +393,7 @@ const LegendPopup = ({
           <SchoolStatusLegend
             entityType={activeTab}
             forceVisible={shouldShowGlobalSchoolStatus}
+            isLoading={isGlobalView ? isGlobalLegendLoading : isStatusLegendLoading}
             shouldShowControls={shouldShowControls}
             statusTitle={legendStatusTitle}
           />
@@ -375,6 +401,7 @@ const LegendPopup = ({
         {showLiveLegend ? (
           <LiveLayerLegend
             entityType={activeTab}
+            isLoading={isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading}
             metricSubtitle={legendMetricSubtitle}
             metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
@@ -383,6 +410,7 @@ const LegendPopup = ({
         {showStaticLegend ? (
           <StaticLayerLegend
             entityType={activeTab}
+            isLoading={isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading}
             metricSubtitle={legendMetricSubtitle}
             metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
@@ -407,9 +435,9 @@ const LegendPopup = ({
       </PopoverAnchor>
       <PopoverContent
         ref={popoverContentRef}
-        align="end"
+        align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
-          'z-1! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
+          'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
           'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
           'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
           'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',

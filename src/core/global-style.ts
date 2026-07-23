@@ -160,6 +160,11 @@ a{
     display: inline-block;
   }
 
+  [data-title='']:hover::after,
+  [data-title='']:hover::before {
+    display: none;
+  }
+
   [data-title]:hover::after {
     content: attr(data-title);
     position: absolute;
@@ -171,11 +176,15 @@ a{
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 12px;
-    white-space: nowrap;
-    z-index: 1000;
+    white-space: normal;
+    max-width: 250px;
+    width: max-content;
+    word-break: break-word;
+    text-align: center;
+    z-index: 10000;
     pointer-events: none;
     opacity: 0;
-    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+    animation: tooltipFadeIn 0.2s ease-in-out 0.5s forwards;
   }
 
   [data-title]:hover::before {
@@ -186,10 +195,10 @@ a{
     transform: translateX(-50%) translateY(100%);
     border: 5px solid transparent;
     border-top-color: #333;
-    z-index: 1000;
+    z-index: 10000;
     pointer-events: none;
     opacity: 0;
-    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+    animation: tooltipFadeIn 0.2s ease-in-out 0.5s forwards;
   }
 
   @keyframes tooltipFadeIn {
