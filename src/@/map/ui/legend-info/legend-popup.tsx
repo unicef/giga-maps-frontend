@@ -20,6 +20,7 @@ import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $layerUtils,
+  $sidebarHeight,
   $isGlobalLegendLoading,
   $isLiveLegendLoading,
   $isStaticLegendLoading,
@@ -82,6 +83,7 @@ const LegendPopup = ({
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
+  const sidebarHeight = useStore($sidebarHeight);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
   const isEntityDetailView = mapLevel.schools || mapLevel.entity;
@@ -108,14 +110,14 @@ const LegendPopup = ({
   const popoverContentRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (!node) return;
-      const wrapper: unknown | any = node.closest(
+      const wrapper = node.closest<HTMLElement>(
         '[data-radix-popper-content-wrapper]',
       );
       if (wrapper) {
-        wrapper.style.left = isMobile ? '7px' : '';
+        wrapper.style.setProperty('z-index', '10000', 'important');
       }
     },
-    [isMobile],
+    [],
   );
 
   useEffect(() => {
@@ -433,9 +435,9 @@ const LegendPopup = ({
       </PopoverAnchor>
       <PopoverContent
         ref={popoverContentRef}
-        align="end"
+        align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
-          'z-1! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
+          'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
           'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
           'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
           'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
