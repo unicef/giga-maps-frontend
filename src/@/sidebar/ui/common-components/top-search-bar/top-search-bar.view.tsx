@@ -40,7 +40,12 @@ const TopSearchBar = () => {
   const isGlobalView = useRoute(mapOverview);
   const isLight = useStore($theme) === ThemeType.light;
   const searchFill = isLight ? '#f4f4f4' : '#242424';
-  const searchBorder = isActiveSearchBar ? '#0f62fe' : isLight ? '#c6c6c6' : '#161616';
+  const idleBorder = isLight ? '#c6c6c6' : '#161616';
+  const activeBorder = '#0f62fe';
+  // Independent focus: blue on search OR world icon, never both
+  const searchBorder = isActiveSearchBar && !showCountries ? activeBorder : idleBorder;
+  const countryTriggerBorder = showCountries ? activeBorder : idleBorder;
+  const countriesPanelBg = isLight ? '#fff' : '#242424';
 
   const entityTagEntries = useMemo(
     () => Object.values(entityRegistry).filter((config) => config.active),
@@ -144,11 +149,12 @@ const TopSearchBar = () => {
       )}
       style={{
         backgroundColor: searchFill,
-        '--country-trigger-border': searchBorder,
+        '--country-trigger-border': countryTriggerBorder,
       } as CSSProperties}
       onClick={() => {
-        changeIsSearchFocused(false)
-        onShowCountriesAdminList(!showCountries)
+        changeIsSearchFocused(false);
+        document.getElementById('main-search-bar')?.blur();
+        onShowCountriesAdminList(!showCountries);
       }}
       type="button"
     >
@@ -165,7 +171,16 @@ const TopSearchBar = () => {
       )}
       ref={searchContainerRef}
     >
-      <Popover open={showCountries} onOpenChange={onShowCountriesAdminList}>
+      <Popover
+        open={showCountries}
+        onOpenChange={(open) => {
+          onShowCountriesAdminList(open);
+          if (open) {
+            changeIsSearchFocused(false);
+            document.getElementById('main-search-bar')?.blur();
+          }
+        }}
+      >
         <PopoverAnchor asChild>
           <div className="flex! min-w-0! flex-1! items-center! gap-0!" ref={searchShellRef}>
             <TooltipProvider>
@@ -251,7 +266,7 @@ const TopSearchBar = () => {
                 aria-label={t('clear-search')}
                 variant={'icon'}
                 className={cn(
-                  'main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0!',
+                  'main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! text-foreground!',
                   !searchText && selectedTags.length === 0 && 'hidden!'
                 )}
                 onClick={() => {
@@ -261,7 +276,7 @@ const TopSearchBar = () => {
                   setMentionQuery('');
                 }}
               >
-                <X size={16} className="fill-current" />
+                <X size={16} className="text-foreground!" />
               </Button>
 
               {/* @ mention entity type suggestions */}
@@ -290,16 +305,33 @@ const TopSearchBar = () => {
         </PopoverAnchor>
         <PopoverContent
           align="start"
-          className="z-60 rounded-lg border border-primary bg-[#161616] p-0 shadow-xs"
+          className="z-60 rounded-lg border-0 bg-transparent p-0 shadow-none outline-none!"
           side="bottom"
           sideOffset={2}
           style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}
         >
-          <div className='!border  !rounded-lg !overflow-hidden !border-solid !border-[#277aff]'>
-            <SearchResultScroll className="search-container max-h-[calc(80vh-6.5rem)] bg-[#161616]">
+          <div
+            className={cn(
+              'countries-browse-panel overflow-hidden! rounded-lg!',
+              !isLight && '[&_.search-container]:!bg-[#242424] [&_p]:!bg-[#242424]',
+            )}
+            style={{
+              border: `1px solid ${isLight ? '#e0e0e0' : '#393939'}`,
+              backgroundColor: countriesPanelBg,
+            }}
+          >
+            <SearchResultScroll
+              className="search-container max-h-[calc(80vh-6.5rem)]"
+              style={{ backgroundColor: countriesPanelBg }}
+            >
               <SearchCountryList />
             </SearchResultScroll>
-            <FooterTourContact message={t("not-the-results-you-expected")} />
+            <div
+              style={{ backgroundColor: countriesPanelBg }}
+              className={cn(!isLight && '[&>div]:!bg-[#242424]')}
+            >
+              <FooterTourContact message={t("not-the-results-you-expected")} />
+            </div>
           </div>
           <SearchSchoolPanel />
         </PopoverContent>

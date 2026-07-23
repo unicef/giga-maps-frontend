@@ -13,18 +13,20 @@ const ButtonBase = styled.button`
 `
 
 export const SearchResultWrapper = styled.div`
-    background: ${props => props.theme.main};
+    background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
     position: absolute;
-    left: 0.5rem;
-    right: 0.5rem;
+    left: 0.875rem;
+    right: 0.875rem;
     width: auto;
     z-index: 13;
-    top: 100%;
+    top: calc(100% + 0.125rem);
     max-height: 80vh;
-    border: 1px solid ${props => props.theme.titleBlue};
+    border: 1px solid ${props => (props.theme.main === '#fff' ? '#E0E0E0' : '#393939')};
     border-radius: 0.5rem;
     box-shadow:#212020 0px 14px 40px 0px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     @media (max-width:768px){
       max-height: 80vh;
@@ -32,15 +34,15 @@ export const SearchResultWrapper = styled.div`
 `
 
 export const SearchListWrapper = styled.div`
-  background: ${props => props.theme.main};
+  background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
   position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
+  left: 0.875rem;
+  right: 0.875rem;
   width: auto;
   z-index: 13;
-  top: 100%;
+  top: calc(100% + 0.125rem);
   max-height: 80vh;
-  border: 1px solid ${props => props.theme.titleBlue};
+  border: 1px solid ${props => (props.theme.main === '#fff' ? '#E0E0E0' : '#393939')};
   border-radius: 0.5rem;
   box-shadow:#212020 0px 14px 40px 0px;
   overflow: hidden;
@@ -50,7 +52,7 @@ export const SearchListWrapper = styled.div`
   }
 `
 export const SearchResultScroll = styled(Scroll)`
-  background: ${props => props.theme.main};
+  background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
   max-height: calc(80vh - 4.5rem);
 `
 export const SearchTopHead = styled.span`
@@ -58,7 +60,7 @@ export const SearchTopHead = styled.span`
   align-items: center;
   min-height: 2.75rem;
   padding: 0.625rem 1rem;
-  background: ${props => props.theme.schoolListBack};
+  background: ${props => (props.theme.main === '#fff' ? props.theme.schoolListBack : '#242424')};
   color: ${props => props.theme.grey60};
   font-size: 0.75rem;
   border-radius: 0.5rem 0.5rem 0 0;
@@ -70,6 +72,10 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
    display: flex;
    width: 100%;
    margin-left: 0;
+   transition: background-color 0.15s ease;
+   &:hover {
+     background: ${props => (props.theme.main === '#fff' ? '#e8e8e8' : '#393939')};
+   }
       ${props => props.$nested && css`
     padding: 0.5rem;
     padding-left: 1.7rem; 
@@ -82,7 +88,7 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
       gap: ${props.$gap}rem;  
    `}
    ${props => props.$border && css`
-      border-bottom: 0.0625rem solid  ${props.theme.bottomBorder};  
+      border-bottom: 0.0625rem solid ${props.theme.main === '#fff' ? '#E0E0E0' : '#393939'};
    `}
    ${props => props.$history}
 
@@ -116,7 +122,7 @@ export const SchoolItem = styled(SearchItem)`
 
 export const DistictWrapper = styled.div`
   padding-left: 0.5rem;
-  background: ${props => props.theme.main};
+  background: ${props => (props.theme.main === '#fff' ? '#fff' : '#242424')};
 `
 
 export const LeftItem = styled.h4<{ $recent?: boolean; $bold?: boolean; $highlight?: boolean; $fullWidth?: boolean }>`
@@ -500,19 +506,19 @@ export const Dot = styled.span<{ $color?: string; }>`
   margin-left: 0.375rem;
 `
 export const NotFoundContainer = styled.div`
-margin:2rem 1rem 0 1rem;
+margin: 2.5rem 1rem 1.5rem;
 display: flex;
 align-items: center;
 justify-content: center;
 flex-direction: column;
 
   h3{
-      color: ${props => props.theme.notFoundRed};
+      color: ${props => (props.theme.main === '#fff' ? props.theme.text : '#C6C6C6')};
       text-align: center;
       font-size: 0.875rem;
       font-weight: 500;
       line-height: 1.125rem;
-      margin-top:2rem
+      margin-top: 1.5rem;
     }
 
   p{
@@ -522,7 +528,7 @@ flex-direction: column;
       font-style: normal;
       font-weight: 400;
       line-height: 1.125rem;
-      margin-top:1rem;
+      margin-top: 0.5rem;
     }
 
     button{
