@@ -194,7 +194,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          {t('filters')}
+          {t('filter-by')}
         </h3>
         <IconButton
           size="md"
