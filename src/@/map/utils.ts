@@ -825,7 +825,7 @@ export const createEntitySymbolLayer = (
     layout: {
       'text-field': symbol,
       'text-size': getEntityTextSizeExpression(entityConfig),
-      'text-allow-overlap': true,
+      'text-allow-overlap': false,
       'text-ignore-placement': true,
     },
     paint: {
@@ -1062,7 +1062,7 @@ export const createSelectedSymbolLayer = (
       layout: {
         'text-field': symbol,
         'text-size': textSize,
-        'text-allow-overlap': true,
+        'text-allow-overlap': false,
         'text-ignore-placement': true,
       },
       paint: {
