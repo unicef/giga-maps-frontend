@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 import { ChevronDown } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -20,6 +20,7 @@ import {
   Popover,
   PopoverAnchor,
   PopoverContent,
+  PopoverTrigger,
 } from '~/components/ui/popover';
 import {
   Tooltip,
@@ -76,6 +77,16 @@ const LegendBenchmarkDropdown = ({
   const countryBenchmark = useStore($countryBenchmark);
   const countryActiveLayersDataById = useStore($countryActiveLayersDataById);
   const [open, setOpen] = useState(false);
+
+  const popoverContentRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    const wrapper = node.closest<HTMLElement>(
+      '[data-radix-popper-content-wrapper]',
+    );
+    if (wrapper) {
+      wrapper.style.setProperty('z-index', '10005', 'important');
+    }
+  }, []);
 
   const layerId =
     (map
@@ -149,16 +160,17 @@ const LegendBenchmarkDropdown = ({
       <PopoverAnchor asChild>
         <div className="relative! mt-3! inline-flex! max-w-full! flex-col! items-start! gap-1.5!">
           <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className="inline-flex! max-w-full! items-center! justify-between! gap-1.5! rounded-md! border! border-border! bg-transparent! px-2.5! py-0.5! text-xs! leading-4.5! text-foreground!"
-                onClick={() => setOpen((current) => !current)}
-                type="button"
-              >
-                <span className="min-w-0! truncate!">{triggerLabel}</span>
-                <ChevronDown size={12} />
-              </button>
-            </TooltipTrigger>
+            <PopoverTrigger asChild>
+              <TooltipTrigger asChild>
+                <button
+                  className="inline-flex! max-w-full! items-center! justify-between! gap-1.5! rounded-md! border! border-border! bg-transparent! px-2.5! py-0.5! text-xs! leading-4.5! text-foreground!"
+                  type="button"
+                >
+                  <span className="min-w-0! truncate!">{triggerLabel}</span>
+                  <ChevronDown size={12} />
+                </button>
+              </TooltipTrigger>
+            </PopoverTrigger>
             {!open && (
               <TooltipContent side="top" sideOffset={4}>
                 {triggerLabel}
@@ -169,10 +181,11 @@ const LegendBenchmarkDropdown = ({
         </div>
       </PopoverAnchor>
       <PopoverContent
+        ref={popoverContentRef}
         align="start"
-        className="z-6004! w-[min(16rem,calc(100vw-2rem))]! rounded-md! border! border-border! bg-popover! p-1! shadow-[0_8px_24px_0_rgb(0_0_0/0.22)]!"
-        side="top"
-        sideOffset={6}
+        className="z-[10005]! w-[var(--radix-popper-anchor-width)]! min-w-[140px]! rounded-md! border! border-border! bg-popover! p-1! shadow-[0_8px_24px_0_rgb(0_0_0/0.22)]!"
+        side="bottom"
+        sideOffset={4}
       >
         <div className="flex! flex-col! gap-1! rounded-[calc(0.375rem-2px)]! bg-transparent!">
           {options.map((option) => {
