@@ -5,6 +5,7 @@ import {
   $connectivityBenchMarkByEntity,
   $connectivityLayers,
   $coverageStatusAllByEntity,
+  $isLiveLegendLoading,
   $layersList,
   $multiSelectionSchoolCheckboxByEntity,
   $selectedLayerDataByEntity,
@@ -12,6 +13,8 @@ import {
   $staticLegendsSelectedByEntity,
   changeEntityCoverageStatus,
   changeMultiSelectionSchoolCheckbox,
+  liveLegendLoadingFinished,
+  liveLegendLoadingStarted,
   makeEmptyEntityStaticLegendsSelection,
   resetCoverageFilterSelection,
   resetEntityCoverageFilterSelection,
@@ -114,6 +117,18 @@ describe('Sidebar Model Layer Tests', () => {
 
     expect(connectivityLayers).toEqual([]);
     expect(staticLayers).toEqual([]);
+  });
+});
+
+describe('Live legend loading', () => {
+  it('stays loading until the full live legend request pipeline finishes', async () => {
+    const scope = fork();
+
+    await allSettled(liveLegendLoadingStarted, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(true);
+
+    await allSettled(liveLegendLoadingFinished, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(false);
   });
 });
 
