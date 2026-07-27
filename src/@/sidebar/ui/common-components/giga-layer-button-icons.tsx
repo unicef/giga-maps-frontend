@@ -62,14 +62,7 @@ const GigaLayerButtonIcons = ({
     isLayerForEntity(layer, targetEntityType),
   );
   const targetDefaultLayerId =
-    entityLayers.find(
-      (layer) =>
-        layer.type === LayerTypeChoices.LIVE &&
-        targetActiveLayerByCountryCode[layer.id] &&
-        layer.active_countries_list?.some(({ is_default }) => is_default),
-    )?.id ??
-    currentDefaultLayerIdByEntity[targetEntityType] ??
-    null;
+    currentDefaultLayerIdByEntity[targetEntityType] ?? null;
 
   const targetSelectedLayerId = getEntityMapValue(
     selectedLayerIdByEntity,
@@ -121,11 +114,6 @@ const GigaLayerButtonIcons = ({
       onSelectEntityMainLayer({
         [targetEntityType]: selectedId,
       });
-      onSelectEntityStatusLayer({
-        [targetEntityType]: selectedId
-          ? null
-          : getEntityStatusId(targetEntityType),
-      });
     },
     [targetEntityType, targetSelectedLayerId],
   );
@@ -136,11 +124,6 @@ const GigaLayerButtonIcons = ({
         return;
       }
 
-      if (!targetStatusSelectedLayer) {
-        onSelectEntityMainLayer({
-          [targetEntityType]: null,
-        });
-      }
       onSelectEntityStatusLayer({
         [targetEntityType]: targetStatusSelectedLayer ? null : selectedId,
       });

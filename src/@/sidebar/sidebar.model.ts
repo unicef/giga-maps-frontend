@@ -1165,26 +1165,34 @@ export const $isLoadingCountryAdminView = $allLoadings.map(
 
 export const $isGlobalLegendLoading = fetchLayerListFx.pending;
 
+export const liveLegendLoadingStarted = createEvent();
+export const liveLegendLoadingFinished = createEvent();
+
+sample({
+  clock: getEntitiesAvailableDates,
+  fn: () => undefined,
+  target: liveLegendLoadingStarted,
+});
+
+sample({
+  clock: [getEntitiesAvailableDates.fail, fetchEntitiesLayerInfoFx.finally],
+  fn: () => undefined,
+  target: liveLegendLoadingFinished,
+});
+
+const $isLiveLegendPipelineLoading = createStore(false)
+  .on(liveLegendLoadingStarted, () => true)
+  .on(liveLegendLoadingFinished, () => false)
+  .reset([router.historyUpdated, mapOverview.visible]);
+
 export const $isLiveLegendLoading = combine(
+  $isLiveLegendPipelineLoading,
   fetchLayerListFx.pending,
-  // fetchAdvanceFilterFx.pending,
   fetchCountryFx.pending,
   fetchCountriesFx.pending,
   getEntitiesAvailableDates.pending,
   fetchEntitiesLayerInfoFx.pending,
-  (...pendingFlags) => pendingFlags.some(Boolean)
-);
-
-combine({
-  layer: fetchLayerListFx.pending,
-  advance: fetchAdvanceFilterFx.pending,
-  countries: fetchCountriesFx.pending,
-  country: fetchCountryFx.pending,
-  availability: getEntitiesAvailableDates.pending,
-  info: fetchEntitiesLayerInfoFx.pending,
-},
-  (object) =>
-    console.log(Object.entries(object), new Date())
+  (...pendingFlags) => pendingFlags.some(Boolean),
 );
 
 export const $isStaticLegendLoading = combine(
