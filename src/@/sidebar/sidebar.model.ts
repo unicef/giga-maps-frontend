@@ -1175,7 +1175,11 @@ sample({
 });
 
 sample({
-  clock: [getEntitiesAvailableDates.fail, fetchEntitiesLayerInfoFx.finally],
+  clock: [
+    getEntitiesAvailableDates.fail,
+    fetchEntitiesLayerInfoFx.finally,
+    fetchSchoolLayerInfoFx.finally,
+  ],
   fn: () => undefined,
   target: liveLegendLoadingFinished,
 });

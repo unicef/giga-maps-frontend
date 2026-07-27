@@ -1,4 +1,5 @@
 import { useStore } from 'effector-react';
+import { Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { $country } from '~/@/country/country.model';
@@ -19,7 +20,6 @@ import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
-import { Info } from 'lucide-react';
 
 const StaticLayerLegend = ({
   entityType,
@@ -95,9 +95,7 @@ const StaticLayerLegend = ({
         const tooltipLabel =
           key === 'unknown' ? tooltip || `Doesn't match any criteria` : tooltip;
 
-        return coverageStats?.connected_schools &&
-          label in coverageStats.connected_schools &&
-          coverageStats.connected_schools[label] > 0 ? (
+        return (
           <button
             className="mt-3! flex! w-full! items-center! justify-start! border-0! bg-transparent! p-0! text-left!"
             key={key}
@@ -147,7 +145,7 @@ const StaticLayerLegend = ({
               )
             ) : null}
           </button>
-        ) : null;
+        );
       })}
 
       <LegendBenchmarkDropdown

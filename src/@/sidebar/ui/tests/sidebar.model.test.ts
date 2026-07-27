@@ -34,6 +34,7 @@ import {
   $countryConnectivityNames,
 } from '~/@/country/country.model';
 import { EntityType, $activeEntityTypes, changeActiveEntityTypes } from '~/@/entities';
+import { fetchSchoolLayerInfoFx } from '~/api/project-connect';
 
 describe('Sidebar Model Layer Tests', () => {
   const mockLayers = [
@@ -128,6 +129,25 @@ describe('Live legend loading', () => {
     expect(scope.getState($isLiveLegendLoading)).toBe(true);
 
     await allSettled(liveLegendLoadingFinished, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(false);
+  });
+
+  it('finishes when the entity-detail layer info request settles', async () => {
+    const scope = fork({
+      handlers: new Map().set(fetchSchoolLayerInfoFx, () => []),
+    });
+
+    await allSettled(liveLegendLoadingStarted, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(true);
+
+    await allSettled(fetchSchoolLayerInfoFx, {
+      scope,
+      params: {
+        entityType: EntityType.HEALTH,
+        query: '',
+        url: '',
+      },
+    });
     expect(scope.getState($isLiveLegendLoading)).toBe(false);
   });
 });

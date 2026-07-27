@@ -58,6 +58,11 @@ const getDefaultLegendTab = (entityTypes: EntityType[]) =>
   entityTypes[0] ?? 'school';
 const getDefaultCollapsedState = (isMobile: boolean) => isMobile;
 
+export const shouldShowLegendLoading = (
+  isEntityDetailView: boolean,
+  isLoading: boolean,
+) => !isEntityDetailView && isLoading;
+
 const schoolSummaryOrder = [
   ConnectivityStatusDistribution.connected,
   ConnectivityStatusDistribution.notConnected,
@@ -86,7 +91,8 @@ const LegendPopup = ({
   const sidebarHeight = useStore($sidebarHeight);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
-  const isEntityDetailView = mapLevel.schools || mapLevel.entity;
+  const isEntityDetailView =
+    mapLevel.schools || mapLevel.entity || mapLevel.entityView;
   const shouldShowControls = !mapLevel.map && !isEntityDetailView;
 
   const paintData = useStore($stylePaintData);
@@ -183,11 +189,14 @@ const LegendPopup = ({
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
   const renderMetricSummary = () => {
-    const isMetricLoading = isGlobalView
-      ? isGlobalLegendLoading
-      : showLiveLegend
-        ? isLiveLegendLoading
-        : isStaticLegendLoading;
+    const isMetricLoading = shouldShowLegendLoading(
+      isEntityDetailView,
+      isGlobalView
+        ? isGlobalLegendLoading
+        : showLiveLegend
+          ? isLiveLegendLoading
+          : isStaticLegendLoading,
+    );
 
     return (
       <div className="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-x-2!">
@@ -393,7 +402,10 @@ const LegendPopup = ({
           <SchoolStatusLegend
             entityType={activeTab}
             forceVisible={shouldShowGlobalSchoolStatus}
-            isLoading={isGlobalView ? isGlobalLegendLoading : isStatusLegendLoading}
+            isLoading={shouldShowLegendLoading(
+              isEntityDetailView,
+              isGlobalView ? isGlobalLegendLoading : isStatusLegendLoading,
+            )}
             shouldShowControls={shouldShowControls}
             statusTitle={legendStatusTitle}
           />
@@ -401,7 +413,10 @@ const LegendPopup = ({
         {showLiveLegend ? (
           <LiveLayerLegend
             entityType={activeTab}
-            isLoading={isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading}
+            isLoading={shouldShowLegendLoading(
+              isEntityDetailView,
+              isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading,
+            )}
             metricSubtitle={legendMetricSubtitle}
             metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
@@ -410,7 +425,10 @@ const LegendPopup = ({
         {showStaticLegend ? (
           <StaticLayerLegend
             entityType={activeTab}
-            isLoading={isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading}
+            isLoading={shouldShowLegendLoading(
+              isEntityDetailView,
+              isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading,
+            )}
             metricSubtitle={legendMetricSubtitle}
             metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}

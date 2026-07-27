@@ -7,9 +7,15 @@ import { fetchLayerListFx } from "~/api/project-connect"
 import { fetchMockResponse } from "~/tests/fetchMock"
 import { testWrapper } from "~/tests/test-wrapper"
 
-import LegendPopup from "../ui/legend-info/legend-popup"
+import LegendPopup, { shouldShowLegendLoading } from "../ui/legend-info/legend-popup"
 
 describe('LegendPopup', () => {
+  test('does not show request loaders in entity detail legends', () => {
+    expect(shouldShowLegendLoading(true, true)).toBe(false)
+    expect(shouldShowLegendLoading(true, false)).toBe(false)
+    expect(shouldShowLegendLoading(false, true)).toBe(true)
+  })
+
   beforeEach(async () => {
     // @ts-ignore
     fetchMock.mockResponse(fetchMockResponse)
