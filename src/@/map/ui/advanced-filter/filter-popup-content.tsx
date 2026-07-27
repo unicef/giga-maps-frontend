@@ -214,11 +214,17 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
               {activeFilterBadges.map(({ entity, label, itemKey }) => (
                 <Badge
                   key={itemKey}
-                  className="flex! justify-between! bg-[#85FFBC]! h-[22px]! w-[210px]! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-black! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-3!"
+                  className="flex! items-center! justify-between! bg-[#85FFBC]! h-[22px]! w-[210px]! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-black! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-2!"
                 >
-                  <span><strong>{entity}:</strong> {label}</span>
+                  <span
+                    className="truncate! min-w-0! flex-1!"
+                    title={`${entity}: ${label}`}
+                  >
+                    <strong>{entity}:</strong> {label}
+                  </span>
                   <button
                     type="button"
+                    className="shrink-0! flex! items-center! justify-center! cursor-pointer!"
                     onClick={(e: any) => clearSingleBadge(itemKey, e)}
                   >
                     <Close size={12} />

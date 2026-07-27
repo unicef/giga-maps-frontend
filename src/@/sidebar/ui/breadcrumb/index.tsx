@@ -8,7 +8,7 @@ import RightShareBDB from './right-share-bdb.view';
 import SchoolBDB from './school-bdb-view';
 
 const breadcrumbWrapperClassName =
-  'mt-2! flex! h-12! w-full! items-center! justify-between! bg-background! px-4! py-[0.88rem]! max-md:fixed! max-md:top-10! max-md:z-3! max-md:bg-background/50!';
+  'mt-2! flex! h-12! w-full! items-center! justify-between! bg-background! px-4! py-[0.88rem]! max-md:mt-0!';
 
 const BreadcrumbInfo = () => {
   const { map } = useStore($mapRoutes);
