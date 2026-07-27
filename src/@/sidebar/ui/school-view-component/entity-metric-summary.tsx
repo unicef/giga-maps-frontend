@@ -95,27 +95,47 @@ export function EntityMetricSummary({
 
   if (isStatic) {
     const formattedValue = formatStaticFieldValue(staticDetails.value);
+    const layerName = selectedLayerData?.name ?? '';
+    const layerDescription = selectedLayerData?.description;
 
     return (
-      <section className="mx-4! my-6!">
-        {formattedValue !== 'N/A' && (
-          <div className="relative! flex! w-full! flex-col! pb-6! pt-3!">
-            <p
-              className="m-0! break-words! text-[2rem]! font-normal! leading-tight!"
-              style={{ color: staticDetails.color }}
-            >
-              {formattedValue}
-              {unit ? ` ${unit}` : ''}
-            </p>
-          </div>
-        )}
+      <section className="mx-4! pt-1!">
+        <div className="relative! flex! w-full! flex-col! gap-2! pb-6! pt-3!">
+          {isLoading ? (
+            <Skeleton className="h-11! w-[70%]!" />
+          ) : (
+            <>
+              {layerName && (
+                <LayerNameWithTooltip
+                  description={layerDescription}
+                  name={layerName}
+                />
+              )}
+              {formattedValue !== 'N/A' ? (
+                <p
+                  className="m-0! break-words! text-[2rem]! font-normal! leading-tight!"
+                  style={{ color: staticDetails.color }}
+                >
+                  {formattedValue}
+                  {unit ? ` ${unit}` : ''}
+                </p>
+              ) : (
+                <div className="mb-[2.6rem]!">
+                  <p className="m-0! text-xs! font-normal! leading-4! text-foreground!">
+                    {t('no-data-available')}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="mx-4! my-6!">
-      <div className="relative! flex! w-full! flex-col! pb-6! pt-3!">
+    <section className="mx-4! pt-1!">
+      <div className="relative! flex! w-full! flex-col! gap-2! pb-6! pt-3!">
         {isLoading ? (
           <Skeleton className="h-11! w-[70%]!" />
         ) : (<>
