@@ -15,8 +15,11 @@ export const getAdminCountryLayerLine = (level: CountryAdminLevel) => `${AdminLa
 
 export const getCurrentCountrySearchPath = (countryCode: string) => {
   const currentCountryCode = $countryCode.getState();
-  const { selectedCount } = $countrySearchParams.getState();
-  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase() && selectedCount >= 1) {
+  const { filtersByEntity } = $countrySearchParams.getState();
+  const hasStoredFilters = Object.values(filtersByEntity).some(
+    (entityFilters) => Object.keys(entityFilters).length > 0,
+  );
+  if (countryCode?.toLocaleLowerCase() === currentCountryCode?.toLocaleLowerCase() && hasStoredFilters) {
     return window.location.search;
   }
 }

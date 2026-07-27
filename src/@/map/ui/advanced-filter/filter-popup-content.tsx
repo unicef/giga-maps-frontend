@@ -5,8 +5,8 @@ import { ChevronDown } from 'lucide-react';
 import { Fragment, MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 
-import { $country, $countrySearchParams } from "~/@/country/country.model";
-import { $activeEntityTypes, $entityRegistry } from '~/@/entities';
+import { $countrySearchParams } from "~/@/country/country.model";
+import { $activeEntityTypes } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import { Badge } from '~/components/ui/badge';
@@ -14,6 +14,10 @@ import { Separator } from '~/components/ui/separator';
 import { router } from "~/core/routes";
 
 import { $advanceFilterList } from "../../map.model";
+import {
+  deleteAdvancedFiltersForEntities,
+  suppressDefaultAdvancedFilters,
+} from './advanced-filter.model';
 import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
 import MultiSelectDropdown from "./multi-select-dropdown";
 import RangeTextInput from './range-text-input';
@@ -28,6 +32,23 @@ export const components = {
   'BOOLEAN': SingleDropdown
 } as Record<string, React.ComponentType<any>>;
 
+type SelectedFieldValue = string | {
+  none_range: boolean;
+  value: string;
+};
+
+const hasSelectedValue = (value: SelectedFieldValue | undefined) =>
+  typeof value === 'object'
+    ? value.none_range || Boolean(value.value)
+    : Boolean(value);
+
+const navigateWithSearchParams = (params: URLSearchParams) => {
+  const search = params.toString();
+  router.navigate(
+    search ? `${window.location.pathname}?${search}` : window.location.pathname,
+  );
+};
+
 
 const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
   const { t } = useTranslation();
@@ -37,26 +58,22 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const advanceFilterList = useStore($advanceFilterList);
   const { urlFieldList } = useStore($countrySearchParams);
   const [openItems, setOpenItems] = useState<EntityType[]>([]);
-  const [selectedFields, setSelectedFields] = useState<Record<string, string | {
-    none_range: boolean;
-    value: string;
-  }>>({})
-  const country = useStore($country);
+  const [selectedFields, setSelectedFields] = useState<Record<string, SelectedFieldValue>>({})
   // multiple key value pair
   const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
-    setSelectedFields({
-      ...selectedFields,
+    setSelectedFields((current) => ({
+      ...current,
       [key]: value,
       ...multiKeyValues
-    })
+    }))
   }
 
   useEffect(() => {
-    const selectedFields = {} as Record<string, string | {
-      none_range: boolean;
-      value: string;
-    }>;
+    const nextSelectedFields = {} as Record<string, SelectedFieldValue>;
+    const activeEntityTypeSet = new Set<string>(activeEntityTypes);
     advanceFilterList?.forEach(item => {
+      if (!activeEntityTypeSet.has(item.entity_type)) return;
+
       const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
       const field = urlFieldList[itemKey];
       const extraItemKey = `ignore_${itemKey}`;
@@ -64,36 +81,32 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       if (field) {
         const isRange = field.filter.includes('range');
         const isNone = field.filter.includes('none');
-        selectedFields[itemKey] = isRange ? {
+        nextSelectedFields[itemKey] = isRange ? {
           none_range: isNone,
           value: field.value
         } : field.value
       } else {
-        selectedFields[`${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`] = ''
+        nextSelectedFields[`${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
       if (extraField) {
-        selectedFields[`${extraItemKey}`] = extraField.value
+        nextSelectedFields[`${extraItemKey}`] = extraField.value
       }
     })
-    setSelectedFields(selectedFields)
+    setSelectedFields(nextSelectedFields)
     setIsReady(true)
-  }, [advanceFilterList, urlFieldList]);
+  }, [activeEntityTypes, advanceFilterList, urlFieldList]);
 
-  const onApply = async (e: MouseEvent) => {
+  const onApply = (e: MouseEvent) => {
     e.preventDefault();
     const prefix = 'filter__';
     const params = new URLSearchParams(window.location.search);
-    for (const key of Array.from(params.keys())) {
-      if (key.startsWith(prefix)) {
-        params.delete(key);
-      }
-    }
+    deleteAdvancedFiltersForEntities(params, activeEntityTypes);
 
     for (const [key, value] of Object.entries(selectedFields)) {
       if (value) {
         if (typeof value === 'object') {
-          const { none_range, value: rangeValue } = value;
-          if (none_range) {
+          const { none_range: noneRange, value: rangeValue } = value;
+          if (noneRange) {
             params.set(
               `${prefix}${key.replace('__range', '__none_range')}`,
               String(rangeValue) || "null,null"
@@ -106,26 +119,26 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
         }
       }
     }
-    router.navigate(`${window.location.pathname}?${params.toString()}`);
+    suppressDefaultAdvancedFilters(activeEntityTypes);
+    navigateWithSearchParams(params);
     setOpen(false);
   }
 
-  const onReset = async (e: MouseEvent) => {
+  const onReset = (e: MouseEvent) => {
     e.preventDefault();
     const params = new URLSearchParams(window.location.search);
-    for (const key of Array.from(params.keys())) {
-      if (key.startsWith('filter__')) {
-        params.delete(key);
-      }
-    }
+    deleteAdvancedFiltersForEntities(params, activeEntityTypes);
 
-    router.navigate(`${window.location.pathname}?${params.toString()}`);
+    suppressDefaultAdvancedFilters(activeEntityTypes);
+    navigateWithSearchParams(params);
     setOpen(false)
   }
 
   const entityWiseSelectedFilterCount = useMemo(() => {
     return activeEntityTypes.reduce((acc, elEntity) => {
-      acc[elEntity] = Object.keys(selectedFields).filter((elSelectedField: string) => elSelectedField.startsWith(elEntity + "__")).length;
+      acc[elEntity] = Object.entries(selectedFields).filter(
+        ([key, value]) => key.startsWith(`${elEntity}__`) && hasSelectedValue(value),
+      ).length;
       return acc;
     }, {} as Record<string, number>)
   }, [activeEntityTypes, selectedFields])
@@ -142,7 +155,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       .filter(item => {
         const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
         const val = selectedFields[itemKey];
-        if (val) {
+        if (hasSelectedValue(val)) {
           return true
         };
         return false;
@@ -292,7 +305,9 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           </Button>
           <Button
             type="submit"
-            onClick={(e) => { void onApply(e) }}>
+            onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
+              void onApply(event);
+            }}>
             {t('apply')}
           </Button>
         </FilterActionButtonWrapper>
@@ -302,5 +317,3 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
 }
 
 export default FilterPopupContent;
-
-

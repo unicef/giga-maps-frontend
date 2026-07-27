@@ -5,15 +5,6 @@ export function buildActiveEntityFilterUrl(
   isAllEntitiesMode: boolean,
 ): string {
   const params = new URLSearchParams(window.location.search);
-  const activeEntitySet = new Set(activeEntityTypes);
-
-  for (const key of Array.from(params.keys())) {
-    if (!key.startsWith('filter__')) continue;
-    const [, entityType] = key.split('__');
-    if (!activeEntitySet.has(entityType)) {
-      params.delete(key);
-    }
-  }
 
   if (isAllEntitiesMode) {
     params.delete('entity');
@@ -34,26 +25,20 @@ export function buildFilterQueryFromSelections(
   filters: AdvanceFilterType[],
   activeEntityTypes?: string[],
   isAllEntitiesMode = false,
+  selectedEntityTypes = activeEntityTypes,
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
   // Start from current query so we preserve non-filter params
   const params = new URLSearchParams(window.location.search);
 
-  // 1) Delete any existing keys that belong to filter__* (clean stale filter keys)
-  for (const key of Array.from(params.keys())) {
-    if (key.startsWith(prefix) || key.startsWith(`${prefix}ignore_`)) {
-      params.delete(key);
-    }
-  }
-
   // Entity changes also trigger this country-filter navigation. Keep the
-  // selection in the URL here so this navigation cannot restore a stale query.
+  // selection in the URL without removing cached filters for inactive entities.
   if (isAllEntitiesMode) {
     params.delete('entity');
     params.delete('global');
-  } else if (activeEntityTypes?.length) {
-    params.set('entity', activeEntityTypes.join(','));
+  } else if (selectedEntityTypes?.length) {
+    params.set('entity', selectedEntityTypes.join(','));
     params.set('global', '0');
   }
   // 2) Build a map of filters for lookup
@@ -93,14 +78,14 @@ export function buildFilterQueryFromSelections(
     const entiryTypePrefix = filter.entity_type + "__";
     // RANGE handling — ONLY accept object shape { min, max, none_range? }
     if (filter.type === "RANGE") {
-      if (typeof raw === "object" && raw !== null && !Array.isArray(raw) && "min" in (raw as any)) {
+      if (typeof raw === "object" && raw !== null && !Array.isArray(raw) && "min" in raw) {
         const obj = raw as { min?: number | string; max?: number | string; none_range?: boolean };
         const min = obj.min ?? "";
         const max = obj.max ?? "";
         const str = `${min},${max}`;
-        const noneRangeFlag = Boolean(obj.none_range ?? df?.none_range);
+        const noneRangeFlag = Boolean(obj.none_range);
         if (noneRangeFlag) {
-          params.set(`${prefix}${entiryTypePrefix}${colName}__none__${qFilter}`, str);
+          params.set(`${prefix}${entiryTypePrefix}${colName}__none_${qFilter}`, str);
         } else {
           params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, str);
         }
@@ -139,7 +124,7 @@ export function buildFilterQueryFromSelections(
         const labels = matchedLabels.join(multiValueDelimiter);
 
         if (labels !== "") {
-          params.set(`${prefix}${entiryTypePrefix}ignore_${colName}__${qFilter}`, labels);
+          params.set(`${prefix}ignore_${entiryTypePrefix}${colName}__${qFilter}`, labels);
         }
       }
       continue;

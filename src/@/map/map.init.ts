@@ -4,6 +4,7 @@ import type { Map as MapboxMap } from 'mapbox-gl';
 import {
   $admin1Data,
   $admin1Id,
+  $advancedFiltersByEntity,
   $country,
   $countryActiveFiltersList,
   $countryCode,
@@ -63,7 +64,6 @@ import {
   router,
 } from '~/core/routes';
 import { $theme } from '~/core/theme.model';
-import { $urlParamsConsumed, $isAppSettled } from '~/@/sidebar/url-params.model';
 
 import {
   changeLayersFx,
@@ -128,6 +128,12 @@ import {
 } from './map.model';
 import { createLoadingPopupFx } from './popup/effects/create-school-popup-fx';
 import { updateSchoolPopupFx } from './popup/effects/update-school-popup.fx';
+import {
+  $defaultAdvancedFilterSuppressedEntityTypes,
+  clearDefaultAdvancedFilterSuppression,
+  deleteAllAdvancedFilters,
+  getEntityTypesNeedingDefaultFilters,
+} from './ui/advanced-filter/advanced-filter.model';
 import {
   buildActiveEntityFilterUrl,
   buildFilterQueryFromSelections,
@@ -235,73 +241,99 @@ sample({
   target: $reloadStyle,
 });
 
-const hasFilterParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  return Array.from(params.keys()).some((key) => key.startsWith('filter__'));
-};
-
-const $hadFiltersOnLoad = createStore(hasFilterParams());
-
 sample({
   clock: $countryCode,
-  source: $isAppSettled,
-  filter: (isAppSettled) => isAppSettled,
-  fn: () => false,
-  target: $hadFiltersOnLoad,
+  fn: () => undefined,
+  target: clearDefaultAdvancedFilterSuppression,
+});
+
+const initialAdvancedFilterCountryCode = $countryCode.getState() || null;
+const $advancedFilterCountryScope = createStore({
+  countryCode: initialAdvancedFilterCountryCode,
+  didCountryChange: false,
+}).on($countryCode, ({ countryCode }, nextCountryCode) => ({
+  countryCode: nextCountryCode || null,
+  didCountryChange: Boolean(
+    countryCode &&
+    nextCountryCode &&
+    countryCode.toLowerCase() !== nextCountryCode.toLowerCase(),
+  ),
+}));
+
+sample({
+  clock: $advancedFilterCountryScope.updates,
+  filter: ({ didCountryChange }) => didCountryChange,
+  fn: () => {
+    const params = new URLSearchParams(window.location.search);
+    deleteAllAdvancedFilters(params);
+    const search = params.toString();
+
+    return search
+      ? `${window.location.pathname}?${search}`
+      : window.location.pathname;
+  },
+  target: router.navigate,
 });
 
 const $derivedCountryActiveFilterList = combine({
   countryActiveFiltersList: $countryActiveFiltersList,
   activeFiltersList: $advanceFilterList,
+  advancedFiltersByEntity: $advancedFiltersByEntity,
+  defaultFilterSuppressedEntityTypes:
+    $defaultAdvancedFilterSuppressedEntityTypes,
   schoolFocusLatLng: $schoolFocusLatLng,
   activeEntityTypes: $activeEntityTypes,
   isAllEntitiesMode: $isGlobalMode,
   isCountryView: mapCountry.visible,
-  urlParamsConsumed: $urlParamsConsumed,
-  hadFiltersOnLoad: $hadFiltersOnLoad,
 });
 
-// User-applied filters are entity-scoped. When the entity selection narrows,
-// remove filters belonging to inactive entities while keeping active values.
+// Keep the entity selection in the URL while retaining every entity's cached
+// filter params. UI and API consumers derive only the active entity slice.
 sample({
   clock: merge([$activeEntityTypes, $isGlobalMode]),
   source: combine({
     activeEntityTypes: $activeEntityTypes,
+    advancedFiltersByEntity: $advancedFiltersByEntity,
     isAllEntitiesMode: $isGlobalMode,
     isCountryView: mapCountry.visible,
   }),
-  filter: ({ isCountryView }) => isCountryView && hasFilterParams(),
+  filter: ({ advancedFiltersByEntity, isCountryView }) =>
+    isCountryView && Object.keys(advancedFiltersByEntity).length > 0,
   fn: ({ activeEntityTypes, isAllEntitiesMode }) =>
     buildActiveEntityFilterUrl(activeEntityTypes, isAllEntitiesMode),
   target: router.navigate,
 });
 
-// guard: apply default country filters only when:
-// - filter data is loaded
-// - no school is focused
-// - URL has no existing filter params on first load
+// Apply country defaults to active entities that do not have saved filters.
+// Explicitly reset entity slices stay empty until the country changes.
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
   clock: merge([
     fetchCountryFx.doneData,
     fetchAdvanceFilterFx.doneData,
     $activeEntityTypes,
+    $isGlobalMode,
   ]),
   filter: ({
     countryActiveFiltersList,
     activeFiltersList,
+    advancedFiltersByEntity,
+    defaultFilterSuppressedEntityTypes,
     schoolFocusLatLng,
-    hadFiltersOnLoad,
+    activeEntityTypes,
     isCountryView,
   }) => {
-    // Existing URL filters may have been applied after the initial page load.
-    // Preserve those user selections when the active entity scope changes.
-    if (!isCountryView || hadFiltersOnLoad || hasFilterParams()) return false;
+    if (!isCountryView) return false;
 
     return (
       countryActiveFiltersList != null &&
       activeFiltersList != null &&
-      schoolFocusLatLng === null
+      schoolFocusLatLng === null &&
+      getEntityTypesNeedingDefaultFilters(
+        advancedFiltersByEntity,
+        activeEntityTypes,
+        defaultFilterSuppressedEntityTypes,
+      ).length > 0
     );
   },
 });
@@ -312,15 +344,25 @@ sample({
   fn: ({
     countryActiveFiltersList,
     activeFiltersList,
+    advancedFiltersByEntity,
+    defaultFilterSuppressedEntityTypes,
     activeEntityTypes,
     isAllEntitiesMode,
-  }) =>
-    buildFilterQueryFromSelections(
+  }) => {
+    const entityTypesNeedingDefaults = getEntityTypesNeedingDefaultFilters(
+      advancedFiltersByEntity,
+      activeEntityTypes,
+      defaultFilterSuppressedEntityTypes,
+    );
+
+    return buildFilterQueryFromSelections(
       countryActiveFiltersList!,
       activeFiltersList,
-      activeEntityTypes,
+      entityTypesNeedingDefaults,
       isAllEntitiesMode,
-    ),
+      activeEntityTypes,
+    );
+  },
   target: router.navigate,
 });
 

@@ -14,6 +14,10 @@ import { PointCoordinates } from "../../core/global-types";
 import { $activeEntityTypes } from '../entities/models/entity.model';
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
+import {
+  parseAdvancedFilters,
+  selectAdvancedFiltersForEntities,
+} from '../map/ui/advanced-filter/advanced-filter.model';
 import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { countryMapping } from './country.constant';
 import { getCountryAdminCode } from './country.utils';
@@ -81,51 +85,36 @@ export const setZoomCountryCode = createEvent<string>();
 export const $zoomedCountryCode = restore(setZoomCountryCode, '');
 $zoomedCountryCode.on(zoomToCountryFx.doneData, setPayload);
 
-export const $countrySearchParams = mapCountry.router.search.map(search => {
+const $allCountrySearchParams = mapCountry.router.search.map(search => {
   const searchParams = new URLSearchParams(search);
-  // iterate over all params and try to parse them to numbers
-  const filterSearchParams = new URLSearchParams();
-  let actualSelectedCount = 0;
-  const urlFieldList: Record<string, { field: string; filter: string; value: string; entity: string }> = {};
-  const searchEntires = searchParams.entries();
-  for (const [key, value] of searchEntires) {
-    try {
-      const [start, entity, field, filter] = key.split('__');
-      if (start === 'filter' && entity && field && filter) {
-        if (!field.startsWith('ignore_')) {
-          filterSearchParams.set(`${entity}__${field}__${filter}`, value);
-        }
-        urlFieldList[`${entity}__${field}__${filter}`] = { entity, field, filter, value };
-        if (!field.startsWith('ignore_')) {
-          actualSelectedCount++;
-        }
-      }
-    } catch (e) { }
-  }
   return {
     searchParamsURL: searchParams,
-    searchParams: filterSearchParams.toString(),
-    urlFieldList,
-    selectedCount: actualSelectedCount
+    filtersByEntity: parseAdvancedFilters(searchParams),
   };
 });
 
-export const $countrySearchString = combine(
-  $countrySearchParams,
+export const $advancedFiltersByEntity = $allCountrySearchParams.map(
+  ({ filtersByEntity }) => filtersByEntity,
+);
+
+export const $countrySearchParams = combine(
+  $allCountrySearchParams,
   $activeEntityTypes,
   (params, activeEntityTypes) => {
-    const activeEntitySet = new Set<string>(activeEntityTypes);
-    const activeSearchParams = new URLSearchParams();
+    const activeFilters = selectAdvancedFiltersForEntities(
+      params.filtersByEntity,
+      activeEntityTypes,
+    );
 
-    for (const [key, value] of new URLSearchParams(params.searchParams)) {
-      const [entityType] = key.split('__');
-      if (activeEntitySet.has(entityType)) {
-        activeSearchParams.set(key, value);
-      }
-    }
-
-    return activeSearchParams.toString();
+    return {
+      ...params,
+      ...activeFilters,
+    };
   },
+);
+
+export const $countrySearchString = $countrySearchParams.map(
+  ({ searchParams }) => searchParams,
 );
 
 const $mapContext = combine({
@@ -296,4 +285,3 @@ $countryCode.reset(mapOverview.visible);
 $country.reset($countryCode, fetchCountryFx.fail, mapOverview.visible);
 $schoolFocusLatLng.reset(mapSchools.router.historyUpdated, mapEntity.router.historyUpdated)
 $zoomedCountryCode.reset(onRecenterView);
-
