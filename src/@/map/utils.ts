@@ -33,6 +33,8 @@ import {
   Layers,
   SCHOOL_STATUS_LAYER,
 } from '../sidebar/sidebar.constant';
+import { registerDevMultipleSchoolSameLocationHighlight } from './dev/multiple-school-same-location-highlight';
+import { $isMapLoading } from './loading.model';
 import {
   animateCircleConfig,
   Colors,
@@ -48,12 +50,11 @@ import {
 } from './map.constant';
 import {
   $activeSchoolPopup,
+  closeEntityPopup,
   resetDublicateSchoolClickData,
   setPopupOnClickDot,
 } from './map.model';
-import { registerDevMultipleSchoolSameLocationHighlight } from './dev/multiple-school-same-location-highlight';
 import { ChangeLayerOptions, StylePaintData } from './map.types';
-import { $isMapLoading } from './loading.model';
 
 type MapAnimationConfigSource = Pick<
   EntityConfig,
@@ -198,6 +199,8 @@ export const mapDotsClickIdsAndHandler = {
   [DEFAULT_SOURCE]: {},
 } as Record<string, Record<string, (event: MapLayerMouseEvent) => void>>;
 
+const handledMapDotClickEvents = new WeakSet<object>();
+
 export const isConnectivity = (id: string) =>
   id === `${Layers.connectivity}_layer`;
 export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
@@ -250,6 +253,9 @@ export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
     mapDotsClickIdsAndHandler[source] = {};
   }
   mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
+    const clickEvent = e.originalEvent ?? e;
+    if (handledMapDotClickEvents.has(clickEvent)) return;
+
     const features = map.queryRenderedFeatures(e.point, {
       layers: [
         ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]),
@@ -278,9 +284,10 @@ export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
       getEntityIdFromFeatureProperties(feature?.properties, entityType) ??
       getEntityIdFromFeatureProperties(fallbackFeature?.properties, entityType);
     if (!entityId) return;
+    handledMapDotClickEvents.add(clickEvent);
     const activePopup = $activeSchoolPopup.getState();
     if (activePopup?.id === entityId && activePopup.entityType === entityType) {
-      setPopupOnClickDot(null);
+      closeEntityPopup();
       return;
     }
     if (feature?.layer?.id) {

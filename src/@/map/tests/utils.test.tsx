@@ -1,5 +1,22 @@
+import type {
+  Map as MapboxMap,
+  MapLayerMouseEvent,
+} from 'mapbox-gl';
+
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
+
+import {
+  CONNECTIVITY_STATUS_SOURCE,
+  DEFAULT_SOURCE,
+  LayerDataProps,
+  mapPaintData,
+  stylePaintData,
+} from '../map.constant';
+import {
+  $activeSchoolPopup,
+  closeEntityPopup,
+} from '../map.model';
 import {
   animateCircles,
   createSchoolSource,
@@ -10,13 +27,6 @@ import {
   getCoveragePaint,
   onClickOnEntityDots,
 } from '../utils';
-import {
-  DEFAULT_SOURCE,
-  LayerDataProps,
-  mapPaintData,
-  stylePaintData,
-} from '../map.constant';
-import { $activeSchoolPopup, setPopupOnClickDot } from '../map.model';
 
 describe('getCoveragePaint', () => {
   it('should return the correct paint object', () => {
@@ -266,7 +276,7 @@ describe('animateCircles', () => {
 
 describe('onClickOnEntityDots', () => {
   afterEach(() => {
-    setPopupOnClickDot(null);
+    closeEntityPopup();
   });
 
   it('uses the clicked entity layer type and id when overlapping map dots exist', () => {
@@ -298,6 +308,58 @@ describe('onClickOnEntityDots', () => {
       entityType: EntityType.HEALTH,
     });
   });
+
+  it('toggles the same entity popup once when multiple layers handle one click', () => {
+    const selectedLayerId = 'entity-selected-health-72';
+    const statusLayerId = 'entity-status-health';
+    const handlers = new Map<string, (event: MapLayerMouseEvent) => void>();
+    const map = {
+      on: vi.fn(
+        (
+          _event: string,
+          layerId: string,
+          handler: (event: MapLayerMouseEvent) => void,
+        ) => {
+          handlers.set(layerId, handler);
+        },
+      ),
+      queryRenderedFeatures: vi.fn(() => [
+        {
+          layer: { id: selectedLayerId },
+          properties: { health_entity_id: 685448 },
+          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
+        },
+        {
+          layer: { id: statusLayerId },
+          properties: { health_entity_id: 685448 },
+          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
+        },
+      ]),
+    } as unknown as MapboxMap;
+
+    onClickOnEntityDots(map, selectedLayerId, DEFAULT_SOURCE);
+    onClickOnEntityDots(map, statusLayerId, CONNECTIVITY_STATUS_SOURCE);
+
+    const clickDot = () => {
+      const originalEvent = {};
+      const event = {
+        originalEvent,
+        point: { x: 1, y: 1 },
+      } as unknown as MapLayerMouseEvent;
+      handlers.get(selectedLayerId)?.(event);
+      handlers.get(statusLayerId)?.(event);
+    };
+
+    clickDot();
+    expect($activeSchoolPopup.getState()).toMatchObject({
+      id: 685448,
+      entityType: EntityType.HEALTH,
+    });
+
+    clickDot();
+    expect($activeSchoolPopup.getState()).toBeNull();
+  });
+
 });
 
 describe('generateLayerUrls', () => {

@@ -1,12 +1,18 @@
-import { createEvent, createStore, restore } from 'effector';
+import {
+  createEffect,
+  createEvent,
+  createStore,
+  restore,
+  sample,
+} from 'effector';
 
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
   fetchAdvanceFilterFx,
   fetchDublicateSchoolPopupDataFx,
   fetchEntityGlobalStatsFx,
   fetchSchoolPopupDataFx,
 } from '~/api/project-connect';
-import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
   AdvanceFilterType,
   EntitiesGlobalStatsResponse,
@@ -15,12 +21,12 @@ import {
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
-
 import { getLocalStorage, setLocalStorage } from '~/lib/utils';
 import {
   extractDataWithMapping,
   reconstructJson,
 } from '~/lib/utils/json-mapper.util';
+
 import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import {
   defaultGigaLayers,
@@ -143,6 +149,7 @@ type EntityDotPopupPayload = {
 };
 
 export const setPopupOnClickDot = createEvent<EntityDotPopupPayload | null>();
+export const closeEntityPopup = createEvent();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
 export const setSchoolIdsOnPopupClickDot =
@@ -185,6 +192,22 @@ export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(
   setSchoolCLickupPopupDiv,
   null,
 );
+
+const removeEntityPopupFx = createEffect((popup: mapboxgl.Popup | null) => {
+  popup?.remove();
+});
+
+sample({
+  clock: closeEntityPopup,
+  source: $popup,
+  target: removeEntityPopupFx,
+});
+
+sample({
+  clock: closeEntityPopup,
+  fn: () => null,
+  target: [setPopupOnClickDot, onCreateSchoolPopup, setSchoolCLickupPopupDiv],
+});
 
 export const setMultipleSchoolPopup = createEvent<
   SchoolClickupPopupType[] | null
