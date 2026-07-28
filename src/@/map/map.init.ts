@@ -30,6 +30,7 @@ import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import {
   $connectivityBenchMarkByEntity,
   $connectivitySpeedFilterByEntity,
+  $getSchoolParams,
   $isLoadedTimePlayer,
   $isLoadingTimeplayer,
   $isPauseTimeplayer,
@@ -38,7 +39,6 @@ import {
   $schoolAdminId,
   $schoolStatsMap,
   $selectedLayerIdByEntity,
-  $selectedSchoolIds,
   $staticLegendsSelectedByEntity,
   $statusLayerIdByEntity,
   $timePlayerInfo,
@@ -378,6 +378,13 @@ $map.watch(setCenter, (map: MapboxMap | null, center) => {
   map?.setCenter(center);
 });
 
+const $entityPageSelection = $getSchoolParams.map(
+  ({ entityType, schoolIds }) => ({
+    entityType,
+    ids: schoolIds ?? [],
+  }),
+);
+
 export const gigaLayerSource = combine({
   selectedLayerIds: $selectedLayers,
   map: $map,
@@ -400,7 +407,7 @@ export const gigaLayerSource = combine({
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
   zoomState: $zoomState,
-  schoolPageIds: $selectedSchoolIds,
+  entityPageSelection: $entityPageSelection,
   activeEntityTypes: $activeEntityTypes,
   entityRegistry: $entityRegistry,
 });

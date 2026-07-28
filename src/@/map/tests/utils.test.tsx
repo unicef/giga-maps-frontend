@@ -6,6 +6,7 @@ import {
   createSelectedLayer,
   createSelectedSymbolLayer,
   generateLayerUrls,
+  generateStaticLayerUrl,
   getCoveragePaint,
   onClickOnEntityDots,
 } from '../utils';
@@ -300,6 +301,38 @@ describe('onClickOnEntityDots', () => {
 });
 
 describe('generateLayerUrls', () => {
+  it.each([
+    [EntityType.SCHOOL, 'school_exclude_same_coords_except_id=101'],
+    [EntityType.HEALTH, 'health_exclude_same_coords_except_id=101'],
+  ])(
+    'should use the current %s detail id in entity-aware tile params',
+    (entityType, expectedParam) => {
+      const options = {
+        activeEntityTypes: [EntityType.SCHOOL, EntityType.HEALTH],
+        connectivityBenchMarkByEntity: {},
+        country: { id: 1 },
+        entityPageSelection: { entityType, ids: [101] },
+        entityRegistry: {
+          [EntityType.SCHOOL]: { visible: true },
+          [EntityType.HEALTH]: { visible: true },
+        },
+        layerUtils: {
+          selectedLayerIdByEntity: {
+            [EntityType.SCHOOL]: 1,
+            [EntityType.HEALTH]: 2,
+          },
+          currentLayerTypeUtilsByEntity: {},
+        },
+        mapRoute: { entity: true },
+      } as any;
+
+      expect(generateLayerUrls({ ...options, layerId: null })).toContain(
+        expectedParam,
+      );
+      expect(generateStaticLayerUrl(options)).toContain(expectedParam);
+    },
+  );
+
   it('should generate global health connectivity tile URL without selected layer', () => {
     const result = generateLayerUrls({
       layerId: null,

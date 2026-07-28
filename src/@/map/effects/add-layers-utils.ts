@@ -110,7 +110,7 @@ export const getLayerIdsAndLastChange = ({
 
 export const createSourceForMapAndCountry = ({
   map,
-  schoolPageIds,
+  entityPageSelection,
   schoolAdminId,
   countrySearch,
   connectivityBenchMarkByEntity,
@@ -163,7 +163,7 @@ export const createSourceForMapAndCountry = ({
       layerId: fallbackLayerId,
       activeEntityTypes,
       connectivityBenchMarkByEntity,
-      schoolPageIds,
+      entityPageSelection,
       layerUtils,
       intervalByEntity,
       intervalUnitByEntity,
@@ -179,7 +179,7 @@ export const createSourceForMapAndCountry = ({
       entityRegistry,
       mapRoute,
       country,
-      schoolPageIds,
+      entityPageSelection,
       admin1Id,
       countrySearch,
     });

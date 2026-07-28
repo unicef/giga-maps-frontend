@@ -454,7 +454,7 @@ const generateEntityMapParams = ({
     const prefix = entityType + '_';
     const entityLayerId = isGlobalView
       ? (layerUtils.globalLayerDataByEntity?.[entityType]?.id ?? null)
-      : getEntityLayerId({
+        : getEntityLayerId({
         entityType,
         selectedLayerIdByEntity: layerUtils.selectedLayerIdByEntity,
       });
@@ -509,13 +509,24 @@ export const getCountryParams = (
   return params;
 };
 
+export const getEntityDetailExclusionParam = ({
+  entityPageSelection,
+  mapRoute,
+}: Pick<ChangeLayerOptions, 'entityPageSelection' | 'mapRoute'>) => {
+  const { entityType, ids = [] } = entityPageSelection ?? {};
+  const isEntityDetailView = mapRoute.entity || mapRoute.schools;
+  if (!isEntityDetailView || !entityType || ids.length !== 1) return '';
+
+  return `${entityType}_exclude_same_coords_except_id=${ids[0]}`;
+};
+
 export const generateStaticLayerUrl = ({
   activeEntityTypes,
   mapRoute,
   country,
   admin1Id,
   countrySearch,
-  schoolPageIds,
+  entityPageSelection,
   entityRegistry,
 }: Pick<
   ChangeLayerOptions,
@@ -524,7 +535,7 @@ export const generateStaticLayerUrl = ({
   | 'mapRoute'
   | 'country'
   | 'countrySearch'
-  | 'schoolPageIds'
+  | 'entityPageSelection'
 > & { admin1Id?: number | null }) => {
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   const { allEntityTypes } = getMapRequestEntityTypes(
@@ -539,8 +550,12 @@ export const generateStaticLayerUrl = ({
   if (countrySearch) {
     params += '&' + countrySearch;
   }
-  if (schoolPageIds?.length === 1) {
-    params += '&exclude_schools_same_coords_except_id=' + schoolPageIds[0];
+  const entityDetailExclusionParam = getEntityDetailExclusionParam({
+    entityPageSelection,
+    mapRoute,
+  });
+  if (entityDetailExclusionParam) {
+    params += '&' + entityDetailExclusionParam;
   }
   return params + '&z={z}&x={x}&y={y}.mvt';
 };
@@ -548,7 +563,7 @@ export const generateLayerUrls = ({
   layerId,
   activeEntityTypes,
   connectivityBenchMarkByEntity,
-  schoolPageIds,
+  entityPageSelection,
   layerUtils,
   mapRoute,
   country,
@@ -568,7 +583,7 @@ export const generateLayerUrls = ({
   | 'layerUtils'
   | 'mapRoute'
   | 'country'
-  | 'schoolPageIds'
+  | 'entityPageSelection'
 > & { layerId: number | null; admin1Id?: number | null }) => {
   const countryParams = getCountryParams(!mapRoute.map, country?.id, admin1Id);
   const { entityTypes, allEntityTypes } = getMapRequestEntityTypes(
@@ -601,10 +616,10 @@ export const generateLayerUrls = ({
     : requestParams;
   const countryFilterParams =
     !isGlobalView && countrySearch ? countrySearch : '';
-  const duplicateLocationParams =
-    !isGlobalView && schoolPageIds?.length === 1
-      ? 'exclude_schools_same_coords_except_id=' + schoolPageIds[0]
-      : '';
+  const duplicateLocationParams = getEntityDetailExclusionParam({
+    entityPageSelection,
+    mapRoute,
+  });
   const query = [
     countryParams,
     entityParams,
