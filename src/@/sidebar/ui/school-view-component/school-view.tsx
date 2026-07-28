@@ -12,6 +12,7 @@ import {
 } from '~/@/sidebar/sidebar.model';
 import { SchoolStatsType } from '~/api/types';
 import { ScrollArea } from '~/components/ui/scroll-area';
+import { mapEntity } from '~/core/routes';
 
 import { EntityDetailContent } from './entity-detail-content';
 import {
@@ -22,11 +23,16 @@ import { EntityListItem } from './entity-list-item';
 
 const SchoolView = () => {
   const { t } = useTranslation();
-  const { schoolIds = [] } = useStore($getSchoolParams);
+  const { entityType: detailEntityType, schoolIds = [] } =
+    useStore($getSchoolParams);
   const entities = useStore($schoolStats) ?? [];
   const activeEntityTypes = useStore($activeEntityTypes);
-  const entityType =
-    activeEntityTypes.length === 1 ? activeEntityTypes[0] : null;
+  const isEntityDetailView = useStore(mapEntity.visible);
+  const entityType = isEntityDetailView
+    ? (detailEntityType ?? null)
+    : activeEntityTypes.length === 1
+      ? activeEntityTypes[0]
+      : null;
   const isLoading = useStore($isLoadingSchoolView);
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,

@@ -21,6 +21,7 @@ import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $layerUtils,
   $sidebarHeight,
+  $getSchoolParams,
   $isGlobalLegendLoading,
   $isLiveLegendLoading,
   $isStaticLegendLoading,
@@ -89,6 +90,7 @@ const LegendPopup = ({
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
   const sidebarHeight = useStore($sidebarHeight);
+  const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
   const isEntityDetailView =
@@ -101,11 +103,17 @@ const LegendPopup = ({
   const isStaticLegendLoading = useStore($isStaticLegendLoading);
   const isStatusLegendLoading = useStore($isStatusLegendLoading);
   const visibleLegendEntityTypes = useMemo(() => {
-    // Filter to only types that are both active AND visible in config, maintain registry order
     return entityTypesFiltered.filter((type) =>
-      activeEntityTypes.includes(type),
+      mapLevel.entity
+        ? type === detailEntityType
+        : activeEntityTypes.includes(type),
     );
-  }, [activeEntityTypes, entityTypesFiltered]);
+  }, [
+    activeEntityTypes,
+    detailEntityType,
+    entityTypesFiltered,
+    mapLevel.entity,
+  ]);
   const [collapsed, setCollapsed] = useState(() =>
     getDefaultCollapsedState(isMobile),
   );

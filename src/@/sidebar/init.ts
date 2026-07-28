@@ -22,7 +22,6 @@ import {
 import {
   $activeEntityTypes,
   $entityTypesFiltered,
-  changeActiveEntityTypes,
 } from '~/@/entities/models/entity.model';
 import {
   ENTITY_TYPE_CODE_PARAM,
@@ -759,26 +758,6 @@ const entityPopupInfoFn = (
     url: 'api/v2/entities/layers/info/',
   };
 };
-// entity detail route selects the entity encoded in the *_ids URL param.
-const entityDetailSelectionSource = combine({
-  mapRoutes: $mapRoutes,
-  schoolParams: $getSchoolParams,
-});
-
-const entityDetailSelectionClock = merge([
-  mapEntity.visible,
-  mapEntity.router.historyUpdate,
-  $getSchoolParams,
-]);
-
-sample({
-  clock: entityDetailSelectionClock,
-  source: entityDetailSelectionSource,
-  filter: ({ mapRoutes, schoolParams }) =>
-    mapRoutes.entity && !!schoolParams.entityType,
-  fn: ({ schoolParams }) => [schoolParams.entityType!],
-  target: changeActiveEntityTypes,
-});
 // school view info api
 sample({
   clock: merge([
