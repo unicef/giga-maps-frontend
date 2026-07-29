@@ -1,5 +1,7 @@
 import { createEvent, createStore } from 'effector';
 
+import type { ActiveFilterListType, AdvanceFilterType } from '~/api/types';
+
 export const ADVANCED_FILTER_PREFIX = 'filter__';
 
 export type AdvancedFilterUrlField = {
@@ -142,6 +144,61 @@ export function getEntityTypesNeedingDefaultFilters(
       (field) => !field.isIgnore,
     );
   });
+}
+
+const hasDefaultFilterValue = (
+  selection: ActiveFilterListType,
+  filter: AdvanceFilterType,
+) => {
+  const raw = selection.default_filter_values?.values;
+  if (raw == null) return false;
+
+  if (filter.type === 'RANGE') {
+    return (
+      typeof raw === 'object' &&
+      !Array.isArray(raw) &&
+      Object.prototype.hasOwnProperty.call(raw, 'min')
+    );
+  }
+
+  if (Array.isArray(raw)) {
+    return raw.some((value) => String(value).trim().length > 0);
+  }
+  if (typeof raw === 'string') return raw.trim().length > 0;
+
+  return true;
+};
+
+export function getEntityTypesNeedingCountryDefaultFilters(
+  selections: ActiveFilterListType[],
+  filters: AdvanceFilterType[],
+  filtersByEntity: AdvancedFiltersByEntity,
+  activeEntityTypes: string[],
+  suppressedEntityTypes: string[],
+) {
+  const missingEntityTypes = getEntityTypesNeedingDefaultFilters(
+    filtersByEntity,
+    activeEntityTypes,
+    suppressedEntityTypes,
+  );
+  const missingEntityTypeSet = new Set(missingEntityTypes);
+  const filtersById = new Map(filters.map((filter) => [filter.id, filter]));
+  const entitiesWithDefaults = new Set<string>();
+
+  selections.forEach((selection) => {
+    const filter = filtersById.get(selection.advance_filter_id);
+    if (
+      filter &&
+      missingEntityTypeSet.has(filter.entity_type) &&
+      hasDefaultFilterValue(selection, filter)
+    ) {
+      entitiesWithDefaults.add(filter.entity_type);
+    }
+  });
+
+  return missingEntityTypes.filter((entityType) =>
+    entitiesWithDefaults.has(entityType),
+  );
 }
 
 export const suppressDefaultAdvancedFilters = createEvent<string[]>();

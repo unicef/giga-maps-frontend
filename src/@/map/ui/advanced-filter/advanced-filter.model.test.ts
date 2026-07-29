@@ -1,9 +1,11 @@
 import { EntityType } from '~/@/entities';
 import { getEntityTypeCodeParam } from '~/@/entities/utils/entity-query-params';
+import type { ActiveFilterListType, AdvanceFilterType } from '~/api/types';
 
 import {
   deleteAdvancedFiltersForEntities,
   deleteAllAdvancedFilters,
+  getEntityTypesNeedingCountryDefaultFilters,
   getEntityTypesNeedingDefaultFilters,
   parseAdvancedFilters,
   selectAdvancedFiltersForEntities,
@@ -52,12 +54,12 @@ describe('advanced filter entity state', () => {
   it('keeps the API entity scope aligned with School, Health, and All Facilities', () => {
     const allEntityTypes = [EntityType.SCHOOL, EntityType.HEALTH];
 
-    expect(
-      getEntityTypeCodeParam([EntityType.SCHOOL], allEntityTypes),
-    ).toBe(EntityType.SCHOOL);
-    expect(
-      getEntityTypeCodeParam([EntityType.HEALTH], allEntityTypes),
-    ).toBe(EntityType.HEALTH);
+    expect(getEntityTypeCodeParam([EntityType.SCHOOL], allEntityTypes)).toBe(
+      EntityType.SCHOOL,
+    );
+    expect(getEntityTypeCodeParam([EntityType.HEALTH], allEntityTypes)).toBe(
+      EntityType.HEALTH,
+    );
     expect(getEntityTypeCodeParam(allEntityTypes, allEntityTypes)).toBe('all');
   });
 
@@ -123,6 +125,65 @@ describe('advanced filter entity state', () => {
         {},
         [EntityType.HEALTH],
         [EntityType.HEALTH],
+      ),
+    ).toEqual([]);
+  });
+
+  it('waits only for entities that have an applicable country default', () => {
+    const filters = [
+      {
+        id: 1,
+        entity_type: EntityType.SCHOOL,
+        type: 'INPUT',
+      },
+      {
+        id: 2,
+        entity_type: EntityType.HEALTH,
+        type: 'INPUT',
+      },
+    ] as AdvanceFilterType[];
+    const selections = [
+      {
+        advance_filter_id: 1,
+        default_filter_values: { values: 'urban' },
+      },
+      {
+        advance_filter_id: 2,
+      },
+    ] as ActiveFilterListType[];
+
+    expect(
+      getEntityTypesNeedingCountryDefaultFilters(
+        selections,
+        filters,
+        {},
+        [EntityType.SCHOOL, EntityType.HEALTH],
+        [],
+      ),
+    ).toEqual([EntityType.SCHOOL]);
+
+    expect(
+      getEntityTypesNeedingCountryDefaultFilters(
+        selections,
+        filters,
+        parseAdvancedFilters('filter__school__environment__iexact=urban'),
+        [EntityType.SCHOOL, EntityType.HEALTH],
+        [],
+      ),
+    ).toEqual([]);
+
+    expect(
+      getEntityTypesNeedingCountryDefaultFilters(
+        [
+          {
+            advance_filter_id: 1,
+            default_filter_values: { values: [] },
+          },
+        ],
+        filters,
+        {},
+        [EntityType.SCHOOL],
+        [],
       ),
     ).toEqual([]);
   });

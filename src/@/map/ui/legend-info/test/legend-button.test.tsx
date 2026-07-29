@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { allSettled, fork } from 'effector';
 import userEvent from '@testing-library/user-event';
 
 import { changeCountryCode } from '~/@/country/country.model';
@@ -13,6 +14,7 @@ import {
 } from '~/@/sidebar/sidebar.model';
 
 import LegendButton from '../legend-button';
+import { $isMobile } from '~/core/media-query';
 import { testWrapper } from '~/tests/test-wrapper';
 import '~/core/i18n/instance'
 
@@ -130,12 +132,36 @@ describe('LegendButton', () => {
     expect($showLegend.getState()).toBe(false);
   });
 
-  test('reopens legend on country change after manual close', () => {
+  test('reopens legend on desktop after a country change', () => {
     onShowLegend(false);
     expect($showLegend.getState()).toBe(false);
 
     changeCountryCode('af');
 
     expect($showLegend.getState()).toBe(true);
+  });
+
+  test('preserves the last legend state on mobile after a country change', async () => {
+    const closedScope = fork({
+      values: new Map()
+        .set($isMobile, true)
+        .set($showLegend, false),
+    });
+    await allSettled(changeCountryCode, {
+      scope: closedScope,
+      params: 'br',
+    });
+    expect(closedScope.getState($showLegend)).toBe(false);
+
+    const openScope = fork({
+      values: new Map()
+        .set($isMobile, true)
+        .set($showLegend, true),
+    });
+    await allSettled(changeCountryCode, {
+      scope: openScope,
+      params: 'ke',
+    });
+    expect(openScope.getState($showLegend)).toBe(true);
   });
 });

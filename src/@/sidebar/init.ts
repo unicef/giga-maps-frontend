@@ -35,6 +35,7 @@ import {
   changeSchoolConnectedOpenStatus,
   setSchoolIdsOnPopupClickDot,
 } from '~/@/map/map.model';
+import { $countryAdvancedFiltersReady } from '~/@/map/ui/advanced-filter/country-filter-readiness.model';
 import {
   $connectivityBenchMarkByEntity,
   $connectivityLayers,
@@ -85,6 +86,7 @@ import {
   getEntitiesAvailableDates,
   getSchoolAvailableDates,
 } from './effects/search-country-fx';
+import { getCurrentEntityConnectivityConfigQuery } from './entity-connectivity-config-query';
 import {
   $historyIntervalByEntity,
   $historyIntervalUnitByEntity,
@@ -156,6 +158,7 @@ const sourceForInfo = combine({
   lastSelectedLayers: $selectedGigaLayers,
   isCheckedLastDate: $isCheckedLastDate,
   countrySearch: $countrySearchString,
+  countryAdvancedFiltersReady: $countryAdvancedFiltersReady,
   isMobile: $isMobile,
   allowDublicateSchoolIds: $allowDublicateSchoolIds,
   activeEntityTypes: $activeEntityTypes,
@@ -349,8 +352,11 @@ const hasCountryInfoScope = ({
   mapRoutes,
   country,
   admin1Id,
+  countryAdvancedFiltersReady,
 }: ReturnType<typeof sourceForInfo.getState>) =>
-  mapRoutes.country && (!!country?.id || !!admin1Id);
+  mapRoutes.country &&
+  countryAdvancedFiltersReady &&
+  (!!country?.id || !!admin1Id);
 type InitialUrlParams = ReturnType<typeof $initialUrlParams.getState>;
 type InitialEntityValue<T> = { hasValue: boolean; value: T | null };
 
@@ -481,49 +487,6 @@ export const getCurrentEntityLayerInfoQuery = ({
   return { query };
 };
 
-export const getCurrentEntityConnectivityConfigQuery = ({
-  activeEntityTypes,
-  country,
-  entityTypesFiltered,
-  admin1Id,
-  layersUtils,
-  mapRoutes,
-  schoolParams,
-  selectedLayerIdByEntity,
-}: ReturnType<typeof sourceForInfo.getState>) => {
-  const params = new URLSearchParams();
-  if (country?.id) {
-    params.set('country_id', String(country.id));
-  }
-  if (admin1Id) {
-    params.set('admin1_id', String(admin1Id));
-  }
-  const entityTypes =
-    mapRoutes.entity && schoolParams.entityType
-      ? [schoolParams.entityType]
-      : activeEntityTypes?.length
-        ? activeEntityTypes
-        : entityTypesFiltered;
-  params.set(
-    ENTITY_TYPE_CODE_PARAM,
-    getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
-  );
-  entityTypes.forEach((entityType) => {
-    const layerId = getEntityMapValue(
-      selectedLayerIdByEntity,
-      entityType,
-      null,
-    );
-    const isStaticLayer =
-      layersUtils.currentLayerTypeUtilsByEntity[entityType]?.isStatic;
-    if (layerId && !isStaticLayer) {
-      params.set(`${entityType}_layer_id`, String(layerId));
-    }
-  });
-  const query = params.toString();
-  return { query: query ? `?${query}` : '' };
-};
-
 const getCurrentSchoolConnectivityConfigQuery = ({
   admin1Id,
   country,
@@ -553,42 +516,26 @@ const getCurrentSchoolConnectivityConfigQuery = ({
   return { query: query ? `?${query}` : '' };
 };
 
+const $entityConnectivityConfigQuery = sourceForInfo.map((props) => {
+  const { country, countryAdvancedFiltersReady, layersUtils, mapRoutes } =
+    props;
+  if (
+    (mapRoutes.country || mapRoutes.entity) &&
+    !!country?.id &&
+    !!layersUtils.layers?.length &&
+    (!mapRoutes.country || countryAdvancedFiltersReady) &&
+    hasSelectedInfoLayerType(props, (layerTypeUtils) => !!layerTypeUtils.isLive)
+  ) {
+    return getCurrentEntityConnectivityConfigQuery(props).query;
+  }
+
+  return null;
+});
+
 sample({
-  clock: merge([
-    $countryId,
-    $admin1Id,
-    $getSchoolParams,
-    $selectedLayerIdByEntity,
-    $activeEntityTypes,
-    $entityTypesFiltered,
-  ]),
-  source: sourceForInfo,
-  fn: getCurrentEntityConnectivityConfigQuery,
-  filter: (props) => {
-    const {
-      activeEntityTypes,
-      country,
-      entityTypesFiltered,
-      layersUtils,
-      mapRoutes,
-      schoolParams,
-    } = props;
-    const entityTypes =
-      mapRoutes.entity && schoolParams.entityType
-        ? [schoolParams.entityType]
-        : activeEntityTypes?.length
-          ? activeEntityTypes
-          : entityTypesFiltered;
-    return (
-      (mapRoutes.country || mapRoutes.entity) &&
-      !!country?.id &&
-      !!layersUtils.layers?.length &&
-      hasSelectedInfoLayerType(
-        props,
-        (layerTypeUtils) => !!layerTypeUtils.isLive,
-      )
-    );
-  },
+  clock: $entityConnectivityConfigQuery,
+  filter: (query) => query !== null,
+  fn: (query) => ({ query: query! }),
   target: getEntitiesAvailableDates,
 });
 
@@ -617,6 +564,7 @@ sample({
 sample({
   clock: merge([
     $countrySearchString,
+    $countryAdvancedFiltersReady,
     $selectedLayerIdByEntity,
     $activeEntityTypes,
     $entityTypesFiltered,
@@ -641,6 +589,7 @@ sample({
 sample({
   clock: merge([
     $countrySearchString,
+    $countryAdvancedFiltersReady,
     $countryId,
     $admin1Id,
     $connectivityBenchMarkByEntity,
@@ -1226,7 +1175,8 @@ sample({
 
 sample({
   clock: changeCountryCode,
-  filter: Boolean,
+  source: $isMobile,
+  filter: (isMobile, countryCode) => Boolean(countryCode) && !isMobile,
   fn: () => true,
   target: onShowLegend,
 });
