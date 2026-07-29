@@ -41,13 +41,11 @@ import {
 } from '~/components/ui/popover';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes } from '~/core/routes';
-import { $theme } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 
 import LiveLayerLegend from './common/live-layer-legend';
 import SchoolStatusLegend from './common/school-status-legend';
 import StaticLayerLegend from './common/static-layer-legend';
-import { LegendExpandedView } from './legend-button.style';
 
 type LegendSummaryItem = {
   color: string;
@@ -92,7 +90,6 @@ const LegendPopup = ({
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
-  const themeState = useStore($theme);
   const sidebarHeight = useStore($sidebarHeight);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
@@ -343,10 +340,7 @@ const LegendPopup = ({
 
   const expandedContent = (
     <>
-
-      <LegendExpandedView
-        themeState={themeState}
-        className="flex! items-center! justify-between! gap-3!  px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
+      <div className="flex! items-center! justify-between! gap-3! bg-popover! in-[.accessible]:bg-[#646973]! in-[[data-theme=accessible]]:bg-[#646973]! px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
         <div className="flex! min-w-0! items-center! gap-2! max-md:gap-3!">
           {visibleLegendEntityTypes.map((entityType) => {
             const config = entityConfigMap[entityType];
@@ -408,10 +402,9 @@ const LegendPopup = ({
             <Minimize2 size={14} className="text-foreground/60!" />
           </Button>
         </CollapsibleTrigger>
-      </LegendExpandedView>
-      <LegendExpandedView
-        themeState={themeState}
-        className="flex! flex-wrap! gap-4! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
+      </div>
+      <div
+        className="flex! flex-wrap! gap-4! bg-popover! in-[.accessible]:bg-[#646973]! in-[[data-theme=accessible]]:bg-[#646973]! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
         data-testid="legend-expanded-view"
       >
         {shouldShowStatusSummary ? (
@@ -450,7 +443,7 @@ const LegendPopup = ({
             shouldShowControls={shouldShowControls}
           />
         ) : null}
-      </LegendExpandedView>
+      </div>
     </>
   );
 
