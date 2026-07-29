@@ -1,4 +1,11 @@
-import { combine, createEffect, createStore, guard, merge, sample } from 'effector';
+import {
+  combine,
+  createEffect,
+  createStore,
+  guard,
+  merge,
+  sample,
+} from 'effector';
 import type { Map as MapboxMap } from 'mapbox-gl';
 
 import {
@@ -15,18 +22,18 @@ import {
   countryReceived,
   setSchoolFocusLatLng,
 } from '~/@/country/country.model';
-import { EntityType, getEntityMapValue } from '~/@/entities';
+import { EntityType } from '~/@/entities';
 import {
   $activeEntityTypes,
   $entityRegistry,
   $entityTypesFiltered,
   $isGlobalMode,
 } from '~/@/entities/models/entity.model';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import {
   ENTITY_TYPE_CODE_PARAM,
   getEntityTypeCodeParam,
 } from '~/@/entities/utils/entity-query-params';
-import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import {
   $connectivityBenchMarkByEntity,
   $connectivitySpeedFilterByEntity,
@@ -49,7 +56,6 @@ import {
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
-  fetchCountryFx,
   fetchEntityGlobalStatsFx,
   fetchLayerListFx,
   fetchSchoolPopupDataFx,
@@ -132,12 +138,16 @@ import {
   $defaultAdvancedFilterSuppressedEntityTypes,
   clearDefaultAdvancedFilterSuppression,
   deleteAllAdvancedFilters,
-  getEntityTypesNeedingDefaultFilters,
+  getEntityTypesNeedingCountryDefaultFilters,
 } from './ui/advanced-filter/advanced-filter.model';
 import {
   buildActiveEntityFilterUrl,
   buildFilterQueryFromSelections,
 } from './ui/advanced-filter/buildFilterQueryFromSelections';
+import {
+  $advancedFilterCountryId,
+  $countryAdvancedFiltersReady,
+} from './ui/advanced-filter/country-filter-readiness.model';
 
 sample({
   source: $theme,
@@ -157,34 +167,32 @@ sample({
   }),
 });
 
-// load global stats
-sample({
-  clock: merge([
-    onLoadPage,
-    mapOverview.visible,
-    mapCountry.visible,
-    fetchCountryFx.doneData,
-    $admin1Id,
-    $countrySearchString,
-    $activeEntityTypes,
-    $entityTypesFiltered,
-  ]),
-  source: combine({
+// Build one stable request key. Country requests remain disabled until the
+// current country's filter definitions and default URL values are settled.
+const $entityGlobalStatsQuery = combine(
+  {
     routes: $mapRoutes,
     country: $country,
     admin1Id: $admin1Id,
     countrySearchString: $countrySearchString,
+    countryAdvancedFiltersReady: $countryAdvancedFiltersReady,
     activeEntityTypes: $activeEntityTypes,
     entityTypesFiltered: $entityTypesFiltered,
-  }),
-  fn: ({
+  },
+  ({
     routes,
     country,
     admin1Id,
     countrySearchString,
+    countryAdvancedFiltersReady,
     activeEntityTypes,
     entityTypesFiltered,
   }) => {
+    if (!routes.map && !routes.country) return null;
+    if (routes.country && (!country?.id || !countryAdvancedFiltersReady)) {
+      return null;
+    }
+
     const queryParts = [
       `${ENTITY_TYPE_CODE_PARAM}=${getEntityTypeCodeParam(
         activeEntityTypes,
@@ -202,11 +210,16 @@ sample({
       }
     }
 
-    return { query: `?${queryParts.join('&')}` };
+    return `?${queryParts.join('&')}`;
   },
-  filter: ({ routes, country }) => {
-    return routes.map || (routes.country && !!country?.id);
-  },
+);
+
+// load global stats
+sample({
+  clock: merge([onLoadPage, $entityGlobalStatsQuery]),
+  source: $entityGlobalStatsQuery,
+  filter: (query) => query !== null,
+  fn: (query) => ({ query: query! }),
   target: fetchEntityGlobalStatsFx,
 });
 
@@ -276,7 +289,9 @@ sample({
 });
 
 const $derivedCountryActiveFilterList = combine({
+  advancedFilterCountryId: $advancedFilterCountryId,
   countryActiveFiltersList: $countryActiveFiltersList,
+  countryId: $countryId,
   activeFiltersList: $advanceFilterList,
   advancedFiltersByEntity: $advancedFiltersByEntity,
   defaultFilterSuppressedEntityTypes:
@@ -308,14 +323,11 @@ sample({
 // Explicitly reset entity slices stay empty until the country changes.
 const activeFiltersListClock = guard({
   source: $derivedCountryActiveFilterList,
-  clock: merge([
-    fetchCountryFx.doneData,
-    fetchAdvanceFilterFx.doneData,
-    $activeEntityTypes,
-    $isGlobalMode,
-  ]),
+  clock: merge([fetchAdvanceFilterFx.done, $activeEntityTypes, $isGlobalMode]),
   filter: ({
+    advancedFilterCountryId,
     countryActiveFiltersList,
+    countryId,
     activeFiltersList,
     advancedFiltersByEntity,
     defaultFilterSuppressedEntityTypes,
@@ -328,8 +340,11 @@ const activeFiltersListClock = guard({
     return (
       countryActiveFiltersList != null &&
       activeFiltersList != null &&
+      advancedFilterCountryId === countryId &&
       schoolFocusLatLng === null &&
-      getEntityTypesNeedingDefaultFilters(
+      getEntityTypesNeedingCountryDefaultFilters(
+        countryActiveFiltersList,
+        activeFiltersList,
         advancedFiltersByEntity,
         activeEntityTypes,
         defaultFilterSuppressedEntityTypes,
@@ -349,11 +364,14 @@ sample({
     activeEntityTypes,
     isAllEntitiesMode,
   }) => {
-    const entityTypesNeedingDefaults = getEntityTypesNeedingDefaultFilters(
-      advancedFiltersByEntity,
-      activeEntityTypes,
-      defaultFilterSuppressedEntityTypes,
-    );
+    const entityTypesNeedingDefaults =
+      getEntityTypesNeedingCountryDefaultFilters(
+        countryActiveFiltersList!,
+        activeFiltersList,
+        advancedFiltersByEntity,
+        activeEntityTypes,
+        defaultFilterSuppressedEntityTypes,
+      );
 
     return buildFilterQueryFromSelections(
       countryActiveFiltersList!,
@@ -406,6 +424,7 @@ export const gigaLayerSource = combine({
   isMobile: $isMobile,
   schoolAdminId: $schoolAdminId,
   countrySearch: $countrySearchString,
+  countryAdvancedFiltersReady: $countryAdvancedFiltersReady,
   zoomState: $zoomState,
   entityPageSelection: $entityPageSelection,
   activeEntityTypes: $activeEntityTypes,
@@ -419,7 +438,14 @@ const combineGigaFn =
     ...data,
   });
 
-const mapLayerFilter = () => true;
+const mapLayerFilter = ({
+  country,
+  countryAdvancedFiltersReady,
+  map: currentMap,
+  mapRoute,
+}: ReturnType<typeof gigaLayerSource.getState>) =>
+  !!currentMap &&
+  (!mapRoute.country || (!!country?.id && countryAdvancedFiltersReady));
 
 const timePlayerActive = sample({
   clock: $isTimeplayer,
@@ -433,6 +459,7 @@ sample({
   clock: merge([
     $mapRouteVisible,
     $countrySearchString,
+    $countryAdvancedFiltersReady,
     onReloadedMap,
     $map,
     countryReceived,
@@ -442,9 +469,7 @@ sample({
   ]),
   source: gigaLayerSource,
   fn: combineGigaFn({ refresh: true }),
-  filter: ({ map }) => {
-    return !!map;
-  },
+  filter: mapLayerFilter,
   target: changeStaticLayerFx,
 });
 
@@ -457,9 +482,7 @@ sample({
   ]),
   source: gigaLayerSource,
   fn: combineGigaFn({}),
-  filter: ({ map }) => {
-    return !!map;
-  },
+  filter: mapLayerFilter,
   target: changeStaticLayerFx,
 });
 
@@ -481,6 +504,7 @@ sample({
     $schoolAdminId,
     $schoolStatsMap,
     $countrySearchString,
+    $countryAdvancedFiltersReady,
     $connectivityBenchMarkByEntity,
     $historyIntervalByEntity,
     $lastAvailableDatesByEntity,
