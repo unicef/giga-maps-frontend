@@ -23,7 +23,6 @@ import LiveAverage from '../global-and-country-view-components/connectivity-laye
 import { ConnectivityStatusNames } from '../global-and-country-view-components/container/layer-view.constant';
 
 import {
-  connectivityColorClassByStatus,
   formatStaticFieldValue,
 } from './school-view.utils';
 import LayerNameWithTooltip from '../global-and-country-view-components/common/layer-name-with-tooltip.view';
@@ -58,16 +57,12 @@ export function EntityMetricSummary({
   });
 
   if (isLive) {
-    const colorClassName =
-      connectivityColorClassByStatus[liveDetails.type ?? UNKNOWN] ??
-      'text-neutral!';
-
     return (
       <section className="pt-1!">
         <div className="mx-4!">
           <div className="relative! flex! w-full! flex-col! gap-3! pb-6! pt-3!">
             <LiveAverage
-              colorClassName={colorClassName}
+              connectivityColor={liveDetails.color}
               currentLayerData={selectedLayerData}
               isLoading={isLoading}
               value={Number(liveDetails.value ?? 0)}

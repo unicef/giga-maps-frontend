@@ -1,3 +1,4 @@
+import { Checkbox } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -5,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { $country } from '~/@/country/country.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+import { CheckBoxContainer } from '../legend-button.style';
 import {
   ConnectivityBenchMarks,
   ConnectivityDistribution,
@@ -103,12 +105,14 @@ const StaticLayerLegend = ({
           >
             <div className="flex! min-w-0! items-center!">
               {shouldShowControls ? (
-                <input
-                  checked={Boolean(coverageStatus[key])}
-                  className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
-                  onChange={() => handleStaticLayerToggle(key)}
-                  type="checkbox"
-                />
+                <CheckBoxContainer>
+                  <Checkbox
+                    id={key}
+                    labelText=""
+                    checked={Boolean(coverageStatus[key])}
+                    onChange={() => handleStaticLayerToggle(key)}
+                  />
+                </CheckBoxContainer>
               ) : null}
               <div
                 className="flex! min-w-0! items-center! gap-2!"

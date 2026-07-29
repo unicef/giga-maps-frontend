@@ -3,15 +3,15 @@ import { useStore } from 'effector-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from 'styled-components';
+
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import { $entityRegistry } from '~/@/entities/models/entity.model';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { PointCoordinates } from '~/core/global-types';
-import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+
 import DublicateSchoolPopup from './dublicate-school-popup.view';
-import useSchoolPopupData from './school-popup-hook';
-import { SchoolPopupLoading } from './school-popup-loading.view';
 import {
   ConnectivityCircleWrapper,
   GoToSchoolButton,
@@ -27,6 +27,8 @@ import {
   SchoolNameWrapper,
   SchoolVerificationTag,
 } from './school-popup.style';
+import useSchoolPopupData from './school-popup-hook';
+import { SchoolPopupLoading } from './school-popup-loading.view';
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
@@ -48,10 +50,10 @@ export const MapSchoolPopup = () => {
 
   const entityLabel = entityType
     ? t(`${entityType}-entity-label`, {
-        defaultValue: t(entityRegistry[entityType]?.slug ?? entityType, {
-          count: 1,
-        }),
-      })
+      defaultValue: t(entityRegistry[entityType]?.slug ?? entityType, {
+        count: 1,
+      }),
+    })
     : '';
 
   return (
@@ -153,7 +155,7 @@ export const MapSchoolPopup = () => {
                             >
                               {t(
                                 ConnectivityStatusNames[
-                                  connectivityStatusValue
+                                connectivityStatusValue
                                 ],
                               )}
                             </Label>

@@ -317,6 +317,13 @@ export const LegendMetricMeta = styled.span`
   line-height: 1.125rem;
 `
 
+export const LegendExpandedView = styled.div<ActiveTheme>`
+  background-color: ${({ themeState }) =>
+    themeState === ThemeType.accessible
+      ? 'rgb(100 105 115)'
+      : 'var(--color-popover)'};
+`;
+
 export const LegendContentWrapper = styled.div<ActiveTheme>`
   display: flex;
   flex-wrap: wrap;

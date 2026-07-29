@@ -158,7 +158,7 @@ const GigaLayerButtonIcons = ({
       <TooltipProvider>
         <div className="inline-flex! flex-col! items-start! gap-4! pr-2!">
           <section className="flex! flex-col! items-start! gap-2!">
-            <p className="text-sm! font-normal! leading-5! text-[#f4f4f4]!">
+            <p className="text-sm! font-normal! leading-5! text-foreground!">
               {t('real-time-layers')}
             </p>
             <div className="grid! grid-cols-[repeat(3,5rem)]! gap-2!">
@@ -186,7 +186,7 @@ const GigaLayerButtonIcons = ({
           </section>
 
           <section className="flex! flex-col! items-start! gap-2!">
-            <p className="text-sm! font-normal! leading-5! text-[#f4f4f4]!">
+            <p className="text-sm! font-normal! leading-5! text-foreground!">
               {t('static-layers')}
             </p>
             <div className="grid! grid-cols-[repeat(3,5rem)]! gap-2!">

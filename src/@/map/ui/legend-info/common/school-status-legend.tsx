@@ -1,3 +1,4 @@
+import { Checkbox } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -6,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
+import { CheckBoxContainer } from '../legend-button.style';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $currentLayerTypeUtilsByEntity,
@@ -106,12 +108,14 @@ const SchoolStatusLegend = ({
         >
           <div className="flex! min-w-0! items-center!">
             {shouldShowControls ? (
-              <input
-                checked={Boolean(schoolStatusCheckedStatus[key])}
-                className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
-                onChange={() => handleSchoolStatusLayerChange(key)}
-                type="checkbox"
-              />
+              <CheckBoxContainer>
+                <Checkbox
+                  id={`school-status-${key}`}
+                  labelText=""
+                  checked={Boolean(schoolStatusCheckedStatus[key])}
+                  onChange={() => handleSchoolStatusLayerChange(key)}
+                />
+              </CheckBoxContainer>
             ) : null}
             <div
               className="flex! min-w-0! items-center! gap-2!"

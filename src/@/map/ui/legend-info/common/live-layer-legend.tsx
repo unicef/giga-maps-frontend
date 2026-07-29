@@ -1,3 +1,4 @@
+import { Checkbox } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +26,7 @@ import { $lng } from '~/core/i18n/store';
 import { $mapRoutes } from '~/core/routes';
 import { formatNumber } from '~/lib/utils';
 
+import { CheckBoxContainer } from '../legend-button.style';
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
 
@@ -108,7 +110,7 @@ const LiveLayerLegend = ({
           </div>
           {metricLayerData?.description ? (
             <button
-              className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-muted-foreground!"
+              className="inline-flex! items-center! justify-center! border-0! p-0! text-muted-foreground!"
               title={metricLayerData.description}
               type="button"
             >
@@ -155,13 +157,14 @@ const LiveLayerLegend = ({
             >
               <div className="flex! min-w-0! items-center!">
                 {shouldShowControls ? (
-                  <input
-                    aria-label={label}
-                    checked={Boolean(connectivitySpeedFilter[key])}
-                    className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
-                    onChange={() => handleRealtimeLayerChange(key)}
-                    type="checkbox"
-                  />
+                  <CheckBoxContainer>
+                    <Checkbox
+                      id={key}
+                      labelText=""
+                      checked={Boolean(connectivitySpeedFilter[key])}
+                      onChange={() => handleRealtimeLayerChange(key)}
+                    />
+                  </CheckBoxContainer>
                 ) : null}
                 <div
                   className="flex! min-w-0! items-center! gap-2!"

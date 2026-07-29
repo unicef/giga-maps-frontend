@@ -8,12 +8,12 @@ import LayerNameWithTooltip from '../common/layer-name-with-tooltip.view';
 
 export default function LiveAverage({
   value,
-  colorClassName,
+  connectivityColor,
   isLoading,
   currentLayerData,
 }: {
   readonly value: number;
-  readonly colorClassName: string;
+  readonly connectivityColor: string;
   readonly isLoading: boolean;
   readonly currentLayerData?: LayerType | null;
 }) {
@@ -34,7 +34,8 @@ export default function LiveAverage({
       ) : value ? (
         <div className="inline-flex! justify-start! items-end! gap-1!">
           <p
-            className={`m-0! text-3xl! font-bold! font-manrope! leading-9! ${colorClassName}`}
+            className="m-0! text-3xl! font-bold! font-manrope! leading-9!"
+            style={{ color: connectivityColor }}
           >
             {value}
           </p>

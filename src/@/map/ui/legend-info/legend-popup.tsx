@@ -19,13 +19,13 @@ import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
-  $layerUtils,
-  $sidebarHeight,
   $getSchoolParams,
   $isGlobalLegendLoading,
   $isLiveLegendLoading,
   $isStaticLegendLoading,
   $isStatusLegendLoading,
+  $layerUtils,
+  $sidebarHeight,
 } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { Button } from '~/components/ui/button';
@@ -41,10 +41,13 @@ import {
 } from '~/components/ui/popover';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes } from '~/core/routes';
+import { $theme } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
+
 import LiveLayerLegend from './common/live-layer-legend';
 import SchoolStatusLegend from './common/school-status-legend';
 import StaticLayerLegend from './common/static-layer-legend';
+import { LegendExpandedView } from './legend-button.style';
 
 type LegendSummaryItem = {
   color: string;
@@ -89,6 +92,7 @@ const LegendPopup = ({
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
+  const themeState = useStore($theme);
   const sidebarHeight = useStore($sidebarHeight);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
@@ -339,7 +343,10 @@ const LegendPopup = ({
 
   const expandedContent = (
     <>
-      <div className="flex! items-center! justify-between! gap-3! bg-popover! px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
+
+      <LegendExpandedView
+        themeState={themeState}
+        className="flex! items-center! justify-between! gap-3!  px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
         <div className="flex! min-w-0! items-center! gap-2! max-md:gap-3!">
           {visibleLegendEntityTypes.map((entityType) => {
             const config = entityConfigMap[entityType];
@@ -401,9 +408,10 @@ const LegendPopup = ({
             <Minimize2 size={14} className="text-foreground/60!" />
           </Button>
         </CollapsibleTrigger>
-      </div>
-      <div
-        className="flex! flex-wrap! gap-4! bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
+      </LegendExpandedView>
+      <LegendExpandedView
+        themeState={themeState}
+        className="flex! flex-wrap! gap-4! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
         data-testid="legend-expanded-view"
       >
         {shouldShowStatusSummary ? (
@@ -442,7 +450,7 @@ const LegendPopup = ({
             shouldShowControls={shouldShowControls}
           />
         ) : null}
-      </div>
+      </LegendExpandedView>
     </>
   );
 
@@ -463,7 +471,7 @@ const LegendPopup = ({
         ref={popoverContentRef}
         align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
-          'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! bg-popover! p-0! shadow-xs!',
+          'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border!  p-0! shadow-xs!',
           'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
           'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
           'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
