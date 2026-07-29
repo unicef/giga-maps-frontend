@@ -27,6 +27,11 @@ import {
   $isStaticLegendLoading,
   $isStatusLegendLoading,
 } from '~/@/sidebar/sidebar.model';
+import {
+  $hasSearchInput,
+  $isSearchFocused,
+  $showCountries,
+} from '~/@/sidebar/ui/common-components/top-search-bar/top-search-bar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { Button } from '~/components/ui/button';
 import {
@@ -64,6 +69,19 @@ export const shouldShowLegendLoading = (
   isLoading: boolean,
 ) => !isEntityDetailView && isLoading;
 
+export const shouldOpenLegendPopup = ({
+  open,
+  isMobile,
+  isCountryListOpen,
+  isSearchListOpen,
+}: {
+  open: boolean;
+  isMobile: boolean;
+  isCountryListOpen: boolean;
+  isSearchListOpen: boolean;
+}) =>
+  open && !(isMobile && (isCountryListOpen || isSearchListOpen));
+
 const schoolSummaryOrder = [
   ConnectivityStatusDistribution.connected,
   ConnectivityStatusDistribution.notConnected,
@@ -89,6 +107,9 @@ const LegendPopup = ({
     selectedLayerDataByEntity,
   } = useStore($layerUtils);
   const isMobile = useStore($isMobile);
+  const hasSearchInput = useStore($hasSearchInput);
+  const isSearchFocused = useStore($isSearchFocused);
+  const isCountryListOpen = useStore($showCountries);
   const sidebarHeight = useStore($sidebarHeight);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
@@ -102,6 +123,13 @@ const LegendPopup = ({
   const isLiveLegendLoading = useStore($isLiveLegendLoading);
   const isStaticLegendLoading = useStore($isStaticLegendLoading);
   const isStatusLegendLoading = useStore($isStatusLegendLoading);
+  const isSearchListOpen = isSearchFocused && hasSearchInput;
+  const isLegendPopupOpen = shouldOpenLegendPopup({
+    open,
+    isMobile,
+    isCountryListOpen,
+    isSearchListOpen,
+  });
   const visibleLegendEntityTypes = useMemo(() => {
     return entityTypesFiltered.filter((type) =>
       mapLevel.entity
@@ -452,7 +480,7 @@ const LegendPopup = ({
       onOpenChange={(nextOpen) => {
         onOpenChange?.(nextOpen);
       }}
-      open={open}
+      open={isLegendPopupOpen}
     >
       <PopoverAnchor asChild>
         <div className="legend-info-popover-link relative! inline-flex!">

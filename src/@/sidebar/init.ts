@@ -1175,7 +1175,8 @@ sample({
 
 sample({
   clock: changeCountryCode,
-  filter: Boolean,
+  source: $isMobile,
+  filter: (isMobile, countryCode) => Boolean(countryCode) && !isMobile,
   fn: () => true,
   target: onShowLegend,
 });
