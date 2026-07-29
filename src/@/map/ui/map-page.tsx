@@ -53,7 +53,7 @@ const MapPage = () => {
       {!isMobile && <EntityTypeSelector />}
       <TopLoader />
       <Footer />
-      <ZoomLevelDisplay />
+      {/* <ZoomLevelDisplay /> */}
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}
     </Layout >
