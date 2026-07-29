@@ -43,28 +43,6 @@ export const getEntityMarkerType = (
 };
 
 /**
- * Resolve the single zoom at which a symbol entity changes from a low-zoom
- * circle to its configured symbol. A single threshold avoids gaps and overlap.
- */
-export const getEntityMarkerTransitionZoom = (
-  config?: Pick<EntityConfig, 'markerType' | 'zoomLevels'>,
-): number | null => {
-  if (config?.markerType !== 'symbol') return null;
-
-  const configuredZoom =
-    config.zoomLevels?.circleMaxZoom ?? config.zoomLevels?.symbolMinZoom;
-  if (
-    typeof configuredZoom !== 'number' ||
-    !Number.isFinite(configuredZoom) ||
-    configuredZoom < 0
-  ) {
-    return null;
-  }
-
-  return Math.min(configuredZoom, 24);
-};
-
-/**
  * Get fields configured for popup display.
  */
 export const getPopupFields = (

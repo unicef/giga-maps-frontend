@@ -32,7 +32,6 @@ export {
   getEntityConfig,
   isLegacyEntity,
   getEntityMarkerType,
-  getEntityMarkerTransitionZoom,
   getPopupFields,
   getNewEntityTypes,
   getLegacyEntityTypes,

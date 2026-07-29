@@ -20,6 +20,7 @@ import Map from './map';
 import { TimeplayerContainer } from './timeplayer/timeplayer-container';
 import TopLoader from './top-loader';
 import Underlay from './underlay';
+import ZoomLevelDisplay from './zoom-level-display';
 
 const PopupContainer = styled.div`
   display: none;
@@ -52,6 +53,7 @@ const MapPage = () => {
       {!isMobile && <EntityTypeSelector />}
       <TopLoader />
       <Footer />
+      <ZoomLevelDisplay />
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}
     </Layout >

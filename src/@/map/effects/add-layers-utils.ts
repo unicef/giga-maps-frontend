@@ -3,7 +3,6 @@ import { Map, VectorSource } from 'mapbox-gl';
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
 import { DEFAULT_ENTITY_REGISTRY } from '~/@/entities/config/entity-registry';
 import { EntityType } from '~/@/entities/types/base-entity.type';
-import { getEntityMarkerTransitionZoom } from '~/@/entities/utils/entity-resolver';
 
 import {
   CONNECTIVITY_STATUS_SOURCE,
@@ -36,6 +35,7 @@ import {
   filterSchoolStatus,
   generateLayerUrls,
   generateStaticLayerUrl,
+  getCircleMaxZoom,
   hideLayer,
 } from '../utils';
 
@@ -110,12 +110,12 @@ export const getLayerIdsAndLastChange = ({
   ]);
   const checkSelectionChange = entityTypes.size
     ? Array.from(entityTypes).some((entityType) => {
-        const typedEntityType = entityType as EntityType;
-        return (
-          selectedLayerIdByEntity[typedEntityType] !==
-          lastLayerIdByEntity[typedEntityType]
-        );
-      })
+      const typedEntityType = entityType as EntityType;
+      return (
+        selectedLayerIdByEntity[typedEntityType] !==
+        lastLayerIdByEntity[typedEntityType]
+      );
+    })
     : false;
   const isLastSelectionChange = refresh || checkSelectionChange;
   return {
@@ -233,6 +233,7 @@ export const createAndUpdateMapLayer = ({
   isMobile,
   activeEntityTypes,
   entityRegistry,
+  country,
 }: ChangeLayerOptions & {
   selectedLayerId: number | null;
 }) => {
@@ -246,12 +247,16 @@ export const createAndUpdateMapLayer = ({
   cancelAnimation();
 
   const entityTypes = activeEntityTypes ?? [];
+  const circleMaxZoom = getCircleMaxZoom({
+    countryCode: country?.code,
+    isGlobalView: Boolean(mapRoute.map),
+  });
 
   const hasSelectedEntityLayer = mapRoute.map
     ? entityTypes.length > 0
     : entityTypes.some((entityType) =>
-        Boolean(layerUtils.selectedLayerIdByEntity?.[entityType]),
-      );
+      Boolean(layerUtils.selectedLayerIdByEntity?.[entityType]),
+    );
 
   // --- Selected layer (connectivity/coverage) per entity type ---
   if (isSourceAvailable && hasSelectedEntityLayer) {
@@ -278,7 +283,7 @@ export const createAndUpdateMapLayer = ({
 
       const config = entityRegistry?.[entityType] as EntityConfig | undefined;
       const markerType = config?.markerType ?? 'circle';
-      const transitionZoom = getEntityMarkerTransitionZoom(config);
+      const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
       const circleLayerId = getEntityZoomCircleLayerId(layerIdStr);
       const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);
 
@@ -389,7 +394,7 @@ export const createAndUpdateMapLayer = ({
       const statusLayerId = getEntityStatusLayerId(entityType);
       const config = entityRegistry?.[entityType] as EntityConfig | undefined;
       const markerType = config?.markerType ?? 'circle';
-      const transitionZoom = getEntityMarkerTransitionZoom(config);
+      const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
       const circleLayerId = getEntityZoomCircleLayerId(statusLayerId);
       const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);
 
@@ -460,6 +465,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
   isMobile,
   activeEntityTypes,
   entityRegistry,
+  country,
 }: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
   const { schoolIdByEntity = {} } = selectedLayerIds;
@@ -468,6 +474,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
     CONNECTIVITY_STATUS_SOURCE,
   );
   const entityTypes = activeEntityTypes ?? [];
+  const circleMaxZoom = getCircleMaxZoom({ countryCode: country?.code });
   if (
     isSourceAvailable &&
     entityTypes.some((entityType) => schoolIdByEntity[entityType])
@@ -480,7 +487,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
       }
       const config = entityRegistry?.[entityType] as EntityConfig | undefined;
       const markerType = config?.markerType ?? 'circle';
-      const transitionZoom = getEntityMarkerTransitionZoom(config);
+      const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
       const statusLayerId = getEntityStatusLayerId(entityType);
       const circleLayerId = getEntityZoomCircleLayerId(statusLayerId);
       const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);

@@ -90,17 +90,6 @@ export interface EntityConfig {
   /** Sidebar/accordion labels and auxiliary UI behavior */
   sidebar: EntitySidebarConfig;
 
-  /** Zoom threshold for a seamless circle → symbol transition. */
-  zoomLevels?: {
-    /**
-     * Circle markers render below this zoom; symbol markers render from this
-     * zoom onward. Mapbox treats layer maxzoom as exclusive and minzoom as
-     * inclusive, so one value produces a gap-free switch.
-     */
-    circleMaxZoom?: number;
-    /** @deprecated Backward-compatible fallback for older registry payloads. */
-    symbolMinZoom?: number;
-  };
   /** Map dot animation and zoom sizing configuration */
   mapAnimation?: EntityMapAnimationConfig;
 

@@ -19,6 +19,19 @@ export const CONNECTIVITY_URL = 'api/v2/entities/tiles/connectivity';
 export const CONNECTIVITY_STATUS_URL =
   'api/v2/entities/tiles/connectivity_status';
 
+
+/**
+ * Circle-to-symbol transition zoom used by map entity layers.
+ * Country-code keys are case-insensitive; add overrides in lowercase.
+ */
+export const CIRCLE_MAX_ZOOM_CONFIG: {
+  default: number;
+  byCountryCode: Record<string, number>;
+} = {
+  default: 7,
+  byCountryCode: {
+  },
+};
 /** Source-layer names returned by the v2 tiles API */
 export const SOURCE_LAYER_SCHOOLS = 'school';
 export const SOURCE_LAYER_ENTITIES = 'entities';
@@ -177,11 +190,11 @@ if (storeStyling) {
 export const getDefaultCountryOpacity = (
   paintData: StylePaintData,
 ): Expression => [
-  'case',
-  ['boolean', ['feature-state', 'hover'], false],
-  mapCountryOpacity.active,
-  mapCountryOpacity.active,
-];
+    'case',
+    ['boolean', ['feature-state', 'hover'], false],
+    mapCountryOpacity.active,
+    mapCountryOpacity.active,
+  ];
 
 export const getDefaultCountryColor = (paintData: StylePaintData): string =>
   paintData.allCountryColor;

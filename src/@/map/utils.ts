@@ -48,6 +48,8 @@ import {
   mapPaintData,
   getEntityLogicalLayerId,
   SCHOOL_LAYER_ID,
+  CIRCLE_MAX_ZOOM_CONFIG,
+  maxZoom,
 } from './map.constant';
 import {
   $activeSchoolPopup,
@@ -1316,4 +1318,25 @@ export const getInterpolatedValue = (
       return v1 + t * (v2 - v1);
     }
   }
+};
+
+
+export const getCircleMaxZoom = ({
+  countryCode,
+  isGlobalView = false,
+}: {
+  countryCode?: string | null;
+  isGlobalView?: boolean;
+}): number => {
+  const normalizedCountryCode = countryCode?.trim().toLowerCase();
+  const configuredZoom =
+    !isGlobalView && normalizedCountryCode
+      ? (CIRCLE_MAX_ZOOM_CONFIG.byCountryCode[normalizedCountryCode] ??
+        CIRCLE_MAX_ZOOM_CONFIG.default)
+      : CIRCLE_MAX_ZOOM_CONFIG.default;
+
+  if (!Number.isFinite(configuredZoom)) {
+    return CIRCLE_MAX_ZOOM_CONFIG.default;
+  }
+  return Math.min(Math.max(configuredZoom, 0), maxZoom);
 };

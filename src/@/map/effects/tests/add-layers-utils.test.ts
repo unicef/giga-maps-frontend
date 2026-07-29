@@ -1,4 +1,5 @@
 import { Map } from 'mapbox-gl';
+import { CIRCLE_MAX_ZOOM_CONFIG } from '../../map.constant';
 import {
   deleteSourceAndLayers,
   createSource,
@@ -9,6 +10,7 @@ import {
   animateCircles,
   generateLayerUrls,
   filterConnectivityList,
+  getCircleMaxZoom,
 } from '../../utils';
 import {
   getLayerIdsAndLastChange,
@@ -17,7 +19,6 @@ import {
   createAndUpdateConnectiivtyStatusLayer,
 } from '../add-layers-utils';
 import { EntityType } from '~/@/entities/types/base-entity.type';
-import { getEntityMarkerTransitionZoom } from '~/@/entities/utils/entity-resolver';
 
 // Mock dependencies
 vi.mock('../../utils', () => ({
@@ -44,23 +45,27 @@ vi.mock('~/@/country/lib/get-schools-geojson', () => ({
   getSchoolsGeoJson: vi.fn(),
 }));
 
-describe('getEntityMarkerTransitionZoom', () => {
-  it('uses circleMaxZoom as the single gap-free transition threshold', () => {
-    expect(
-      getEntityMarkerTransitionZoom({
-        markerType: 'symbol',
-        zoomLevels: { circleMaxZoom: 8, symbolMinZoom: 12 },
-      }),
-    ).toBe(8);
+describe('getCircleMaxZoom', () => {
+  afterEach(() => {
+    delete CIRCLE_MAX_ZOOM_CONFIG.byCountryCode.ke;
   });
 
-  it('supports legacy registry payloads and guards Mapbox maximum zoom', () => {
-    expect(
-      getEntityMarkerTransitionZoom({
-        markerType: 'symbol',
-        zoomLevels: { symbolMinZoom: 30 },
-      }),
-    ).toBe(24);
+  it('uses a case-insensitive country override in country view', () => {
+    CIRCLE_MAX_ZOOM_CONFIG.byCountryCode.ke = 9;
+    expect(getCircleMaxZoom({ countryCode: 'KE' })).toBe(9);
+  });
+
+  it('always uses the default in global view', () => {
+    CIRCLE_MAX_ZOOM_CONFIG.byCountryCode.ke = 9;
+    expect(getCircleMaxZoom({ countryCode: 'KE', isGlobalView: true })).toBe(
+      CIRCLE_MAX_ZOOM_CONFIG.default,
+    );
+  });
+
+  it('uses the default when a country has no override', () => {
+    expect(getCircleMaxZoom({ countryCode: 'ZZ' })).toBe(
+      CIRCLE_MAX_ZOOM_CONFIG.default,
+    );
   });
 });
 
@@ -90,6 +95,11 @@ describe('add-layers-utils', () => {
 
     vi.clearAllMocks();
     vi.mocked(generateLayerUrls).mockReturnValue('tile-url');
+    CIRCLE_MAX_ZOOM_CONFIG.byCountryCode.ke = 6;
+  });
+
+  afterEach(() => {
+    delete CIRCLE_MAX_ZOOM_CONFIG.byCountryCode.ke;
   });
 
   describe('getLayerIdsAndLastChange', () => {
@@ -378,12 +388,12 @@ describe('add-layers-utils', () => {
         lastSelectedLayer: { layerIdByEntity: {} },
         isMobile: false,
         activeEntityTypes: [EntityType.HEALTH],
+        country: { code: 'KE' },
         entityRegistry: {
           [EntityType.SCHOOL]: schoolCircleConfig,
           [EntityType.HEALTH]: {
             markerType: 'symbol',
             symbol: '■',
-            zoomLevels: { circleMaxZoom: 9 },
           },
         },
       } as any);
@@ -394,7 +404,7 @@ describe('add-layers-utils', () => {
           id: 'entity-selected-health-7-zoom-circle',
           options: expect.objectContaining({
             'source-layer': 'entities',
-            maxzoom: 9,
+            maxzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
           }),
           entityConfig: schoolCircleConfig,
         }),
@@ -405,7 +415,7 @@ describe('add-layers-utils', () => {
           id: 'entity-selected-health-7',
           options: expect.objectContaining({
             'source-layer': 'entities',
-            minzoom: 9,
+            minzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
           }),
         }),
       );
@@ -413,7 +423,10 @@ describe('add-layers-utils', () => {
         mockMap,
         expect.objectContaining({
           id: 'entity-status-health-zoom-circle',
-          options: { 'source-layer': 'entities', maxzoom: 9 },
+          options: {
+            'source-layer': 'entities',
+            maxzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+          },
           entityConfig: schoolCircleConfig,
         }),
       );
@@ -421,7 +434,10 @@ describe('add-layers-utils', () => {
         mockMap,
         expect.objectContaining({
           id: 'entity-status-health',
-          options: { 'source-layer': 'entities', minzoom: 9 },
+          options: {
+            'source-layer': 'entities',
+            minzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+          },
         }),
       );
     });
@@ -443,12 +459,12 @@ describe('add-layers-utils', () => {
         lastSelectedLayer: { layerIdByEntity: {} },
         isMobile: false,
         activeEntityTypes: [EntityType.HEALTH],
+        country: { code: 'KE' },
         entityRegistry: {
           [EntityType.SCHOOL]: schoolCircleConfig,
           [EntityType.HEALTH]: {
             markerType: 'symbol',
             symbol: '■',
-            zoomLevels: { circleMaxZoom: 6 },
           },
         },
       } as any);
@@ -485,7 +501,7 @@ describe('add-layers-utils', () => {
       });
     });
 
-    it('animates the symbol layer when it has no zoom transition', () => {
+    it('uses the default transition for a country without an override', () => {
       createAndUpdateMapLayer({
         map: mockMap,
         mapRoute: { country: true },
@@ -502,6 +518,7 @@ describe('add-layers-utils', () => {
         lastSelectedLayer: { layerIdByEntity: {} },
         isMobile: false,
         activeEntityTypes: [EntityType.HEALTH],
+        country: { code: 'ZZ' },
         entityRegistry: {
           [EntityType.SCHOOL]: schoolCircleConfig,
           [EntityType.HEALTH]: {
@@ -511,15 +528,27 @@ describe('add-layers-utils', () => {
         },
       } as any);
 
-      expect(createSelectedSymbolLayer).toHaveBeenCalledWith(
+      expect(createSelectedLayer).toHaveBeenCalledWith(
         mockMap,
-        expect.objectContaining({ id: 'entity-selected-health-12' }),
+        expect.objectContaining({
+          id: 'entity-selected-health-12-zoom-circle',
+          options: expect.objectContaining({
+            maxzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+          }),
+        }),
       );
       expect(animateCircles).toHaveBeenCalledWith({
         map: mockMap,
-        id: 'entity-selected-health-12',
-        entityConfig: expect.objectContaining({ markerType: 'symbol' }),
-        fallbackMarkerType: 'symbol',
+        id: 'entity-selected-health-12-zoom-circle',
+        entityConfig: schoolCircleConfig,
+        fallbackMarkerType: 'circle',
+        maxZoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+        zoomVariant: {
+          id: 'entity-selected-health-12',
+          entityConfig: expect.objectContaining({ markerType: 'symbol' }),
+          fallbackMarkerType: 'symbol',
+          minZoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+        },
       });
     });
 
@@ -535,12 +564,12 @@ describe('add-layers-utils', () => {
         schoolLegendsByEntity: { [EntityType.HEALTH]: ['connected'] },
         isMobile: false,
         activeEntityTypes: [EntityType.HEALTH],
+        country: { code: 'KE' },
         entityRegistry: {
           [EntityType.SCHOOL]: schoolCircleConfig,
           [EntityType.HEALTH]: {
             markerType: 'symbol',
             symbol: '■',
-            zoomLevels: { circleMaxZoom: 10 },
           },
         },
       } as any);
@@ -550,7 +579,7 @@ describe('add-layers-utils', () => {
         expect.objectContaining({
           source: 'map-data-source-static',
           id: 'entity-status-health-zoom-circle',
-          options: expect.objectContaining({ maxzoom: 10 }),
+          options: expect.objectContaining({ maxzoom: 6 }),
           entityConfig: schoolCircleConfig,
         }),
       );
@@ -559,7 +588,7 @@ describe('add-layers-utils', () => {
         expect.objectContaining({
           source: 'map-data-source-static',
           id: 'entity-status-health',
-          options: expect.objectContaining({ minzoom: 10 }),
+          options: expect.objectContaining({ minzoom: 6 }),
         }),
       );
     });
