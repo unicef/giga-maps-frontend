@@ -15,7 +15,7 @@ import type { EntityType } from '../types/base-entity.type';
  */
 export const getEntityConfig = (
   registry: Record<string, EntityConfig>,
-  entityType: string
+  entityType: string,
 ): EntityConfig | undefined => {
   return registry[entityType];
 };
@@ -25,7 +25,7 @@ export const getEntityConfig = (
  */
 export const isLegacyEntity = (
   registry: Record<string, EntityConfig>,
-  entityType: string
+  entityType: string,
 ): boolean => {
   const config = registry[entityType];
   return config?.useLegacyApi ?? false;
@@ -36,10 +36,32 @@ export const isLegacyEntity = (
  */
 export const getEntityMarkerType = (
   registry: Record<string, EntityConfig>,
-  entityType: string
+  entityType: string,
 ): 'circle' | 'symbol' => {
   const config = registry[entityType];
   return config?.markerType ?? 'circle';
+};
+
+/**
+ * Resolve the single zoom at which a symbol entity changes from a low-zoom
+ * circle to its configured symbol. A single threshold avoids gaps and overlap.
+ */
+export const getEntityMarkerTransitionZoom = (
+  config?: Pick<EntityConfig, 'markerType' | 'zoomLevels'>,
+): number | null => {
+  if (config?.markerType !== 'symbol') return null;
+
+  const configuredZoom =
+    config.zoomLevels?.circleMaxZoom ?? config.zoomLevels?.symbolMinZoom;
+  if (
+    typeof configuredZoom !== 'number' ||
+    !Number.isFinite(configuredZoom) ||
+    configuredZoom < 0
+  ) {
+    return null;
+  }
+
+  return Math.min(configuredZoom, 24);
 };
 
 /**
@@ -47,24 +69,28 @@ export const getEntityMarkerType = (
  */
 export const getPopupFields = (
   registry: Record<string, EntityConfig>,
-  entityType: string
+  entityType: string,
 ) => {
   const config = registry[entityType];
-  return config?.fields.filter(f => f.showInPopup) ?? [];
+  return config?.fields.filter((f) => f.showInPopup) ?? [];
 };
 
 /**
  * Get all non-legacy entity types (those using the new generic API).
  */
-export const getNewEntityTypes = (registry: Record<string, EntityConfig>): string[] => {
-  return Object.keys(registry).filter(type => !registry[type].useLegacyApi);
+export const getNewEntityTypes = (
+  registry: Record<string, EntityConfig>,
+): string[] => {
+  return Object.keys(registry).filter((type) => !registry[type].useLegacyApi);
 };
 
 /**
  * Get all legacy entity types.
  */
-export const getLegacyEntityTypes = (registry: Record<string, EntityConfig>): string[] => {
-  return Object.keys(registry).filter(type => registry[type].useLegacyApi);
+export const getLegacyEntityTypes = (
+  registry: Record<string, EntityConfig>,
+): string[] => {
+  return Object.keys(registry).filter((type) => registry[type].useLegacyApi);
 };
 export const normalizeEntityLayerInfoList = <T = unknown>(
   payload: unknown,

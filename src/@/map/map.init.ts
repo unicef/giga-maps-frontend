@@ -1,4 +1,11 @@
-import { combine, createEffect, createStore, guard, merge, sample } from 'effector';
+import {
+  combine,
+  createEffect,
+  createStore,
+  guard,
+  merge,
+  sample,
+} from 'effector';
 import type { Map as MapboxMap } from 'mapbox-gl';
 
 import {
@@ -64,6 +71,10 @@ import {
   router,
 } from '~/core/routes';
 import { $theme } from '~/core/theme.model';
+import {
+  $urlParamsConsumed,
+  $isAppSettled,
+} from '~/@/sidebar/url-params.model';
 
 import {
   changeLayersFx,
@@ -414,10 +425,10 @@ export const gigaLayerSource = combine({
 
 const combineGigaFn =
   (data: { refresh?: boolean; timeout?: number }) =>
-  (source: ReturnType<typeof gigaLayerSource.getState>) => ({
-    ...source,
-    ...data,
-  });
+    (source: ReturnType<typeof gigaLayerSource.getState>) => ({
+      ...source,
+      ...data,
+    });
 
 const mapLayerFilter = () => true;
 
@@ -469,6 +480,24 @@ sample({
   fn: combineGigaFn({}),
   filter: mapLayerFilter,
   target: changeLayersFx,
+});
+
+// Registry marker/zoom configuration updates only adjust existing layers. The
+// vector sources and their API URLs stay unchanged.
+sample({
+  clock: $entityRegistry,
+  source: gigaLayerSource,
+  fn: combineGigaFn({}),
+  filter: ({ map: mapInstance }) => !!mapInstance,
+  target: changeLayersFx,
+});
+
+sample({
+  clock: $entityRegistry,
+  source: gigaLayerSource,
+  fn: combineGigaFn({}),
+  filter: ({ map: mapInstance }) => !!mapInstance,
+  target: changeStaticLayerFx,
 });
 // change giga layer update on connectivity filter
 sample({

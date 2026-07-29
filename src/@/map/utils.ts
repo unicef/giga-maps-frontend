@@ -46,6 +46,7 @@ import {
   defaultWorldView,
   LayerDataProps,
   mapPaintData,
+  getEntityLogicalLayerId,
   SCHOOL_LAYER_ID,
 } from './map.constant';
 import {
@@ -207,11 +208,14 @@ export const isCoverage = (id: string) => id === `${Layers.coverage}_layer`;
 
 const getEntityTypeFromMapLayerId = (layerId?: string): EntityType | null => {
   if (!layerId) return null;
-  if (layerId.startsWith('entity-status-')) {
-    return layerId.replace('entity-status-', '') as EntityType;
+  const logicalLayerId = getEntityLogicalLayerId(layerId);
+  if (logicalLayerId.startsWith('entity-status-')) {
+    return logicalLayerId.replace('entity-status-', '') as EntityType;
   }
 
-  const selectedLayerMatch = layerId.match(/^entity-selected-(.+)-[^-]+$/);
+  const selectedLayerMatch = logicalLayerId.match(
+    /^entity-selected-(.+)-[^-]+$/,
+  );
   if (selectedLayerMatch?.[1]) {
     return selectedLayerMatch[1] as EntityType;
   }
@@ -326,58 +330,132 @@ const setCurrentRadius = (
   };
 };
 
+type MarkerAnimationLayer = {
+  id: string;
+  entityConfig?: MapAnimationConfigSource;
+  fallbackMarkerType: MarkerType;
+  minZoom?: number;
+  maxZoom?: number;
+};
+
 export function animateCircles({
   map,
   id: layer,
   entityConfig,
   fallbackMarkerType = 'circle',
+  maxZoom,
+  zoomVariant,
 }: {
   map: Map;
   id: string;
   entityConfig?: MapAnimationConfigSource;
   fallbackMarkerType?: MarkerType;
+  maxZoom?: number;
+  zoomVariant?: {
+    id: string;
+    entityConfig?: MapAnimationConfigSource;
+    fallbackMarkerType?: MarkerType;
+    minZoom?: number;
+    maxZoom?: number;
+  };
 }) {
   const animationFrameData = { requestId: 0 };
   const { opacityMax, opacityMin } = animateCircleConfig;
-  const { growSpeed } = getEntityMapAnimation(entityConfig, fallbackMarkerType);
-  const duration = animateCircleConfig.duration / growSpeed;
+  const animationLayerConfigs: MarkerAnimationLayer[] = [
+    {
+      id: layer,
+      entityConfig,
+      fallbackMarkerType,
+      maxZoom,
+    },
+    ...(zoomVariant
+      ? [
+        {
+          fallbackMarkerType: 'circle' as MarkerType,
+          ...zoomVariant,
+        },
+      ]
+      : []),
+  ];
+  const animationLayers = animationLayerConfigs.map((animationLayer) => {
+    const { growSpeed } = getEntityMapAnimation(
+      animationLayer.entityConfig,
+      animationLayer.fallbackMarkerType,
+    );
+    return {
+      ...animationLayer,
+      duration: animateCircleConfig.duration / growSpeed,
+      getMaxRadius: setCurrentRadius(
+        animationLayer.entityConfig,
+        animationLayer.fallbackMarkerType,
+      ),
+    };
+  });
   let startTime = performance.now();
   let isGrowing = true;
-  const getMaxRadius = setCurrentRadius(entityConfig, fallbackMarkerType);
+  let activeLayerId: string | null = null;
   function animateFrame(time: number) {
     if ($isMapLoading.getState()) {
       startTime = time;
       animationFrameData.requestId = requestAnimationFrame(animateFrame);
       return;
     }
-    const mapLayer = map.getLayer(layer) as { type?: string } | undefined;
-    if (!mapLayer) {
+    const zoom = Number(map.getZoom().toFixed(1));
+    const activeLayer = animationLayers.find(
+      ({ minZoom, maxZoom: layerMaxZoom }) =>
+        (minZoom == null || zoom >= minZoom) &&
+        (layerMaxZoom == null || zoom < layerMaxZoom),
+    );
+    if (!activeLayer) {
+      startTime = time;
       animationFrameData.requestId = requestAnimationFrame(animateFrame);
       return;
     }
-    const zoom = Number(map.getZoom().toFixed(1));
-    const [startRadius, maxRadius] = getMaxRadius(zoom);
+    if (activeLayerId !== activeLayer.id) {
+      activeLayerId = activeLayer.id;
+      startTime = time;
+      isGrowing = true;
+    }
+    const mapLayer = map.getLayer(activeLayer.id) as
+      | { type?: string }
+      | undefined;
+    if (!mapLayer) {
+      startTime = time;
+      animationFrameData.requestId = requestAnimationFrame(animateFrame);
+      return;
+    }
+    const [startRadius, maxRadius] = activeLayer.getMaxRadius(zoom);
     let progress = time - startTime;
-    if (progress >= duration) {
-      progress = duration;
+    if (progress >= activeLayer.duration) {
+      progress = activeLayer.duration;
     }
     let radius =
-      (progress / duration) * (maxRadius - startRadius) + startRadius;
+      (progress / activeLayer.duration) * (maxRadius - startRadius) +
+      startRadius;
     let opacity =
-      opacityMax - (progress / duration) * (opacityMax - opacityMin);
+      opacityMax -
+      (progress / activeLayer.duration) * (opacityMax - opacityMin);
     if (!isGrowing) {
-      radius = maxRadius - (progress / duration) * (maxRadius - startRadius);
-      opacity = (progress / duration) * (opacityMax - opacityMin) + opacityMin;
+      radius =
+        maxRadius -
+        (progress / activeLayer.duration) * (maxRadius - startRadius);
+      opacity =
+        (progress / activeLayer.duration) * (opacityMax - opacityMin) +
+        opacityMin;
     }
     const nextOpacity = opacity > opacityMax ? opacityMax : opacity;
     if (mapLayer.type === 'symbol') {
-      map.setLayoutProperty(layer, 'text-size', radius * symbolTextSizeScale);
-      map.setPaintProperty(layer, 'text-opacity', nextOpacity);
+      map.setLayoutProperty(
+        activeLayer.id,
+        'text-size',
+        radius * symbolTextSizeScale,
+      );
+      map.setPaintProperty(activeLayer.id, 'text-opacity', nextOpacity);
     } else {
-      map.setPaintProperty(layer, 'circle-radius', radius);
-      map.setPaintProperty(layer, 'circle-opacity', nextOpacity);
+      map.setPaintProperty(activeLayer.id, 'circle-radius', radius);
+      map.setPaintProperty(activeLayer.id, 'circle-opacity', nextOpacity);
     }
-    if (progress >= duration) {
+    if (progress >= activeLayer.duration) {
       // await waitFor(300)
       startTime = performance.now();
       isGrowing = !isGrowing;
@@ -461,7 +539,7 @@ const generateEntityMapParams = ({
     const prefix = entityType + '_';
     const entityLayerId = isGlobalView
       ? (layerUtils.globalLayerDataByEntity?.[entityType]?.id ?? null)
-        : getEntityLayerId({
+      : getEntityLayerId({
         entityType,
         selectedLayerIdByEntity: layerUtils.selectedLayerIdByEntity,
       });
@@ -723,6 +801,17 @@ export const createCircleLayer = (
   );
 };
 
+const syncLayerZoomRange = (
+  map: Map,
+  id: string,
+  options: Record<string, unknown>,
+) => {
+  if (typeof map.setLayerZoomRange !== 'function') return;
+  const minzoom = typeof options.minzoom === 'number' ? options.minzoom : 0;
+  const maxzoom = typeof options.maxzoom === 'number' ? options.maxzoom : 24;
+  map.setLayerZoomRange(id, minzoom, maxzoom);
+};
+
 export const createSchoolLayer = (
   map: Map,
   {
@@ -744,6 +833,7 @@ export const createSchoolLayer = (
   },
 ): void => {
   if (map.getLayer(id)) {
+    syncLayerZoomRange(map, id, options);
     showLayer(map, id);
     return;
   }
@@ -816,6 +906,7 @@ export const createEntitySymbolLayer = (
   },
 ): void => {
   if (map.getLayer(id)) {
+    syncLayerZoomRange(map, id, options);
     showLayer(map, id);
     return;
   }
@@ -974,6 +1065,7 @@ export const createSelectedLayer = (
   },
 ): void => {
   if (map.getLayer(id)) {
+    syncLayerZoomRange(map, id, options);
     map.setLayoutProperty(id, 'visibility', 'visible');
     registerDevMultipleSchoolSameLocationHighlight({
       map,
@@ -1051,6 +1143,7 @@ export const createSelectedSymbolLayer = (
 ): void => {
   const textSize = getEntityTextSizeExpression(entityConfig);
   if (map.getLayer(id)) {
+    syncLayerZoomRange(map, id, options);
     map.setLayoutProperty(id, 'visibility', 'visible');
     registerDevMultipleSchoolSameLocationHighlight({
       map,

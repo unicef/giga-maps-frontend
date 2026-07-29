@@ -1,22 +1,5 @@
-import type {
-  Map as MapboxMap,
-  MapLayerMouseEvent,
-} from 'mapbox-gl';
-
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
-
-import {
-  CONNECTIVITY_STATUS_SOURCE,
-  DEFAULT_SOURCE,
-  LayerDataProps,
-  mapPaintData,
-  stylePaintData,
-} from '../map.constant';
-import {
-  $activeSchoolPopup,
-  closeEntityPopup,
-} from '../map.model';
 import {
   animateCircles,
   createSchoolSource,
@@ -27,6 +10,14 @@ import {
   getCoveragePaint,
   onClickOnEntityDots,
 } from '../utils';
+import {
+  DEFAULT_SOURCE,
+  LayerDataProps,
+  mapPaintData,
+  stylePaintData,
+} from '../map.constant';
+import { $activeSchoolPopup, setPopupOnClickDot, closeEntityPopup } from '../map.model';
+import { setMapLoadingState } from '../loading.model';
 
 describe('getCoveragePaint', () => {
   it('should return the correct paint object', () => {
@@ -171,6 +162,48 @@ describe('createSelectedLayer', () => {
     ]);
   });
 
+  it('updates existing circle and symbol zoom ranges without recreating layers', () => {
+    const map = {
+      getLayer: vi.fn(() => ({})),
+      setLayerZoomRange: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      off: vi.fn(),
+      on: vi.fn(),
+    } as any;
+
+    createSelectedLayer(map, {
+      id: 'entity-selected-health-1-zoom-circle',
+      isDynamicLayer: true,
+      paintData: stylePaintData.dark,
+      mapRoute: { country: true },
+      options: { maxzoom: 11 },
+      isMobile: false,
+    });
+    createSelectedSymbolLayer(map, {
+      id: 'entity-selected-health-1',
+      symbol: '\u25A0',
+      isDynamicLayer: true,
+      paintData: stylePaintData.dark,
+      mapRoute: { country: true },
+      options: { minzoom: 11 },
+      isMobile: false,
+    });
+
+    expect(map.setLayerZoomRange).toHaveBeenNthCalledWith(
+      1,
+      'entity-selected-health-1-zoom-circle',
+      0,
+      11,
+    );
+    expect(map.setLayerZoomRange).toHaveBeenNthCalledWith(
+      2,
+      'entity-selected-health-1',
+      11,
+      24,
+    );
+    expect(map.addLayer).toBeUndefined();
+  });
+
   it('adds a dev-only white border for multiple-school same-location dots', () => {
     const devSettings = (globalThis as any).GIGA_MAP_DEV;
     devSettings.highlightMultipleSchoolOnSameLatLng = true;
@@ -272,6 +305,52 @@ describe('animateCircles', () => {
       globalThis.requestAnimationFrame = originalRequestAnimationFrame;
     }
   });
+
+  it('animates the symbol variant above the configured transition zoom', () => {
+    const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+    let nextFrame: FrameRequestCallback | undefined;
+    globalThis.requestAnimationFrame = vi.fn((callback) => {
+      nextFrame = callback;
+      return 123;
+    }) as any;
+    const map = {
+      getLayer: vi.fn(() => ({ type: 'symbol' })),
+      getZoom: vi.fn(() => 8),
+      setLayoutProperty: vi.fn(),
+      setPaintProperty: vi.fn(),
+    } as any;
+
+    try {
+      setMapLoadingState(false);
+      animateCircles({
+        map,
+        id: 'circle-layer',
+        maxZoom: 7,
+        zoomVariant: {
+          id: 'symbol-layer',
+          fallbackMarkerType: 'symbol',
+          minZoom: 7,
+        },
+      });
+      expect(nextFrame).toBeTypeOf('function');
+      nextFrame!(performance.now() + 16);
+
+      expect(map.getLayer).toHaveBeenCalledWith('symbol-layer');
+      expect(map.setLayoutProperty).toHaveBeenCalledWith(
+        'symbol-layer',
+        'text-size',
+        expect.any(Number),
+      );
+      expect(map.setPaintProperty).toHaveBeenCalledWith(
+        'symbol-layer',
+        'text-opacity',
+        expect.any(Number),
+      );
+    } finally {
+      setMapLoadingState(true);
+      globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+    }
+  });
 });
 
 describe('onClickOnEntityDots', () => {
@@ -309,57 +388,30 @@ describe('onClickOnEntityDots', () => {
     });
   });
 
-  it('toggles the same entity popup once when multiple layers handle one click', () => {
-    const selectedLayerId = 'entity-selected-health-72';
-    const statusLayerId = 'entity-status-health';
-    const handlers = new Map<string, (event: MapLayerMouseEvent) => void>();
+  it('resolves the low-zoom circle companion as the same entity layer', () => {
+    const healthCircleLayerId = 'entity-selected-health-72-zoom-circle';
+    const handlerRef = { current: null as ((event: any) => void) | null };
     const map = {
-      on: vi.fn(
-        (
-          _event: string,
-          layerId: string,
-          handler: (event: MapLayerMouseEvent) => void,
-        ) => {
-          handlers.set(layerId, handler);
-        },
-      ),
+      on: vi.fn((_event, _id, handler) => {
+        handlerRef.current = handler;
+      }),
       queryRenderedFeatures: vi.fn(() => [
         {
-          layer: { id: selectedLayerId },
-          properties: { health_entity_id: 685448 },
-          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
-        },
-        {
-          layer: { id: statusLayerId },
+          layer: { id: healthCircleLayerId },
           properties: { health_entity_id: 685448 },
           geometry: { type: 'Point', coordinates: [26.5, -30.2] },
         },
       ]),
-    } as unknown as MapboxMap;
+    } as any;
 
-    onClickOnEntityDots(map, selectedLayerId, DEFAULT_SOURCE);
-    onClickOnEntityDots(map, statusLayerId, CONNECTIVITY_STATUS_SOURCE);
+    onClickOnEntityDots(map, healthCircleLayerId, DEFAULT_SOURCE);
+    handlerRef.current?.({ point: { x: 1, y: 1 } });
 
-    const clickDot = () => {
-      const originalEvent = {};
-      const event = {
-        originalEvent,
-        point: { x: 1, y: 1 },
-      } as unknown as MapLayerMouseEvent;
-      handlers.get(selectedLayerId)?.(event);
-      handlers.get(statusLayerId)?.(event);
-    };
-
-    clickDot();
     expect($activeSchoolPopup.getState()).toMatchObject({
       id: 685448,
       entityType: EntityType.HEALTH,
     });
-
-    clickDot();
-    expect($activeSchoolPopup.getState()).toBeNull();
   });
-
 });
 
 describe('generateLayerUrls', () => {

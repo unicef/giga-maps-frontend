@@ -37,6 +37,23 @@ export const getEntitySelectedLayerId = (
   layerId: number | null,
 ): string => `entity-selected-${entityType}-${layerId}`;
 
+const ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX = '-zoom-circle';
+
+/** Low-zoom circle companion for an entity layer whose primary layer is a symbol. */
+export const getEntityZoomCircleLayerId = (layerId: string): string =>
+  `${layerId}${ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX}`;
+
+/** Both render variants of one logical entity layer. Non-transition layers use the first ID. */
+export const getEntityRenderedLayerIds = (layerId: string): string[] => [
+  layerId,
+  getEntityZoomCircleLayerId(layerId),
+];
+
+export const getEntityLogicalLayerId = (layerId: string): string =>
+  layerId.endsWith(ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX)
+    ? layerId.slice(0, -ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX.length)
+    : layerId;
+
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cmrvoj0c5007g01sg7di86ql0',
   dark: 'mapbox://styles/gigamapbox/cmrvo760i00gj01qzdhki9s2w',
@@ -160,11 +177,11 @@ if (storeStyling) {
 export const getDefaultCountryOpacity = (
   paintData: StylePaintData,
 ): Expression => [
-    'case',
-    ['boolean', ['feature-state', 'hover'], false],
-    mapCountryOpacity.active,
-    mapCountryOpacity.active,
-  ];
+  'case',
+  ['boolean', ['feature-state', 'hover'], false],
+  mapCountryOpacity.active,
+  mapCountryOpacity.active,
+];
 
 export const getDefaultCountryColor = (paintData: StylePaintData): string =>
   paintData.allCountryColor;
