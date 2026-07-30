@@ -23,17 +23,20 @@ const connectivityColorClassByStatus: Record<string, string> = {
 
 export default function ConnectivityLayer({
   entityType,
+  isLiveDataLoading = false,
 }: {
   entityType: EntityType;
+  isLiveDataLoading?: boolean;
 }) {
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
   const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
   const connectivityStats = connectivityStatsByEntity[entityType];
-  const isLoading = useStore($isLoadingCountryAdminView);
+  const isLoadingCountryAdminView = useStore($isLoadingCountryAdminView);
+  const isLoading = isLiveDataLoading || isLoadingCountryAdminView;
   const currentLayerData = selectedLayerDataByEntity[entityType];
   const colorClassName =
     connectivityColorClassByStatus[
-    connectivityStats?.live_avg_connectivity ?? UNKNOWN
+      connectivityStats?.live_avg_connectivity ?? UNKNOWN
     ] ?? 'text-neutral!';
 
   return (
