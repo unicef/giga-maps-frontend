@@ -82,7 +82,7 @@ const CommonComponentGigaLayer = ({
             </Tooltip>
             <PopoverContent
               align="center"
-              className="sidebar-footer-gigalayer-icons-popover z-50! w-[17.25rem]! max-w-[calc(100vw-1rem)]! overflow-hidden! rounded-lg! border! border-[#393939]! bg-[#161616]! px-2.5! py-4! text-[#f4f4f4]! shadow-[0_1px_2px_0_rgb(0_0_0/0.05)]!"
+              className="sidebar-footer-gigalayer-icons-popover z-50! w-[17.25rem]! max-w-[calc(100vw-1rem)]! overflow-hidden! rounded-lg! border! border-border! bg-popover! px-2.5! py-4! text-popover-foreground! shadow-[0_1px_2px_0_rgb(0_0_0/0.05)]!"
               onCloseAutoFocus={(event) => event.preventDefault()}
               side={isMobile ? 'top' : 'right'}
               sideOffset={20}

@@ -47,9 +47,7 @@ const SingleSchoolConnectivityLayer = ({
         <div className="relative! flex! w-full! flex-col! pt-3! pb-6! [&>p]:pt-[0.56rem]! [&>p]:pb-4! gap-3!">
           <LiveAverage
             isLoading={isLoading}
-            icon={icon ?? ''}
-            color={color}
-            unit={globalBenchmark?.convert_unit ?? ''}
+            connectivityColor={color}
             value={value}
           />
           <WeekSlider entityType={entityType} />

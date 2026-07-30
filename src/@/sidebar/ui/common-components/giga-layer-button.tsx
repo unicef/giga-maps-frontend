@@ -30,12 +30,12 @@ export default function GigaLayerButton({
     ? 'text-gray-500! group-hover:text-gray-500!'
     : isActive
       ? 'text-primary-foreground!'
-      : 'text-white/30! group-hover:text-white/70!';
+      : 'text-white/30! group-hover:text-white/70! [.light_&]:text-[#222222]! [.light_&]:group-hover:text-[#222222]!';
   const infoIconColorClass = disabled
     ? 'text-gray-500! hover:text-gray-500! group-hover:text-gray-500!'
     : isActive
       ? 'text-primary-foreground/70! hover:text-primary-foreground!'
-      : 'text-white/30! hover:text-white/70! group-hover:text-white/70!';
+      : 'text-white/30! hover:text-white/70! group-hover:text-white/70! [.light_&]:text-[#c8c8c8]! [.light_&]:hover:text-[#222222]! [.light_&]:group-hover:text-[#222222]!';
 
   return (
     <div
@@ -51,7 +51,7 @@ export default function GigaLayerButton({
           '[&_svg]:size-4! [&_svg]:shrink-0!',
           isActive
             ? 'bg-primary! text-primary-foreground! hover:bg-primary!'
-            : 'bg-[#393939]! text-white/30! hover:bg-[#393939]! hover:text-white/70!',
+            : 'bg-[#393939]! text-white/30! hover:bg-[#393939]! hover:text-white/70! [.light_&]:bg-white! [.light_&]:text-[#222222]! [.light_&]:hover:bg-[#f4f4f4]! [.light_&]:hover:text-[#222222]!',
         )}
         disabled={disabled}
         onClick={onClick}
