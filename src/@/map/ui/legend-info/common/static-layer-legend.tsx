@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { $country } from '~/@/country/country.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
-import { CheckBoxContainer } from '../legend-button.style';
 import {
   ConnectivityBenchMarks,
   ConnectivityDistribution,
@@ -21,6 +20,7 @@ import {
 import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
 
+import { CheckBoxContainer } from '../legend-button.style';
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
 const StaticLayerLegend = ({
@@ -105,10 +105,10 @@ const StaticLayerLegend = ({
           >
             <div className="flex! min-w-0! items-center!">
               {shouldShowControls ? (
-                <Checkbox
+                <input
                   className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
                   id={key}
-                  labelText=""
+                  type="checkbox"
                   checked={Boolean(coverageStatus[key])}
                   onChange={() => handleStaticLayerToggle(key)}
                 />
