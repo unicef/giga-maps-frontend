@@ -27,15 +27,12 @@ const formatNoChoiceLabel = (fieldName: string) =>
 
 const formatUnknownChoiceLabel = (fieldName: string) => {
   const lowerField = fieldName.toLowerCase();
-  // Spec: "School area type" + Unknown → "Unknown area type"
   if (lowerField.endsWith('area type')) {
     return 'Unknown area type';
   }
-  // Spec: "Coverage type" + Unknown → "Unknown coverage type"
   if (lowerField.endsWith('coverage type')) {
     return 'Unknown coverage type';
   }
-  // Spec: "Cold chain available" + Unknown → "Unknown cold chain availability"
   if (lowerField === 'cold chain available') {
     return 'Unknown cold chain availability';
   }
@@ -228,8 +225,6 @@ export const buildFilterChipsByEntity = (
     if (!activeEntityTypes.includes(item.entity_type)) return;
 
     const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
-    // Two published filters can share the same column/query key (e.g. coverage_type).
-    // Only emit chips once per shared selection key.
     if (processedItemKeys.has(itemKey)) return;
     processedItemKeys.add(itemKey);
 
@@ -247,7 +242,6 @@ export const buildFilterChipsByEntity = (
   return chipsByEntity;
 };
 
-/** Whether a sequence of item widths fits in `maxRows` of a flex-wrap row. */
 export const widthsFitInRows = (
   widths: number[],
   containerWidth: number,
@@ -279,10 +273,6 @@ export const widthsFitInRows = (
   return true;
 };
 
-/**
- * How many chips can stay visible in a collapsed flex-wrap layout limited to
- * `maxRows`, while still leaving room for a trailing toggle (e.g. "Show all").
- */
 export const getVisibleChipCountForRows = ({
   chipWidths,
   containerWidth,

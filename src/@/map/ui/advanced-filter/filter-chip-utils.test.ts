@@ -274,7 +274,6 @@ describe('buildFilterChips', () => {
 
 describe('getVisibleChipCountForRows', () => {
   it('returns all chips when they fit in two rows without a toggle', () => {
-    // 3 chips of 100px in a 220px container → row1: 2, row2: 1
     expect(widthsFitInRows([100, 100, 100], 220, 8, 2)).toBe(true);
     expect(getVisibleChipCountForRows({
       chipWidths: [100, 100, 100],
@@ -284,7 +283,6 @@ describe('getVisibleChipCountForRows', () => {
   });
 
   it('reserves space for Show all on the second row when chips overflow', () => {
-    // 6 × 100px chips in 220px → would need 3 rows; keep as many as fit with toggle
     const visible = getVisibleChipCountForRows({
       chipWidths: [100, 100, 100, 100, 100, 100],
       containerWidth: 220,
@@ -307,7 +305,6 @@ describe('getVisibleChipCountForRows', () => {
   });
 
   it('keeps one oversized chip with Show all on the second row', () => {
-    // A chip wider than the container still occupies one row; toggle wraps to row 2.
     expect(getVisibleChipCountForRows({
       chipWidths: [300, 300, 300],
       containerWidth: 120,
