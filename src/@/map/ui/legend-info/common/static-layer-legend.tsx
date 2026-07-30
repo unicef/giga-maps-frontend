@@ -105,14 +105,13 @@ const StaticLayerLegend = ({
           >
             <div className="flex! min-w-0! items-center!">
               {shouldShowControls ? (
-                <CheckBoxContainer>
-                  <Checkbox
-                    id={key}
-                    labelText=""
-                    checked={Boolean(coverageStatus[key])}
-                    onChange={() => handleStaticLayerToggle(key)}
-                  />
-                </CheckBoxContainer>
+                <Checkbox
+                  className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
+                  id={key}
+                  labelText=""
+                  checked={Boolean(coverageStatus[key])}
+                  onChange={() => handleStaticLayerToggle(key)}
+                />
               ) : null}
               <div
                 className="flex! min-w-0! items-center! gap-2!"
