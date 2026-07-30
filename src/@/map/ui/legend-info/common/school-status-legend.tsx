@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
-import { CheckBoxContainer } from '../legend-button.style';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $currentLayerTypeUtilsByEntity,
@@ -17,6 +16,8 @@ import {
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
+
+import { CheckBoxContainer } from '../legend-button.style';
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -108,14 +109,13 @@ const SchoolStatusLegend = ({
         >
           <div className="flex! min-w-0! items-center!">
             {shouldShowControls ? (
-              <CheckBoxContainer>
-                <Checkbox
-                  id={`school-status-${key}`}
-                  labelText=""
-                  checked={Boolean(schoolStatusCheckedStatus[key])}
-                  onChange={() => handleSchoolStatusLayerChange(key)}
-                />
-              </CheckBoxContainer>
+              <Checkbox
+                id={`school-status-${key}`}
+                className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
+                labelText=""
+                checked={Boolean(schoolStatusCheckedStatus[key])}
+                onChange={() => handleSchoolStatusLayerChange(key)}
+              />
             ) : null}
             <div
               className="flex! min-w-0! items-center! gap-2!"
