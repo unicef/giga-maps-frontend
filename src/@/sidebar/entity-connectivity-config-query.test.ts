@@ -19,6 +19,7 @@ const createSource = () => ({
   },
   schoolParams: {
     entityType: null as EntityType | null,
+    schoolIds: undefined as number[] | undefined,
   },
   selectedLayerIdByEntity: {
     [EntityType.SCHOOL]: 10,
@@ -36,15 +37,31 @@ describe('getCurrentEntityConnectivityConfigQuery', () => {
     expect(params.get('school__environment__iexact')).toBe('urban');
   });
 
-  it('does not leak country filters into an entity-detail request', () => {
+  it.each([EntityType.SCHOOL, EntityType.HEALTH])(
+    'scopes an %s detail request to the selected entities',
+    (entityType) => {
+      const source = createSource();
+      source.mapRoutes = { country: false, entity: true };
+      source.schoolParams = { entityType, schoolIds: [101, 202] };
+
+      const { query } = getCurrentEntityConnectivityConfigQuery(source);
+      const params = new URLSearchParams(query);
+
+      expect(params.get('entity_type__code')).toBe(entityType);
+      expect(params.get(`${entityType}_entity_id__in`)).toBe('101,202');
+      expect(params.has('school__environment__iexact')).toBe(false);
+    },
+  );
+
+  it('does not add entity IDs outside an entity-detail request', () => {
     const source = createSource();
-    source.mapRoutes = { country: false, entity: true };
-    source.schoolParams = { entityType: EntityType.SCHOOL };
+    source.schoolParams = {
+      entityType: EntityType.SCHOOL,
+      schoolIds: [101, 202],
+    };
 
     const { query } = getCurrentEntityConnectivityConfigQuery(source);
 
-    expect(new URLSearchParams(query).has('school__environment__iexact')).toBe(
-      false,
-    );
+    expect(new URLSearchParams(query).has('school_entity_id__in')).toBe(false);
   });
 });
