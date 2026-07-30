@@ -16,13 +16,16 @@ import LiveAverage from './live-average.view';
 
 export default function ConnectivityLayer({
   entityType,
+  isLiveDataLoading = false,
 }: {
   entityType: EntityType;
+  isLiveDataLoading?: boolean;
 }) {
   const selectedLayerDataByEntity = useStore($selectedLayerDataByEntity);
   const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
   const connectivityStats = connectivityStatsByEntity[entityType];
-  const isLoading = useStore($isLoadingCountryAdminView);
+  const isLoadingCountryAdminView = useStore($isLoadingCountryAdminView);
+  const isLoading = isLiveDataLoading || isLoadingCountryAdminView;
   const currentLayerData = selectedLayerDataByEntity[entityType];
   const stylePaintData = useStore($stylePaintData);
   const connectivityColor =

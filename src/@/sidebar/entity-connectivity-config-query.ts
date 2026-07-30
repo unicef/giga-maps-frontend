@@ -21,6 +21,7 @@ type EntityConnectivityConfigQuerySource = {
   };
   schoolParams: {
     entityType?: EntityType | null;
+    schoolIds?: number[];
   };
   selectedLayerIdByEntity: Partial<Record<EntityType, number | null>>;
 };
@@ -49,6 +50,16 @@ export const getCurrentEntityConnectivityConfigQuery = ({
       : activeEntityTypes.length
         ? activeEntityTypes
         : entityTypesFiltered;
+  if (
+    mapRoutes.entity &&
+    schoolParams.entityType &&
+    schoolParams.schoolIds?.length
+  ) {
+    params.set(
+      `${schoolParams.entityType}_ids`,
+      schoolParams.schoolIds.join(','),
+    );
+  }
   params.set(
     ENTITY_TYPE_CODE_PARAM,
     getEntityTypeCodeParam(entityTypes, entityTypesFiltered),
