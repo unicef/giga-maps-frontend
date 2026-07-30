@@ -9,7 +9,6 @@ import { $countrySearchParams } from "~/@/country/country.model";
 import { $activeEntityTypes } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
-import { Badge } from '~/components/ui/badge';
 import { Separator } from '~/components/ui/separator';
 import { router } from "~/core/routes";
 
@@ -18,6 +17,12 @@ import {
   deleteAdvancedFiltersForEntities,
   suppressDefaultAdvancedFilters,
 } from './advanced-filter.model';
+import {
+  buildFilterChipsByEntity,
+  type FilterChip,
+  hasSelectedFilterValue,
+} from './filter-chip-utils';
+import CollapsibleFilterChips from './collapsible-filter-chips';
 import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
 import MultiSelectDropdown from "./multi-select-dropdown";
 import RangeTextInput from './range-text-input';
@@ -37,10 +42,7 @@ type SelectedFieldValue = string | {
   value: string;
 };
 
-const hasSelectedValue = (value: SelectedFieldValue | undefined) =>
-  typeof value === 'object'
-    ? value.none_range || Boolean(value.value)
-    : Boolean(value);
+const hasSelectedValue = hasSelectedFilterValue;
 
 const navigateWithSearchParams = (params: URLSearchParams) => {
   const search = params.toString();
@@ -49,6 +51,11 @@ const navigateWithSearchParams = (params: URLSearchParams) => {
   );
 };
 
+const getEntityFilterGroupLabel = (entityType: EntityType, t: (key: string) => string) => {
+  if (entityType === EntityType.SCHOOL) return t('schools');
+  if (entityType === EntityType.HEALTH) return t('health-facilities_other');
+  return t(`${entityType}-entity-label`);
+};
 
 const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
   const { t } = useTranslation();
@@ -58,6 +65,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
   const advanceFilterList = useStore($advanceFilterList);
   const { urlFieldList } = useStore($countrySearchParams);
   const [openItems, setOpenItems] = useState<EntityType[]>([]);
+  const [expandedChipGroups, setExpandedChipGroups] = useState<Partial<Record<EntityType, boolean>>>({});
   const [selectedFields, setSelectedFields] = useState<Record<string, SelectedFieldValue>>({})
   // multiple key value pair
   const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
@@ -131,17 +139,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
 
     suppressDefaultAdvancedFilters(activeEntityTypes);
     navigateWithSearchParams(params);
-    setOpen(false)
   }
-
-  const entityWiseSelectedFilterCount = useMemo(() => {
-    return activeEntityTypes.reduce((acc, elEntity) => {
-      acc[elEntity] = Object.entries(selectedFields).filter(
-        ([key, value]) => key.startsWith(`${elEntity}__`) && hasSelectedValue(value),
-      ).length;
-      return acc;
-    }, {} as Record<string, number>)
-  }, [activeEntityTypes, selectedFields])
 
   const entitiesWithFilters = useMemo(() => {
     return activeEntityTypes
@@ -149,48 +147,73 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       .sort((a, b) => a < b ? 1 : -1);
   }, [activeEntityTypes, advanceFilterList])
 
-  const activeFilterBadges = useMemo(() => {
-    if (Object.keys(selectedFields).length === 0) return [];
-    const filteredAdvanceFilterList = advanceFilterList
-      .filter(item => {
-        const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
-        const val = selectedFields[itemKey];
-        if (hasSelectedValue(val)) {
-          return true
-        };
-        return false;
-      });
+  const selectedFilterChipsByEntity = useMemo(() => {
+    return buildFilterChipsByEntity(
+      advanceFilterList ?? [],
+      activeEntityTypes,
+      selectedFields,
+      t,
+    ) as Record<EntityType, FilterChip[]>;
+  }, [activeEntityTypes, advanceFilterList, selectedFields, t]);
 
-    const mapedfilteredAdvanceFilterList = filteredAdvanceFilterList.map(item => ({
-      entity: t(`${item.entity_type}-entity-label`, { count: 1 }),
-      label: item.name,
-      itemKey: `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`,
-    }));
+  const entityWiseSelectedFilterCount = useMemo(() => {
+    return activeEntityTypes.reduce((acc, elEntity) => {
+      acc[elEntity] = (selectedFilterChipsByEntity[elEntity] ?? []).length;
+      return acc;
+    }, {} as Record<string, number>)
+  }, [activeEntityTypes, selectedFilterChipsByEntity])
 
-
-    return mapedfilteredAdvanceFilterList;
-  }, [advanceFilterList, selectedFields]);
-
-  const clearSingleBadge = (itemKey: string, e: MouseEvent) => {
+  const clearSingleBadge = (chip: FilterChip, e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedFields(prev => {
       const next = { ...prev };
-      next[itemKey] = "";
-      next[`ignore_${itemKey}`] = "";
+      const ignoreKey = `ignore_${chip.itemKey}`;
+
+      if (chip.removeValue !== undefined) {
+        const removeKey = chip.removeValue.trim().toLowerCase();
+        const currentValues = String(prev[chip.itemKey] ?? '').split('|').filter(Boolean);
+        const nextValues = currentValues.filter(
+          (value) => value.trim().toLowerCase() !== removeKey,
+        );
+        next[chip.itemKey] = nextValues.join('|');
+
+        if (prev[ignoreKey]) {
+          const filterItem = advanceFilterList?.find((item) => {
+            const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+            return itemKey === chip.itemKey;
+          });
+          const choiceLabel = filterItem?.options?.choices?.find(
+            (choice) => choice.value.trim().toLowerCase() === removeKey
+              || choice.label.trim().toLowerCase() === removeKey,
+          )?.label;
+
+          const currentLabels = String(prev[ignoreKey]).split('|').filter(Boolean);
+          next[ignoreKey] = currentLabels
+            .filter((label) => label !== choiceLabel && label.trim().toLowerCase() !== removeKey)
+            .join('|');
+        }
+      } else {
+        next[chip.itemKey] = "";
+        next[ignoreKey] = "";
+      }
+
       return next;
     });
   };
 
-  const clearAllBadges = (e: MouseEvent) => {
+  const clearEntityBadges = (entityType: EntityType, e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedFields(prev => {
       const next = { ...prev };
-      activeFilterBadges.forEach(({ itemKey }) => {
-        next[itemKey] = "";
-        next[`ignore_${itemKey}`] = "";
-      });
+      advanceFilterList
+        .filter(item => item.entity_type === entityType)
+        .forEach((item) => {
+          const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+          next[itemKey] = "";
+          next[`ignore_${itemKey}`] = "";
+        });
       return next;
     });
   };
@@ -207,7 +230,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
     <PopoverContent className="filter-popover-content">
       <FilterHeaderWrapper>
         <h3>
-          {t('filter-by')}
+          {t('filters')}
         </h3>
         <IconButton
           size="md"
@@ -222,35 +245,45 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
       </FilterHeaderWrapper>
       <Form aria-label="filter-form">
         <ScrollableContainer>
-          {activeFilterBadges.length > 0 && (
-            <div style={{ padding: '0.5rem 10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {activeFilterBadges.map(({ entity, label, itemKey }) => (
-                <Badge
-                  key={itemKey}
-                  className="flex! items-center! justify-between! bg-[#85FFBC]! h-[22px]! w-[210px]! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-black! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-2!"
-                >
-                  <span
-                    className="truncate! min-w-0! flex-1!"
-                    title={`${entity}: ${label}`}
-                  >
-                    <strong>{entity}:</strong> {label}
-                  </span>
-                  <button
-                    type="button"
-                    className="shrink-0! flex! items-center! justify-center! cursor-pointer!"
-                    onClick={(e: any) => clearSingleBadge(itemKey, e)}
-                  >
-                    <Close size={12} />
-                  </button>
-                </Badge>
-              ))}
-              <Badge
-                className="flex! justify-between! bg-[#393939]! h-[22px]! w-auto! pt-[2px]! pb-[2px]! pl-[10px]! pr-[10px]! text-white! text-[12px]! leading-[18px]! opacity-100! rounded-md! gap-1.5! cursor-pointer! items-center!"
-                onClick={(e) => clearAllBadges(e)}
-              >
-                <span>{t('clear-all')}</span>
-                <Close size={12} className="fill-current!" />
-              </Badge>
+          {entitiesWithFilters.some((el) => (entityWiseSelectedFilterCount[el] ?? 0) > 0) && (
+            <div className="flex! flex-col! gap-4! px-3.5! pb-3!">
+              {entitiesWithFilters.map((el) => {
+                const selectedCount = entityWiseSelectedFilterCount[el] ?? 0;
+                const chips = selectedFilterChipsByEntity[el] ?? [];
+                if (selectedCount === 0) return null;
+
+                const isExpanded = expandedChipGroups[el] ?? false;
+
+                return (
+                  <div key={`active-filters-${el}`} className="flex! flex-col! gap-2!">
+                    <div className="flex! w-full! items-center! gap-2!">
+                      <span className="text-[14px]! leading-[20px]! text-foreground!">
+                        {getEntityFilterGroupLabel(el, t)} ({selectedCount})
+                      </span>
+                      <button
+                        type="button"
+                        className="text-[#0f62fe]! text-[12px]! font-normal! cursor-pointer! hover:underline!"
+                        onClick={(e) => clearEntityBadges(el, e)}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                    <CollapsibleFilterChips
+                      chips={chips}
+                      selectedCount={selectedCount}
+                      isExpanded={isExpanded}
+                      onClearChip={clearSingleBadge}
+                      onToggleExpanded={(expanded) => {
+                        setExpandedChipGroups((current) => ({
+                          ...current,
+                          [el]: expanded,
+                        }));
+                      }}
+                    />
+                  </div>
+                );
+              })}
+              <Separator />
             </div>
           )}
 
@@ -265,7 +298,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
                 <Fragment key={'accordion-item-' + el}>
                   <AccordionItem value={el}>
                     <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
-                      <span className="whitespace-nowrap!">{t(`${el}-entity-label`, { count: 1 })}  {entityWiseSelectedFilterCount[el] > 0 ? `(${entityWiseSelectedFilterCount[el]})` : ''}</span>
+                      <span className="whitespace-nowrap!">{getEntityFilterGroupLabel(el, t)}</span>
                       <ChevronDown
                         size={16}
                         style={{
