@@ -362,7 +362,12 @@ export function animateCircles({
   };
 }) {
   const animationFrameData = { requestId: 0 };
-  const { opacityMax, opacityMin } = animateCircleConfig;
+  const {
+    opacityMax,
+    opacityMin,
+    symbolHaloMaxWidth,
+    symbolHaloMaxBlur,
+  } = animateCircleConfig;
   const animationLayerConfigs: MarkerAnimationLayer[] = [
     {
       id: layer,
@@ -413,7 +418,8 @@ export function animateCircles({
       animationFrameData.requestId = requestAnimationFrame(animateFrame);
       return;
     }
-    if (activeLayerId !== activeLayer.id) {
+    const activeLayerChanged = activeLayerId !== activeLayer.id;
+    if (activeLayerChanged) {
       activeLayerId = activeLayer.id;
       startTime = time;
       isGrowing = true;
@@ -447,12 +453,24 @@ export function animateCircles({
     }
     const nextOpacity = opacity > opacityMax ? opacityMax : opacity;
     if (mapLayer.type === 'symbol') {
-      map.setLayoutProperty(
+      const radiusRange = maxRadius - startRadius;
+      const glowProgress =
+        radiusRange > 0
+          ? Math.min(Math.max((radius - startRadius) / radiusRange, 0), 1)
+          : 0;
+      if (activeLayerChanged) {
+        map.setPaintProperty(activeLayer.id, 'text-opacity', opacityMax);
+      }
+      map.setPaintProperty(
         activeLayer.id,
-        'text-size',
-        radius * symbolTextSizeScale,
+        'text-halo-width',
+        glowProgress * symbolHaloMaxWidth,
       );
-      map.setPaintProperty(activeLayer.id, 'text-opacity', nextOpacity);
+      map.setPaintProperty(
+        activeLayer.id,
+        'text-halo-blur',
+        glowProgress * symbolHaloMaxBlur,
+      );
     } else {
       map.setPaintProperty(activeLayer.id, 'circle-radius', radius);
       map.setPaintProperty(activeLayer.id, 'circle-opacity', nextOpacity);
@@ -946,6 +964,9 @@ export const createEntitySymbolLayer = (
     paint: {
       'text-color': textColor as any,
       'text-opacity': 1,
+      'text-halo-color': textColor as any,
+      'text-halo-width': 0,
+      'text-halo-blur': 0,
     },
     ...(sourceLayer ? { 'source-layer': sourceLayer } : {}),
     ...(layerFilter ? { filter: layerFilter } : {}),
@@ -1185,6 +1206,9 @@ export const createSelectedSymbolLayer = (
       paint: {
         'text-color': (textColor ?? paintData.unknown) as any,
         'text-opacity': 1,
+        'text-halo-color': (textColor ?? paintData.unknown) as any,
+        'text-halo-width': 0,
+        'text-halo-blur': 0,
       },
       ...(sourceLayer ? { 'source-layer': sourceLayer } : {}),
       ...(layerFilter ? { filter: layerFilter } : {}),
@@ -1339,4 +1363,13 @@ export const getCircleMaxZoom = ({
     return CIRCLE_MAX_ZOOM_CONFIG.default;
   }
   return Math.min(Math.max(configuredZoom, 0), maxZoom);
+};
+
+export const getSymbolMinZoom = (circleMaxZoom: number): number => {
+  const configuredOffset = CIRCLE_MAX_ZOOM_CONFIG.symbolPreloadZoomOffset;
+  const preloadOffset = Number.isFinite(configuredOffset)
+    ? Math.max(configuredOffset, 0)
+    : 0;
+
+  return Math.max(circleMaxZoom - preloadOffset, 0);
 };

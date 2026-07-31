@@ -36,6 +36,19 @@ vi.mock('../../utils', () => ({
   filterCoverageList: vi.fn(),
   generateLayerUrls: vi.fn(),
   generateStaticLayerUrl: vi.fn(),
+  getCircleMaxZoom: vi.fn(({ countryCode, isGlobalView }) => {
+    const normalizedCountryCode = countryCode?.toLowerCase();
+    return !isGlobalView && normalizedCountryCode
+      ? (CIRCLE_MAX_ZOOM_CONFIG.byCountryCode[normalizedCountryCode] ??
+          CIRCLE_MAX_ZOOM_CONFIG.default)
+      : CIRCLE_MAX_ZOOM_CONFIG.default;
+  }),
+  getSymbolMinZoom: vi.fn((circleMaxZoom) =>
+    Math.max(
+      circleMaxZoom - CIRCLE_MAX_ZOOM_CONFIG.symbolPreloadZoomOffset,
+      0,
+    ),
+  ),
   hideLayer: vi.fn(),
   removePreviewsMapClickHandlers: vi.fn(),
   filterSchoolStatus: vi.fn(),
@@ -415,7 +428,9 @@ describe('add-layers-utils', () => {
           id: 'entity-selected-health-7',
           options: expect.objectContaining({
             'source-layer': 'entities',
-            minzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+            minzoom:
+              CIRCLE_MAX_ZOOM_CONFIG.default -
+              CIRCLE_MAX_ZOOM_CONFIG.symbolPreloadZoomOffset,
           }),
         }),
       );
@@ -436,7 +451,9 @@ describe('add-layers-utils', () => {
           id: 'entity-status-health',
           options: {
             'source-layer': 'entities',
-            minzoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+            minzoom:
+              CIRCLE_MAX_ZOOM_CONFIG.default -
+              CIRCLE_MAX_ZOOM_CONFIG.symbolPreloadZoomOffset,
           },
         }),
       );
@@ -483,7 +500,7 @@ describe('add-layers-utils', () => {
         expect.objectContaining({
           id: 'entity-selected-health-12',
           isDynamicLayer: true,
-          options: expect.objectContaining({ minzoom: 6 }),
+          options: expect.objectContaining({ minzoom: 5.5 }),
         }),
       );
       expect(animateCircles).toHaveBeenCalledWith({
@@ -496,7 +513,7 @@ describe('add-layers-utils', () => {
           id: 'entity-selected-health-12',
           entityConfig: expect.objectContaining({ markerType: 'symbol' }),
           fallbackMarkerType: 'symbol',
-          minZoom: 6,
+          minZoom: 5.5,
         },
       });
     });
@@ -547,7 +564,9 @@ describe('add-layers-utils', () => {
           id: 'entity-selected-health-12',
           entityConfig: expect.objectContaining({ markerType: 'symbol' }),
           fallbackMarkerType: 'symbol',
-          minZoom: CIRCLE_MAX_ZOOM_CONFIG.default,
+          minZoom:
+            CIRCLE_MAX_ZOOM_CONFIG.default -
+            CIRCLE_MAX_ZOOM_CONFIG.symbolPreloadZoomOffset,
         },
       });
     });
@@ -588,7 +607,7 @@ describe('add-layers-utils', () => {
         expect.objectContaining({
           source: 'map-data-source-static',
           id: 'entity-status-health',
-          options: expect.objectContaining({ minzoom: 6 }),
+          options: expect.objectContaining({ minzoom: 5.5 }),
         }),
       );
     });

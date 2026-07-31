@@ -36,6 +36,7 @@ import {
   generateLayerUrls,
   generateStaticLayerUrl,
   getCircleMaxZoom,
+  getSymbolMinZoom,
   hideLayer,
 } from '../utils';
 
@@ -251,6 +252,7 @@ export const createAndUpdateMapLayer = ({
     countryCode: country?.code,
     isGlobalView: Boolean(mapRoute.map),
   });
+  const symbolMinZoom = getSymbolMinZoom(circleMaxZoom);
 
   const hasSelectedEntityLayer = mapRoute.map
     ? entityTypes.length > 0
@@ -305,7 +307,7 @@ export const createAndUpdateMapLayer = ({
             id: layerIdStr,
             entityConfig: config,
             fallbackMarkerType: 'symbol',
-            minZoom: transitionZoom,
+            minZoom: symbolMinZoom,
           },
         });
       } else if (getIsEntityLive(entityType)) {
@@ -348,7 +350,7 @@ export const createAndUpdateMapLayer = ({
           isDynamicLayer,
           paintData,
           mapRoute,
-          options: { ...options, minzoom: transitionZoom },
+          options: { ...options, minzoom: symbolMinZoom },
           entityConfig: config,
         });
       } else {
@@ -430,7 +432,7 @@ export const createAndUpdateMapLayer = ({
           isMobile,
           options: {
             'source-layer': sourceLayer,
-            minzoom: transitionZoom,
+            minzoom: symbolMinZoom,
           },
           mapRoute,
           entityConfig: config,
@@ -475,6 +477,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
   );
   const entityTypes = activeEntityTypes ?? [];
   const circleMaxZoom = getCircleMaxZoom({ countryCode: country?.code });
+  const symbolMinZoom = getSymbolMinZoom(circleMaxZoom);
   if (
     isSourceAvailable &&
     entityTypes.some((entityType) => schoolIdByEntity[entityType])
@@ -523,7 +526,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           symbol: config?.symbol ?? '■',
           paintData,
           isMobile,
-          options: { ...options, minzoom: transitionZoom },
+          options: { ...options, minzoom: symbolMinZoom },
           mapRoute,
           entityConfig: config,
         });

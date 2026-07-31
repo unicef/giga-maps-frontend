@@ -8,9 +8,11 @@ import {
   generateLayerUrls,
   generateStaticLayerUrl,
   getCoveragePaint,
+  getSymbolMinZoom,
   onClickOnEntityDots,
 } from '../utils';
 import {
+  CIRCLE_MAX_ZOOM_CONFIG,
   DEFAULT_SOURCE,
   LayerDataProps,
   mapPaintData,
@@ -160,6 +162,12 @@ describe('createSelectedLayer', () => {
       14,
       25,
     ]);
+    expect(map.addLayer.mock.calls[0][0].paint).toEqual(
+      expect.objectContaining({
+        'text-halo-width': 0,
+        'text-halo-blur': 0,
+      }),
+    );
   });
 
   it('updates existing circle and symbol zoom ranges without recreating layers', () => {
@@ -283,6 +291,18 @@ describe('createSelectedLayer', () => {
   });
 });
 
+describe('getSymbolMinZoom', () => {
+  it('preloads symbols before the circle cutoff without changing the cutoff', () => {
+    expect(getSymbolMinZoom(5)).toBe(
+      5 - CIRCLE_MAX_ZOOM_CONFIG.symbolPreloadZoomOffset,
+    );
+  });
+
+  it('never returns a negative symbol minimum zoom', () => {
+    expect(getSymbolMinZoom(0.25)).toBe(0);
+  });
+});
+
 describe('animateCircles', () => {
   it('starts animation on the next frame without delaying dot glow', () => {
     const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
@@ -336,14 +356,20 @@ describe('animateCircles', () => {
       nextFrame!(performance.now() + 16);
 
       expect(map.getLayer).toHaveBeenCalledWith('symbol-layer');
-      expect(map.setLayoutProperty).toHaveBeenCalledWith(
+      expect(map.setLayoutProperty).not.toHaveBeenCalled();
+      expect(map.setPaintProperty).toHaveBeenCalledWith(
         'symbol-layer',
-        'text-size',
+        'text-opacity',
+        1,
+      );
+      expect(map.setPaintProperty).toHaveBeenCalledWith(
+        'symbol-layer',
+        'text-halo-width',
         expect.any(Number),
       );
       expect(map.setPaintProperty).toHaveBeenCalledWith(
         'symbol-layer',
-        'text-opacity',
+        'text-halo-blur',
         expect.any(Number),
       );
     } finally {

@@ -27,10 +27,13 @@ export const CONNECTIVITY_STATUS_URL =
 export const CIRCLE_MAX_ZOOM_CONFIG: {
   default: number;
   byCountryCode: Record<string, number>;
+  /** Start symbol placement this many zoom levels before circles end. */
+  symbolPreloadZoomOffset: number;
 } = {
-  default: 7,
+  default: 5.5,
   byCountryCode: {
   },
+  symbolPreloadZoomOffset: 0.5,
 };
 /** Source-layer names returned by the v2 tiles API */
 export const SOURCE_LAYER_SCHOOLS = 'school';
@@ -362,6 +365,8 @@ export const animateCircleConfig = {
   maxRadius: 12,
   opacityMax: 1,
   opacityMin: 0.2,
+  symbolHaloMaxWidth: 2,
+  symbolHaloMaxBlur: 1,
   zoomDivisible: [],
 };
 

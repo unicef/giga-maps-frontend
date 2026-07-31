@@ -159,7 +159,7 @@ const createSymbolOverlayLayer = ({
       visibility: getVisibility(),
       'text-field': symbol ?? '',
       'text-size': textSize ?? defaultSymbolTextSize,
-      'text-allow-overlap': true,
+      'text-allow-overlap': false,
       'text-ignore-placement': true,
     },
     paint: {
