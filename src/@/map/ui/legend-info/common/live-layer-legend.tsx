@@ -108,7 +108,7 @@ const LiveLayerLegend = ({
           </div>
           {metricLayerData?.description ? (
             <button
-              className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-muted-foreground!"
+              className="inline-flex! items-center! justify-center! border-0! p-0! text-muted-foreground!"
               title={metricLayerData.description}
               type="button"
             >
@@ -158,7 +158,7 @@ const LiveLayerLegend = ({
                   <input
                     aria-label={label}
                     checked={Boolean(connectivitySpeedFilter[key])}
-                    className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
+                    className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
                     onChange={() => handleRealtimeLayerChange(key)}
                     type="checkbox"
                   />

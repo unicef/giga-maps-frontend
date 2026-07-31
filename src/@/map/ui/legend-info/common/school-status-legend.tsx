@@ -1,3 +1,4 @@
+import { Checkbox } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,8 @@ import {
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { $lng } from '~/core/i18n/store';
 import { formatNumber } from '~/lib/utils';
+
+import { CheckBoxContainer } from '../legend-button.style';
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -107,10 +110,12 @@ const SchoolStatusLegend = ({
           <div className="flex! min-w-0! items-center!">
             {shouldShowControls ? (
               <input
+                aria-label={""}
+                id={`school-status-${key}`}
                 checked={Boolean(schoolStatusCheckedStatus[key])}
-                className="mr-2! h-4! w-4! cursor-pointer! rounded-sm! border! border-border! accent-white!"
                 onChange={() => handleSchoolStatusLayerChange(key)}
-                type="checkbox"
+                className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
+                type='checkbox'
               />
             ) : null}
             <div

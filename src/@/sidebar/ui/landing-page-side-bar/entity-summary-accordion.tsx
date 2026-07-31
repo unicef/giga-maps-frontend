@@ -46,12 +46,14 @@ type EntitySummaryAccordionProps = {
   connectivityStatsByEntity: EntitiesConnectivityStatsResponse | null;
   isLoadingConnectivityStats?: boolean;
   showSummaryRowsWhenExpanded?: boolean;
+  isLoadingLiveData?: boolean;
 };
 
 const EntitySummaryAccordion = ({
   children,
   connectivityStatsByEntity,
   isLoadingConnectivityStats = false,
+  isLoadingLiveData = false,
   showSummaryRowsWhenExpanded = false,
 }: EntitySummaryAccordionProps) => {
   const globalStatsByEntity = useStore($globalStatsByEntity);
@@ -61,7 +63,7 @@ const EntitySummaryAccordion = ({
   const entityConfigMap = useStore($entityConfigMap);
   const stylePaintData = useStore($stylePaintData);
   const isLoadingGlobalStats = useStore(fetchEntityGlobalStatsFx.pending);
-  const isLoadingEntityInfo = useStore(fetchEntitiesLayerInfoFx.pending);
+  const isLoadingEntityInfoRequest = useStore(fetchEntitiesLayerInfoFx.pending);
   const isLoadingEntityConnectivityStats = useStore(
     fetchEntitiesConnectivityStatsFx.pending,
   );
@@ -74,16 +76,13 @@ const EntitySummaryAccordion = ({
   );
   const accordionExpandedEntitiesMap = useStore($accordionExpandedEntities);
   const activeAccordion = Object.entries(accordionExpandedEntitiesMap)
-    .filter(([_, isExpanded]) => Boolean(isExpanded))
+    .filter(([, isExpanded]) => Boolean(isExpanded))
     .map(([entityType]) => entityType);
 
   const isLoading =
     isLoadingGlobalStats ||
     isLoadingConnectivityStats ||
     isLoadingEntityConnectivityStats;
-  const infoLoadingMetricLabels = isLoadingEntityInfo
-    ? [t('reporting-internet-quality')]
-    : [];
   const entityCards = buildEntityCards({
     connectivityStatsByEntity,
     entityConfigMap,
@@ -122,15 +121,18 @@ const EntitySummaryAccordion = ({
         <div className="flex! flex-col! gap-3!">
           {entityCards.map((card) => {
             const accordionItem = card.accordionItem;
+            const entityType = accordionItem.value as EntityType;
+            const isLoadingEntityInfo =
+              Boolean(currentLayerTypeUtilsByEntity[entityType]?.isLive) &&
+              (isLoadingLiveData || isLoadingEntityInfoRequest);
+            const infoLoadingMetricLabels = isLoadingEntityInfo
+              ? [t('reporting-internet-quality')]
+              : [];
 
             return (
               <EntitySummaryCard
                 card={accordionItem}
-                expanded={Boolean(
-                  accordionExpandedEntitiesMap[
-                    accordionItem.value as EntityType
-                  ],
-                )}
+                expanded={Boolean(accordionExpandedEntitiesMap[entityType])}
                 isLoading={isLoading}
                 key={accordionItem.value}
                 loadingRowLabels={infoLoadingMetricLabels}
