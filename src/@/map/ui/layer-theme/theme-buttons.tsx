@@ -1,5 +1,5 @@
-import { Settings } from 'lucide-react';
 import { useStore } from 'effector-react';
+import { Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { $isProductTour, $showThemeLayer, onShowThemeLayer } from '~/@/sidebar/sidebar.model';
@@ -23,6 +23,7 @@ const ThemeButtons = () => {
       <div className={cn('theme-wrapper-popup relative! overflow-visible!')}>
         <ThemePopup open={isOpen} setOpen={onShowThemeLayer}>
           <MapControlButton
+            active={isOpen}
             aria-label={t('theme-layers')}
             label={t('theme-layers')}
             onClick={openLayerTheme}

@@ -397,6 +397,8 @@ const LegendPopup = ({
                       ? 'var(--color-foreground)'
                       : 'var(--color-muted-foreground)'
                   }
+                  fitToViewBox
+                  size={8}
                   entityType={entityType}
                 />
                 <span className="whitespace-nowrap!">
