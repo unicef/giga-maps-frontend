@@ -25,6 +25,7 @@ import {
   CONNECTIVITY_STATUS_SOURCE,
   DEFAULT_SOURCE,
   getEntitySelectedLayerId,
+  getEntityRenderedLayerIds,
   getEntityStatusLayerId,
 } from '../map.constant';
 import {
@@ -232,14 +233,15 @@ export const updateCoverageFilter = createEffect(
           entityType,
           effectiveSelectedLayerId,
         );
-        const mapLayer = map.getLayer(layerId);
-        if (!mapLayer) continue;
         const filter = filterCoverageList(
           coverageFilterByEntity?.[entityType] ??
             DEFAULT_ENTITY_DISTRIBUTION_FILTER,
           true,
         );
-        map.setFilter(layerId, filter);
+        getEntityRenderedLayerIds(layerId).forEach((renderedLayerId) => {
+          if (map.getLayer(renderedLayerId))
+            map.setFilter(renderedLayerId, filter);
+        });
       }
     }
   },
@@ -278,15 +280,16 @@ export const updateConnectivityFilter = createEffect(
         entityType,
         effectiveSelectedLayerId,
       );
-      const mapLayer = map.getLayer(layerId);
-      if (!mapLayer) continue;
       const isDynamicLayer = !isGlobalMap;
       const filter = filterConnectivityList(
         connectivitySpeedFilterByEntity?.[entityType] ??
           DEFAULT_ENTITY_DISTRIBUTION_FILTER,
         isDynamicLayer,
       );
-      map.setFilter(layerId, filter);
+      getEntityRenderedLayerIds(layerId).forEach((renderedLayerId) => {
+        if (map.getLayer(renderedLayerId))
+          map.setFilter(renderedLayerId, filter);
+      });
     }
   },
 );
@@ -303,13 +306,13 @@ export const updateConnectivityStatus = createEffect(
     const entityTypes = activeEntityTypes ?? [];
     for (const entityType of entityTypes) {
       const layerId = getEntityStatusLayerId(entityType);
-      const layer = map.getLayer(layerId);
-      if (layer) {
-        const filter = filterSchoolStatus(
-          legendsSelectedByEntity?.[entityType] ?? [],
-        );
-        map.setFilter(layerId, filter);
-      }
+      const filter = filterSchoolStatus(
+        legendsSelectedByEntity?.[entityType] ?? [],
+      );
+      getEntityRenderedLayerIds(layerId).forEach((renderedLayerId) => {
+        if (map.getLayer(renderedLayerId))
+          map.setFilter(renderedLayerId, filter);
+      });
     }
   },
 );

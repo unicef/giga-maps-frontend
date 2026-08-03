@@ -63,10 +63,6 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
     sidebar: {
       estimatedTotalInMillions: 3,
     },
-    zoomLevels: {
-      circleMaxZoom: 7.99,
-      symbolMinZoom: 8,
-    },
     useLegacyApi: false,
   },
 };
