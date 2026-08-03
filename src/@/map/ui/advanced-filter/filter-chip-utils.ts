@@ -22,41 +22,68 @@ export const hasSelectedFilterValue = (value: SelectedFieldValue | undefined) =>
 const translateLabel = (label: string, t: TFunction) =>
   t(label, { defaultValue: label });
 
-const formatNoChoiceLabel = (fieldName: string) =>
-  `No ${fieldName.charAt(0).toLowerCase()}${fieldName.slice(1)}`;
+const uncapitalize = (value: string) =>
+  value ? `${value.charAt(0).toLowerCase()}${value.slice(1)}` : value;
 
-const formatUnknownChoiceLabel = (fieldName: string) => {
-  const lowerField = fieldName.toLowerCase();
-  if (lowerField.endsWith('area type')) {
-    return 'Unknown area type';
+const formatNoChoiceLabel = (fieldName: string, t: TFunction) =>
+  t('filter-chip-no-field', {
+    field: uncapitalize(fieldName),
+    defaultValue: 'No {{field}}',
+  });
+
+const formatUnknownChoiceLabel = (item: AdvanceFilterType, t: TFunction) => {
+  const column = item.column_configuration.name.toLowerCase();
+
+  if (column.includes('area_type') || column === 'environment') {
+    return t('filter-chip-unknown-area-type', {
+      defaultValue: 'Unknown area type',
+    });
   }
-  if (lowerField.endsWith('coverage type')) {
-    return 'Unknown coverage type';
+
+  if (column.includes('coverage_type')) {
+    return t('filter-chip-unknown-coverage-type', {
+      defaultValue: 'Unknown coverage type',
+    });
   }
-  if (lowerField === 'cold chain available') {
-    return 'Unknown cold chain availability';
+
+  if (column.includes('cold_chain')) {
+    return t('filter-chip-unknown-cold-chain-availability', {
+      defaultValue: 'Unknown cold chain availability',
+    });
   }
-  return `Unknown ${fieldName.charAt(0).toLowerCase()}${fieldName.slice(1)}`;
+
+  return t('filter-chip-unknown-field', {
+    field: uncapitalize(item.name.trim()),
+    defaultValue: 'Unknown {{field}}',
+  });
 };
 
 const normalizeChipKey = (value: string) => value.trim().toLowerCase();
 
 const shouldPrefixRangeWithEntity = (item: AdvanceFilterType) => {
   const column = item.column_configuration.name.toLowerCase();
-  const fieldName = item.name.trim().toLowerCase();
-  return column.includes('num_computers') || fieldName.includes('number of computers');
+  return column.includes('num_computers');
 };
 
 export const getRangeChipLabel = (
   item: AdvanceFilterType,
   minDisplay: string,
   maxDisplay: string,
+  t: TFunction,
 ) => {
   const rangeText = `${minDisplay || '…'}–${maxDisplay || '…'}`;
   if (shouldPrefixRangeWithEntity(item) && item.entity_type === 'school') {
-    return `School: ${item.name} (${rangeText})`;
+    return t('filter-chip-school-range', {
+      name: item.name,
+      range: rangeText,
+      defaultValue: 'School: {{name}} ({{range}})',
+    });
   }
-  return `${item.name} (${rangeText})`;
+  return t('filter-chip-range', {
+    name: item.name,
+    range: rangeText,
+    defaultValue: '{{name}} ({{range}})',
+  });
 };
 
 export const findChoiceByValue = (
@@ -95,11 +122,11 @@ export const getChoiceChipLabel = (
   }
 
   if (lowerChoice === 'no' || choice.value === 'false') {
-    return translateLabel(formatNoChoiceLabel(fieldName), t);
+    return formatNoChoiceLabel(fieldName, t);
   }
 
   if (lowerChoice === 'unknown' || choice.value === 'none') {
-    return translateLabel(formatUnknownChoiceLabel(fieldName), t);
+    return formatUnknownChoiceLabel(item, t);
   }
 
   return translateLabel(choiceLabel, t);
@@ -108,7 +135,7 @@ export const getChoiceChipLabel = (
 export const dedupeFilterChips = (chips: FilterChip[]): FilterChip[] => {
   const seen = new Set<string>();
   return chips.filter((chip) => {
-    const key = normalizeChipKey(chip.removeValue ?? chip.label);
+    const key = `${chip.itemKey}__${normalizeChipKey(chip.removeValue ?? chip.label)}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -180,7 +207,7 @@ export const buildFilterChips = (
       return [{
         chipId: itemKey,
         itemKey,
-        label: getRangeChipLabel(item, minDisplay, maxDisplay),
+        label: getRangeChipLabel(item, minDisplay, maxDisplay, t),
       }];
     }
 

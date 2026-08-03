@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { TFunction } from 'i18next';
 
 import type { AdvanceFilterType } from '~/api/types';
 import { EntityType } from '~/@/entities/types/entity-types';
@@ -10,6 +11,17 @@ import {
   getVisibleChipCountForRows,
   widthsFitInRows,
 } from './filter-chip-utils';
+
+const t = ((key: string, options?: Record<string, unknown>) => {
+  let value = String(options?.defaultValue ?? key);
+  if (!options) return value;
+
+  Object.entries(options).forEach(([optionKey, optionValue]) => {
+    if (optionKey === 'defaultValue') return;
+    value = value.replace(`{{${optionKey}}}`, String(optionValue));
+  });
+  return value;
+}) as TFunction;
 
 const createFilter = (
   overrides: Partial<AdvanceFilterType> = {},
@@ -44,7 +56,7 @@ describe('buildFilterChips', () => {
 
     const chips = buildFilterChips(item, {
       [itemKey]: 'no',
-    }, (key) => key);
+    }, t);
 
     expect(chips).toEqual([{
       chipId: itemKey,
@@ -55,14 +67,13 @@ describe('buildFilterChips', () => {
 
   it('maps yes/no boolean choices to field-based labels from the design', () => {
     const item = createFilter({ type: 'BOOLEAN' });
-    const itemKey = 'school__computer_lab__iexact';
 
-    expect(getChoiceChipLabel(item, { label: 'Yes', value: 'true' }, (key) => key)).toBe('Computer lab');
-    expect(getChoiceChipLabel(item, { label: 'No', value: 'false' }, (key) => key)).toBe('No computer lab');
+    expect(getChoiceChipLabel(item, { label: 'Yes', value: 'true' }, t)).toBe('Computer lab');
+    expect(getChoiceChipLabel(item, { label: 'No', value: 'false' }, t)).toBe('No computer lab');
     expect(getChoiceChipLabel(
       createFilter({ name: 'Education level' }),
       { label: 'Unknown', value: 'none' },
-      (key) => key,
+      t,
     )).toBe('Unknown education level');
   });
 
@@ -70,7 +81,7 @@ describe('buildFilterChips', () => {
     expect(getChoiceChipLabel(
       createFilter({ name: 'Connectivity type', type: 'DROPDOWN_MULTISELECT' }),
       { label: 'Unknown education level', value: 'unknown' },
-      (key) => key,
+      t,
     )).toBe('Unknown education level');
   });
 
@@ -97,7 +108,7 @@ describe('buildFilterChips', () => {
 
     const chips = buildFilterChips(item, {
       [itemKey]: 'fiber|2g',
-    }, (key) => key);
+    }, t);
 
     expect(chips).toEqual([
       {
@@ -138,7 +149,7 @@ describe('buildFilterChips', () => {
 
     const chips = buildFilterChips(item, {
       [itemKey]: '2G|2g',
-    }, (key) => key);
+    }, t);
 
     expect(chips).toHaveLength(1);
     expect(chips[0].label).toBe('2G');
@@ -162,7 +173,7 @@ describe('buildFilterChips', () => {
 
     const chips = buildFilterChips(item, {
       [itemKey]: { none_range: false, value: '1,266' },
-    }, (key) => key);
+    }, t);
 
     expect(chips).toEqual([{
       chipId: itemKey,
@@ -173,9 +184,19 @@ describe('buildFilterChips', () => {
 
   it('maps unknown school area type to Unknown area type', () => {
     expect(getChoiceChipLabel(
-      createFilter({ name: 'School area type' }),
+      createFilter({
+        name: 'School area type',
+        column_configuration: {
+          name: 'area_type',
+          label: 'School area type',
+          type: 'string',
+          table_name: 'school',
+          table_alias: 'school',
+          table_label: 'School',
+        },
+      }),
       { label: 'Unknown', value: 'none' },
-      (key) => key,
+      t,
     )).toBe('Unknown area type');
   });
 
@@ -183,25 +204,35 @@ describe('buildFilterChips', () => {
     expect(getChoiceChipLabel(
       createFilter({ name: 'Cold chain' }),
       { label: 'Unknown', value: 'none' },
-      (key) => key,
+      t,
     )).toBe('Unknown cold chain');
 
     expect(getChoiceChipLabel(
-      createFilter({ name: 'Cold chain available' }),
+      createFilter({
+        name: 'Cold chain available',
+        column_configuration: {
+          name: 'cold_chain_available',
+          label: 'Cold chain available',
+          type: 'string',
+          table_name: 'health',
+          table_alias: 'health',
+          table_label: 'Health',
+        },
+      }),
       { label: 'Unknown', value: 'none' },
-      (key) => key,
+      t,
     )).toBe('Unknown cold chain availability');
 
     expect(getChoiceChipLabel(
       createFilter({ name: 'Power backup system' }),
       { label: 'Unknown', value: 'none' },
-      (key) => key,
+      t,
     )).toBe('Unknown power backup system');
 
     expect(getChoiceChipLabel(
       createFilter({ name: 'Water availability' }),
       { label: 'Unknown', value: 'none' },
-      (key) => key,
+      t,
     )).toBe('Unknown water availability');
   });
 
@@ -224,7 +255,7 @@ describe('buildFilterChips', () => {
 
     const chips = buildFilterChips(item, {
       [itemKey]: { none_range: false, value: '1,266' },
-    }, (key) => key);
+    }, t);
 
     expect(chips).toEqual([{
       chipId: itemKey,
@@ -264,11 +295,75 @@ describe('buildFilterChips', () => {
       [first, second],
       [EntityType.SCHOOL],
       { [itemKey]: '2g' },
-      (key) => key,
+      t,
     );
 
     expect(chipsByEntity[EntityType.SCHOOL]).toHaveLength(1);
     expect(chipsByEntity[EntityType.SCHOOL][0].label).toBe('2G');
+  });
+
+  it('keeps separate chips when different filters share the same option value', () => {
+    const coverage = createFilter({
+      id: 1,
+      name: 'Coverage type',
+      type: 'DROPDOWN_MULTISELECT',
+      column_configuration: {
+        name: 'coverage_type',
+        label: 'Coverage type',
+        type: 'string',
+        table_name: 'school',
+        table_alias: 'school',
+        table_label: 'School',
+      },
+      options: { choices: [{ label: '4G', value: '4g' }] },
+      query_param_filter: 'in',
+    });
+    const connectivity = createFilter({
+      id: 2,
+      name: 'Connectivity type',
+      type: 'DROPDOWN_MULTISELECT',
+      column_configuration: {
+        name: 'connectivity_type',
+        label: 'Connectivity type',
+        type: 'string',
+        table_name: 'school',
+        table_alias: 'school',
+        table_label: 'School',
+      },
+      options: { choices: [{ label: '4G', value: '4g' }] },
+      query_param_filter: 'in',
+    });
+
+    const chipsByEntity = buildFilterChipsByEntity(
+      [coverage, connectivity],
+      [EntityType.SCHOOL],
+      {
+        school__coverage_type__in: '4g',
+        school__connectivity_type__in: '4g',
+      },
+      t,
+    );
+
+    expect(chipsByEntity[EntityType.SCHOOL]).toHaveLength(2);
+    expect(chipsByEntity[EntityType.SCHOOL].map((chip) => chip.itemKey)).toEqual([
+      'school__coverage_type__in',
+      'school__connectivity_type__in',
+    ]);
+    expect(chipsByEntity[EntityType.SCHOOL].every((chip) => chip.label === '4G')).toBe(true);
+  });
+
+  it('interpolates translated field names into no/unknown chip keys', () => {
+    expect(getChoiceChipLabel(
+      createFilter({ name: 'laboratorio de informática' }),
+      { label: 'No', value: 'false' },
+      t,
+    )).toBe('No laboratorio de informática');
+
+    expect(getChoiceChipLabel(
+      createFilter({ name: 'nivel educativo' }),
+      { label: 'Unknown', value: 'none' },
+      t,
+    )).toBe('Unknown nivel educativo');
   });
 });
 

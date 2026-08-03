@@ -57,7 +57,7 @@ const FilterButton = () => {
               <Tuning fill={theme.white} />
               <span>{t('filters')}</span>
               {selectedCount > 0 && (
-                <span className="ml-1! inline-flex! h-5! min-w-5! items-center! justify-center! rounded-full! bg-[#0f62fe]! px-1.5! text-[12px]! font-normal! leading-none! text-white!">
+                <span className="ml-1! inline-flex! h-5! min-w-5! items-center! justify-center! rounded-full! bg-primary! px-1.5! text-xs! font-normal! leading-none! text-primary-foreground!">
                   {selectedCount}
                 </span>
               )}

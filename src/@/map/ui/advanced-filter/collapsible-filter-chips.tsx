@@ -13,14 +13,13 @@ import {
   type FilterChip,
 } from './filter-chip-utils';
 
-const CHIP_GAP_PX = 8;
 const MAX_CHIP_ROWS = 2;
 
 const chipClassName =
-  'flex! items-center! gap-1! bg-[#0f62fe]! text-white! rounded-md! h-[22px]! px-2! text-[12px]! leading-[18px]! cursor-pointer!';
+  'flex! cursor-pointer! items-center! gap-1! rounded-md! bg-primary! px-2! py-0.5! text-xs! text-primary-foreground!';
 
 const toggleClassName =
-  'flex! items-center! bg-[#393939]! text-white! rounded-md! h-[22px]! px-2! text-[12px]! leading-[18px]! cursor-pointer!';
+  'flex! cursor-pointer! items-center! rounded-md! bg-secondary! px-2! py-0.5! text-xs! text-secondary-foreground!';
 
 type CollapsibleFilterChipsProps = {
   chips: FilterChip[];
@@ -50,12 +49,13 @@ const CollapsibleFilterChips = ({
     const toggleNode = measureRoot.querySelector<HTMLElement>('[data-measure-toggle]');
     const chipWidths = chipNodes.map((node) => node.offsetWidth);
     const toggleWidth = toggleNode?.offsetWidth ?? 0;
+    const computedGap = Number.parseFloat(getComputedStyle(measureRoot).columnGap || '0');
 
     setVisibleCount(getVisibleChipCountForRows({
       chipWidths,
       containerWidth: measureRoot.clientWidth,
       toggleWidth,
-      gap: CHIP_GAP_PX,
+      gap: Number.isFinite(computedGap) ? computedGap : 8,
       maxRows: MAX_CHIP_ROWS,
     }));
   }, []);

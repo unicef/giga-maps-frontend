@@ -257,12 +257,12 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
                 return (
                   <div key={`active-filters-${el}`} className="flex! flex-col! gap-2!">
                     <div className="flex! w-full! items-center! gap-2!">
-                      <span className="text-[14px]! leading-[20px]! text-foreground!">
+                      <span className="text-sm! leading-5! text-foreground!">
                         {getEntityFilterGroupLabel(el, t)} ({selectedCount})
                       </span>
                       <button
                         type="button"
-                        className="text-[#0f62fe]! text-[12px]! font-normal! cursor-pointer! hover:underline!"
+                        className="cursor-pointer! text-xs! font-normal! text-primary! hover:underline!"
                         onClick={(e) => clearEntityBadges(el, e)}
                       >
                         Clear
