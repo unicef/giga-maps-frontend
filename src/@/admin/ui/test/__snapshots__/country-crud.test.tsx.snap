@@ -628,7 +628,7 @@ exports[`Country Crud Tab > render MainCountryView 1`] = `
                   <div
                     class="cds--table-header-label"
                   >
-                    Data Source
+                    Data source (schools)
                   </div>
                 </th>
                 <th

@@ -6,6 +6,7 @@ export interface CountryType {
   map_preview: string;
   description: string;
   data_source: string;
+  health_data_source: string;
   date_schools_mapped?: any;
   integration_status: number;
   date_of_join?: any;
