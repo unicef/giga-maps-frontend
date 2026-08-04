@@ -365,7 +365,7 @@ export const animateCircleConfig = {
   maxRadius: 12,
   opacityMax: 1,
   opacityMin: 0.2,
-  symbolHaloMaxWidth: 2,
+  symbolHaloActivationWidth: 0.01,
   symbolHaloMaxBlur: 1,
   zoomDivisible: [],
 };

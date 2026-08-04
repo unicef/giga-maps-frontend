@@ -125,6 +125,7 @@ describe('createSelectedLayer', () => {
     const map = {
       addLayer: vi.fn(),
       setLayoutProperty: vi.fn(),
+      setPaintProperty: vi.fn(),
       off: vi.fn(),
       getLayer: vi.fn(),
       on: vi.fn(),
@@ -164,7 +165,8 @@ describe('createSelectedLayer', () => {
     ]);
     expect(map.addLayer.mock.calls[0][0].paint).toEqual(
       expect.objectContaining({
-        'text-halo-width': 0,
+        'text-color': 'rgba(0, 0, 0, 0)',
+        'text-halo-width': 0.01,
         'text-halo-blur': 0,
       }),
     );
@@ -175,6 +177,7 @@ describe('createSelectedLayer', () => {
       getLayer: vi.fn(() => ({})),
       setLayerZoomRange: vi.fn(),
       setLayoutProperty: vi.fn(),
+      setPaintProperty: vi.fn(),
       off: vi.fn(),
       on: vi.fn(),
     } as any;
@@ -326,8 +329,9 @@ describe('animateCircles', () => {
     }
   });
 
-  it('animates the symbol variant above the configured transition zoom', () => {
+  it('scales the symbol halo up and down without layout updates', () => {
     const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+    const performanceNow = vi.spyOn(performance, 'now').mockReturnValue(100);
     let nextFrame: FrameRequestCallback | undefined;
     globalThis.requestAnimationFrame = vi.fn((callback) => {
       nextFrame = callback;
@@ -348,32 +352,49 @@ describe('animateCircles', () => {
         maxZoom: 7,
         zoomVariant: {
           id: 'symbol-layer',
+          entityConfig: {
+            markerType: 'symbol',
+            mapAnimation: {
+              zoomRadius: [{ zoom: 8, radius: 6 }],
+              growSpeed: 1,
+              glowMinScale: 1,
+              glowMaxScale: 2.5,
+            },
+          },
           fallbackMarkerType: 'symbol',
           minZoom: 7,
         },
       });
       expect(nextFrame).toBeTypeOf('function');
-      nextFrame!(performance.now() + 16);
+      const getLastPaintValue = (property: string) =>
+        map.setPaintProperty.mock.calls
+          .filter(([, paintProperty]) => paintProperty === property)
+          .at(-1)?.[2];
+      nextFrame!(100);
+      expect(getLastPaintValue('text-opacity')).toBeCloseTo(1);
+      expect(getLastPaintValue('text-halo-width')).toBeCloseTo(0.01);
+
+      nextFrame!(600);
+      const growingWidth = getLastPaintValue('text-halo-width');
+      expect(growingWidth).toBeGreaterThan(0.01);
+      expect(growingWidth).toBeLessThan(3.75);
+
+      performanceNow.mockReturnValue(1100);
+      nextFrame!(1100);
 
       expect(map.getLayer).toHaveBeenCalledWith('symbol-layer');
       expect(map.setLayoutProperty).not.toHaveBeenCalled();
-      expect(map.setPaintProperty).toHaveBeenCalledWith(
-        'symbol-layer',
-        'text-opacity',
-        1,
-      );
-      expect(map.setPaintProperty).toHaveBeenCalledWith(
-        'symbol-layer',
-        'text-halo-width',
-        expect.any(Number),
-      );
-      expect(map.setPaintProperty).toHaveBeenCalledWith(
-        'symbol-layer',
-        'text-halo-blur',
-        expect.any(Number),
-      );
+      expect(getLastPaintValue('text-opacity')).toBeCloseTo(0.2);
+      expect(getLastPaintValue('text-halo-width')).toBeCloseTo(3.75);
+      expect(getLastPaintValue('text-halo-blur')).toBeCloseTo(1);
+
+      nextFrame!(1600);
+      const shrinkingWidth = getLastPaintValue('text-halo-width');
+      expect(shrinkingWidth).toBeLessThan(3.75);
+      expect(shrinkingWidth).toBeCloseTo(growingWidth);
     } finally {
       setMapLoadingState(true);
+      performanceNow.mockRestore();
       globalThis.requestAnimationFrame = originalRequestAnimationFrame;
     }
   });

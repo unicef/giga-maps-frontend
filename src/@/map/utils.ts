@@ -90,6 +90,7 @@ const defaultSymbolMapAnimation: EntityMapAnimationConfig = {
 };
 
 const symbolTextSizeScale = 2.5;
+const transparentSymbolColor = 'rgba(0, 0, 0, 0)';
 
 const getDefaultMapAnimation = (
   markerType: MarkerType,
@@ -316,7 +317,11 @@ const setCurrentRadius = (
   fallbackMarkerType: MarkerType = 'circle',
 ) => {
   let lastZoom = Number.NaN;
-  let radiusValue = [0, 0];
+  let radiusValue = {
+    baseRadius: 0,
+    startRadius: 0,
+    maxRadius: 0,
+  };
   const { glowMaxScale, glowMinScale, zoomRadius } = getEntityMapAnimation(
     entityConfig,
     fallbackMarkerType,
@@ -327,8 +332,29 @@ const setCurrentRadius = (
     }
     lastZoom = currentZoom;
     const baseRadius = getRadiusAtZoom(zoomRadius, currentZoom);
-    radiusValue = [baseRadius * glowMinScale, baseRadius * glowMaxScale];
+    radiusValue = {
+      baseRadius,
+      startRadius: baseRadius * glowMinScale,
+      maxRadius: baseRadius * glowMaxScale,
+    };
     return radiusValue;
+  };
+};
+
+const getSymbolPulseScaleRange = (
+  entityConfig?: MapAnimationConfigSource,
+  fallbackMarkerType: MarkerType = 'symbol',
+): { minScale: number; haloWidthScale: number } => {
+  const { glowMinScale, glowMaxScale } = getEntityMapAnimation(
+    entityConfig,
+    fallbackMarkerType,
+  );
+  const minScale = Math.max(glowMinScale, 0);
+  const maxScale = Math.max(glowMaxScale, minScale);
+
+  return {
+    minScale,
+    haloWidthScale: (maxScale - minScale) / 2,
   };
 };
 
@@ -365,7 +391,7 @@ export function animateCircles({
   const {
     opacityMax,
     opacityMin,
-    symbolHaloMaxWidth,
+    symbolHaloActivationWidth,
     symbolHaloMaxBlur,
   } = animateCircleConfig;
   const animationLayerConfigs: MarkerAnimationLayer[] = [
@@ -392,6 +418,10 @@ export function animateCircles({
     return {
       ...animationLayer,
       duration: animateCircleConfig.duration / growSpeed,
+      symbolPulseScaleRange: getSymbolPulseScaleRange(
+        animationLayer.entityConfig,
+        animationLayer.fallbackMarkerType,
+      ),
       getMaxRadius: setCurrentRadius(
         animationLayer.entityConfig,
         animationLayer.fallbackMarkerType,
@@ -399,8 +429,6 @@ export function animateCircles({
     };
   });
   let startTime = performance.now();
-  let isGrowing = true;
-  let activeLayerId: string | null = null;
   function animateFrame(time: number) {
     if ($isMapLoading.getState()) {
       startTime = time;
@@ -418,12 +446,6 @@ export function animateCircles({
       animationFrameData.requestId = requestAnimationFrame(animateFrame);
       return;
     }
-    const activeLayerChanged = activeLayerId !== activeLayer.id;
-    if (activeLayerChanged) {
-      activeLayerId = activeLayer.id;
-      startTime = time;
-      isGrowing = true;
-    }
     const mapLayer = map.getLayer(activeLayer.id) as
       | { type?: string }
       | undefined;
@@ -432,39 +454,36 @@ export function animateCircles({
       animationFrameData.requestId = requestAnimationFrame(animateFrame);
       return;
     }
-    const [startRadius, maxRadius] = activeLayer.getMaxRadius(zoom);
-    let progress = time - startTime;
-    if (progress >= activeLayer.duration) {
-      progress = activeLayer.duration;
-    }
-    let radius =
-      (progress / activeLayer.duration) * (maxRadius - startRadius) +
-      startRadius;
-    let opacity =
-      opacityMax -
-      (progress / activeLayer.duration) * (opacityMax - opacityMin);
-    if (!isGrowing) {
-      radius =
-        maxRadius -
-        (progress / activeLayer.duration) * (maxRadius - startRadius);
-      opacity =
-        (progress / activeLayer.duration) * (opacityMax - opacityMin) +
-        opacityMin;
-    }
-    const nextOpacity = opacity > opacityMax ? opacityMax : opacity;
+    const { baseRadius, startRadius, maxRadius } =
+      activeLayer.getMaxRadius(zoom);
+    const cycleProgress =
+      ((time - startTime) / activeLayer.duration) % 2;
+    const directionalProgress =
+      cycleProgress <= 1 ? cycleProgress : 2 - cycleProgress;
+    const easedProgress =
+      (1 - Math.cos(Math.PI * directionalProgress)) / 2;
+    const radius =
+      startRadius + easedProgress * (maxRadius - startRadius);
+    const opacity =
+      opacityMax - easedProgress * (opacityMax - opacityMin);
     if (mapLayer.type === 'symbol') {
       const radiusRange = maxRadius - startRadius;
       const glowProgress =
         radiusRange > 0
           ? Math.min(Math.max((radius - startRadius) / radiusRange, 0), 1)
           : 0;
-      if (activeLayerChanged) {
-        map.setPaintProperty(activeLayer.id, 'text-opacity', opacityMax);
-      }
+      const symbolHaloMaxWidth =
+        baseRadius *
+        symbolTextSizeScale *
+        activeLayer.symbolPulseScaleRange.haloWidthScale;
+      const symbolHaloWidth =
+        symbolHaloActivationWidth +
+        glowProgress * (symbolHaloMaxWidth - symbolHaloActivationWidth);
+      map.setPaintProperty(activeLayer.id, 'text-opacity', opacity);
       map.setPaintProperty(
         activeLayer.id,
         'text-halo-width',
-        glowProgress * symbolHaloMaxWidth,
+        symbolHaloWidth,
       );
       map.setPaintProperty(
         activeLayer.id,
@@ -473,12 +492,7 @@ export function animateCircles({
       );
     } else {
       map.setPaintProperty(activeLayer.id, 'circle-radius', radius);
-      map.setPaintProperty(activeLayer.id, 'circle-opacity', nextOpacity);
-    }
-    if (progress >= activeLayer.duration) {
-      // await waitFor(300)
-      startTime = performance.now();
-      isGrowing = !isGrowing;
+      map.setPaintProperty(activeLayer.id, 'circle-opacity', opacity);
     }
     animationFrameData.requestId = requestAnimationFrame(animateFrame);
   }
@@ -1164,10 +1178,32 @@ export const createSelectedSymbolLayer = (
     mapRoute: ChangeLayerOptions['mapRoute'];
   },
 ): void => {
-  const textSize = getEntityTextSizeExpression(entityConfig);
+  const isAnimatedSymbol = Boolean(isLive);
+  const symbolPulseScaleRange = getSymbolPulseScaleRange(entityConfig);
+  const textSize = getEntityTextSizeExpression(
+    entityConfig,
+    isAnimatedSymbol ? symbolPulseScaleRange.minScale : 1,
+  );
+  const paint = getPaintData({ isLive, paintData, isDynamicLayer });
+  const textColor =
+    (paint as Record<string, unknown> | undefined)?.['circle-color'] ??
+    paintData.unknown;
+  const symbolTextColor = isAnimatedSymbol
+    ? transparentSymbolColor
+    : textColor;
+  const initialHaloWidth = isAnimatedSymbol
+    ? animateCircleConfig.symbolHaloActivationWidth
+    : 0;
   if (map.getLayer(id)) {
     syncLayerZoomRange(map, id, options);
     map.setLayoutProperty(id, 'visibility', 'visible');
+    map.setPaintProperty(id, 'text-color', symbolTextColor as any);
+    map.setPaintProperty(id, 'text-halo-color', textColor as any);
+    if (!isAnimatedSymbol) {
+      map.setPaintProperty(id, 'text-opacity', 1);
+      map.setPaintProperty(id, 'text-halo-width', 0);
+      map.setPaintProperty(id, 'text-halo-blur', 0);
+    }
     registerDevMultipleSchoolSameLocationHighlight({
       map,
       id,
@@ -1180,10 +1216,6 @@ export const createSelectedSymbolLayer = (
     });
     return;
   }
-  const paint = getPaintData({ isLive, paintData, isDynamicLayer });
-  const textColor = (paint as Record<string, unknown> | undefined)?.[
-    'circle-color'
-  ];
   const {
     'source-layer': sourceLayer,
     filter: layerFilter,
@@ -1204,10 +1236,10 @@ export const createSelectedSymbolLayer = (
         'text-ignore-placement': true,
       },
       paint: {
-        'text-color': (textColor ?? paintData.unknown) as any,
+        'text-color': symbolTextColor as any,
         'text-opacity': 1,
-        'text-halo-color': (textColor ?? paintData.unknown) as any,
-        'text-halo-width': 0,
+        'text-halo-color': textColor as any,
+        'text-halo-width': initialHaloWidth,
         'text-halo-blur': 0,
       },
       ...(sourceLayer ? { 'source-layer': sourceLayer } : {}),
