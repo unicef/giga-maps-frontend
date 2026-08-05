@@ -26,7 +26,7 @@ const InfoTooltip = ({ content }: { content?: string }) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger asChild stopPropagation>
           <button
             aria-label={content}
             className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-on-surface-dim!"
@@ -92,7 +92,7 @@ const EntitySummaryCardContent = ({
                       </span>
                     ) : null}
                   </div>
-                  <p className="m-0! mt-1! text-[11px]! leading-[14px]! text-[#a8a8a8]">
+                  <p className="m-0! mt-1! text-[11px]! leading-3.5! text-[#a8a8a8]">
                     {metric.detail}
                   </p>
                 </>

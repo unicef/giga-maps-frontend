@@ -27,4 +27,25 @@ describe('legend popup visibility', () => {
       }),
     ).toBe(true);
   });
+
+  test('hides when sidebar menu is open', () => {
+    expect(
+      shouldOpenLegendPopup({
+        open: true,
+        isMobile: false,
+        isCountryListOpen: false,
+        isSearchListOpen: false,
+        isMenuOpen: true,
+      }),
+    ).toBe(false);
+    expect(
+      shouldOpenLegendPopup({
+        open: true,
+        isMobile: true,
+        isCountryListOpen: false,
+        isSearchListOpen: false,
+        isMenuOpen: true,
+      }),
+    ).toBe(false);
+  });
 });
