@@ -88,7 +88,7 @@ const StaticLayerLegend = ({
                 <TooltipTrigger asChild stopPropagation>
                   <button
                     aria-label={currentSelectedLayerData.description}
-                    className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-muted-foreground! cursor-pointer!"
+                    className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
                     type="button"
                   >
                     <Info size={12} />

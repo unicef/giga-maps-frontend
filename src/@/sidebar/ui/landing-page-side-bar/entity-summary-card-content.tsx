@@ -29,7 +29,7 @@ const InfoTooltip = ({ content }: { content?: string }) => {
         <TooltipTrigger asChild stopPropagation>
           <button
             aria-label={content}
-            className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-on-surface-dim!"
+            className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-on-surface-dim!"
             type="button"
           >
             <Info size={12} />

@@ -19,10 +19,10 @@ export const AccordionItemTitle = ({
     <div className="flex! items-center!">
       {label}
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger asChild stopPropagation>
           <span
             aria-label={tooltipLabel}
-            className="ml-1! inline-flex! size-5! items-center! justify-center! text-muted-foreground!"
+            className="ml-0.5! inline-flex! size-6! -m-0.5! p-1.5! items-center! justify-center! rounded-full! text-muted-foreground!"
           >
             <Info aria-hidden="true" className="size-3!" />
           </span>
