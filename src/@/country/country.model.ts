@@ -12,6 +12,7 @@ import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper
 
 import { PointCoordinates } from "../../core/global-types";
 import { $activeEntityTypes } from '../entities/models/entity.model';
+import { EntityType } from '../entities/types/base-entity.type';
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
 import {
@@ -56,7 +57,20 @@ $countryMapping.on(fetchCountryFx.doneData, (_, payload) => {
   return Object.entries(extractDataWithMapping(payload, countryMapping)).filter(([_key, value]) => !!value);
 })
 
-export const $dataSource = $country.map((country) => country?.data_source ?? null);
+const dataSourceFieldByEntity: Record<EntityType, 'data_source' | 'health_data_source'> = {
+  [EntityType.SCHOOL]: 'data_source',
+  [EntityType.HEALTH]: 'health_data_source',
+};
+
+export const $dataSourceByEntity = $country.map(
+  (country) =>
+    Object.fromEntries(
+      Object.entries(dataSourceFieldByEntity).map(([entityType, field]) => [
+        entityType,
+        country?.[field] ?? '',
+      ]),
+    ) as Record<EntityType, string>,
+);
 export const $countryActiveFiltersList = $country.map((country) => country?.active_filters_list ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
