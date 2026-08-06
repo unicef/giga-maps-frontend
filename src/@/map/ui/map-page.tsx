@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import { changeCountryCode } from '~/@/country/country.model';
 import EntityTypeSelector from '~/@/entities/ui/entity-selector';
+import WelcomeToast from '~/@/entities/ui/welcome-toast';
 import ProductTour from '~/@/product-tour/ui/product-tour.view';
 import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
@@ -53,11 +54,12 @@ const MapPage = () => {
       {!isMobile && <EntityTypeSelector />}
       <TopLoader />
       <Footer />
+      <WelcomeToast />
       {/* <ZoomLevelDisplay /> */}
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}
-    </Layout >
-  )
+    </Layout>
+  );
 };
 
 export default MapPage;
