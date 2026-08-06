@@ -23,6 +23,7 @@ import {
 import { DefaultLegendValuesType } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
 import { $mapRoutes } from '~/core/routes';
+import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
@@ -30,12 +31,14 @@ import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
 const LiveLayerLegend = ({
   entityType,
+  isCompact = false,
   isLoading = false,
   metricSubtitle,
   metricTitle,
   shouldShowControls,
 }: {
   entityType: EntityType;
+  isCompact?: boolean;
   isLoading?: boolean;
   metricSubtitle: string;
   metricTitle: string;
@@ -100,7 +103,14 @@ const LiveLayerLegend = ({
     benchmarkValue && unitLabel ? `${benchmarkValue}${unitLabel}` : undefined;
 
   return (
-    <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start! max-[560px]:basis-full! max-[560px]:min-w-full!">
+    <div
+      className={cn(
+        'flex! flex-col! self-start!',
+        isCompact
+          ? 'w-full! self-stretch!'
+          : 'min-w-0! flex-1! basis-[calc(50%-0.5rem)]! max-[560px]:basis-full! max-[560px]:min-w-full!',
+      )}
+    >
       <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
         <div className="flex! items-center! gap-1.5!">
           <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
@@ -149,7 +159,10 @@ const LiveLayerLegend = ({
 
           return (
             <button
-              className="mt-1! flex! w-full! items-center! justify-start! border-0! bg-transparent! p-0! text-left!"
+              className={cn(
+                'mt-1! flex! w-full! items-center! gap-3! border-0! bg-transparent! p-0! text-left!',
+                isCompact ? 'justify-between!' : 'justify-start!',
+              )}
               key={key}
               type="button"
             >

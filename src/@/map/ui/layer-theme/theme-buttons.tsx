@@ -23,6 +23,7 @@ const ThemeButtons = () => {
       <div className={cn('theme-wrapper-popup relative! overflow-visible!')}>
         <ThemePopup open={isOpen} setOpen={onShowThemeLayer}>
           <MapControlButton
+            active={isOpen}
             aria-label={t('theme-layers')}
             label={t('theme-layers')}
             onClick={openLayerTheme}
@@ -32,7 +33,7 @@ const ThemeButtons = () => {
         </ThemePopup>
       </div>
       {isOpen && <ClickAnywhere
-        classList={['theme-wrapper-popup']}
+        classList={['theme-wrapper-popup', 'theme-layer-popover-content']}
         trigger={isOpen}
         outsideClick={() => {
           if (!isProductTour) {

@@ -67,11 +67,10 @@ export const CustomeLegendPopover = styled(Popover) <ActiveTheme>`
 }
 
 .legend-info-popover-content--single{
-  inline-size: min(22rem, calc(100vw - 1rem));
+  inline-size: max-content;
   max-inline-size: min(22rem, calc(100vw - 1rem));
 
   @media (max-width: 560px) {
-    inline-size: min(18.5rem, calc(100vw - 1rem));
     max-inline-size: min(18.5rem, calc(100vw - 1rem));
   }
 }

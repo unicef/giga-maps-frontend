@@ -15,6 +15,7 @@ import {
 } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { $lng } from '~/core/i18n/store';
+import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
 import { CheckBoxContainer } from '../legend-button.style';
@@ -26,12 +27,14 @@ interface CheckedStatus {
 const SchoolStatusLegend = ({
   entityType,
   forceVisible = false,
+  isCompact = false,
   isLoading = false,
   shouldShowControls,
   statusTitle,
 }: {
   entityType: EntityType;
   forceVisible?: boolean;
+  isCompact?: boolean;
   isLoading?: boolean;
   shouldShowControls: boolean;
   statusTitle: string;
@@ -97,14 +100,24 @@ const SchoolStatusLegend = ({
   if (!isSchoolStatus && !forceVisible) return null;
 
   return (
-    <div className="flex! min-w-0! flex-1! basis-[calc(50%-0.5rem)]! flex-col! self-start max-[560px]:basis-full max-[560px]:min-w-full">
+    <div
+      className={cn(
+        'flex! flex-col! self-start!',
+        isCompact
+          ? 'w-full! self-stretch!'
+          : 'min-w-0! flex-1! basis-[calc(50%-0.5rem)]! max-[560px]:basis-full! max-[560px]:min-w-full!',
+      )}
+    >
       <div className="mb-1! flex! items-center! gap-1.5! text-muted-foreground!">
         <div className="text-sm! font-normal! leading-5!">{statusTitle}</div>
         {/* <Info size={12} /> */}
       </div>
       {Object.values(ConnectivityStatusDistribution).map((key) => (
         <div
-          className="mt-3! flex! w-full! items-center! justify-start!"
+          className={cn(
+            'mt-3! flex! w-full! items-center! gap-3!',
+            isCompact ? 'justify-between!' : 'justify-start!',
+          )}
           key={key}
         >
           <div className="flex! min-w-0! items-center!">
