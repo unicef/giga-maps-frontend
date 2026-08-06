@@ -1,5 +1,4 @@
 import { useStore } from 'effector-react';
-import { Hospital } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import DisclaimerNotification from '~/@/common/disclaimer-notification';
@@ -8,6 +7,7 @@ import {
   dismissWelcomeToast,
 } from '~/@/entities/models/welcome-toast.model';
 import { $showDisclaimerNotification } from '~/@/sidebar/ui/common-components/country-disclaimer-notification/country-disclaimer-notification';
+import BuildingHospital from '~/assets/images/building-hospital.svg';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
@@ -44,7 +44,7 @@ const WelcomeToast = () => {
           </Button>
         ) : null
       }
-      icon={<Hospital className="size-6" />}
+      icon={<BuildingHospital />}
       modal={isMobile}
       onClose={() => dismissWelcomeToast()}
       title={t('welcome-toast-title')}
