@@ -567,7 +567,7 @@ const generateEntityMapParams = ({
   isGlobalView: boolean;
 }) => {
   const params = new URLSearchParams();
-  if (isGlobalView) params.set('limit', '5000');
+  if (isGlobalView) params.set('limit', '12000');
 
   entityTypes.forEach((entityType) => {
     const prefix = entityType + '_';
