@@ -26,7 +26,7 @@ const CountryDisclaimerNotification = () => {
 
   return (
     <DisclaimerNotification
-      className="fixed bottom-8 left-80 z-[6002] w-80"
+      className="fixed bottom-8 left-84 z-[6002] w-96 max-w-[calc(100vw-2rem)]"
       closeLabel={t('close-notification')}
       onClose={() => onCloseDiscalimerNotification(false)}
       title={t('disclaimer')}
