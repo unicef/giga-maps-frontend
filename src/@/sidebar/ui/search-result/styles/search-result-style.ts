@@ -21,7 +21,7 @@ export const SearchResultWrapper = styled.div`
     z-index: 13;
     top: calc(100% + 0.125rem);
     max-height: 80vh;
-    border: 1px solid ${props => (props.theme.main === '#fff' ? '#E0E0E0' : '#393939')};
+    border: 1px solid ${props => props.theme.searchSchoolBorder};
     border-radius: 0.5rem;
     box-shadow: ${props => (props.theme.main === '#fff'
       ? '0 14px 40px 0 rgba(0, 0, 0, 0.12)'
@@ -44,7 +44,7 @@ export const SearchListWrapper = styled.div`
   z-index: 13;
   top: calc(100% + 0.125rem);
   max-height: 80vh;
-  border: 1px solid ${props => (props.theme.main === '#fff' ? '#E0E0E0' : '#393939')};
+  border: 1px solid ${props => props.theme.searchSchoolBorder};
   border-radius: 0.5rem;
   box-shadow: ${props => (props.theme.main === '#fff'
     ? '0 14px 40px 0 rgba(0, 0, 0, 0.12)'
@@ -92,7 +92,7 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
       gap: ${props.$gap}rem;  
    `}
    ${props => props.$border && css`
-      border-bottom: 0.0625rem solid ${props.theme.main === '#fff' ? '#E0E0E0' : '#393939'};
+      border-bottom: 0.0625rem solid ${props.theme.searchSchoolBorder};
    `}
    ${props => props.$history}
 

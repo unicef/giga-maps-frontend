@@ -20,7 +20,7 @@ export const TotalCountLabel = styled.p`
   font-weight: 400;
   vertical-align: middle;
   line-height: 1rem;
-  border-bottom: 0.0625rem solid #525252;
+  border-bottom: 0.0625rem solid ${props => props.theme.bottomBorder};
   .data-source-tooltip .cds--tooltip-content {
     background-color: ${props => props.theme.grayDark} !important;
     color: ${props => props.theme.white} !important;            
@@ -43,7 +43,7 @@ export const SchoolListItem = styled.div`
   padding: 1rem 0;
   background: transparent;
   border: none;
-  border-bottom: 0.0625rem solid #525252;
+  border-bottom: 0.0625rem solid ${props => props.theme.bottomBorder};
   text-align: left;
   overflow: hidden;
 `;

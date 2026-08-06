@@ -82,7 +82,7 @@ export const RadioButtonGroupWrapper = styled(RadioButtonGroup)`
     }
 
     .cds--label{
-        color:#9E9E9E;
+        color:${props => props.theme.titleDesc};
     }
 `
 
@@ -90,7 +90,7 @@ export const CheckboxGroupWrapper = styled(CheckboxGroup)`
     padding: 0rem 1rem ;
     margin-bottom: 1.5rem;
     .cds--label{
-        color:#9E9E9E;
+        color:${props => props.theme.titleDesc};
     }
     .cds--checkbox:checked+.cds--checkbox-label::before{
         border: 1px solid ${props => props.theme.text};
