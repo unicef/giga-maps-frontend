@@ -193,7 +193,21 @@
   --color-connectivity-green-200: #85FFBC;
   --color-grey-900: #161616;
 
+  --color-primary-300: #A9CAFF;
+
   --font-manrope: "Manrope", sans-serif;
+}
+
+@keyframes notification-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes legend-connectivity-glow {
