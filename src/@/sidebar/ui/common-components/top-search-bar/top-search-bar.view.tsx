@@ -14,6 +14,7 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
+import { $isMobile } from '~/core/media-query';
 import { mapOverview } from '~/core/routes';
 import { $theme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
@@ -28,6 +29,7 @@ const onChange = changeSearchText.prepend(getInputValue);
 const onClear = clearSearchText.prepend(getVoid);
 
 const TopSearchBar = () => {
+  const isMobile = useStore($isMobile);
   const searchText = useStore($searchInput);
   const isActiveSearchBar = useStore($isActiveSearchBar);
   const showCountries = useStore($showCountries)
@@ -87,14 +89,14 @@ const TopSearchBar = () => {
   }, []);
 
   useEffect(() => {
-    if (!isGlobalView) return;
+    if (!isGlobalView || isMobile) return;
 
     const input = document.getElementById('main-search-bar') as HTMLInputElement | null;
     if (!input) return;
 
     input.focus();
     changeIsSearchFocused(true);
-  }, [isGlobalView]);
+  }, [isGlobalView, isMobile]);
 
   const onBlurSearch = (e: React.FocusEvent<HTMLInputElement>) => {
     // Check if the newly focused element is inside our search results
@@ -226,7 +228,7 @@ const TopSearchBar = () => {
                   aria-label={t('search-country-region-school-id')}
                   autoCapitalize="none"
                   autoComplete="off"
-                  autoFocus
+                  autoFocus={!isMobile}
                   autoCorrect="off"
                   spellCheck={false}
                   className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-3.5! pr-10! text-[0.9375rem]! font-normal! leading-5! text-foreground! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"

@@ -90,11 +90,6 @@ export interface EntityConfig {
   /** Sidebar/accordion labels and auxiliary UI behavior */
   sidebar: EntitySidebarConfig;
 
-  /** Zoom level thresholds (for circle → symbol transitions) */
-  zoomLevels?: {
-    circleMaxZoom: number;
-    symbolMinZoom: number;
-  };
   /** Map dot animation and zoom sizing configuration */
   mapAnimation?: EntityMapAnimationConfig;
 

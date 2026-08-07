@@ -21,6 +21,12 @@ import {
   changeEntityConnectivitySpeed,
 } from '~/@/sidebar/sidebar.model';
 import { DefaultLegendValuesType } from '~/api/types';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 import { $lng } from '~/core/i18n/store';
 import { $mapRoutes } from '~/core/routes';
 import { cn } from '~/lib/cn';
@@ -117,13 +123,22 @@ const LiveLayerLegend = ({
             {metricSubtitle}
           </div>
           {metricLayerData?.description ? (
-            <button
-              className="inline-flex! items-center! justify-center! border-0! p-0! text-muted-foreground!"
-              title={metricLayerData.description}
-              type="button"
-            >
-              <Info size={12} />
-            </button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild stopPropagation>
+                  <button
+                    aria-label={metricLayerData.description}
+                    className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
+                    type="button"
+                  >
+                    <Info size={12} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" sideOffset={6}>
+                  {metricLayerData.description}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ) : null}
         </div>
         <div className="text-xs! leading-4.5! text-muted-foreground!">

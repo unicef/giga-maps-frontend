@@ -35,7 +35,7 @@ const headers = [
   { key: 'flag', header: 'Flag' },
   { key: 'code', header: 'Code' },
   { key: 'name', header: 'Name' },
-  { key: 'data_source', header: 'Data Source' },
+  { key: 'data_source', header: 'Data source (schools)' },
   { key: 'date_of_join', header: 'Date of join' },
   { key: 'schools_total', header: 'Total schools' },
   { key: 'health_total', header: 'Total health' },

@@ -17,6 +17,12 @@ import {
   $layerUtils,
   changeEntityCoverageStatus,
 } from '~/@/sidebar/sidebar.model';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 import { $lng } from '~/core/i18n/store';
 import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
@@ -87,13 +93,22 @@ const StaticLayerLegend = ({
             {metricTitle}
           </div>
           {currentSelectedLayerData?.description ? (
-            <button
-              className="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! text-muted-foreground!"
-              title={currentSelectedLayerData.description}
-              type="button"
-            >
-              <Info size={12} />
-            </button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild stopPropagation>
+                  <button
+                    aria-label={currentSelectedLayerData.description}
+                    className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
+                    type="button"
+                  >
+                    <Info size={12} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" sideOffset={6}>
+                  {currentSelectedLayerData.description}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ) : null}
         </div>
         {metricSubtitle ? (

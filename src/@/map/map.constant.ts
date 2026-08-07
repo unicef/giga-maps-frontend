@@ -19,6 +19,22 @@ export const CONNECTIVITY_URL = 'api/v2/entities/tiles/connectivity';
 export const CONNECTIVITY_STATUS_URL =
   'api/v2/entities/tiles/connectivity_status';
 
+
+/**
+ * Circle-to-symbol transition zoom used by map entity layers.
+ * Country-code keys are case-insensitive; add overrides in lowercase.
+ */
+export const CIRCLE_MAX_ZOOM_CONFIG: {
+  default: number;
+  byCountryCode: Record<string, number>;
+  /** Start symbol placement this many zoom levels before circles end. */
+  symbolPreloadZoomOffset: number;
+} = {
+  default: 5.5,
+  byCountryCode: {
+  },
+  symbolPreloadZoomOffset: 0.5,
+};
 /** Source-layer names returned by the v2 tiles API */
 export const SOURCE_LAYER_SCHOOLS = 'school';
 export const SOURCE_LAYER_ENTITIES = 'entities';
@@ -36,6 +52,23 @@ export const getEntitySelectedLayerId = (
   entityType: string,
   layerId: number | null,
 ): string => `entity-selected-${entityType}-${layerId}`;
+
+const ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX = '-zoom-circle';
+
+/** Low-zoom circle companion for an entity layer whose primary layer is a symbol. */
+export const getEntityZoomCircleLayerId = (layerId: string): string =>
+  `${layerId}${ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX}`;
+
+/** Both render variants of one logical entity layer. Non-transition layers use the first ID. */
+export const getEntityRenderedLayerIds = (layerId: string): string[] => [
+  layerId,
+  getEntityZoomCircleLayerId(layerId),
+];
+
+export const getEntityLogicalLayerId = (layerId: string): string =>
+  layerId.endsWith(ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX)
+    ? layerId.slice(0, -ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX.length)
+    : layerId;
 
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cmrvoj0c5007g01sg7di86ql0',
@@ -332,6 +365,8 @@ export const animateCircleConfig = {
   maxRadius: 12,
   opacityMax: 1,
   opacityMin: 0.2,
+  symbolHaloActivationWidth: 0.01,
+  symbolHaloMaxBlur: 1,
   zoomDivisible: [],
 };
 

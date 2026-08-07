@@ -31,7 +31,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
         { zoom: 14, radius: 24 },
       ],
       growSpeed: 1,
-      glowMinScale: 1,
+      glowMinScale: 1.2,
       glowMaxScale: 2.5,
     },
     sidebar: {
@@ -56,16 +56,12 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
         { zoom: 8, radius: 6 },
         { zoom: 14, radius: 40 },
       ],
-      growSpeed: 0.5,
-      glowMinScale: 1,
-      glowMaxScale: 2.5,
+      growSpeed: 1,
+      glowMinScale: 1.37,
+      glowMaxScale: 2.2,
     },
     sidebar: {
       estimatedTotalInMillions: 3,
-    },
-    zoomLevels: {
-      circleMaxZoom: 7.99,
-      symbolMinZoom: 8,
     },
     useLegacyApi: false,
   },

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Chip, TooltipButton } from '~/@/common/style/styled-component-style';
-import { $dataSource } from '~/@/country/country.model';
+import { $dataSourceByEntity } from '~/@/country/country.model';
 import { $activeSchoolPopup } from '~/@/map/map.model';
 import {
   $currentLayerCountryDataSource,
@@ -83,7 +83,7 @@ const SOURCE_LINKS: Record<string, string> = {
 
 const SchoolPopupDataSource = () => {
   const { t } = useTranslation();
-  const dataSource = useStore($dataSource);
+  const dataSourceByEntity = useStore($dataSourceByEntity);
   const currentEntityType = useStore($activeSchoolPopup)?.entityType;
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
@@ -97,6 +97,9 @@ const SchoolPopupDataSource = () => {
   const currentDataSource = currentEntityType
     ? currentLayerCountryDataSource[currentEntityType]
     : null;
+  const dataSource = currentEntityType
+    ? dataSourceByEntity[currentEntityType]
+    : '';
 
   const { dataSourceName, dataSourceDescription } = useMemo(() => {
     const names = currentDataSource?.name

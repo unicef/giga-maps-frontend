@@ -257,10 +257,10 @@ $isMenuOpen.on(onChangeMenu, setPayload);
 export const changeEntityConnectivitySpeed = createEvent<{
   entityType: EntityType;
   key:
-  | ConnectivityDistribution.good
-  | ConnectivityDistribution.moderate
-  | ConnectivityDistribution.bad
-  | ConnectivityDistribution.unknown;
+    | ConnectivityDistribution.good
+    | ConnectivityDistribution.moderate
+    | ConnectivityDistribution.bad
+    | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultConnectivitySpeedFilter = {
@@ -369,7 +369,7 @@ export const $coverageLayerDataByEntity = $layersList.map((layers) => {
       if (
         layer?.type === LayerTypeChoices.STATIC &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-        'coverage_type'
+          'coverage_type'
       ) {
         result[entityType] = layer;
       }
@@ -578,8 +578,8 @@ const buildCurrentLayerLegends = ({
   };
   selectedLayerData?: LayerType | null;
   stylePaintData: typeof $stylePaintData extends { getState: () => infer T }
-  ? T
-  : never;
+    ? T
+    : never;
 }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -963,10 +963,10 @@ export const checkEntityConnectivityBenchmark = createEvent<{
 export const changeEntityCoverageStatus = createEvent<{
   entityType: EntityType;
   key:
-  | ConnectivityDistribution.good
-  | ConnectivityDistribution.moderate
-  | ConnectivityDistribution.bad
-  | ConnectivityDistribution.unknown;
+    | ConnectivityDistribution.good
+    | ConnectivityDistribution.moderate
+    | ConnectivityDistribution.bad
+    | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultCoverageStatusAll = {
@@ -1205,7 +1205,8 @@ export const $isStaticLegendLoading = combine(
   fetchCountryFx.pending,
   fetchCountriesFx.pending,
   fetchEntitiesLayerInfoFx.pending,
-  (...pendingFlags) => pendingFlags.some(Boolean));
+  (...pendingFlags) => pendingFlags.some(Boolean),
+);
 
 export const $isStatusLegendLoading = combine(
   fetchLayerListFx.pending,
@@ -1213,13 +1214,17 @@ export const $isStatusLegendLoading = combine(
   fetchCountryFx.pending,
   fetchCountriesFx.pending,
   fetchEntityGlobalStatsFx.pending,
-  (...pendingFlags) => pendingFlags.some(Boolean));
+  (...pendingFlags) => pendingFlags.some(Boolean),
+);
 
 export const onShowLegend = createEvent<boolean>();
 export const $showLegend = restore(onShowLegend, true);
 
 export const onShowThemeLayer = createEvent<boolean>();
 export const $showThemeLayer = restore(onShowThemeLayer, false);
+
+export const onShowAccessibility = createEvent<boolean>();
+export const $showAccessibility = restore(onShowAccessibility, false);
 
 export const onShowFilterSidebar = createEvent<boolean>();
 export const $showFilterSidebar = restore(onShowFilterSidebar, false);
