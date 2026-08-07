@@ -34,16 +34,14 @@ const ThemePopup = ({
 
       wrapper.style.setProperty('z-index', '10000', 'important');
 
-      const applyPosition = () => {
-        // Pin bottom edge to the legend button — same place as the legend panel
-        // on both desktop and mobile.
+      const applyPosition = (attempt = 0) => {
         const legendButton = document.querySelector<HTMLElement>(
           '.legend-container .legend-open-button',
         );
-        if (!legendButton) return;
+        const legendBottom = legendButton
+          ? legendButton.getBoundingClientRect().bottom
+          : window.innerHeight - 8;
 
-        const legendBottom = legendButton.getBoundingClientRect().bottom;
-        // Keep the panel inside the viewport while still bottom-aligning to legend.
         const maxHeight = Math.max(
           160,
           Math.min(legendBottom - 8, window.innerHeight - 16),
@@ -51,17 +49,28 @@ const ThemePopup = ({
 
         wrapper.style.setProperty('max-height', `${maxHeight}px`, 'important');
         node.style.setProperty('max-height', `${maxHeight}px`, 'important');
+        wrapper.style.setProperty('height', 'auto', 'important');
+        node.style.setProperty('height', 'auto', 'important');
 
-        // Use an explicit height when content overflows so the inner form can
-        // scroll and Cancel/Apply stay visible (max-height alone is not enough
-        // for flex children with overflow-y-auto).
-        const contentHeight = node.scrollHeight;
-        const panelHeight = Math.min(contentHeight, maxHeight);
-        wrapper.style.setProperty('height', `${panelHeight}px`, 'important');
-        node.style.setProperty('height', `${panelHeight}px`, 'important');
+        const naturalHeight = Math.max(
+          node.scrollHeight,
+          node.getBoundingClientRect().height,
+        );
+        if (naturalHeight <= 0) {
+          if (attempt < 5) {
+            requestAnimationFrame(() => applyPosition(attempt + 1));
+          }
+          return;
+        }
 
-        const top = Math.max(8, legendBottom - panelHeight);
+        const panelHeight = Math.min(naturalHeight, maxHeight);
+        if (naturalHeight > maxHeight) {
+          wrapper.style.setProperty('height', `${panelHeight}px`, 'important');
+          node.style.setProperty('height', `${panelHeight}px`, 'important');
+        }
+
         const panelRect = wrapper.getBoundingClientRect();
+        const top = Math.max(8, legendBottom - panelHeight);
 
         wrapper.style.setProperty('position', 'fixed', 'important');
         wrapper.style.setProperty('left', `${panelRect.left}px`, 'important');
@@ -72,7 +81,7 @@ const ThemePopup = ({
       };
 
       requestAnimationFrame(() => {
-        requestAnimationFrame(applyPosition);
+        requestAnimationFrame(() => applyPosition());
       });
     },
     [isMobile, sidebarHeight],
@@ -82,7 +91,9 @@ const ThemePopup = ({
     <Popover
       modal={false}
       onOpenChange={(nextOpen) => {
-        setOpen(nextOpen);
+        if (!nextOpen) {
+          setOpen(false);
+        }
       }}
       open={open}
     >
