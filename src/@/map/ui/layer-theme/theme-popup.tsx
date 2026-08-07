@@ -42,9 +42,26 @@ const ThemePopup = ({
         );
         if (!legendButton) return;
 
+        const legendBottom = legendButton.getBoundingClientRect().bottom;
+        // Keep the panel inside the viewport while still bottom-aligning to legend.
+        const maxHeight = Math.max(
+          160,
+          Math.min(legendBottom - 8, window.innerHeight - 16),
+        );
+
+        wrapper.style.setProperty('max-height', `${maxHeight}px`, 'important');
+        node.style.setProperty('max-height', `${maxHeight}px`, 'important');
+
+        // Use an explicit height when content overflows so the inner form can
+        // scroll and Cancel/Apply stay visible (max-height alone is not enough
+        // for flex children with overflow-y-auto).
+        const contentHeight = node.scrollHeight;
+        const panelHeight = Math.min(contentHeight, maxHeight);
+        wrapper.style.setProperty('height', `${panelHeight}px`, 'important');
+        node.style.setProperty('height', `${panelHeight}px`, 'important');
+
+        const top = Math.max(8, legendBottom - panelHeight);
         const panelRect = wrapper.getBoundingClientRect();
-        const legendRect = legendButton.getBoundingClientRect();
-        const top = Math.max(8, legendRect.bottom - panelRect.height);
 
         wrapper.style.setProperty('position', 'fixed', 'important');
         wrapper.style.setProperty('left', `${panelRect.left}px`, 'important');
@@ -52,7 +69,6 @@ const ThemePopup = ({
         wrapper.style.setProperty('right', 'auto', 'important');
         wrapper.style.setProperty('bottom', 'auto', 'important');
         wrapper.style.setProperty('transform', 'none', 'important');
-        wrapper.style.setProperty('height', 'auto', 'important');
       };
 
       requestAnimationFrame(() => {
@@ -80,7 +96,7 @@ const ThemePopup = ({
         align={isMobile && sidebarHeight ? 'center' : 'end'}
         avoidCollisions={false}
         className={cn(
-          'theme-layer-popover-content z-[10000]! flex! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs!',
+          'theme-layer-popover-content z-[10000]! flex! max-h-[calc(100dvh-1rem)]! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

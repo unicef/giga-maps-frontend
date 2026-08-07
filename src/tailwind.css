@@ -70,6 +70,7 @@
   /* Misc */
   --giga-icon-secondary: #fff;
   --giga-mapped: #C6C6C6;
+  --giga-accessible-panel: #646973;
 }
 
 /* ── Light theme overrides ──────────────────────────────────── */
@@ -191,6 +192,7 @@
   --color-filter-muted: var(--giga-filter-muted);
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
+  --color-accessible-panel: var(--giga-accessible-panel);
 
   --color-connectivity-green-200: #85FFBC;
   --color-connectivity-green-600: #00D661;

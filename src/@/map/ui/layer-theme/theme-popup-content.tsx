@@ -25,17 +25,6 @@ const mapThemeList = styles.filter(
   (style: string) => !gigaThemeList.includes(style as ThemeType),
 );
 
-const themeLabel: Record<string, string> = {
-  dark: 'Dark',
-  light: 'Light',
-};
-
-const mapTypeLabel: Record<string, string> = {
-  default: 'Default',
-  satellite: 'Satellite',
-  street: 'Street view',
-};
-
 const radioClassName = 'size-4! shrink-0! cursor-pointer! accent-primary!';
 
 type ThemeSectionProps = PropsWithChildren<{
@@ -109,7 +98,7 @@ const ThemeToggleOption = ({
       aria-labelledby={id}
       className={cn(
         'relative! inline-flex! h-5! w-9! shrink-0! cursor-pointer! rounded-full! border-2! border-transparent! transition-colors!',
-        checked ? 'bg-[#42be65]!' : 'bg-muted!',
+        checked ? 'bg-connectivity-green-600!' : 'bg-muted!',
       )}
       id={id}
       onClick={onChange}
@@ -118,7 +107,7 @@ const ThemeToggleOption = ({
     >
       <span
         className={cn(
-          'pointer-events-none! block! size-4! rounded-full! bg-white! shadow-sm! transition-transform!',
+          'pointer-events-none! block! size-4! rounded-full! bg-primary-foreground! shadow-sm! transition-transform!',
           checked ? 'translate-x-4!' : 'translate-x-0!',
         )}
       />
@@ -162,18 +151,18 @@ const ThemePopupContent = ({
   };
 
   return (
-    <div className="flex! h-full! min-h-0! flex-1! flex-col! bg-popover! in-[.accessible]:bg-[#646973]! in-[[data-theme=accessible]]:bg-[#646973]!">
-      <div className="px-4! pt-4!">
+    <div className="flex! h-full! max-h-full! min-h-0! flex-1! flex-col! overflow-hidden! bg-popover! in-[.accessible]:bg-accessible-panel! in-[[data-theme=accessible]]:bg-accessible-panel!">
+      <div className="shrink-0! px-4! pt-4!">
         <h3 className="text-base! font-medium! leading-6! text-foreground!">
-          Settings
+          {t('themes-layers')}
         </h3>
       </div>
 
       <form
         aria-label="layer-theme-form"
-        className="flex! min-h-0! flex-1! flex-col! gap-6! overflow-y-auto! px-4! py-4!"
+        className="flex! min-h-0! flex-1! flex-col! gap-6! overflow-y-auto! overscroll-contain! px-4! py-4!"
       >
-        <ThemeSection title="Theme">
+        <ThemeSection title={t('themes')}>
           {gigaThemeList
             .filter((item) => item !== 'accessible')
             .map((item, index) => (
@@ -181,7 +170,7 @@ const ThemePopupContent = ({
                 checked={gigaTheme === item}
                 id={`giga_${item}_${index}`}
                 key={`giga-${item}`}
-                label={themeLabel[item] ?? t(`${item}-mode`)}
+                label={t(`${item}-mode`)}
                 name="theme-radio-button-group-giga"
                 onChange={() => {
                   setCurrentStyle(item as Style);
@@ -191,11 +180,11 @@ const ThemePopupContent = ({
             ))}
         </ThemeSection>
 
-        <ThemeSection title="Map type">
+        <ThemeSection title={t('map-types')}>
           <ThemeRadioOption
             checked={defaultMapStyle === 'default'}
             id="default-view-radio"
-            label={mapTypeLabel.default}
+            label={t('default-view')}
             name="theme-radio-button-group"
             onChange={() => {
               setCurrentStyle(gigaTheme);
@@ -206,7 +195,7 @@ const ThemePopupContent = ({
               checked={defaultMapStyle === item}
               id={`${item}_${index}`}
               key={item}
-              label={mapTypeLabel[item] ?? t(`${item}-view`)}
+              label={t(`${item}-view`)}
               name="theme-radio-button-group"
               onChange={() => {
                 setCurrentStyle(item as Style);
@@ -215,11 +204,11 @@ const ThemePopupContent = ({
           ))}
         </ThemeSection>
 
-        <ThemeSection title="Layers">
+        <ThemeSection title={t('layers')}>
           <ThemeToggleOption
             checked={currentAdminBoundaries}
             id="admin-boundary"
-            label="Boundaries"
+            label={t('administrative-boundaries')}
             onChange={() => {
               setCurrentAdminBoundaries((prev) => !prev);
             }}
@@ -227,7 +216,7 @@ const ThemePopupContent = ({
           <ThemeToggleOption
             checked={currentTitlesAndLabels}
             id="titles-label"
-            label="Titles and labels"
+            label={t('titles-and-labels')}
             onChange={() => {
               setCurrentTitlesAndLabels((prev) => !prev);
             }}
@@ -235,7 +224,7 @@ const ThemePopupContent = ({
           <ThemeToggleOption
             checked={currentNavigateByAdminLevel}
             id="navigate-by-admin-level"
-            label="Admin levels"
+            label={t('admin-levels')}
             onChange={() => {
               setCurrentNavigateByAdminLevel((prev) => !prev);
             }}
@@ -243,7 +232,7 @@ const ThemePopupContent = ({
         </ThemeSection>
       </form>
 
-      <div className="mt-auto! flex! gap-2! px-4! pb-4! pt-2!">
+      <div className="mt-auto! flex! shrink-0! gap-2! border-t! border-border! px-4! pb-4! pt-3!">
         <Button
           className="h-10! flex-1! rounded-lg!"
           onClick={() => setOpen(false)}
