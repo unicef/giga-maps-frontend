@@ -52,6 +52,7 @@ import {
   $schoolAdminId,
   $schoolStats,
   $selectedLayerIdByEntity,
+  $showAccessibility,
   $showAdvancedFilter,
   $showThemeLayer,
   $statusLayerIdByEntity,
@@ -60,6 +61,7 @@ import {
   onSchoolUncheck,
   onSelectEntityMainLayer,
   onSelectEntityStatusLayer,
+  onShowAccessibility,
   onShowAdvancedFilter,
   onShowLegend,
   onShowThemeLayer,
@@ -1143,32 +1145,46 @@ sample({
   clock: $showAdvancedFilter.updates,
   filter: (isOpen) => isOpen,
   fn: () => false,
-  target: onShowThemeLayer,
+  target: [onShowAccessibility, onShowThemeLayer],
 });
 
 sample({
   clock: $showThemeLayer.updates,
   filter: (isOpen) => isOpen,
   fn: () => false,
-  target: onShowAdvancedFilter,
+  target: [onShowAccessibility, onShowAdvancedFilter],
 });
 
 sample({
-  clock: [$showAdvancedFilter.updates, $showThemeLayer.updates],
+  clock: $showAccessibility.updates,
+  filter: (isOpen) => isOpen,
+  fn: () => false,
+  target: [onShowAdvancedFilter, onShowThemeLayer],
+});
+
+const $isSidebarControlOpen = combine(
+  $showAccessibility,
+  $showAdvancedFilter,
+  $showThemeLayer,
+  (isAccessibilityOpen, isAdvancedFilterOpen, isThemeLayerOpen) =>
+    isAccessibilityOpen || isAdvancedFilterOpen || isThemeLayerOpen,
+);
+
+sample({
+  clock: [
+    $showAccessibility.updates,
+    $showAdvancedFilter.updates,
+    $showThemeLayer.updates,
+  ],
   filter: (isOpen) => isOpen,
   fn: () => false,
   target: onShowLegend,
 });
 
 sample({
-  clock: [$showAdvancedFilter.updates, $showThemeLayer.updates],
-  source: {
-    isAdvancedFilterOpen: $showAdvancedFilter,
-    isProductTour: $isProductTour,
-    isThemeLayerOpen: $showThemeLayer,
-  },
-  filter: ({ isAdvancedFilterOpen, isProductTour, isThemeLayerOpen }, isOpen) =>
-    !isProductTour && !isOpen && !isAdvancedFilterOpen && !isThemeLayerOpen,
+  clock: $isSidebarControlOpen.updates,
+  source: $isProductTour,
+  filter: (isProductTour, isOpen) => !isProductTour && !isOpen,
   fn: () => true,
   target: onShowLegend,
 });

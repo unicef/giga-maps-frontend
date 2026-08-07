@@ -16,10 +16,18 @@ const getLegendSurface = ({ themeState, theme }: LegendThemeProps) =>
   themeState === ThemeType.light ? theme.main : "#161616";
 
 const getLegendBorder = ({ themeState }: ActiveTheme) =>
-  themeState === ThemeType.light ? "#d9d9d9" : "#393939";
+  themeState === ThemeType.accessible
+    ? '#374151'
+    : themeState === ThemeType.light
+    ? '#d9d9d9'
+    : '#393939';
 
 const getLegendMuted = ({ themeState, theme }: LegendThemeProps) =>
-  themeState === ThemeType.light ? theme.titleDesc : "#9e9e9e";
+  themeState === ThemeType.accessible
+    ? '#9ca3af'
+    : themeState === ThemeType.light
+    ? theme.titleDesc
+    : '#9e9e9e';
 
 const getLegendText = ({ themeState, theme }: LegendThemeProps) =>
   themeState === ThemeType.light ? theme.text : "#ececec";
