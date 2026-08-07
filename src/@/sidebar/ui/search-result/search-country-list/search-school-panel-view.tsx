@@ -1,34 +1,26 @@
 import { useStore } from 'effector-react';
-import { useEffect, useRef } from 'react';
 
-import { ScrollArea } from '~/components/ui/scroll-area';
+import { cn } from '~/lib/cn';
 
-import {
-  $schoolListCurrentPage,
-  $searchAdminLevel2,
-} from '../container/search-result.model';
-import { SchoolListWrapper } from '../styles/search-result-style';
+import { $searchAdminLevel2 } from '../container/search-result.model';
 import { SearchButtonGroup } from './search-button-group';
 import SearchSchoolList from './search-school-list-view';
 
 export default function SearchSchoolPanel() {
   const isExpanded = useStore($searchAdminLevel2);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const currentPage = useStore($schoolListCurrentPage);
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
-    }
-  }, [currentPage]);
 
   if (!isExpanded) return null;
-  return (
-    <SchoolListWrapper className="school-list-wrapper">
-      <ScrollArea viewportRef={scrollRef} className='h-full!'>
 
-        <SearchSchoolList />
-      </ScrollArea>
+  return (
+    <div
+      className={cn(
+        'school-list-wrapper absolute! top-0! left-full! ml-2! flex! w-full! flex-col! overflow-clip! rounded-md! bg-surface-panel! shadow-md!',
+        'h-[calc(100dvh-var(--search-panel-top-offset))]!',
+        'max-md:fixed! max-md:inset-x-0! max-md:top-12! max-md:bottom-0! max-md:ml-0! max-md:h-auto!',
+      )}
+    >
+      <SearchSchoolList />
       <SearchButtonGroup />
-    </SchoolListWrapper>
+    </div>
   );
 }
