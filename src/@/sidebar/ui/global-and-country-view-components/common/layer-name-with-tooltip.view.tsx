@@ -28,10 +28,10 @@ export default function LayerNameWithTooltip({
         </p>
         {description && (
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild stopPropagation>
               <Button
                 aria-label={description}
-                className="size-5! bg-transparent! p-0! text-muted-foreground! hover:bg-transparent! hover:text-foreground!"
+                className="size-6! -m-0.5! p-1.5! rounded-full! bg-transparent! text-muted-foreground! hover:bg-transparent! hover:text-foreground!"
                 size="icon-xs"
                 type="button"
                 variant="icon"

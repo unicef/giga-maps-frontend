@@ -132,12 +132,14 @@ const EntityLegendIndicator = ({
     const fontFamily = getMeasurementFontFamily();
 
     if (fitToViewBox) {
-      const baseMetrics = getGlyphMetrics(symbol, glyphSize);
-      const targetScale = glyphSize / Math.max(baseMetrics.boundsWidth, baseMetrics.boundsHeight);
-      const fittedFontSize = glyphSize * targetScale;
-      const glyphMetrics = getGlyphMetrics(symbol, fittedFontSize);
-      const centerX = glyphMetrics.boundsX + (glyphMetrics.boundsWidth / 2);
-      const centerY = glyphMetrics.boundsY + (glyphMetrics.boundsHeight / 2);
+      // 1. Measure at a high-precision reference size (100px) to get exact ink boundaries
+      const REF_SIZE = 100;
+      const baseMetrics = getGlyphMetrics(symbol, REF_SIZE);
+
+      const vbX = baseMetrics.boundsX;
+      const vbY = baseMetrics.boundsY;
+      const vbWidth = baseMetrics.boundsWidth || REF_SIZE;
+      const vbHeight = baseMetrics.boundsHeight || REF_SIZE;
 
       return (
         <svg
@@ -147,15 +149,17 @@ const EntityLegendIndicator = ({
             height: `${glyphSize}px`,
             width: `${glyphSize}px`,
           }}
-          viewBox={`0 0 ${glyphSize} ${glyphSize}`}
+          // 2. Crop the viewBox tightly around the drawn character's ink area
+          viewBox={`${vbX} ${vbY} ${vbWidth} ${vbHeight}`}
+          // 3. Force SVG to stretch BOTH X and Y to fill 100% of glyphSize (e.g., 16x16)
+          preserveAspectRatio="none"
         >
           <text
             fill={glyphColor}
             fontFamily={fontFamily}
-            fontSize={fittedFontSize}
-            textAnchor="start"
-            x={(glyphSize / 2) - centerX}
-            y={(glyphSize / 2) - centerY}
+            fontSize={REF_SIZE}
+            x="0"
+            y="0"
           >
             {symbol}
           </text>

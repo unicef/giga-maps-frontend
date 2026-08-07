@@ -188,6 +188,7 @@ export type CountryBasic = {
   map_preview: string;
   description: string;
   data_source: string;
+  health_data_source: string;
   integration_status: IntegrationStatus;
   date_of_join: string;
   schools_with_data_percentage: number;
@@ -240,6 +241,7 @@ export type Country = {
   map_preview: string;
   description: string;
   data_source: string;
+  health_data_source: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
   country_disclaimer: string;

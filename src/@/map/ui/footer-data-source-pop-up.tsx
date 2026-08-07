@@ -3,7 +3,7 @@ import { Info } from 'lucide-react';
 import { type PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $dataSource } from '~/@/country/country.model';
+import { $dataSourceByEntity } from '~/@/country/country.model';
 import { type EntityType } from '~/@/entities';
 import {
   $currentLayerCountryDataSource,
@@ -76,7 +76,7 @@ const FooterDataSourcePopUp = ({
   showOldDataSource = false,
   entityType,
 }: FooterDataSourcePopUpProps) => {
-  const dataSource = useStore($dataSource);
+  const dataSourceByEntity = useStore($dataSourceByEntity);
   const { t } = useTranslation();
   const currentEntityType = entityType;
   const currentLayerTypeUtilsByEntity = useStore(
@@ -89,7 +89,7 @@ const FooterDataSourcePopUp = ({
   );
   const currentDataSource =
     (currentLayerCountryDataSource[currentEntityType] as LayerDataSource | null) ?? null;
-  const oldDataSource = dataSource ?? '';
+  const oldDataSource = dataSourceByEntity[currentEntityType] ?? '';
   const dataSourceName = useMemo(() => {
     const data: string[] = currentDataSource?.name
       ? splitOutsideParens(currentDataSource.name)
@@ -107,6 +107,8 @@ const FooterDataSourcePopUp = ({
     () => currentDataSource?.description?.split(';') ?? [],
     [currentDataSource?.description],
   );
+
+  if (showOldDataSource && !oldDataSource.trim()) return null;
 
   if (showOldDataSource) {
     if (!isFooter) {

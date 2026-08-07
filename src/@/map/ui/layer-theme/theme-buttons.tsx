@@ -1,5 +1,5 @@
-import { Settings } from 'lucide-react';
 import { useStore } from 'effector-react';
+import { Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { $isProductTour, $showThemeLayer, onShowThemeLayer } from '~/@/sidebar/sidebar.model';

@@ -440,6 +440,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('description', formElement.description?.value);
       formData.append('iso3_format', formElement.iso3_format?.value);
       formData.append('data_source', formElement.data_source?.value);
+      formData.append('health_data_source', formElement.health_data_source?.value);
       formData.append('last_weekly_status_id', formElement.last_weekly_status_id?.value)
       formData.append('country_disclaimer', formElement.country_disclaimer?.value)
       formData.append('date_of_join', formElement.date_of_join?.value?.split('/').join('-'));
@@ -659,20 +660,38 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
         <RowContainer>
           <InputContainer>
             <InputLabel>
-              Data Source
+              Data source (schools)
             </InputLabel>
             <InputBoxWrapper>
               <TextInput
                 type="text"
                 labelText=""
-                id="data-souce"
+                id="data-source-schools"
                 name="data_source"
-                placeholder='Enter data source'
+                placeholder='Enter schools data source'
                 value={formDataCountry?.data_source}
                 onChange={(e) => onUdpateCountryForm([e.target.name, e.target.value])}
               />
             </InputBoxWrapper>
           </InputContainer>
+          <InputContainer>
+            <InputLabel>
+              Data source (health)
+            </InputLabel>
+            <InputBoxWrapper>
+              <TextInput
+                type="text"
+                labelText=""
+                id="data-source-health"
+                name="health_data_source"
+                placeholder='Enter health data source'
+                value={formDataCountry?.health_data_source}
+                onChange={(e) => onUdpateCountryForm([e.target.name, e.target.value])}
+              />
+            </InputBoxWrapper>
+          </InputContainer>
+        </RowContainer>
+        <RowContainer>
           <InputContainer>
             <InputLabel>
               Add a country disclaimer
@@ -681,7 +700,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               <TextInput
                 type="text"
                 labelText=""
-                id="data-souce"
+                id="country-disclaimer"
                 maxLength={255}
                 name="country_disclaimer"
                 placeholder='Enter country disclaimer(Max 255 characters)'

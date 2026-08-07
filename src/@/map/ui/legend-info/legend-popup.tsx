@@ -22,6 +22,7 @@ import {
   $getSchoolParams,
   $isGlobalLegendLoading,
   $isLiveLegendLoading,
+  $isMenuOpen,
   $isStaticLegendLoading,
   $isStatusLegendLoading,
   $layerUtils,
@@ -75,13 +76,15 @@ export const shouldOpenLegendPopup = ({
   isMobile,
   isCountryListOpen,
   isSearchListOpen,
+  isMenuOpen,
 }: {
   open: boolean;
   isMobile: boolean;
   isCountryListOpen: boolean;
   isSearchListOpen: boolean;
+  isMenuOpen?: boolean;
 }) =>
-  open && !(isMobile && (isCountryListOpen || isSearchListOpen));
+  open && !isMenuOpen && !(isMobile && (isCountryListOpen || isSearchListOpen));
 
 const schoolSummaryOrder = [
   ConnectivityStatusDistribution.connected,
@@ -111,6 +114,7 @@ const LegendPopup = ({
   const hasSearchInput = useStore($hasSearchInput);
   const isSearchFocused = useStore($isSearchFocused);
   const isCountryListOpen = useStore($showCountries);
+  const isMenuOpen = useStore($isMenuOpen);
   const sidebarHeight = useStore($sidebarHeight);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
@@ -130,6 +134,7 @@ const LegendPopup = ({
     isMobile,
     isCountryListOpen,
     isSearchListOpen,
+    isMenuOpen,
   });
   const visibleLegendEntityTypes = useMemo(() => {
     return entityTypesFiltered.filter((type) =>
@@ -403,6 +408,8 @@ const LegendPopup = ({
                       ? 'var(--color-foreground)'
                       : 'var(--color-muted-foreground)'
                   }
+                  fitToViewBox
+                  size={8}
                   entityType={entityType}
                 />
                 <span className="whitespace-nowrap!">

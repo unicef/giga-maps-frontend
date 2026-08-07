@@ -58,6 +58,10 @@ export const onZoomStateChange = createEvent<'start' | 'end' | null>();
 export const $zoomState = createStore<'start' | 'end' | null>(null);
 $zoomState.on(onZoomStateChange, setPayload);
 
+export const onZoomLevelChange = createEvent<number>();
+export const $zoomLevel = createStore<number>(2);
+$zoomLevel.on(onZoomLevelChange, setPayload);
+
 export const updateSchoolMarker = createEvent<SchoolMarker[]>();
 export const $schoolMarkers = createStore<SchoolMarker[]>([]).on(
   updateSchoolMarker,

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import { changeCountryCode } from '~/@/country/country.model';
 import EntityTypeSelector from '~/@/entities/ui/entity-selector';
+import WelcomeToast from '~/@/entities/ui/welcome-toast';
 import ProductTour from '~/@/product-tour/ui/product-tour.view';
 import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
@@ -20,6 +21,7 @@ import Map from './map';
 import { TimeplayerContainer } from './timeplayer/timeplayer-container';
 import TopLoader from './top-loader';
 import Underlay from './underlay';
+import ZoomLevelDisplay from './zoom-level-display';
 
 const PopupContainer = styled.div`
   display: none;
@@ -52,10 +54,12 @@ const MapPage = () => {
       {!isMobile && <EntityTypeSelector />}
       <TopLoader />
       <Footer />
+      <WelcomeToast />
+      {/* <ZoomLevelDisplay /> */}
       {isProductTour && <ProductTour />}
       {isTimeplayer && <TimeplayerContainer />}
-    </Layout >
-  )
+    </Layout>
+  );
 };
 
 export default MapPage;
