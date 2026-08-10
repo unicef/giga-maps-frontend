@@ -228,6 +228,12 @@ const LegendPopup = ({
   const shouldShowGlobalSchoolStatus = isGlobalView;
   const shouldShowStatusSummary =
     isSchoolStatus || shouldShowGlobalSchoolStatus;
+  const visibleLegendSectionCount = [
+    shouldShowStatusSummary,
+    showLiveLegend,
+    showStaticLegend,
+  ].filter(Boolean).length;
+  const isCompactLegend = visibleLegendSectionCount <= 1;
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
   const renderMetricSummary = () => {
@@ -320,7 +326,7 @@ const LegendPopup = ({
 
   const collapsedContent = (
     <div
-      className="flex! flex-col! gap-2.5! bg-popover! px-3.5! py-3! max-md:gap-2! max-md:px-3! max-md:py-2.5!"
+      className="relative! flex! flex-col! gap-2.5! bg-popover! px-3.5! pr-10! py-3! max-md:gap-2! max-md:px-3! max-md:pr-9! max-md:py-2.5!"
       data-testid="legend-collapsed-view"
     >
       {shouldShowStatusSummary ? (
@@ -373,7 +379,7 @@ const LegendPopup = ({
 
   const expandedContent = (
     <>
-      <div className="flex! items-center! justify-between! gap-3! bg-popover! in-[.accessible]:bg-[#646973]! in-[[data-theme=accessible]]:bg-[#646973]! px-3.5! pt-3! max-md:gap-2! max-md:px-3! max-md:pt-2.5!">
+      <div className="relative! flex! items-center! justify-between! gap-3! bg-popover! in-[.accessible]:bg-accessible-panel! in-[[data-theme=accessible]]:bg-accessible-panel! px-3.5! pr-10! pt-3! max-md:gap-2! max-md:px-3! max-md:pr-9! max-md:pt-2.5!">
         <div className="flex! min-w-0! items-center! gap-2! max-md:gap-3!">
           {visibleLegendEntityTypes.map((entityType) => {
             const config = entityConfigMap[entityType];
@@ -439,13 +445,17 @@ const LegendPopup = ({
         </CollapsibleTrigger>
       </div>
       <div
-        className="flex! flex-wrap! gap-4! bg-popover! in-[.accessible]:bg-[#646973]! in-[[data-theme=accessible]]:bg-[#646973]! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!"
+        className={cn(
+          'bg-popover! in-[.accessible]:bg-accessible-panel! in-[[data-theme=accessible]]:bg-accessible-panel! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!',
+          isCompactLegend ? 'flex! flex-col! gap-4!' : 'flex! flex-wrap! gap-4!',
+        )}
         data-testid="legend-expanded-view"
       >
         {shouldShowStatusSummary ? (
           <SchoolStatusLegend
             entityType={activeTab}
             forceVisible={shouldShowGlobalSchoolStatus}
+            isCompact={isCompactLegend}
             isLoading={shouldShowLegendLoading(
               isEntityDetailView,
               isGlobalView ? isGlobalLegendLoading : isStatusLegendLoading,
@@ -457,6 +467,7 @@ const LegendPopup = ({
         {showLiveLegend ? (
           <LiveLayerLegend
             entityType={activeTab}
+            isCompact={isCompactLegend}
             isLoading={shouldShowLegendLoading(
               isEntityDetailView,
               isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading,
@@ -469,6 +480,7 @@ const LegendPopup = ({
         {showStaticLegend ? (
           <StaticLayerLegend
             entityType={activeTab}
+            isCompact={isCompactLegend}
             isLoading={shouldShowLegendLoading(
               isEntityDetailView,
               isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading,
@@ -499,10 +511,14 @@ const LegendPopup = ({
         ref={popoverContentRef}
         align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
-          'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border!  p-0! shadow-xs!',
-          'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
-          'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
-          'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
+          'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
+          isCompactLegend
+            ? 'w-max! max-w-[min(22rem,calc(100vw-1rem))]!'
+            : [
+                'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
+                'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
+                'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
+              ],
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

@@ -76,6 +76,7 @@
 
   /* Vertical space taken by the top bar + search box above the panels */
   --search-panel-top-offset: 7.7rem;
+  --giga-accessible-panel: #646973;
 }
 
 /* ── Light theme overrides ──────────────────────────────────── */
@@ -199,6 +200,7 @@
   --color-filter-muted: var(--giga-filter-muted);
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
+  --color-accessible-panel: var(--giga-accessible-panel);
 
   --color-connectivity-green-200: #85FFBC;
   --color-connectivity-green-600: #00D661;

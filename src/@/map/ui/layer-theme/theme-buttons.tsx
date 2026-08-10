@@ -33,7 +33,7 @@ const ThemeButtons = () => {
         </ThemePopup>
       </div>
       {isOpen && <ClickAnywhere
-        classList={['theme-wrapper-popup']}
+        classList={['theme-wrapper-popup', 'theme-layer-popover-content']}
         trigger={isOpen}
         outsideClick={() => {
           if (!isProductTour) {
