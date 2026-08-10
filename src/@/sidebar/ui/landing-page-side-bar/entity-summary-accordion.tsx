@@ -24,6 +24,7 @@ import { Accordion } from '~/components/ui/accordion';
 import { defaultLanguage } from '~/core/i18n/constant';
 import { $lng } from '~/core/i18n/store';
 
+import EntityEmptyState from './entity-empty-state';
 import EntitySummaryCard from './entity-summary-card';
 import type {
   EntitySummaryCardData,
@@ -110,6 +111,19 @@ const EntitySummaryAccordion = ({
       toggleAccordionEntity(entityType);
     });
   };
+
+  const allEntitiesEmpty =
+    !isLoading &&
+    entityCards.length > 0 &&
+    entityCards.every((card) => card.accordionItem.entitiesTotal === 0);
+
+  if (allEntitiesEmpty) {
+    return (
+      <div className="mt-4! border-t! border-border!">
+        <EntityEmptyState t={t} />
+      </div>
+    );
+  }
 
   return (
     <div className="mt-4! flex! flex-col! gap-3!">

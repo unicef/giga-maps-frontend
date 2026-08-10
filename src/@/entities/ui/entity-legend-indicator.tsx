@@ -5,12 +5,14 @@ import { $entityConfigMap } from '~/@/entities/models/entity.model';
 import { cn } from '~/lib/cn';
 
 type EntityLegendIndicatorProps = {
+  borderOnly?: boolean;
   className?: string;
   color: string;
   entityType: string;
   fitToViewBox?: boolean;
   glowColor?: string;
   size?: number;
+  strokeWidth?: number;
 };
 
 type GlyphMetrics = {
@@ -109,12 +111,14 @@ const getGlyphMetrics = (symbol: string, glyphSize: number): GlyphMetrics => {
 };
 
 const EntityLegendIndicator = ({
+  borderOnly = false,
   className,
   color,
   entityType,
   fitToViewBox = false,
   glowColor,
   size = 16,
+  strokeWidth: strokeWidthProp,
 }: EntityLegendIndicatorProps) => {
   const entityConfigMap = useStore($entityConfigMap);
   const config = entityConfigMap[entityType];
@@ -130,6 +134,7 @@ const EntityLegendIndicator = ({
 
   const renderGlyph = (glyphSize: number, glyphColor: string, extraClass: string = '') => {
     const fontFamily = getMeasurementFontFamily();
+    const effectiveStrokeWidth = strokeWidthProp ?? Math.min(2, Math.max(1, glyphSize * 0.1));
 
     if (fitToViewBox) {
       // 1. Measure at a high-precision reference size (100px) to get exact ink boundaries
@@ -140,6 +145,7 @@ const EntityLegendIndicator = ({
       const vbY = baseMetrics.boundsY;
       const vbWidth = baseMetrics.boundsWidth || REF_SIZE;
       const vbHeight = baseMetrics.boundsHeight || REF_SIZE;
+      const refStrokeWidth = (effectiveStrokeWidth / glyphSize) * REF_SIZE;
 
       return (
         <svg
@@ -155,9 +161,11 @@ const EntityLegendIndicator = ({
           preserveAspectRatio="none"
         >
           <text
-            fill={glyphColor}
+            fill={borderOnly ? 'none' : glyphColor}
             fontFamily={fontFamily}
             fontSize={REF_SIZE}
+            stroke={borderOnly ? glyphColor : undefined}
+            strokeWidth={borderOnly ? refStrokeWidth : undefined}
             x="0"
             y="0"
           >
@@ -180,9 +188,11 @@ const EntityLegendIndicator = ({
         viewBox={`0 0 ${glyphSize} ${glyphSize}`}
       >
         <text
-          fill={glyphColor}
+          fill={borderOnly ? 'none' : glyphColor}
           fontFamily={fontFamily}
           fontSize={glyphSize}
+          stroke={borderOnly ? glyphColor : undefined}
+          strokeWidth={borderOnly ? effectiveStrokeWidth : undefined}
           textAnchor="start"
           x={(glyphSize / 2) + glyphMetrics.x}
           y={(glyphSize / 2) + glyphMetrics.y}

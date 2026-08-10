@@ -69,6 +69,10 @@ export const buildEntityCard = ({
   const connectedValue = Number(connectedGroup?.connected ?? 0);
   const entityLabel = getEntityLabel(config, t);
 
+  const entitiesTotal = Number(
+    entityGlobalStats?.entities_total ?? entityGlobalStats?.entities_connected ?? 0,
+  );
+
   return {
     badge: config.sidebar.badge,
     collapsedRows: [
@@ -79,6 +83,7 @@ export const buildEntityCard = ({
       },
       { label: t('reporting-internet-quality'), value: measureValue },
     ],
+    entitiesTotal,
     t,
     title: entityLabel,
     value: entityType,

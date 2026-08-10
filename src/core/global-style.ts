@@ -167,6 +167,8 @@ a{
 
   [data-title]:hover::after {
     content: attr(data-title);
+    -webkit-text-fill-color: white;
+    -webkit-background-clip: border-box;
     position: absolute;
     bottom: 100%;
     left: 50%;

@@ -1,9 +1,14 @@
+import { useStore } from 'effector-react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import { $country } from '~/@/country/country.model';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { EntityType } from '~/@/entities/types/base-entity.type';
+import { $stylePaintData } from '~/@/map/map.model';
 import HealthCentersAccordionFooterLogo from '~/assets/images/health-centers-accordion-footer-logo.svg';
 import SchoolAccordionFooterLogo from '~/assets/images/school-accordion-footer-logo.svg';
+import EntityEmptyState from './entity-empty-state';
 import {
   AccordionContent,
   AccordionItem,
@@ -12,13 +17,18 @@ import {
 import { Skeleton } from '~/components/ui/skeleton';
 import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
-
 import type {
   EntityCardData,
   LandingPageTranslationFn,
 } from './landing-page.types';
 
 const MetricDivider = () => <div className="h-px! w-full! bg-border!" />;
+
+const naStyle: React.CSSProperties = {
+  color: 'var(--tailwind-colors-gray-600, #6F6F6F)',
+  fontSize: '16px',
+  fontWeight: 600,
+};
 
 type EntitySummaryCardProps = {
   card: EntityCardData;
@@ -38,11 +48,11 @@ const EntitySummaryCard = ({
   isLoading = false,
   loadingRowLabels = [],
   lng,
-  showSummaryRowsWhenExpanded = false,
   t,
 }: EntitySummaryCardProps) => {
-  const shouldShowSummaryRows =
-    !isLoading && (!expanded || showSummaryRowsWhenExpanded);
+  const stylePaintData = useStore($stylePaintData);
+  const isEmptyState = !isLoading && card.entitiesTotal === 0;
+  const shouldShowSummaryRows = !isLoading && !expanded;
   const loadingRowLabelSet = new Set(loadingRowLabels);
 
   return (
@@ -50,13 +60,21 @@ const EntitySummaryCard = ({
       className="overflow-visible! rounded-lg! border! border-border!"
       value={card.value}
     >
-      <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!">
+      <AccordionTrigger
+        disabled={isEmptyState}
+        className={cn(
+          'px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!',
+          isEmptyState && 'border-b-0! cursor-default! pointer-events-none! opacity-90!',
+        )}
+      >
         <div className="flex! min-w-0! items-center! gap-2.5!">
           <div className="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground">
             {card.title}
           </div>
         </div>
-        {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        {!isEmptyState ? (
+          expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />
+        ) : null}
       </AccordionTrigger>
 
       {isLoading ? (
@@ -67,13 +85,119 @@ const EntitySummaryCard = ({
         </div>
       ) : null}
 
+      {isEmptyState ? (
+        <EntityEmptyState entityTitle={card.title} t={t} />
+      ) : (
+        <>
+          {!isLoading && expanded ? (
+        <div className="px-3.5! pb-2!">
+          <div className="flex! items-center! gap-4! px-3.5! pb-3! pt-0.5! flex-wrap!">
+            {/* Locations Mapped */}
+            <div className="flex! items-center! gap-1.5!">
+              <EntityLegendIndicator
+                borderOnly
+                className="ml-0!"
+                color={stylePaintData.unknown}
+                entityType={card.value}
+                size={14}
+                strokeWidth={1.5}
+              />
+              {loadingRowLabelSet.has(card.collapsedRows[0]?.label) ? (
+                <Skeleton className="h-5! w-10! rounded-sm!" />
+              ) : !card.collapsedRows[0]?.value ? (
+                <span
+                  className="text-[16px]! font-semibold! leading-[18px]!"
+                  style={naStyle}
+                  data-title={t('no-data-available')}
+                >
+                  NA
+                </span>
+              ) : (
+                <span
+                  className="text-sm! font-semibold! leading-[18px]! text-foreground"
+                  data-title={t('int', { val: card.collapsedRows[0]?.value })}
+                >
+                  {formatNumber(card.collapsedRows[0]?.value, lng)}
+                </span>
+              )}
+            </div>
+
+            {/* Connected */}
+            <div className="flex! items-center! gap-1.5!">
+              <EntityLegendIndicator
+                className="ml-0!"
+                color={stylePaintData.connected}
+                entityType={card.value}
+                size={14}
+              />
+              {loadingRowLabelSet.has(card.collapsedRows[1]?.label) ? (
+                <Skeleton className="h-5! w-10! rounded-sm!" />
+              ) : !card.collapsedRows[1]?.value ? (
+                <span
+                  className="text-[16px]! font-semibold! leading-[18px]!"
+                  style={naStyle}
+                  data-title={t('no-data-available')}
+                >
+                  NA
+                </span>
+              ) : (
+                <span
+                  className="text-sm! font-semibold! leading-[18px]! text-foreground"
+                  data-title={t('int', { val: card.collapsedRows[1]?.value })}
+                >
+                  {formatNumber(card.collapsedRows[1]?.value, lng)}
+                </span>
+              )}
+            </div>
+
+            {/* Reporting Internet Quality */}
+            <div className="flex! items-center! gap-1.5!">
+              <EntityLegendIndicator
+                className="ml-0!"
+                color={stylePaintData.connected}
+                entityType={card.value}
+                glowColor={stylePaintData.good ?? stylePaintData.connected}
+                size={14}
+              />
+              {loadingRowLabelSet.has(card.collapsedRows[2]?.label) ? (
+                <Skeleton className="h-5! w-10! rounded-sm!" />
+              ) : !card.collapsedRows[2]?.value ? (
+                <span
+                  className="text-[16px]! font-semibold! leading-[18px]!"
+                  style={naStyle}
+                  data-title={t('no-data-available')}
+                >
+                  NA
+                </span>
+              ) : (
+                <span
+                  className="text-sm! font-semibold! leading-[18px]! text-foreground"
+                  data-title={t('int', { val: card.collapsedRows[2]?.value })}
+                >
+                  {formatNumber(card.collapsedRows[2]?.value, lng)}
+                </span>
+              )}
+            </div>
+          </div>
+          <MetricDivider />
+        </div>
+      ) : null}
+
       {shouldShowSummaryRows ? (
         <div className="px-3.5! pb-2!">
           {card.collapsedRows.map((row, index) => (
             <div key={row.label}>
-              <div className="grid! grid-cols-[auto_1fr]! items-center! gap-x-3! py-2.5!">
+              <div className="grid! grid-cols-[auto_1fr]! items-center! py-2.5!">
                 {loadingRowLabelSet.has(row.label) ? (
                   <Skeleton className="h-5! w-12! rounded-sm!" />
+                ) : !row.value ? (
+                  <span
+                    className="shrink-0! text-[16px]! font-semibold! leading-[22px]!"
+                    style={naStyle}
+                    data-title={t('no-data-available')}
+                  >
+                    NA
+                  </span>
                 ) : (
                   <span
                     className="shrink-0! text-lg! font-semibold! leading-[22px]! text-foreground"
@@ -86,7 +210,7 @@ const EntitySummaryCard = ({
                   {row.label.charAt(0).toUpperCase() + row.label.slice(1)}
                 </span>
               </div>
-              {card.collapsedRows.length > index + 1 || expanded ? <MetricDivider /> : null}
+              {card.collapsedRows.length > index + 1 ? <MetricDivider /> : null}
             </div>
           ))}
         </div>
@@ -110,8 +234,11 @@ const EntitySummaryCard = ({
           </div>
         </div>
       ) : null}
+        </>
+      )}
     </AccordionItem>
   );
 };
 
 export default EntitySummaryCard;
+
