@@ -8,7 +8,7 @@ import { setPayload } from '~/lib/effector-kit';
 import { $isSearchFocused, changeIsSearchFocused } from '../../../common-components/top-search-bar/top-search-bar.model';
 import { MAX_SCHOOL_SELECTED } from '../../container/search-result.constant';
 import { fetchSchoolListFx } from '../../container/search-result.fx';
-import { $searchCountryList, $searchHistoryData, $searchSchoolIds, $searchSchoolList, onSearchItemClick, setSchoolSelection, setSearchCountryExpand, setSearchExpandLevel1, setSearchExpandLevel2 } from '../../container/search-result.model';
+import { $schoolListCurrentPage, $searchCountryList, $searchHistoryData, $searchSchoolIds, $searchSchoolList, onSchoolListCurrentPage, onSearchItemClick, setSchoolSelection, setSearchCountryExpand, setSearchExpandLevel1, setSearchExpandLevel2 } from '../../container/search-result.model';
 import { CountryWithDistrictCount, SearchResultApi } from '../../container/search-result.type';
 import { SearchCountryList } from "..";
 import { SearchButtonGroup } from '../search-button-group';
@@ -361,10 +361,8 @@ describe('SearchCountryList', () => {
   test('render SearchButtonGroup', () => {
     changeIsSearchFocused(true)
     setSearchExpandLevel2("")
-    void waitFor(() => {
-      render(<SearchButtonGroup />)
-    })
-    expect(screen.queryByText('School(s) Selected')).not.toBeInTheDocument();
+    render(<SearchButtonGroup />)
+    expect(screen.queryByTestId('selected-school-apply-button')).not.toBeInTheDocument();
   })
 
   test("onclick of close button", () => {
@@ -383,10 +381,22 @@ describe('SearchCountryList', () => {
       count: 0,
       results: []
     } as unknown as APIListType<SearchResultApi>)
-    void waitFor(() => {
-      render(<SearchButtonGroup />)
-    })
-    expect(screen.queryByText('0–0 of 0 items')).toBeInTheDocument();
+    render(<SearchButtonGroup />)
+    expect(screen.getByText('of 1 page')).toBeInTheDocument();
+  })
+
+  test('page select keeps the 0-based page index', () => {
+    setSearchExpandLevel2(" ")
+    onSchoolListCurrentPage(0)
+    updateSearchSchoolList({
+      count: 120,
+      results: []
+    } as unknown as APIListType<SearchResultApi>)
+    const { getByLabelText } = render(<SearchButtonGroup />)
+    // 120 schools / 50 per page = 3 pages
+    expect(screen.getByText('of 3 pages')).toBeInTheDocument();
+    fireEvent.change(getByLabelText('Page'), { target: { value: '2' } });
+    expect($schoolListCurrentPage.getState()).toBe(2);
   })
 
   test("onclick of apply button", () => {
