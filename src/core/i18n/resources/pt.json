@@ -27,6 +27,7 @@
   "reset": "Reiniciar",
   "apply": "Aplicar",
   "or": "ou",
+  "of-total": "de {{total}}",
   "contact-us": "Contate-nos",
   "isnt-reporting-internet-quality": "{{country}} não está relatando a qualidade da internet.",
   "want-to-help-map-it": "Quer ajudar a mapeá-lo?",

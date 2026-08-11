@@ -76,12 +76,21 @@ export const buildEntityCard = ({
   return {
     badge: config.sidebar.badge,
     collapsedRows: [
-      { label: t('locations-mapped'), value: mappedValue },
+      {
+        label: t('locations-mapped'),
+        value: mappedValue,
+        totalValue: mappedValue,
+      },
       {
         label: `${t('connected')} ${entityLabel}`,
         value: connectedValue,
+        totalValue: connectedValue,
       },
-      { label: t('reporting-internet-quality'), value: measureValue },
+      {
+        label: t('reporting-internet-quality'),
+        value: measureValue,
+        totalValue: measureValue,
+      },
     ],
     entitiesTotal,
     t,

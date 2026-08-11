@@ -34,6 +34,7 @@ type EntitySummaryCardProps = {
   card: EntityCardData;
   children?: ReactNode;
   expanded: boolean;
+  isFiltered?: boolean;
   isLoading?: boolean;
   loadingRowLabels?: string[];
   lng: string;
@@ -45,6 +46,7 @@ const EntitySummaryCard = ({
   card,
   children,
   expanded,
+  isFiltered: isFilteredProp,
   isLoading = false,
   loadingRowLabels = [],
   lng,
@@ -54,6 +56,7 @@ const EntitySummaryCard = ({
   const isEmptyState = !isLoading && card.entitiesTotal === 0;
   const shouldShowSummaryRows = !isLoading && !expanded;
   const loadingRowLabelSet = new Set(loadingRowLabels);
+  const isFiltered = isFilteredProp ?? card.isFiltered ?? false;
 
   return (
     <AccordionItem
@@ -101,7 +104,7 @@ const EntitySummaryCard = ({
                     dataTitle={
                       card.collapsedRows[0]?.label
                         ? card.collapsedRows[0].label.charAt(0).toUpperCase() +
-                          card.collapsedRows[0].label.slice(1)
+                        card.collapsedRows[0].label.slice(1)
                         : undefined
                     }
                     dataTitlePos="right"
@@ -120,12 +123,33 @@ const EntitySummaryCard = ({
                       NA
                     </span>
                   ) : (
-                    <span
-                      className="text-sm! font-semibold! leading-[18px]! text-foreground"
-                      data-title={t('int', { val: card.collapsedRows[0]?.value })}
-                    >
-                      {formatNumber(card.collapsedRows[0]?.value, lng)}
-                    </span>
+                    <div className="flex! flex-col! justify-center!">
+                      <span
+                        className="text-[16px]! font-normal! leading-[18px]! text-foreground"
+                        data-title={t('int', { val: card.collapsedRows[0]?.value })}
+                      >
+                        {formatNumber(card.collapsedRows[0]?.value, lng)}
+                      </span>
+                      {isFiltered ? (
+                        <span
+                          className="text-[12px]! font-normal! leading-3.5! text-muted-foreground"
+                          data-title={t('int', {
+                            val: card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value,
+                          })}
+                        >
+                          {t('of-total', {
+                            total: formatNumber(
+                              card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value,
+                              lng,
+                            ),
+                            defaultValue: `of ${formatNumber(
+                              card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value,
+                              lng,
+                            )}`,
+                          })}
+                        </span>
+                      ) : null}
+                    </div>
                   )}
                 </div>
 
@@ -137,7 +161,7 @@ const EntitySummaryCard = ({
                     dataTitle={
                       card.collapsedRows[1]?.label
                         ? card.collapsedRows[1].label.charAt(0).toUpperCase() +
-                          card.collapsedRows[1].label.slice(1)
+                        card.collapsedRows[1].label.slice(1)
                         : undefined
                     }
                     entityType={card.value}
@@ -154,12 +178,33 @@ const EntitySummaryCard = ({
                       NA
                     </span>
                   ) : (
-                    <span
-                      className="text-sm! font-semibold! leading-[18px]! text-foreground"
-                      data-title={t('int', { val: card.collapsedRows[1]?.value })}
-                    >
-                      {formatNumber(card.collapsedRows[1]?.value, lng)}
-                    </span>
+                    <div className="flex! flex-col! justify-center!">
+                      <span
+                        className="text-[16px]! font-normal! leading-[18px]! text-foreground"
+                        data-title={t('int', { val: card.collapsedRows[1]?.value })}
+                      >
+                        {formatNumber(card.collapsedRows[1]?.value, lng)}
+                      </span>
+                      {isFiltered ? (
+                        <span
+                          className="text-[12px]! font-normal! leading-3.5! text-muted-foreground"
+                          data-title={t('int', {
+                            val: card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value,
+                          })}
+                        >
+                          {t('of-total', {
+                            total: formatNumber(
+                              card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value,
+                              lng,
+                            ),
+                            defaultValue: `of ${formatNumber(
+                              card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value,
+                              lng,
+                            )}`,
+                          })}
+                        </span>
+                      ) : null}
+                    </div>
                   )}
                 </div>
 
@@ -171,7 +216,7 @@ const EntitySummaryCard = ({
                     dataTitle={
                       card.collapsedRows[2]?.label
                         ? card.collapsedRows[2].label.charAt(0).toUpperCase() +
-                          card.collapsedRows[2].label.slice(1)
+                        card.collapsedRows[2].label.slice(1)
                         : undefined
                     }
                     entityType={card.value}
@@ -189,12 +234,33 @@ const EntitySummaryCard = ({
                       NA
                     </span>
                   ) : (
-                    <span
-                      className="text-sm! font-semibold! leading-[18px]! text-foreground"
-                      data-title={t('int', { val: card.collapsedRows[2]?.value })}
-                    >
-                      {formatNumber(card.collapsedRows[2]?.value, lng)}
-                    </span>
+                    <div className="flex! flex-col! justify-center!">
+                      <span
+                        className="text-[16px]! font-normal! leading-[18px]! text-foreground"
+                        data-title={t('int', { val: card.collapsedRows[2]?.value })}
+                      >
+                        {formatNumber(card.collapsedRows[2]?.value, lng)}
+                      </span>
+                      {isFiltered ? (
+                        <span
+                          className="text-[12px]! font-normal! leading-3.5! text-muted-foreground"
+                          data-title={t('int', {
+                            val: card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value,
+                          })}
+                        >
+                          {t('of-total', {
+                            total: formatNumber(
+                              card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value,
+                              lng,
+                            ),
+                            defaultValue: `of ${formatNumber(
+                              card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value,
+                              lng,
+                            )}`,
+                          })}
+                        </span>
+                      ) : null}
+                    </div>
                   )}
                 </div>
               </div>
@@ -218,12 +284,25 @@ const EntitySummaryCard = ({
                         NA
                       </span>
                     ) : (
-                      <span
-                        className="shrink-0! text-lg! font-semibold! leading-[22px]! text-foreground"
-                        data-title={t('int', { val: row.value })}
-                      >
-                        {formatNumber(row.value, lng)}
-                      </span>
+                      <div className="flex! items-baseline! gap-1.5!">
+                        <span
+                          className="shrink-0! text-[16px]! font-semibold! leading-[22px]! text-foreground"
+                          data-title={t('int', { val: row.value })}
+                        >
+                          {formatNumber(row.value, lng)}
+                        </span>
+                        {isFiltered ? (
+                          <span
+                            className="shrink-0! text-[12px]! font-normal! leading-[22px]! text-muted-foreground"
+                            data-title={t('int', { val: row.totalValue ?? row.value })}
+                          >
+                            {t('of-total', {
+                              total: formatNumber(row.totalValue ?? row.value, lng),
+                              defaultValue: `of ${formatNumber(row.totalValue ?? row.value, lng)}`,
+                            })}
+                          </span>
+                        ) : null}
+                      </div>
                     )}
                     <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">
                       {row.label.charAt(0).toUpperCase() + row.label.slice(1)}

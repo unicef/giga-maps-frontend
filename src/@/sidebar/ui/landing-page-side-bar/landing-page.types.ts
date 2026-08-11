@@ -21,8 +21,9 @@ export type CardMetric = {
 
 export type EntityCardData = {
   badge?: string;
-  collapsedRows: { label: string; value: number }[];
+  collapsedRows: { label: string; value: number; totalValue?: number }[];
   entitiesTotal?: number;
+  isFiltered?: boolean;
   title: string;
   value: EntityType;
   t: LandingPageTranslationFn;
