@@ -243,50 +243,56 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
           }}><Close size={18} />
         </IconButton>
       </FilterHeaderWrapper>
-      <Form aria-label="filter-form">
-        <ScrollableContainer>
-          {entitiesWithFilters.some((el) => (entityWiseSelectedFilterCount[el] ?? 0) > 0) && (
-            <div className="flex! flex-col! gap-4! px-3.5! pb-3!">
-              {entitiesWithFilters.map((el) => {
-                const selectedCount = entityWiseSelectedFilterCount[el] ?? 0;
-                const chips = selectedFilterChipsByEntity[el] ?? [];
-                if (selectedCount === 0) return null;
+      <Form
+        aria-label="filter-form"
+        className="flex! min-h-0! flex-1! flex-col! overflow-hidden!"
+        onSubmit={(event) => {
+          event.preventDefault();
+        }}
+      >
+        {entitiesWithFilters.some((el) => (entityWiseSelectedFilterCount[el] ?? 0) > 0) && (
+          <div className="flex! shrink-0! flex-col! gap-4! px-3.5! pb-3!">
+            {entitiesWithFilters.map((el) => {
+              const selectedCount = entityWiseSelectedFilterCount[el] ?? 0;
+              const chips = selectedFilterChipsByEntity[el] ?? [];
+              if (selectedCount === 0) return null;
 
-                const isExpanded = expandedChipGroups[el] ?? false;
+              const isExpanded = expandedChipGroups[el] ?? false;
 
-                return (
-                  <div key={`active-filters-${el}`} className="flex! flex-col! gap-2!">
-                    <div className="flex! w-full! items-center! gap-2!">
-                      <span className="text-sm! leading-5! text-foreground!">
-                        {getEntityFilterGroupLabel(el, t)} ({selectedCount})
-                      </span>
-                      <button
-                        type="button"
-                        className="cursor-pointer! text-xs! font-normal! text-primary! hover:underline!"
-                        onClick={(e) => clearEntityBadges(el, e)}
-                      >
-                        Clear
-                      </button>
-                    </div>
-                    <CollapsibleFilterChips
-                      chips={chips}
-                      selectedCount={selectedCount}
-                      isExpanded={isExpanded}
-                      onClearChip={clearSingleBadge}
-                      onToggleExpanded={(expanded) => {
-                        setExpandedChipGroups((current) => ({
-                          ...current,
-                          [el]: expanded,
-                        }));
-                      }}
-                    />
+              return (
+                <div key={`active-filters-${el}`} className="flex! flex-col! gap-2!">
+                  <div className="flex! w-full! items-center! gap-2!">
+                    <span className="text-sm! leading-5! text-foreground!">
+                      {getEntityFilterGroupLabel(el, t)} ({selectedCount})
+                    </span>
+                    <button
+                      type="button"
+                      className="cursor-pointer! text-xs! font-normal! text-primary! hover:underline!"
+                      onClick={(e) => clearEntityBadges(el, e)}
+                    >
+                      Clear
+                    </button>
                   </div>
-                );
-              })}
-              <Separator />
-            </div>
-          )}
+                  <CollapsibleFilterChips
+                    chips={chips}
+                    selectedCount={selectedCount}
+                    isExpanded={isExpanded}
+                    onClearChip={clearSingleBadge}
+                    onToggleExpanded={(expanded) => {
+                      setExpandedChipGroups((current) => ({
+                        ...current,
+                        [el]: expanded,
+                      }));
+                    }}
+                  />
+                </div>
+              );
+            })}
+            <Separator />
+          </div>
+        )}
 
+        <ScrollableContainer>
           <Accordion type="multiple"
             value={openItems}
             onValueChange={(eventAccordion: string[]) => {
@@ -329,7 +335,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
         </ScrollableContainer>
         <FilterActionButtonWrapper>
           <Button
-            type="reset"
+            type="button"
             kind="secondary"
             onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
               void onReset(event);
@@ -337,7 +343,7 @@ const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boo
             {t('reset')}
           </Button>
           <Button
-            type="submit"
+            type="button"
             onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
               void onApply(event);
             }}>

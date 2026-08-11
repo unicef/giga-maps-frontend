@@ -264,6 +264,32 @@ describe('buildFilterChips', () => {
     }]);
   });
 
+  it('formats open-ended range chips with Min or Max', () => {
+    const item = createFilter({
+      name: 'Catchment Population',
+      type: 'RANGE',
+      entity_type: EntityType.HEALTH,
+      column_configuration: {
+        name: 'catchment_population',
+        label: 'Catchment Population',
+        type: 'int',
+        table_name: 'health',
+        table_alias: 'health',
+        table_label: 'Health',
+      },
+      query_param_filter: 'range',
+    });
+    const itemKey = 'health__catchment_population__range';
+
+    expect(buildFilterChips(item, {
+      [itemKey]: { none_range: false, value: '10,null' },
+    }, t)[0]?.label).toBe('Catchment Population (10–Max)');
+
+    expect(buildFilterChips(item, {
+      [itemKey]: { none_range: false, value: 'null,299' },
+    }, t)[0]?.label).toBe('Catchment Population (Min–299)');
+  });
+
   it('emits chips once when two filters share the same column key', () => {
     const sharedColumn = {
       name: 'coverage_type',

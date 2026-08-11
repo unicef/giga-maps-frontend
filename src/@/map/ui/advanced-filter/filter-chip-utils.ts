@@ -71,7 +71,7 @@ export const getRangeChipLabel = (
   maxDisplay: string,
   t: TFunction,
 ) => {
-  const rangeText = `${minDisplay || '…'}–${maxDisplay || '…'}`;
+  const rangeText = `${minDisplay || t('min', { defaultValue: 'Min' })}–${maxDisplay || t('max', { defaultValue: 'Max' })}`;
   if (shouldPrefixRangeWithEntity(item) && item.entity_type === 'school') {
     return t('filter-chip-school-range', {
       name: item.name,
