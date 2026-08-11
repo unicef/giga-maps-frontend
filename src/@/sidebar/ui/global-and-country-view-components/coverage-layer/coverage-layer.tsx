@@ -65,7 +65,7 @@ const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
 
   return (
     <div className="mx-4! py-4! flex! flex-col! justify-start! items-start! gap-6! h-full! max-md:h-auto!">
-      <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4!">
+      <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4! min-h-[10.5rem]! max-h-[18.5rem]! h-[24vh]!">
         <LayerNameWithTooltip
           description={layerDescription}
           name={layerName}
