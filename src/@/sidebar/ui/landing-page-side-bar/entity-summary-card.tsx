@@ -90,150 +90,169 @@ const EntitySummaryCard = ({
       ) : (
         <>
           {!isLoading && expanded ? (
-        <div className="px-3.5! pb-2!">
-          <div className="flex! items-center! gap-4! px-3.5! pb-3! pt-0.5! flex-wrap!">
-            {/* Locations Mapped */}
-            <div className="flex! items-center! gap-1.5!">
-              <EntityLegendIndicator
-                borderOnly
-                className="ml-0!"
-                color={stylePaintData.unknown}
-                entityType={card.value}
-                size={14}
-                strokeWidth={1.5}
-              />
-              {loadingRowLabelSet.has(card.collapsedRows[0]?.label) ? (
-                <Skeleton className="h-5! w-10! rounded-sm!" />
-              ) : !card.collapsedRows[0]?.value ? (
-                <span
-                  className="text-[16px]! font-semibold! leading-[18px]!"
-                  style={naStyle}
-                  data-title={t('no-data-available')}
-                >
-                  NA
-                </span>
-              ) : (
-                <span
-                  className="text-sm! font-semibold! leading-[18px]! text-foreground"
-                  data-title={t('int', { val: card.collapsedRows[0]?.value })}
-                >
-                  {formatNumber(card.collapsedRows[0]?.value, lng)}
-                </span>
-              )}
-            </div>
+            <div className="px-3.5! pb-2!">
+              <div className="flex! items-center! gap-4! pb-3! pt-0.5! flex-wrap!">
+                {/* Locations Mapped */}
+                <div className="flex! items-center! gap-1.5!">
+                  <EntityLegendIndicator
+                    borderOnly
+                    className="ml-0!"
+                    color={stylePaintData.unknown}
+                    dataTitle={
+                      card.collapsedRows[0]?.label
+                        ? card.collapsedRows[0].label.charAt(0).toUpperCase() +
+                          card.collapsedRows[0].label.slice(1)
+                        : undefined
+                    }
+                    dataTitlePos="right"
+                    entityType={card.value}
+                    size={14}
+                    strokeWidth={0.75}
+                  />
+                  {loadingRowLabelSet.has(card.collapsedRows[0]?.label) ? (
+                    <Skeleton className="h-5! w-10! rounded-sm!" />
+                  ) : card.collapsedRows[0]?.value === undefined || card.collapsedRows[0]?.value === null ? (
+                    <span
+                      className="text-[16px]! font-semibold! leading-[18px]!"
+                      style={naStyle}
+                      data-title={t('no-data-available')}
+                    >
+                      NA
+                    </span>
+                  ) : (
+                    <span
+                      className="text-sm! font-semibold! leading-[18px]! text-foreground"
+                      data-title={t('int', { val: card.collapsedRows[0]?.value })}
+                    >
+                      {formatNumber(card.collapsedRows[0]?.value, lng)}
+                    </span>
+                  )}
+                </div>
 
-            {/* Connected */}
-            <div className="flex! items-center! gap-1.5!">
-              <EntityLegendIndicator
-                className="ml-0!"
-                color={stylePaintData.connected}
-                entityType={card.value}
-                size={14}
-              />
-              {loadingRowLabelSet.has(card.collapsedRows[1]?.label) ? (
-                <Skeleton className="h-5! w-10! rounded-sm!" />
-              ) : !card.collapsedRows[1]?.value ? (
-                <span
-                  className="text-[16px]! font-semibold! leading-[18px]!"
-                  style={naStyle}
-                  data-title={t('no-data-available')}
-                >
-                  NA
-                </span>
-              ) : (
-                <span
-                  className="text-sm! font-semibold! leading-[18px]! text-foreground"
-                  data-title={t('int', { val: card.collapsedRows[1]?.value })}
-                >
-                  {formatNumber(card.collapsedRows[1]?.value, lng)}
-                </span>
-              )}
-            </div>
+                {/* Connected */}
+                <div className="flex! items-center! gap-1.5!">
+                  <EntityLegendIndicator
+                    className="ml-0!"
+                    color={stylePaintData.connected}
+                    dataTitle={
+                      card.collapsedRows[1]?.label
+                        ? card.collapsedRows[1].label.charAt(0).toUpperCase() +
+                          card.collapsedRows[1].label.slice(1)
+                        : undefined
+                    }
+                    entityType={card.value}
+                    size={14}
+                  />
+                  {loadingRowLabelSet.has(card.collapsedRows[1]?.label) ? (
+                    <Skeleton className="h-5! w-10! rounded-sm!" />
+                  ) : card.collapsedRows[1]?.value === undefined || card.collapsedRows[1]?.value === null ? (
+                    <span
+                      className="text-[16px]! font-semibold! leading-[18px]!"
+                      style={naStyle}
+                      data-title={t('no-data-available')}
+                    >
+                      NA
+                    </span>
+                  ) : (
+                    <span
+                      className="text-sm! font-semibold! leading-[18px]! text-foreground"
+                      data-title={t('int', { val: card.collapsedRows[1]?.value })}
+                    >
+                      {formatNumber(card.collapsedRows[1]?.value, lng)}
+                    </span>
+                  )}
+                </div>
 
-            {/* Reporting Internet Quality */}
-            <div className="flex! items-center! gap-1.5!">
-              <EntityLegendIndicator
-                className="ml-0!"
-                color={stylePaintData.connected}
-                entityType={card.value}
-                glowColor={stylePaintData.good ?? stylePaintData.connected}
-                size={14}
-              />
-              {loadingRowLabelSet.has(card.collapsedRows[2]?.label) ? (
-                <Skeleton className="h-5! w-10! rounded-sm!" />
-              ) : !card.collapsedRows[2]?.value ? (
-                <span
-                  className="text-[16px]! font-semibold! leading-[18px]!"
-                  style={naStyle}
-                  data-title={t('no-data-available')}
-                >
-                  NA
-                </span>
-              ) : (
-                <span
-                  className="text-sm! font-semibold! leading-[18px]! text-foreground"
-                  data-title={t('int', { val: card.collapsedRows[2]?.value })}
-                >
-                  {formatNumber(card.collapsedRows[2]?.value, lng)}
-                </span>
-              )}
-            </div>
-          </div>
-          <MetricDivider />
-        </div>
-      ) : null}
-
-      {shouldShowSummaryRows ? (
-        <div className="px-3.5! pb-2!">
-          {card.collapsedRows.map((row, index) => (
-            <div key={row.label}>
-              <div className="grid! grid-cols-[auto_1fr]! items-center! py-2.5!">
-                {loadingRowLabelSet.has(row.label) ? (
-                  <Skeleton className="h-5! w-12! rounded-sm!" />
-                ) : !row.value ? (
-                  <span
-                    className="shrink-0! text-[16px]! font-semibold! leading-[22px]!"
-                    style={naStyle}
-                    data-title={t('no-data-available')}
-                  >
-                    NA
-                  </span>
-                ) : (
-                  <span
-                    className="shrink-0! text-lg! font-semibold! leading-[22px]! text-foreground"
-                    data-title={t('int', { val: row.value })}
-                  >
-                    {formatNumber(row.value, lng)}
-                  </span>
-                )}
-                <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">
-                  {row.label.charAt(0).toUpperCase() + row.label.slice(1)}
-                </span>
+                {/* Reporting Internet Quality */}
+                <div className="flex! items-center! gap-1.5!">
+                  <EntityLegendIndicator
+                    className="ml-0!"
+                    color={stylePaintData.connected}
+                    dataTitle={
+                      card.collapsedRows[2]?.label
+                        ? card.collapsedRows[2].label.charAt(0).toUpperCase() +
+                          card.collapsedRows[2].label.slice(1)
+                        : undefined
+                    }
+                    entityType={card.value}
+                    glowColor={stylePaintData.good ?? stylePaintData.connected}
+                    size={14}
+                  />
+                  {loadingRowLabelSet.has(card.collapsedRows[2]?.label) ? (
+                    <Skeleton className="h-5! w-10! rounded-sm!" />
+                  ) : card.collapsedRows[2]?.value === undefined || card.collapsedRows[2]?.value === null ? (
+                    <span
+                      className="text-[16px]! font-semibold! leading-[18px]!"
+                      style={naStyle}
+                      data-title={t('no-data-available')}
+                    >
+                      NA
+                    </span>
+                  ) : (
+                    <span
+                      className="text-sm! font-semibold! leading-[18px]! text-foreground"
+                      data-title={t('int', { val: card.collapsedRows[2]?.value })}
+                    >
+                      {formatNumber(card.collapsedRows[2]?.value, lng)}
+                    </span>
+                  )}
+                </div>
               </div>
-              {card.collapsedRows.length > index + 1 ? <MetricDivider /> : null}
+              <MetricDivider />
             </div>
-          ))}
-        </div>
-      ) : null}
+          ) : null}
 
-      <AccordionContent className={cn((!expanded || isLoading) && 'hidden!')}>
-        {children}
-      </AccordionContent>
+          {shouldShowSummaryRows ? (
+            <div className="px-3.5! pb-2!">
+              {card.collapsedRows.map((row, index) => (
+                <div key={row.label}>
+                  <div className="grid! grid-cols-[auto_1fr]! items-center! py-2.5!">
+                    {loadingRowLabelSet.has(row.label) ? (
+                      <Skeleton className="h-5! w-12! rounded-sm!" />
+                    ) : row.value === undefined || row.value === null ? (
+                      <span
+                        className="shrink-0! text-[16px]! font-semibold! leading-[22px]!"
+                        style={naStyle}
+                        data-title={t('no-data-available')}
+                      >
+                        NA
+                      </span>
+                    ) : (
+                      <span
+                        className="shrink-0! text-lg! font-semibold! leading-[22px]! text-foreground"
+                        data-title={t('int', { val: row.value })}
+                      >
+                        {formatNumber(row.value, lng)}
+                      </span>
+                    )}
+                    <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">
+                      {row.label.charAt(0).toUpperCase() + row.label.slice(1)}
+                    </span>
+                  </div>
+                  {card.collapsedRows.length > index + 1 ? <MetricDivider /> : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
 
-      {!isLoading && EntityType.SCHOOL === card.value ? (
-        <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
-          <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
-            <SchoolAccordionFooterLogo />
-          </div>
-        </div>
-      ) : null}
-      {!isLoading && EntityType.HEALTH === card.value ? (
-        <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
-          <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
-            <HealthCentersAccordionFooterLogo />
-          </div>
-        </div>
-      ) : null}
+          <AccordionContent className={cn((!expanded || isLoading) && 'hidden!')}>
+            {children}
+          </AccordionContent>
+
+          {!isLoading && EntityType.SCHOOL === card.value ? (
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
+              <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
+                <SchoolAccordionFooterLogo />
+              </div>
+            </div>
+          ) : null}
+          {!isLoading && EntityType.HEALTH === card.value ? (
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
+              <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
+                <HealthCentersAccordionFooterLogo />
+              </div>
+            </div>
+          ) : null}
         </>
       )}
     </AccordionItem>

@@ -8,6 +8,8 @@ type EntityLegendIndicatorProps = {
   borderOnly?: boolean;
   className?: string;
   color: string;
+  dataTitle?: string;
+  dataTitlePos?: 'center' | 'right' | 'left';
   entityType: string;
   fitToViewBox?: boolean;
   glowColor?: string;
@@ -114,6 +116,8 @@ const EntityLegendIndicator = ({
   borderOnly = false,
   className,
   color,
+  dataTitle,
+  dataTitlePos,
   entityType,
   fitToViewBox = false,
   glowColor,
@@ -134,7 +138,8 @@ const EntityLegendIndicator = ({
 
   const renderGlyph = (glyphSize: number, glyphColor: string, extraClass: string = '') => {
     const fontFamily = getMeasurementFontFamily();
-    const effectiveStrokeWidth = strokeWidthProp ?? Math.min(2, Math.max(1, glyphSize * 0.1));
+    const effectiveStrokeWidth =
+      strokeWidthProp ?? (borderOnly ? 0.75 : Math.min(2, Math.max(1, glyphSize * 0.1)));
 
     if (fitToViewBox) {
       // 1. Measure at a high-precision reference size (100px) to get exact ink boundaries
@@ -206,6 +211,8 @@ const EntityLegendIndicator = ({
   return (
     <span
       className={cn('relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-[-4px]!', className)}
+      data-title={dataTitle}
+      data-title-pos={dataTitlePos}
       style={containerStyle}
     >
       {glowColor ? (

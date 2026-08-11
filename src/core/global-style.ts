@@ -213,6 +213,29 @@ a{
       transform: translateX(-50%) translateY(0);
     }
   }
+
+  @keyframes tooltipFadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(0) translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+
+  [data-title-pos='right']:hover::after {
+    left: 0;
+    transform: translateX(0);
+    animation-name: tooltipFadeInRight;
+  }
+
+  [data-title-pos='right']:hover::before {
+    left: 8px;
+    transform: translateX(0) translateY(100%);
+    animation-name: tooltipFadeInRight;
+  }
 `;
 
 export const GlobalStyle = createGlobalStyle`${globalStyle}`;
