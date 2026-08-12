@@ -12,7 +12,8 @@ import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 
-export const CONTACT_EMAIL = 'gigamaps@unicef.org';
+/** "Get in touch" section of the About page - relative, so every env resolves it. */
+const GET_IN_TOUCH_URL = '/about#live-map-get-in-touch';
 
 /** One-off health-facilities announcement. Shows once per browser. */
 const WelcomeToast = () => {
@@ -56,7 +57,9 @@ const WelcomeToast = () => {
             // eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/control-has-associated-label
             <a
               className="text-primary! hover:underline"
-              href={`mailto:${CONTACT_EMAIL}`}
+              href={GET_IN_TOUCH_URL}
+              rel="noreferrer"
+              target="_blank"
             />
           ),
         }}
