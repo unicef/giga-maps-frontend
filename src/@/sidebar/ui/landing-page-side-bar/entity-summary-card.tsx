@@ -114,11 +114,12 @@ const EntitySummaryCard = ({
                   />
                   {loadingRowLabelSet.has(card.collapsedRows[0]?.label) ? (
                     <Skeleton className="h-5! w-10! rounded-sm!" />
-                  ) : card.collapsedRows[0]?.value === undefined || card.collapsedRows[0]?.value === null ? (
+                  ) : !card.collapsedRows[0]?.value ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]!"
                       style={naStyle}
                       data-title={t('no-data-available')}
+                      data-title-pos="right"
                     >
                       NA
                     </span>
@@ -169,7 +170,7 @@ const EntitySummaryCard = ({
                   />
                   {loadingRowLabelSet.has(card.collapsedRows[1]?.label) ? (
                     <Skeleton className="h-5! w-10! rounded-sm!" />
-                  ) : card.collapsedRows[1]?.value === undefined || card.collapsedRows[1]?.value === null ? (
+                  ) : !card.collapsedRows[1]?.value ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]!"
                       style={naStyle}
@@ -225,7 +226,7 @@ const EntitySummaryCard = ({
                   />
                   {loadingRowLabelSet.has(card.collapsedRows[2]?.label) ? (
                     <Skeleton className="h-5! w-10! rounded-sm!" />
-                  ) : card.collapsedRows[2]?.value === undefined || card.collapsedRows[2]?.value === null ? (
+                  ) : !card.collapsedRows[2]?.value ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]!"
                       style={naStyle}
@@ -275,11 +276,12 @@ const EntitySummaryCard = ({
                   <div className="grid! grid-cols-[auto_1fr]! items-center! py-2.5!">
                     {loadingRowLabelSet.has(row.label) ? (
                       <Skeleton className="h-5! w-12! rounded-sm!" />
-                    ) : row.value === undefined || row.value === null ? (
+                    ) : !row.value ? (
                       <span
                         className="shrink-0! text-[16px]! font-semibold! leading-[22px]!"
                         style={naStyle}
                         data-title={t('no-data-available')}
+                        data-title-pos="right"
                       >
                         NA
                       </span>
