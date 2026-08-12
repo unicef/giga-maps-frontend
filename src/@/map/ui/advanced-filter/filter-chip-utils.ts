@@ -19,9 +19,6 @@ export const hasSelectedFilterValue = (value: SelectedFieldValue | undefined) =>
     ? value.none_range || Boolean(value.value)
     : Boolean(value);
 
-const translateLabel = (label: string, t: TFunction) =>
-  t(label, { defaultValue: label });
-
 const uncapitalize = (value: string) =>
   value ? `${value.charAt(0).toLowerCase()}${value.slice(1)}` : value;
 
@@ -72,18 +69,12 @@ export const getRangeChipLabel = (
   t: TFunction,
 ) => {
   const rangeText = `${minDisplay || t('min', { defaultValue: 'Min' })}–${maxDisplay || t('max', { defaultValue: 'Max' })}`;
-  if (shouldPrefixRangeWithEntity(item) && item.entity_type === 'school') {
-    return t('filter-chip-school-range', {
-      name: item.name,
-      range: rangeText,
-      defaultValue: 'School: {{name}} ({{range}})',
-    });
+  if (shouldPrefixRangeWithEntity(item)) {
+    const entityLabel =
+      item.column_configuration.table_label?.trim() || item.entity_type;
+    return `${entityLabel}: ${item.name} (${rangeText})`;
   }
-  return t('filter-chip-range', {
-    name: item.name,
-    range: rangeText,
-    defaultValue: '{{name}} ({{range}})',
-  });
+  return `${item.name} (${rangeText})`;
 };
 
 export const findChoiceByValue = (
@@ -114,11 +105,11 @@ export const getChoiceChipLabel = (
     || lowerChoice.startsWith('no ')
     || lowerChoice.startsWith('unknown ')
   ) {
-    return translateLabel(choiceLabel, t);
+    return choiceLabel;
   }
 
   if (lowerChoice === 'yes' || choice.value === 'true') {
-    return translateLabel(fieldName, t);
+    return fieldName;
   }
 
   if (lowerChoice === 'no' || choice.value === 'false') {
@@ -129,7 +120,7 @@ export const getChoiceChipLabel = (
     return formatUnknownChoiceLabel(item, t);
   }
 
-  return translateLabel(choiceLabel, t);
+  return choiceLabel;
 };
 
 export const dedupeFilterChips = (chips: FilterChip[]): FilterChip[] => {
@@ -142,12 +133,42 @@ export const dedupeFilterChips = (chips: FilterChip[]): FilterChip[] => {
   });
 };
 
+export const getAdvanceFilterItemKey = (item: AdvanceFilterType) =>
+  `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+
+/** Collapse admin duplicates that share entity + column + query filter. Prefer newest filter id. */
+export const dedupeAdvanceFiltersByColumnKey = (
+  advanceFilterList: AdvanceFilterType[],
+): AdvanceFilterType[] => {
+  const preferredByKey = new Map<string, AdvanceFilterType>();
+
+  advanceFilterList.forEach((item) => {
+    const key = getAdvanceFilterItemKey(item);
+    const existing = preferredByKey.get(key);
+    if (!existing || item.id > existing.id) {
+      preferredByKey.set(key, item);
+    }
+  });
+
+  const seenKeys = new Set<string>();
+  const uniqueFilters: AdvanceFilterType[] = [];
+
+  advanceFilterList.forEach((item) => {
+    const key = getAdvanceFilterItemKey(item);
+    if (seenKeys.has(key)) return;
+    seenKeys.add(key);
+    uniqueFilters.push(preferredByKey.get(key) ?? item);
+  });
+
+  return uniqueFilters;
+};
+
 export const buildFilterChips = (
   item: AdvanceFilterType,
   selectedFields: Record<string, SelectedFieldValue>,
   t: TFunction,
 ): FilterChip[] => {
-  const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+  const itemKey = getAdvanceFilterItemKey(item);
   const value = selectedFields[itemKey];
   const extraValue = selectedFields[`ignore_${itemKey}`];
 
@@ -199,7 +220,7 @@ export const buildFilterChips = (
       return [{
         chipId: `${itemKey}__none`,
         itemKey,
-        label: `${item.name}: ${translateLabel('show-null-values', t)}`,
+        label: `${item.name}: ${t('show-null-values', { defaultValue: 'Show null values' })}`,
       }];
     }
 
@@ -242,18 +263,14 @@ export const buildFilterChipsByEntity = (
   t: TFunction,
 ) => {
   const chipsByEntity = {} as Record<string, FilterChip[]>;
-  const processedItemKeys = new Set<string>();
+  const uniqueFilters = dedupeAdvanceFiltersByColumnKey(advanceFilterList);
 
   activeEntityTypes.forEach((entityType) => {
     chipsByEntity[entityType] = [];
   });
 
-  advanceFilterList.forEach((item) => {
+  uniqueFilters.forEach((item) => {
     if (!activeEntityTypes.includes(item.entity_type)) return;
-
-    const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
-    if (processedItemKeys.has(itemKey)) return;
-    processedItemKeys.add(itemKey);
 
     const chips = buildFilterChips(item, selectedFields, t);
     if (!chipsByEntity[item.entity_type]) {
