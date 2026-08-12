@@ -15,6 +15,8 @@ import {
   toggleAccordionEntity,
 } from '~/@/sidebar/sidebar.model';
 import {
+  fetchAdvanceFilterFx,
+  fetchCountryFx,
   fetchEntitiesConnectivityStatsFx,
   fetchEntitiesLayerInfoFx,
   fetchEntityGlobalStatsFx,
@@ -63,6 +65,8 @@ const EntitySummaryAccordion = ({
   );
   const entityConfigMap = useStore($entityConfigMap);
   const stylePaintData = useStore($stylePaintData);
+  const isLoadingCountry = useStore(fetchCountryFx.pending);
+  const isLoadingAdvanceFilter = useStore(fetchAdvanceFilterFx.pending);
   const isLoadingGlobalStats = useStore(fetchEntityGlobalStatsFx.pending);
   const isLoadingEntityInfoRequest = useStore(fetchEntitiesLayerInfoFx.pending);
   const isLoadingEntityConnectivityStats = useStore(
@@ -81,6 +85,8 @@ const EntitySummaryAccordion = ({
     .map(([entityType]) => entityType);
 
   const isLoading =
+    isLoadingCountry ||
+    isLoadingAdvanceFilter ||
     isLoadingGlobalStats ||
     isLoadingConnectivityStats ||
     isLoadingEntityConnectivityStats;
