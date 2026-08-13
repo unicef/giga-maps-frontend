@@ -56,6 +56,14 @@ const FilterButton = () => {
           onClick={() => {
             onShowAdvancedFilter(!isOpen);
           }}
+          onKeyDown={(event) => {
+            if (
+              isOpen &&
+              (event.key === 'Enter' || event.key === ' ')
+            ) {
+              event.preventDefault();
+            }
+          }}
           size="sm"
           type="button"
           variant={isOpen ? 'default' : 'secondary'}

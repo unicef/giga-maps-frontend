@@ -312,6 +312,18 @@ const FilterPopupContent = ({
       <form
         aria-label="filter-form"
         className="flex! min-h-0! flex-1! flex-col! overflow-hidden!"
+        onKeyDown={(event) => {
+          if (event.key !== 'Enter') return;
+
+          const target = event.target;
+          if (
+            target instanceof HTMLInputElement ||
+            target instanceof HTMLTextAreaElement ||
+            target instanceof HTMLSelectElement
+          ) {
+            event.preventDefault();
+          }
+        }}
         onSubmit={(event) => {
           event.preventDefault();
         }}

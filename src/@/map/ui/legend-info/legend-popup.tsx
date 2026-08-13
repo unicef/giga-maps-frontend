@@ -234,6 +234,11 @@ const LegendPopup = ({
     showStaticLegend,
   ].filter(Boolean).length;
   const isCompactLegend = visibleLegendSectionCount <= 1;
+  const legendPanelWidthClasses = [
+    'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
+    'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
+    'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
+  ];
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
   const renderMetricSummary = () => {
@@ -512,13 +517,9 @@ const LegendPopup = ({
         align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
           'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
-          isCompactLegend
-            ? 'w-max! max-w-[min(22rem,calc(100vw-1rem))]!'
-            : [
-                'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
-                'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
-                'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
-              ],
+          collapsed || !isCompactLegend
+            ? legendPanelWidthClasses
+            : 'w-max! max-w-[min(22rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
