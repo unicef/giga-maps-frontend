@@ -173,6 +173,7 @@ const toEntityConnectivityStat = (
       stat.real_time_connected_entities ??
       stat.real_time_connected_schools ??
       {},
+    total_metrics: stat.total_metrics,
   };
 };
 

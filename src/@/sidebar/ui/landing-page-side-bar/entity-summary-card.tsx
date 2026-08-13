@@ -24,6 +24,13 @@ import type {
 
 const MetricDivider = () => <div className="h-px! w-full! bg-border!" />;
 
+const isNoData = (row?: { value?: number | null; totalValue?: number | null }) => {
+  if (!row) return true;
+  if (row.value) return false;
+  if (row.value === 0 && Boolean(row.totalValue)) return false;
+  return true;
+};
+
 type EntitySummaryCardProps = {
   card: EntityCardData;
   children?: ReactNode;
@@ -47,7 +54,13 @@ const EntitySummaryCard = ({
   t,
 }: EntitySummaryCardProps) => {
   const stylePaintData = useStore($stylePaintData);
-  const isEmptyState = !isLoading && card.entitiesTotal === 0;
+  const countryObj = useStore($country);
+  const entityCountFromCountry = countryObj?.entity_counts?.[card.value];
+  const isEmptyState =
+    !isLoading &&
+    (typeof entityCountFromCountry === 'number'
+      ? entityCountFromCountry === 0
+      : card.entitiesTotal === 0);
   const shouldShowSummaryRows = !isLoading && !expanded;
   const loadingRowLabelSet = new Set(loadingRowLabels);
   const isFiltered = isFilteredProp ?? card.isFiltered ?? false;
@@ -108,7 +121,7 @@ const EntitySummaryCard = ({
                   />
                   {loadingRowLabelSet.has(card.collapsedRows[0]?.label) ? (
                     <Skeleton className="h-5! w-10! rounded-sm!" />
-                  ) : !card.collapsedRows[0]?.value ? (
+                  ) : isNoData(card.collapsedRows[0]) ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
@@ -120,24 +133,24 @@ const EntitySummaryCard = ({
                     <div className="flex! flex-col! justify-center!">
                       <span
                         className="text-[16px]! font-normal! leading-[18px]! text-foreground"
-                        data-title={t('int', { val: card.collapsedRows[0]?.value })}
+                        data-title={t('int', { val: card.collapsedRows[0]?.value ?? 0 })}
                       >
-                        {formatNumber(card.collapsedRows[0]?.value, lng)}
+                        {formatNumber(card.collapsedRows[0]?.value ?? 0, lng)}
                       </span>
                       {isFiltered ? (
                         <span
                           className="text-[12px]! font-normal! leading-3.5! text-muted-foreground"
                           data-title={t('int', {
-                            val: card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value,
+                            val: card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value ?? 0,
                           })}
                         >
                           {t('of-total', {
                             total: formatNumber(
-                              card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value,
+                              card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value ?? 0,
                               lng,
                             ),
                             defaultValue: `of ${formatNumber(
-                              card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value,
+                              card.collapsedRows[0]?.totalValue ?? card.collapsedRows[0]?.value ?? 0,
                               lng,
                             )}`,
                           })}
@@ -163,7 +176,7 @@ const EntitySummaryCard = ({
                   />
                   {loadingRowLabelSet.has(card.collapsedRows[1]?.label) ? (
                     <Skeleton className="h-5! w-10! rounded-sm!" />
-                  ) : !card.collapsedRows[1]?.value ? (
+                  ) : isNoData(card.collapsedRows[1]) ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
@@ -174,24 +187,24 @@ const EntitySummaryCard = ({
                     <div className="flex! flex-col! justify-center!">
                       <span
                         className="text-[16px]! font-normal! leading-[18px]! text-foreground"
-                        data-title={t('int', { val: card.collapsedRows[1]?.value })}
+                        data-title={t('int', { val: card.collapsedRows[1]?.value ?? 0 })}
                       >
-                        {formatNumber(card.collapsedRows[1]?.value, lng)}
+                        {formatNumber(card.collapsedRows[1]?.value ?? 0, lng)}
                       </span>
                       {isFiltered ? (
                         <span
                           className="text-[12px]! font-normal! leading-3.5! text-muted-foreground"
                           data-title={t('int', {
-                            val: card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value,
+                            val: card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value ?? 0,
                           })}
                         >
                           {t('of-total', {
                             total: formatNumber(
-                              card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value,
+                              card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value ?? 0,
                               lng,
                             ),
                             defaultValue: `of ${formatNumber(
-                              card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value,
+                              card.collapsedRows[1]?.totalValue ?? card.collapsedRows[1]?.value ?? 0,
                               lng,
                             )}`,
                           })}
@@ -218,7 +231,7 @@ const EntitySummaryCard = ({
                   />
                   {loadingRowLabelSet.has(card.collapsedRows[2]?.label) ? (
                     <Skeleton className="h-5! w-10! rounded-sm!" />
-                  ) : !card.collapsedRows[2]?.value ? (
+                  ) : isNoData(card.collapsedRows[2]) ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
@@ -229,24 +242,24 @@ const EntitySummaryCard = ({
                     <div className="flex! flex-col! justify-center!">
                       <span
                         className="text-[16px]! font-normal! leading-[18px]! text-foreground"
-                        data-title={t('int', { val: card.collapsedRows[2]?.value })}
+                        data-title={t('int', { val: card.collapsedRows[2]?.value ?? 0 })}
                       >
-                        {formatNumber(card.collapsedRows[2]?.value, lng)}
+                        {formatNumber(card.collapsedRows[2]?.value ?? 0, lng)}
                       </span>
                       {isFiltered ? (
                         <span
                           className="text-[12px]! font-normal! leading-3.5! text-muted-foreground"
                           data-title={t('int', {
-                            val: card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value,
+                            val: card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value ?? 0,
                           })}
                         >
                           {t('of-total', {
                             total: formatNumber(
-                              card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value,
+                              card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value ?? 0,
                               lng,
                             ),
                             defaultValue: `of ${formatNumber(
-                              card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value,
+                              card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value ?? 0,
                               lng,
                             )}`,
                           })}
@@ -267,7 +280,7 @@ const EntitySummaryCard = ({
                   <div className="grid! grid-cols-[auto_1fr]! items-center! py-2.5!">
                     {loadingRowLabelSet.has(row.label) ? (
                       <Skeleton className="h-5! w-12! rounded-sm!" />
-                    ) : !row.value ? (
+                    ) : isNoData(row) ? (
                       <span
                         className="shrink-0! text-[16px]! font-semibold! leading-[22px]! text-gray-600!"
                         data-title={t('no-data-available')}
@@ -279,18 +292,18 @@ const EntitySummaryCard = ({
                       <div className="flex! items-baseline! gap-1.5!">
                         <span
                           className="shrink-0! text-[16px]! font-semibold! leading-[22px]! text-foreground"
-                          data-title={t('int', { val: row.value })}
+                          data-title={t('int', { val: row.value ?? 0 })}
                         >
-                          {formatNumber(row.value, lng)}
+                          {formatNumber(row.value ?? 0, lng)}
                         </span>
                         {isFiltered ? (
                           <span
                             className="shrink-0! text-[12px]! font-normal! leading-[22px]! text-muted-foreground"
-                            data-title={t('int', { val: row.totalValue ?? row.value })}
+                            data-title={t('int', { val: row.totalValue ?? row.value ?? 0 })}
                           >
                             {t('of-total', {
-                              total: formatNumber(row.totalValue ?? row.value, lng),
-                              defaultValue: `of ${formatNumber(row.totalValue ?? row.value, lng)}`,
+                              total: formatNumber(row.totalValue ?? row.value ?? 0, lng),
+                              defaultValue: `of ${formatNumber(row.totalValue ?? row.value ?? 0, lng)}`,
                             })}
                           </span>
                         ) : null}

@@ -2,7 +2,7 @@ import { useStore } from 'effector-react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $advancedFiltersByEntity } from '~/@/country/country.model';
+import { $advancedFiltersByEntity, $country } from '~/@/country/country.model';
 import {
   $activeEntityTypes,
   $entityConfigMap,
@@ -131,10 +131,16 @@ const EntitySummaryAccordion = ({
     });
   };
 
+  const countryObj = useStore($country);
   const allEntitiesEmpty =
     !isLoading &&
     entityCards.length > 0 &&
-    entityCards.every((card) => card.accordionItem.entitiesTotal === 0);
+    entityCards.every((card) => {
+      const count = countryObj?.entity_counts?.[card.accordionItem.value];
+      return typeof count === 'number'
+        ? count === 0
+        : card.accordionItem.entitiesTotal === 0;
+    });
 
   if (allEntitiesEmpty) {
     return (

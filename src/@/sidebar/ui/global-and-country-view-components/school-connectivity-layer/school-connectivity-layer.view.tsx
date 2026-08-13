@@ -31,7 +31,12 @@ const SchoolConnectivityLayer = ({
 
   const connectivityStatusMapped =
     selectedEntityGlobalStats?.entities_with_connectivity_status_mapped ?? 0;
-  const isConnectivityStatusZero = connectivityStatusMapped === 0;
+
+  const countryConnected = country?.connected_entities?.[entityType]?.connected;
+  const isConnectivityStatusZero =
+    typeof countryConnected === 'number'
+      ? countryConnected === 0
+      : connectivityStatusMapped === 0;
 
   const connectedValue =
     selectedEntityGlobalStats?.connected_entities?.connected ?? 0;

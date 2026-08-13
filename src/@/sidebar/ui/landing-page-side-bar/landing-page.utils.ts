@@ -85,6 +85,7 @@ export const buildEntityCard = ({
     ? 0
     : Number(
         totalMetricsConn?.no_of_entities_measure ??
+        totalMetricsConn?.no_of_schools_measure ??
         totalMetricsGlobal?.no_of_entities_measure ??
         measureValue,
       );

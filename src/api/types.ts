@@ -262,6 +262,8 @@ export type Country = {
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
   country_disclaimer: string;
+  entity_counts?: Partial<Record<EntityType | string, number>>;
+  connected_entities?: Partial<Record<EntityType | string, { connected?: number }>>;
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
