@@ -220,7 +220,7 @@ const EntitySummaryCard = ({
                     <Skeleton className="h-5! w-10! rounded-sm!" />
                   ) : !card.collapsedRows[2]?.value ? (
                     <span
-                      className="text-[16px]! font-semibold! leading-[18px]!"
+                      className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
                     >
                       NA
