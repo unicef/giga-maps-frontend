@@ -30,6 +30,14 @@ export type EntityConnectedEntitiesGroup = {
   unknown: number;
 };
 
+export type EntityTotalMetrics = {
+  entities_connected?: number;
+  entities_total?: number;
+  connected_entities?: EntityConnectedEntitiesGroup;
+  no_of_entities_measure?: number;
+  [key: string]: unknown;
+};
+
 export type EntityGlobalStats = {
   no_of_countries: number;
   countries_with_connectivity_status_mapped: number;
@@ -38,6 +46,7 @@ export type EntityGlobalStats = {
   entities_connected?: number;
   entities_total?: number;
   entities_with_connectivity_status_mapped?: number;
+  total_metrics?: EntityTotalMetrics;
 };
 
 export type EntitiesGlobalStatsResponse = Partial<Record<EntityStatsResponseKey, EntityGlobalStats>>;
@@ -75,6 +84,13 @@ export type ConnectivityStat = {
   }
 };
 
+export type EntityConnectivityTotalMetrics = {
+  no_of_entities_measure?: number;
+  entity_with_realtime_data?: number;
+  real_time_connected_entities?: DefaultLegendValuesType;
+  [key: string]: unknown;
+};
+
 export type EntityConnectivityStat = {
   benchmark_metadata: ConnectivityStat['benchmark_metadata'];
   countries_with_realtime_data: number;
@@ -85,6 +101,7 @@ export type EntityConnectivityStat = {
   live_avg_connectivity: string;
   no_of_entities_measure: number;
   real_time_connected_entities: DefaultLegendValuesType;
+  total_metrics?: EntityConnectivityTotalMetrics;
 };
 
 export type EntitiesConnectivityStatsResponse = Partial<Record<EntityStatsResponseKey, EntityConnectivityStat>>;

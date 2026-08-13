@@ -2,6 +2,7 @@ import { useStore } from 'effector-react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { $advancedFiltersByEntity } from '~/@/country/country.model';
 import {
   $activeEntityTypes,
   $entityConfigMap,
@@ -63,6 +64,7 @@ const EntitySummaryAccordion = ({
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
   );
+  const advancedFiltersByEntity = useStore($advancedFiltersByEntity);
   const entityConfigMap = useStore($entityConfigMap);
   const stylePaintData = useStore($stylePaintData);
   const isLoadingCountry = useStore(fetchCountryFx.pending);
@@ -90,11 +92,22 @@ const EntitySummaryAccordion = ({
     isLoadingGlobalStats ||
     isLoadingConnectivityStats ||
     isLoadingEntityConnectivityStats;
+  const isFilteredByEntity = Object.fromEntries(
+    visibleEntityTypes.map((type) => [
+      type,
+      Boolean(
+        advancedFiltersByEntity?.[type] &&
+          Object.keys(advancedFiltersByEntity[type]).length > 0,
+      ),
+    ]),
+  );
+
   const entityCards = buildEntityCards({
     connectivityStatsByEntity,
     entityConfigMap,
     entityTypes: visibleEntityTypes,
     globalStatsByEntity,
+    isFilteredByEntity,
     isStaticLayerByEntity: Object.fromEntries(
       Object.entries(currentLayerTypeUtilsByEntity).map(
         ([entityType, layerTypeUtils]) => [
@@ -153,6 +166,7 @@ const EntitySummaryAccordion = ({
               <EntitySummaryCard
                 card={accordionItem}
                 expanded={Boolean(accordionExpandedEntitiesMap[entityType])}
+                isFiltered={accordionItem.isFiltered}
                 isLoading={isLoading}
                 key={accordionItem.value}
                 loadingRowLabels={infoLoadingMetricLabels}

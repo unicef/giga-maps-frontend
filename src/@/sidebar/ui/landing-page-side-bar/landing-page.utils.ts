@@ -23,6 +23,7 @@ type BuildEntityCardArgs = {
   config?: EntityConfig;
   entityType: EntityType;
   globalStats?: EntityGlobalStats | null;
+  isFiltered?: boolean;
   isStaticLayer?: boolean;
   lng: string;
   stylePaintData: LandingPageStylePaintData;
@@ -39,6 +40,7 @@ type BuildEntityCardsArgs = {
   entityConfigMap: Partial<Record<EntityType, EntityConfig>>;
   entityTypes: EntityType[];
   globalStatsByEntity: EntitiesGlobalStatsResponse;
+  isFilteredByEntity?: Partial<Record<EntityType, boolean>>;
   isStaticLayerByEntity?: Partial<Record<EntityType, boolean>>;
   lng: string;
   stylePaintData: LandingPageStylePaintData;
@@ -50,23 +52,47 @@ export const buildEntityCard = ({
   config,
   entityType,
   globalStats,
+  isFiltered = false,
   isStaticLayer = false,
   t,
 }: BuildEntityCardArgs): EntityCardData | null => {
   if (!config) return null;
 
   const entityGlobalStats = globalStats as LandingPageEntityStats | undefined;
+  const totalMetricsGlobal = entityGlobalStats?.total_metrics as LandingPageEntityStats | undefined;
+  const totalMetricsConn = connectivityStats?.total_metrics as Record<string, unknown> | undefined;
+
   const connectedGroup =
     entityGlobalStats?.connected_entities as LandingPageStatsGroup;
+  const totalConnectedGroup =
+    (totalMetricsGlobal?.connected_entities ?? connectedGroup) as LandingPageStatsGroup;
+
   const mappedValue = Number(
     entityGlobalStats?.entities_connected ??
     entityGlobalStats?.entities_total ??
     0,
   );
+  const totalMappedValue = Number(
+    totalMetricsGlobal?.entities_connected ??
+    totalMetricsGlobal?.entities_total ??
+    mappedValue,
+  );
+
   const measureValue = isStaticLayer
     ? 0
     : Number(connectivityStats?.no_of_entities_measure ?? 0);
+  const totalMeasureValue = isStaticLayer
+    ? 0
+    : Number(
+        totalMetricsConn?.no_of_entities_measure ??
+        totalMetricsGlobal?.no_of_entities_measure ??
+        measureValue,
+      );
+
   const connectedValue = Number(connectedGroup?.connected ?? 0);
+  const totalConnectedValue = Number(
+    totalConnectedGroup?.connected ?? connectedValue,
+  );
   const entityLabel = getEntityLabel(config, t);
 
   const entitiesTotal = Number(
@@ -79,20 +105,21 @@ export const buildEntityCard = ({
       {
         label: t('locations-mapped'),
         value: mappedValue,
-        totalValue: mappedValue,
+        totalValue: totalMappedValue,
       },
       {
         label: `${t('connected')} ${entityLabel}`,
         value: connectedValue,
-        totalValue: connectedValue,
+        totalValue: totalConnectedValue,
       },
       {
         label: t('reporting-internet-quality'),
         value: measureValue,
-        totalValue: measureValue,
+        totalValue: totalMeasureValue,
       },
     ],
     entitiesTotal,
+    isFiltered,
     t,
     title: entityLabel,
     value: entityType,
@@ -200,6 +227,7 @@ export const buildEntityCards = ({
   entityConfigMap,
   entityTypes,
   globalStatsByEntity,
+  isFilteredByEntity = {},
   isStaticLayerByEntity = {},
   lng,
   stylePaintData,
@@ -212,6 +240,7 @@ export const buildEntityCards = ({
         connectivityStats: connectivityStatsByEntity?.[entityType],
         entityType,
         globalStats: globalStatsByEntity[entityType],
+        isFiltered: isFilteredByEntity[entityType] ?? false,
         isStaticLayer: isStaticLayerByEntity[entityType] ?? false,
         lng,
         stylePaintData,

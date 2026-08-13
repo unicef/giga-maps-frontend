@@ -24,12 +24,6 @@ import type {
 
 const MetricDivider = () => <div className="h-px! w-full! bg-border!" />;
 
-const naStyle: React.CSSProperties = {
-  color: 'var(--tailwind-colors-gray-600, #6F6F6F)',
-  fontSize: '16px',
-  fontWeight: 600,
-};
-
 type EntitySummaryCardProps = {
   card: EntityCardData;
   children?: ReactNode;
@@ -116,8 +110,7 @@ const EntitySummaryCard = ({
                     <Skeleton className="h-5! w-10! rounded-sm!" />
                   ) : !card.collapsedRows[0]?.value ? (
                     <span
-                      className="text-[16px]! font-semibold! leading-[18px]!"
-                      style={naStyle}
+                      className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
                       data-title-pos="right"
                     >
@@ -172,8 +165,7 @@ const EntitySummaryCard = ({
                     <Skeleton className="h-5! w-10! rounded-sm!" />
                   ) : !card.collapsedRows[1]?.value ? (
                     <span
-                      className="text-[16px]! font-semibold! leading-[18px]!"
-                      style={naStyle}
+                      className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
                     >
                       NA
@@ -229,7 +221,6 @@ const EntitySummaryCard = ({
                   ) : !card.collapsedRows[2]?.value ? (
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]!"
-                      style={naStyle}
                       data-title={t('no-data-available')}
                     >
                       NA
@@ -278,8 +269,7 @@ const EntitySummaryCard = ({
                       <Skeleton className="h-5! w-12! rounded-sm!" />
                     ) : !row.value ? (
                       <span
-                        className="shrink-0! text-[16px]! font-semibold! leading-[22px]!"
-                        style={naStyle}
+                        className="shrink-0! text-[16px]! font-semibold! leading-[22px]! text-gray-600!"
                         data-title={t('no-data-available')}
                         data-title-pos="right"
                       >
