@@ -1,4 +1,5 @@
 import { useStore } from 'effector-react';
+import type { TFunction } from 'i18next';
 import { ChevronDown, X } from 'lucide-react';
 import {
   Fragment,
@@ -12,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { $countrySearchParams } from '~/@/country/country.model';
 import { $activeEntityTypes, $entityRegistry } from '~/@/entities';
+import type { EntityConfig } from '~/@/entities/config/entity-config.types';
 import { EntityType } from '~/@/entities/types/entity-types';
 import {
   Accordion,
@@ -66,8 +68,17 @@ const navigateWithSearchParams = (params: URLSearchParams) => {
 
 const getEntityFilterGroupLabel = (
   entityType: EntityType,
-  entityRegistry: Record<string, { displayName?: string }>,
-) => entityRegistry[entityType]?.displayName ?? entityType;
+  entityRegistry: Record<string, EntityConfig>,
+  t: TFunction,
+) => {
+  const config = entityRegistry[entityType];
+  if (!config) return entityType;
+
+  return t(config.slug, {
+    count: 2,
+    defaultValue: config.displayName,
+  });
+};
 
 const FilterPopupContent = ({
   setOpen,
@@ -346,7 +357,7 @@ const FilterPopupContent = ({
                 >
                   <div className="flex! w-full! items-center! gap-2!">
                     <span className="text-sm! leading-5! text-filter-text!">
-                      {getEntityFilterGroupLabel(el, entityRegistry)} (
+                      {getEntityFilterGroupLabel(el, entityRegistry, t)} (
                       {selectedCount})
                     </span>
                     <button
@@ -396,7 +407,7 @@ const FilterPopupContent = ({
                       )}
                     >
                       <span className="whitespace-nowrap!">
-                        {getEntityFilterGroupLabel(el, entityRegistry)}
+                        {getEntityFilterGroupLabel(el, entityRegistry, t)}
                       </span>
                       <ChevronDown
                         size={16}
