@@ -1,18 +1,13 @@
 import { useStore } from 'effector-react';
 
-import { cn } from '~/lib/cn';
-
-import {
-  HERO_GLOBE_VIDEO,
-  LANDING_CONTAINER,
-  LAYER_SECTIONS,
-} from '../landing.constant';
-import { $hero, $isContentLoading, $layerSections } from '../landing.model';
+import { HERO_GLOBE_VIDEO, LAYER_SECTIONS } from '../landing.constant';
+import { $hero, $landingSections, $layerSections } from '../landing.model';
 import { hasLayerContent, LayerSectionData } from '../landing.types';
 import { CtaSection } from './cta-section';
 import { FaqSection } from './faq-section';
 import { HeroGlobe } from './hero-globe';
 import { HeroSection } from './hero-section';
+import { HeroSkeleton } from './hero-skeleton';
 import { LandingFooter } from './landing-footer';
 import { LandingHeader } from './landing-header';
 import { LayerSection } from './layer-section';
@@ -35,7 +30,8 @@ const EMPTY_LAYER: LayerSectionData = {
 const LandingPage = () => {
   const hero = useStore($hero);
   const layers = useStore($layerSections);
-  const isLoading = useStore($isContentLoading);
+  // `null` means the first request has not resolved yet.
+  const sections = useStore($landingSections);
 
   return (
     <div
@@ -45,6 +41,8 @@ const LandingPage = () => {
       <LandingHeader />
 
       <main>
+        {sections === null ? <HeroSkeleton /> : null}
+
         {hero ? (
           <HeroSection
             data={hero}
@@ -79,10 +77,6 @@ const LandingPage = () => {
         <FaqSection />
         <PartnersSection />
         <CtaSection />
-
-        {isLoading ? (
-          <div className={cn(LANDING_CONTAINER, 'py-24')} aria-hidden="true" />
-        ) : null}
       </main>
 
       <LandingFooter />
