@@ -65,14 +65,11 @@ export const LayerSection = ({
         ) : null}
       </div>
 
-      <div
-        className={cn(
-          'order-2 overflow-hidden! rounded-lg! border! border-border! bg-card!',
-          mediaSide === 'left' && 'tablet:order-1',
-        )}
-      >
-        <SectionMedia image={data.media} video={video} />
-      </div>
+      <SectionMedia
+        className={cn(mediaSide === 'left' && 'tablet:order-1')}
+        image={data.media}
+        video={video}
+      />
     </div>
   </section>
 );

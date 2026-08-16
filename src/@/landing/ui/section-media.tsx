@@ -1,15 +1,18 @@
 import { useEffect, useRef } from 'react';
 
+import { cn } from '~/lib/cn';
+
 import { LANDING_COPY } from '../landing.constant';
 import { isVideoUrl } from '../landing.types';
 import { useInViewport } from '../use-in-viewport';
 
 interface SectionMediaProps {
+  className?: string;
   image: string;
   video?: string;
 }
 
-const ASPECT = 'aspect-[824/587]';
+const ASPECT = 'aspect-[824/588]';
 
 // Plays only while on screen, and not at all under reduced motion.
 const SectionVideo = ({ src }: { src: string }) => {
@@ -42,21 +45,36 @@ const SectionVideo = ({ src }: { src: string }) => {
   );
 };
 
-export const SectionMedia = ({ image, video }: SectionMediaProps) => {
+const FRAME = 'order-2 overflow-hidden! rounded-lg!';
+const CHROME = 'border! border-border! bg-card!';
+
+export const SectionMedia = ({
+  className,
+  image,
+  video,
+}: SectionMediaProps) => {
   const source = video || (isVideoUrl(image) ? image : '');
 
-  if (source) return <SectionVideo src={source} />;
-
-  if (image) {
+  if (source) {
     return (
-      <img
-        alt={LANDING_COPY.mediaAlt}
-        className={`${ASPECT} w-full! object-cover!`}
-        loading="lazy"
-        src={image}
-      />
+      <div className={cn(FRAME, className)}>
+        <SectionVideo src={source} />
+      </div>
     );
   }
 
-  return <div className={`${ASPECT} w-full! bg-card!`} />;
+  return (
+    <div className={cn(FRAME, CHROME, className)}>
+      {image ? (
+        <img
+          alt={LANDING_COPY.mediaAlt}
+          className={`${ASPECT} w-full! object-cover!`}
+          loading="lazy"
+          src={image}
+        />
+      ) : (
+        <div className={`${ASPECT} w-full!`} />
+      )}
+    </div>
+  );
 };
