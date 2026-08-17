@@ -25,8 +25,11 @@ export const SectionHeading = ({
       {intro.subheading ? (
         <p
           className={cn(
-            'mt-3! mb-0! max-w-prose!',
+            'mt-2! mb-0! max-w-prose! tablet:mt-3!',
             TYPE_BODY,
+            // After TYPE_BODY: tailwind-merge keeps the last of a conflict.
+            // Section subheadings are 14/20 on mobile, unlike the body copy.
+            'text-sm! leading-5! tablet:text-lg! tablet:leading-7!',
             centered && 'mx-auto!',
           )}
         >

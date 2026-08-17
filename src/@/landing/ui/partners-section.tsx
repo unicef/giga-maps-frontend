@@ -41,14 +41,14 @@ const LogoBlock = ({ heading, id, logos }: LogoBlockProps) => {
         </p>
       ) : null}
 
-      <ul className="m-0! grid! list-none! grid-cols-2! gap-4! p-0! tablet:grid-cols-6!">
+      <ul className="m-0! grid! list-none! grid-cols-3! gap-4! p-0! tablet:grid-cols-6!">
         {visible.map((logo) => {
           const isBroken = failed.includes(logo.id);
 
           return (
             <li
               className={cn(
-                'flex! h-20! items-center! justify-center! rounded-md! border! bg-card! p-4! transition-shadow hover:shadow-sm!',
+                'flex! h-20! items-center! justify-center! rounded-md! border! bg-card! p-4! transition-shadow hover:bg-muted! hover:shadow-sm!',
                 isBroken
                   ? 'border-dashed! border-destructive!'
                   : 'border-border!',
@@ -87,7 +87,7 @@ export const PartnersSection = () => {
 
   return (
     <section
-      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-16! tablet:py-24!')}
+      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
       id={CmsSectionType.partners}
     >
       <SectionHeading className="mb-10!" intro={intro} />

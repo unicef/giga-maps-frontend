@@ -33,7 +33,9 @@ export const StatsRow = ({ centered = false, className }: StatsRowProps) => {
       {stats.map((stat, index) => (
         <div
           className={cn(
-            'flex! flex-col! gap-1! py-4! tablet:py-0!',
+            // The design spaces stacked stats 12px from their divider, with no
+            // padding at the top and bottom ends of the list.
+            'flex! flex-col! gap-1! py-3! first:pt-0! last:pb-0! tablet:py-0!',
             index > 0 &&
               'border-t! border-border! tablet:border-t-0! tablet:border-l! tablet:pl-8!',
             index < stats.length - 1 && 'tablet:pr-8!',

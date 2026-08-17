@@ -27,7 +27,8 @@ export const TYPE_H1 =
 export const TYPE_H2 =
   'font-manrope! text-3xl! leading-9! font-medium! text-foreground! tablet:text-4xl! tablet:leading-[2.625rem]!';
 export const TYPE_EYEBROW = 'text-base! leading-6! text-muted-foreground!';
-export const TYPE_BODY = 'text-lg! leading-7! text-muted-foreground!';
+export const TYPE_BODY =
+  'text-base! leading-6! text-muted-foreground! tablet:text-lg! tablet:leading-7!';
 
 // Render order. `video` wins over the CMS image; drop it once uploaded.
 export const LAYER_SECTIONS = [
@@ -64,6 +65,7 @@ export const LANDING_COPY = {
   // Dev-only marker; never rendered in production.
   brokenImage: 'Image not found',
   closeMenu: 'Close menu',
+  goToTestimonial: 'Go to testimonial {{count}}',
   heroMediaAlt: 'Globe showing mapped schools and their connectivity',
   logoAlt: 'Partner logo',
   mediaAlt: 'Product screenshot',

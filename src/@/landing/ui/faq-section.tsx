@@ -19,11 +19,11 @@ const FaqColumn = ({ items }: { items: FaqData[] }) => (
   <Accordion className="flex! flex-col! gap-4!" type="multiple">
     {items.map((faq) => (
       <AccordionItem
-        className="rounded-lg! border! border-border! bg-card! px-5! transition-shadow hover:shadow-sm!"
+        className="rounded-lg! border! border-border! bg-card! px-5! transition-shadow hover:bg-muted! hover:shadow-sm!"
         key={faq.id}
         value={faq.id}
       >
-        <AccordionTrigger className="py-4! text-left! text-base! font-medium! text-foreground! [&[data-state=open]>svg]:rotate-180!">
+        <AccordionTrigger className="py-4! cursor-pointer! text-left! text-base! font-medium! text-foreground! [&[data-state=open]>svg]:rotate-180!">
           {faq.question}
           <ChevronDown
             aria-hidden="true"
@@ -56,7 +56,7 @@ export const FaqSection = () => {
 
   return (
     <section
-      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-16! tablet:py-24!')}
+      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
       id={CmsSectionType.faqs}
     >
       <SectionHeading className="mb-10!" intro={intro} />

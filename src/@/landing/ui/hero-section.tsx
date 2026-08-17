@@ -31,17 +31,21 @@ export const HeroSection = ({
 
   return (
     <section
-      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-16! tablet:py-24!')}
+      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
       id={CmsSectionType.hero}
     >
       <div className="grid! items-center! gap-12! tablet:grid-cols-2! tablet:gap-16!">
         <div className="flex! flex-col! items-start!">
           {data.heading ? (
-            <h1 className={cn('mb-6!', TYPE_H1)}>{data.heading}</h1>
+            <h1 className={cn('mb-4! tablet:mb-6!', TYPE_H1)}>
+              {data.heading}
+            </h1>
           ) : null}
 
           {data.body ? (
-            <p className={cn('mb-10! max-w-prose!', TYPE_BODY)}>{data.body}</p>
+            <p className={cn('mb-8! max-w-prose! tablet:mb-10!', TYPE_BODY)}>
+              {data.body}
+            </p>
           ) : null}
 
           {children}
@@ -50,7 +54,7 @@ export const HeroSection = ({
             <Button
               asChild={true}
               // buttonVariants ships `bg-primary` unimportant; Carbon wins.
-              className="mt-10! h-12! rounded-full! bg-primary! px-8! text-base! font-medium! text-primary-foreground! shadow-sm! transition-shadow hover:bg-primary/90! hover:shadow-md!"
+              className="mt-8! h-12! self-center! rounded-full! bg-primary! px-8! text-base! font-medium! text-primary-foreground! shadow-sm! transition-shadow hover:bg-primary/90! hover:shadow-md! tablet:mt-10! tablet:self-start!"
               size="lg"
             >
               <a href={data.ctaLink} rel="noreferrer" target="_blank">

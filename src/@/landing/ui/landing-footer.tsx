@@ -1,6 +1,7 @@
 import { useStore } from 'effector-react';
 
 import GigaMapsLogo from '~/assets/images/GigaMaps.svg';
+import { Card } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 import { cn } from '~/lib/cn';
 
@@ -41,11 +42,11 @@ export const LandingFooter = () => {
         ) : null}
 
         {footer.linkColumns.length > 0 ? (
-          <div className="mt-12! grid! gap-6! tablet:grid-cols-3!">
+          <div className="mt-12! grid! gap-4! tablet:grid-cols-3! tablet:gap-6!">
             {footer.linkColumns.map((column, index) => (
-              <div
+              <Card
                 className={cn(
-                  'rounded-lg! border! border-border! bg-card! p-8!',
+                  'block! rounded-lg! border-border! p-8!',
                   cmsHtml,
                 )}
                 dangerouslySetInnerHTML={{ __html: column }}
@@ -69,7 +70,7 @@ export const LandingFooter = () => {
               {footer.socialLinks.map((link, index) => (
                 <div
                   className={cn(
-                    'flex! size-10! items-center! justify-center! rounded-md! border! border-border! bg-card! transition-shadow hover:shadow-sm!',
+                    'flex! size-10! items-center! justify-center! rounded-md! border! border-border! bg-card! transition-shadow hover:bg-muted! hover:shadow-sm!',
                     cmsHtml,
                   )}
                   dangerouslySetInnerHTML={{ __html: link }}

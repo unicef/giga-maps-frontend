@@ -27,10 +27,10 @@ export const LayerSection = ({
   video,
 }: LayerSectionProps) => (
   <section
-    className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-16! tablet:py-24!')}
+    className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
     id={id}
   >
-    <div className="grid! items-center! gap-10! tablet:grid-cols-2! tablet:gap-20!">
+    <div className="grid! items-center! gap-6! tablet:grid-cols-2! tablet:gap-20!">
       <div
         className={cn(
           'order-1 flex! flex-col! items-start!',
@@ -38,11 +38,13 @@ export const LayerSection = ({
         )}
       >
         {data.eyebrow ? (
-          <p className={cn('mb-2!', TYPE_EYEBROW)}>{data.eyebrow}</p>
+          <p className={cn('mb-4! tablet:mb-2!', TYPE_EYEBROW)}>
+            {data.eyebrow}
+          </p>
         ) : null}
 
         {data.heading ? (
-          <h2 className={cn('mb-6!', TYPE_H2)}>{data.heading}</h2>
+          <h2 className={cn('mb-4! tablet:mb-6!', TYPE_H2)}>{data.heading}</h2>
         ) : null}
 
         {data.body ? (
