@@ -1,38 +1,23 @@
-import { ArrowRight, Launch } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from 'styled-components';
 
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import { $entityRegistry } from '~/@/entities/models/entity.model';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
 import { PointCoordinates } from '~/core/global-types';
 
 import DublicateSchoolPopup from './dublicate-school-popup.view';
-import {
-  ConnectivityCircleWrapper,
-  GoToSchoolButton,
-  Label,
-  LiveContainer,
-  LiveContent,
-  LiveStatusRow,
-  OSMLink,
-  PopupTemplate,
-  SchoolInfoWrapper,
-  SchoolName,
-  SchoolNameContent,
-  SchoolNameWrapper,
-  SchoolVerificationTag,
-} from './school-popup.style';
 import useSchoolPopupData from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
   const entityRegistry = useStore($entityRegistry);
   const {
     isLoading,
@@ -90,30 +75,34 @@ export const MapSchoolPopup = () => {
                 />
               ) : (
                 <div className="map-popup-template">
-                  <PopupTemplate>
-                    <SchoolNameWrapper>
-                      <SchoolNameContent>
-                        <SchoolName className="map-school-name">
+                  <div className="relative flex w-[15.4375rem] flex-col rounded-[2px] bg-surface-elevated p-4 shadow-[0px_2px_3px_0px_var(--giga-background)]">
+                    <div className="mb-4 flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+                        <h6 className="map-school-name mb-[2px] max-w-full text-xl font-normal leading-7 text-filter-text capitalize break-words">
                           {feature?.name?.toLocaleLowerCase()}
-                        </SchoolName>
+                        </h6>
                         {feature?.isVerifiedSchool === false && (
-                          <SchoolVerificationTag>
+                          <Badge
+                            variant="outline"
+                            className="min-h-5 rounded-md border-transparent bg-[#FCD34D] px-2.5 py-0.5 text-xs font-normal leading-4 text-[#44403C] hover:bg-[#FCD34D]"
+                          >
                             Unverified
-                          </SchoolVerificationTag>
+                          </Badge>
                         )}
-                      </SchoolNameContent>
-                      <OSMLink
+                      </div>
+                      <a
                         href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Open in OpenStreetMap"
+                        className="inline-flex size-auto shrink-0 items-center self-start text-[#277AFF] transition-colors hover:text-[#277AFF]/80 focus:text-[#277AFF]/80 active:text-[#277AFF]"
                       >
-                        <Launch />
-                      </OSMLink>
-                    </SchoolNameWrapper>
-                    <SchoolInfoWrapper className="live-container">
-                      <LiveContainer>
-                        <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
+                        <ExternalLink className="size-4" />
+                      </a>
+                    </div>
+                    <div className="live-container mb-2 flex flex-col items-baseline gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className="map-school-status-circle relative mr-[0.2rem] flex scale-130 items-center">
                           <EntityLegendIndicator
                             color={
                               isStatic ? staticColor : connecitivityStatusColor
@@ -126,52 +115,53 @@ export const MapSchoolPopup = () => {
                             }
                             size={16}
                           />
-                        </ConnectivityCircleWrapper>
-                        <LiveContent>
+                        </div>
+                        <div className="flex flex-col gap-1">
                           {isLive && feature?.isRealTime && (
-                            <LiveStatusRow>
-                              <Label
-                                $color={connecitivityColor}
-                                style={{ whiteSpace: 'nowrap' }}
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span
+                                className="whitespace-nowrap text-sm font-normal leading-4 capitalize"
+                                style={{ color: connecitivityColor }}
                               >
                                 {connectivityValue}
-                              </Label>
-                              <Label
-                                $size="0.875rem"
-                                $textTransform="none"
-                                $color={theme.filterText}
-                              >
+                              </span>
+                              <span className="text-sm font-normal leading-4 text-filter-text">
                                 {formattedInterval}
-                              </Label>
-                            </LiveStatusRow>
+                              </span>
+                            </div>
                           )}
                           {isStatic && (
-                            <Label $color={staticColor}>{staticValue}</Label>
+                            <span
+                              className="text-sm font-normal leading-4 capitalize"
+                              style={{ color: staticColor }}
+                            >
+                              {staticValue}
+                            </span>
                           )}
                           {!isStatic && (!isLive || !feature?.isRealTime) && (
-                            <Label
-                              $color={connecitivityStatusColor}
-                              style={{ whiteSpace: 'nowrap' }}
+                            <span
+                              className="whitespace-nowrap text-sm font-normal leading-4 capitalize"
+                              style={{ color: connecitivityStatusColor }}
                             >
                               {t(
                                 ConnectivityStatusNames[
                                 connectivityStatusValue
                                 ],
                               )}
-                            </Label>
+                            </span>
                           )}
-                        </LiveContent>
-                      </LiveContainer>
+                        </div>
+                      </div>
                       {isEntityBenchmark && benchmarkTitle && (
-                        <Label style={{ marginTop: '0.5rem' }} $size=".875rem">
+                        <span className="mt-2 text-sm font-normal leading-4 text-muted-foreground capitalize">
                           {benchmarkTitle} - {feature?.schoolBenchmark}
-                        </Label>
+                        </span>
                       )}
-                    </SchoolInfoWrapper>
-                  </PopupTemplate>
+                    </div>
+                  </div>
                   {isClicked && entityType && feature?.id && (
-                    <GoToSchoolButton
-                      className="go-to-school"
+                    <Button
+                      className="go-to-school w-full cursor-pointer justify-between rounded-none border-0 text-sm font-normal outline-none"
                       onClick={() => {
                         navigateToEntity(entityType, countryCode, feature.id);
                         setSchoolFocusLatLng(
@@ -179,10 +169,10 @@ export const MapSchoolPopup = () => {
                         );
                       }}
                       type="button"
-                      renderIcon={ArrowRight}
                     >
-                      {t('go-to-entity-page', { entity: entityLabel })}
-                    </GoToSchoolButton>
+                      <span>{t('go-to-entity-page', { entity: entityLabel })}</span>
+                      <ArrowRight className="size-4 shrink-0" />
+                    </Button>
                   )}
                 </div>
               )}
