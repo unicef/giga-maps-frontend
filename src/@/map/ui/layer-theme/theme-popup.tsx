@@ -105,10 +105,11 @@ const ThemePopup = ({
       <PopoverContent
         ref={popoverContentRef}
         align={isMobile && sidebarHeight ? 'center' : 'end'}
-        avoidCollisions={false}
+        avoidCollisions={true}
         className={cn(
-          'theme-layer-popover-content z-[10000]! flex! max-h-[calc(100dvh-1rem)]! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs!',
+          'theme-layer-popover-content z-[10000]! flex! max-h-[calc(100dvh-1rem)]! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs! max-md:max-h-[var(--radix-popper-available-height)]!',
         )}
+        collisionPadding={8}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
         onInteractOutside={(event) => event.preventDefault()}

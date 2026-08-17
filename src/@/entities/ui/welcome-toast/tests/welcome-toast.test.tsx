@@ -122,7 +122,7 @@ describe('WelcomeToast', () => {
     expect(screen.getByRole('link')).toHaveTextContent('escríbenos');
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
-      'mailto:gigamaps@unicef.org',
+      '/about#live-map-get-in-touch',
     );
   });
 });

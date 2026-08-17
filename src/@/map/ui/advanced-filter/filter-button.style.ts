@@ -125,8 +125,23 @@ export const FilterActionButtonWrapper = styled.div`
   }
 `
 
+const wrappedMenuItems = (minBlockSize: string) => css`
+  .cds--list-box__menu .cds--list-box__menu-item,
+  .cds--list-box__menu .cds--list-box__menu-item__option {
+    block-size: auto;
+    min-block-size: ${minBlockSize};
+  }
+
+  .cds--list-box__menu .cds--list-box__menu-item__option {
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+`;
+
 export const StyledDropdownSingleSelect = styled(Dropdown) <{ light?: boolean, theme: any }>`
   padding: 0.5rem 1rem;
+  ${wrappedMenuItems('2.5rem')}
   ${({ light, theme }) =>
     !light &&
     css`
@@ -229,6 +244,21 @@ export const StyledTextInputContainer = styled.div`
 
 export const StyledMultiSelectFilterConfig = styled(MultiSelect) <{ light?: boolean, theme: any }>`
   padding: 0.5rem 1rem;
+  ${wrappedMenuItems('3rem')}
+
+  .cds--multi-select .cds--list-box__menu-item__option .cds--checkbox-label {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .cds--list-box__menu .cds--checkbox-label-text {
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
   ${({ light, theme }) =>
     !light &&
     css`
