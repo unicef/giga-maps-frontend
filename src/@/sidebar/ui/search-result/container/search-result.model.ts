@@ -1,17 +1,18 @@
 import { combine, createEvent, createStore, merge, restore, sample } from "effector";
 
 import { EntityType } from "~/@/entities";
-import { $countries, $country, $countryCode } from "~/@/country/country.model";
+import { $admin1Code, $admin1Name, $countries, $country, $countryCode } from "~/@/country/country.model";
 import { APIListType } from "~/api/types";
 import { $mapRoutes, mapCountry } from "~/core/routes";
 import { debounce, setPayload, setPayloadResults } from "~/lib/effector-kit";
 import { getId, getLocalStorage, setLocalStorage } from "~/lib/utils";
 
 import { applySearchFx } from "../../../effects/search-country-fx";
-import { $hasSearchInput, $isSearchFocused, $searchInput, $selectedSearchEntityTags, $showCountries, changeSearchText, clearSearchText } from "../../common-components/top-search-bar/top-search-bar.model";
+import { $getSchoolParams, $schoolStats } from "../../../sidebar.model";
+import { $hasSearchInput, $isSearchFocused, $isSearchTextDirty, $searchInput, $selectedSearchEntityTags, $showCountries, changeSearchText, clearSearchText, resetSearchTextDirty, searchInputBlurred } from "../../common-components/top-search-bar/top-search-bar.model";
 import { MAX_SEARCH_HISTORY, SCHOOL_LIST_SEARCH_LENGTH, SEARCH_ADMIN_SIZE, SEARCH_COUNTRY_SIZE, SEARCH_DATA_TYPE, STORE_SEARCH_HISTORY } from "./search-result.constant";
 import { fetchCountriesWithDistrictFx, fetchSchoolListFx, getSearchResultsFx } from "./search-result.fx";
-import { CountryWithDistrictCount, SearchResultApi, SearchResultCollection, SearchType } from "./search-result.type";
+import { CountryWithDistrictCount, SearchResultApi, SearchResultCollection, SearchType, SelectedPlace } from "./search-result.type";
 import { makeSearchDataCollection, matchAndCollectItems } from './search-result.util';
 
 const $query = sample({
@@ -311,6 +312,65 @@ loadMoreResults.watch(() => {
 
 
 
+export const $selectedPlaceKey = combine(
+  { routes: $mapRoutes, countryCode: $countryCode, admin1Code: $admin1Code, schoolParams: $getSchoolParams },
+  ({ routes, countryCode, admin1Code, schoolParams }) => {
+    if (routes.schools || routes.entity) {
+      const ids = [...(schoolParams.schoolIds ?? [])].sort((a, b) => a - b).join(',');
+      return `entity:${schoolParams.country ?? countryCode}:${schoolParams.entityType ?? ''}:${ids}`;
+    }
+    if (routes.country && countryCode) {
+      return admin1Code ? `region:${countryCode}:${admin1Code}` : `country:${countryCode}`;
+    }
+    return '';
+  },
+);
+
+
+export const $selectedPlace = combine(
+  {
+    key: $selectedPlaceKey,
+    country: $country,
+    countries: $countries,
+    countryCode: $countryCode,
+    admin1Name: $admin1Name,
+    schoolStats: $schoolStats,
+    schoolParams: $getSchoolParams,
+  },
+  ({ key, country, countries, countryCode, admin1Name, schoolStats, schoolParams }): SelectedPlace | null => {
+    if (!key) return null;
+
+    const code = (schoolParams.country ?? countryCode).toLowerCase();
+    const countryName = country?.code?.toLowerCase() === code
+      ? country.name
+      : countries?.find((item) => item.code.toLowerCase() === code)?.name;
+    if (!countryName) return null;
+
+    if (key.startsWith('region:') && admin1Name) {
+      return { kind: 'region', name: admin1Name, countryName };
+    }
+    if (key.startsWith('entity:')) {
+      const selectedIds = schoolParams.schoolIds ?? [];
+      if (selectedIds.length > 1) {
+        return { kind: 'entities', count: selectedIds.length, countryName, entityType: schoolParams.entityType };
+      }
+      const isCurrentEntity = !!schoolStats?.length
+        && schoolStats.every((entity) => selectedIds.includes(entity.id));
+      return isCurrentEntity && schoolStats[0].name
+        ? { kind: 'entity', name: schoolStats[0].name, countryName }
+        : { kind: 'entity-pending', countryName };
+    }
+    return { kind: 'country', countryName };
+  },
+);
+
+sample({
+  clock: searchInputBlurred,
+  source: { text: $searchInput, key: $selectedPlaceKey },
+  filter: ({ text, key }) => !text && !!key,
+  target: resetSearchTextDirty,
+});
+
 // reset on below change
 $currentExpandCountry.reset($showCountries);
 $searchAdminLevel1.reset($showCountries, $currentExpandCountry);
@@ -326,4 +386,7 @@ $searchSchoolList.on(fetchSchoolListFx.doneData, setPayload)
 $searchSchoolListValue.reset([$searchAdminLevel2])
 $schoolListCurrentPage.reset([$searchAdminLevel2])
 $schoolListCurrentPage.reset(setSearchSchoolListValue)
-$searchInput.reset([$countryCode]);
+$searchInput.reset($selectedPlaceKey);
+$isSearchTextDirty.reset($selectedPlaceKey);
+$searchResultResponse.reset($selectedPlaceKey);
+$hasMoreResults.reset($selectedPlaceKey);

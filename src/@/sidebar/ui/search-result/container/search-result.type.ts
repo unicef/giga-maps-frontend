@@ -67,3 +67,10 @@ export type SearchType = {
   entityTypetag?: EntityType
 
 } & AdminType
+
+export type SelectedPlace =
+  | { kind: 'country'; countryName: string }
+  | { kind: 'region'; name: string; countryName: string }
+  | { kind: 'entity'; name: string; countryName: string }
+  | { kind: 'entities'; count: number; countryName: string; entityType?: EntityType }
+  | { kind: 'entity-pending'; countryName: string };

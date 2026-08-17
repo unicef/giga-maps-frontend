@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { $entityRegistryFiltered, selectAllEntityTypes } from '~/@/entities/models/entity.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterTourContact from '~/@/sidebar/ui/common-components/footer-tour-contact.view';
+import { $selectedPlace } from '~/@/sidebar/ui/search-result/container/search-result.model';
 import { SearchCountryList } from '~/@/sidebar/ui/search-result/search-country-list';
 import SearchSchoolPanel from '~/@/sidebar/ui/search-result/search-country-list/search-school-panel-view';
 import { SearchResultScroll } from '~/@/sidebar/ui/search-result/styles/search-result-style';
@@ -19,24 +20,30 @@ import { mapOverview } from '~/core/routes';
 import { $theme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
-import { getInputValue } from '~/lib/event-reducers';
 import { useRoute } from '~/lib/router';
 
-import { $isActiveSearchBar, $searchInput, $selectedSearchEntityTags, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, toggleSearchEntityTag } from './top-search-bar.model';
+import { $isActiveSearchBar, $isSearchTextDirty, $searchInput, $selectedSearchEntityTags, $showCountries, changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList, searchInputBlurred, searchTextTyped, toggleSearchEntityTag } from './top-search-bar.model';
 
 
-const onChange = changeSearchText.prepend(getInputValue);
 const onClear = clearSearchText.prepend(getVoid);
+
+const entitiesSelectedKeyByType: Partial<Record<EntityType, string>> = {
+  [EntityType.SCHOOL]: 'search-schools-selected',
+  [EntityType.HEALTH]: 'search-health-selected',
+};
 
 const TopSearchBar = () => {
   const isMobile = useStore($isMobile);
   const searchText = useStore($searchInput);
+  const isSearchTextDirty = useStore($isSearchTextDirty);
+  const selectedPlace = useStore($selectedPlace);
   const isActiveSearchBar = useStore($isActiveSearchBar);
   const showCountries = useStore($showCountries)
   const entityRegistry = useStore($entityRegistryFiltered);
   const selectedTags = useStore($selectedSearchEntityTags);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchShellRef = useRef<HTMLDivElement>(null);
+  const keepSelectionOnClickRef = useRef(false);
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const { t } = useTranslation();
   const isGlobalView = useRoute(mapOverview);
@@ -53,6 +60,22 @@ const TopSearchBar = () => {
     () => Object.values(entityRegistry).filter((config) => config.active),
     [entityRegistry],
   );
+
+  const selectedPlaceLabel = useMemo(() => {
+    if (!selectedPlace) return '';
+    const country = t(selectedPlace.countryName);
+    if (selectedPlace.kind === 'country' || selectedPlace.kind === 'entity-pending') return country;
+    const name = selectedPlace.kind === 'entities'
+      ? t(
+        (selectedPlace.entityType && entitiesSelectedKeyByType[selectedPlace.entityType])
+        ?? 'search-entities-selected',
+        { count: selectedPlace.count },
+      )
+      : selectedPlace.name;
+    return t('search-selected-place', { country, name });
+  }, [selectedPlace, t]);
+
+  const displayValue = isSearchTextDirty ? searchText : selectedPlaceLabel;
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState('');
@@ -110,12 +133,16 @@ const TopSearchBar = () => {
       setTimeout(() => {
         changeIsSearchFocused(false);
         setShowSuggestions(false);
+        searchInputBlurred();
       }, 0);
     }
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    // drop the label if the caret left it in
+    const value = isSearchTextDirty
+      ? e.target.value
+      : e.target.value.replace(selectedPlaceLabel, '');
     const mentionMatch = value.match(/@([\w-]*)$/);
     if (mentionMatch) {
       setMentionQuery(mentionMatch[1]);
@@ -124,7 +151,7 @@ const TopSearchBar = () => {
       setMentionQuery('');
       setShowSuggestions(false);
     }
-    onChange(e);
+    searchTextTyped(value);
   };
 
   const handleSelectEntityTag = (entityType: EntityType) => {
@@ -249,14 +276,24 @@ const TopSearchBar = () => {
                       handleSelectEntityTag(filteredSuggestions[0].type as EntityType);
                     }
                   }}
-                  onFocus={() => {
+                  onFocus={(e) => {
                     onShowCountriesAdminList(false);
                     changeIsSearchFocused(true);
+                    if (!isSearchTextDirty && displayValue) {
+                      e.currentTarget.select();
+                      keepSelectionOnClickRef.current = true;
+                    }
+                  }}
+                  onMouseUp={(e) => {
+                    if (keepSelectionOnClickRef.current) {
+                      e.preventDefault();
+                      keepSelectionOnClickRef.current = false;
+                    }
                   }}
                   placeholder={selectedTagConfigs.length > 0 ? '' : t("search-country-region-school-id")}
-                  value={searchText}
+                  value={displayValue}
                 />
-                {!searchText && selectedTags.length === 0 ? (
+                {!displayValue && selectedTags.length === 0 ? (
                   <Search
                     size={16}
                     className="pointer-events-none! absolute! right-3.5! top-1/2! shrink-0! -translate-y-1/2! text-foreground!"
@@ -264,17 +301,19 @@ const TopSearchBar = () => {
                 ) : null}
               </div>
               <Button
-                aria-label={t('clear-search')}
+                aria-label={t('clear-search-input')}
                 variant={'icon'}
                 className={cn(
                   'main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! text-foreground!',
-                  !searchText && selectedTags.length === 0 && 'hidden!'
+                  !displayValue && selectedTags.length === 0 && 'hidden!'
                 )}
                 onClick={() => {
+                  const wasShowingSelection = !isSearchTextDirty && !!selectedPlace;
                   onClear();
                   changeIsSearchFocused(false);
                   setShowSuggestions(false);
                   setMentionQuery('');
+                  if (wasShowingSelection) mapOverview.navigate();
                 }}
               >
                 <X size={16} className="text-foreground!" />
