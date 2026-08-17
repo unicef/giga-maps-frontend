@@ -2,6 +2,7 @@ import { useStore } from 'effector-react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { $advancedFiltersByEntity, $country } from '~/@/country/country.model';
 import {
   $activeEntityTypes,
   $entityConfigMap,
@@ -15,6 +16,8 @@ import {
   toggleAccordionEntity,
 } from '~/@/sidebar/sidebar.model';
 import {
+  fetchAdvanceFilterFx,
+  fetchCountryFx,
   fetchEntitiesConnectivityStatsFx,
   fetchEntitiesLayerInfoFx,
   fetchEntityGlobalStatsFx,
@@ -24,6 +27,7 @@ import { Accordion } from '~/components/ui/accordion';
 import { defaultLanguage } from '~/core/i18n/constant';
 import { $lng } from '~/core/i18n/store';
 
+import EntityEmptyState from './entity-empty-state';
 import EntitySummaryCard from './entity-summary-card';
 import type {
   EntitySummaryCardData,
@@ -60,8 +64,11 @@ const EntitySummaryAccordion = ({
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
   );
+  const advancedFiltersByEntity = useStore($advancedFiltersByEntity);
   const entityConfigMap = useStore($entityConfigMap);
   const stylePaintData = useStore($stylePaintData);
+  const isLoadingCountry = useStore(fetchCountryFx.pending);
+  const isLoadingAdvanceFilter = useStore(fetchAdvanceFilterFx.pending);
   const isLoadingGlobalStats = useStore(fetchEntityGlobalStatsFx.pending);
   const isLoadingEntityInfoRequest = useStore(fetchEntitiesLayerInfoFx.pending);
   const isLoadingEntityConnectivityStats = useStore(
@@ -80,14 +87,27 @@ const EntitySummaryAccordion = ({
     .map(([entityType]) => entityType);
 
   const isLoading =
+    isLoadingCountry ||
+    isLoadingAdvanceFilter ||
     isLoadingGlobalStats ||
     isLoadingConnectivityStats ||
     isLoadingEntityConnectivityStats;
+  const isFilteredByEntity = Object.fromEntries(
+    visibleEntityTypes.map((type) => [
+      type,
+      Boolean(
+        advancedFiltersByEntity?.[type] &&
+          Object.keys(advancedFiltersByEntity[type]).length > 0,
+      ),
+    ]),
+  );
+
   const entityCards = buildEntityCards({
     connectivityStatsByEntity,
     entityConfigMap,
     entityTypes: visibleEntityTypes,
     globalStatsByEntity,
+    isFilteredByEntity,
     isStaticLayerByEntity: Object.fromEntries(
       Object.entries(currentLayerTypeUtilsByEntity).map(
         ([entityType, layerTypeUtils]) => [
@@ -111,6 +131,25 @@ const EntitySummaryAccordion = ({
     });
   };
 
+  const countryObj = useStore($country);
+  const allEntitiesEmpty =
+    !isLoading &&
+    entityCards.length > 0 &&
+    entityCards.every((card) => {
+      const count = countryObj?.entity_counts?.[card.accordionItem.value];
+      return typeof count === 'number'
+        ? count === 0
+        : card.accordionItem.entitiesTotal === 0;
+    });
+
+  if (allEntitiesEmpty) {
+    return (
+      <div className="mt-4! border-t! border-border!">
+        <EntityEmptyState t={t} />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-4! flex! flex-col! gap-3!">
       <Accordion
@@ -133,6 +172,7 @@ const EntitySummaryAccordion = ({
               <EntitySummaryCard
                 card={accordionItem}
                 expanded={Boolean(accordionExpandedEntitiesMap[entityType])}
+                isFiltered={accordionItem.isFiltered}
                 isLoading={isLoading}
                 key={accordionItem.value}
                 loadingRowLabels={infoLoadingMetricLabels}

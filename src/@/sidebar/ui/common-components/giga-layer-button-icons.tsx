@@ -35,42 +35,22 @@ export const isLayerApplicableToCountry = (
   !layer.applicable_countries?.length ||
   layer.applicable_countries.includes(countryId);
 
-const GigaLayerButtonIcons = ({
-  entityType,
-  popup,
-}: {
-  entityType: EntityType;
-  popup?: boolean;
-}) => {
-  const { t } = useTranslation();
+export const useTargetLiveButtonLayer = (targetEntityType: EntityType) => {
+  const countryId = useStore($country)?.id ?? null;
   const {
-    coverageLayerDataByEntity,
     currentDefaultLayerIdByEntity,
     globalLayerDataByEntity,
     layers,
     activeLayerByCountryCodeByEntity,
   } = useStore($layerUtils);
-  const countryId = useStore($country)?.id ?? null;
-  const statusLayerIdByEntity = useStore($statusLayerIdByEntity);
   const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
-  const targetEntityType = entityType;
-  const targetStatusSelectedLayer = getEntityMapValue(
-    statusLayerIdByEntity,
-    targetEntityType,
-    getEntityStatusId(targetEntityType),
-  );
+
   const targetActiveLayerByCountryCode =
     activeLayerByCountryCodeByEntity[targetEntityType] ?? {};
   const entityLayers = layers.filter(
     (layer) =>
       isLayerForEntity(layer, targetEntityType) &&
       isLayerApplicableToCountry(layer, countryId),
-  );
-  const entityLiveLayers = entityLayers.filter(
-    (layer) => layer.type === LayerTypeChoices.LIVE,
-  );
-  const entityStaticLayers = entityLayers.filter(
-    (layer) => layer.type === LayerTypeChoices.STATIC,
   );
   const targetDefaultLayerId =
     currentDefaultLayerIdByEntity[targetEntityType] ?? null;
@@ -103,6 +83,68 @@ const GigaLayerButtonIcons = ({
       : null;
   const targetLiveButtonLayer =
     selectedLiveLayerData ?? targetDefaultLayerData ?? targetGlobalLayerData;
+
+  const isLiveButtonDisabled =
+    !targetLiveButtonLayer ||
+    !targetActiveLayerByCountryCode[String(targetLiveButtonLayer.id)];
+
+  return {
+    targetLiveButtonLayer,
+    isLiveButtonDisabled,
+  };
+};
+
+const GigaLayerButtonIcons = ({
+  entityType,
+  popup,
+}: {
+  entityType: EntityType;
+  popup?: boolean;
+}) => {
+  const { t } = useTranslation();
+  const {
+    coverageLayerDataByEntity,
+    currentDefaultLayerIdByEntity,
+    layers,
+    activeLayerByCountryCodeByEntity,
+  } = useStore($layerUtils);
+  const countryId = useStore($country)?.id ?? null;
+  const statusLayerIdByEntity = useStore($statusLayerIdByEntity);
+  const selectedLayerIdByEntity = useStore($selectedLayerIdByEntity);
+  const targetEntityType = entityType;
+  const { targetLiveButtonLayer, isLiveButtonDisabled } =
+    useTargetLiveButtonLayer(targetEntityType);
+  const targetStatusSelectedLayer = getEntityMapValue(
+    statusLayerIdByEntity,
+    targetEntityType,
+    getEntityStatusId(targetEntityType),
+  );
+  const targetActiveLayerByCountryCode =
+    activeLayerByCountryCodeByEntity[targetEntityType] ?? {};
+  const entityLayers = layers.filter(
+    (layer) =>
+      isLayerForEntity(layer, targetEntityType) &&
+      isLayerApplicableToCountry(layer, countryId),
+  );
+  const entityLiveLayers = entityLayers.filter(
+    (layer) => layer.type === LayerTypeChoices.LIVE,
+  );
+  const entityStaticLayers = entityLayers.filter(
+    (layer) => layer.type === LayerTypeChoices.STATIC,
+  );
+  const targetDefaultLayerId =
+    currentDefaultLayerIdByEntity[targetEntityType] ?? null;
+
+  const targetSelectedLayerId = getEntityMapValue(
+    selectedLayerIdByEntity,
+    targetEntityType,
+    targetDefaultLayerId,
+  );
+  const targetLayerData = entityLayers.find(
+    (layer) => layer.id === targetSelectedLayerId,
+  );
+  const selectedLiveLayerData =
+    targetLayerData?.type === LayerTypeChoices.LIVE ? targetLayerData : null;
   const isLive = !!selectedLiveLayerData;
   const selectedStaticLayerData =
     targetLayerData?.type === LayerTypeChoices.STATIC ? targetLayerData : null;
@@ -251,10 +293,7 @@ const GigaLayerButtonIcons = ({
         {!countryId || targetLiveButtonLayer ? (
           <GigaLayerButton
             label={targetLiveButtonLayer?.name ?? t('average-download-speed')}
-            disabled={
-              !targetLiveButtonLayer ||
-              !targetActiveLayerByCountryCode[String(targetLiveButtonLayer.id)]
-            }
+            disabled={isLiveButtonDisabled}
             popup={popup}
             isActive={isLive}
             icon={<Wifi />}

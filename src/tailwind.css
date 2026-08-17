@@ -204,11 +204,14 @@
 
   --color-connectivity-green-200: #85FFBC;
   --color-connectivity-green-600: #00D661;
-  --color-grey-400: #9ca3af;
-  --color-grey-700: #374151;
-  --color-grey-900: #161616;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6B7280;
+  --color-gray-600: #6F6F6F;
+  --color-gray-700: #374151;
+  --color-gray-800: #222222;
+  --color-gray-900: #242424;
+  --color-gray-950: #161616;
   --color-surface-panel: var(--giga-surface-panel);
-
   --color-primary-300: #A9CAFF;
 
   --font-manrope: "Manrope", sans-serif;
@@ -234,12 +237,12 @@
 @keyframes legend-connectivity-glow {
   from {
     opacity: 0.9;
-    transform: translate(-50%, -50%) scale(0.72);
+    transform: scale(0.72);
   }
 
   to {
     opacity: 0.35;
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: scale(1.05);
   }
 }
 
