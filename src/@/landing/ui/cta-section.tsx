@@ -16,12 +16,12 @@ export const CtaSection = () => {
 
   return (
     <section
-      className={cn(LANDING_ANCHOR, 'bg-card! py-20! tablet:py-28!')}
+      className={cn(LANDING_ANCHOR, 'bg-card! py-12! tablet:py-28!')}
       id={CmsSectionType.closingCta}
     >
       <div className={cn(LANDING_CONTAINER, 'text-center!')}>
         {cta.heading ? (
-          <h2 className="m-0! font-manrope! text-3xl! font-medium! leading-tight! text-foreground! tablet:text-5xl!">
+          <h2 className="m-0! font-manrope! text-4xl! font-medium! leading-[2.625rem]! text-foreground! tablet:text-5xl! tablet:leading-tight!">
             {cta.heading}
           </h2>
         ) : null}

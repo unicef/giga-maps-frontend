@@ -56,12 +56,12 @@ export const LandingHeader = () => {
       <div
         className={cn(
           LANDING_CONTAINER,
-          'flex! h-16! items-center! justify-between!',
+          'flex! h-14! items-center! justify-between! tablet:h-16!',
         )}
       >
         {/* Wrapper sizes and repaints the logo: `*.svg` is typed without props,
             and the asset has a hard-coded white fill. */}
-        <span className="flex! h-7! shrink-0! items-center! [&_path]:fill-foreground! [&_svg]:h-full! [&_svg]:w-auto!">
+        <span className="flex! h-6! shrink-0! items-center! [&_path]:fill-foreground! [&_svg]:h-full! [&_svg]:w-auto! tablet:h-7!">
           <GigaMapsLogo />
         </span>
 
@@ -70,6 +70,7 @@ export const LandingHeader = () => {
             <SheetTrigger asChild={true}>
               <Button
                 aria-label={LANDING_COPY.openMenu}
+                className="cursor-pointer! hover:bg-muted!"
                 size="icon"
                 variant="ghost"
               >

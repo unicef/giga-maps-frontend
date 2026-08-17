@@ -1,5 +1,6 @@
 import { useStore } from 'effector-react';
 
+import { Card, CardContent } from '~/components/ui/card';
 import { cn } from '~/lib/cn';
 
 import {
@@ -42,33 +43,42 @@ export const ServicesSection = () => {
 
   if (services.length === 0) return null;
 
+  // Card and CardContent ship their padding unmarked, and Carbon's unlayered
+  // CSS beats it — both have to be restated with `!` or the card loses it.
   const card =
-    'flex! h-full! flex-col! items-start! rounded-lg! border! border-border! bg-card! p-6! no-underline! transition-shadow';
+    'h-full! rounded-lg! border-border! py-6! transition-shadow hover:bg-muted! hover:shadow-md!';
+  const cardBody = 'flex! flex-col! items-start! px-6!';
 
   return (
     <section
-      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-16! tablet:py-24!')}
+      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
       id={CmsSectionType.services}
     >
       <SectionHeading className="mb-10!" intro={intro} />
 
-      <ul className="m-0! grid! list-none! gap-6! p-0! tablet:grid-cols-4!">
+      <ul className="m-0! grid! list-none! gap-4! p-0! tablet:grid-cols-4! tablet:gap-6!">
         {services.map((service) => (
           <li key={service.id}>
             {service.link ? (
               <a
                 aria-label={service.title || LANDING_COPY.logoAlt}
-                className={cn(card, 'hover:shadow-md!')}
+                className="block! h-full! no-underline!"
                 href={service.link}
                 rel="noreferrer"
                 target="_blank"
               >
-                <ServiceBody service={service} />
+                <Card className={card}>
+                  <CardContent className={cardBody}>
+                    <ServiceBody service={service} />
+                  </CardContent>
+                </Card>
               </a>
             ) : (
-              <div className={card}>
-                <ServiceBody service={service} />
-              </div>
+              <Card className={card}>
+                <CardContent className={cardBody}>
+                  <ServiceBody service={service} />
+                </CardContent>
+              </Card>
             )}
           </li>
         ))}

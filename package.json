@@ -125,6 +125,7 @@
     "date-fns": "^2.30.0",
     "effector": "^22",
     "effector-react": "^22",
+    "embla-carousel-react": "^8.6.0",
     "history": "^5.3.0",
     "i18next": "^23",
     "i18next-browser-languagedetector": "^8",

@@ -52,7 +52,9 @@ const LandingPage = () => {
               ) : undefined
             }
           >
-            <StatsRow />
+            {/* The hero column is `items-start`, so the list would shrink to
+                its content and the dividers would stop mid-screen. */}
+            <StatsRow className="w-full!" />
           </HeroSection>
         ) : null}
 
