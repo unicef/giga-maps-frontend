@@ -6,7 +6,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import WebFont from 'webfontloader';
 
-import { aboutus, admin, apiDocs, map, router } from '~/core/routes';
+import { aboutus, admin, apiDocs, landing, map, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { appLoadEvent } from './init';
@@ -15,6 +15,7 @@ import { $theme, themeData } from './theme.model';
 import { TooltipProvider } from '~/components/ui/tooltip';
 
 const AboutPage = lazy(async () => import('~/@/about-giga-map/ui'));
+const LandingPage = lazy(async () => import('@/landing/ui'));
 const MapPage = lazy(async () => import('@/map/ui'));
 const AuthRoot = lazy(async () => import('./auth-root'));
 
@@ -28,7 +29,9 @@ export const Root = () => {
       google: {
         families: [
           'Open Sans:100,200,300,400,500,600,700,800,900',
-          'Manrope:200',
+          // 200 is used by the sidebar (font-extralight); 500 is the brand
+          // weight for Manrope headings and is required by the landing page.
+          'Manrope:200,500',
         ],
       },
     });
@@ -53,6 +56,7 @@ export const Root = () => {
           {useRoute(map) && <MapPage />}
           {(apiDocsRoute || adminRoute) && <AuthRoot />}
           {useRoute(aboutus) && <AboutPage />}
+          {useRoute(landing) && <LandingPage />}
           {useStore(router.noMatches) && <PageNotFound />}
         </TooltipProvider>
       </ThemeProvider>
