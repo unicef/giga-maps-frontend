@@ -48,7 +48,7 @@ describe('getCurrentEntityConnectivityConfigQuery', () => {
       const params = new URLSearchParams(query);
 
       expect(params.get('entity_type__code')).toBe(entityType);
-      expect(params.get(`${entityType}_entity_id__in`)).toBe('101,202');
+      expect(params.get(`${entityType}_ids`)).toBe('101,202');
       expect(params.has('school__environment__iexact')).toBe(false);
     },
   );
@@ -62,6 +62,6 @@ describe('getCurrentEntityConnectivityConfigQuery', () => {
 
     const { query } = getCurrentEntityConnectivityConfigQuery(source);
 
-    expect(new URLSearchParams(query).has('school_entity_id__in')).toBe(false);
+    expect(new URLSearchParams(query).has('school_ids')).toBe(false);
   });
 });

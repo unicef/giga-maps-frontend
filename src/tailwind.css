@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@import 'tw-animate-css';
+
+/*
+ * `dark:` must follow the APP theme, not the OS.
+ * The app sets .dark / .light / .accessible on <html> (see core/root.tsx).
+ * Without this, shadcn's built-in `dark:` classes fall back to
+ * prefers-color-scheme and break for anyone whose OS and app themes differ.
+ * `accessible` is a dark theme too, so it opts in as well.
+ */
+@custom-variant dark (&:where(.dark, .dark *, .accessible, .accessible *));
 
 /*
  * Tailwind CSS v4 — shadcn/ui compatible theme
@@ -17,6 +27,10 @@
   --giga-background: #161616;
   --giga-foreground: #fff;
 
+  /* Landing page only: the design calls for pure black behind the cards.
+     Scoped so the map and admin keep #161616. */
+  --giga-landing-background: #000;
+
   /* Card */
   --giga-card: #181818;
   --giga-card-foreground: #fff;
@@ -25,8 +39,8 @@
   --giga-popover: #181818;
   --giga-popover-foreground: #fff;
 
-  /* Primary (brand blue) */
-  --giga-primary: #005BED;
+  /* Primary (brand blue — Giga Primary600) */
+  --giga-primary: #277aff;
   --giga-primary-foreground: #fff;
 
   /* Secondary */
@@ -38,7 +52,7 @@
   --giga-muted-foreground: #9E9E9E;
 
   /* Accent */
-  --giga-accent: #005BED;
+  --giga-accent: #277aff;
   --giga-accent-foreground: #fff;
 
   /* Destructive */
@@ -48,7 +62,7 @@
   /* Border / Input / Ring */
   --giga-border: #393939;
   --giga-input: #C7C7C7;
-  --giga-ring: #005BED;
+  --giga-ring: #277aff;
 
   /* ── Extended tokens (not standard shadcn, but useful) ──── */
   --giga-surface-elevated: #383838;
@@ -85,6 +99,8 @@
   --giga-background: #fff;
   --giga-foreground: #222222;
 
+  --giga-landing-background: #fff;
+
   --giga-card: #fff;
   --giga-card-foreground: #222222;
 
@@ -99,7 +115,7 @@
   --giga-muted: #f4f4f4;
   --giga-muted-foreground: #474747;
 
-  --giga-accent: #005BED;
+  --giga-accent: #277aff;
   --giga-accent-foreground: #222222;
 
   --giga-border: #E0E0E0;
@@ -123,6 +139,8 @@
 [data-theme="accessible"] {
   --giga-background: #181818;
   --giga-foreground: #fff;
+
+  --giga-landing-background: #000;
 
   --giga-card: #181818;
   --giga-card-foreground: #fff;
@@ -158,6 +176,8 @@
   /* Standard shadcn/ui tokens */
   --color-background: var(--giga-background);
   --color-foreground: var(--giga-foreground);
+
+  --color-landing-background: var(--giga-landing-background);
 
   --color-card: var(--giga-card);
   --color-card-foreground: var(--giga-card-foreground);
@@ -220,6 +240,13 @@
   --text-xs--line-height: 1.125rem;
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 1.125rem;
+
+  /* Marketing container: 1728px content width (96px gutters at 1920) */
+  --container-giga: 108rem;
+
+  /* Matches $isTablet (max-width: 996px) in core/media-query.ts, so the CSS
+     and JS breakpoints agree. Use as `tablet:` / `max-tablet:`. */
+  --breakpoint-tablet: 62.25rem;
 }
 
 @keyframes notification-enter {

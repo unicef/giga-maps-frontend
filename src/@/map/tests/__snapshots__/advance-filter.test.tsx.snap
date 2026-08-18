@@ -34,6 +34,18 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
   padding: 0.5rem 1rem;
 }
 
+.c4 .cds--list-box__menu .cds--list-box__menu-item,
+.c4 .cds--list-box__menu .cds--list-box__menu-item__option {
+  block-size: auto;
+  min-block-size: 2.5rem;
+}
+
+.c4 .cds--list-box__menu .cds--list-box__menu-item__option {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
 .c4 .cds--list-box__field {
   border-bottom: 1px solid;
 }
@@ -64,6 +76,31 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
 
 .c2 {
   padding: 0.5rem 1rem;
+}
+
+.c2 .cds--list-box__menu .cds--list-box__menu-item,
+.c2 .cds--list-box__menu .cds--list-box__menu-item__option {
+  block-size: auto;
+  min-block-size: 3rem;
+}
+
+.c2 .cds--list-box__menu .cds--list-box__menu-item__option {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.c2 .cds--multi-select .cds--list-box__menu-item__option .cds--checkbox-label {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.c2 .cds--list-box__menu .cds--checkbox-label-text {
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 .c2 .cds--list-box__field--wrapper {
@@ -124,7 +161,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
         class="c0"
       >
         <h3>
-          Filter by
+          Filters
         </h3>
         <span
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
@@ -209,7 +246,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   <span
                     class="whitespace-nowrap!"
                   >
-                    School  (10)
+                    Schools
                   </span>
                   <svg
                     aria-hidden="true"
@@ -251,26 +288,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     Building-id
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -348,26 +392,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       >
                         Building Id
                         <button
-                          class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                          class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                           data-state="closed"
                           type="button"
                         >
                           <svg
                             aria-hidden="true"
-                            class="fill-current!"
-                            fill="currentColor"
-                            focusable="false"
+                            class="lucide lucide-info"
+                            fill="none"
                             height="12"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 32 32"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
                             width="12"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path
-                              d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
                             />
                             <path
-                              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                              d="M12 16v-4"
+                            />
+                            <path
+                              d="M12 8h.01"
                             />
                           </svg>
                         </button>
@@ -405,26 +456,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     Computer availability
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -493,26 +551,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     Coverage Type
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -583,26 +648,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     Equipment's count
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -700,26 +772,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     Maps views - Grouped
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -884,26 +963,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       >
                         Region
                         <button
-                          class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                          class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                           data-state="closed"
                           type="button"
                         >
                           <svg
                             aria-hidden="true"
-                            class="fill-current!"
-                            fill="currentColor"
-                            focusable="false"
+                            class="lucide lucide-info"
+                            fill="none"
                             height="12"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 32 32"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
                             width="12"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path
-                              d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
                             />
                             <path
-                              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                              d="M12 16v-4"
+                            />
+                            <path
+                              d="M12 8h.01"
                             />
                           </svg>
                         </button>
@@ -941,26 +1027,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     School area type - Org
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -1027,26 +1120,33 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   >
                     Test Filter NG-001
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -1217,6 +1317,18 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
   padding: 0.5rem 1rem;
 }
 
+.c4 .cds--list-box__menu .cds--list-box__menu-item,
+.c4 .cds--list-box__menu .cds--list-box__menu-item__option {
+  block-size: auto;
+  min-block-size: 2.5rem;
+}
+
+.c4 .cds--list-box__menu .cds--list-box__menu-item__option {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
 .c4 .cds--list-box__field {
   border-bottom: 1px solid;
 }
@@ -1247,6 +1359,31 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
 
 .c2 {
   padding: 0.5rem 1rem;
+}
+
+.c2 .cds--list-box__menu .cds--list-box__menu-item,
+.c2 .cds--list-box__menu .cds--list-box__menu-item__option {
+  block-size: auto;
+  min-block-size: 3rem;
+}
+
+.c2 .cds--list-box__menu .cds--list-box__menu-item__option {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.c2 .cds--multi-select .cds--list-box__menu-item__option .cds--checkbox-label {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.c2 .cds--list-box__menu .cds--checkbox-label-text {
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 .c2 .cds--list-box__field--wrapper {
@@ -1307,7 +1444,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
         class="c0"
       >
         <h3>
-          Filter by
+          Filters
         </h3>
         <span
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
@@ -1392,7 +1529,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   <span
                     class="whitespace-nowrap!"
                   >
-                    School  (10)
+                    Schools
                   </span>
                   <svg
                     aria-hidden="true"
@@ -1434,26 +1571,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     Building-id
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -1531,26 +1675,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       >
                         Building Id
                         <button
-                          class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                          class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                           data-state="closed"
                           type="button"
                         >
                           <svg
                             aria-hidden="true"
-                            class="fill-current!"
-                            fill="currentColor"
-                            focusable="false"
+                            class="lucide lucide-info"
+                            fill="none"
                             height="12"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 32 32"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
                             width="12"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path
-                              d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
                             />
                             <path
-                              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                              d="M12 16v-4"
+                            />
+                            <path
+                              d="M12 8h.01"
                             />
                           </svg>
                         </button>
@@ -1588,26 +1739,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     Computer availability
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -1676,26 +1834,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     Coverage Type
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -1766,26 +1931,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     Equipment's count
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -1883,26 +2055,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     Maps views - Grouped
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -2067,26 +2246,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       >
                         Region
                         <button
-                          class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                          class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                           data-state="closed"
                           type="button"
                         >
                           <svg
                             aria-hidden="true"
-                            class="fill-current!"
-                            fill="currentColor"
-                            focusable="false"
+                            class="lucide lucide-info"
+                            fill="none"
                             height="12"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 32 32"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
                             width="12"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path
-                              d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
                             />
                             <path
-                              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                              d="M12 16v-4"
+                            />
+                            <path
+                              d="M12 8h.01"
                             />
                           </svg>
                         </button>
@@ -2124,26 +2310,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     School area type - Org
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -2210,26 +2403,33 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   >
                     Test Filter NG-001
                     <button
-                      class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+                      class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
                       data-state="closed"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
-                        class="fill-current!"
-                        fill="currentColor"
-                        focusable="false"
+                        class="lucide lucide-info"
+                        fill="none"
                         height="12"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 32 32"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
                         width="12"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
                         />
                         <path
-                          d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                          d="M12 16v-4"
+                        />
+                        <path
+                          d="M12 8h.01"
                         />
                       </svg>
                     </button>
@@ -2462,8 +2662,8 @@ exports[`AdvancedFilter > should render Advance filter button  1`] = `
           <button
             align="left"
             class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-            label="Filter(s)"
-            tooltiptext="Filter(s)"
+            label="Filters"
+            tooltiptext="Filters"
             type="button"
           >
             <svg
@@ -2481,7 +2681,7 @@ exports[`AdvancedFilter > should render Advance filter button  1`] = `
               />
             </svg>
             <span>
-              Filter(s)
+              Filters
             </span>
           </button>
         </div>
@@ -2530,26 +2730,33 @@ exports[`RangeTextInput Component > RangeTextInput input 1`] = `
     >
       No of Teachers
       <button
-        class="inline-flex! items-center! justify-center! border-0! bg-transparent! p-0! ml-1! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
+        class="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
         data-state="closed"
         type="button"
       >
         <svg
           aria-hidden="true"
-          class="fill-current!"
-          fill="currentColor"
-          focusable="false"
+          class="lucide lucide-info"
+          fill="none"
           height="12"
-          preserveAspectRatio="xMidYMid meet"
-          viewBox="0 0 32 32"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
           width="12"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
           />
           <path
-            d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+            d="M12 16v-4"
+          />
+          <path
+            d="M12 8h.01"
           />
         </svg>
       </button>

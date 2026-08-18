@@ -8,8 +8,8 @@ import "~/core/i18n/instance"
 describe('ThemeButtons', () => {
   test('ThemeButtons', () => {
     const handleClick = vi.fn()
-    const { getByLabelText } = render(testWrapper(<ThemeButtons onClick={handleClick} />))
-    const button = getByLabelText('Theme & Layers')
+    const { getByRole } = render(testWrapper(<ThemeButtons onClick={handleClick} />))
+    const button = getByRole('button', { name: /theme & layers/i })
     fireEvent.click(button)
   })
 })

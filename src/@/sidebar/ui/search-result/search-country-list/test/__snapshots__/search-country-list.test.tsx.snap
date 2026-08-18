@@ -7,6 +7,7 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   align-items: center;
   min-height: 2.75rem;
   padding: 0.625rem 1rem;
+  background: #242424;
   font-size: 0.75rem;
   border-radius: 0.5rem 0.5rem 0 0;
 }
@@ -31,7 +32,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -126,7 +132,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -221,7 +232,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -316,7 +332,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -411,7 +432,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -506,7 +532,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -601,7 +632,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -696,7 +732,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -791,7 +832,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -886,7 +932,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -981,7 +1032,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1076,7 +1132,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1171,7 +1232,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1266,7 +1332,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1361,7 +1432,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1456,7 +1532,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1551,7 +1632,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1646,7 +1732,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1741,7 +1832,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {
@@ -1836,7 +1932,12 @@ exports[`SearchCountryList > renders SearchCountryList and take a snapshop 1`] =
   display: flex;
   width: 100%;
   margin-left: 0;
+  transition: background-color 0.15s ease;
   border-bottom: 0.0625rem solid;
+}
+
+.c0:hover {
+  background: #393939;
 }
 
 .c0 .type-name {

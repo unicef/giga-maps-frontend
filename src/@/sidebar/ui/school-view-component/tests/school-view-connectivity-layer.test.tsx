@@ -6,10 +6,11 @@ import { router } from '~/core/routes';
 import "~/core/i18n/instance"
 
 test('renders SchoolViewConnectivityLayer component correctly', () => {
+  router.navigate(`/map/schools?country=AI`);
   const { getAllByText } = render(testWrapper(
     <SchoolViewConnectivityLayer />
   ));
-  expect(getAllByText('Average Download Speed', { exact: false })[0]).toBeInTheDocument();
+  expect(getAllByText(/Average Download Speed/i)[0]).toBeInTheDocument();
 });
 
 test('check SchoolViewConnectivityLayer with multiple school ids', () => {

@@ -1,6 +1,7 @@
 import '~/@/map/map.init';
 import '@/sidebar/init';
 import '~/@/entities/init';
+import '~/@/landing/landing.init';
 
 import { createEvent, guard, restore } from 'effector';
 

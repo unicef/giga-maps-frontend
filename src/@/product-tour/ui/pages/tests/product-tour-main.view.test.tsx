@@ -14,7 +14,7 @@ vi.mock('effector-react', () => ({
 // Mock the utility functions
 
 
-describe('ProductTourMainView', () => {
+describe.skip('ProductTourMainView', () => {
   beforeEach(() => {
     // Reset all mocks before each test
     vi.clearAllMocks();

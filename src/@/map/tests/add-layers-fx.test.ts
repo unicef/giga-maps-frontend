@@ -89,10 +89,12 @@ describe('updateCoverageFilter', () => {
       setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      coverageLayerDataByEntity: { school: { id: 2 } },
-      currentLayerTypeUtils: {
-        isStatic: true,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      coverageLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isStatic: true,
+        },
       },
     };
     const coverageFilter = {};
@@ -101,7 +103,7 @@ describe('updateCoverageFilter', () => {
     updateCoverageFilter({
       map,
       layerUtils,
-      coverageFilter,
+      coverageFilterByEntity: { [EntityType.SCHOOL]: coverageFilter },
       lastSelectedLayer,
     } as any);
 
@@ -114,10 +116,12 @@ describe('updateCoverageFilter', () => {
       setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      coverageLayerDataByEntity: { school: { id: 2 } },
-      currentLayerTypeUtils: {
-        isStatic: false,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      coverageLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isStatic: false,
+        },
       },
     };
     const coverageFilter = {};
@@ -126,7 +130,7 @@ describe('updateCoverageFilter', () => {
     updateCoverageFilter({
       map,
       layerUtils,
-      coverageFilter,
+      coverageFilterByEntity: { [EntityType.SCHOOL]: coverageFilter },
       lastSelectedLayer,
     } as any);
 
@@ -139,7 +143,7 @@ describe('updateConnectivityFilter', () => {
     const result = await updateConnectivityFilter({
       map: null,
       layerUtils: {},
-      connectivitySpeedFilter: {},
+      connectivitySpeedFilterByEntity: {},
       lastSelectedLayer: {},
     } as any);
 
@@ -152,10 +156,12 @@ describe('updateConnectivityFilter', () => {
       setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerDataByEntity: { school: { id: 2 } },
-      currentLayerTypeUtils: {
-        isLive: true,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: true,
+        },
       },
     };
     const connectivitySpeedFilter = {
@@ -168,7 +174,7 @@ describe('updateConnectivityFilter', () => {
     updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
       lastSelectedLayer: {},
     } as any);
 
@@ -181,17 +187,19 @@ describe('updateConnectivityFilter', () => {
       setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerDataByEntity: { school: { id: 2 } },
-      currentLayerTypeUtils: {
-        isLive: false,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: false,
+        },
       },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter: {},
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: {} },
       lastSelectedLayer: {},
     } as any);
 
@@ -202,7 +210,7 @@ describe('updateConnectivityFilter', () => {
     const result = await updateConnectivityFilter({
       map: null,
       layerUtils: {},
-      connectivitySpeedFilter: null,
+      connectivitySpeedFilterByEntity: null,
       lastSelectedLayer: {},
     } as any);
 
@@ -216,10 +224,12 @@ describe('updateConnectivityFilter', () => {
     };
 
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerDataByEntity: { school: { id: 2 } },
-      currentLayerTypeUtils: {
-        isLive: true,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: true,
+        },
       },
     };
 
@@ -233,7 +243,7 @@ describe('updateConnectivityFilter', () => {
     await updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
       lastSelectedLayer: {},
     } as any);
 
@@ -247,11 +257,12 @@ describe('updateConnectivityFilter', () => {
     };
 
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerDataByEntity: { school: { id: 1 } },
-      selectedLayerIdByEntity: { school: 1 },
-      currentLayerTypeUtils: {
-        isLive: true,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 1 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: true,
+        },
       },
     };
 
@@ -265,7 +276,7 @@ describe('updateConnectivityFilter', () => {
     await updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
       mapRoute: { country: true },
       lastSelectedLayer: {},
     } as any);
@@ -285,7 +296,7 @@ describe('updateConnectivityFilter', () => {
       unknown: true,
     };
     const map = {
-      getLayer: vi.fn((id) => id === 'entity-selected-health-null'),
+      getLayer: vi.fn((id) => id === 'entity-selected-health-10'),
       setFilter: vi.fn(),
     };
 
@@ -294,19 +305,19 @@ describe('updateConnectivityFilter', () => {
       layerUtils: {
         selectedLayerId: null,
         selectedLayerIdByEntity: {},
-        globalLayerDataByEntity: {},
+        globalLayerDataByEntity: { [EntityType.HEALTH]: { id: 10 } },
         currentLayerTypeUtils: {
           isLive: false,
         },
         currentLayerTypeUtilsByEntity: {},
       },
-      connectivitySpeedFilter,
+      connectivitySpeedFilterByEntity: { [EntityType.HEALTH]: connectivitySpeedFilter },
       mapRoute: { map: true },
       activeEntityTypes: [EntityType.HEALTH],
       lastSelectedLayer: {},
     } as any);
 
-    expect(map.getLayer).toHaveBeenCalledWith('entity-selected-health-null');
+    expect(map.getLayer).toHaveBeenCalledWith('entity-selected-health-10');
     expect(filterConnectivityList).toHaveBeenCalledWith(
       connectivitySpeedFilter,
       false,
@@ -320,10 +331,12 @@ describe('updateConnectivityFilter', () => {
     };
 
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerDataByEntity: { school: { id: 2 } },
-      currentLayerTypeUtils: {
-        isLive: false,
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: false,
+        },
       },
     };
 
@@ -337,7 +350,7 @@ describe('updateConnectivityFilter', () => {
     updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
       lastSelectedLayer: {},
     } as any);
 

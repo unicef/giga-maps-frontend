@@ -139,14 +139,6 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   height: 100%;
 }
 
-.c8 .cds--popover-content {
-  background: #181818;
-}
-
-.c8 .cds--popover-caret {
-  background-color: #181818;
-}
-
 .c6 {
   position: fixed;
   z-index: 10;
@@ -167,26 +159,26 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   align-items: center;
 }
 
-.c30 {
+.c29 {
   display: flex;
   align-items: center;
 }
 
-.c30 .privacy {
+.c29 .privacy {
   font-size: 0.75rem;
   margin-right: 0.5rem;
   color: #277AFF;
   text-decoration: underline;
 }
 
-.c25 {
+.c24 {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 1.25rem;
   opacity: 0.65;
 }
 
-.c17 {
+.c16 {
   min-width: 0.625rem;
   min-height: 0.625rem;
   max-width: 0.625rem;
@@ -196,7 +188,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   z-index: 2;
 }
 
-.c16 {
+.c15 {
   width: 0.625rem;
   min-height: 0.625rem;
   border-radius: 50%;
@@ -214,11 +206,11 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   transform: translate(-50%, -50%);
 }
 
-.c10 {
+.c9 {
   cursor: pointer;
 }
 
-.c12 {
+.c11 {
   width: 231px;
   border-radius: 2px;
   background: #181818;
@@ -226,24 +218,24 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   box-shadow: 0px 2px 3px 0px #181818;
 }
 
-.c13 {
+.c12 {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.c18 {
+.c17 {
   display: flex;
   align-items: baseline;
   margin-top: 0.75rem;
 }
 
-.c18.hide,
-.c18 .hide {
+.c17.hide,
+.c17 .hide {
   display: none;
 }
 
-.c18 svg {
+.c17 svg {
   width: 0.75rem;
   height: 0.75rem;
   fill: #fff;
@@ -251,12 +243,12 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   margin-top: -0.12rem;
 }
 
-.c22 {
+.c21 {
   display: flex;
   flex-direction: column;
 }
 
-.c14 {
+.c13 {
   color: #fff;
   font-size: 0.875rem;
   font-style: normal;
@@ -268,7 +260,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   margin-right: 1rem;
 }
 
-.c20 {
+.c19 {
   color: #9E9E9E;
   font-size: 0.75rem;
   font-weight: 400;
@@ -276,50 +268,50 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   text-transform: capitalize;
 }
 
-.c21 {
+.c20 {
   color: #9E9E9E;
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
 }
 
-.c19 {
+.c18 {
   color: #474747;
 }
 
-.c11 {
+.c10 {
   color: #277AFF;
   height: 3rem;
   width: 3rem;
   transform: translateY(-34px);
 }
 
-.c23 {
+.c22 {
   width: 100%;
   outline: none;
   border: none;
 }
 
-.c23.hide {
+.c22.hide {
   display: none;
 }
 
-.c24 {
+.c23 {
   width: 100%;
   height: 1rem;
   margin-block-end: 0.25rem;
 }
 
-.c26 {
+.c25 {
   margin-block-end: 0;
   height: 1.125rem;
 }
 
-.c15 {
+.c14 {
   position: relative;
 }
 
-.c29 {
+.c28 {
   position: fixed;
   right: 0;
   bottom: 0;
@@ -336,17 +328,17 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   width: calc(100vw - 17rem);
 }
 
-.c29 .footer-content {
+.c28 .footer-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.c29 .footer-content .cds--popover-caret {
+.c28 .footer-content .cds--popover-caret {
   display: none;
 }
 
-.c29 .footer-content .link {
+.c28 .footer-content .link {
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -356,35 +348,35 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   cursor: pointer;
 }
 
-.c29 .footer-content .data-source {
+.c28 .footer-content .data-source {
   color: #fff;
   margin-right: 0.5rem;
 }
 
-.c29 .footer-content a {
+.c28 .footer-content a {
   margin-left: 0.5rem;
 }
 
-.c29 .footer-content .link:hover {
+.c28 .footer-content .link:hover {
   background: transparent;
 }
 
-.c29 p {
+.c28 p {
   color: #fff;
   font-size: 0.75rem;
   display: flex;
 }
 
-.c29 .itu-logo {
+.c28 .itu-logo {
   width: 1rem;
   height: 1rem;
 }
 
-.c29 .giga-logo {
+.c28 .giga-logo {
   color: #fff;
 }
 
-.c29 svg {
+.c28 svg {
   fill: #fff;
 }
 
@@ -401,7 +393,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   border-bottom-color: #383838;
 }
 
-.c27 {
+.c26 {
   position: fixed;
   top: 0;
   left: 0;
@@ -412,7 +404,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   overflow: hidden;
 }
 
-.c28 {
+.c27 {
   height: 100%;
   background: linear-gradient(90deg, #0f62fe, #3d8dff);
   width: 20%;
@@ -424,7 +416,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   transition: all 0.3s ease-in-out;
 }
 
-.c28::before {
+.c27::before {
   content: '';
   position: absolute;
   top: 0;
@@ -437,7 +429,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   width: 60%;
 }
 
-.c28::after {
+.c27::after {
   content: '';
   position: absolute;
   top: 0;
@@ -485,7 +477,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   padding: 0;
 }
 
-.c9 {
+.c8 {
   display: none;
 }
 
@@ -502,7 +494,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
 }
 
 @media (max-width: 786px) {
-  .c29 {
+  .c28 {
     display: none;
   }
 }
@@ -585,14 +577,14 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
               class=""
             >
               <div
-                class="flex w-full items-center justify-between border-b border-white/8 text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current [&_svg]:!fill-[#f4f4f4]"
+                class="flex w-full items-center justify-between border-b border-border text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current"
               >
                 <div
                   class="flex h-11 w-full items-center justify-start gap-2 px-3.5! py-0"
                 >
                   <button
                     aria-label="Menu"
-                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 text-foreground!"
                     data-size="icon"
                     data-slot="button"
                     data-state="closed"
@@ -624,11 +616,11 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   </button>
                   <a
                     aria-label="Giga Maps"
-                    class="flex h-4 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
+                    class="flex h-5 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
                     href="/map"
                   >
                     <svg
-                      class="h-3.5! w-auto! max-w-[7.5rem]! [&_path]:fill-[#f4f4f4]!"
+                      class="h-4! w-auto! max-w-[9rem]! [&_path]:fill-[#f4f4f4]!"
                       fill="none"
                       height="16"
                       viewBox="0 0 76 16"
@@ -656,8 +648,9 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                     <button
                       aria-expanded="false"
                       aria-label="Country List"
-                      class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! bg-[#e8e8e8]! px-2! py-0! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
+                      class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! px-2! py-0! text-foreground! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
                       data-state="closed"
+                      style="background-color: rgb(36, 36, 36); --country-trigger-border: #161616;"
                       type="button"
                     >
                       <svg
@@ -707,15 +700,28 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                       </svg>
                     </button>
                     <div
-                      class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! bg-[#f4f4f4]! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
-                      style="--search-shell-border: #0f62fe;"
+                      class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
+                      style="background-color: rgb(36, 36, 36); --search-shell-border: #0f62fe;"
                     >
                       <div
                         class="flex! h-12! items-center!"
                       >
+                        <input
+                          aria-label="Search country, region, or facility"
+                          autocapitalize="none"
+                          autocomplete="off"
+                          autocorrect="off"
+                          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! min-w-0! flex-1! border-0! bg-transparent! pl-3.5! pr-10! text-[0.9375rem]! font-normal! leading-5! text-foreground! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                          data-slot="input"
+                          id="main-search-bar"
+                          inputmode="search"
+                          placeholder="Search country, region, or facility"
+                          spellcheck="false"
+                          value=""
+                        />
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-search pointer-events-none! ml-3.5! shrink-0! text-[#525252]!"
+                          class="lucide lucide-search pointer-events-none! absolute! right-3.5! top-1/2! shrink-0! -translate-y-1/2! text-foreground!"
                           fill="none"
                           height="16"
                           stroke="currentColor"
@@ -735,30 +741,17 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                             r="8"
                           />
                         </svg>
-                        <input
-                          aria-label="Search country, region or facilities"
-                          autocapitalize="none"
-                          autocomplete="off"
-                          autocorrect="off"
-                          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! min-w-0! flex-1! border-0! bg-transparent! pl-2! pr-2! text-[0.9375rem]! font-normal! leading-5! text-[#161616]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-[#8d8d8d]! focus-visible:ring-0! focus-visible:ring-offset-0!"
-                          data-slot="input"
-                          id="main-search-bar"
-                          inputmode="search"
-                          placeholder="Search country, region or facilities"
-                          spellcheck="false"
-                          value=""
-                        />
                       </div>
                       <button
-                        aria-label="clear-search"
-                        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 h-9 px-4 py-2 has-[>svg]:px-3 main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! hidden!"
+                        aria-label="Clear search input"
+                        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 h-9 px-4 py-2 has-[>svg]:px-3 main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! text-foreground! hidden!"
                         data-size="default"
                         data-slot="button"
                         data-variant="icon"
                       >
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-x fill-current"
+                          class="lucide lucide-x text-foreground!"
                           fill="none"
                           height="16"
                           stroke="currentColor"
@@ -899,14 +892,14 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               data-state="closed"
                             >
                               <button
-                                aria-controls="radix-:r5:"
+                                aria-controls="radix-:rn:"
                                 aria-expanded="false"
                                 class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
                                 data-orientation="vertical"
                                 data-radix-collection-item=""
                                 data-slot="accordion-trigger"
                                 data-state="closed"
-                                id="radix-:r4:"
+                                id="radix-:rm:"
                                 type="button"
                               >
                                 <div
@@ -954,13 +947,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               />
                             </div>
                             <div
-                              aria-labelledby="radix-:r4:"
+                              aria-labelledby="radix-:rm:"
                               class="hidden!"
                               data-orientation="vertical"
                               data-slot="accordion-content"
                               data-state="closed"
                               hidden=""
-                              id="radix-:r5:"
+                              id="radix-:rn:"
                               role="region"
                               style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
                             />
@@ -978,14 +971,14 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               data-state="closed"
                             >
                               <button
-                                aria-controls="radix-:r7:"
+                                aria-controls="radix-:rp:"
                                 aria-expanded="false"
                                 class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
                                 data-orientation="vertical"
                                 data-radix-collection-item=""
                                 data-slot="accordion-trigger"
                                 data-state="closed"
-                                id="radix-:r6:"
+                                id="radix-:ro:"
                                 type="button"
                               >
                                 <div
@@ -1033,13 +1026,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               />
                             </div>
                             <div
-                              aria-labelledby="radix-:r6:"
+                              aria-labelledby="radix-:ro:"
                               class="hidden!"
                               data-orientation="vertical"
                               data-slot="accordion-content"
                               data-state="closed"
                               hidden=""
-                              id="radix-:r7:"
+                              id="radix-:rp:"
                               role="region"
                               style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
                             />
@@ -1152,7 +1145,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                 class="cds--tooltip-trigger__wrapper"
                               >
                                 <button
-                                  aria-labelledby="tooltip-:r8:"
+                                  aria-labelledby="tooltip-:r4:"
                                   class="cds--btn--icon-only copy-button cds--copy-btn cds--copy cds--btn cds--btn--primary"
                                   type="button"
                                 >
@@ -1179,7 +1172,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               <span
                                 aria-hidden="true"
                                 class="cds--popover"
-                                id="tooltip-:r8:"
+                                id="tooltip-:r4:"
                                 role="tooltip"
                               >
                                 <span
@@ -1217,7 +1210,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                 class="cds--tooltip-trigger__wrapper"
                               >
                                 <button
-                                  aria-labelledby="tooltip-:ra:"
+                                  aria-labelledby="tooltip-:r6:"
                                   class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
                                   type="button"
                                 >
@@ -1252,7 +1245,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               <span
                                 aria-hidden="true"
                                 class="cds--popover"
-                                id="tooltip-:ra:"
+                                id="tooltip-:r6:"
                                 role="tooltip"
                               >
                                 <span
@@ -1279,7 +1272,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                 class="cds--tooltip-trigger__wrapper"
                               >
                                 <button
-                                  aria-labelledby="tooltip-:rc:"
+                                  aria-labelledby="tooltip-:r8:"
                                   class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
                                   type="button"
                                 >
@@ -1302,7 +1295,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               <span
                                 aria-hidden="true"
                                 class="cds--popover"
-                                id="tooltip-:rc:"
+                                id="tooltip-:r8:"
                                 role="tooltip"
                               >
                                 <span
@@ -1329,7 +1322,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                                 class="cds--tooltip-trigger__wrapper"
                               >
                                 <button
-                                  aria-labelledby="tooltip-:re:"
+                                  aria-labelledby="tooltip-:ra:"
                                   class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
                                   type="button"
                                 >
@@ -1366,7 +1359,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               <span
                                 aria-hidden="true"
                                 class="cds--popover"
-                                id="tooltip-:re:"
+                                id="tooltip-:ra:"
                                 role="tooltip"
                               >
                                 <span
@@ -1515,59 +1508,65 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="group relative! z-6010! mt-2! flex! overflow-visible!"
+                class="accessibility-wrapper-popup relative! inline-flex!"
+                data-slot="popover-anchor"
               >
-                <button
-                  aria-label="Accessible mode"
-                  class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! border! transition-colors! bg-background! border-background! text-foreground!"
-                  data-size="icon"
-                  data-slot="button"
-                  data-state="closed"
-                  data-testid="accessible-button"
-                  data-variant="icon"
-                  type="button"
+                <div
+                  class="group relative! z-6010! mt-2! flex! overflow-visible!"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="lucide lucide-person-standing size-4"
-                    fill="none"
-                    height="24"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    width="24"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <button
+                    aria-label="Accessible mode"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! border! transition-colors! bg-background! border-background! text-foreground!"
+                    data-size="icon"
+                    data-slot="button"
+                    data-state="closed"
+                    data-testid="accessible-button"
+                    data-variant="icon"
+                    type="button"
                   >
-                    <circle
-                      cx="12"
-                      cy="5"
-                      r="1"
-                    />
-                    <path
-                      d="m9 20 3-6 3 6"
-                    />
-                    <path
-                      d="m6 8 6 2 6-2"
-                    />
-                    <path
-                      d="M12 10v4"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-person-standing size-4"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="12"
+                        cy="5"
+                        r="1"
+                      />
+                      <path
+                        d="m9 20 3-6 3 6"
+                      />
+                      <path
+                        d="m6 8 6 2 6-2"
+                      />
+                      <path
+                        d="M12 10v4"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div
                 class="theme-wrapper-popup relative! overflow-visible!"
               >
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c8 theme-layer-popover-link"
+                <div
+                  class="theme-layer-popover-link relative! inline-flex!"
+                  data-slot="popover-anchor"
                 >
                   <div
                     class="group relative! z-6010! mt-2! flex! overflow-visible!"
                   >
                     <button
-                      aria-label="Theme & Layers"
+                      aria-label="Theme & layers"
                       class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! border! transition-colors! bg-background! border-background! text-foreground!"
                       data-size="icon"
                       data-slot="button"
@@ -1599,7 +1598,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                       </svg>
                     </button>
                   </div>
-                </span>
+                </div>
               </div>
               <div
                 class="relative! legend-container"
@@ -1661,17 +1660,17 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         </div>
       </div>
       <div
-        class="c9"
+        class="c8"
       >
         <div
           class="school-popup-data"
         >
           <div
-            class="c10 shool-marker-wrapper"
+            class="c9 shool-marker-wrapper"
           >
             <svg
               aria-label="marker"
-              class="c11 school-map-marker"
+              class="c10 school-map-marker"
               fill="currentColor"
               focusable="false"
               height="46"
@@ -1696,31 +1695,31 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             class="map-popup-template"
           >
             <div
-              class="c12 main-popup-container"
+              class="c11 main-popup-container"
             >
               <div
-                class="c13"
+                class="c12"
               >
                 <h6
-                  class="c14 map-school-name"
+                  class="c13 map-school-name"
                 />
                 <div
-                  class="c15 map-school-status-circle"
+                  class="c14 map-school-status-circle"
                 >
                   <div
-                    class="c16 outer-circle"
+                    class="c15 outer-circle"
                   />
                   <div
-                    class="c17 inner-circle"
+                    class="c16 inner-circle"
                   />
                 </div>
               </div>
               <div
-                class="c18"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
-                  class="c19"
+                  class="c18"
                   fill="currentColor"
                   focusable="false"
                   height="16"
@@ -1740,11 +1739,11 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   />
                 </svg>
                 <span
-                  class="c20 c21 label map-school-geo"
+                  class="c19 c20 label map-school-geo"
                 />
               </div>
               <div
-                class="c18 live-container hide"
+                class="c17 live-container hide"
               >
                 <svg
                   aria-hidden="true"
@@ -1772,18 +1771,18 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   />
                 </svg>
                 <div
-                  class="c22"
+                  class="c21"
                 >
                   <span
-                    class="c20 map-school-connectivity-speed"
+                    class="c19 map-school-connectivity-speed"
                   />
                   <span
-                    class="c20 benchmark-value-label hide"
+                    class="c19 benchmark-value-label hide"
                   />
                 </div>
               </div>
               <div
-                class="c18 static-container hide"
+                class="c17 static-container hide"
               >
                 <span
                   class="static-icon"
@@ -1807,12 +1806,12 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="c20 map-school-school-coverage"
+                  class="c19 map-school-school-coverage"
                 />
               </div>
             </div>
             <button
-              class="c23 go-to-school hide cds--btn cds--btn--primary"
+              class="c22 go-to-school hide cds--btn cds--btn--primary"
               type="button"
             >
               Go to School page
@@ -1837,21 +1836,21 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
             class="popup-template-loading"
           >
             <div
-              class="c12"
+              class="c11"
             >
               <div
-                class="c13"
+                class="c12"
               >
                 <p
-                  class="cds--skeleton__text cds--skeleton__heading c24"
+                  class="cds--skeleton__text cds--skeleton__heading c23"
                   style="width: 100%;"
                 />
                 <div
-                  class="c25"
+                  class="c24"
                 />
               </div>
               <div
-                class="c18"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
@@ -1868,16 +1867,16 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text c26"
+                  class="cds--skeleton__text c25"
                   style="width: 60%;"
                 />
               </div>
               <div
-                class="c18"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
-                  class="c19"
+                  class="c18"
                   fill="currentColor"
                   focusable="false"
                   height="16"
@@ -1897,12 +1896,12 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text c26"
+                  class="cds--skeleton__text c25"
                   style="width: 80%;"
                 />
               </div>
               <div
-                class="c18"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
@@ -1930,12 +1929,12 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text c26"
+                  class="cds--skeleton__text c25"
                   style="width: 40%;"
                 />
               </div>
               <div
-                class="c18"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
@@ -1955,7 +1954,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text c26"
+                  class="cds--skeleton__text c25"
                   style="width: 40%;"
                 />
               </div>
@@ -1972,7 +1971,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       class="fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300 left-86!"
     >
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#525252]! bg-[#525252]! text-white! hover:bg-[#6f6f6f]! hover:text-white!"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#393939]! bg-[#393939]! text-white! hover:bg-[#4c4c4c]! hover:text-white!"
         data-size="lg"
         data-slot="button"
         data-variant="outline"
@@ -1996,18 +1995,14 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
               class="block! shrink-0! overflow-visible!"
               focusable="false"
               style="height: 8px; width: 8px;"
-              viewBox="0 0 8 8"
+              viewBox="0 0 100 100"
             >
-              <text
+              <circle
+                cx="50"
+                cy="50"
                 fill="#d9d9d9"
-                font-family=""Open Sans", sans-serif"
-                font-size="8"
-                text-anchor="start"
-                x="0"
-                y="0"
-              >
-                ●
-              </text>
+                r="50"
+              />
             </svg>
           </span>
         </span>
@@ -2030,18 +2025,15 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
               class="block! shrink-0! overflow-visible!"
               focusable="false"
               style="height: 8px; width: 8px;"
-              viewBox="0 0 8 8"
+              viewBox="0 0 100 100"
             >
-              <text
+              <rect
                 fill="#d9d9d9"
-                font-family=""Open Sans", sans-serif"
-                font-size="8"
-                text-anchor="start"
+                height="100"
+                width="100"
                 x="0"
                 y="0"
-              >
-                ■
-              </text>
+              />
             </svg>
           </span>
         </span>
@@ -2049,16 +2041,16 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       </button>
     </div>
     <div
-      class="c27"
+      class="c26"
     >
       <div
-        class="c28"
+        class="c27"
         progress="20"
         status="active"
       />
     </div>
     <footer
-      class="c29"
+      class="c28"
     >
       <div>
         <p />
@@ -2067,7 +2059,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         class="footer-content"
       >
         <div
-          class="c30"
+          class="c29"
         >
           <p>
             © 2026  
@@ -2150,6 +2142,85 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         </div>
       </div>
     </footer>
+    <div
+      class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm border-border! gap-0! rounded-lg! border! p-0! shadow-xl! animate-[notification-enter_200ms_ease-out] fixed left-84 z-[6002] w-96 max-w-[calc(100vw-2rem)] bottom-8"
+      data-slot="card"
+    >
+      <div
+        class="flex items-start gap-4! p-4!"
+      >
+        <div
+          class="bg-primary-300 text-primary! flex size-10 shrink-0 items-center justify-center rounded-lg!"
+        >
+          <svg
+            fill="none"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 21H21M5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21M9 21V17C9 16.4696 9.21071 15.9609 9.58579 15.5858C9.96086 15.2107 10.4696 15 11 15H13C13.5304 15 14.0391 15.2107 14.4142 15.5858C14.7893 15.9609 15 16.4696 15 17V21M10 9H14M12 7V11"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+            />
+          </svg>
+        </div>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1.5!"
+        >
+          <p
+            class="text-card-foreground! text-base! leading-6! font-medium!"
+            id=":rl:"
+          >
+            Health facilities are here!
+          </p>
+          <div
+            class="text-muted-foreground! text-sm! leading-5! break-words"
+          >
+            The connectivity map for children now includes health facilities. For more information, 
+            <a
+              class="text-primary! hover:underline"
+              href="/about#live-map-get-in-touch"
+              rel="noreferrer"
+              target="_blank"
+            >
+              contact us
+            </a>
+          </div>
+        </div>
+        <button
+          aria-label="Close notification"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 size-8 text-muted-foreground hover:text-foreground -mt-1 -mr-1 shrink-0"
+          data-size="icon-sm"
+          data-slot="button"
+          data-variant="ghost"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x size-5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;
