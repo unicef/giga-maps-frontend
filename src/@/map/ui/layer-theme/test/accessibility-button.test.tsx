@@ -1,4 +1,5 @@
 import '~/core/i18n/instance';
+import '@/sidebar/init';
 
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -44,9 +45,9 @@ describe('AccessibilityButton', () => {
 
   test('opens and closes the accessibility controls from the trigger', async () => {
     const user = userEvent.setup();
-    onShowAdvancedFilter(true);
+    onShowAdvancedFilter(false);
+    onShowThemeLayer(false);
     onShowLegend(true);
-    onShowThemeLayer(true);
 
     render(testWrapper(<AccessibilityButton />));
 

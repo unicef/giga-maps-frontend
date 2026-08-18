@@ -16,7 +16,8 @@ import {
 import LegendButton from '../legend-button';
 import { $isMobile } from '~/core/media-query';
 import { testWrapper } from '~/tests/test-wrapper';
-import '~/core/i18n/instance'
+import '~/core/i18n/instance';
+import '@/sidebar/init';
 
 describe('LegendButton', () => {
   beforeEach(() => {
@@ -67,7 +68,7 @@ describe('LegendButton', () => {
     expect(clickAnywhere).toBeInTheDocument();
   });
 
-  test('close legend on outside click during product tour', async () => {
+  test('keeps legend open on outside click on desktop', async () => {
     global.innerWidth = 1200;
     window.dispatchEvent(new Event('resize'));
     onShowLegend(true);
@@ -83,7 +84,7 @@ describe('LegendButton', () => {
     });
 
     await waitFor(() => {
-      expect($showLegend.getState()).toBe(false);
+      expect($showLegend.getState()).toBe(true);
     });
   });
 

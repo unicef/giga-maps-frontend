@@ -4,9 +4,9 @@ import TopMenuBar from "..";
 
 describe('TopMenuBar component', () => {
   it('renders correctly with default props', () => {
-    const { getByAltText, getByLabelText } = render(testWrapper(<TopMenuBar />));
+    const { getByLabelText } = render(testWrapper(<TopMenuBar />));
 
-    expect(getByAltText('Atlas')).toBeInTheDocument();
+    expect(getByLabelText('Giga Maps')).toBeInTheDocument();
 
     expect(getByLabelText('Menu')).toBeInTheDocument();
   });

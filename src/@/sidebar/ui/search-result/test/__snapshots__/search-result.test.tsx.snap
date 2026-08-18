@@ -3,17 +3,24 @@
 exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
 <DocumentFragment>
   .c4 {
-  padding: 1rem 0;
+  padding: 1rem 0.5rem;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
-  flex-direction: column;
+  color: #F4F4F4;
+  flex-direction: row;
+  gap: 0.25rem 0.5rem;
+  text-align: center;
+  background: #242424;
 }
 
 .c6 {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  white-space: nowrap;
+  line-height: 12px;
 }
 
 .c6 a:hover {
@@ -24,6 +31,8 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   font-size: 0.75rem;
   white-space: pre-line;
   text-align: center;
+  margin: 0;
+  margin-right: 0.25rem;
 }
 
 .c7 {
@@ -31,28 +40,33 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   font-style: normal;
   font-weight: 400;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .c0 {
+  background: #242424;
   position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
+  left: 0.875rem;
+  right: 0.875rem;
   width: auto;
   z-index: 13;
-  top: 100%;
+  top: calc(100% + 0.125rem);
   max-height: 80vh;
   border: 1px solid;
   border-radius: 0.5rem;
   box-shadow: #212020 0px 14px 40px 0px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .c1 {
+  background: #242424;
   max-height: calc(80vh - 4.5rem);
 }
 
 .c2 {
-  margin: 2rem 1rem 0 1rem;
+  margin: 2.5rem 1rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,11 +74,12 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
 }
 
 .c2 h3 {
+  color: #C6C6C6;
   text-align: center;
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.125rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .c2 p {
@@ -73,7 +88,7 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   font-style: normal;
   font-weight: 400;
   line-height: 1.125rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .c2 button {
@@ -117,10 +132,10 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
           />
         </svg>
         <h3>
-          We couldn’t find what you’re looking for
+          No results found.
         </h3>
         <p>
-          Try again with a different term
+          Try a different search.
         </p>
       </div>
       <div
@@ -155,14 +170,6 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
       <div
         class="c6"
       >
-        <a
-          class="cds--link c7"
-        >
-          Take the tour
-        </a>
-        <span>
-           or 
-        </span>
         <a
           class="cds--link c7"
           href="/about#live-map-get-in-touch"
