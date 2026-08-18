@@ -23,6 +23,11 @@ declare module '*.woff2' {
   // noinspection all
   export default url;
 }
+declare module '*.mp4' {
+  const url: string;
+  // noinspection all
+  export default url;
+}
 declare module '*.svg' {
   import { ComponentType } from 'react';
 
@@ -91,7 +96,7 @@ declare module '@carbon/react' {
     type?: string;
     renderIcon?: (props: IconButtonProps) => React.ReactNode;
     onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    kind?: 'primary' | 'secondary' | 'tertiary' | "ghost";
+    kind?: 'primary' | 'secondary' | 'tertiary' | 'ghost';
     size?: 'sm' | 'md' | 'lg';
     tooltipPosition?: 'top' | 'right' | 'bottom' | 'left';
     tooltipAlignment?: 'start' | 'center' | 'end';
@@ -100,7 +105,7 @@ declare module '@carbon/react' {
 
   export const IconButton: React.FC<IconButtonProps>;
 
-  export const InlineLoading = React.FC<any>
+  export const InlineLoading = React.FC<any>;
 
-  export const OverflowMenu = React.FC<any>
+  export const OverflowMenu = React.FC<any>;
 }

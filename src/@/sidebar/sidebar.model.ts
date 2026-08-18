@@ -173,6 +173,7 @@ const toEntityConnectivityStat = (
       stat.real_time_connected_entities ??
       stat.real_time_connected_schools ??
       {},
+    total_metrics: stat.total_metrics,
   };
 };
 
@@ -1141,6 +1142,7 @@ export const $connectivityYearsByEntity = $connectivityAvailabilityByEntity.map(
 export const $allLoadings = combine({
   country: fetchCountryFx.pending,
   countries: fetchCountriesFx.pending,
+  advanceFilter: fetchAdvanceFilterFx.pending,
   stats: fetchEntityGlobalStatsFx.pending,
   layers: fetchLayerListFx.pending,
   info: fetchLayerInfoFx.pending,
@@ -1157,8 +1159,8 @@ export const $isLoadingSchoolView = $allLoadings.map(
     [country, layers, info, lastAvailableDates].some(Boolean),
 );
 export const $isLoadingCountryAdminView = $allLoadings.map(
-  ({ country, lastAvailableDates, stats, info, entityInfo, layers }) =>
-    [info, entityInfo, lastAvailableDates, country, stats, layers].some(
+  ({ country, advanceFilter, lastAvailableDates, stats, info, entityInfo, layers }) =>
+    [info, entityInfo, lastAvailableDates, country, advanceFilter, stats, layers].some(
       Boolean,
     ),
 );

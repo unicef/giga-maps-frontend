@@ -71,6 +71,6 @@ describe('EntitySummaryAccordion live data loading', () => {
     expect(
       row?.querySelector('[data-slot="skeleton"]'),
     ).not.toBeInTheDocument();
-    expect(row).toHaveTextContent('0');
+    expect(row).toHaveTextContent('NA');
   });
 });

@@ -377,7 +377,7 @@ describe('animateCircles', () => {
       nextFrame!(600);
       const growingWidth = getLastPaintValue('text-halo-width');
       expect(growingWidth).toBeGreaterThan(0.01);
-      expect(growingWidth).toBeLessThan(3.75);
+      expect(growingWidth).toBeLessThan(11.25);
 
       performanceNow.mockReturnValue(1100);
       nextFrame!(1100);
@@ -385,12 +385,12 @@ describe('animateCircles', () => {
       expect(map.getLayer).toHaveBeenCalledWith('symbol-layer');
       expect(map.setLayoutProperty).not.toHaveBeenCalled();
       expect(getLastPaintValue('text-opacity')).toBeCloseTo(0.2);
-      expect(getLastPaintValue('text-halo-width')).toBeCloseTo(3.75);
+      expect(getLastPaintValue('text-halo-width')).toBeCloseTo(11.25);
       expect(getLastPaintValue('text-halo-blur')).toBeCloseTo(1);
 
       nextFrame!(1600);
       const shrinkingWidth = getLastPaintValue('text-halo-width');
-      expect(shrinkingWidth).toBeLessThan(3.75);
+      expect(shrinkingWidth).toBeLessThan(11.25);
       expect(shrinkingWidth).toBeCloseTo(growingWidth);
     } finally {
       setMapLoadingState(true);

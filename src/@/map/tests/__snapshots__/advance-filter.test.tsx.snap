@@ -3,19 +3,19 @@
 exports[`AdvancedFilter > should render Advance filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-popover!"
+    class="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-background!"
   >
     <div
       class="flex! shrink-0! items-center! justify-between! px-4! py-4!"
     >
       <h3
-        class="text-lg! leading-7! font-normal! text-foreground!"
+        class="text-base! leading-6! font-normal! text-filter-text!"
       >
         Filters
       </h3>
       <button
         aria-label="Close"
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 size-8! text-foreground!"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 size-8! text-filter-text!"
         data-size="icon-sm"
         data-slot="button"
         data-testid="filter-close"
@@ -86,7 +86,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                   <button
                     aria-controls="radix-:r1:"
                     aria-expanded="true"
-                    class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-4! py-3! text-lg! leading-7! font-normal! text-foreground! data-[state=open]:pt-3! data-[state=open]:pb-3!"
+                    class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-4! py-3! text-base! leading-6! font-normal! text-filter-text! data-[state=open]:pt-3! data-[state=open]:pb-3!"
                     data-orientation="vertical"
                     data-radix-collection-item=""
                     data-slot="accordion-trigger"
@@ -132,12 +132,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="multi-select-dropdown-building_id_govt"
                     >
                       Building-id
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -174,7 +174,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left! text-muted-foreground!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
                         id="multi-select-dropdown-building_id_govt"
                         type="button"
                       >
@@ -185,7 +185,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -207,12 +207,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="text-input-building_id_govt"
                     >
                       Building Id
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -244,7 +244,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       </button>
                     </label>
                     <input
-                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                       data-slot="input"
                       id="text-input-building_id_govt"
                       placeholder="Enter building id"
@@ -256,12 +256,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="dropdown-computer_availability"
                     >
                       Computer availability
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -298,7 +298,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
                         id="dropdown-computer_availability"
                         type="button"
                       >
@@ -309,7 +309,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -331,12 +331,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="multi-select-dropdown-coverage_type"
                     >
                       Coverage Type
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -373,7 +373,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left! text-muted-foreground!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
                         id="multi-select-dropdown-coverage_type"
                         type="button"
                       >
@@ -384,7 +384,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -406,11 +406,11 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                     >
                       Equipment's count
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -446,7 +446,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     >
                       <input
                         aria-label="Equipment's count min"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_robotic_equipment-min-input"
                         placeholder="min(30)"
@@ -455,7 +455,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       />
                       <input
                         aria-label="Equipment's count max"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_robotic_equipment-max-input"
                         placeholder="max(100)"
@@ -464,7 +464,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       />
                     </div>
                     <label
-                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
                       for="checkbox-school__num_robotic_equipment__range"
                     >
                       <input
@@ -481,12 +481,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="dropdown-coverage_type"
                     >
                       Maps views - Grouped
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -523,7 +523,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
                         id="dropdown-coverage_type"
                         type="button"
                       >
@@ -534,7 +534,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -556,7 +556,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                     >
                       No of Computer
                     </label>
@@ -565,7 +565,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     >
                       <input
                         aria-label="No of Computer min"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_computers-min-input"
                         placeholder="Min (0)"
@@ -574,7 +574,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       />
                       <input
                         aria-label="No of Computer max"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_computers-max-input"
                         placeholder="Max (1450)"
@@ -583,7 +583,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       />
                     </div>
                     <label
-                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
                       for="checkbox-school__num_computers__range"
                     >
                       <input
@@ -600,12 +600,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="text-input-environment"
                     >
                       Region
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -637,7 +637,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       </button>
                     </label>
                     <input
-                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                       data-slot="input"
                       id="text-input-environment"
                       placeholder="Enter region"
@@ -649,12 +649,12 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="dropdown-environment"
                     >
                       School area type - Org
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -691,7 +691,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
                         id="dropdown-environment"
                         type="button"
                       >
@@ -702,7 +702,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -724,11 +724,11 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                     >
                       Test Filter NG-001
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -764,7 +764,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                     >
                       <input
                         aria-label="Test Filter NG-001 min"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="connectivity_speed-min-input"
                         placeholder="Min (35)"
@@ -773,7 +773,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       />
                       <input
                         aria-label="Test Filter NG-001 max"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="connectivity_speed-max-input"
                         placeholder="Max (36)"
@@ -782,7 +782,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
                       />
                     </div>
                     <label
-                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
                       for="checkbox-school__connectivity_speed__range"
                     >
                       <input
@@ -805,7 +805,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
         class="flex! shrink-0! gap-3! px-4! pb-4!"
       >
         <button
-          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2 has-[>svg]:px-3 h-12! flex-1! rounded-full! text-lg! leading-7! font-normal!"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-secondary! text-sm! font-medium! text-secondary-foreground! hover:bg-secondary/80!"
           data-size="default"
           data-slot="button"
           data-variant="secondary"
@@ -814,7 +814,7 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
           Clear all
         </button>
         <button
-          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 h-12! flex-1! rounded-full! text-lg! leading-7! font-normal!"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-primary! text-sm! font-medium! text-primary-foreground! hover:bg-primary/90!"
           data-size="default"
           data-slot="button"
           data-variant="default"
@@ -831,19 +831,19 @@ exports[`AdvancedFilter > should render Advance filter 1`] = `
 exports[`AdvancedFilter > should render Advance filter 2`] = `
 <DocumentFragment>
   <div
-    class="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-popover!"
+    class="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-background!"
   >
     <div
       class="flex! shrink-0! items-center! justify-between! px-4! py-4!"
     >
       <h3
-        class="text-lg! leading-7! font-normal! text-foreground!"
+        class="text-base! leading-6! font-normal! text-filter-text!"
       >
         Filters
       </h3>
       <button
         aria-label="Close"
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 size-8! text-foreground!"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 size-8! text-filter-text!"
         data-size="icon-sm"
         data-slot="button"
         data-testid="filter-close"
@@ -914,7 +914,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                   <button
                     aria-controls="radix-:rn:"
                     aria-expanded="true"
-                    class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-4! py-3! text-lg! leading-7! font-normal! text-foreground! data-[state=open]:pt-3! data-[state=open]:pb-3!"
+                    class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-4! py-3! text-base! leading-6! font-normal! text-filter-text! data-[state=open]:pt-3! data-[state=open]:pb-3!"
                     data-orientation="vertical"
                     data-radix-collection-item=""
                     data-slot="accordion-trigger"
@@ -960,12 +960,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="multi-select-dropdown-building_id_govt"
                     >
                       Building-id
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1002,7 +1002,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left! text-muted-foreground!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
                         id="multi-select-dropdown-building_id_govt"
                         type="button"
                       >
@@ -1013,7 +1013,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -1035,12 +1035,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="text-input-building_id_govt"
                     >
                       Building Id
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1072,7 +1072,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       </button>
                     </label>
                     <input
-                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                       data-slot="input"
                       id="text-input-building_id_govt"
                       placeholder="Enter building id"
@@ -1084,12 +1084,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="dropdown-computer_availability"
                     >
                       Computer availability
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1126,7 +1126,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
                         id="dropdown-computer_availability"
                         type="button"
                       >
@@ -1137,7 +1137,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -1159,12 +1159,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="multi-select-dropdown-coverage_type"
                     >
                       Coverage Type
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1201,7 +1201,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left! text-muted-foreground!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
                         id="multi-select-dropdown-coverage_type"
                         type="button"
                       >
@@ -1212,7 +1212,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -1234,11 +1234,11 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                     >
                       Equipment's count
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1274,7 +1274,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     >
                       <input
                         aria-label="Equipment's count min"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_robotic_equipment-min-input"
                         placeholder="min(30)"
@@ -1283,7 +1283,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       />
                       <input
                         aria-label="Equipment's count max"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_robotic_equipment-max-input"
                         placeholder="max(100)"
@@ -1292,7 +1292,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       />
                     </div>
                     <label
-                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
                       for="checkbox-school__num_robotic_equipment__range"
                     >
                       <input
@@ -1309,12 +1309,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="dropdown-coverage_type"
                     >
                       Maps views - Grouped
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1351,7 +1351,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
                         id="dropdown-coverage_type"
                         type="button"
                       >
@@ -1362,7 +1362,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -1384,7 +1384,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                     >
                       No of Computer
                     </label>
@@ -1393,7 +1393,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     >
                       <input
                         aria-label="No of Computer min"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_computers-min-input"
                         placeholder="Min (0)"
@@ -1402,7 +1402,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       />
                       <input
                         aria-label="No of Computer max"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="num_computers-max-input"
                         placeholder="Max (1450)"
@@ -1411,7 +1411,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       />
                     </div>
                     <label
-                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
                       for="checkbox-school__num_computers__range"
                     >
                       <input
@@ -1428,12 +1428,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="text-input-environment"
                     >
                       Region
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1465,7 +1465,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       </button>
                     </label>
                     <input
-                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                       data-slot="input"
                       id="text-input-environment"
                       placeholder="Enter region"
@@ -1477,12 +1477,12 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                       for="dropdown-environment"
                     >
                       School area type - Org
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1519,7 +1519,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        class="h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring! flex! items-center! justify-between! text-left!"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
                         id="dropdown-environment"
                         type="button"
                       >
@@ -1530,7 +1530,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                         </span>
                         <svg
                           aria-hidden="true"
-                          class="lucide lucide-chevron-down size-4! shrink-0! text-muted-foreground!"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
                           fill="none"
                           height="24"
                           stroke="currentColor"
@@ -1552,11 +1552,11 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     class="flex! flex-col! gap-2! px-4! py-2!"
                   >
                     <label
-                      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
                     >
                       Test Filter NG-001
                       <button
-                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
                         data-state="closed"
                         type="button"
                       >
@@ -1592,7 +1592,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                     >
                       <input
                         aria-label="Test Filter NG-001 min"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="connectivity_speed-min-input"
                         placeholder="Min (35)"
@@ -1601,7 +1601,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       />
                       <input
                         aria-label="Test Filter NG-001 max"
-                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
                         data-slot="input"
                         id="connectivity_speed-max-input"
                         placeholder="Max (36)"
@@ -1610,7 +1610,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
                       />
                     </div>
                     <label
-                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
                       for="checkbox-school__connectivity_speed__range"
                     >
                       <input
@@ -1633,7 +1633,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
         class="flex! shrink-0! gap-3! px-4! pb-4!"
       >
         <button
-          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2 has-[>svg]:px-3 h-12! flex-1! rounded-full! text-lg! leading-7! font-normal!"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-secondary! text-sm! font-medium! text-secondary-foreground! hover:bg-secondary/80!"
           data-size="default"
           data-slot="button"
           data-variant="secondary"
@@ -1642,7 +1642,7 @@ exports[`AdvancedFilter > should render Advance filter 2`] = `
           Clear all
         </button>
         <button
-          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 h-12! flex-1! rounded-full! text-lg! leading-7! font-normal!"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-primary! text-sm! font-medium! text-primary-foreground! hover:bg-primary/90!"
           data-size="default"
           data-slot="button"
           data-variant="default"
@@ -1730,11 +1730,11 @@ exports[`RangeTextInput Component > RangeTextInput input 1`] = `
     class="flex! flex-col! gap-2! px-4! py-2!"
   >
     <label
-      class="font-['Open_Sans',sans-serif]! flex! items-center! text-sm! leading-5! text-muted-foreground!"
+      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
     >
       No of Teachers
       <button
-        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-muted-foreground! transition-colors! hover:text-foreground!"
+        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
         data-state="closed"
         type="button"
       >
@@ -1770,7 +1770,7 @@ exports[`RangeTextInput Component > RangeTextInput input 1`] = `
     >
       <input
         aria-label="No of Teachers min"
-        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
         data-slot="input"
         id="-min-input"
         placeholder="Min (0)"
@@ -1779,7 +1779,7 @@ exports[`RangeTextInput Component > RangeTextInput input 1`] = `
       />
       <input
         aria-label="No of Teachers max"
-        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! w-full! rounded-lg! border-0! bg-muted! px-3! text-lg! leading-7! font-normal! text-foreground! shadow-none! outline-none! placeholder:text-muted-foreground! focus-visible:ring-1! focus-visible:ring-ring!"
+        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
         data-slot="input"
         id="-max-input"
         placeholder="Max (10K)"
@@ -1788,7 +1788,7 @@ exports[`RangeTextInput Component > RangeTextInput input 1`] = `
       />
     </div>
     <label
-      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-sm! text-foreground!"
+      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
       for="checkbox-num_computers__range"
     >
       <input

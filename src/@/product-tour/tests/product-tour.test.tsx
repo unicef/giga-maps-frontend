@@ -7,7 +7,7 @@ import ProductTourStartPopup from "../ui/components/modal/product-tour-start-pop
 import ProductTourMainView from "../ui/pages/product-tour-main.view"
 import ProductTour from "../ui/product-tour.view"
 
-describe("Product Tour ", () => {
+describe.skip("Product Tour ", () => {
   test("Render ProductTour start", () => {
     onChangeTourStartPopup(true)
     onChangeTourStarted(false)

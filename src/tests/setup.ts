@@ -35,6 +35,14 @@ vi.mock('@azure/msal-browser', () => {
   };
 });
 
+if (!globalThis.ResizeObserver) {
+  globalThis.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}
+
 // matchMedia mock
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

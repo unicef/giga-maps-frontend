@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { AdvanceFilterType } from '~/api/types';
 import { cn } from '~/lib/cn';
 
-import { filterOptionClassName, filterSelectTriggerClassName } from './filter-control-styles';
+import {
+  filterOptionLabelClassName,
+  filterOptionMultiClassName,
+  filterSelectTriggerClassName,
+} from './filter-control-styles';
 import { FilterFieldLabel } from './filter-field-label';
 
 type Choice = { label: string; value: string };
@@ -127,17 +131,19 @@ const MultiSelectDropdown = ({
                 <li key={`${item.value}-${item.label}`}>
                   <label
                     className={cn(
-                      filterOptionClassName,
+                      filterOptionMultiClassName,
                       isSelected ? 'bg-filter-field!' : 'hover:bg-filter-field/70!',
                     )}
                   >
                     <input
                       checked={isSelected}
-                      className="size-4! accent-primary!"
+                      className="size-4! shrink-0! accent-primary!"
                       onChange={() => toggleItem(item)}
                       type="checkbox"
                     />
-                    <span className="truncate!">{item.label}</span>
+                    <span className={filterOptionLabelClassName}>
+                      {item.label}
+                    </span>
                   </label>
                 </li>
               );

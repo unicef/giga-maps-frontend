@@ -13,7 +13,20 @@ export const $isSearchFocused = restore(changeIsSearchFocused, false);
 
 export const changeSearchText = createEvent<string>();
 export const clearSearchText = createEvent();
-export const $searchInput = restore(changeSearchText, '').reset(clearSearchText);
+
+export const searchTextTyped = createEvent<string>();
+export const searchInputBlurred = createEvent();
+export const resetSearchTextDirty = createEvent();
+
+export const $searchInput = createStore<string>('')
+  .on([changeSearchText, searchTextTyped], setPayload)
+  .reset(clearSearchText);
+
+// true -> the input shows the typed text; false -> it shows the selected place label.
+export const $isSearchTextDirty = createStore(false)
+  .on(searchTextTyped, () => true)
+  .reset(clearSearchText, resetSearchTextDirty);
+
 export const $hasSearchInput = $searchInput.map(text => text?.length >= maxTextCount);
 
 export const $isActiveSearchBar = combine([$hasSearchInput, $isSearchFocused], (allInput) => allInput.some((input) => Boolean(input)))

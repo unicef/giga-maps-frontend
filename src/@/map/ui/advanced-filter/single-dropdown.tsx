@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { AdvanceFilterType } from '~/api/types';
 import { cn } from '~/lib/cn';
 
-import { filterOptionClassName, filterSelectTriggerClassName } from './filter-control-styles';
+import {
+  filterOptionClassName,
+  filterOptionLabelClassName,
+  filterSelectTriggerClassName,
+} from './filter-control-styles';
 import { FilterFieldLabel } from './filter-field-label';
 
 type Choice = { label: string; value: string };
@@ -88,7 +92,9 @@ const SingleDropdown = ({
                     role="option"
                     type="button"
                   >
-                    <span className="truncate!">{item.label}</span>
+                    <span className={filterOptionLabelClassName}>
+                      {item.label}
+                    </span>
                   </button>
                 </li>
               );

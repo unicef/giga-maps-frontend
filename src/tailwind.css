@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@import 'tw-animate-css';
+
+/*
+ * `dark:` must follow the APP theme, not the OS.
+ * The app sets .dark / .light / .accessible on <html> (see core/root.tsx).
+ * Without this, shadcn's built-in `dark:` classes fall back to
+ * prefers-color-scheme and break for anyone whose OS and app themes differ.
+ * `accessible` is a dark theme too, so it opts in as well.
+ */
+@custom-variant dark (&:where(.dark, .dark *, .accessible, .accessible *));
 
 /*
  * Tailwind CSS v4 — shadcn/ui compatible theme
@@ -17,6 +27,10 @@
   --giga-background: #161616;
   --giga-foreground: #fff;
 
+  /* Landing page only: the design calls for pure black behind the cards.
+     Scoped so the map and admin keep #161616. */
+  --giga-landing-background: #000;
+
   /* Card */
   --giga-card: #181818;
   --giga-card-foreground: #fff;
@@ -25,8 +39,8 @@
   --giga-popover: #181818;
   --giga-popover-foreground: #fff;
 
-  /* Primary (brand blue) */
-  --giga-primary: #005BED;
+  /* Primary (brand blue — Giga Primary600) */
+  --giga-primary: #277aff;
   --giga-primary-foreground: #fff;
 
   /* Secondary */
@@ -38,7 +52,7 @@
   --giga-muted-foreground: #9E9E9E;
 
   /* Accent */
-  --giga-accent: #005BED;
+  --giga-accent: #277aff;
   --giga-accent-foreground: #fff;
 
   /* Destructive */
@@ -48,7 +62,7 @@
   /* Border / Input / Ring */
   --giga-border: #393939;
   --giga-input: #C7C7C7;
-  --giga-ring: #005BED;
+  --giga-ring: #277aff;
 
   /* ── Extended tokens (not standard shadcn, but useful) ──── */
   --giga-surface-elevated: #383838;
@@ -71,6 +85,12 @@
   /* Misc */
   --giga-icon-secondary: #fff;
   --giga-mapped: #C6C6C6;
+
+  /* Floating search panels (country browser + school list) */
+  --giga-surface-panel: #242424;
+
+  /* Vertical space taken by the top bar + search box above the panels */
+  --search-panel-top-offset: 7.7rem;
   --giga-accessible-panel: #646973;
 }
 
@@ -79,6 +99,8 @@
 [data-theme="light"] {
   --giga-background: #fff;
   --giga-foreground: #222222;
+
+  --giga-landing-background: #fff;
 
   --giga-card: #fff;
   --giga-card-foreground: #222222;
@@ -94,7 +116,7 @@
   --giga-muted: #f4f4f4;
   --giga-muted-foreground: #474747;
 
-  --giga-accent: #005BED;
+  --giga-accent: #277aff;
   --giga-accent-foreground: #222222;
 
   --giga-border: #E0E0E0;
@@ -110,6 +132,8 @@
   --giga-filter-muted: #6F6F6F;
   --giga-filter-field: #f4f4f4;
   --giga-icon-secondary: #595959;
+
+  --giga-surface-panel: #f4f4f4;
 }
 
 /* ── Accessible theme overrides ──────────────────────────────── */
@@ -117,6 +141,8 @@
 [data-theme="accessible"] {
   --giga-background: #181818;
   --giga-foreground: #fff;
+
+  --giga-landing-background: #000;
 
   --giga-card: #181818;
   --giga-card-foreground: #fff;
@@ -153,6 +179,8 @@
   /* Standard shadcn/ui tokens */
   --color-background: var(--giga-background);
   --color-foreground: var(--giga-foreground);
+
+  --color-landing-background: var(--giga-landing-background);
 
   --color-card: var(--giga-card);
   --color-card-foreground: var(--giga-card-foreground);
@@ -200,13 +228,29 @@
 
   --color-connectivity-green-200: #85FFBC;
   --color-connectivity-green-600: #00D661;
-  --color-grey-400: #9ca3af;
-  --color-grey-700: #374151;
-  --color-grey-900: #161616;
-
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6B7280;
+  --color-gray-600: #6F6F6F;
+  --color-gray-700: #374151;
+  --color-gray-800: #222222;
+  --color-gray-900: #242424;
+  --color-gray-950: #161616;
+  --color-surface-panel: var(--giga-surface-panel);
   --color-primary-300: #A9CAFF;
 
   --font-manrope: "Manrope", sans-serif;
+
+  /* Brand type scale: text-xs is 12/18 (Tailwind ships 12/16), plus a 10/18 step */
+  --text-xs--line-height: 1.125rem;
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 1.125rem;
+
+  /* Marketing container: 1728px content width (96px gutters at 1920) */
+  --container-giga: 108rem;
+
+  /* Matches $isTablet (max-width: 996px) in core/media-query.ts, so the CSS
+     and JS breakpoints agree. Use as `tablet:` / `max-tablet:`. */
+  --breakpoint-tablet: 62.25rem;
 }
 
 @keyframes notification-enter {
@@ -224,12 +268,12 @@
 @keyframes legend-connectivity-glow {
   from {
     opacity: 0.9;
-    transform: translate(-50%, -50%) scale(0.72);
+    transform: scale(0.72);
   }
 
   to {
     opacity: 0.35;
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: scale(1.05);
   }
 }
 

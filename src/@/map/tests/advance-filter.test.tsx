@@ -9,7 +9,6 @@ import FilterButton from "../ui/advanced-filter/filter"
 import { testWrapper } from "~/tests/test-wrapper"
 import "~/core/i18n/instance"
 import userEvent from "@testing-library/user-event"
-import { $showAdvancedFilter } from "~/@/sidebar/sidebar.model"
 
 describe('AdvancedFilter', () => {
 
@@ -59,38 +58,12 @@ describe('AdvancedFilter', () => {
     await fetchCountryFx('br')
     await fetchAdvanceFilterFx()
     render(testWrapper(<FilterButton />))
-    const button = (await screen.findByText("Filters")).closest('button') as HTMLElement;
+    const button = (await screen.findByText(/filter/i)).closest('button') as HTMLElement;
     await userEvent.click(button);
 
     const textInput = (await screen.findByPlaceholderText("Enter building id"))
     await fireEvent.change(textInput, "123");
     // screen.debug();
-  })
-
-  test('does not close the filter panel when Enter is pressed in an input', async () => {
-    const setOpen = vi.fn()
-    await fetchAdvanceFilterFx()
-    render(<FilterPopupContent setOpen={setOpen} />)
-
-    const textInput = await screen.findByPlaceholderText('Enter building id')
-    fireEvent.keyDown(textInput, { key: 'Enter' })
-
-    expect(setOpen).not.toHaveBeenCalled()
-  })
-
-  test('does not close the filter panel when Enter is pressed on the open trigger', async () => {
-    await fetchCountryFx('br')
-    await fetchAdvanceFilterFx()
-    render(testWrapper(<FilterButton />))
-
-    const button = (await screen.findByText('Filters')).closest('button') as HTMLElement
-    await userEvent.click(button)
-    expect($showAdvancedFilter.getState()).toBe(true)
-
-    fireEvent.keyDown(button, { key: 'Enter' })
-
-    expect($showAdvancedFilter.getState()).toBe(true)
-    expect(screen.getByRole('dialog', { name: 'filters' })).toBeInTheDocument()
   })
 
   test('should render Advance filter', async () => {

@@ -1,4 +1,4 @@
-import exp from 'constants';
+import { EntityType } from '~/@/entities';
 import { createAndSetPopupTemplate } from '../popup/popup.util';
 
 describe('createAndSetPopupTemplate', () => {
@@ -27,18 +27,18 @@ describe('createAndSetPopupTemplate', () => {
       bad: 'red',
     };
     const layerUtils = {
-      currentLayerTypeUtilsByEntity: {
-        school: {
-          isLive: true,
-          isStatic: false,
-          isSchoolStatus: false,
-        },
-      },
       selectedLayerDataByEntity: {
         school: {
           global_benchmark: {
             convert_unit: 'Mbps',
           },
+        },
+      },
+      currentLayerTypeUtilsByEntity: {
+        school: {
+          isLive: true,
+          isStatic: false,
+          isSchoolStatus: false,
         },
       },
       isSchoolBenchmarkByEntity: {},
@@ -52,6 +52,7 @@ describe('createAndSetPopupTemplate', () => {
       feature,
       stylePaintData,
       layerUtils,
+      entityType: EntityType.SCHOOL,
     } as any);
 
     expect(result).toBeDefined();
@@ -87,15 +88,15 @@ describe('createAndSetPopupTemplate', () => {
       bad: 'red',
     };
     const layerUtils = {
+      selectedLayerDataByEntity: {
+        school: {},
+      },
       currentLayerTypeUtilsByEntity: {
         school: {
           isLive: false,
           isStatic: true,
           isSchoolStatus: false,
         },
-      },
-      selectedLayerDataByEntity: {
-        school: {},
       },
       isSchoolBenchmarkByEntity: {},
       connectivityBenchMarksByEntity: {},
@@ -108,6 +109,7 @@ describe('createAndSetPopupTemplate', () => {
       feature,
       stylePaintData,
       layerUtils,
+      entityType: EntityType.SCHOOL,
     } as any);
 
     expect(result).toBeDefined();

@@ -384,7 +384,7 @@ const LegendPopup = ({
 
   const expandedContent = (
     <>
-      <div className="relative! flex! items-center! justify-between! gap-3! bg-popover! in-[.accessible]:bg-accessible-panel! in-[[data-theme=accessible]]:bg-accessible-panel! px-3.5! pr-10! pt-3! max-md:gap-2! max-md:px-3! max-md:pr-9! max-md:pt-2.5!">
+      <div className="relative! flex! items-center! justify-between! gap-3! bg-popover! px-3.5! pr-10! pt-3! max-md:gap-2! max-md:px-3! max-md:pr-9! max-md:pt-2.5!">
         <div className="flex! min-w-0! items-center! gap-2! max-md:gap-3!">
           {visibleLegendEntityTypes.map((entityType) => {
             const config = entityConfigMap[entityType];
@@ -451,7 +451,7 @@ const LegendPopup = ({
       </div>
       <div
         className={cn(
-          'bg-popover! in-[.accessible]:bg-accessible-panel! in-[[data-theme=accessible]]:bg-accessible-panel! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!',
+          'bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!',
           isCompactLegend ? 'flex! flex-col! gap-4!' : 'flex! flex-wrap! gap-4!',
         )}
         data-testid="legend-expanded-view"

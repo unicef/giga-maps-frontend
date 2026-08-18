@@ -151,7 +151,7 @@ const ThemePopupContent = ({
   };
 
   return (
-    <div className="flex! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-popover! in-[.accessible]:bg-accessible-panel! in-[[data-theme=accessible]]:bg-accessible-panel!">
+    <div className="flex! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-popover!">
       <div className="shrink-0! px-4! pt-4!">
         <h3 className="text-base! font-medium! leading-6! text-foreground!">
           {t('themes-layers')}

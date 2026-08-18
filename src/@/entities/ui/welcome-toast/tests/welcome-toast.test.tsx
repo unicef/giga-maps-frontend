@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { testWrapper } from '~/tests/test-wrapper';
@@ -16,6 +16,8 @@ const TITLE_ES = '¡Ya están las instalaciones de salud!';
  * `$isMobile` starts inverted and settles in a timeout, so it needs a flush.
  */
 const renderToast = async (language = 'en', isMobile = false) => {
+  cleanup();
+  document.body.innerHTML = '';
   vi.resetModules();
   window.matchMedia = ((query: string) => ({
     addEventListener: vi.fn(),
@@ -31,7 +33,7 @@ const renderToast = async (language = 'en', isMobile = false) => {
   const { default: WelcomeToast } = await import('../welcome-toast');
   const result = render(testWrapper(<WelcomeToast />));
   await act(async () => {
-    vi.runAllTimers();
+    vi.advanceTimersByTime(200);
   });
 
   return result;
@@ -39,12 +41,16 @@ const renderToast = async (language = 'en', isMobile = false) => {
 
 describe('WelcomeToast', () => {
   beforeEach(() => {
+    cleanup();
+    document.body.innerHTML = '';
     window.localStorage.clear();
     vi.useFakeTimers({ shouldAdvanceTime: true });
     vi.setSystemTime(BEFORE_EXPIRY);
   });
 
   afterEach(() => {
+    cleanup();
+    document.body.innerHTML = '';
     vi.useRealTimers();
     window.localStorage.clear();
   });
@@ -122,7 +128,7 @@ describe('WelcomeToast', () => {
     expect(screen.getByRole('link')).toHaveTextContent('escríbenos');
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
-      'mailto:gigamaps@unicef.org',
+      '/about#live-map-get-in-touch',
     );
   });
 });

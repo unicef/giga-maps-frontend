@@ -167,6 +167,8 @@ a{
 
   [data-title]:hover::after {
     content: attr(data-title);
+    -webkit-text-fill-color: white;
+    -webkit-background-clip: border-box;
     position: absolute;
     bottom: 100%;
     left: 50%;
@@ -210,6 +212,29 @@ a{
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+  }
+
+  @keyframes tooltipFadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(0) translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+
+  [data-title-pos='right']:hover::after {
+    left: 0;
+    transform: translateX(0);
+    animation-name: tooltipFadeInRight;
+  }
+
+  [data-title-pos='right']:hover::before {
+    left: 8px;
+    transform: translateX(0) translateY(100%);
+    animation-name: tooltipFadeInRight;
   }
 `;
 
