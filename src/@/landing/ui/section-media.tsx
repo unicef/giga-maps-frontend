@@ -54,9 +54,11 @@ const SectionVideo = ({ src }: { src: string }) => {
     // loop.
     let hasFallenBack = false;
     const start = () => {
+      // Already running: keeps the retries below effectively free.
+      if (!video.paused) return;
+
       void video.play().catch(() => {
-        // Autoplay can still be denied (iOS Low Power Mode, for one). Falling
-        // back to a decoded frame beats an empty black box.
+        // Denied outright. A decoded frame beats an empty black box.
         if (hasFallenBack) return;
         hasFallenBack = true;
         video.currentTime = 0.05;
@@ -64,12 +66,22 @@ const SectionVideo = ({ src }: { src: string }) => {
     };
 
     start();
-    // On mobile data the first attempt lands before the clip has buffered, and
-    // a rejected play() is never retried on its own — which left the video
-    // frozen on frame one. `canplay` fires as soon as it can start.
+    // The first attempt can land before the clip has buffered, and a rejected
+    // play() is never retried on its own.
     video.addEventListener('canplay', start);
 
-    return () => video.removeEventListener('canplay', start);
+    // iOS Low Power Mode refuses gesture-less playback, and since `preload` is
+    // `metadata` nothing downloads either — so `canplay` never fires and the
+    // retry above never runs. Any real interaction lifts the block, and a
+    // scroll is enough. Passive so it never delays that scroll.
+    document.addEventListener('touchstart', start, { passive: true });
+    document.addEventListener('click', start);
+
+    return () => {
+      video.removeEventListener('canplay', start);
+      document.removeEventListener('touchstart', start);
+      document.removeEventListener('click', start);
+    };
   }, [isVisible]);
 
   return (
