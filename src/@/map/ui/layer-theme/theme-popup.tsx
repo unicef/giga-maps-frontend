@@ -34,17 +34,43 @@ const ThemePopup = ({
 
       wrapper.style.setProperty('z-index', '10000', 'important');
 
-      const applyPosition = () => {
-        // Pin bottom edge to the legend button — same place as the legend panel
-        // on both desktop and mobile.
+      const applyPosition = (attempt = 0) => {
         const legendButton = document.querySelector<HTMLElement>(
           '.legend-container .legend-open-button',
         );
-        if (!legendButton) return;
+        const legendBottom = legendButton
+          ? legendButton.getBoundingClientRect().bottom
+          : window.innerHeight - 8;
+
+        const maxHeight = Math.max(
+          160,
+          Math.min(legendBottom - 8, window.innerHeight - 16),
+        );
+
+        wrapper.style.setProperty('max-height', `${maxHeight}px`, 'important');
+        node.style.setProperty('max-height', `${maxHeight}px`, 'important');
+        wrapper.style.setProperty('height', 'auto', 'important');
+        node.style.setProperty('height', 'auto', 'important');
+
+        const naturalHeight = Math.max(
+          node.scrollHeight,
+          node.getBoundingClientRect().height,
+        );
+        if (naturalHeight <= 0) {
+          if (attempt < 5) {
+            requestAnimationFrame(() => applyPosition(attempt + 1));
+          }
+          return;
+        }
+
+        const panelHeight = Math.min(naturalHeight, maxHeight);
+        if (naturalHeight > maxHeight) {
+          wrapper.style.setProperty('height', `${panelHeight}px`, 'important');
+          node.style.setProperty('height', `${panelHeight}px`, 'important');
+        }
 
         const panelRect = wrapper.getBoundingClientRect();
-        const legendRect = legendButton.getBoundingClientRect();
-        const top = Math.max(8, legendRect.bottom - panelRect.height);
+        const top = Math.max(8, legendBottom - panelHeight);
 
         wrapper.style.setProperty('position', 'fixed', 'important');
         wrapper.style.setProperty('left', `${panelRect.left}px`, 'important');
@@ -52,11 +78,10 @@ const ThemePopup = ({
         wrapper.style.setProperty('right', 'auto', 'important');
         wrapper.style.setProperty('bottom', 'auto', 'important');
         wrapper.style.setProperty('transform', 'none', 'important');
-        wrapper.style.setProperty('height', 'auto', 'important');
       };
 
       requestAnimationFrame(() => {
-        requestAnimationFrame(applyPosition);
+        requestAnimationFrame(() => applyPosition());
       });
     },
     [isMobile, sidebarHeight],
@@ -66,7 +91,9 @@ const ThemePopup = ({
     <Popover
       modal={false}
       onOpenChange={(nextOpen) => {
-        setOpen(nextOpen);
+        if (!nextOpen) {
+          setOpen(false);
+        }
       }}
       open={open}
     >
@@ -80,7 +107,7 @@ const ThemePopup = ({
         align={isMobile && sidebarHeight ? 'center' : 'end'}
         avoidCollisions={false}
         className={cn(
-          'theme-layer-popover-content z-[10000]! flex! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs!',
+          'theme-layer-popover-content z-[10000]! flex! max-h-[calc(100dvh-1rem)]! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
