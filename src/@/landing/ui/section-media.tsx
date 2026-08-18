@@ -1,5 +1,7 @@
+import { useStore } from 'effector-react';
 import { useEffect, useRef } from 'react';
 
+import { $isTablet } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 
 import { LANDING_COPY } from '../landing.constant';
@@ -17,7 +19,12 @@ const ASPECT = 'aspect-[824/588]';
 // Plays only while on screen, and not at all under reduced motion.
 const SectionVideo = ({ src }: { src: string }) => {
   const ref = useRef<HTMLVideoElement>(null);
-  const isVisible = useInViewport(ref, '200px');
+  const isTablet = useStore($isTablet);
+  // A screen of lead time on mobile, where the clips only start downloading
+  // once play() is called and the connection needs the head start. Desktop
+  // keeps the tighter margin: there it would just leave a third clip decoding
+  // off-screen for nothing.
+  const isVisible = useInViewport(ref, isTablet ? '600px' : '200px');
 
   // React sets `muted` as a property only, but WebKit reads the *attribute* to
   // decide whether playback may start without a user gesture. Without it iOS
@@ -29,25 +36,40 @@ const SectionVideo = ({ src }: { src: string }) => {
 
   useEffect(() => {
     const video = ref.current;
-    if (!video) return;
+    if (!video) return undefined;
 
     if (!isVisible) {
       video.pause();
-      return;
+      return undefined;
     }
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       // A seek forces iOS to decode one frame; a merely paused video shows
       // nothing at all.
       video.currentTime = 0.05;
-      return;
+      return undefined;
     }
 
-    void video.play().catch(() => {
-      // Autoplay can still be denied (iOS Low Power Mode, for one). Falling
-      // back to a decoded frame beats an empty black box.
-      video.currentTime = 0.05;
-    });
+    // Seek once at most: the seek itself fires `canplay`, so retrying it would
+    // loop.
+    let hasFallenBack = false;
+    const start = () => {
+      void video.play().catch(() => {
+        // Autoplay can still be denied (iOS Low Power Mode, for one). Falling
+        // back to a decoded frame beats an empty black box.
+        if (hasFallenBack) return;
+        hasFallenBack = true;
+        video.currentTime = 0.05;
+      });
+    };
+
+    start();
+    // On mobile data the first attempt lands before the clip has buffered, and
+    // a rejected play() is never retried on its own — which left the video
+    // frozen on frame one. `canplay` fires as soon as it can start.
+    video.addEventListener('canplay', start);
+
+    return () => video.removeEventListener('canplay', start);
   }, [isVisible]);
 
   return (
