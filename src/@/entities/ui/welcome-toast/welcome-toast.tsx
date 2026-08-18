@@ -26,9 +26,11 @@ const WelcomeToast = () => {
   return (
     <DisclaimerNotification
       className={cn(
+        'z-[6002]',
         isMobile
-          ? 'fixed inset-x-4 bottom-8 z-[10051]'
-          : 'fixed left-84 z-[6002] w-96 max-w-[calc(100vw-2rem)]',
+          ? // Clears the fixed sidebar header and its entity-type pill row.
+            'fixed inset-x-4 top-42'
+          : 'fixed left-84 w-96 max-w-[calc(100vw-2rem)]',
         // Stack above the country disclaimer, which shares this anchor.
         !isMobile && (isCountryDisclaimerOpen ? 'bottom-44' : 'bottom-8'),
       )}
@@ -45,7 +47,6 @@ const WelcomeToast = () => {
         ) : null
       }
       icon={<BuildingHospital />}
-      modal={isMobile}
       onClose={() => dismissWelcomeToast()}
       title={t('welcome-toast-title')}
     >

@@ -80,32 +80,6 @@ describe('WelcomeToast', () => {
     expect(screen.queryByText(TITLE_EN)).not.toBeInTheDocument();
   });
 
-  it('blocks the page behind a backdrop on mobile only', async () => {
-    const { unmount } = await renderToast('en', true);
-
-    expect(screen.getByRole('dialog')).toHaveAttribute('aria-modal', 'true');
-    expect(document.body.style.overflow).toBe('hidden');
-    unmount();
-
-    await renderToast();
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    expect(document.body.style.overflow).not.toBe('hidden');
-  });
-
-  it('dismisses when the backdrop is tapped', async () => {
-    await renderToast('en', true);
-
-    const [backdrop] = screen.getAllByRole('button', {
-      name: 'Close notification',
-    });
-    fireEvent.click(backdrop);
-
-    expect(screen.queryByText(TITLE_EN)).not.toBeInTheDocument();
-    expect(window.localStorage.getItem(STORAGE_KEY)).toBe('true');
-    expect(document.body.style.overflow).not.toBe('hidden');
-  });
-
   it('dismisses from the mobile confirm button', async () => {
     await renderToast('en', true);
 
