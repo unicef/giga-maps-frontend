@@ -21,8 +21,11 @@ import {
 import { $testimonials } from '../landing.model';
 import { CmsSectionType } from '../landing.types';
 
+// `static` pulls them out of shadcn's absolute placement, which pins them to
+// -48px and lands them flush against the viewport edge. `rounded-full` and the
+// border need `!`: unmarked, Carbon squares them into boxes.
 const ARROW =
-  'hidden! size-10! cursor-pointer! border-border! bg-transparent! text-foreground! transition-shadow hover:bg-muted! hover:shadow-sm! tablet:flex!';
+  'hidden! static! size-10! shrink-0! translate-y-0! cursor-pointer! rounded-full! border-0! bg-transparent! text-foreground! transition-colors hover:bg-muted! tablet:flex!';
 
 export const TestimonialsSection = () => {
   const testimonials = useStore($testimonials);
@@ -56,74 +59,79 @@ export const TestimonialsSection = () => {
       id={CmsSectionType.testimonials}
     >
       <Carousel opts={{ loop: true }} setApi={setApi}>
-        <CarouselContent>
-          {testimonials.map((item) => (
-            <CarouselItem key={item.quote}>
-              <figure className="m-0! flex! flex-col! items-start! gap-6! tablet:flex-row! tablet:items-center! tablet:gap-14!">
-                {/* Two avatars, one per breakpoint: the design stands it on its
+        <div className="flex! items-center! gap-4! tablet:gap-8!">
+          {total > 1 ? (
+            <CarouselPrevious
+              aria-label={LANDING_COPY.previousTestimonial}
+              className={ARROW}
+            />
+          ) : null}
+
+          <div className="min-w-0! flex-1!">
+            <CarouselContent>
+              {testimonials.map((item) => (
+                <CarouselItem key={item.quote}>
+                  <figure className="m-0! flex! flex-col! items-start! gap-6! tablet:flex-row! tablet:items-center! tablet:gap-14!">
+                    {/* Two avatars, one per breakpoint: the design stands it on its
                     own beside the quote on desktop, but tucks it next to the
                     name on mobile, and flex cannot move a node between
                     parents. The hidden one is never fetched. */}
-                {item.avatar ? (
-                  <img
-                    alt=""
-                    className="hidden! size-48! shrink-0! rounded-full! object-cover! tablet:block!"
-                    loading="lazy"
-                    src={item.avatar}
-                  />
-                ) : null}
-
-                <div className="min-w-0!">
-                  <Quote
-                    aria-hidden="true"
-                    className="mb-6! size-8! text-muted-foreground! tablet:hidden!"
-                  />
-
-                  <blockquote className="m-0! font-manrope! text-xl! leading-snug! text-foreground! tablet:text-3xl!">
-                    {item.quote}
-                  </blockquote>
-
-                  <figcaption className="mt-6! flex! items-center! gap-3! tablet:block!">
                     {item.avatar ? (
                       <img
                         alt=""
-                        className="size-12! shrink-0! rounded-full! object-cover! tablet:hidden!"
+                        className="hidden! size-48! shrink-0! rounded-full! object-cover! tablet:block!"
                         loading="lazy"
                         src={item.avatar}
                       />
                     ) : null}
 
                     <div className="min-w-0!">
-                      {item.name ? (
-                        <p className="m-0! text-sm! font-semibold! text-foreground! tablet:text-base!">
-                          {item.name}
-                        </p>
-                      ) : null}
-                      {item.attribution ? (
-                        <p className="mt-1! mb-0! text-xs! text-muted-foreground! tablet:text-sm!">
-                          {item.attribution}
-                        </p>
-                      ) : null}
-                    </div>
-                  </figcaption>
-                </div>
-              </figure>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
+                      <Quote
+                        aria-hidden="true"
+                        className="mb-6! size-8! text-muted-foreground! tablet:hidden!"
+                      />
 
-        {total > 1 ? (
-          <>
-            <CarouselPrevious
-              aria-label={LANDING_COPY.previousTestimonial}
-              className={ARROW}
-            />
+                      <blockquote className="m-0! font-manrope! text-xl! leading-snug! text-foreground! tablet:text-3xl!">
+                        {item.quote}
+                      </blockquote>
+
+                      <figcaption className="mt-6! flex! items-center! gap-3! tablet:block!">
+                        {item.avatar ? (
+                          <img
+                            alt=""
+                            className="size-12! shrink-0! rounded-full! object-cover! tablet:hidden!"
+                            loading="lazy"
+                            src={item.avatar}
+                          />
+                        ) : null}
+
+                        <div className="min-w-0!">
+                          {item.name ? (
+                            <p className="m-0! text-sm! font-semibold! text-foreground! tablet:text-base!">
+                              {item.name}
+                            </p>
+                          ) : null}
+                          {item.attribution ? (
+                            <p className="mt-1! mb-0! text-xs! text-muted-foreground! tablet:text-sm!">
+                              {item.attribution}
+                            </p>
+                          ) : null}
+                        </div>
+                      </figcaption>
+                    </div>
+                  </figure>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </div>
+
+          {total > 1 ? (
             <CarouselNext
               aria-label={LANDING_COPY.nextTestimonial}
               className={ARROW}
             />
-          </>
-        ) : null}
+          ) : null}
+        </div>
       </Carousel>
 
       {total > 1 ? (

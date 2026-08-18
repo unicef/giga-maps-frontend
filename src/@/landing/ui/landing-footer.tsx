@@ -10,7 +10,9 @@ import { $footer } from '../landing.model';
 
 // Raw HTML from the admin: no classes, inherits Carbon. Restyled from outside.
 const cmsHtml = cn(
-  '[&_a]:text-sm! [&_a]:text-muted-foreground! [&_a]:transition-colors hover:[&_a]:text-foreground!',
+  // `[&_a:hover]` targets the hovered link. `hover:[&_a]` would key off the
+  // container and light up every link in the block at once.
+  '[&_a]:text-sm! [&_a]:text-muted-foreground! [&_a]:transition-colors [&_a:hover]:text-foreground!',
   '[&_ul]:m-0! [&_ul]:flex! [&_ul]:list-none! [&_ul]:flex-col! [&_ul]:gap-3! [&_ul]:p-0!',
   // The admin authors link groups as `<div class="footer-link-wrapper">`.
   '[&_.footer-link-wrapper]:flex! [&_.footer-link-wrapper]:flex-col! [&_.footer-link-wrapper]:gap-3!',
