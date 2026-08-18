@@ -80,6 +80,7 @@
   /* Filter */
   --giga-filter-text: #f5f5f5;
   --giga-filter-muted: #c0c0c0;
+  --giga-filter-field: #262626;
 
   /* Misc */
   --giga-icon-secondary: #fff;
@@ -128,7 +129,8 @@
   --giga-on-surface-dim: #7E7E7E;
 
   --giga-filter-text: #222222;
-  --giga-filter-muted: #222222;
+  --giga-filter-muted: #6F6F6F;
+  --giga-filter-field: #f4f4f4;
   --giga-icon-secondary: #595959;
 
   --giga-surface-panel: #f4f4f4;
@@ -168,6 +170,7 @@
 
   --giga-filter-text: #f5f5f5;
   --giga-filter-muted: #9ca3af;
+  --giga-filter-field: #262626;
   --giga-icon-secondary: #fff;
 }
 
@@ -218,6 +221,7 @@
 
   --color-filter-text: var(--giga-filter-text);
   --color-filter-muted: var(--giga-filter-muted);
+  --color-filter-field: var(--giga-filter-field);
   --color-icon-secondary: var(--giga-icon-secondary);
   --color-mapped: var(--giga-mapped);
   --color-accessible-panel: var(--giga-accessible-panel);
