@@ -1,63 +1,48 @@
+import { Close } from '@carbon/icons-react'
+import { Button, Form, IconButton, PopoverContent } from "@carbon/react";
 import { useStore } from 'effector-react';
-import type { TFunction } from 'i18next';
-import { ChevronDown, X } from 'lucide-react';
-import {
-  Fragment,
-  MouseEvent,
-  PropsWithChildren,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useTranslation } from 'react-i18next';
+import { ChevronDown } from 'lucide-react';
+import { Fragment, MouseEvent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from "react-i18next";
 
-import { $countrySearchParams } from '~/@/country/country.model';
-import { $activeEntityTypes, $entityRegistry } from '~/@/entities';
-import type { EntityConfig } from '~/@/entities/config/entity-config.types';
+import { $countrySearchParams } from "~/@/country/country.model";
+import { $activeEntityTypes } from '~/@/entities';
 import { EntityType } from '~/@/entities/types/entity-types';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '~/components/ui/accordion';
-import { Button } from '~/components/ui/button';
-import { ScrollArea } from '~/components/ui/scroll-area';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import { Separator } from '~/components/ui/separator';
-import { router } from '~/core/routes';
-import { cn } from '~/lib/cn';
+import { router } from "~/core/routes";
 
-import { $advanceFilterList } from '../../map.model';
+import { $advanceFilterList } from "../../map.model";
 import {
   deleteAdvancedFiltersForEntities,
   suppressDefaultAdvancedFilters,
 } from './advanced-filter.model';
-import CollapsibleFilterChips from './collapsible-filter-chips';
 import {
   buildFilterChipsByEntity,
-  dedupeAdvanceFiltersByColumnKey,
-  getAdvanceFilterItemKey,
   type FilterChip,
+  hasSelectedFilterValue,
 } from './filter-chip-utils';
-import MultiSelectDropdown from './multi-select-dropdown';
+import CollapsibleFilterChips from './collapsible-filter-chips';
+import { FilterActionButtonWrapper, FilterHeaderWrapper, ScrollableContainer } from "./filter-button.style";
+import MultiSelectDropdown from "./multi-select-dropdown";
 import RangeTextInput from './range-text-input';
-import SingleDropdown from './single-dropdown';
-import TextField from './text-input';
+import SingleDropdown from "./single-dropdown";
+import TextField from "./text-input";
 
 export const components = {
-  DROPDOWN: SingleDropdown,
-  DROPDOWN_MULTISELECT: MultiSelectDropdown,
-  RANGE: RangeTextInput,
-  INPUT: TextField,
-  BOOLEAN: SingleDropdown,
+  'DROPDOWN': SingleDropdown,
+  'DROPDOWN_MULTISELECT': MultiSelectDropdown,
+  'RANGE': RangeTextInput,
+  'INPUT': TextField,
+  'BOOLEAN': SingleDropdown
 } as Record<string, React.ComponentType<any>>;
 
-type SelectedFieldValue =
-  | string
-  | {
-      none_range: boolean;
-      value: string;
-    };
+type SelectedFieldValue = string | {
+  none_range: boolean;
+  value: string;
+};
+
+const hasSelectedValue = hasSelectedFilterValue;
 
 const navigateWithSearchParams = (params: URLSearchParams) => {
   const search = params.toString();
@@ -66,83 +51,58 @@ const navigateWithSearchParams = (params: URLSearchParams) => {
   );
 };
 
-const getEntityFilterGroupLabel = (
-  entityType: EntityType,
-  entityRegistry: Record<string, EntityConfig>,
-  t: TFunction,
-) => {
-  const config = entityRegistry[entityType];
-  if (!config) return entityType;
-
-  return t(config.slug, {
-    count: 2,
-    defaultValue: config.displayName,
-  });
+const getEntityFilterGroupLabel = (entityType: EntityType, t: (key: string) => string) => {
+  if (entityType === EntityType.SCHOOL) return t('schools');
+  if (entityType === EntityType.HEALTH) return t('health-facilities_other');
+  return t(`${entityType}-entity-label`);
 };
 
-const FilterPopupContent = ({
-  setOpen,
-}: PropsWithChildren<{ setOpen: (open: boolean) => void }>) => {
+const FilterPopupContent = ({ setOpen }: PropsWithChildren<{ setOpen: (open: boolean) => void, }>) => {
   const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
 
   const activeEntityTypes = useStore($activeEntityTypes);
-  const entityRegistry = useStore($entityRegistry);
   const advanceFilterList = useStore($advanceFilterList);
-  const uniqueAdvanceFilterList = useMemo(
-    () => dedupeAdvanceFiltersByColumnKey(advanceFilterList ?? []),
-    [advanceFilterList],
-  );
   const { urlFieldList } = useStore($countrySearchParams);
   const [openItems, setOpenItems] = useState<EntityType[]>([]);
-  const [expandedChipGroups, setExpandedChipGroups] = useState<
-    Partial<Record<EntityType, boolean>>
-  >({});
-  const [selectedFields, setSelectedFields] = useState<
-    Record<string, SelectedFieldValue>
-  >({});
-
-  const onChange = (
-    key: string,
-    value: string,
-    multiKeyValues?: Record<string, string>,
-  ) => {
+  const [expandedChipGroups, setExpandedChipGroups] = useState<Partial<Record<EntityType, boolean>>>({});
+  const [selectedFields, setSelectedFields] = useState<Record<string, SelectedFieldValue>>({})
+  // multiple key value pair
+  const onChange = (key: string, value: string, multiKeyValues?: Record<string, string>) => {
     setSelectedFields((current) => ({
       ...current,
       [key]: value,
-      ...multiKeyValues,
-    }));
-  };
+      ...multiKeyValues
+    }))
+  }
 
   useEffect(() => {
     const nextSelectedFields = {} as Record<string, SelectedFieldValue>;
     const activeEntityTypeSet = new Set<string>(activeEntityTypes);
-    uniqueAdvanceFilterList.forEach((item) => {
+    advanceFilterList?.forEach(item => {
       if (!activeEntityTypeSet.has(item.entity_type)) return;
 
-      const itemKey = getAdvanceFilterItemKey(item);
+      const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
       const field = urlFieldList[itemKey];
       const extraItemKey = `ignore_${itemKey}`;
       const extraField = urlFieldList[extraItemKey];
       if (field) {
         const isRange = field.filter.includes('range');
         const isNone = field.filter.includes('none');
-        nextSelectedFields[itemKey] = isRange
-          ? {
-              none_range: isNone,
-              value: field.value,
-            }
-          : field.value;
+        nextSelectedFields[itemKey] = isRange ? {
+          none_range: isNone,
+          value: field.value
+        } : field.value
       } else {
-        nextSelectedFields[itemKey] = '';
+        nextSelectedFields[`${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`] = ''
       }
       if (extraField) {
-        nextSelectedFields[extraItemKey] = extraField.value;
+        nextSelectedFields[`${extraItemKey}`] = extraField.value
       }
-    });
-    setSelectedFields(nextSelectedFields);
-    setIsReady(true);
-  }, [activeEntityTypes, uniqueAdvanceFilterList, urlFieldList]);
+    })
+    setSelectedFields(nextSelectedFields)
+    setIsReady(true)
+  }, [activeEntityTypes, advanceFilterList, urlFieldList]);
 
   const onApply = (e: MouseEvent) => {
     e.preventDefault();
@@ -157,7 +117,7 @@ const FilterPopupContent = ({
           if (noneRange) {
             params.set(
               `${prefix}${key.replace('__range', '__none_range')}`,
-              String(rangeValue) || 'null,null',
+              String(rangeValue) || "null,null"
             );
           } else if (rangeValue) {
             params.set(`${prefix}${key}`, String(rangeValue));
@@ -170,99 +130,72 @@ const FilterPopupContent = ({
     suppressDefaultAdvancedFilters(activeEntityTypes);
     navigateWithSearchParams(params);
     setOpen(false);
-  };
+  }
 
   const onReset = (e: MouseEvent) => {
     e.preventDefault();
     const params = new URLSearchParams(window.location.search);
     deleteAdvancedFiltersForEntities(params, activeEntityTypes);
 
-    setSelectedFields((prev) => {
-      const next = { ...prev };
-      uniqueAdvanceFilterList
-        .filter((item) =>
-          activeEntityTypes.includes(item.entity_type as EntityType),
-        )
-        .forEach((item) => {
-          const itemKey = getAdvanceFilterItemKey(item);
-          next[itemKey] = '';
-          next[`ignore_${itemKey}`] = '';
-        });
-      return next;
-    });
-
     suppressDefaultAdvancedFilters(activeEntityTypes);
     navigateWithSearchParams(params);
-  };
+  }
 
   const entitiesWithFilters = useMemo(() => {
     return activeEntityTypes
-      .filter((el) =>
-        uniqueAdvanceFilterList.some((item) => item.entity_type === el),
-      )
-      .sort((a, b) => (a < b ? 1 : -1));
-  }, [activeEntityTypes, uniqueAdvanceFilterList]);
+      .filter(el => advanceFilterList.some(item => item.entity_type === el))
+      .sort((a, b) => a < b ? 1 : -1);
+  }, [activeEntityTypes, advanceFilterList])
 
   const selectedFilterChipsByEntity = useMemo(() => {
     return buildFilterChipsByEntity(
-      uniqueAdvanceFilterList,
+      advanceFilterList ?? [],
       activeEntityTypes,
       selectedFields,
       t,
     ) as Record<EntityType, FilterChip[]>;
-  }, [activeEntityTypes, uniqueAdvanceFilterList, selectedFields, t]);
+  }, [activeEntityTypes, advanceFilterList, selectedFields, t]);
 
   const entityWiseSelectedFilterCount = useMemo(() => {
-    return activeEntityTypes.reduce(
-      (acc, elEntity) => {
-        acc[elEntity] = (selectedFilterChipsByEntity[elEntity] ?? []).length;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-  }, [activeEntityTypes, selectedFilterChipsByEntity]);
+    return activeEntityTypes.reduce((acc, elEntity) => {
+      acc[elEntity] = (selectedFilterChipsByEntity[elEntity] ?? []).length;
+      return acc;
+    }, {} as Record<string, number>)
+  }, [activeEntityTypes, selectedFilterChipsByEntity])
 
   const clearSingleBadge = (chip: FilterChip, e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setSelectedFields((prev) => {
+    setSelectedFields(prev => {
       const next = { ...prev };
       const ignoreKey = `ignore_${chip.itemKey}`;
 
       if (chip.removeValue !== undefined) {
         const removeKey = chip.removeValue.trim().toLowerCase();
-        const currentValues = String(prev[chip.itemKey] ?? '')
-          .split('|')
-          .filter(Boolean);
+        const currentValues = String(prev[chip.itemKey] ?? '').split('|').filter(Boolean);
         const nextValues = currentValues.filter(
           (value) => value.trim().toLowerCase() !== removeKey,
         );
         next[chip.itemKey] = nextValues.join('|');
 
         if (prev[ignoreKey]) {
-          const filterItem = uniqueAdvanceFilterList.find(
-            (item) => getAdvanceFilterItemKey(item) === chip.itemKey,
-          );
+          const filterItem = advanceFilterList?.find((item) => {
+            const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+            return itemKey === chip.itemKey;
+          });
           const choiceLabel = filterItem?.options?.choices?.find(
-            (choice) =>
-              choice.value.trim().toLowerCase() === removeKey ||
-              choice.label.trim().toLowerCase() === removeKey,
+            (choice) => choice.value.trim().toLowerCase() === removeKey
+              || choice.label.trim().toLowerCase() === removeKey,
           )?.label;
 
-          const currentLabels = String(prev[ignoreKey])
-            .split('|')
-            .filter(Boolean);
+          const currentLabels = String(prev[ignoreKey]).split('|').filter(Boolean);
           next[ignoreKey] = currentLabels
-            .filter(
-              (label) =>
-                label !== choiceLabel &&
-                label.trim().toLowerCase() !== removeKey,
-            )
+            .filter((label) => label !== choiceLabel && label.trim().toLowerCase() !== removeKey)
             .join('|');
         }
       } else {
-        next[chip.itemKey] = '';
-        next[ignoreKey] = '';
+        next[chip.itemKey] = "";
+        next[ignoreKey] = "";
       }
 
       return next;
@@ -272,14 +205,14 @@ const FilterPopupContent = ({
   const clearEntityBadges = (entityType: EntityType, e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setSelectedFields((prev) => {
+    setSelectedFields(prev => {
       const next = { ...prev };
-      uniqueAdvanceFilterList
-        .filter((item) => item.entity_type === entityType)
+      advanceFilterList
+        .filter(item => item.entity_type === entityType)
         .forEach((item) => {
-          const itemKey = getAdvanceFilterItemKey(item);
-          next[itemKey] = '';
-          next[`ignore_${itemKey}`] = '';
+          const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+          next[itemKey] = "";
+          next[`ignore_${itemKey}`] = "";
         });
       return next;
     });
@@ -292,191 +225,128 @@ const FilterPopupContent = ({
       setHasInitializedOpenItems(true);
     }
   }, [entitiesWithFilters, hasInitializedOpenItems]);
-
   if (!isReady) return null;
-
   return (
-    <div className="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-background!">
-      <div className="flex! shrink-0! items-center! justify-between! px-4! py-4!">
-        <h3
-          className={cn(
-            "font-['Open_Sans',sans-serif]! text-base! leading-6! font-normal! text-filter-text!",
-          )}
-        >
+    <PopoverContent className="filter-popover-content">
+      <FilterHeaderWrapper>
+        <h3>
           {t('filters')}
         </h3>
-        <Button
-          aria-label={t('close', { defaultValue: 'Close' })}
-          className="size-8! text-filter-text!"
+        <IconButton
+          size="md"
           data-testid="filter-close"
+          align="bottom-right"
+          label='Close'
+          kind="ghost"
           onClick={() => {
             setOpen(false);
-          }}
-          size="icon-sm"
-          type="button"
-          variant="ghost"
-        >
-          <X className="size-4!" />
-        </Button>
-      </div>
+          }}><Close size={18} />
+        </IconButton>
+      </FilterHeaderWrapper>
+      <Form aria-label="filter-form">
+        <ScrollableContainer>
+          {entitiesWithFilters.some((el) => (entityWiseSelectedFilterCount[el] ?? 0) > 0) && (
+            <div className="flex! flex-col! gap-4! px-3.5! pb-3!">
+              {entitiesWithFilters.map((el) => {
+                const selectedCount = entityWiseSelectedFilterCount[el] ?? 0;
+                const chips = selectedFilterChipsByEntity[el] ?? [];
+                if (selectedCount === 0) return null;
 
-      <form
-        aria-label="filter-form"
-        className="flex! min-h-0! flex-1! flex-col! overflow-hidden!"
-        onKeyDown={(event) => {
-          if (event.key !== 'Enter') return;
+                const isExpanded = expandedChipGroups[el] ?? false;
 
-          const target = event.target;
-          if (
-            target instanceof HTMLInputElement ||
-            target instanceof HTMLTextAreaElement ||
-            target instanceof HTMLSelectElement
-          ) {
-            event.preventDefault();
-          }
-        }}
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
-      >
-        {entitiesWithFilters.some(
-          (el) => (entityWiseSelectedFilterCount[el] ?? 0) > 0,
-        ) && (
-          <div className="flex! shrink-0! flex-col! gap-4! px-4! pb-3!">
-            {entitiesWithFilters.map((el) => {
-              const selectedCount = entityWiseSelectedFilterCount[el] ?? 0;
-              const chips = selectedFilterChipsByEntity[el] ?? [];
-              if (selectedCount === 0) return null;
-
-              const isExpanded = expandedChipGroups[el] ?? false;
-
-              return (
-                <div
-                  key={`active-filters-${el}`}
-                  className="flex! flex-col! gap-2!"
-                >
-                  <div className="flex! w-full! items-center! gap-2!">
-                    <span className="text-sm! leading-5! text-filter-text!">
-                      {getEntityFilterGroupLabel(el, entityRegistry, t)} (
-                      {selectedCount})
-                    </span>
-                    <button
-                      type="button"
-                      className="cursor-pointer! text-xs! font-normal! text-primary! hover:underline!"
-                      onClick={(e) => clearEntityBadges(el, e)}
-                    >
-                      {t('clear')}
-                    </button>
+                return (
+                  <div key={`active-filters-${el}`} className="flex! flex-col! gap-2!">
+                    <div className="flex! w-full! items-center! gap-2!">
+                      <span className="text-sm! leading-5! text-foreground!">
+                        {getEntityFilterGroupLabel(el, t)} ({selectedCount})
+                      </span>
+                      <button
+                        type="button"
+                        className="cursor-pointer! text-xs! font-normal! text-primary! hover:underline!"
+                        onClick={(e) => clearEntityBadges(el, e)}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                    <CollapsibleFilterChips
+                      chips={chips}
+                      selectedCount={selectedCount}
+                      isExpanded={isExpanded}
+                      onClearChip={clearSingleBadge}
+                      onToggleExpanded={(expanded) => {
+                        setExpandedChipGroups((current) => ({
+                          ...current,
+                          [el]: expanded,
+                        }));
+                      }}
+                    />
                   </div>
-                  <CollapsibleFilterChips
-                    chips={chips}
-                    selectedCount={selectedCount}
-                    isExpanded={isExpanded}
-                    onClearChip={clearSingleBadge}
-                    onToggleExpanded={(expanded) => {
-                      setExpandedChipGroups((current) => ({
-                        ...current,
-                        [el]: expanded,
-                      }));
-                    }}
-                  />
-                </div>
-              );
-            })}
-            <Separator />
-          </div>
-        )}
+                );
+              })}
+              <Separator />
+            </div>
+          )}
 
-        <ScrollArea className="min-h-0! flex-1! px-0! pb-8!">
-          <Accordion
-            type="multiple"
+          <Accordion type="multiple"
             value={openItems}
             onValueChange={(eventAccordion: string[]) => {
               setOpenItems(eventAccordion as EntityType[]);
             }}
-            className="flex! flex-col! gap-3!"
-          >
+            className="flex! flex-col! gap-3!">
             {entitiesWithFilters.map((el, index) => {
               return (
-                <Fragment key={`accordion-item-${el}`}>
+                <Fragment key={'accordion-item-' + el}>
                   <AccordionItem value={el}>
-                    <AccordionTrigger
-                      className={cn(
-                        "font-['Open_Sans',sans-serif]! px-4! py-3! text-base! leading-6! font-normal! text-filter-text!",
-                        'data-[state=open]:pt-3! data-[state=open]:pb-3!',
-                      )}
-                    >
-                      <span className="whitespace-nowrap!">
-                        {getEntityFilterGroupLabel(el, entityRegistry, t)}
-                      </span>
+                    <AccordionTrigger className="px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3! font-['Open_Sans',sans-serif]! font-normal! not-italic! text-[16px]! leading-[24px]! tracking-[0%]! ">
+                      <span className="whitespace-nowrap!">{getEntityFilterGroupLabel(el, t)}</span>
                       <ChevronDown
                         size={16}
-                        className={cn(
-                          'transition-transform! duration-200!',
-                          openItems.includes(el) && 'rotate-180!',
-                        )}
+                        style={{
+                          transform: openItems.includes(el) ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.2s ease',
+                        }}
                       />
                     </AccordionTrigger>
                     <AccordionContent>
-                      {uniqueAdvanceFilterList
-                        .filter(
-                          (elAdvanceFilter) =>
-                            elAdvanceFilter.entity_type === el,
+                      {advanceFilterList.filter(elAdvanceFilter => elAdvanceFilter.entity_type === el).map((item, index) => {
+                        const Component = components[item.type] as React.JSXElementConstructor<any>;
+                        if (!Component) return null;
+                        const itemKey = `${item.entity_type}__${item.column_configuration.name}__${item.query_param_filter}`;
+                        const extraItemKey = `ignore_${itemKey}`;
+                        const extraValue = selectedFields[extraItemKey];
+                        return (
+                          <Component key={`${index}${item.name}`} {...item} itemKey={itemKey} value={selectedFields[itemKey]} extraValue={extraValue} onChange={onChange} />
                         )
-                        .map((item) => {
-                          const Component = components[
-                            item.type
-                          ] as React.JSXElementConstructor<any>;
-                          if (!Component) return null;
-                          const itemKey = getAdvanceFilterItemKey(item);
-                          const extraItemKey = `ignore_${itemKey}`;
-                          const extraValue = selectedFields[extraItemKey];
-                          return (
-                            <Component
-                              key={itemKey}
-                              {...item}
-                              itemKey={itemKey}
-                              value={selectedFields[itemKey]}
-                              extraValue={extraValue}
-                              onChange={onChange}
-                            />
-                          );
-                        })}
+                      })}
                     </AccordionContent>
                   </AccordionItem>
-                  {index < entitiesWithFilters.length - 1 && (
-                    <Separator className="my-2!" />
-                  )}
+                  {index < entitiesWithFilters.length - 1 && <Separator className="my-2!" />}
                 </Fragment>
-              );
+              )
             })}
           </Accordion>
-        </ScrollArea>
 
-        <div className="flex! shrink-0! gap-3! px-4! pb-4!">
+        </ScrollableContainer>
+        <FilterActionButtonWrapper>
           <Button
-            className="h-10! flex-1! rounded-full! bg-secondary! font-['Open_Sans',sans-serif]! text-sm! font-medium! text-secondary-foreground! hover:bg-secondary/80!"
-            onClick={(event) => {
+            type="reset"
+            kind="secondary"
+            onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
               void onReset(event);
-            }}
-            type="button"
-            variant="secondary"
-          >
-            {t('clear-all')}
+            }}>
+            {t('reset')}
           </Button>
           <Button
-            className="h-10! flex-1! rounded-full! bg-primary! font-['Open_Sans',sans-serif]! text-sm! font-medium! text-primary-foreground! hover:bg-primary/90!"
-            onClick={(event) => {
+            type="submit"
+            onClick={(event: MouseEvent<Element, globalThis.MouseEvent>) => {
               void onApply(event);
-            }}
-            type="button"
-          >
+            }}>
             {t('apply')}
           </Button>
-        </div>
-      </form>
-    </div>
-  );
-};
+        </FilterActionButtonWrapper>
+      </Form>
+    </PopoverContent>
+  )
+}
 
 export default FilterPopupContent;

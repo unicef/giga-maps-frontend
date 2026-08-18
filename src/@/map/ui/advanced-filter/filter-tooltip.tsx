@@ -8,7 +8,7 @@ export const FilterTooltip = ({ label }: { label: string }) => {
         <TooltipTrigger asChild stopPropagation>
           <button
             type="button"
-            className="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+            className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! ml-0.5! align-middle! cursor-pointer! text-[#6f6f6f]! hover:text-[#8d8d8d]! transition-colors!"
           >
             <Info size={12} />
           </button>

@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { Close } from '@carbon/icons-react';
 import {
   MouseEvent,
   useCallback,
@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import {
   getVisibleChipCountForRows,
@@ -17,10 +16,10 @@ import {
 const MAX_CHIP_ROWS = 2;
 
 const chipClassName =
-  'flex! h-6! cursor-pointer! items-center! gap-1! rounded-full! bg-primary! px-2! text-xs! leading-none! text-primary-foreground!';
+  'flex! cursor-pointer! items-center! gap-1! rounded-md! bg-primary! px-2! py-0.5! text-xs! text-primary-foreground!';
 
 const toggleClassName =
-  'flex! h-6! cursor-pointer! items-center! rounded-full! bg-secondary! px-2! text-xs! leading-none! text-secondary-foreground!';
+  'flex! cursor-pointer! items-center! rounded-md! bg-secondary! px-2! py-0.5! text-xs! text-secondary-foreground!';
 
 type CollapsibleFilterChipsProps = {
   chips: FilterChip[];
@@ -37,7 +36,6 @@ const CollapsibleFilterChips = ({
   onClearChip,
   onToggleExpanded,
 }: CollapsibleFilterChipsProps) => {
-  const { t } = useTranslation();
   const measureRef = useRef<HTMLDivElement>(null);
   const [visibleCount, setVisibleCount] = useState(chips.length);
 
@@ -48,23 +46,18 @@ const CollapsibleFilterChips = ({
     const chipNodes = Array.from(
       measureRoot.querySelectorAll<HTMLElement>('[data-measure-chip]'),
     );
-    const toggleNode =
-      measureRoot.querySelector<HTMLElement>('[data-measure-toggle]');
+    const toggleNode = measureRoot.querySelector<HTMLElement>('[data-measure-toggle]');
     const chipWidths = chipNodes.map((node) => node.offsetWidth);
     const toggleWidth = toggleNode?.offsetWidth ?? 0;
-    const computedGap = Number.parseFloat(
-      getComputedStyle(measureRoot).columnGap || '0',
-    );
+    const computedGap = Number.parseFloat(getComputedStyle(measureRoot).columnGap || '0');
 
-    setVisibleCount(
-      getVisibleChipCountForRows({
-        chipWidths,
-        containerWidth: measureRoot.clientWidth,
-        toggleWidth,
-        gap: Number.isFinite(computedGap) ? computedGap : 8,
-        maxRows: MAX_CHIP_ROWS,
-      }),
-    );
+    setVisibleCount(getVisibleChipCountForRows({
+      chipWidths,
+      containerWidth: measureRoot.clientWidth,
+      toggleWidth,
+      gap: Number.isFinite(computedGap) ? computedGap : 8,
+      maxRows: MAX_CHIP_ROWS,
+    }));
   }, []);
 
   useLayoutEffect(() => {
@@ -99,14 +92,11 @@ const CollapsibleFilterChips = ({
             className={chipClassName}
           >
             <span className="truncate!">{chip.label}</span>
-            <X className="size-3!" />
+            <Close size={12} className="fill-current!" />
           </span>
         ))}
         <span data-measure-toggle className={toggleClassName}>
-          {t('show-all', {
-            count: selectedCount,
-            defaultValue: 'Show all {{count}}',
-          })}
+          Show all {selectedCount}
         </span>
       </div>
 
@@ -119,7 +109,7 @@ const CollapsibleFilterChips = ({
             onClick={(e) => onClearChip(chip, e)}
           >
             <span className="truncate!">{chip.label}</span>
-            <X className="size-3!" />
+            <Close size={12} className="fill-current!" />
           </button>
         ))}
         {!isExpanded && hasOverflow && (
@@ -132,10 +122,7 @@ const CollapsibleFilterChips = ({
               onToggleExpanded(true);
             }}
           >
-            {t('show-all', {
-              count: selectedCount,
-              defaultValue: 'Show all {{count}}',
-            })}
+            Show all {selectedCount}
           </button>
         )}
         {isExpanded && hasOverflow && (
@@ -148,7 +135,7 @@ const CollapsibleFilterChips = ({
               onToggleExpanded(false);
             }}
           >
-            {t('show-less', { defaultValue: 'Show less' })}
+            Show less
           </button>
         )}
       </div>

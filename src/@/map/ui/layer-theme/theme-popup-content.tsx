@@ -234,7 +234,7 @@ const ThemePopupContent = ({
 
       <div className="mt-auto! flex! shrink-0! gap-2! border-t! border-border! px-4! pb-4! pt-3!">
         <Button
-          className="h-10! flex-1! rounded-full!"
+          className="h-10! flex-1! rounded-lg!"
           onClick={() => setOpen(false)}
           type="button"
           variant="secondary"
@@ -242,7 +242,7 @@ const ThemePopupContent = ({
           {t('cancel')}
         </Button>
         <Button
-          className="h-10! flex-1! rounded-full!"
+          className="h-10! flex-1! rounded-lg!"
           onClick={(event) => {
             void onApply(event);
           }}

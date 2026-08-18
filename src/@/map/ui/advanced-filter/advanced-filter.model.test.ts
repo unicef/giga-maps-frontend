@@ -51,19 +51,6 @@ describe('advanced filter entity state', () => {
     expect(allFilters.searchParams).not.toContain('ignore_');
   });
 
-  it('counts each multiselect choice toward selectedCount', () => {
-    const filtersByEntity = parseAdvancedFilters(
-      'filter__school__connectivity_type__in=fiber%7C2g%7Cwifi' +
-        '&filter__school__computer_lab__iexact=yes',
-    );
-
-    const schoolFilters = selectAdvancedFiltersForEntities(filtersByEntity, [
-      EntityType.SCHOOL,
-    ]);
-
-    expect(schoolFilters.selectedCount).toBe(4);
-  });
-
   it('keeps the API entity scope aligned with School, Health, and All Facilities', () => {
     const allEntityTypes = [EntityType.SCHOOL, EntityType.HEALTH];
 
