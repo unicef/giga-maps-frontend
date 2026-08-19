@@ -93,11 +93,11 @@ export const MapSchoolPopup = () => {
                   />
                 ) : (
                   <div className="map-popup-template">
-                    <div className="relative! flex! w-[300px]! flex-col! gap-3! rounded-xl! border! border-gray-800! bg-gray-900! p-4! text-foreground! shadow-xl!">
+                    <div className="relative! flex! w-[300px]! flex-col! gap-3! rounded-xl! border! border-border! bg-popover! dark:border-gray-800! dark:bg-gray-900! p-4! text-foreground! shadow-xl!">
                       {/* Header: Title, verification badge & OSM link */}
                       <div className="flex! items-start! justify-between! gap-3!">
                         <div className="flex! min-w-0! flex-1! flex-wrap! items-center! gap-2!">
-                          <h6 className="map-school-name text-[20px]! font-normal! not-italic! leading-[30px]! text-foreground! capitalize! break-words!">
+                          <h6 className="map-school-name text-[20px]! font-normal! not-italic! leading-[30px]! text-black! dark:text-foreground! capitalize! break-words!">
                             {feature?.name?.toLocaleLowerCase()}
                           </h6>
                           {feature?.isVerifiedSchool === false && (
@@ -153,7 +153,7 @@ export const MapSchoolPopup = () => {
                                 {connectivityValue}
                               </span>
                               {formattedInterval && (
-                                <span className="inline-flex! items-center! rounded-md! border! border-gray-800! px-2.5! py-0.5! text-xs! font-normal! text-foreground!">
+                                <span className="inline-flex! items-center! rounded-md! border! border-border! dark:border-gray-800! px-2.5! py-0.5! text-xs! font-normal! text-black! dark:text-foreground!">
                                   {formattedInterval}
                                 </span>
                               )}
@@ -183,7 +183,7 @@ export const MapSchoolPopup = () => {
                         {featureIsEntityBenchmark &&
                           benchmarkTitle &&
                           feature?.schoolBenchmark && (
-                            <span className="text-[14px]! font-normal! not-italic! leading-[20px]! text-gray-400!">
+                            <span className="text-[14px]! font-normal! not-italic! leading-[20px]! text-gray-700! dark:text-gray-400!">
                               {benchmarkTitle} - {feature?.schoolBenchmark}
                             </span>
                           )}

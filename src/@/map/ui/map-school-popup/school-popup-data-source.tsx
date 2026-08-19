@@ -96,14 +96,14 @@ const SchoolPopupDataSource = ({
 
   return (
     <div className="flex! flex-col! gap-2!">
-      <div className="flex! items-center! gap-1.5! text-xs! font-normal! leading-[18px]! text-white! text-[#FFFFFF]!">
+      <div className="flex! items-center! gap-1.5! text-xs! font-normal! leading-[18px]! text-black! dark:text-white!">
         <span>{t('data-source', { defaultValue: 'Data source' })}</span>
         <TooltipProvider delayDuration={150}>
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 type="button"
-                className="inline-flex! cursor-pointer! text-white/80! transition-colors! hover:text-white! focus:outline-none!"
+                className="inline-flex! cursor-pointer! text-gray-700! transition-colors! hover:text-black! focus:outline-none! dark:text-white/80! dark:hover:text-white!"
                 aria-label={t('data-is-sourced-research-institutions')}
               >
                 <Info className="size-3.5!" />
@@ -128,7 +128,7 @@ const SchoolPopupDataSource = ({
               type="button"
               onClick={() => handleClick(raw)}
               className={cn(
-                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-800! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-400! transition-colors! hover:bg-surface-highlight! hover:text-white!',
+                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-gray-400! dark:hover:text-white!',
                 url ? 'cursor-pointer!' : 'cursor-default!',
               )}
             >
@@ -155,7 +155,7 @@ const SchoolPopupDataSource = ({
           <TooltipProvider delayDuration={150}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-800! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-white! text-[#FFFFFF]! transition-colors! hover:bg-surface-highlight!">
+                <span className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-white! dark:hover:bg-surface-highlight!">
                   +{remainingCount}
                 </span>
               </TooltipTrigger>

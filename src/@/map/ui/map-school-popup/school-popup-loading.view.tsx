@@ -3,7 +3,7 @@ import { Skeleton } from '~/components/ui/skeleton';
 export const SchoolPopupLoading = () => {
   return (
     <div className="popup-template-loading">
-      <div className="relative! flex! w-[300px]! flex-col! gap-3! rounded-xl! border! border-gray-800! bg-gray-900! p-4! shadow-xl!">
+      <div className="relative! flex! w-[300px]! flex-col! gap-3! rounded-xl! border! border-border! bg-popover! dark:border-gray-800! dark:bg-gray-900! p-4! shadow-xl!">
         {/* Header Skeleton */}
         <div className="flex! items-start! justify-between! gap-3!">
           <Skeleton className="h-7! w-3/4! rounded-md!" />
