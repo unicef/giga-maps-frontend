@@ -18,14 +18,19 @@ export const LanguageSuffixes = {
   pt: { thousand: ' mil', million: 'M', billion: 'B', trillion: 'T' },
 } as Record<string, { thousand: string; million: string; billion: string; trillion: string }>
 
+function formatCompact(value: number, divisor: number, suffix: string) {
+  const scaled = (value / divisor).toFixed(1);
+  return `${scaled.endsWith('.0') ? scaled.slice(0, -2) : scaled}${suffix}`;
+}
+
 export function formatNumber(value: number = 0, lng: string | null = defaultLanguage) {
   const currentSuffix = LanguageSuffixes[lng ?? defaultLanguage];
   if (Math.abs(value) >= 1000000000) {
-    return `${(value / 1000000000).toFixed(1)}${currentSuffix.billion}`;
+    return formatCompact(value, 1000000000, currentSuffix.billion);
   } if (Math.abs(value) >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}${currentSuffix.million}`;
+    return formatCompact(value, 1000000, currentSuffix.million);
   } if (Math.abs(value) >= 1000) {
-    return `${(value / 1000).toFixed(1)}${currentSuffix.thousand}`;
+    return formatCompact(value, 1000, currentSuffix.thousand);
   }
   return value > 0 ? value : '0';
 }

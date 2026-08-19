@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -178,6 +179,20 @@ const LegendPopup = ({
     );
   }, [visibleLegendEntityTypes]);
 
+  const wasFlyoutOpen = useRef(false);
+
+  // Collapse only on the opening transition, so the user can still expand the
+  // legend while the flyout stays open.
+  useEffect(() => {
+    const isFlyoutOpen = sidebarHeight || Boolean(isMenuOpen);
+
+    if (isMobile && isFlyoutOpen && !wasFlyoutOpen.current) {
+      setCollapsed(true);
+    }
+
+    wasFlyoutOpen.current = isFlyoutOpen;
+  }, [isMenuOpen, isMobile, sidebarHeight]);
+
   const legendMetricTitle = t('internet-quality');
   const activeLayerTypeUtils =
     currentLayerTypeUtilsByEntity[activeTab];
@@ -235,9 +250,9 @@ const LegendPopup = ({
   ].filter(Boolean).length;
   const isCompactLegend = visibleLegendSectionCount <= 1;
   const legendPanelWidthClasses = [
-    'min-[420px]:w-[min(20rem,calc(100vw-1rem))]! min-[420px]:max-w-[min(20rem,calc(100vw-1rem))]!',
-    'min-[560px]:w-[min(25rem,calc(100vw-1rem))]! min-[560px]:max-w-[min(25rem,calc(100vw-1rem))]!',
-    'min-[768px]:w-[min(30rem,calc(100vw-1rem))]! min-[768px]:max-w-[min(30rem,calc(100vw-1rem))]!',
+    'legend-sm:w-[min(20rem,calc(100vw-1rem))]! legend-sm:max-w-[min(20rem,calc(100vw-1rem))]!',
+    'legend-md:w-[min(25rem,calc(100vw-1rem))]! legend-md:max-w-[min(25rem,calc(100vw-1rem))]!',
+    'legend-lg:w-[min(30rem,calc(100vw-1rem))]! legend-lg:max-w-[min(30rem,calc(100vw-1rem))]!',
   ];
   const liveMetricFill = paintData[ConnectivityStatusDistribution.connected];
 
@@ -451,8 +466,8 @@ const LegendPopup = ({
       </div>
       <div
         className={cn(
-          'bg-popover! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:gap-3.5! max-md:p-3!',
-          isCompactLegend ? 'flex! flex-col! gap-4!' : 'flex! flex-wrap! gap-4!',
+          'bg-popover! flex! gap-[var(--legend-section-gap)]! p-3.5! max-md:max-h-[min(24rem,calc(100vh-10rem))]! max-md:overflow-y-auto! max-md:p-3!',
+          isCompactLegend ? 'flex-col!' : 'flex-wrap!',
         )}
         data-testid="legend-expanded-view"
       >
@@ -517,9 +532,8 @@ const LegendPopup = ({
         align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
           'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
-          collapsed || !isCompactLegend
-            ? legendPanelWidthClasses
-            : 'w-max! max-w-[min(22rem,calc(100vw-1rem))]!',
+          'w-[min(18rem,calc(100vw-1rem))]! max-w-[min(18rem,calc(100vw-1rem))]!',
+          legendPanelWidthClasses,
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

@@ -104,8 +104,8 @@ const SchoolStatusLegend = ({
       className={cn(
         'flex! flex-col! self-start!',
         isCompact
-          ? 'w-full! self-stretch!'
-          : 'min-w-0! flex-1! basis-[calc(50%-0.5rem)]! max-[560px]:basis-full! max-[560px]:min-w-full!',
+          ? 'w-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:w-full!'
+          : 'min-w-0! flex-1! basis-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:basis-full! max-legend-md:min-w-full!',
       )}
     >
       <div className="mb-1! flex! items-center! gap-1.5! text-muted-foreground!">
@@ -114,10 +114,7 @@ const SchoolStatusLegend = ({
       </div>
       {Object.values(ConnectivityStatusDistribution).map((key) => (
         <div
-          className={cn(
-            'mt-3! flex! w-full! items-center! gap-3!',
-            isCompact ? 'justify-between!' : 'justify-start!',
-          )}
+          className="mt-3! flex! w-full! items-center! justify-start! gap-3!"
           key={key}
         >
           <div className="flex! min-w-0! items-center!">
