@@ -75,7 +75,7 @@ const useSchoolPopupData = () => {
   const formattedInterval = formatDateInterval(interval, intervalUnit, false);
   const formatConnectivityValue = (value: number, unit?: string) => {
     if (!unit) return String(value);
-    return unit === '%' ? `${value}${unit}` : `${value} ${unit}`;
+    return unit === '%' ? `${value}${unit}` : `${value}${unit.trim()}`;
   };
   const getFeatureInfo = (feature: any) => {
     const unit = global_benchmark?.convert_unit;

@@ -29,9 +29,26 @@ const MapStyle = styled.div<{ $isMobile: boolean }>`
   ${({ $isMobile }) => $isMobile && css`
     bottom: 5.125rem;
   `}
-  // .mapboxgl-popup-anchor-left .mapboxgl-popup-tip, 
-  .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-    border-bottom-color: ${props => props.theme.grayDark}
+  .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+  .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+  .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+    border-bottom-color: var(--giga-popover, #181818);
+  }
+  .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+  .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+  .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+    border-top-color: var(--giga-popover, #181818);
+  }
+  .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+    border-right-color: var(--giga-popover, #181818);
+  }
+  .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+    border-left-color: var(--giga-popover, #181818);
+  }
+  .mapboxgl-popup-content {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
   }
   
 `
