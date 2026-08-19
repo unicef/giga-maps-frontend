@@ -9,6 +9,7 @@ import { $activeSchoolPopup } from '~/@/map/map.model';
 import {
   $currentLayerCountryDataSource,
   $currentLayerTypeUtilsByEntity,
+  $getSchoolParams,
 } from '~/@/sidebar/sidebar.model';
 import {
   Tooltip,
@@ -39,7 +40,9 @@ const SchoolPopupDataSource = ({
   const { t } = useTranslation();
   const dataSourceByEntity = useStore($dataSourceByEntity);
   const activePopupEntityType = useStore($activeSchoolPopup)?.entityType;
-  const currentEntityType = propEntityType ?? activePopupEntityType;
+  const { entityType: routeEntityType } = useStore($getSchoolParams);
+  const currentEntityType =
+    propEntityType ?? activePopupEntityType ?? routeEntityType;
 
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
@@ -61,8 +64,8 @@ const SchoolPopupDataSource = ({
     const names = currentDataSource?.name
       ? splitOutsideParens(currentDataSource.name)
       : ([] as string[]);
-    if (names && isSchoolStatus) {
-      splitOutsideParens(dataSource || '').forEach((item) => {
+    if (dataSource) {
+      splitOutsideParens(dataSource).forEach((item) => {
         if (item && !names.includes(item)) names.push(item);
       });
     }
@@ -75,7 +78,6 @@ const SchoolPopupDataSource = ({
     currentDataSource?.name,
     currentDataSource?.description,
     dataSource,
-    isSchoolStatus,
   ]);
 
   if (!dataSourceName?.length) return null;
@@ -94,14 +96,14 @@ const SchoolPopupDataSource = ({
 
   return (
     <div className="flex! flex-col! gap-2!">
-      <div className="flex! items-center! gap-1.5! text-sm! font-normal! text-muted-foreground!">
+      <div className="flex! items-center! gap-1.5! text-xs! font-normal! leading-[18px]! text-white! text-[#FFFFFF]!">
         <span>{t('data-source', { defaultValue: 'Data source' })}</span>
         <TooltipProvider delayDuration={150}>
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 type="button"
-                className="inline-flex! cursor-pointer! text-muted-foreground/80! transition-colors! hover:text-foreground! focus:outline-none!"
+                className="inline-flex! cursor-pointer! text-white/80! transition-colors! hover:text-white! focus:outline-none!"
                 aria-label={t('data-is-sourced-research-institutions')}
               >
                 <Info className="size-3.5!" />
@@ -126,7 +128,7 @@ const SchoolPopupDataSource = ({
               type="button"
               onClick={() => handleClick(raw)}
               className={cn(
-                'inline-flex! items-center! rounded-lg! bg-[#2b2b2b]! px-3! py-1.5! text-xs! font-normal! text-neutral-300! transition-colors! hover:bg-neutral-700/80! hover:text-white!',
+                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-800! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-400! transition-colors! hover:bg-surface-highlight! hover:text-white!',
                 url ? 'cursor-pointer!' : 'cursor-default!',
               )}
             >
@@ -153,7 +155,7 @@ const SchoolPopupDataSource = ({
           <TooltipProvider delayDuration={150}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="inline-flex! cursor-pointer! items-center! rounded-lg! bg-[#2b2b2b]! px-3! py-1.5! text-xs! font-normal! text-neutral-300! transition-colors! hover:bg-neutral-700/80! hover:text-white!">
+                <span className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-800! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-white! text-[#FFFFFF]! transition-colors! hover:bg-surface-highlight!">
                   +{remainingCount}
                 </span>
               </TooltipTrigger>

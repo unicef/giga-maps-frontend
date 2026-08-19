@@ -9,9 +9,14 @@ import {
 } from '~/@/sidebar/history-graph.model';
 import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
 import { defaultInterval } from '~/@/sidebar/sidebar.constant';
-import { $schoolStatsMap } from '~/@/sidebar/sidebar.model';
+import {
+  $getSchoolParams,
+  $schoolStatsMap,
+  schoolStatsMap,
+} from '~/@/sidebar/sidebar.model';
 import { fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { $mapRoutes } from '~/core/routes';
+import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { formatDateInterval } from '~/lib/date-fns-kit/format-date-interval';
 import { $schoolPopupData } from '../../map.init';
 import {
@@ -21,10 +26,42 @@ import {
 } from '../../map.model';
 import { UNKNOWN } from '../../map.types';
 
+export type MappedFeature = ReturnType<typeof schoolStatsMap>;
+
+export type PopupFeatureItem = {
+  id: number;
+  element: HTMLElement;
+  isClicked: boolean;
+  feature?: MappedFeature | null;
+  entityType?: EntityType;
+};
+
+export type FeatureInfo = {
+  unit?: string;
+  schoolId?: number;
+  connecitivityStatusColor?: string;
+  connecitivityColor?: string;
+  schoolCoords: number[];
+  isLiveNotUnknown: boolean;
+  connectivityValue: string;
+  benchmarkTitle: string;
+  staticValue: string;
+  staticColor?: string;
+  connectivityStatusValue?: string;
+  schoolAtSameLocation?: {
+    count: number;
+    schoolIds: number[];
+  };
+  isLive: boolean;
+  isStatic: boolean;
+  isEntityBenchmark: boolean;
+};
+
 const useSchoolPopupData = () => {
   const { t } = useTranslation();
   const { schools: isSchoolView } = useStore($mapRoutes);
   const activePopup = useStore($activeSchoolPopup);
+  const { entityType: routeEntityType } = useStore($getSchoolParams);
   const schoolPopupDiv = useStore($schoolClickedPopupDiv);
   const multipleSchoolDiv = useStore($multipleSchoolPopup);
   const isLoading = useStore(fetchSchoolPopupDataFx.pending);
@@ -35,7 +72,8 @@ const useSchoolPopupData = () => {
     stylePaintData,
     feature: schoolStats,
   } = useStore($schoolPopupData);
-  const currentEntityType = activePopup?.entityType;
+  const currentEntityType =
+    activePopup?.entityType ?? routeEntityType;
   const {
     selectedLayerDataByEntity,
     currentLayerTypeUtilsByEntity,
@@ -66,9 +104,9 @@ const useSchoolPopupData = () => {
   const { global_benchmark } = selectedLayerData ?? {};
   const intervalUnitByEntity = useStore($historyIntervalUnitByEntity);
   const intervalByEntity = useStore($historyIntervalByEntity);
-  const intervalUnit = currentEntityType
-    ? (intervalUnitByEntity[currentEntityType] ?? 'week')
-    : 'week';
+  const intervalUnit: IntervalUnit = currentEntityType
+    ? (intervalUnitByEntity[currentEntityType] ?? IntervalUnit.week)
+    : IntervalUnit.week;
   const interval = currentEntityType
     ? (intervalByEntity[currentEntityType] ?? defaultInterval())
     : defaultInterval();
@@ -77,7 +115,33 @@ const useSchoolPopupData = () => {
     if (!unit) return String(value);
     return unit === '%' ? `${value}${unit}` : `${value}${unit.trim()}`;
   };
-  const getFeatureInfo = (feature: any) => {
+  const getFeatureInfo = (
+    feature: MappedFeature | null | undefined,
+    itemEntityType?: EntityType,
+  ): FeatureInfo => {
+    const resolvedEntityType =
+      itemEntityType ?? currentEntityType ?? EntityType.SCHOOL;
+    const targetLayerData = resolvedEntityType
+      ? selectedLayerDataByEntity[resolvedEntityType]
+      : undefined;
+    const targetLayerTypeUtils = currentLayerTypeUtilsByEntity[
+      resolvedEntityType ?? ('' as EntityType)
+    ] ?? {
+      isLive: false,
+      isStatic: false,
+      isSchoolStatus: false,
+    };
+    const targetConnectivityBenchmark =
+      (resolvedEntityType
+        ? connectivityBenchMarksByEntity[resolvedEntityType]
+        : undefined) ?? ConnectivityBenchMarks.global;
+    const targetIsEntityBenchmark =
+      (resolvedEntityType
+        ? isSchoolBenchmarkByEntity[resolvedEntityType]
+        : false) ?? false;
+    const { isLive: itemIsLive, isStatic: itemIsStatic } = targetLayerTypeUtils;
+    const { global_benchmark } = targetLayerData ?? {};
+
     const unit = global_benchmark?.convert_unit;
     const connectivityStatusValue = feature?.connectivityStatus;
     const schoolId = feature?.id;
@@ -85,17 +149,17 @@ const useSchoolPopupData = () => {
       stylePaintData[feature?.connectivityStatus ?? UNKNOWN];
     const connecitivityColor =
       stylePaintData[feature?.connectivityType ?? UNKNOWN];
-    const schoolCoords = JSON.parse(
-      JSON.stringify(feature?.geopoint?.coordinates ?? []),
-    );
-    const isLiveNotUnknown = isLive && feature?.connectivityType !== UNKNOWN;
+    const schoolCoords: number[] = Array.isArray(feature?.geopoint?.coordinates)
+      ? (feature.geopoint.coordinates as number[])
+      : [];
+    const isLiveNotUnknown = itemIsLive && feature?.connectivityType !== UNKNOWN;
     const connectivityValue = isLiveNotUnknown
       ? formatConnectivityValue(feature?.liveAvg ?? 0, unit)
       : t('unknown');
     const benchmarkTitle =
-      entityConnectivityBenchmark === ConnectivityBenchMarks.global
-        ? benchmarkNamesAllLayers[selectedLayerData?.id ?? '']
-        : countryConnectivityNames[selectedLayerData?.id ?? ''];
+      targetConnectivityBenchmark === ConnectivityBenchMarks.global
+        ? (benchmarkNamesAllLayers[targetLayerData?.id ?? ''] ?? '')
+        : (countryConnectivityNames[targetLayerData?.id ?? ''] ?? '');
     let staticValue = feature?.staticValue as boolean | undefined | string;
     const staticColor = stylePaintData[feature?.staticType ?? UNKNOWN];
     const schoolAtSameLocation = feature?.schoolAtSameLocation;
@@ -118,16 +182,21 @@ const useSchoolPopupData = () => {
       staticColor,
       connectivityStatusValue,
       schoolAtSameLocation,
+      isLive: itemIsLive,
+      isStatic: itemIsStatic,
+      isEntityBenchmark: targetIsEntityBenchmark,
     };
   };
 
-  const features = useMemo(() => {
-    const collectList = [];
+  const features = useMemo<PopupFeatureItem[]>(() => {
+    const collectList: PopupFeatureItem[] = [];
     if (schoolPopupDiv) {
       collectList.push(
         ...schoolPopupDiv.map((item) => ({
           ...item,
+          isClicked: item.isClicked ?? false,
           feature: schoolStats,
+          entityType: activePopup?.entityType ?? routeEntityType ?? EntityType.SCHOOL,
         })),
       );
     }
@@ -135,12 +204,21 @@ const useSchoolPopupData = () => {
       collectList.push(
         ...multipleSchoolDiv.map((item) => ({
           ...item,
-          feature: multipleSchoolStats?.find((school) => school.id === item.id),
+          isClicked: item.isClicked ?? false,
+          feature: multipleSchoolStats?.find((school) => school.id === item.id) ?? null,
+          entityType: routeEntityType ?? EntityType.SCHOOL,
         })),
       );
     }
     return collectList;
-  }, [schoolPopupDiv, multipleSchoolDiv, schoolStats, multipleSchoolStats]);
+  }, [
+    schoolPopupDiv,
+    multipleSchoolDiv,
+    schoolStats,
+    multipleSchoolStats,
+    activePopup?.entityType,
+    routeEntityType,
+  ]);
 
   return {
     getFeatureInfo,
@@ -153,7 +231,7 @@ const useSchoolPopupData = () => {
     isSchoolView,
     isEntityBenchmark,
     formattedInterval,
-    entityType: activePopup?.entityType,
+    entityType: currentEntityType as EntityType | undefined,
   };
 };
 

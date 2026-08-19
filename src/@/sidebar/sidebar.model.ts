@@ -258,10 +258,10 @@ $isMenuOpen.on(onChangeMenu, setPayload);
 export const changeEntityConnectivitySpeed = createEvent<{
   entityType: EntityType;
   key:
-    | ConnectivityDistribution.good
-    | ConnectivityDistribution.moderate
-    | ConnectivityDistribution.bad
-    | ConnectivityDistribution.unknown;
+  | ConnectivityDistribution.good
+  | ConnectivityDistribution.moderate
+  | ConnectivityDistribution.bad
+  | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultConnectivitySpeedFilter = {
@@ -370,7 +370,7 @@ export const $coverageLayerDataByEntity = $layersList.map((layers) => {
       if (
         layer?.type === LayerTypeChoices.STATIC &&
         Object.values(layer.data_source_column ?? {})[0].name ===
-          'coverage_type'
+        'coverage_type'
       ) {
         result[entityType] = layer;
       }
@@ -509,13 +509,11 @@ export const $selectedLayerDataByEntity = combine(
 
 export const $currentLayerCountryDataSource = combine(
   $selectedLayerDataByEntity,
-  $activeEntityTypes,
   $country,
-  (selectedLayerDataByEntity, activeEntityTypes, country) => {
+  (selectedLayerDataByEntity, country) => {
     if (!country) return {} as EntityStoreMap<any>;
-    return activeEntityTypes.reduce((acc, entityType) => {
-      const selectedData = selectedLayerDataByEntity[entityType];
-      acc[entityType] =
+    return Object.entries(selectedLayerDataByEntity).reduce((acc, [entityType, selectedData]) => {
+      acc[entityType as EntityType] =
         (
           selectedData?.active_countries_list?.find(
             (activeLayers) => activeLayers.country === country.id,
@@ -579,8 +577,8 @@ const buildCurrentLayerLegends = ({
   };
   selectedLayerData?: LayerType | null;
   stylePaintData: typeof $stylePaintData extends { getState: () => infer T }
-    ? T
-    : never;
+  ? T
+  : never;
 }) => {
   let apiLegends = selectedLayerData?.legend_configs;
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
@@ -964,10 +962,10 @@ export const checkEntityConnectivityBenchmark = createEvent<{
 export const changeEntityCoverageStatus = createEvent<{
   entityType: EntityType;
   key:
-    | ConnectivityDistribution.good
-    | ConnectivityDistribution.moderate
-    | ConnectivityDistribution.bad
-    | ConnectivityDistribution.unknown;
+  | ConnectivityDistribution.good
+  | ConnectivityDistribution.moderate
+  | ConnectivityDistribution.bad
+  | ConnectivityDistribution.unknown;
   value: boolean;
 }>();
 const defaultCoverageStatusAll = {
@@ -1048,27 +1046,36 @@ $multiSelectionSchoolCheckboxByEntity.on(
 export const onSchoolUncheck = createEvent<number>();
 export const $schoolStats = createStore<SchoolStatsType[] | null>([]);
 $schoolStats.on(fetchSchoolLayerInfoFx.doneData, setPayload);
-export const schoolStatsMap = (school: SchoolStatsType) => ({
-  name: school.name,
-  geopoint: school?.geopoint,
-  liveAvg: school?.connectivity_speed || school?.live_avg || 0,
-  staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
-  staticType: school?.field_status ?? school?.coverage_status,
-  connectivityStatus:
-    school.connectivity_status ??
-    school.statistics?.connectivity_status ??
-    UNKNOWN,
-  isRealTime: school.is_rt_connected,
-  connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
-  id: school?.id,
-  externalId: school?.external_id,
-  isVerifiedSchool: school?.is_verified_school,
-  schoolBenchmark: `${school?.benchmark_metadata?.rounded_benchmark_value} ${school?.benchmark_metadata?.display_unit}`,
-  schoolAtSameLocation: {
-    count: school.schools_at_same_location?.count ?? 0,
-    schoolIds: school.schools_at_same_location?.school_ids ?? [],
-  },
-});
+export const schoolStatsMap = (school: SchoolStatsType) => {
+  const benchmarkMetadata =
+    school?.benchmark_metadata ?? school?.statistics?.benchmark_metadata;
+  const roundedBenchmark = benchmarkMetadata?.rounded_benchmark_value;
+  const displayUnit = benchmarkMetadata?.display_unit ?? '';
+  const schoolBenchmark =
+    roundedBenchmark != null ? `${roundedBenchmark} ${displayUnit}`.trim() : '';
+
+  return {
+    name: school.name,
+    geopoint: school?.geopoint,
+    liveAvg: school?.connectivity_speed || school?.live_avg || 0,
+    staticValue: school?.field_value ?? school?.coverage_type ?? UNKNOWN,
+    staticType: school?.field_status ?? school?.coverage_status,
+    connectivityStatus:
+      school.connectivity_status ??
+      school.statistics?.connectivity_status ??
+      UNKNOWN,
+    isRealTime: school.is_rt_connected,
+    connectivityType: school?.week_connectivity || school?.live_avg_connectivity,
+    id: school?.id,
+    externalId: school?.external_id,
+    isVerifiedSchool: school?.is_verified_school,
+    schoolBenchmark,
+    schoolAtSameLocation: {
+      count: school.schools_at_same_location?.count ?? 0,
+      schoolIds: school.schools_at_same_location?.school_ids ?? [],
+    },
+  };
+};
 export const $schoolStatsMap = $schoolStats.map((schools) => {
   return schools?.map(schoolStatsMap) ?? null;
 });
