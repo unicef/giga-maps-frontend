@@ -880,7 +880,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                           class="flex! flex-col! gap-3!"
                         >
                           <div
-                            class="overflow-visible! rounded-lg! border! border-border!"
+                            class="overflow-visible! rounded-lg! border! border-card-border!"
                             data-orientation="vertical"
                             data-slot="accordion-item"
                             data-state="closed"
@@ -892,14 +892,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               data-state="closed"
                             >
                               <button
-                                aria-controls="radix-:rn:"
                                 aria-expanded="false"
                                 class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
                                 data-orientation="vertical"
                                 data-radix-collection-item=""
                                 data-slot="accordion-trigger"
                                 data-state="closed"
-                                id="radix-:rm:"
+                                id="radix-:rl:"
                                 type="button"
                               >
                                 <div
@@ -947,19 +946,19 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               />
                             </div>
                             <div
-                              aria-labelledby="radix-:rm:"
+                              aria-labelledby="radix-:rl:"
                               class="hidden!"
                               data-orientation="vertical"
                               data-slot="accordion-content"
                               data-state="closed"
                               hidden=""
-                              id="radix-:rn:"
+                              id="radix-:rm:"
                               role="region"
                               style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
                             />
                           </div>
                           <div
-                            class="overflow-visible! rounded-lg! border! border-border!"
+                            class="overflow-visible! rounded-lg! border! border-card-border!"
                             data-orientation="vertical"
                             data-slot="accordion-item"
                             data-state="closed"
@@ -971,14 +970,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               data-state="closed"
                             >
                               <button
-                                aria-controls="radix-:rp:"
                                 aria-expanded="false"
                                 class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
                                 data-orientation="vertical"
                                 data-radix-collection-item=""
                                 data-slot="accordion-trigger"
                                 data-state="closed"
-                                id="radix-:ro:"
+                                id="radix-:rn:"
                                 type="button"
                               >
                                 <div
@@ -1026,13 +1024,13 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                               />
                             </div>
                             <div
-                              aria-labelledby="radix-:ro:"
+                              aria-labelledby="radix-:rn:"
                               class="hidden!"
                               data-orientation="vertical"
                               data-slot="accordion-content"
                               data-state="closed"
                               hidden=""
-                              id="radix-:rp:"
+                              id="radix-:ro:"
                               role="region"
                               style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
                             />
@@ -1605,6 +1603,8 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
               >
                 <div
                   class="legend-info-popover-link relative! inline-flex!"
+                  data-radix-popper-align="end"
+                  data-radix-popper-side="left"
                   data-slot="popover-anchor"
                 >
                   <div
@@ -2143,7 +2143,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       </div>
     </footer>
     <div
-      class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm border-border! gap-0! rounded-lg! border! p-0! shadow-xl! animate-[notification-enter_200ms_ease-out] fixed left-84 z-[6002] w-96 max-w-[calc(100vw-2rem)] bottom-8"
+      class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm border-border! gap-0! rounded-lg! border! p-0! shadow-xl! animate-[notification-enter_200ms_ease-out] z-[6002] fixed left-84 w-96 max-w-[calc(100vw-2rem)] bottom-8"
       data-slot="card"
     >
       <div
@@ -2173,7 +2173,6 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         >
           <p
             class="text-card-foreground! text-base! leading-6! font-medium!"
-            id=":rl:"
           >
             Health facilities are here!
           </p>

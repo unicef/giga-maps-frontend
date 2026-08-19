@@ -43,7 +43,7 @@ const InfoTooltip = ({ content }: { content?: string }) => {
   );
 };
 
-const MetricDivider = () => <div className="h-px! w-full! bg-border!" />;
+const MetricDivider = () => <div className="h-px! w-full! bg-card-border!" />;
 
 type EntitySummaryCardContentProps = {
   card: EntityCardContentData;

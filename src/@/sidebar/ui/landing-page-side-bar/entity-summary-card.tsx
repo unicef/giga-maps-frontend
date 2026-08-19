@@ -22,7 +22,7 @@ import type {
   LandingPageTranslationFn,
 } from './landing-page.types';
 
-const MetricDivider = () => <div className="h-px! w-full! bg-border!" />;
+const MetricDivider = () => <div className="h-px! w-full! bg-card-border!" />;
 
 const isNoData = (row?: { value?: number | null; totalValue?: number | null }) => {
   if (!row) return true;
@@ -51,6 +51,7 @@ const EntitySummaryCard = ({
   isLoading = false,
   loadingRowLabels = [],
   lng,
+  showSummaryRowsWhenExpanded = false,
   t,
 }: EntitySummaryCardProps) => {
   const stylePaintData = useStore($stylePaintData);
@@ -67,7 +68,7 @@ const EntitySummaryCard = ({
 
   return (
     <AccordionItem
-      className="overflow-visible! rounded-lg! border! border-border!"
+      className="overflow-visible! rounded-lg! border! border-card-border!"
       value={card.value}
     >
       <AccordionTrigger
@@ -99,7 +100,7 @@ const EntitySummaryCard = ({
         <EntityEmptyState entityTitle={card.title} t={t} />
       ) : (
         <>
-          {!isLoading && expanded ? (
+          {!isLoading && expanded && showSummaryRowsWhenExpanded ? (
             <div className="px-3.5! pb-2!">
               <div className="flex! items-center! gap-4! pb-3! pt-0.5! flex-wrap!">
                 {/* Locations Mapped */}
@@ -324,14 +325,14 @@ const EntitySummaryCard = ({
           </AccordionContent>
 
           {!isLoading && EntityType.SCHOOL === card.value ? (
-            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-card-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
               <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
                 <SchoolAccordionFooterLogo />
               </div>
             </div>
           ) : null}
           {!isLoading && EntityType.HEALTH === card.value ? (
-            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-card-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-[#8d8d8d] [&_svg_g]:!fill-[#8d8d8d] [&_svg_path]:!fill-[#8d8d8d] [&_svg_polygon]:!fill-[#8d8d8d] [&_svg_rect]:!fill-[#8d8d8d]">
               <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
                 <HealthCentersAccordionFooterLogo />
               </div>

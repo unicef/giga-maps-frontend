@@ -144,7 +144,7 @@ const EntitySummaryAccordion = ({
 
   if (allEntitiesEmpty) {
     return (
-      <div className="mt-4! border-t! border-border!">
+      <div className="mt-4! border-t! border-card-border!">
         <EntityEmptyState t={t} />
       </div>
     );

@@ -61,6 +61,8 @@
 
   /* Border / Input / Ring */
   --giga-border: #393939;
+  /* Cards use a darker border than the sidebar/popovers on purpose (Grey900). */
+  --giga-card-border: #242424;
   --giga-input: #C7C7C7;
   --giga-ring: #277aff;
 
@@ -91,6 +93,10 @@
 
   /* Vertical space taken by the top bar + search box above the panels */
   --search-panel-top-offset: 7.7rem;
+
+  /* Gap between legend sections. A section column subtracts half of it, so both
+     have to move together. */
+  --legend-section-gap: 0.875rem;
   --giga-accessible-panel: #646973;
 }
 
@@ -120,6 +126,7 @@
   --giga-accent-foreground: #222222;
 
   --giga-border: #E0E0E0;
+  --giga-card-border: #E0E0E0;
   --giga-input: #C7C7C7;
 
   --giga-surface-elevated: #cdcdcd;
@@ -160,6 +167,7 @@
   --giga-accent-foreground: #fff;
 
   --giga-border: #374151;
+  --giga-card-border: #374151;
   --giga-input: #C7C7C7;
 
   --giga-surface-elevated: #383838;
@@ -204,6 +212,7 @@
   --color-destructive-foreground: var(--giga-destructive-foreground);
 
   --color-border: var(--giga-border);
+  --color-card-border: var(--giga-card-border);
   --color-input: var(--giga-input);
   --color-ring: var(--giga-ring);
 
@@ -251,6 +260,17 @@
   /* Matches $isTablet (max-width: 996px) in core/media-query.ts, so the CSS
      and JS breakpoints agree. Use as `tablet:` / `max-tablet:`. */
   --breakpoint-tablet: 62.25rem;
+
+  /* Steps of the legend panel width ladder (420 / 560 / 768px). */
+  --breakpoint-legend-sm: 26.25rem;
+  --breakpoint-legend-md: 35rem;
+  --breakpoint-legend-lg: 48rem;
+}
+
+@media (width >= theme(--breakpoint-legend-lg)) {
+  :root {
+    --legend-section-gap: 1rem;
+  }
 }
 
 @keyframes notification-enter {
