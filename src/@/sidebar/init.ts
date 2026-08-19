@@ -1191,8 +1191,14 @@ sample({
 
 sample({
   clock: changeCountryCode,
-  source: $isMobile,
-  filter: (isMobile, countryCode) => Boolean(countryCode) && !isMobile,
+  filter: (countryCode) => Boolean(countryCode),
+  fn: () => false,
+  target: [onShowThemeLayer, onShowAccessibility],
+});
+
+sample({
+  clock: changeCountryCode,
+  filter: (countryCode) => Boolean(countryCode),
   fn: () => true,
   target: onShowLegend,
 });

@@ -31,6 +31,7 @@ function AccordionTrigger({
     <AccordionPrimitive.Header data-slot="accordion-header" className="flex!">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
+        type="button"
         className={cn(
           "flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none!",
           className

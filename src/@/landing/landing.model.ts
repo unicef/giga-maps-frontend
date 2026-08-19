@@ -47,6 +47,15 @@ $landingSections.on(fetchLandingContentFx.doneData, (_, payload) =>
 
 export const $isContentLoading = fetchLandingContentFx.pending;
 
+// Local for the same reason as the fetch above: about.model reaches into map
+// and sidebar constants, and the landing must not pull those in for a POST.
+export const submitContactFx = createEffect(
+  async (data: Record<string, string>): Promise<unknown> =>
+    request({ data, method: 'POST', url: 'api/contact/contact/' }),
+);
+
+export const $isContactSending = submitContactFx.pending;
+
 export const $header = $landingSections.map((sections) =>
   toHeader(findSection(sections, CmsSectionType.header)),
 );
@@ -106,9 +115,8 @@ $globalStats.on(fetchEntityGlobalStatsFx.doneData, setPayload);
 
 export const $isStatsLoading = fetchEntityGlobalStatsFx.pending;
 
-// formatNumber gives "166.0k"; the design shows "166k".
 const compact = (value: number | undefined): string =>
-  String(formatNumber(value ?? 0)).replace(/\.0(?=\D|$)/, '');
+  String(formatNumber(value ?? 0));
 
 export interface LandingStat {
   id: string;

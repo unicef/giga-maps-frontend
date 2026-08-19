@@ -97,7 +97,12 @@ export function selectAdvancedFiltersForEntities(
       if (field.isIgnore) return;
 
       filterSearchParams.set(field.apiKey, field.value);
-      selectedCount += 1;
+      // Count each multiselect choice (pipe-delimited) as its own selection,
+      // matching chip counts in the Filters panel — not one per filter field.
+      const choiceCount = String(field.value ?? '')
+        .split('|')
+        .filter(Boolean).length;
+      selectedCount += Math.max(choiceCount, 1);
     });
   });
 

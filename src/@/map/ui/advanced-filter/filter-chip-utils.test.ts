@@ -7,6 +7,7 @@ import { EntityType } from '~/@/entities/types/entity-types';
 import {
   buildFilterChips,
   buildFilterChipsByEntity,
+  dedupeAdvanceFiltersByColumnKey,
   getChoiceChipLabel,
   getVisibleChipCountForRows,
   widthsFitInRows,
@@ -264,6 +265,32 @@ describe('buildFilterChips', () => {
     }]);
   });
 
+  it('formats open-ended range chips with Min or Max', () => {
+    const item = createFilter({
+      name: 'Catchment Population',
+      type: 'RANGE',
+      entity_type: EntityType.HEALTH,
+      column_configuration: {
+        name: 'catchment_population',
+        label: 'Catchment Population',
+        type: 'int',
+        table_name: 'health',
+        table_alias: 'health',
+        table_label: 'Health',
+      },
+      query_param_filter: 'range',
+    });
+    const itemKey = 'health__catchment_population__range';
+
+    expect(buildFilterChips(item, {
+      [itemKey]: { none_range: false, value: '10,null' },
+    }, t)[0]?.label).toBe('Catchment Population (10–Max)');
+
+    expect(buildFilterChips(item, {
+      [itemKey]: { none_range: false, value: 'null,299' },
+    }, t)[0]?.label).toBe('Catchment Population (Min–299)');
+  });
+
   it('emits chips once when two filters share the same column key', () => {
     const sharedColumn = {
       name: 'coverage_type',
@@ -275,18 +302,18 @@ describe('buildFilterChips', () => {
     };
     const first = createFilter({
       id: 1,
-      name: 'Coverage Type',
-      type: 'DROPDOWN_MULTISELECT',
-      column_configuration: sharedColumn,
-      options: { choices: [{ label: '2G', value: '2g' }] },
-      query_param_filter: 'in',
-    });
-    const second = createFilter({
-      id: 2,
       name: 'coverage type fil',
       type: 'DROPDOWN_MULTISELECT',
       column_configuration: sharedColumn,
       options: { choices: [{ label: '2g', value: '2g' }] },
+      query_param_filter: 'in',
+    });
+    const second = createFilter({
+      id: 2,
+      name: 'Coverage Type',
+      type: 'DROPDOWN_MULTISELECT',
+      column_configuration: sharedColumn,
+      options: { choices: [{ label: '2G', value: '2g' }] },
       query_param_filter: 'in',
     });
     const itemKey = 'school__coverage_type__in';
@@ -300,6 +327,49 @@ describe('buildFilterChips', () => {
 
     expect(chipsByEntity[EntityType.SCHOOL]).toHaveLength(1);
     expect(chipsByEntity[EntityType.SCHOOL][0].label).toBe('2G');
+  });
+
+  it('keeps a single doctors range control when admin publishes duplicates', () => {
+    const sharedColumn = {
+      name: 'staff_doctors',
+      label: 'Number of Doctors (staff_doctors)',
+      type: 'int',
+      table_name: 'health',
+      table_alias: 'health',
+      table_label: 'Health',
+    };
+    const older = createFilter({
+      id: 17,
+      name: 'Health Doc Filter',
+      type: 'RANGE',
+      entity_type: EntityType.HEALTH,
+      column_configuration: sharedColumn,
+      query_param_filter: 'range',
+    });
+    const newer = createFilter({
+      id: 57,
+      name: 'NUmber of doctors',
+      type: 'RANGE',
+      entity_type: EntityType.HEALTH,
+      column_configuration: sharedColumn,
+      query_param_filter: 'range',
+    });
+
+    expect(dedupeAdvanceFiltersByColumnKey([older, newer])).toEqual([newer]);
+
+    const chipsByEntity = buildFilterChipsByEntity(
+      [older, newer],
+      [EntityType.HEALTH],
+      {
+        health__staff_doctors__range: { none_range: false, value: '1,20' },
+      },
+      t,
+    );
+
+    expect(chipsByEntity[EntityType.HEALTH]).toHaveLength(1);
+    expect(chipsByEntity[EntityType.HEALTH][0].label).toBe(
+      'NUmber of doctors (1–20)',
+    );
   });
 
   it('keeps separate chips when different filters share the same option value', () => {

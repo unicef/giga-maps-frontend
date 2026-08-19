@@ -1,5 +1,6 @@
 import { useStore } from 'effector-react';
 import { ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
@@ -7,10 +8,18 @@ import { cn } from '~/lib/cn';
 import { LANDING_ANCHOR, LANDING_CONTAINER } from '../landing.constant';
 import { $closingCta } from '../landing.model';
 import { CmsSectionType } from '../landing.types';
+import { GetInTouchDialog } from './get-in-touch-dialog';
 import { StatsRow } from './stats-row';
+
+// The old /about opened the contact modal from this button, and the CMS still
+// stores it as a link to that page. Match on the link: the label arrives
+// translated, so comparing against it would only ever work in English.
+const opensContactForm = (link: string) =>
+  link.replace(/\/$/, '').endsWith('/about');
 
 export const CtaSection = () => {
   const cta = useStore($closingCta);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   if (!cta.heading && cta.ctas.length === 0) return null;
 
@@ -42,27 +51,48 @@ export const CtaSection = () => {
 
         {cta.ctas.length > 0 ? (
           <div className="mt-10! flex! flex-col! items-center! justify-center! gap-4! tablet:flex-row!">
-            {cta.ctas.map((item, index) => (
-              <Button
-                asChild={true}
-                className={cn(
-                  'h-12! rounded-full! px-8! text-base! font-medium! shadow-sm! transition-shadow hover:shadow-md!',
-                  index === 0
-                    ? 'bg-primary! text-primary-foreground! hover:bg-primary/90!'
-                    : 'border! border-primary! bg-transparent! text-primary!',
-                )}
-                key={item.link}
-                size="lg"
-              >
-                <a href={item.link} rel="noreferrer" target="_blank">
-                  {item.text}
-                  <ArrowRight aria-hidden="true" className="ml-2 size-4" />
-                </a>
-              </Button>
-            ))}
+            {cta.ctas.map((item, index) => {
+              const buttonClass = cn(
+                'h-12! cursor-pointer! rounded-full! px-8! text-base! font-medium! shadow-sm! transition-shadow hover:shadow-md!',
+                index === 0
+                  ? 'bg-primary! text-primary-foreground! hover:bg-primary/90!'
+                  : 'border! border-primary! bg-transparent! text-primary!',
+              );
+
+              if (opensContactForm(item.link)) {
+                return (
+                  <Button
+                    className={buttonClass}
+                    key={item.link}
+                    onClick={() => setIsContactOpen(true)}
+                    size="lg"
+                    type="button"
+                  >
+                    {item.text}
+                    <ArrowRight aria-hidden="true" className="ml-2 size-4" />
+                  </Button>
+                );
+              }
+
+              return (
+                <Button
+                  asChild={true}
+                  className={buttonClass}
+                  key={item.link}
+                  size="lg"
+                >
+                  <a href={item.link} rel="noreferrer" target="_blank">
+                    {item.text}
+                    <ArrowRight aria-hidden="true" className="ml-2 size-4" />
+                  </a>
+                </Button>
+              );
+            })}
           </div>
         ) : null}
       </div>
+
+      <GetInTouchDialog onOpenChange={setIsContactOpen} open={isContactOpen} />
     </section>
   );
 };

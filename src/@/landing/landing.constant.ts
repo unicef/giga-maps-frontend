@@ -85,3 +85,37 @@ export const fillCount = (template: string, count: number): string =>
   template.replace('{{count}}', String(count));
 
 export const STORIES_PAGE_SIZE = 3;
+
+// Mirrors the /about contact form so both send the same shape to the backend.
+export const CONTACT_COPY = {
+  email: 'Email',
+  emailInvalid: 'Enter a valid email address',
+  emailPlaceholder: 'john@example.com',
+  emailRequired: 'Email is required',
+  failed: 'Could not send your message. Please try again.',
+  fullName: 'Full name',
+  fullNamePlaceholder: 'John Doe',
+  fullNameRequired: 'Full name is required',
+  intro: 'Have a question or need clarification? Contact Giga.',
+  message: 'Your message',
+  messagePlaceholder: 'Type your message here...',
+  messageRequired: 'Message is required',
+  organisation: 'Your organisation',
+  organisationPlaceholder: 'Business name',
+  organisationRequired: 'Organisation is required',
+  purpose: 'Purpose of inquiry',
+  purposePlaceholder: 'Choose an option',
+  purposeRequired: 'Purpose of inquiry is required',
+  send: 'Send',
+  sending: 'Sending...',
+  title: 'Get in touch',
+} as const;
+
+// `value` is what the backend stores; never branch on the label.
+export const CONTACT_PURPOSES = [
+  'I want to join',
+  'I want to share data',
+  'I want to volunteer',
+  'I want to be a partner',
+  'Other',
+] as const;

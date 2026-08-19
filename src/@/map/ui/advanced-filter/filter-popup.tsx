@@ -1,31 +1,46 @@
 import { useStore } from 'effector-react';
 import { PropsWithChildren } from 'react';
+import { createPortal } from 'react-dom';
 
 import { $isMobile } from '~/core/media-query';
+import { cn } from '~/lib/cn';
 
 import FilterPopupContent from './filter-popup-content';
-import { FilterPopover } from './filter-button.style';
-import { PopoverProps } from '@carbon/react';
 
-
-const FilterPopup = ({ open, setOpen, children, ...props }: PropsWithChildren<{ open: boolean, setOpen: (open: boolean) => void, } & PopoverProps>) => {
-  const isMobile = useStore($isMobile)
+const FilterPopup = ({
+  open,
+  setOpen,
+  children,
+}: PropsWithChildren<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}>) => {
+  const isMobile = useStore($isMobile);
 
   return (
-    <FilterPopover
-      open={open}
-      align={isMobile ? "left" : "left-bottom"}
-      className="filter-popover-link"
-      dropShadow={!isMobile}
-      caret={!isMobile}
-      {...props}
-    >
-      {children}
-      {open && <FilterPopupContent setOpen={setOpen} />}
-    </FilterPopover>
-  )
-}
+    <>
+      <div className="filter-popover-link relative! inline-flex!">
+        {children}
+      </div>
+      {open &&
+        createPortal(
+          <div
+            aria-label="filters"
+            className={cn(
+              'filter-popover-content z-[10000]! flex! flex-col! overflow-hidden! border! border-primary! bg-background! p-0! shadow-xs!',
+              isMobile
+                ? 'fixed! inset-0! h-dvh! w-screen! rounded-none!'
+                : 'fixed! top-0! right-0! h-dvh! w-80! rounded-none! border-y-0! border-r-0!',
+            )}
+            data-state="open"
+            role="dialog"
+          >
+            <FilterPopupContent setOpen={setOpen} />
+          </div>,
+          document.body,
+        )}
+    </>
+  );
+};
 
-export default FilterPopup
-
-
+export default FilterPopup;
