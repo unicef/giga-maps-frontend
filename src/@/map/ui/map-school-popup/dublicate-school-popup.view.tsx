@@ -1,18 +1,26 @@
-import { ArrowRight, Information } from '@carbon/icons-react';
-import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { t } from 'i18next';
+import { ArrowRight, Info } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import type { EntityType } from '~/@/entities/types/base-entity.type';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { normalizeEntityLayerInfoList } from '~/@/entities/utils/entity-resolver';
 import { $layerUtils, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Scroll } from '~/@/scroll';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 import { PointCoordinates } from '~/core/global-types';
 import {
   $dublicateSchoolClickData,
@@ -20,27 +28,7 @@ import {
   setSchoolIdsOnPopupClickDot,
 } from '../../map.model';
 import { UNKNOWN } from '../../map.types';
-import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import DublicateSchoolLoader from './dublicate-school-popup-loader.view';
-import {
-  DublicateSchoolList,
-  DublicateSchoolListWrapper,
-  GoToSchoolInfo,
-  ItemBottomSection,
-  ItemTopSection,
-  SchoolInternetSpeed,
-  SchoolItemCount,
-  SchoolListItem,
-  SchoolName,
-  TotalCountLabel,
-} from './dublicate-school-popup.style';
-import {
-  ConnectivityCircleWrapper,
-  Label,
-  LiveContent,
-  LiveStatusRow,
-  SchoolVerificationTag,
-} from './school-popup.style';
 
 type Props = {
   schoolIds: number[];
@@ -54,18 +42,6 @@ type Props = {
   scrollableTargetId: string;
   batchSize?: number;
 };
-
-export function getStaticValue(
-  staticValue: boolean | undefined | string | null,
-) {
-  if (typeof staticValue === 'boolean') {
-    return staticValue ? 'yes' : 'no';
-  }
-  if (!staticValue || staticValue === 'unknown') {
-    return t('unknown');
-  }
-  return String(staticValue);
-}
 
 export default function DublicateSchoolPopup({
   schoolIds,
@@ -240,26 +216,38 @@ export default function DublicateSchoolPopup({
   const hasMore = visibleSchools.length < total;
 
   return (
-    <DublicateSchoolListWrapper>
-      <TotalCountLabel>
-        {`(${schoolIds.length}) ${t('school-location-duplicates')}`}{' '}
-        <Tooltip
-          className="info-icon"
-          align="top"
-          label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}
-        >
-          <button className="sb-tooltip-trigger" type="button">
-            <Information
-              size={16}
-              color={'#7e7e7e'}
-              style={{ verticalAlign: 'middle' }}
-            />
-          </button>
-        </Tooltip>
-      </TotalCountLabel>
+    <div className="relative! flex! w-[300px]! flex-col! rounded-xl! border! border-border! bg-popover! p-4! text-foreground! shadow-xl! dark:border-gray-800! dark:bg-gray-900!">
+      {/* Header: Total Count with Info Tooltip */}
+      <div className="flex! items-center! justify-between! gap-2! border-b! border-border! pb-3! dark:border-gray-800!">
+        <div className="flex! items-center! gap-1.5!">
+          <span className="text-[14px]! font-medium! text-black! dark:text-foreground!">
+            {`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+          </span>
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex! cursor-pointer! text-gray-700! transition-colors! hover:text-black! focus:outline-none! dark:text-white/80! dark:hover:text-white!"
+                  aria-label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+                >
+                  <Info className="size-3.5!" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-xs! text-xs!">
+                {`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
 
-      {/* NOTE: parent must provide a scroll container with id={scrollableTargetId} */}
-      <DublicateSchoolList id={scrollableTargetId}>
+      {/* Scrollable Duplicate List with custom scrollbar */}
+      <Scroll
+        id={scrollableTargetId}
+        className="max-h-[50vh]! -mr-3! pr-3!"
+        options={{ suppressScrollX: true }}
+      >
         <InfiniteScroll
           dataLength={visibleSchools.length}
           next={loadMore}
@@ -281,76 +269,104 @@ export default function DublicateSchoolPopup({
               stylePaintData[s?.connectivityStatus ?? UNKNOWN];
 
             return (
-              <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
-                <ItemTopSection>
-                  <SchoolName title={s.name}>
-                    <span>{s.name ?? s.id}</span>
-                    {s?.isVerifiedSchool === false && (
-                      <SchoolVerificationTag>Unverified</SchoolVerificationTag>
-                    )}
-                  </SchoolName>
-                  <SchoolItemCount>{`${idx + 1} ${t('of')} (${total})`}</SchoolItemCount>
-                </ItemTopSection>
+              <div
+                key={String(s.id)}
+                aria-label={`Open ${s.name}`}
+                className="flex! flex-col! gap-2! border-b! border-border/60! py-3.5! last:border-b-0! dark:border-gray-800!"
+              >
+                {/* Line 1: School Name & Verification Tag */}
+                <div className="flex! min-w-0! flex-1! flex-wrap! items-center! gap-1.5!">
+                  <h6
+                    title={s.name}
+                    className="text-[20px]! font-normal! not-italic! leading-[30px]! text-black! dark:text-foreground! capitalize! line-clamp-2! break-words!"
+                  >
+                    {s.name?.toLocaleLowerCase() ?? s.id}
+                  </h6>
+                  {s?.isVerifiedSchool === false && (
+                    <Badge
+                      variant="outline"
+                      className="min-h-5! rounded-md! border-transparent! bg-[#FCD34D]! px-2! py-0.5! text-xs! font-normal! leading-4! text-[#44403C]! hover:bg-[#FCD34D]!"
+                    >
+                      Unverified
+                    </Badge>
+                  )}
+                </div>
 
-                <ItemBottomSection>
-                  <SchoolInternetSpeed>
-                    <ConnectivityCircleWrapper className="map-school-status-circle flex! items-center!">
-                      <EntityLegendIndicator
-                        color={
-                          isStatic ? staticColor : connecitivityStatusColor
-                        }
-                        entityType={entityType}
-                        glowColor={
-                          !isStatic && s?.isRealTime
+                {/* Line 2: Status Indicator & Value */}
+                <div className="flex! items-center! gap-2!">
+                  <div className="map-school-status-circle flex! items-center!">
+                    <EntityLegendIndicator
+                      color={
+                        (isStatic ? staticColor : connecitivityStatusColor) ?? ''
+                      }
+                      entityType={entityType}
+                      glowColor={
+                        !isStatic && s?.isRealTime
+                          ? connecitivityColor
                             ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
                             : undefined
-                        }
-                        size={16}
-                      />
-                    </ConnectivityCircleWrapper>
-                    <LiveContent>
-                      {isLive && s?.isRealTime && (
-                        <LiveStatusRow>
-                          <Label
-                            $color={connecitivityColor}
-                            style={{ whiteSpace: 'nowrap' }}
-                          >
-                            {connectivityValue}
-                          </Label>
-                        </LiveStatusRow>
+                          : undefined
+                      }
+                      size={14}
+                    />
+                  </div>
+
+                  {isLive && s?.isRealTime ? (
+                    <span
+                      className="text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                      style={{ color: connecitivityColor }}
+                    >
+                      {connectivityValue}
+                    </span>
+                  ) : isStatic ? (
+                    <span
+                      className="text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                      style={{ color: staticColor }}
+                    >
+                      {staticValue}
+                    </span>
+                  ) : (
+                    <span
+                      className="whitespace-nowrap! text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                      style={{ color: connecitivityStatusColor }}
+                    >
+                      {t(
+                        ConnectivityStatusNames[
+                        s?.connectivityStatus ?? UNKNOWN
+                        ] ?? UNKNOWN,
                       )}
-                      {isStatic && (
-                        <Label $color={staticColor}>{staticValue}</Label>
-                      )}
-                      {!isStatic && (!isLive || !s?.isRealTime) && (
-                        <Label
-                          $color={connecitivityStatusColor}
-                          style={{ whiteSpace: 'nowrap' }}
-                        >
-                          {t(ConnectivityStatusNames[s?.connectivityStatus])}
-                        </Label>
-                      )}
-                    </LiveContent>
-                  </SchoolInternetSpeed>
-                  <GoToSchoolInfo
-                    className="cds--btn cds--btn--primary"
+                    </span>
+                  )}
+                </div>
+
+                {/* Line 3: Counter (Left) & Circular Action Button (Right, 40px) */}
+                <div className="flex! items-center! justify-between! gap-2! pt-0.5!">
+                  <span className="text-[14px]! font-normal! not-italic! leading-[20px]! text-gray-700! dark:text-gray-400!">
+                    {`${idx + 1} ${t('of')} ${total}`}
+                  </span>
+
+                  <Button
+                    size="icon"
+                    className="size-10! shrink-0! cursor-pointer! rounded-full! border-0! bg-[#005BED]! text-[#FAFAFA]! shadow-xs! transition-all! hover:bg-[#0052D6]! focus:outline-none! active:bg-[#0047B3]!"
                     onClick={() => {
                       navigateToEntity(entityType, countryCode, s.id);
-                      setSchoolFocusLatLng(
-                        s.geopoint.coordinates as PointCoordinates,
-                      );
+                      if (s?.geopoint?.coordinates) {
+                        setSchoolFocusLatLng(
+                          s.geopoint.coordinates as PointCoordinates,
+                        );
+                      }
                     }}
                     aria-label={`View ${s.name}`}
                     type="button"
                   >
-                    <ArrowRight size={16} />
-                  </GoToSchoolInfo>
-                </ItemBottomSection>
-              </SchoolListItem>
+                    <ArrowRight className="size-5!" />
+                  </Button>
+                </div>
+              </div>
             );
           })}
         </InfiniteScroll>
-      </DublicateSchoolList>
-    </DublicateSchoolListWrapper>
+      </Scroll>
+    </div>
   );
 }
