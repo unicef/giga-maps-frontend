@@ -31,7 +31,14 @@ export const HeroSection = ({
 
   return (
     <section
-      className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
+      className={cn(
+        LANDING_CONTAINER,
+        LANDING_ANCHOR,
+        'py-12! tablet:py-24!',
+        // First screen on desktop, minus the sticky header (h-16). `min-h` so
+        // longer translated copy grows the section instead of overflowing it.
+        'tablet:flex! tablet:min-h-[calc(100vh-4rem)]! tablet:flex-col! tablet:justify-center!',
+      )}
       id={CmsSectionType.hero}
     >
       <div className="grid! items-center! gap-12! tablet:grid-cols-2! tablet:gap-16!">

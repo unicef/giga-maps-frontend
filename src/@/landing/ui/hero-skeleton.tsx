@@ -9,7 +9,11 @@ import { LANDING_CONTAINER } from '../landing.constant';
 export const HeroSkeleton = () => (
   <section
     aria-hidden="true"
-    className={cn(LANDING_CONTAINER, 'py-16! tablet:py-24!')}
+    className={cn(
+      LANDING_CONTAINER,
+      'py-16! tablet:py-24!',
+      'tablet:flex! tablet:min-h-[calc(100vh-4rem)]! tablet:flex-col! tablet:justify-center!',
+    )}
     data-slot="hero-skeleton"
   >
     <div className="grid! items-center! gap-12! tablet:grid-cols-2! tablet:gap-16!">
