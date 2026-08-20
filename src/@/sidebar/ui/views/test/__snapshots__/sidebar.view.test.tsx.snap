@@ -1972,7 +1972,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <p>
                   0 /6M 
                   <span>
-                    schools location mapped
+                    Schools mapped
                   </span>
                 </p>
                 <span
@@ -2056,7 +2056,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <p>
                   0 
                   <span>
-                    schools connectivity status mapped
+                    Schools with connectivity status
                   </span>
                 </p>
                 <span
@@ -2154,7 +2154,7 @@ exports[`Sidebar renders Sidebar and take a snapshop 1`] = `
                 <p>
                   0 
                   <span>
-                    schools with real-time data mapped
+                    Schools sending real-time connectivity measurements
                   </span>
                 </p>
                 <span
