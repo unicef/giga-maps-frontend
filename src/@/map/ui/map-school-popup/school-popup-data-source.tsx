@@ -1,16 +1,23 @@
-import { DataBase, Information } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
-import { useMemo } from 'react';
+import { Info } from 'lucide-react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-import { Chip, TooltipButton } from '~/@/common/style/styled-component-style';
 import { $dataSourceByEntity } from '~/@/country/country.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import { $activeSchoolPopup } from '~/@/map/map.model';
 import {
   $currentLayerCountryDataSource,
   $currentLayerTypeUtilsByEntity,
+  $getSchoolParams,
 } from '~/@/sidebar/sidebar.model';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
+import { cn } from '~/lib/cn';
 
 import {
   ensureAbsoluteUrl,
@@ -19,72 +26,24 @@ import {
   splitOutsideParens,
 } from '../data-source-utils';
 
-const Container = styled.div`
-  margin: 1.25rem 0 0.25rem;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-bottom: 0.15rem;
-  color: ${(props) => props.theme.text};
-  font-size: 0.8rem;
-  svg {
-    fill: ${(props) => props.theme.text};
-  }
-  .sb-tooltip-trigger {
-    border: none;
-    background: transparent;
-    padding: 0;
-    line-height: 0;
-    display: flex;
-    align-items: center;
-    svg {
-      fill: ${(props) => props.theme.text};
-      width: 14px;
-      height: 14px;
-    }
-  }
-`;
-
-const Chips = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-`;
-
-const SourceChip = styled(Chip)<{ $underline?: boolean }>`
-  background: #2b2b2b;
-  color: ${(props) => props.theme.grey60};
-  border-radius: 8px;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.7rem;
-  line-height: 1.4;
-  text-decoration: ${(props) => (props.$underline ? 'underline' : 'none')};
-  white-space: normal;
-  word-break: break-word;
-  display: inline-block;
-  text-align: left;
-`;
-
-const ChipButton = styled.button`
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: inherit;
-  cursor: pointer;
-`;
-
 const SOURCE_LINKS: Record<string, string> = {
   Ericsson: 'https://www.ericsson.com/',
 };
 
-const SchoolPopupDataSource = () => {
+type SchoolPopupDataSourceProps = {
+  entityType?: EntityType;
+};
+
+const SchoolPopupDataSource = ({
+  entityType: propEntityType,
+}: SchoolPopupDataSourceProps) => {
   const { t } = useTranslation();
   const dataSourceByEntity = useStore($dataSourceByEntity);
-  const currentEntityType = useStore($activeSchoolPopup)?.entityType;
+  const activePopupEntityType = useStore($activeSchoolPopup)?.entityType;
+  const { entityType: routeEntityType } = useStore($getSchoolParams);
+  const currentEntityType =
+    propEntityType ?? activePopupEntityType ?? routeEntityType;
+
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
   );
@@ -105,8 +64,8 @@ const SchoolPopupDataSource = () => {
     const names = currentDataSource?.name
       ? splitOutsideParens(currentDataSource.name)
       : ([] as string[]);
-    if (names && isSchoolStatus) {
-      splitOutsideParens(dataSource || '').forEach((item) => {
+    if (dataSource) {
+      splitOutsideParens(dataSource).forEach((item) => {
         if (item && !names.includes(item)) names.push(item);
       });
     }
@@ -119,7 +78,6 @@ const SchoolPopupDataSource = () => {
     currentDataSource?.name,
     currentDataSource?.description,
     dataSource,
-    isSchoolStatus,
   ]);
 
   if (!dataSourceName?.length) return null;
@@ -131,40 +89,93 @@ const SchoolPopupDataSource = () => {
     if (toOpen) window.open(toOpen, '_blank', 'noopener,noreferrer');
   };
 
+  const MAX_VISIBLE_CHIPS = 2;
+  const visibleChips = dataSourceName.slice(0, MAX_VISIBLE_CHIPS);
+  const remainingChips = dataSourceName.slice(MAX_VISIBLE_CHIPS);
+  const remainingCount = remainingChips.length;
+
   return (
-    <Container>
-      <Header>
-        <DataBase width={14} height={14} />
-        <span>{t('data-source')}</span>
-        <TooltipButton
-          align="top"
-          label={t('data-is-sourced-research-institutions')}
-        >
-          <button className="sb-tooltip-trigger" type="button">
-            <Information />
-          </button>
-        </TooltipButton>
-      </Header>
-      <Chips>
-        {dataSourceName.map((raw: string, index: number) => {
+    <div className="flex! flex-col! gap-2!">
+      <div className="flex! items-center! gap-1.5! text-xs! font-normal! leading-[18px]! text-black! dark:text-white!">
+        <span>{t('data-source', { defaultValue: 'Data source' })}</span>
+        <TooltipProvider delayDuration={150}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex! cursor-pointer! text-gray-700! transition-colors! hover:text-black! focus:outline-none! dark:text-white/80! dark:hover:text-white!"
+                aria-label={t('data-is-sourced-research-institutions')}
+              >
+                <Info className="size-3.5!" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-xs! text-xs!">
+              {t('data-is-sourced-research-institutions', {
+                defaultValue:
+                  'Data is sourced from various public and research institutions',
+              })}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      <div className="flex! flex-wrap! items-center! gap-2!">
+        {visibleChips.map((raw: string, index: number) => {
           const { name, url } = parseNameAndUrl(raw);
-          return (
-            <TooltipButton
-              key={`${raw}-${index}`}
-              $hideLabel={!dataSourceDescription?.[index]}
-              label={dataSourceDescription?.[index]}
-              align="top-right"
+          const desc = dataSourceDescription?.[index];
+          const chipNode = (
+            <button
+              type="button"
+              onClick={() => handleClick(raw)}
+              className={cn(
+                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-gray-400! dark:hover:text-white!',
+                url ? 'cursor-pointer!' : 'cursor-default!',
+              )}
             >
-              <ChipButton type="button" onClick={() => handleClick(raw)}>
-                <SourceChip as="span" $underline={Boolean(url)}>
-                  {replaceSourceName(name)}
-                </SourceChip>
-              </ChipButton>
-            </TooltipButton>
+              <span>{replaceSourceName(name)}</span>
+            </button>
           );
+
+          if (desc) {
+            return (
+              <TooltipProvider key={`${raw}-${index}`} delayDuration={150}>
+                <Tooltip>
+                  <TooltipTrigger asChild>{chipNode}</TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs! text-xs!">
+                    {desc}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            );
+          }
+          return <React.Fragment key={`${raw}-${index}`}>{chipNode}</React.Fragment>;
         })}
-      </Chips>
-    </Container>
+
+        {remainingCount > 0 && (
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-white! dark:hover:bg-surface-highlight!">
+                  +{remainingCount}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-xs!">
+                <div className="flex! flex-col! gap-1! text-xs!">
+                  {remainingChips.map((raw) => {
+                    const { name } = parseNameAndUrl(raw);
+                    return (
+                      <span key={raw} className="text-foreground!">
+                        {replaceSourceName(name)}
+                      </span>
+                    );
+                  })}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
+    </div>
   );
 };
 
