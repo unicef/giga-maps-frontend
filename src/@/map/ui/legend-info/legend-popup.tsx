@@ -249,8 +249,6 @@ const LegendPopup = ({
     showStaticLegend,
   ].filter(Boolean).length;
   const isCompactLegend = visibleLegendSectionCount <= 1;
-  // Forcing the collapsed bar always to keep the two-column width
-  const shouldUseWideLegendPanel = collapsed || !isCompactLegend;
   const legendPanelWidthClasses = [
     'legend-sm:w-[min(20rem,calc(100vw-1rem))]! legend-sm:max-w-[min(20rem,calc(100vw-1rem))]!',
     'legend-md:w-[min(25rem,calc(100vw-1rem))]! legend-md:max-w-[min(25rem,calc(100vw-1rem))]!',
@@ -535,7 +533,7 @@ const LegendPopup = ({
         className={cn(
           'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
           'w-[min(18rem,calc(100vw-1rem))]! max-w-[min(18rem,calc(100vw-1rem))]!',
-          shouldUseWideLegendPanel && legendPanelWidthClasses,
+          legendPanelWidthClasses,
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
