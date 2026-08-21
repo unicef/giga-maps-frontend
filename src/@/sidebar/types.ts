@@ -12,6 +12,8 @@ export type SortKey =
 
 export type Tabs = 'map' | 'content' | 'controls';
 
+export type AccordionScope = 'global' | 'country';
+
 export type CoverageStat = {
   "total_schools": number,
   "connected_schools": {

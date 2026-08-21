@@ -532,8 +532,14 @@ const LegendPopup = ({
         align={isMobile && sidebarHeight && !collapsed ? 'center' : 'end'}
         className={cn(
           'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
-          'w-[min(18rem,calc(100vw-1rem))]! max-w-[min(18rem,calc(100vw-1rem))]!',
-          legendPanelWidthClasses,
+          // Collapsed always uses the ladder so the bar matches across entity
+          // types; a single expanded section hugs its content instead.
+          collapsed || !isCompactLegend
+            ? [
+              'w-[min(18rem,calc(100vw-1rem))]! max-w-[min(18rem,calc(100vw-1rem))]!',
+              ...legendPanelWidthClasses,
+            ]
+            : 'w-max! max-w-[min(21rem,calc(100vw-1rem))]!',
         )}
         onCloseAutoFocus={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

@@ -389,8 +389,48 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
   z-index: 1;
 }
 
-.c2 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-  border-bottom-color: #383838;
+.c2 .mapboxgl-popup-tip {
+  width: 0;
+  height: 0;
+  z-index: 1;
+}
+
+.c2 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-bottom: 16px solid var(--giga-border, #393939);
+  border-top: none;
+}
+
+.c2 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-top: 16px solid var(--giga-border, #393939);
+  border-bottom: none;
+}
+
+.c2 .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-right: 16px solid var(--giga-border, #393939);
+  border-left: none;
+}
+
+.c2 .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-left: 16px solid var(--giga-border, #393939);
+  border-right: none;
+}
+
+.c2 .mapboxgl-popup-content {
+  background: transparent!important;
+  padding: 0!important;
+  box-shadow: none!important;
 }
 
 .c26 {

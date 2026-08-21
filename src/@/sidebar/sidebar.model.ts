@@ -72,6 +72,7 @@ import {
 } from './sidebar.constant';
 import { getEntityStatusId, isLiveLayer, isStaticLayer } from './sidebar.util';
 import {
+  AccordionScope,
   ConnectivityConfig,
   CoverageStat,
   LayerType,
@@ -1277,30 +1278,94 @@ export const setSidebarHeight = createEvent<boolean>();
 export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
 
 export const toggleAccordionEntity = createEvent<EntityType>();
-export const $accordionExpandedEntities = createStore<
-  Partial<Record<EntityType, boolean>>
+
+export const $accordionScope = createStore<AccordionScope>('global');
+
+// Opening a facility detail leaves both routes hidden: the filter keeps the
+// last scope instead of falling back to global and losing the country state.
+sample({
+  clock: $mapRoutes,
+  filter: ({ country, map }) => country || map,
+  fn: ({ country }): AccordionScope => (country ? 'country' : 'global'),
+  target: $accordionScope,
+});
+
+export const $accordionExpandedByScope = createStore<
+  Record<AccordionScope, EntityStoreMap<boolean>>
+>({ country: {}, global: {} });
+
+/**
+ * Expansion state while a single entity type is shown. Kept apart from the
+ * multi-entity state so auto-expanding a single card never leaks back into it.
+ */
+export const $accordionExpandedSingleEntity = createStore<
+  EntityStoreMap<boolean>
 >({});
 
-$accordionExpandedEntities.on(toggleAccordionEntity, (state, entityType) => ({
-  ...state,
-  [entityType]: !state[entityType],
-}));
+/**
+ * Emits only on real mode transitions, so re-syncing the active types while
+ * navigating between countries does not re-expand a card the user collapsed.
+ */
+export const $singleVisibleEntityType = combine(
+  $activeEntityTypes,
+  $entityTypesFiltered,
+  (activeTypes, filteredTypes): EntityType | null => {
+    const visibleTypes = filteredTypes.filter((type) =>
+      activeTypes.includes(type),
+    );
+    return visibleTypes.length === 1 ? (visibleTypes[0] ?? null) : null;
+  },
+);
 
 sample({
-  clock: $activeEntityTypes,
-  source: $accordionExpandedEntities,
-  fn: (expandedEntities, activeTypes) => {
-    if (activeTypes.length === 1) {
-      const singleType = activeTypes[0];
-      return {
-        ...expandedEntities,
-        [singleType]: true,
-      };
-    }
-    return expandedEntities;
-  },
-  target: $accordionExpandedEntities,
+  clock: $singleVisibleEntityType,
+  filter: (entityType): entityType is EntityType => Boolean(entityType),
+  fn: (entityType: EntityType): EntityStoreMap<boolean> => ({
+    [entityType]: true,
+  }),
+  target: $accordionExpandedSingleEntity,
 });
+
+sample({
+  clock: toggleAccordionEntity,
+  source: {
+    expandedByScope: $accordionExpandedByScope,
+    scope: $accordionScope,
+    singleEntityType: $singleVisibleEntityType,
+  },
+  filter: ({ singleEntityType }) => !singleEntityType,
+  fn: ({ expandedByScope, scope }, entityType) => ({
+    ...expandedByScope,
+    [scope]: {
+      ...expandedByScope[scope],
+      [entityType]: !expandedByScope[scope][entityType],
+    },
+  }),
+  target: $accordionExpandedByScope,
+});
+
+sample({
+  clock: toggleAccordionEntity,
+  source: {
+    singleEntityType: $singleVisibleEntityType,
+    singleExpanded: $accordionExpandedSingleEntity,
+  },
+  filter: ({ singleEntityType }) => Boolean(singleEntityType),
+  fn: ({ singleExpanded }, entityType) => ({
+    ...singleExpanded,
+    [entityType]: !singleExpanded[entityType],
+  }),
+  target: $accordionExpandedSingleEntity,
+});
+
+export const $accordionExpandedEntities = combine(
+  $accordionExpandedByScope,
+  $accordionScope,
+  $singleVisibleEntityType,
+  $accordionExpandedSingleEntity,
+  (expandedByScope, scope, singleEntityType, singleExpanded) =>
+    singleEntityType ? singleExpanded : expandedByScope[scope],
+);
 
 export const $getSchoolParams = combine(
   {

@@ -9,7 +9,7 @@ import {
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import { $globalStatsByEntity } from '~/@/map/map.model';
 import {
-  $accordionExpandedEntities,
+  $accordionExpandedByScope,
   $currentLayerTypeUtilsByEntity,
 } from '~/@/sidebar/sidebar.model';
 import { testWrapper } from '~/tests/test-wrapper';
@@ -21,7 +21,6 @@ const renderAccordion = (isLive: boolean) => {
     values: new Map()
       .set($activeEntityTypes, [EntityType.SCHOOL])
       .set($entityTypesFiltered, [EntityType.SCHOOL])
-      .set($accordionExpandedEntities, {})
       .set($currentLayerTypeUtilsByEntity, {
         [EntityType.SCHOOL]: {
           isLive,
@@ -72,5 +71,58 @@ describe('EntitySummaryAccordion live data loading', () => {
       row?.querySelector('[data-slot="skeleton"]'),
     ).not.toBeInTheDocument();
     expect(row).toHaveTextContent('NA');
+  });
+});
+
+describe('EntitySummaryAccordion expansion state', () => {
+  const entityStats = {
+    connected_entities: { connected: 2 },
+    entities_total: 10,
+  };
+
+  const renderMultiEntity = (
+    expandedByScope: Record<string, Record<string, boolean>>,
+  ) => {
+    const scope = fork({
+      values: new Map()
+        .set($activeEntityTypes, [EntityType.HEALTH, EntityType.SCHOOL])
+        .set($entityTypesFiltered, [EntityType.SCHOOL, EntityType.HEALTH])
+        .set($accordionExpandedByScope, expandedByScope)
+        .set($globalStatsByEntity, {
+          [EntityType.HEALTH]: entityStats,
+          [EntityType.SCHOOL]: entityStats,
+        }),
+    });
+
+    render(
+      <Provider value={scope}>
+        {testWrapper(
+          <EntitySummaryAccordion connectivityStatsByEntity={{}}>
+            {() => null}
+          </EntitySummaryAccordion>,
+        )}
+      </Provider>,
+    );
+
+    return screen
+      .getAllByRole('button')
+      .filter((node) => node.dataset.slot === 'accordion-trigger')
+      .map((node) => node.getAttribute('aria-expanded'));
+  };
+
+  it('renders every card collapsed when no scope state is set', () => {
+    expect(renderMultiEntity({ country: {}, global: {} })).toEqual([
+      'false',
+      'false',
+    ]);
+  });
+
+  it('renders the cards expanded by the current scope state', () => {
+    expect(
+      renderMultiEntity({
+        country: { [EntityType.HEALTH]: true },
+        global: { [EntityType.SCHOOL]: true },
+      }),
+    ).toEqual(['true', 'false']);
   });
 });
