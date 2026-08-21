@@ -26,6 +26,7 @@ import { PointCoordinates } from '~/core/global-types';
 import { Button } from '~/components/ui/button';
 import { Skeleton } from '~/components/ui/skeleton';
 import { EntityType } from '~/@/entities';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 
 import { ConnectivityStatusNames } from '../global-and-country-view-components/container/layer-view.constant';
 
@@ -147,7 +148,7 @@ export function EntityDuplicateLocationList({
   if (totalIds <= 1) return null;
 
   return (
-    <section className="border-t! border-border! px-3.5! py-4!">
+    <section className="px-3.5! py-4!">
       <div className="mb-3! flex! items-center! justify-between! gap-3!">
         <h3 className="m-0! text-sm! font-semibold! leading-5! text-foreground!">
           {`(${totalIds}) ${t(`${entityType}-duplicates`, {
@@ -156,7 +157,7 @@ export function EntityDuplicateLocationList({
         </h3>
         {fetchPending && <Skeleton className="h-3! w-16!" />}
       </div>
-      <div className="space-y-2!">
+      <div className="space-y-[4px]!">
         {items.map((item, index) => {
           const connectivityColor =
             stylePaintData[item.connectivityType ?? UNKNOWN];
@@ -170,15 +171,15 @@ export function EntityDuplicateLocationList({
           const staticValue = getStaticValue(item.staticValue);
           const statusLabel = t(
             ConnectivityStatusNames[item.connectivityStatus ?? UNKNOWN] ??
-              item.connectivityStatus ??
-              UNKNOWN,
+            item.connectivityStatus ??
+            UNKNOWN,
           );
 
           return (
             <button
               key={item.id}
               aria-label={`Open ${item.name}`}
-              className="flex! w-full! items-center! justify-between! gap-3! rounded-md! border! border-border! bg-background! px-3! py-2.5! text-left! hover:bg-muted/40!"
+              className="flex! w-full! flex-col! rounded-xl! border! border-[#242424]! bg-card! p-3.5! text-left! transition-colors! hover:bg-muted/40! dark:bg-[#181818]!"
               onClick={() => {
                 navigateToEntity(entityType, countryCode, item.id);
                 if (item.geopoint?.coordinates) {
@@ -189,40 +190,66 @@ export function EntityDuplicateLocationList({
               }}
               type="button"
             >
-              <span className="flex! min-w-0! flex-1! items-center! gap-2!">
-                <span className="shrink-0! text-xs! text-muted-foreground!">
-                  {index + 1}.
+              {/* Row 1: Item Index & Full School Name (14px) */}
+              <div className="flex! items-start! gap-2.5!">
+                <span className="shrink-0! text-[14px]! font-normal! leading-[20px]! text-foreground!">
+                  {index + 1}
                 </span>
                 <span
-                  className="truncate! text-sm! font-medium! text-foreground!"
+                  className="min-w-0! flex-1! text-[14px]! font-normal! leading-[20px]! text-foreground! capitalize! break-words!"
                   title={item.name}
                 >
-                  {item.name}
+                  {item.name?.toLocaleLowerCase() ?? item.id}
                 </span>
-              </span>
-              <span className="flex! shrink-0! items-center! gap-2! text-xs!">
-                <span
-                  className="size-2.5! rounded-full!"
-                  style={{
-                    backgroundColor: isStatic ? staticColor : statusColor,
-                  }}
-                />
+              </div>
+
+              {/* Row 2: Status Indicator (EntityLegendIndicator) & Label (12px) */}
+              <div className="mt-2.5! flex! items-center! gap-2!">
+                <div className="map-school-status-circle flex! items-center!">
+                  <EntityLegendIndicator
+                    color={(isStatic ? staticColor : statusColor) ?? ''}
+                    entityType={entityType}
+                    glowColor={
+                      !isStatic && item.isRealTime
+                        ? connectivityColor
+                          ? `color-mix(in srgb, ${connectivityColor} 42%, white)`
+                          : undefined
+                        : undefined
+                    }
+                    size={14}
+                  />
+                </div>
                 {isLive && item.isRealTime ? (
-                  <span style={{ color: connectivityColor }}>{liveValue}</span>
+                  <span
+                    className="text-[12px]! font-normal! leading-4! capitalize!"
+                    style={{ color: connectivityColor }}
+                  >
+                    {liveValue}
+                  </span>
                 ) : isStatic ? (
-                  <span style={{ color: staticColor }}>{staticValue}</span>
+                  <span
+                    className="text-[12px]! font-normal! leading-4! capitalize!"
+                    style={{ color: staticColor }}
+                  >
+                    {staticValue}
+                  </span>
                 ) : (
-                  <span style={{ color: statusColor }}>{statusLabel}</span>
+                  <span
+                    className="text-[12px]! font-normal! leading-4! capitalize!"
+                    style={{ color: statusColor }}
+                  >
+                    {statusLabel}
+                  </span>
                 )}
-              </span>
+              </div>
             </button>
           );
         })}
         {fetchPending && !items.length && (
-          <div className="space-y-2!">
+          <div className="space-y-[4px]!">
             {Array.from({ length: Math.min(totalIds, pageSize) }).map(
               (_, index) => (
-                <Skeleton key={index} className="h-10! w-full! rounded-md!" />
+                <Skeleton key={index} className="h-20! w-full! rounded-xl!" />
               ),
             )}
           </div>
