@@ -1,6 +1,8 @@
 import { allSettled, fork } from 'effector';
 import {
+  $accordionExpandedByScope,
   $accordionExpandedEntities,
+  $accordionScope,
   $benchmarkmarkUtilsByEntity,
   $connectivityBenchMarkByEntity,
   $connectivityLayers,
@@ -23,7 +25,7 @@ import {
   buildBenchmarkUtils,
   toggleAccordionEntity,
 } from '../../sidebar.model';
-import { LayerType, LayerTypeChoices } from '../../types';
+import { AccordionScope, LayerType, LayerTypeChoices } from '../../types';
 import {
   ConnectivityBenchMarks,
   ConnectivityDistribution,
@@ -33,7 +35,11 @@ import {
   $countryBenchmark,
   $countryConnectivityNames,
 } from '~/@/country/country.model';
-import { EntityType, $activeEntityTypes, changeActiveEntityTypes } from '~/@/entities';
+import {
+  EntityType,
+  $activeEntityTypes,
+  changeActiveEntityTypes,
+} from '~/@/entities';
 import { fetchSchoolLayerInfoFx } from '~/api/project-connect';
 
 describe('Sidebar Model Layer Tests', () => {
@@ -507,39 +513,89 @@ describe('Entity coverage filter reset', () => {
   });
 });
 
-describe('Accordion Expanded Entities Store', () => {
-  it('collapses all entities by default on initial multi-entity selection', () => {
-    const scope = fork({
-      values: new Map().set($activeEntityTypes, [
-        EntityType.HEALTH,
-        EntityType.SCHOOL,
-      ]),
-    });
-    expect(scope.getState($accordionExpandedEntities)).toEqual({});
+const forkMultiEntity = (accordionScope: AccordionScope = 'global') =>
+  fork({
+    values: new Map()
+      .set($accordionScope, accordionScope)
+      .set($activeEntityTypes, [EntityType.HEALTH, EntityType.SCHOOL]),
   });
 
-  it('expands single entity by default on single-entity selection', async () => {
-    const scope = fork();
+describe('Accordion Expanded Entities Store', () => {
+  it('collapses every card by default in both views', () => {
+    expect(
+      forkMultiEntity('global').getState($accordionExpandedEntities),
+    ).toEqual({});
+    expect(
+      forkMultiEntity('country').getState($accordionExpandedEntities),
+    ).toEqual({});
+  });
+
+  it('keeps global and country expansion state independent', async () => {
+    const countryScope = forkMultiEntity('country');
+    await allSettled(toggleAccordionEntity, {
+      scope: countryScope,
+      params: EntityType.HEALTH,
+    });
+
+    expect(countryScope.getState($accordionExpandedByScope)).toEqual({
+      country: { [EntityType.HEALTH]: true },
+      global: {},
+    });
+
+    const globalScope = forkMultiEntity('global');
+    await allSettled(toggleAccordionEntity, {
+      scope: globalScope,
+      params: EntityType.SCHOOL,
+    });
+
+    expect(globalScope.getState($accordionExpandedByScope)).toEqual({
+      country: {},
+      global: { [EntityType.SCHOOL]: true },
+    });
+  });
+
+  it('expands the card by default when a single entity type is selected', async () => {
+    const scope = forkMultiEntity();
+
     await allSettled(changeActiveEntityTypes, {
       scope,
       params: [EntityType.SCHOOL],
     });
+
     expect(scope.getState($accordionExpandedEntities)).toEqual({
       [EntityType.SCHOOL]: true,
     });
   });
 
-  it('expands single entity when switching from multi-entity to single-entity', async () => {
-    const scope = fork({
-      values: new Map().set($activeEntityTypes, [
-        EntityType.HEALTH,
-        EntityType.SCHOOL,
-      ]),
-    });
+  it('returns to the collapsed multi-entity state when the user never expanded it', async () => {
+    const scope = forkMultiEntity();
 
     await allSettled(changeActiveEntityTypes, {
       scope,
-      params: [EntityType.HEALTH],
+      params: [EntityType.SCHOOL],
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.HEALTH, EntityType.SCHOOL],
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({});
+  });
+
+  it('restores the expanded multi-entity state after a single-entity round trip', async () => {
+    const scope = forkMultiEntity();
+
+    await allSettled(toggleAccordionEntity, {
+      scope,
+      params: EntityType.HEALTH,
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.SCHOOL],
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.HEALTH, EntityType.SCHOOL],
     });
 
     expect(scope.getState($accordionExpandedEntities)).toEqual({
@@ -547,33 +603,32 @@ describe('Accordion Expanded Entities Store', () => {
     });
   });
 
-  it('toggles entity expansion and preserves user expanded state across transitions', async () => {
-    const scope = fork({
-      values: new Map().set($activeEntityTypes, [
-        EntityType.HEALTH,
-        EntityType.SCHOOL,
-      ]),
-    });
+  it('does not leak a collapse done in single-entity view into the multi-entity state', async () => {
+    const scope = forkMultiEntity();
 
-    // Toggle HEALTH to expanded
     await allSettled(toggleAccordionEntity, {
       scope,
-      params: EntityType.HEALTH,
+      params: EntityType.SCHOOL,
     });
-
-    expect(scope.getState($accordionExpandedEntities)).toEqual({
-      [EntityType.HEALTH]: true,
-    });
-
-    // Switch to single entity SCHOOL
     await allSettled(changeActiveEntityTypes, {
       scope,
       params: [EntityType.SCHOOL],
     });
+    await allSettled(toggleAccordionEntity, {
+      scope,
+      params: EntityType.SCHOOL,
+    });
 
-    // Both HEALTH (toggled earlier) and SCHOOL (single entity auto-expand) should remain true
     expect(scope.getState($accordionExpandedEntities)).toEqual({
-      [EntityType.HEALTH]: true,
+      [EntityType.SCHOOL]: false,
+    });
+
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.HEALTH, EntityType.SCHOOL],
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({
       [EntityType.SCHOOL]: true,
     });
   });

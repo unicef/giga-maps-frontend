@@ -104,7 +104,7 @@ const SchoolStatusLegend = ({
       className={cn(
         'flex! flex-col! self-start!',
         isCompact
-          ? 'w-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:w-full!'
+          ? 'w-full! self-stretch!'
           : 'min-w-0! flex-1! basis-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:basis-full! max-legend-md:min-w-full!',
       )}
     >
