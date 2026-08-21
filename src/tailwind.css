@@ -94,6 +94,11 @@
   /* Vertical space taken by the top bar + search box above the panels */
   --search-panel-top-offset: 7.7rem;
 
+  /* Keeps the panels clear of the fixed disclaimer footer (map/ui/footer.tsx),
+     which they otherwise reach or slip under depending on where the popover
+     anchors. */
+  --search-panel-bottom-offset: 1.5rem;
+
   /* Gap between legend sections. A section column subtracts half of it, so both
      have to move together. */
   --legend-section-gap: 0.875rem;
