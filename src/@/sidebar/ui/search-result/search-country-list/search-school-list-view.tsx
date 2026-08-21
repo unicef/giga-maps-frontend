@@ -65,7 +65,11 @@ const SearchSchoolListPanel = () => {
         </div>
       </div>
 
-      <ScrollArea className="min-h-0! flex-1!" viewportRef={scrollRef}>
+      <ScrollArea
+        className="min-h-0! flex-1!"
+        viewportClassName="[&>div]:block!"
+        viewportRef={scrollRef}
+      >
         {isLoading && (
           <p className="p-4! text-sm! text-muted-foreground!">{t('loading')}</p>
         )}
