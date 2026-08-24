@@ -66,8 +66,8 @@ const SchoolConnectivityLayer = ({
             <p
               className={
                 isConnected
-                  ? 'm-0! text-3xl! font-bold! font-manrope! leading-9! text-success!'
-                  : 'm-0! text-3xl! font-bold! font-manrope! leading-9! text-foreground!'
+                  ? 'm-0! text-3xl! font-normal! leading-9! text-success!'
+                  : 'm-0! text-3xl! font-normal! leading-9! text-foreground!'
               }
               data-title={t('int', {
                 val: (isConnected ? connectedValue : totalMappedValue) ?? 0,
