@@ -3,7 +3,8 @@ import { Skeleton } from '~/components/ui/skeleton';
 export function SingleEntityDetailSkeleton() {
   return (
     <div className="min-w-0! px-4! py-6!">
-      <div className="relative! flex! w-full! flex-col! gap-3! pb-6! pt-3!">
+      <Skeleton className="mb-3! h-7! w-3/4!" />
+      <div className="relative! flex! w-full! flex-col! gap-3! pb-6! pt-1!">
         <Skeleton className="h-3.5! w-40!" />
         <Skeleton className="h-10! w-44!" />
         <Skeleton className="h-2! w-full!" />

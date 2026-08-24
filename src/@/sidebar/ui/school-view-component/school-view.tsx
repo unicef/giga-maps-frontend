@@ -11,6 +11,7 @@ import {
   $schoolStats,
 } from '~/@/sidebar/sidebar.model';
 import { SchoolStatsType } from '~/api/types';
+import { Badge } from '~/components/ui/badge';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { mapEntity } from '~/core/routes';
 
@@ -46,8 +47,8 @@ const SchoolView = () => {
   );
   const selectedEntities = schoolIds.length
     ? schoolIds
-        .map((id) => entities.find((entity) => entity.id === id))
-        .filter((entity): entity is SchoolStatsType => Boolean(entity))
+      .map((id) => entities.find((entity) => entity.id === id))
+      .filter((entity): entity is SchoolStatsType => Boolean(entity))
     : entities;
   const isMulti = selectedEntities.length > 1;
 
@@ -94,6 +95,18 @@ const SchoolView = () => {
             </div>
           ) : (
             <div className={isLoading ? 'opacity-70!' : undefined}>
+              {selectedEntities[0]?.name && (
+                <div className="px-4! pt-1!">
+                  <div className="flex! min-w-0! flex-wrap! items-center! gap-2!">
+                    <h2
+                      title={selectedEntities[0].name}
+                      className="m-0! text-[18px]! font-semibold! leading-[28px]! text-foreground! capitalize! break-words!"
+                    >
+                      {selectedEntities[0].name}
+                    </h2>
+                  </div>
+                </div>
+              )}
               <EntityDetailContent
                 entity={selectedEntities[0]!}
                 entityType={entityType}
