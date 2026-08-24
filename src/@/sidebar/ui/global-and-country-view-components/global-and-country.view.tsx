@@ -13,6 +13,7 @@ import { ScrollArea } from '~/components/ui/scroll-area';
 
 import CoverageLayer from '@/sidebar/ui/global-and-country-view-components/coverage-layer/coverage-layer';
 
+import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import EntitySummaryAccordion from '../landing-page-side-bar/entity-summary-accordion';
 import CommonComponentGigaLayer from './common-component-gigalayer';
 import ConnectivityLayer from './connectivity-layer/connectivity-layer.view';
@@ -72,16 +73,26 @@ const GlobalAndCountryView = () => {
           showSummaryRowsWhenExpanded={true}
         >
           {(card) => (
-            <>
-              <EntityLayerContent
-                entityType={card.accordionItem.value}
-                isLiveDataLoading={isLiveDataLoading}
-              />
-              <CommonComponentGigaLayer
-                entityType={card.accordionItem.value}
-                isCountryView
-              />
-            </>
+            <div className="min-h-[calc(100vh-14rem)]! flex! flex-col! justify-between!">
+              <div>
+                <EntityLayerContent
+                  entityType={card.accordionItem.value}
+                  isLiveDataLoading={isLiveDataLoading}
+                />
+              </div>
+              <div className="sticky! bottom-0! z-10! bg-background! mt-auto! flex! flex-col! gap-0!">
+                <div className="px-4!">
+                  <FooterDataSourcePopUp
+                    isFooter={false}
+                    entityType={card.accordionItem.value}
+                  />
+                </div>
+                <CommonComponentGigaLayer
+                  entityType={card.accordionItem.value}
+                  isCountryView
+                />
+              </div>
+            </div>
           )}
         </EntitySummaryAccordion>
       </div>

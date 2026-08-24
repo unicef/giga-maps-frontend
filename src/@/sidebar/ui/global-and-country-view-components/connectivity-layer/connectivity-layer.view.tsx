@@ -51,7 +51,6 @@ export default function ConnectivityLayer({
           isLoading={isLoading}
           selectedLayerData={currentLayerData}
         />
-        <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
       </div>
     </>
   );
