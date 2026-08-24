@@ -21,9 +21,11 @@ export const zoomToCountryFx = createEffect(
 
     // check for school center;
     if (schoolFocusLatLng) {
+      const predefinedSchoolZoom = 10;
+      const currentZoom = typeof map.getZoom === 'function' ? map.getZoom() : 0;
       map.flyTo({
         center: schoolFocusLatLng as LngLatLike,
-        zoom: 10,
+        zoom: Math.max(currentZoom, predefinedSchoolZoom),
         offset: [0, -180]
       });
       return schoolFocusLatLng.toString();
