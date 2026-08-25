@@ -5,8 +5,6 @@ import { changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountri
 import SearchResult from '..';
 import { getSearchResultsFx } from '../container/search-result.fx';
 import SearchResultList from '../views/search-result.list.view';
-import { SearchResultWrapper } from '../styles/search-result-style';
-import { testWrapper } from '~/tests/test-wrapper';
 import "~/core/i18n/instance"
 
 describe('SearchResultList', () => {
@@ -103,11 +101,6 @@ describe('SearchResultList', () => {
     await getSearchResultsFx({ query: 'India' })
     await render(<SearchResultList />);
     expect(screen.getAllByText('ESCUELA REPUBLICA DE LA')[0]).toBeInTheDocument();
-  });
-
-  it('should render component', () => {
-    const { asFragment } = render(testWrapper(<SearchResultWrapper />));
-    expect(asFragment).toMatchSnapshot();
   });
 })
 

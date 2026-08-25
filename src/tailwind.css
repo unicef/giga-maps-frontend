@@ -72,6 +72,8 @@
   --giga-surface-highlight: #494949;
   --giga-on-surface-subtle: #6F6F6F;
   --giga-on-surface-dim: #7E7E7E;
+  /* Secondary text on panels (Grey400). */
+  --giga-on-surface-muted: #CACACA;
 
   /* Status colors */
   --giga-success: #00A651;
@@ -139,6 +141,7 @@
   --giga-surface-highlight: #c1c1c1;
   --giga-on-surface-subtle: #6F6F6F;
   --giga-on-surface-dim: #7E7E7E;
+  --giga-on-surface-muted: #6F6F6F;
 
   --giga-filter-text: #222222;
   --giga-filter-muted: #6F6F6F;
@@ -180,6 +183,7 @@
   --giga-surface-highlight: #494949;
   --giga-on-surface-subtle: #9ca3af;
   --giga-on-surface-dim: #9ca3af;
+  --giga-on-surface-muted: #9ca3af;
 
   --giga-filter-text: #f5f5f5;
   --giga-filter-muted: #9ca3af;
@@ -227,6 +231,7 @@
   --color-surface-highlight: var(--giga-surface-highlight);
   --color-on-surface-subtle: var(--giga-on-surface-subtle);
   --color-on-surface-dim: var(--giga-on-surface-dim);
+  --color-on-surface-muted: var(--giga-on-surface-muted);
 
   --color-success: var(--giga-success);
   --color-warning: var(--giga-warning);

@@ -2,7 +2,7 @@
 
 exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
 <DocumentFragment>
-  .c4 {
+  .c2 {
   padding: 1rem 0.5rem;
   display: flex;
   flex-wrap: wrap;
@@ -16,18 +16,18 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   background: #242424;
 }
 
-.c6 {
+.c4 {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
   line-height: 12px;
 }
 
-.c6 a:hover {
+.c4 a:hover {
   text-decoration: underline!important;
 }
 
-.c5 {
+.c3 {
   font-size: 0.75rem;
   white-space: pre-line;
   text-align: center;
@@ -35,7 +35,7 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   margin-right: 0.25rem;
 }
 
-.c7 {
+.c5 {
   font-size: 0.75rem!important;
   font-style: normal;
   font-weight: 400;
@@ -44,28 +44,6 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
 }
 
 .c0 {
-  background: #242424;
-  position: absolute;
-  left: 0.875rem;
-  right: 0.875rem;
-  width: auto;
-  z-index: 13;
-  top: calc(100% + 0.125rem);
-  max-height: 80vh;
-  border: 1px solid;
-  border-radius: 0.5rem;
-  box-shadow: #212020 0px 14px 40px 0px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.c1 {
-  background: #242424;
-  max-height: calc(80vh - 4.5rem);
-}
-
-.c2 {
   margin: 2.5rem 1rem 1.5rem;
   display: flex;
   align-items: center;
@@ -73,7 +51,7 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   flex-direction: column;
 }
 
-.c2 h3 {
+.c0 h3 {
   color: #C6C6C6;
   text-align: center;
   font-size: 0.875rem;
@@ -82,7 +60,7 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   margin-top: 1.5rem;
 }
 
-.c2 p {
+.c0 p {
   text-align: center;
   font-size: 0.875rem;
   font-style: normal;
@@ -91,34 +69,28 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   margin-top: 0.5rem;
 }
 
-.c2 button {
+.c0 button {
   margin-top: 2rem;
 }
 
-.c3 {
+.c1 {
   width: 5rem;
   height: 5rem;
 }
 
-@media (max-width:768px) {
-  .c0 {
-    max-height: 80vh;
-  }
-}
-
 <div
-    class="c0 search-results-container"
+    class="search-results-container absolute! top-[calc(100%+0.125rem)]! right-3.5! left-3.5! z-[13]! flex! max-h-[80vh]! flex-col! overflow-hidden! rounded-md! bg-surface-panel! shadow-md!"
   >
     <div
-      class="scrollbar-container c1 search-results-container ps"
+      class="scrollbar-container max-h-[calc(80vh-4.5rem)]! ps"
       id="scrollableDiv"
     >
       <div
-        class="c2"
+        class="c0"
       >
         <svg
           aria-hidden="true"
-          class="c3"
+          class="c1"
           fill="currentColor"
           focusable="false"
           height="64"
@@ -160,18 +132,18 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
       </div>
     </div>
     <div
-      class="c4"
+      class="c2"
     >
       <p
-        class="c5"
+        class="c3"
       >
         Not the results you expected?
       </p>
       <div
-        class="c6"
+        class="c4"
       >
         <a
-          class="cds--link c7"
+          class="cds--link c5"
           href="/about#live-map-get-in-touch"
           rel="noopener"
           target="_blank"
@@ -183,5 +155,3 @@ exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
   </div>
 </DocumentFragment>
 `;
-
-exports[`SearchResultList > should render component 1`] = `[Function]`;

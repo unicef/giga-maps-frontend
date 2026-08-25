@@ -53,7 +53,7 @@ export const themeData = {
     schoolId: "#6F6F6F",
     schoolListBack: "#383838",
     gigaButtonBack: "#383838",
-    searchSchoolBorder: "#C7C7C7",
+    searchSchoolBorder: "#393939",
     notFoundRed: "#F94B4B",
     graphWeekMonthBorder: "#474747",
     skeleton: "#353535",

@@ -1,32 +1,8 @@
 import { ChevronDown, ChevronRight, ChevronUp, RecentlyViewed } from '@carbon/icons-react';
 import { DesignResearch } from '@carbon/pictograms-react';
-import { InlineLoading } from '@carbon/react';
 import styled, { css } from "styled-components";
 
 import { Scroll } from '~/@/scroll';
-
-export const SearchResultWrapper = styled.div`
-    background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
-    position: absolute;
-    left: 0.875rem;
-    right: 0.875rem;
-    width: auto;
-    z-index: 13;
-    top: calc(100% + 0.125rem);
-    max-height: 80vh;
-    border: 1px solid ${props => props.theme.searchSchoolBorder};
-    border-radius: 0.5rem;
-    box-shadow: ${props => (props.theme.main === '#fff'
-      ? '0 14px 40px 0 rgba(0, 0, 0, 0.12)'
-      : '#212020 0px 14px 40px 0px')};
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-
-    @media (max-width:768px){
-      max-height: 80vh;
-    }
-`
 
 export const SearchListWrapper = styled.div`
   background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
@@ -167,17 +143,6 @@ text-transform: capitalize;
   `}
 `
 
-export const NoMoreResults = styled.p`
-  color: ${props => props.theme.text};
-  font-size: .75rem;
-  margin: 1.5rem 0;
-  text-align:center;
-  color: ${props => props.theme.schoolId};
-`
-
-export const Loading = styled(InlineLoading)`
-  padding: 16px;
-`
 export const ChevronUpIcon = styled(ChevronUp) <{
   $highlight?: boolean;
   $scondary?: boolean;
