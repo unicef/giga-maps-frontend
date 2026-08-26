@@ -87,11 +87,6 @@ const SchoolConnectivityLayer = ({
           isConnectivityStatusZero={isConnectivityStatusZero}
           isLiveButtonDisabled={isLiveButtonDisabled}
         />
-        <FooterDataSourcePopUp
-          showOldDataSource={true}
-          isFooter={false}
-          entityType={entityType}
-        />
       </div>
     </div>
   );

@@ -93,7 +93,6 @@ const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
           </div>
         )}
       </div>
-      <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
     </div>
   );
 };
