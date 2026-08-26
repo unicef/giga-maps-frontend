@@ -15,6 +15,8 @@ import {
   WebGLRenderer,
 } from 'three';
 
+import { isProduction } from '~/env';
+
 import {
   loadHeroGlobeBuffers,
   loadHeroGlobeNames,
@@ -605,10 +607,14 @@ export default function HeroGlobeScene({
     };
     canvas.addEventListener('webglcontextlost', handleContextLost);
 
-    // Dev-only tuning panel. The dynamic import inside the DEV branch keeps
-    // lil-gui out of the production bundle entirely.
+    // Temporary tuning panel, opened with ?tune on any non-production build.
+    // The import stays dynamic so lil-gui sits in its own chunk and is only
+    // fetched when the flag is present. Remove this block and the dependency
+    // once the globe parameters are settled.
     let panel: { destroy: () => void } | undefined;
-    if (import.meta.env.DEV) {
+    const tuningRequested =
+      !isProduction && new URLSearchParams(window.location.search).has('tune');
+    if (tuningRequested) {
       void import('lil-gui').then(({ GUI }) => {
         if (disposed) return;
         const gui = new GUI({ title: 'Hero globe' });
