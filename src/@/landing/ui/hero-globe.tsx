@@ -1,54 +1,123 @@
-import { useEffect, useRef } from 'react';
+import './hero-globe.css';
 
-// The source spins faster than the design wants; slowing playback avoids
-// re-exporting it. `defaultPlaybackRate` too, so a reload does not reset it.
-const PLAYBACK_RATE = 0.90;
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-// Serves both the local asset and a CMS video.
-export const HeroGlobe = ({ src }: { src: string }) => {
-  const ref = useRef<HTMLVideoElement>(null);
+import { LANDING_COPY } from '../landing.constant';
+import { isVideoUrl } from '../landing.types';
+import { loadHeroGlobeScene } from './hero-globe.resources';
 
-  // See section-media.tsx: React omits the `muted` attribute and WebKit needs
-  // it to allow gesture-less playback.
+const HeroGlobeScene = lazy(loadHeroGlobeScene);
+
+const GLOBE_LABELS = {
+  bad: LANDING_COPY.heroStatusBad,
+  good: LANDING_COPY.heroStatusGood,
+  moderate: LANDING_COPY.heroStatusModerate,
+  school: LANDING_COPY.heroSchool,
+  unknown: LANDING_COPY.heroStatusUnknown,
+};
+
+const HeroGlobeFallback = ({ src }: { src?: string }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
-    const video = ref.current;
-    if (!video) return;
+    const video = videoRef.current;
+    if (!video) return undefined;
 
     video.setAttribute('muted', '');
-    video.defaultPlaybackRate = PLAYBACK_RATE;
-    video.playbackRate = PLAYBACK_RATE;
-  }, []);
-
-  useEffect(() => {
-    const video = ref.current;
-    if (!video) return;
-
-    // A looping globe is the classic vestibular trigger; hold frame one.
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const apply = () => {
-      if (reduced.matches) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updatePlayback = () => {
+      if (reducedMotion.matches) {
         video.pause();
-        // Seek so iOS actually paints that held frame.
         video.currentTime = 0.05;
       } else void video.play().catch(() => undefined);
     };
 
-    apply();
-    reduced.addEventListener('change', apply);
-    return () => reduced.removeEventListener('change', apply);
+    updatePlayback();
+    reducedMotion.addEventListener('change', updatePlayback);
+    return () => reducedMotion.removeEventListener('change', updatePlayback);
   }, []);
 
-  return (
+  if (!src) return null;
+
+  return isVideoUrl(src) ? (
     <video
-      // Source is 1:1, slot is 824x719: `contain` pillarboxes, never crops.
-      className="aspect-[824/719] w-full! object-contain!"
+      aria-hidden="true"
+      className="hero-globe-fallback"
       loop={true}
       muted={true}
       playsInline={true}
-      // `auto` would compete with the app bundle. Needs a `poster` eventually.
       preload="metadata"
-      ref={ref}
+      ref={videoRef}
       src={src}
     />
+  ) : (
+    <img alt="" className="hero-globe-fallback" decoding="async" src={src} />
+  );
+};
+
+interface HeroGlobeProps {
+  fallbackSrc?: string;
+  stage?: boolean;
+}
+
+export const HeroGlobe = ({ fallbackSrc, stage = false }: HeroGlobeProps) => {
+  const [isReady, setIsReady] = useState(false);
+  const [isUnavailable, setIsUnavailable] = useState(false);
+  const handleReady = useCallback(() => setIsReady(true), []);
+  const handleUnavailable = useCallback(() => setIsUnavailable(true), []);
+
+  return (
+    <figure
+      aria-label={LANDING_COPY.heroMediaAlt}
+      className={`hero-globe-frame${stage ? ' hero-globe-stage' : ''}${
+        isReady ? ' is-ready' : ''
+      }`}
+      data-slot="hero-globe"
+    >
+      <div
+        aria-hidden="true"
+        className="hero-globe-poster"
+        data-slot="hero-globe-poster"
+      />
+
+      {isUnavailable ? (
+        <HeroGlobeFallback src={fallbackSrc} />
+      ) : (
+        <Suspense fallback={null}>
+          <HeroGlobeScene
+            labels={GLOBE_LABELS}
+            onReady={handleReady}
+            onUnavailable={handleUnavailable}
+          />
+        </Suspense>
+      )}
+
+      {/* Hidden until the data backs it: the `connectivity_status` tiles only
+          report connected / not_connected / unknown, so "Moderate" never lights
+          up. See scripts/build-hero-data.mjs.
+      <div aria-hidden="true" className="hero-globe-legend">
+        {(
+          [
+            ['good', LANDING_COPY.heroStatusGood],
+            ['moderate', LANDING_COPY.heroStatusModerate],
+            ['bad', LANDING_COPY.heroStatusBad],
+            ['unknown', LANDING_COPY.heroStatusUnknown],
+          ] as const
+        ).map(([status, label]) => (
+          <span key={status}>
+            <i data-status={status} />
+            {label}
+          </span>
+        ))}
+      </div>
+      */}
+    </figure>
   );
 };
