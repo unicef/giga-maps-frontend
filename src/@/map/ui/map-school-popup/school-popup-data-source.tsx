@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 import { Info } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSourceByEntity } from '~/@/country/country.model';
@@ -89,10 +89,13 @@ const SchoolPopupDataSource = ({
     if (toOpen) window.open(toOpen, '_blank', 'noopener,noreferrer');
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
   const MAX_VISIBLE_CHIPS = 2;
-  const visibleChips = dataSourceName.slice(0, MAX_VISIBLE_CHIPS);
-  const remainingChips = dataSourceName.slice(MAX_VISIBLE_CHIPS);
-  const remainingCount = remainingChips.length;
+  const hasOverflow = dataSourceName.length > MAX_VISIBLE_CHIPS;
+  const visibleChips = isExpanded
+    ? dataSourceName
+    : dataSourceName.slice(0, MAX_VISIBLE_CHIPS);
+  const remainingCount = dataSourceName.length - MAX_VISIBLE_CHIPS;
 
   return (
     <div className="flex! flex-col! gap-2!">
@@ -151,28 +154,26 @@ const SchoolPopupDataSource = ({
           return <React.Fragment key={`${raw}-${index}`}>{chipNode}</React.Fragment>;
         })}
 
-        {remainingCount > 0 && (
-          <TooltipProvider delayDuration={150}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-white! dark:hover:bg-surface-highlight!">
-                  +{remainingCount}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent side="top" className="max-w-xs!">
-                <div className="flex! flex-col! gap-1! text-xs!">
-                  {remainingChips.map((raw) => {
-                    const { name } = parseNameAndUrl(raw);
-                    return (
-                      <span key={raw} className="text-foreground!">
-                        {replaceSourceName(name)}
-                      </span>
-                    );
-                  })}
-                </div>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        {hasOverflow && !isExpanded && (
+          <button
+            type="button"
+            onClick={() => setIsExpanded(true)}
+            aria-label={t('show-more', { defaultValue: 'Show more' })}
+            className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-white! dark:hover:bg-surface-highlight!"
+          >
+            +{remainingCount}
+          </button>
+        )}
+
+        {hasOverflow && isExpanded && (
+          <button
+            type="button"
+            onClick={() => setIsExpanded(false)}
+            aria-label={t('show-less', { defaultValue: 'Show less' })}
+            className="inline-flex! cursor-pointer! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-white! dark:hover:bg-surface-highlight!"
+          >
+            {t('show-less', { defaultValue: 'Show less' })}
+          </button>
         )}
       </div>
     </div>
