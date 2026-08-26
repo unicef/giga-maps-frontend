@@ -50,16 +50,20 @@ const GLOBE_COLOR = {
   ocean: '#121d2a',
   rim: '#172538',
 };
-const FOCUS_LONGITUDE = 25;
+// The globe sits off to the right, so the well-framed band is west of the face
+// centre, not on it: 55 frames Africa and -20 frames Brazil.
+const FOCUS_LONGITUDE = 55;
 const FOCUS_LATITUDE = -9;
 // Westward excursion from FOCUS_LONGITUDE, not a symmetric amplitude: the sway
-// runs 25° -> -35° and back, which is the widest arc that keeps both ends on
-// populated land. Drifting further west puts the empty Pacific on screen.
-const SWAY = (60 * Math.PI) / 180;
-const SWAY_PERIOD = 80;
+// runs Africa -> Brazil and back.
+const SWAY = (75 * Math.PI) / 180;
+const SWAY_PERIOD = 120;
 const PULSE_PERIOD = 2.4;
-const PULSE_GROW = 3.6;
-const CAMERA_DISTANCE = 4.2;
+// Halo radius as a multiple of the dot. Drives gl_PointSize, so fragment cost
+// scales with its square; the dot itself is a fraction of the sprite and does
+// not change size with it.
+const PULSE_GROW = 2.2;
+const CAMERA_DISTANCE = 4.4;
 const INITIAL_FOV = 32;
 const HALF_VIEWPORT_HEIGHT =
   CAMERA_DISTANCE * Math.tan((INITIAL_FOV / 2) * (Math.PI / 180));
@@ -375,11 +379,11 @@ export default function HeroGlobeScene({
           : undefined;
         const candidate = named
           ? {
-              kind: STATUS[named.status] ?? 'unknown',
-              latitude: named.latitude,
-              longitude: named.longitude,
-              seed: random(),
-            }
+            kind: STATUS[named.status] ?? 'unknown',
+            latitude: named.latitude,
+            longitude: named.longitude,
+            seed: random(),
+          }
           : points[Math.floor(random() * points.length)];
 
         if (candidate?.kind !== 'land' && isFacingCamera(candidate)) {
