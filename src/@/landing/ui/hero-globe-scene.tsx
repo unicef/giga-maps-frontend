@@ -47,8 +47,8 @@ const STATUS_COLOR: Record<Status, string> = {
 };
 const GLOBE_COLOR = {
   land: '#25394f',
-  ocean: '#121d2a',
-  rim: '#172538',
+  ocean: '#000000',
+  rim: '#000000',
 };
 // The globe sits off to the right, so the well-framed band is west of the face
 // centre, not on it: 55 frames Africa and -20 frames Brazil.
@@ -62,11 +62,9 @@ const PULSE_PERIOD = 2.4;
 // Halo radius as a multiple of the dot. Drives gl_PointSize, so fragment cost
 // scales with its square; the dot itself is a fraction of the sprite and does
 // not change size with it.
-const PULSE_GROW = 2.2;
+const PULSE_GROW = 0.8;
 const CAMERA_DISTANCE = 4.4;
 const INITIAL_FOV = 32;
-const HALF_VIEWPORT_HEIGHT =
-  CAMERA_DISTANCE * Math.tan((INITIAL_FOV / 2) * (Math.PI / 180));
 const GLOBE_SCALE = 2.05;
 const GLOBE_POSITION: [number, number] = [0.75, -0.5];
 const MAX_CARDS = 3;
@@ -152,17 +150,32 @@ export default function HeroGlobeScene({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.outputColorSpace = SRGBColorSpace;
 
+    // Seeded from the constants above and read per frame, so the dev panel can
+    // drive them live. Ships as plain property reads when the panel is absent.
+    const settings = {
+      cameraDistance: CAMERA_DISTANCE,
+      focusLatitude: FOCUS_LATITUDE,
+      focusLongitude: FOCUS_LONGITUDE,
+      globeScale: GLOBE_SCALE,
+      globeX: GLOBE_POSITION[0],
+      globeY: GLOBE_POSITION[1],
+      pulseGrow: PULSE_GROW,
+      pulsePeriod: PULSE_PERIOD,
+      showPlanet: false,
+      swayDegrees: (SWAY * 180) / Math.PI,
+      swayPeriod: SWAY_PERIOD,
+    };
+
     const scene = new Scene();
     const camera = new PerspectiveCamera(INITIAL_FOV, 1, 0.1, 100);
-    camera.position.set(0, 0, CAMERA_DISTANCE);
 
     const globe = new Group();
-    globe.scale.setScalar(GLOBE_SCALE);
     scene.add(globe);
 
     const initialColors = getGlobeColors();
     const sphereGeometry = new SphereGeometry(0.985, 64, 64);
     const sphereMaterial = new ShaderMaterial({
+      colorWrite: false,
       fragmentShader: `
         uniform vec3 ocean;
         uniform vec3 rim;
@@ -189,7 +202,8 @@ export default function HeroGlobeScene({
         }
       `,
     });
-    globe.add(new Mesh(sphereGeometry, sphereMaterial));
+    const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
+    globe.add(sphereMesh);
 
     const pointMaterial = new ShaderMaterial({
       depthWrite: false,
@@ -341,6 +355,7 @@ export default function HeroGlobeScene({
     interface LiveCard {
       element: HTMLDivElement;
       expiresAt: number;
+      name?: string;
       point: GlobePoint;
     }
 
@@ -374,22 +389,32 @@ export default function HeroGlobeScene({
       let name: string | undefined;
 
       for (let attempt = 0; attempt < 60 && !point; attempt += 1) {
-        const named = namedSchools.length
-          ? namedSchools[Math.floor(random() * namedSchools.length)]
-          : undefined;
+        // Named schools are the showcase, but a short list must not monopolise
+        // every card, so later attempts fall back to an anonymous point.
+        const named =
+          namedSchools.length && attempt < 30
+            ? namedSchools[Math.floor(random() * namedSchools.length)]
+            : undefined;
         const candidate = named
           ? {
-            kind: STATUS[named.status] ?? 'unknown',
-            latitude: named.latitude,
-            longitude: named.longitude,
-            seed: random(),
-          }
+              kind: STATUS[named.status] ?? 'unknown',
+              latitude: named.latitude,
+              longitude: named.longitude,
+              seed: random(),
+            }
           : points[Math.floor(random() * points.length)];
 
-        if (candidate?.kind !== 'land' && isFacingCamera(candidate)) {
-          point = candidate;
-          name = named?.name;
-        }
+        if (candidate?.kind === 'land' || !isFacingCamera(candidate)) continue;
+        const isOnScreen = liveCards.some((card) =>
+          named
+            ? card.name === named.name
+            : card.point.latitude === candidate.latitude &&
+              card.point.longitude === candidate.longitude,
+        );
+        if (isOnScreen) continue;
+
+        point = candidate;
+        name = named?.name;
       }
       if (!point) return;
 
@@ -404,6 +429,7 @@ export default function HeroGlobeScene({
       liveCards.push({
         element,
         expiresAt: time + 4.5 + random() * 2,
+        name,
         point,
       });
       lastCardAt = time;
@@ -450,7 +476,6 @@ export default function HeroGlobeScene({
       }
     };
 
-    const baseRotation = -((FOCUS_LONGITUDE + 90) * Math.PI) / 180;
     const renderFrame = (timestamp: number) => {
       if (dataReady && animationStartedAt === undefined) {
         animationStartedAt = timestamp;
@@ -459,14 +484,16 @@ export default function HeroGlobeScene({
         animationStartedAt !== undefined
           ? Math.max(0, timestamp - animationStartedAt) / 1000
           : 0;
-      globe.rotation.x = (FOCUS_LATITUDE * Math.PI) / 180;
+      globe.rotation.x = (settings.focusLatitude * Math.PI) / 180;
       // Cosine rather than sine so the drift starts and turns at zero speed,
-      // and so t=0 still frames FOCUS_LONGITUDE like the reduced-motion pose.
+      // and so t=0 still frames focusLongitude like the reduced-motion pose.
       globe.rotation.y =
-        baseRotation +
+        -((settings.focusLongitude + 90) * Math.PI) / 180 +
         (reducedMotion
           ? 0
-          : SWAY * 0.5 * (1 - Math.cos((time * 2 * Math.PI) / SWAY_PERIOD)));
+          : ((settings.swayDegrees * Math.PI) / 180) *
+            0.5 *
+            (1 - Math.cos((time * 2 * Math.PI) / settings.swayPeriod)));
       globe.updateMatrixWorld();
       pointMaterial.uniforms.time.value = reducedMotion ? 0 : time;
       if (dataReady) updateCards(time);
@@ -508,16 +535,22 @@ export default function HeroGlobeScene({
 
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
+      camera.position.z = settings.cameraDistance;
+      globe.scale.setScalar(settings.globeScale);
+      const halfViewportHeight =
+        settings.cameraDistance * Math.tan((INITIAL_FOV / 2) * (Math.PI / 180));
       const stageViewports = height / window.innerHeight;
       camera.fov =
         (2 *
-          Math.atan((HALF_VIEWPORT_HEIGHT * stageViewports) / CAMERA_DISTANCE) *
+          Math.atan(
+            (halfViewportHeight * stageViewports) / settings.cameraDistance,
+          ) *
           180) /
         Math.PI;
       camera.updateProjectionMatrix();
       globe.position.set(
-        GLOBE_POSITION[0],
-        GLOBE_POSITION[1] + HALF_VIEWPORT_HEIGHT * (stageViewports - 1),
+        settings.globeX,
+        settings.globeY + halfViewportHeight * (stageViewports - 1),
         0,
       );
       renderFrame(performance.now());
@@ -572,11 +605,89 @@ export default function HeroGlobeScene({
     };
     canvas.addEventListener('webglcontextlost', handleContextLost);
 
+    // Dev-only tuning panel. The dynamic import inside the DEV branch keeps
+    // lil-gui out of the production bundle entirely.
+    let panel: { destroy: () => void } | undefined;
+    if (import.meta.env.DEV) {
+      void import('lil-gui').then(({ GUI }) => {
+        if (disposed) return;
+        const gui = new GUI({ title: 'Hero globe' });
+        panel = gui;
+        const redraw = () => renderFrame(performance.now());
+
+        const rotation = gui.addFolder('Rotation');
+        rotation
+          .add(settings, 'focusLongitude', -180, 180, 1)
+          .name('focus lon')
+          .onChange(redraw);
+        rotation
+          .add(settings, 'focusLatitude', -60, 60, 1)
+          .name('focus lat')
+          .onChange(redraw);
+        rotation
+          .add(settings, 'swayDegrees', 0, 180, 1)
+          .name('sway west (deg)');
+        rotation
+          .add(settings, 'swayPeriod', 10, 300, 5)
+          .name('sway period (s)');
+
+        const framing = gui.addFolder('Framing');
+        framing
+          .add(settings, 'cameraDistance', 2.5, 8, 0.05)
+          .name('camera z')
+          .onChange(resize);
+        framing
+          .add(settings, 'globeScale', 1, 4, 0.05)
+          .name('scale')
+          .onChange(resize);
+        framing.add(settings, 'globeX', -2, 2, 0.05).name('x').onChange(resize);
+        framing.add(settings, 'globeY', -2, 2, 0.05).name('y').onChange(resize);
+
+        const dots = gui.addFolder('Dots');
+        dots
+          .add(settings, 'pulseGrow', 0.5, 6, 0.1)
+          .name('glow radius')
+          .onChange((value: number) => {
+            pointMaterial.uniforms.pulseGrow.value = value;
+            redraw();
+          });
+        dots
+          .add(settings, 'pulsePeriod', 0.5, 8, 0.1)
+          .name('pulse period (s)')
+          .onChange((value: number) => {
+            pointMaterial.uniforms.pulsePeriod.value = value;
+          });
+
+        const planet = gui.addFolder('Planet');
+        planet
+          .add(settings, 'showPlanet')
+          .name('show body')
+          .onChange((value: boolean) => {
+            sphereMaterial.colorWrite = value;
+            redraw();
+          });
+        planet.addColor(GLOBE_COLOR, 'ocean').onChange((value: string) => {
+          sphereMaterial.uniforms.ocean.value.set(value);
+          redraw();
+        });
+        planet.addColor(GLOBE_COLOR, 'rim').onChange((value: string) => {
+          sphereMaterial.uniforms.rim.value.set(value);
+          redraw();
+        });
+        // Recolouring the points rebuilds 450k vertices, so wait for release.
+        planet.addColor(GLOBE_COLOR, 'land').onFinishChange(() => {
+          rebuildPoints();
+          redraw();
+        });
+      });
+    }
+
     resize();
     updateLoop();
 
     return () => {
       disposed = true;
+      panel?.destroy();
       window.clearTimeout(namesTimer);
       renderer.setAnimationLoop(null);
       resizeObserver.disconnect();
