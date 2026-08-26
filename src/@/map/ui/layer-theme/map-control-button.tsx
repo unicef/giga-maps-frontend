@@ -63,11 +63,7 @@ const MapControlButton = ({
             {children}
           </Button>
         </TooltipTrigger>
-        <TooltipContent
-          side="left"
-          sideOffset={4}
-          className="z-6006!"
-        >
+        <TooltipContent side="left" sideOffset={4}>
           {label}
         </TooltipContent>
       </Tooltip>

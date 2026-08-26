@@ -101,6 +101,11 @@
      anchors. */
   --search-panel-bottom-offset: 1.5rem;
 
+  /* Vertical space the fixed disclaimer footer (map/ui/footer.tsx) occupies.
+     Every panel anchored to the bottom of the map subtracts it so the footer
+     stays readable, and they all stay aligned with each other. */
+  --map-footer-offset: 1.8rem;
+
   /* Gap between legend sections. A section column subtracts half of it, so both
      have to move together. */
   --legend-section-gap: 0.875rem;

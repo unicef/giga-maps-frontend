@@ -44,12 +44,12 @@ export const SearchSchool = ({ school }: { school: SearchResultApi }) => {
   return (
     <div>
       <label
-        className="flex! cursor-pointer! items-center! gap-2!"
+        className="flex! cursor-pointer! items-start! gap-2!"
         htmlFor={schoolId}
       >
         <Checkbox
           checked={isChecked}
-          className="size-4! shrink-0! rounded-sm! border! border-foreground! bg-transparent! shadow-none! data-[state=checked]:border-foreground! data-[state=checked]:bg-foreground! data-[state=checked]:text-background! [&_svg]:size-3!"
+          className="mt-0.5! size-4! shrink-0! rounded-sm! border! border-foreground! bg-transparent! shadow-none! data-[state=checked]:border-foreground! data-[state=checked]:bg-foreground! data-[state=checked]:text-background! [&_svg]:size-3!"
           data-testid="single-school"
           id={schoolId}
           onCheckedChange={toggleSelection}
