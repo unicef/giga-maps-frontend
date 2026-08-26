@@ -1,13 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Build the compact school dataset used by the landing-page globe.
- *
- * The defaults intentionally mirror the public maps.giga.global deployment:
- *   yarn build:hero-data
- *
- * A different environment can be selected without editing this file:
- *   node scripts/build-hero-data.mjs --base https://example.test/ --zoom 3 --max 450000
+ * Builds src/assets/hero/hero-schools.bin for the landing-page globe.
+ * Defaults mirror the public deployment: `yarn build:hero-data`.
+ * Override with --base, --zoom, --limit, --max, --entity.
  */
 
 import fs from 'node:fs';
@@ -32,18 +28,14 @@ const BASE = argument(
 );
 const ZOOM = Number(argument('zoom', '3'));
 const MAX_ZOOM = Number(argument('max-zoom', '6'));
-// The endpoint truncates to `limit` without any spatial sampling, so a low
-// value silently drops whole regions instead of thinning them evenly.
+// The API truncates to `limit` without sampling, so a low value drops whole regions.
 const LIMIT = Number(argument('limit', '400000'));
 const MAX_SCHOOLS = Number(argument('max', '2000000'));
 const OUTPUT = argument('out', 'src/assets/hero/hero-schools.bin');
 const NAMES_OUTPUT = OUTPUT.replace(/\.bin$/, '-names.json');
 const ENTITY = argument('entity', 'school');
 
-// v2 is what the map itself requests (CONNECTIVITY_STATUS_URL in
-// src/@/map/map.constant.ts) and is the only one that can serve other entity
-// types, but it is not deployed everywhere yet -- the public backend still
-// answers 404 there. Probe rather than hardcode, so one command works on both.
+// v2 is what the map uses but 404s on the public backend; probe so both work.
 const TILE_PATHS = [
   `api/v2/entities/tiles/connectivity_status/?entity_type__code=${ENTITY}`,
   'api/locations/schools/tiles/connectivity_status/',
@@ -71,8 +63,7 @@ const resolveTileUrl = async () => {
 
 const TILE_URL = await resolveTileUrl();
 
-// Both endpoints only report connected / not_connected / unknown; the
-// good-moderate-bad scale belongs to the separate `tiles/connectivity` layer.
+// Only connected/not_connected/unknown here; good-moderate-bad is another layer.
 const STATUS = {
   connected: 0,
   not_connected: 2,
@@ -85,10 +76,7 @@ const tileToLatitude = (y, zoom) => {
   return (180 / Math.PI) * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
 };
 
-// Stable ordering makes the generated asset reproducible between runs when the
-// upstream data has not changed. The coordinates are packed into a single key
-// and run through an avalanche mix: a cheaper linear hash keeps enough of the
-// lattice to draw visible diagonal bands across the globe.
+// Avalanche mix, not a linear hash: a linear one draws visible diagonal bands.
 const scoreRow = ([longitude, latitude, status]) => {
   const key =
     (Math.round((longitude + 180) * 100) * 18_001 +
@@ -150,15 +138,13 @@ const readTile = async (zoom, x, y) => {
   return { rows, truncated };
 };
 
-// A truncated tile is split into its four children instead of being kept, so
-// dense regions stay complete rather than losing whatever the API cut off.
+// Split truncated tiles instead of keeping them, so dense regions stay complete.
 const queue = [];
 for (let x = 0; x < 2 ** ZOOM; x += 1) {
   for (let y = 0; y < 2 ** ZOOM; y += 1) queue.push([ZOOM, x, y]);
 }
 
-// Rows are deduplicated as tiles arrive: the full result set is several
-// million records and does not need to be held in memory at once.
+// Deduplicate as tiles arrive; the full set is several million rows.
 const rowsByCoordinate = new Map();
 const statusPriority = [2, 1, 3, 0];
 let fetchedCount = 0;
@@ -200,9 +186,7 @@ console.log(
   `deduplicated ${fetchedCount} records to ${rows.length} visible coordinates`,
 );
 if (rows.length > MAX_SCHOOLS) {
-  // Uniform sample over the whole set, so relative density is preserved and the
-  // globe reads like the map. A per-region quota instead leaves visible seams
-  // wherever a dense region hits its cap and its neighbour does not.
+  // Uniform sample keeps relative density; a per-region quota leaves visible seams.
   rows = rows
     .map((row) => [scoreRow(row), row])
     .toSorted((left, right) => left[0] - right[0])
@@ -222,9 +206,7 @@ rows.forEach(([longitude, latitude, status], index) => {
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
 fs.writeFileSync(OUTPUT, output);
 
-// Current tiles do not expose school names. This file is deliberately kept as
-// a separate, optional payload so it can be populated later without rebuilding
-// the coordinates binary.
+// Tiles expose no names; kept as a separate payload to fill in later.
 const namedSchools = rows
   .filter((row) => row[3])
   .slice(0, 400)

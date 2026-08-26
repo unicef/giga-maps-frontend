@@ -49,21 +49,17 @@ const STATUS_COLOR: Record<Status, string> = {
 };
 const GLOBE_COLOR = {
   land: '#25394f',
-  ocean: '#000000',
-  rim: '#000000',
+  ocean: '#121d2a',
+  rim: '#172538',
 };
-// The globe sits off to the right, so the well-framed band is west of the face
-// centre, not on it: 55 frames Africa and -20 frames Brazil.
+// Globe is offset right, so the framed band is west of centre: 55 = Africa.
 const FOCUS_LONGITUDE = 55;
 const FOCUS_LATITUDE = -9;
-// Westward excursion from FOCUS_LONGITUDE, not a symmetric amplitude: the sway
-// runs Africa -> Brazil and back.
+// One-sided westward excursion, not a symmetric amplitude: ends at -20 = Brazil.
 const SWAY = (75 * Math.PI) / 180;
 const SWAY_PERIOD = 120;
 const PULSE_PERIOD = 2.4;
-// Halo radius as a multiple of the dot. Drives gl_PointSize, so fragment cost
-// scales with its square; the dot itself is a fraction of the sprite and does
-// not change size with it.
+// Halo radius; fragment cost scales with its square and the dot size is unaffected.
 const PULSE_GROW = 0.8;
 const CAMERA_DISTANCE = 4.4;
 const INITIAL_FOV = 32;
@@ -152,8 +148,7 @@ export default function HeroGlobeScene({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.outputColorSpace = SRGBColorSpace;
 
-    // Seeded from the constants above and read per frame, so the dev panel can
-    // drive them live. Ships as plain property reads when the panel is absent.
+    // Read per frame so the ?tune panel can drive them live.
     const settings = {
       cameraDistance: CAMERA_DISTANCE,
       focusLatitude: FOCUS_LATITUDE,
@@ -163,7 +158,7 @@ export default function HeroGlobeScene({
       globeY: GLOBE_POSITION[1],
       pulseGrow: PULSE_GROW,
       pulsePeriod: PULSE_PERIOD,
-      showPlanet: false,
+      showPlanet: true,
       swayDegrees: (SWAY * 180) / Math.PI,
       swayPeriod: SWAY_PERIOD,
     };
@@ -177,7 +172,6 @@ export default function HeroGlobeScene({
     const initialColors = getGlobeColors();
     const sphereGeometry = new SphereGeometry(0.985, 64, 64);
     const sphereMaterial = new ShaderMaterial({
-      colorWrite: false,
       fragmentShader: `
         uniform vec3 ocean;
         uniform vec3 rim;
@@ -391,8 +385,7 @@ export default function HeroGlobeScene({
       let name: string | undefined;
 
       for (let attempt = 0; attempt < 60 && !point; attempt += 1) {
-        // Named schools are the showcase, but a short list must not monopolise
-        // every card, so later attempts fall back to an anonymous point.
+        // Later attempts go anonymous so a short list cannot fill every card.
         const named =
           namedSchools.length && attempt < 30
             ? namedSchools[Math.floor(random() * namedSchools.length)]
@@ -487,8 +480,7 @@ export default function HeroGlobeScene({
           ? Math.max(0, timestamp - animationStartedAt) / 1000
           : 0;
       globe.rotation.x = (settings.focusLatitude * Math.PI) / 180;
-      // Cosine rather than sine so the drift starts and turns at zero speed,
-      // and so t=0 still frames focusLongitude like the reduced-motion pose.
+      // Cosine, not sine: turns at zero speed and t=0 matches the reduced-motion pose.
       globe.rotation.y =
         -((settings.focusLongitude + 90) * Math.PI) / 180 +
         (reducedMotion
@@ -607,10 +599,7 @@ export default function HeroGlobeScene({
     };
     canvas.addEventListener('webglcontextlost', handleContextLost);
 
-    // Temporary tuning panel, opened with ?tune on any non-production build.
-    // The import stays dynamic so lil-gui sits in its own chunk and is only
-    // fetched when the flag is present. Remove this block and the dependency
-    // once the globe parameters are settled.
+    // Temporary ?tune panel; delete with the lil-gui dependency once tuned.
     let panel: { destroy: () => void } | undefined;
     const tuningRequested =
       !isProduction && new URLSearchParams(window.location.search).has('tune');

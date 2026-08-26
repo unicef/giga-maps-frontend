@@ -99,9 +99,7 @@ export const HeroGlobe = ({ fallbackSrc, stage = false }: HeroGlobeProps) => {
         </Suspense>
       )}
 
-      {/* Hidden until the data backs it: the `connectivity_status` tiles only
-          report connected / not_connected / unknown, so "Moderate" never lights
-          up. See scripts/build-hero-data.mjs.
+      {/* Hidden: the data has no "Moderate", so that swatch never lights up.
       <div aria-hidden="true" className="hero-globe-legend">
         {(
           [
