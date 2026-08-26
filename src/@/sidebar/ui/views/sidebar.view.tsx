@@ -77,7 +77,7 @@ export default function Sidebar() {
           : cn(
               'fixed top-2',
               isSidebarCollapsed ? 'left-[-320px]!' : 'left-2!',
-              'bottom-[1.8rem] min-[1584px]:bottom-2',
+              'bottom-[var(--map-footer-offset)] min-[1584px]:bottom-2',
               'w-[320px] min-[1584px]:w-[320px]',
             ),
       )}

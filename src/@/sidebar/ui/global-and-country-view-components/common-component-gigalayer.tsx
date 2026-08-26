@@ -41,7 +41,7 @@ const CommonComponentGigaLayer = ({
           'sidebar-footer-gigalayer-container z-1! md:sticky! md:bottom-0! flex! items-start! bg-background! transition-transform! duration-[400ms]! ease-in-out!',
           isCountryView
             ? 'relative! mt-auto! w-full! justify-center! pb-2!'
-            : 'fixed! bottom-[1.8rem]! w-[inherit]! justify-between! border-t! border-secondary! max-md:bottom-0! max-md:w-full!',
+            : 'fixed! bottom-[var(--map-footer-offset)]! w-[inherit]! justify-between! border-t! border-secondary! max-md:bottom-0! max-md:w-full!',
           isMobile && !sidebarHeight && !isCountryView && 'translate-y-full!',
         )}
       >

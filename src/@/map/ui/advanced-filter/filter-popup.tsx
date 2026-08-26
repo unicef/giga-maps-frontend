@@ -27,10 +27,10 @@ const FilterPopup = ({
           <div
             aria-label="filters"
             className={cn(
-              'filter-popover-content z-[10000]! flex! flex-col! overflow-hidden! border! border-primary! bg-background! p-0! shadow-xs!',
+              'filter-popover-content z-[10000]! flex! flex-col! overflow-hidden! border! border-border! bg-background! p-0! shadow-xs!',
               isMobile
                 ? 'fixed! inset-0! h-dvh! w-screen! rounded-none!'
-                : 'fixed! top-0! right-0! h-dvh! w-80! rounded-none! border-y-0! border-r-0!',
+                : 'fixed! top-2! right-2! bottom-[var(--map-footer-offset)]! w-80! rounded-lg!',
             )}
             data-state="open"
             role="dialog"
