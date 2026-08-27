@@ -1,5 +1,5 @@
 import type { EntityConfig } from '~/@/entities/config/entity-config.types';
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import type {
   EntitiesConnectivityStatsResponse,
   EntitiesGlobalStatsResponse,
@@ -34,6 +34,16 @@ const getEntityLabel = (
   config: EntityConfig,
   t: LandingPageTranslationFn,
 ) => t(config.slug, { count: 2 });
+
+const getConnectedEntityLabel = (
+  entityType: EntityType,
+  t: LandingPageTranslationFn,
+) =>
+  t(
+    entityType === EntityType.SCHOOL
+      ? 'connected-schools'
+      : 'connected-health-facilities',
+  );
 
 type BuildEntityCardsArgs = {
   connectivityStatsByEntity: EntitiesConnectivityStatsResponse | null;
@@ -95,6 +105,7 @@ export const buildEntityCard = ({
     totalConnectedGroup?.connected ?? connectedValue,
   );
   const entityLabel = getEntityLabel(config, t);
+  const connectedEntityLabel = getConnectedEntityLabel(entityType, t);
 
   const entitiesTotal = Number(
     entityGlobalStats?.entities_total ?? entityGlobalStats?.entities_connected ?? 0,
@@ -109,7 +120,7 @@ export const buildEntityCard = ({
         totalValue: totalMappedValue,
       },
       {
-        label: `${t('connected')} ${entityLabel}`,
+        label: connectedEntityLabel,
         value: connectedValue,
         totalValue: totalConnectedValue,
       },
@@ -157,29 +168,39 @@ export const buildEntityCardContent = ({
     ? `/${config.sidebar.estimatedTotalInMillions}${LanguageSuffixes[lng].million}`
     : undefined;
   const entityLabel = getEntityLabel(config, t);
+  const connectedEntityLabel = getConnectedEntityLabel(entityType, t);
+  const countriesDetailKey =
+    entityType === EntityType.SCHOOL
+      ? 'across-no-countries-and-territories'
+      : 'across-no-countries';
+  const showMetricTooltips = entityType !== EntityType.HEALTH;
 
   return {
     metrics: [
       {
-        detail: t('across-no-countries', {
+        detail: t(countriesDetailKey, {
           count: entityGlobalStats?.no_of_countries ?? 0,
         }),
         estimate: estimate ? `${estimate} ${t('estimated')}` : undefined,
         label: t('locations-mapped'),
-        tooltip: t('locations-mapped-from-datasets-tooltip', {
-          entity: entityLabel,
-        }),
+        tooltip: showMetricTooltips
+          ? t('locations-mapped-from-datasets-tooltip', {
+              entity: entityLabel,
+            })
+          : undefined,
         value: mappedValue,
       },
       {
-        detail: t('across-no-countries', {
+        detail: t(countriesDetailKey, {
           count:
             entityGlobalStats?.countries_with_connectivity_status_mapped ?? 0,
         }),
-        label: `${t('connected')} ${entityLabel}`,
-        tooltip: t('with-mapped-connectivity-status-tooltip', {
-          entity: entityLabel,
-        }),
+        label: connectedEntityLabel,
+        tooltip: showMetricTooltips
+          ? t('with-mapped-connectivity-status-tooltip', {
+              entity: entityLabel,
+            })
+          : undefined,
         value: connectedValue,
       },
       {
@@ -206,15 +227,17 @@ export const buildEntityCardContent = ({
             isStaticLayer ? 0 : (connectivityGroup?.unknown ?? 0),
           ],
         },
-        detail: t('across-no-countries', {
+        detail: t(countriesDetailKey, {
           count: isStaticLayer
             ? 0
             : (connectivityStats?.countries_with_realtime_data ?? 0),
         }),
         label: t('reporting-internet-quality'),
-        tooltip: t('reporting-internet-quality-tooltip', {
-          entity: entityLabel,
-        }),
+        tooltip: showMetricTooltips
+          ? t('reporting-internet-quality-tooltip', {
+              entity: entityLabel,
+            })
+          : undefined,
         value: measureValue,
       },
     ],

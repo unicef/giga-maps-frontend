@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import { $entityRegistry } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
@@ -17,6 +18,11 @@ import SchoolPopupDataSource from './school-popup-data-source';
 import useSchoolPopupData, { PopupFeatureItem } from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 import { UNKNOWN } from '../../map.types';
+
+const ENTITY_PAGE_COPY_KEYS: Record<EntityType, string> = {
+  [EntityType.SCHOOL]: 'go-to-school-page',
+  [EntityType.HEALTH]: 'go-to-health-facility-page',
+};
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
@@ -215,7 +221,7 @@ export const MapSchoolPopup = () => {
                           type="button"
                         >
                           <span>
-                            {t('go-to-entity-page', {
+                            {t(ENTITY_PAGE_COPY_KEYS[targetEntityType], {
                               entity: itemEntityLabel,
                               defaultValue: `Go to ${itemEntityLabel} page`,
                             })}

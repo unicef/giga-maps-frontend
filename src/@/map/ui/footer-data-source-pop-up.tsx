@@ -1,10 +1,9 @@
 import { useStore } from 'effector-react';
-import { Info } from 'lucide-react';
 import { type PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSourceByEntity } from '~/@/country/country.model';
-import { type EntityType } from '~/@/entities';
+import { EntityType } from '~/@/entities';
 import {
   $currentLayerCountryDataSource,
   $currentLayerTypeUtilsByEntity,
@@ -52,25 +51,6 @@ const DataSourceContainer = ({ children }: PropsWithChildren) => (
   <div className={dataSourceContainerClassName}>{children}</div>
 );
 
-const DataSourceInfoTooltip = ({ label }: { label: string }) => (
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Button
-        aria-label={label}
-        className="size-5! bg-transparent! p-0! text-foreground! hover:bg-transparent! hover:text-foreground!"
-        size="icon-xs"
-        type="button"
-        variant="icon"
-      >
-        <Info aria-hidden="true" className="size-3!" />
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent align="start" className="max-w-40!" side="top">
-      {label}
-    </TooltipContent>
-  </Tooltip>
-);
-
 const FooterDataSourcePopUp = ({
   isFooter = true,
   showOldDataSource = false,
@@ -108,6 +88,7 @@ const FooterDataSourcePopUp = ({
     [currentDataSource?.description],
   );
 
+  if (currentEntityType === EntityType.HEALTH) return null;
   if (showOldDataSource && !oldDataSource.trim()) return null;
 
   if (showOldDataSource) {
@@ -117,9 +98,6 @@ const FooterDataSourcePopUp = ({
           <div className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-row! justify-start! items-start! gap-2! flex-wrap! w-full!">
             <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
               <span className="leading-4!">{t('data-source')}</span>
-              <DataSourceInfoTooltip
-                label={t('data-is-sourced-research-institutions')}
-              />
             </div>
             <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
               <span>{oldDataSource}</span>
@@ -136,9 +114,6 @@ const FooterDataSourcePopUp = ({
             <p className="m-0! text-[0.85rem]! text-foreground!">
               {t('data-source')}
             </p>
-            <DataSourceInfoTooltip
-              label={t('data-is-sourced-research-institutions')}
-            />
           </DataSourceHeader>
           <DataSourceContainer>
             <div className="mr-0.5! text-xs!">
@@ -161,9 +136,6 @@ const FooterDataSourcePopUp = ({
         <div className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-row! justify-start! items-start! gap-2! flex-wrap! w-full!">
           <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
             <span className="leading-4!">{t('data-source')}</span>
-            <DataSourceInfoTooltip
-              label={t('data-is-sourced-research-institutions')}
-            />
           </div>
           <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
             {dataSourceName?.map((sourceName: string, index: number) => {

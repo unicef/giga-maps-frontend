@@ -60,9 +60,7 @@ export const DEFAULT_ENTITY_REGISTRY: Record<EntityType, EntityConfig> = {
       glowMinScale: 1.37,
       glowMaxScale: 2.2,
     },
-    sidebar: {
-      estimatedTotalInMillions: 3,
-    },
+    sidebar: {},
     useLegacyApi: false,
   },
 };

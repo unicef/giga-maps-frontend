@@ -21,8 +21,9 @@ const CountryDisclaimerNotification = () => {
   const countryData = useStore($country);
   const { country } = useStore($mapRoutes);
   const isMobile = useStore($isMobile);
+  const disclaimerText = countryData?.country_disclaimer?.trim();
 
-  if (!country || !showNotification || isMobile) return null;
+  if (!country || !showNotification || isMobile || !disclaimerText) return null;
 
   return (
     <DisclaimerNotification
@@ -31,7 +32,7 @@ const CountryDisclaimerNotification = () => {
       onClose={() => onCloseDiscalimerNotification(false)}
       title={t('disclaimer')}
     >
-      {countryData?.country_disclaimer || t('disclaimer-text')}
+      {disclaimerText}
     </DisclaimerNotification>
   );
 };
