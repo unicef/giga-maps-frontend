@@ -688,9 +688,9 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                     <button
                       aria-expanded="false"
                       aria-label="Country List"
-                      class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! px-2! py-0! text-foreground! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
+                      class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! px-2! py-0! text-foreground! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none! bg-filter-field!"
                       data-state="closed"
-                      style="background-color: rgb(36, 36, 36); --country-trigger-border: #161616;"
+                      style="--country-trigger-border: var(--giga-border);"
                       type="button"
                     >
                       <svg
@@ -740,8 +740,8 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
                       </svg>
                     </button>
                     <div
-                      class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
-                      style="background-color: rgb(36, 36, 36); --search-shell-border: #0f62fe;"
+                      class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]! bg-filter-field!"
+                      style="--search-shell-border: #0f62fe;"
                     >
                       <div
                         class="flex! h-12! items-center!"
@@ -2011,7 +2011,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
       class="fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300 left-86!"
     >
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#393939]! bg-[#393939]! text-white! hover:bg-[#4c4c4c]! hover:text-white!"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-semibold! leading-5! shadow-sm! whitespace-nowrap! border-border! bg-pill-active! text-foreground! hover:bg-pill-active! hover:text-foreground!"
         data-size="lg"
         data-slot="button"
         data-variant="outline"
@@ -2019,7 +2019,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         All facilities
       </button>
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-semibold! leading-5! shadow-sm! whitespace-nowrap! border-border! bg-pill-inactive! text-muted-foreground! hover:bg-surface-elevated! hover:text-foreground!"
         data-size="lg"
         data-slot="button"
         data-variant="outline"
@@ -2049,7 +2049,7 @@ exports[`Render Map-page > MapPage snapshot 1`] = `
         Schools
       </button>
       <button
-        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-semibold! leading-5! shadow-sm! whitespace-nowrap! border-border! bg-pill-inactive! text-muted-foreground! hover:bg-surface-elevated! hover:text-foreground!"
         data-size="lg"
         data-slot="button"
         data-variant="outline"

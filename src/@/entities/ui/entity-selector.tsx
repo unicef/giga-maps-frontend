@@ -20,11 +20,11 @@ import { mapEntity } from '~/core/routes';
 import { cn } from '~/lib/cn';
 
 const base =
-  'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap!';
+  'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-semibold! leading-5! shadow-sm! whitespace-nowrap!';
 const active =
-  'border-[#393939]! bg-[#393939]! text-white! hover:bg-[#4c4c4c]! hover:text-white!';
+  'border-border! bg-pill-active! text-foreground! hover:bg-pill-active! hover:text-foreground!';
 const inactive =
-  'border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!';
+  'border-border! bg-pill-inactive! text-muted-foreground! hover:bg-surface-elevated! hover:text-foreground!';
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -66,9 +66,9 @@ export default function EntityTypeSelector() {
       className={
         !isMobile
           ? cn(
-            'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
-            isSidebarCollapsed ? 'left-4!' : 'left-86!',
-          )
+              'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
+              isSidebarCollapsed ? 'left-4!' : 'left-86!',
+            )
           : cn('flex items-center gap-2 p-1! overflow-auto')
       }
     >

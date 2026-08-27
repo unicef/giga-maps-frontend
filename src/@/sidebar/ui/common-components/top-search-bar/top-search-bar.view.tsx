@@ -17,7 +17,6 @@ import { Popover, PopoverAnchor, PopoverContent } from '~/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { $isMobile } from '~/core/media-query';
 import { mapOverview } from '~/core/routes';
-import { $theme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 import { getVoid } from '~/lib/effector-kit';
 import { useRoute } from '~/lib/router';
@@ -47,14 +46,11 @@ const TopSearchBar = () => {
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const { t } = useTranslation();
   const isGlobalView = useRoute(mapOverview);
-  const isLight = useStore($theme) === ThemeType.light;
-  const searchFill = isLight ? '#f4f4f4' : '#242424';
-  const idleBorder = isLight ? '#c6c6c6' : '#161616';
+  const searchFillClass = 'bg-filter-field!';
+  const idleBorder = 'var(--giga-border)';
   const activeBorder = '#0f62fe';
-  // Independent focus: blue on search OR world icon, never both
   const searchBorder = isActiveSearchBar && !showCountries ? activeBorder : idleBorder;
   const countryTriggerBorder = showCountries ? activeBorder : idleBorder;
-  const countriesPanelBg = isLight ? '#f4f4f4' : '#242424';
 
   const entityTagEntries = useMemo(
     () => Object.values(entityRegistry).filter((config) => config.active),
@@ -174,10 +170,9 @@ const TopSearchBar = () => {
       aria-label={t('country-list')}
       className={cn(
         'main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! px-2! py-0! text-foreground! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!',
-        ''
+        searchFillClass,
       )}
       style={{
-        backgroundColor: searchFill,
         '--country-trigger-border': countryTriggerBorder,
       } as CSSProperties}
       onClick={() => {
@@ -228,9 +223,11 @@ const TopSearchBar = () => {
               )}
             </TooltipProvider>
             <div
-              className="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
+              className={cn(
+                'sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!',
+                searchFillClass,
+              )}
               style={{
-                backgroundColor: searchFill,
                 '--search-shell-border': searchBorder,
               } as CSSProperties}
             >
@@ -321,15 +318,15 @@ const TopSearchBar = () => {
 
               {/* @ mention entity type suggestions */}
               {showSuggestions && filteredSuggestions.length > 0 && (
-                <div className="absolute! left-0! right-0! top-full! z-50! mt-1! overflow-hidden! rounded-lg! border! border-[#e0e0e0]! bg-white! py-1! shadow-lg!">
-                  <div className="px-3! py-1.5! text-[11px]! font-medium! uppercase! tracking-wider! text-[#8d8d8d]!">
+                <div className="absolute! left-0! right-0! top-full! z-50! mt-1! overflow-hidden! rounded-lg! border! border-border! bg-popover! py-1! shadow-lg!">
+                  <div className="px-3! py-1.5! text-[11px]! font-medium! uppercase! tracking-wider! text-muted-foreground!">
                     {t('filter-by-type', { defaultValue: 'Filter by type' })}
                   </div>
                   {filteredSuggestions.map((config) => (
                     <button
                       key={config.type}
                       id={`entity-suggest-${config.slug}`}
-                      className="flex! w-full! items-center! gap-2! px-3! py-2! text-left! text-sm! text-[#161616]! transition-colors! hover:bg-[#e8e8e8]! focus:bg-[#e8e8e8]! focus:outline-none!"
+                      className="flex! w-full! items-center! gap-2! px-3! py-2! text-left! text-sm! text-foreground! transition-colors! hover:bg-surface-elevated! focus:bg-surface-elevated! focus:outline-none!"
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => handleSelectEntityTag(config.type as EntityType)}
                       type="button"
@@ -350,26 +347,11 @@ const TopSearchBar = () => {
           sideOffset={2}
           style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}
         >
-          <div
-            className={cn(
-              'countries-browse-panel overflow-hidden! rounded-lg!',
-              !isLight && '[&_.search-container]:!bg-[#242424] [&_p]:!bg-[#242424]',
-            )}
-            style={{
-              border: `1px solid ${isLight ? '#e0e0e0' : '#393939'}`,
-              backgroundColor: countriesPanelBg,
-            }}
-          >
-            <SearchResultScroll
-              className="search-container max-h-[calc(80vh-6.5rem)]"
-              style={{ backgroundColor: countriesPanelBg }}
-            >
+          <div className="countries-browse-panel overflow-hidden! rounded-lg! border! border-border! bg-surface-panel! [&_.search-container]:bg-surface-panel! [&>div]:bg-surface-panel!">
+            <SearchResultScroll className="search-container max-h-[calc(80vh-6.5rem)] bg-surface-panel!">
               <SearchCountryList />
             </SearchResultScroll>
-            <div
-              style={{ backgroundColor: countriesPanelBg }}
-              className={cn(!isLight && '[&>div]:!bg-[#242424]')}
-            >
+            <div className="bg-surface-panel! [&>div]:bg-surface-panel!">
               <FooterTourContact message={t("not-the-results-you-expected")} />
             </div>
           </div>
