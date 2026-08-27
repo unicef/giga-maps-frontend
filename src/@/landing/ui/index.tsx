@@ -1,4 +1,8 @@
 import { useStore } from 'effector-react';
+import { useEffect } from 'react';
+
+import { $isMobile } from '~/core/media-query';
+import { cn } from '~/lib/cn';
 
 import { HERO_GLOBE_VIDEO, LAYER_SECTIONS } from '../landing.constant';
 import { $hero, $landingSections, $layerSections } from '../landing.model';
@@ -6,6 +10,7 @@ import { hasLayerContent, LayerSectionData } from '../landing.types';
 import { CtaSection } from './cta-section';
 import { FaqSection } from './faq-section';
 import { HeroGlobe } from './hero-globe';
+import { preloadHeroGlobe } from './hero-globe.resources';
 import { HeroSection } from './hero-section';
 import { HeroSkeleton } from './hero-skeleton';
 import { LandingFooter } from './landing-footer';
@@ -30,8 +35,19 @@ const EMPTY_LAYER: LayerSectionData = {
 const LandingPage = () => {
   const hero = useStore($hero);
   const layers = useStore($layerSections);
+  const storeIsMobile = useStore($isMobile);
   // `null` means the first request has not resolved yet.
   const sections = useStore($landingSections);
+  const isMobile =
+    storeIsMobile || window.matchMedia('(max-width: 768px)').matches;
+
+  // Starts the Three module and both compact binary assets together after the
+  // first paint. It does not wait for the CMS request that supplies hero copy.
+  useEffect(() => {
+    if (isMobile) return undefined;
+    const frame = requestAnimationFrame(preloadHeroGlobe);
+    return () => cancelAnimationFrame(frame);
+  }, [isMobile]);
 
   return (
     <div
@@ -41,44 +57,58 @@ const LandingPage = () => {
       <LandingHeader />
 
       <main>
-        {sections === null ? <HeroSkeleton /> : null}
-
-        {hero ? (
-          <HeroSection
-            data={hero}
-            media={
-              HERO_GLOBE_VIDEO ? (
-                <HeroGlobe src={HERO_GLOBE_VIDEO} />
-              ) : undefined
-            }
+        {sections === null || hero ? (
+          <div
+            className={cn(
+              'relative! isolate!',
+              // The globe stage runs 180vh from the top of this wrapper, so the
+              // next section covers its lower half. Extra room lets more of the
+              // globe breathe before that overlap starts.
+              !isMobile && 'mb-32!',
+            )}
           >
-            {/* The hero column is `items-start`, so the list would shrink to
-                its content and the dividers would stop mid-screen. */}
-            <StatsRow className="w-full!" />
-          </HeroSection>
+            {isMobile ? null : (
+              <HeroGlobe
+                fallbackSrc={HERO_GLOBE_VIDEO ?? hero?.media}
+                stage={true}
+              />
+            )}
+
+            {sections === null ? <HeroSkeleton /> : null}
+
+            {hero ? (
+              <HeroSection data={hero} showMedia={false}>
+                {/* The hero column is `items-start`, so the list would shrink to
+                    its content and the dividers would stop mid-screen. */}
+                <StatsRow className="w-full!" />
+              </HeroSection>
+            ) : null}
+          </div>
         ) : null}
 
-        {LAYER_SECTIONS.map(({ mediaSide, type, ...config }) => {
-          const data = layers[type] ?? EMPTY_LAYER;
-          if (!hasLayerContent(data)) return null;
+        <div className="relative! z-[1]!">
+          {LAYER_SECTIONS.map(({ mediaSide, type, ...config }) => {
+            const data = layers[type] ?? EMPTY_LAYER;
+            if (!hasLayerContent(data)) return null;
 
-          return (
-            <LayerSection
-              data={data}
-              id={type}
-              key={type}
-              mediaSide={mediaSide}
-              video={'video' in config ? config.video : undefined}
-            />
-          );
-        })}
+            return (
+              <LayerSection
+                data={data}
+                id={type}
+                key={type}
+                mediaSide={mediaSide}
+                video={'video' in config ? config.video : undefined}
+              />
+            );
+          })}
 
-        <TestimonialsSection />
-        <SuccessStoriesSection />
-        <ServicesSection />
-        <FaqSection />
-        <PartnersSection />
-        <CtaSection />
+          <TestimonialsSection />
+          <SuccessStoriesSection />
+          <ServicesSection />
+          <FaqSection />
+          <PartnersSection />
+          <CtaSection />
+        </div>
       </main>
 
       <LandingFooter />
