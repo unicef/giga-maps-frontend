@@ -171,15 +171,15 @@ export function EntityDuplicateLocationList({
           const staticValue = getStaticValue(item.staticValue);
           const statusLabel = t(
             ConnectivityStatusNames[item.connectivityStatus ?? UNKNOWN] ??
-            item.connectivityStatus ??
-            UNKNOWN,
+              item.connectivityStatus ??
+              UNKNOWN,
           );
 
           return (
             <button
               key={item.id}
               aria-label={`Open ${item.name}`}
-              className="flex! w-full! flex-col! rounded-xl! border! border-[#242424]! bg-card! p-3.5! text-left! transition-colors! hover:bg-muted/40! dark:bg-[#181818]!"
+              className="flex! w-full! flex-col! rounded-xl! border! border-card-border! bg-card! p-3.5! text-left! transition-colors! hover:bg-muted/40!"
               onClick={() => {
                 navigateToEntity(entityType, countryCode, item.id);
                 if (item.geopoint?.coordinates) {

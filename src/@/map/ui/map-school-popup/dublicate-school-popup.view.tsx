@@ -285,7 +285,7 @@ export default function DublicateSchoolPopup({
                   {s?.isVerifiedSchool === false && (
                     <Badge
                       variant="outline"
-                      className="min-h-5! rounded-md! border-transparent! bg-[#FCD34D]! px-2! py-0.5! text-xs! font-normal! leading-4! text-[#44403C]! hover:bg-[#FCD34D]!"
+                      className="min-h-5! rounded-md! border-transparent! bg-warning/15! px-2! py-0.5! text-xs! font-normal! leading-4! text-warning! hover:bg-warning/15!"
                     >
                       Unverified
                     </Badge>
@@ -347,7 +347,7 @@ export default function DublicateSchoolPopup({
 
                   <Button
                     size="icon"
-                    className="size-10! shrink-0! cursor-pointer! rounded-full! border-0! bg-[#005BED]! text-[#FAFAFA]! shadow-xs! transition-all! hover:bg-[#0052D6]! focus:outline-none! active:bg-[#0047B3]!"
+                    className="size-10! shrink-0! cursor-pointer! rounded-full! border-0! bg-primary! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
                     onClick={() => {
                       navigateToEntity(entityType, countryCode, s.id);
                       if (s?.geopoint?.coordinates) {

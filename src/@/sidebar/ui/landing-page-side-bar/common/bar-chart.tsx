@@ -62,7 +62,7 @@ const BarChart = ({
               />
             </TooltipTrigger>
             <TooltipContent
-              className="!z-[7000] !max-w-none !whitespace-nowrap !rounded-[2px] !border !border-[#6f6f6f] !bg-[#393939] !px-2 !py-1 !text-[12px] !leading-4 !text-[#f4f4f4] !shadow-none [&_[data-slot=tooltip-arrow]]:!hidden"
+              className="!z-[7000] !max-w-none !whitespace-nowrap !rounded-[2px] !border !border-border !bg-popover !px-2 !py-1 !text-[12px] !leading-4 !text-popover-foreground !shadow-none [&_[data-slot=tooltip-arrow]]:!hidden"
               side="top"
               sideOffset={8}
             >

@@ -103,7 +103,7 @@ export const MapSchoolPopup = () => {
                           {feature?.isVerifiedSchool === false && (
                             <Badge
                               variant="outline"
-                              className="min-h-5! rounded-md! border-transparent! bg-[#FCD34D]! px-2! py-0.5! text-xs! font-normal! leading-4! text-[#44403C]! hover:bg-[#FCD34D]!"
+                              className="min-h-5! rounded-md! border-transparent! bg-warning/15! px-2! py-0.5! text-xs! font-normal! leading-4! text-warning! hover:bg-warning/15!"
                             >
                               Unverified
                             </Badge>
@@ -195,7 +195,7 @@ export const MapSchoolPopup = () => {
                       {/* Action Button */}
                       {targetEntityType && (feature?.id || schoolId) && isClicked && (
                         <Button
-                          className="go-to-school mt-1! w-full! cursor-pointer! justify-center! gap-1.5! rounded-full! border-0! bg-[#005BED]! px-2.5! py-2! text-sm! font-medium! text-[#FAFAFA]! shadow-xs! transition-all! hover:bg-[#0052D6]! focus:outline-none! active:bg-[#0047B3]!"
+                          className="go-to-school mt-1! w-full! cursor-pointer! justify-center! gap-1.5! rounded-full! border-0! bg-primary! px-2.5! py-2! text-sm! font-medium! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
                           onClick={() => {
                             const targetId = feature?.id ?? schoolId;
                             if (targetId && targetEntityType) {
