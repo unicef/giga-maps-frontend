@@ -314,7 +314,7 @@ export default function HeroGlobeScene({
       globe.add(pointsObject);
     };
 
-    const parseBuffers = (landBuffer: ArrayBuffer, schools?: ArrayBuffer) => {
+    const parseBuffers = (landBuffer: ArrayBuffer, schools: ArrayBuffer) => {
       const nextPoints: GlobePoint[] = [];
       const land = new Int16Array(landBuffer);
 
@@ -328,25 +328,21 @@ export default function HeroGlobeScene({
         });
       }
 
-      if (schools) {
-        const view = new DataView(schools);
-        const count = view.getUint32(0, true);
-        if (schools.byteLength === 4 + count * 5) {
-          for (let index = 0; index < count; index += 1) {
-            const offset = 4 + index * 5;
-            nextPoints.push({
-              kind: STATUS[view.getUint8(offset + 4)] ?? 'unknown',
-              latitude: view.getInt16(offset + 2, true) / 100,
-              longitude: view.getInt16(offset, true) / 100,
-              seed: random(),
-            });
-          }
-        }
+      const view = new DataView(schools);
+      const count = view.getUint32(0, true);
+      // A truncated asset would otherwise render as a globe with land only,
+      // indistinguishable from one where every school is unmapped.
+      if (schools.byteLength !== 4 + count * 5) {
+        throw new Error('Hero globe: school buffer size does not match header');
       }
 
-      if (!schools) {
-        nextPoints.forEach((point) => {
-          if (random() < 0.4) point.kind = STATUS[Math.floor(random() * 4)];
+      for (let index = 0; index < count; index += 1) {
+        const offset = 4 + index * 5;
+        nextPoints.push({
+          kind: STATUS[view.getUint8(offset + 4)] ?? 'unknown',
+          latitude: view.getInt16(offset + 2, true) / 100,
+          longitude: view.getInt16(offset, true) / 100,
+          seed: random(),
         });
       }
 

@@ -1,6 +1,6 @@
 export interface HeroGlobeBuffers {
   land: ArrayBuffer;
-  schools?: ArrayBuffer;
+  schools: ArrayBuffer;
 }
 
 export interface NamedSchool {
@@ -57,7 +57,7 @@ export const loadHeroGlobeScene = () => {
 export const loadHeroGlobeBuffers = () => {
   buffersPromise ??= Promise.all([
     fetchBuffer(LAND_URL),
-    fetchBuffer(SCHOOLS_URL).catch(() => undefined),
+    fetchBuffer(SCHOOLS_URL),
   ]).then(([land, schools]) => {
     mark('hero-globe:data-ready');
     return { land, schools };
