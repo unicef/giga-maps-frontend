@@ -2,6 +2,7 @@ import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 
 import { $isMobile } from '~/core/media-query';
+import { cn } from '~/lib/cn';
 
 import { HERO_GLOBE_VIDEO, LAYER_SECTIONS } from '../landing.constant';
 import { $hero, $landingSections, $layerSections } from '../landing.model';
@@ -57,7 +58,15 @@ const LandingPage = () => {
 
       <main>
         {sections === null || hero ? (
-          <div className="relative! isolate!">
+          <div
+            className={cn(
+              'relative! isolate!',
+              // The globe stage runs 180vh from the top of this wrapper, so the
+              // next section covers its lower half. Extra room lets more of the
+              // globe breathe before that overlap starts.
+              !isMobile && 'mb-32!',
+            )}
+          >
             {isMobile ? null : (
               <HeroGlobe
                 fallbackSrc={HERO_GLOBE_VIDEO ?? hero?.media}
