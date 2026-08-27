@@ -52,7 +52,7 @@ export const EntityEmptyState = ({
                 />
               ),
             }}
-            defaults="{{subject}} in <country>{{countryName}}</country> aren’t mapped here yet. For more information, <contact>contact us</contact>."
+            defaults="{{subject}} in <country>{{countryName}}</country> have not been mapped yet. For more information, <contact>contact us</contact>."
             i18nKey="subject-in-country-arent-mapped-here-yet"
             t={t}
             values={{ subject, countryName }}
