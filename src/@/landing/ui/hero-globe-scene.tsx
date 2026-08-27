@@ -48,23 +48,24 @@ const STATUS_COLOR: Record<Status, string> = {
   unknown: '#1d8cf0',
 };
 const GLOBE_COLOR = {
-  land: '#25394f',
-  ocean: '#121d2a',
-  rim: '#172538',
+  land: '#0b1722',
+  ocean: '#000414',
+  rim: '#000000',
 };
-// Globe is offset right, so the framed band is west of centre: 55 = Africa.
-const FOCUS_LONGITUDE = 55;
-const FOCUS_LATITUDE = -9;
-// One-sided westward excursion, not a symmetric amplitude: ends at -20 = Brazil.
-const SWAY = (75 * Math.PI) / 180;
-const SWAY_PERIOD = 120;
+// Globe is offset right, so the framed band sits west of the face centre.
+const FOCUS_LONGITUDE = 21;
+const FOCUS_LATITUDE = 0;
+// One-sided westward excursion, not a symmetric amplitude.
+const SWAY = (74 * Math.PI) / 180;
+const SWAY_PERIOD = 300;
 const PULSE_PERIOD = 2.4;
+const POINT_OPACITY = 1;
 // Halo radius; fragment cost scales with its square and the dot size is unaffected.
 const PULSE_GROW = 0.8;
 const CAMERA_DISTANCE = 4.4;
 const INITIAL_FOV = 32;
-const GLOBE_SCALE = 2.05;
-const GLOBE_POSITION: [number, number] = [0.75, -0.5];
+const GLOBE_SCALE = 1.65;
+const GLOBE_POSITION: [number, number] = [0.75, -0.3];
 const MAX_CARDS = 3;
 const FRAME_INTERVAL = 1000 / 30;
 
@@ -156,6 +157,7 @@ export default function HeroGlobeScene({
       globeScale: GLOBE_SCALE,
       globeX: GLOBE_POSITION[0],
       globeY: GLOBE_POSITION[1],
+      pointOpacity: POINT_OPACITY,
       pulseGrow: PULSE_GROW,
       pulsePeriod: PULSE_PERIOD,
       showPlanet: true,
@@ -204,6 +206,7 @@ export default function HeroGlobeScene({
     const pointMaterial = new ShaderMaterial({
       depthWrite: false,
       fragmentShader: `
+        uniform float pointOpacity;
         varying vec3 pointColor;
         varying float phase;
         varying float coreRadius;
@@ -221,6 +224,7 @@ export default function HeroGlobeScene({
             );
             alpha = max(alpha, pulseRing * 0.2 * (1.0 - phase));
           }
+          alpha *= pointOpacity;
           if (alpha < 0.01) discard;
           gl_FragColor = vec4(pointColor, alpha);
           #include <colorspace_fragment>
@@ -229,6 +233,7 @@ export default function HeroGlobeScene({
       transparent: true,
       uniforms: {
         pixelRatio: { value: renderer.getPixelRatio() },
+        pointOpacity: { value: POINT_OPACITY },
         pulseGrow: { value: PULSE_GROW },
         pulsePeriod: { value: PULSE_PERIOD },
         time: { value: 0 },
@@ -639,6 +644,13 @@ export default function HeroGlobeScene({
         framing.add(settings, 'globeY', -2, 2, 0.05).name('y').onChange(resize);
 
         const dots = gui.addFolder('Dots');
+        dots
+          .add(settings, 'pointOpacity', 0, 1, 0.05)
+          .name('opacity')
+          .onChange((value: number) => {
+            pointMaterial.uniforms.pointOpacity.value = value;
+            redraw();
+          });
         dots
           .add(settings, 'pulseGrow', 0.5, 6, 0.1)
           .name('glow radius')
