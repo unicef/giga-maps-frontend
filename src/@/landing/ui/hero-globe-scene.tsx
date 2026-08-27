@@ -57,7 +57,7 @@ const FOCUS_LONGITUDE = 21;
 const FOCUS_LATITUDE = 0;
 // One-sided westward excursion, not a symmetric amplitude.
 const SWAY = (74 * Math.PI) / 180;
-const SWAY_PERIOD = 300;
+const SWAY_PERIOD = 180;
 const PULSE_PERIOD = 2.4;
 const POINT_OPACITY = 1;
 // Halo radius; fragment cost scales with its square and the dot size is unaffected.
@@ -397,11 +397,11 @@ export default function HeroGlobeScene({
             : undefined;
         const candidate = named
           ? {
-              kind: STATUS[named.status] ?? 'unknown',
-              latitude: named.latitude,
-              longitude: named.longitude,
-              seed: random(),
-            }
+            kind: STATUS[named.status] ?? 'unknown',
+            latitude: named.latitude,
+            longitude: named.longitude,
+            seed: random(),
+          }
           : points[Math.floor(random() * points.length)];
 
         if (candidate?.kind === 'land' || !isFacingCamera(candidate)) continue;
@@ -409,7 +409,7 @@ export default function HeroGlobeScene({
           named
             ? card.name === named.name
             : card.point.latitude === candidate.latitude &&
-              card.point.longitude === candidate.longitude,
+            card.point.longitude === candidate.longitude,
         );
         if (isOnScreen) continue;
 
@@ -491,8 +491,8 @@ export default function HeroGlobeScene({
         (reducedMotion
           ? 0
           : ((settings.swayDegrees * Math.PI) / 180) *
-            0.5 *
-            (1 - Math.cos((time * 2 * Math.PI) / settings.swayPeriod)));
+          0.5 *
+          (1 - Math.cos((time * 2 * Math.PI) / settings.swayPeriod)));
       globe.updateMatrixWorld();
       pointMaterial.uniforms.time.value = reducedMotion ? 0 : time;
       if (dataReady) updateCards(time);
