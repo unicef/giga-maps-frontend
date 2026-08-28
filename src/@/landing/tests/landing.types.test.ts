@@ -159,17 +159,33 @@ describe('toFooter', () => {
   it('reads the footer content object rather than an array', () => {
     const data = toFooter({
       content: {
+        footerDescription: "A United Nation's initiative",
         footerLinks: [{ text: '<ul><li><a href="/map">Map</a></li></ul>' }],
+        footerLogo: [
+          { text: '<a href="https://giga.global/">giga</a>' },
+          { text: '<a href="https://www.unicef.org/"><svg /></a>' },
+          { text: '' },
+        ],
         socialLinks: [{ text: '<a href="https://x.com"></a>' }, { text: '' }],
       },
       id: 12,
-      text: ['Connect every school'],
       type: 'footer',
     });
 
-    expect(data.tagline).toBe('Connect every school');
+    expect(data.description).toBe("A United Nation's initiative");
     expect(data.linkColumns).toHaveLength(1);
     expect(data.socialLinks).toHaveLength(1);
+    expect(data.accreditations).toEqual([
+      '<a href="https://giga.global/">giga</a>',
+      '<a href="https://www.unicef.org/"><svg /></a>',
+    ]);
+  });
+
+  it('falls back to empty values when the section stores content as an array', () => {
+    const data = toFooter({ content: [], id: 12, type: 'footer' });
+
+    expect(data.accreditations).toEqual([]);
+    expect(data.description).toBe('');
   });
 });
 

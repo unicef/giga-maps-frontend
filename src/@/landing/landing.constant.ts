@@ -44,12 +44,14 @@ export const LANDING_COPY = {
   nextTestimonial: 'Next testimonial',
   openMenu: 'Open menu',
   previousTestimonial: 'Previous testimonial',
+  readMore: 'Read More',
   readStory: 'Read Full Story',
   showMoreStories: 'Show {{count}} More Stories',
   skipToContent: 'Skip to content',
-  statCountries: 'Countries Engaged',
-  statHealthCenters: 'Health centers Mapped',
-  statSchools: 'Schools Mapped',
+  statCountries: 'Countries engaged',
+  statHealthFacilities: 'Health facilities mapped',
+  statSchools: 'Schools mapped',
+  storyTitleFallback: 'Success story',
 } as const;
 
 // Single-string templates keep word order translatable; never concatenate.
