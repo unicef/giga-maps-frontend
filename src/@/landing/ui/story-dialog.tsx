@@ -21,7 +21,7 @@ export const StoryDialog = ({ onOpenChange, story }: StoryDialogProps) => {
 
   return (
     <Dialog onOpenChange={onOpenChange} open={true}>
-      <DialogContent className="flex! max-h-[85dvh]! flex-col! gap-0! overflow-hidden! border-border! bg-background! p-6! text-foreground! tablet:max-w-[37.5rem]!">
+      <DialogContent className="flex! max-h-[min(400px,70dvh)]! flex-col! gap-0! overflow-hidden! border-border! bg-background! p-6! text-foreground! tablet:max-h-[85dvh]! tablet:max-w-[37.5rem]!">
         <DialogHeader className="shrink-0! pr-8!">
           {/* A story only needs a title or a body, so the heading Radix
               requires is not always something worth showing. */}

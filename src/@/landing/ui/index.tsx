@@ -22,6 +22,13 @@ import { StatsRow } from './stats-row';
 import { SuccessStoriesSection } from './success-stories-section';
 import { TestimonialsSection } from './testimonials-section';
 
+// Mobile stands in for the globe with a flat dot map. Resolved the same way as
+// the globe binaries so Vite fingerprints it.
+const HERO_MOBILE_ART = new URL(
+  '../../../assets/hero/hero-mobile.png',
+  import.meta.url,
+).href;
+
 const EMPTY_LAYER: LayerSectionData = {
   body: '',
   ctaLink: '',
@@ -83,7 +90,17 @@ const LandingPage = () => {
               !isMobile && 'mb-32!',
             )}
           >
-            {isMobile ? null : (
+            {isMobile ? (
+              // Bleeds up behind the sticky header, which is transparent at the
+              // top of the page.
+              <img
+                alt=""
+                className="pointer-events-none! absolute! -top-16! right-0! left-0! -z-10! w-full! select-none!"
+                decoding="async"
+                fetchPriority="high"
+                src={HERO_MOBILE_ART}
+              />
+            ) : (
               <HeroGlobe fallbackSrc={hero?.media} stage={true} />
             )}
 
