@@ -11,9 +11,9 @@ import { CmsSectionType } from '../landing.types';
 import { GetInTouchDialog } from './get-in-touch-dialog';
 import { StatsRow } from './stats-row';
 
-// The old /about opened the contact modal from this button, and the CMS still
-// stores it as a link to that page. Match on the link: the label arrives
-// translated, so comparing against it would only ever work in English.
+// The CMS stores this CTA as a link to this same page, which is how it opened
+// the contact modal. Match on the link: the label arrives translated, so
+// comparing against it would only ever work in English.
 const opensContactForm = (link: string) =>
   link.replace(/\/$/, '').endsWith('/about');
 
