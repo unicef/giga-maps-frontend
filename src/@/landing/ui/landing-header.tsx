@@ -50,7 +50,7 @@ export const LandingHeader = () => {
   const cta =
     header.ctaText && header.ctaLink ? (
       <a
-        className="group inline-flex items-center gap-2 text-base! font-medium! text-primary! transition-colors hover:text-primary/80!"
+        className="group inline-flex items-center gap-2 text-base! font-medium! text-primary-700! transition-colors hover:text-primary/80!"
         href={header.ctaLink}
         rel="noreferrer"
         target="_blank"
