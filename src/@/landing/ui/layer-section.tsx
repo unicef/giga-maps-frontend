@@ -16,16 +16,10 @@ interface LayerSectionProps {
   data: LayerSectionData;
   id: string;
   mediaSide: 'left' | 'right';
-  video?: string;
 }
 
 // No fixed heights: translated copy runs 20-25% longer.
-export const LayerSection = ({
-  data,
-  id,
-  mediaSide,
-  video,
-}: LayerSectionProps) => (
+export const LayerSection = ({ data, id, mediaSide }: LayerSectionProps) => (
   <section
     className={cn(LANDING_CONTAINER, LANDING_ANCHOR, 'py-12! tablet:py-24!')}
     id={id}
@@ -70,7 +64,6 @@ export const LayerSection = ({
       <SectionMedia
         className={cn(mediaSide === 'left' && 'tablet:order-1')}
         image={data.media}
-        video={video}
       />
     </div>
   </section>
