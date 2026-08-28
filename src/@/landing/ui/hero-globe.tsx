@@ -18,6 +18,7 @@ const HeroGlobeScene = lazy(loadHeroGlobeScene);
 const GLOBE_LABELS = {
   bad: LANDING_COPY.heroStatusBad,
   good: LANDING_COPY.heroStatusGood,
+  healthFacility: LANDING_COPY.heroHealthFacility,
   moderate: LANDING_COPY.heroStatusModerate,
   school: LANDING_COPY.heroSchool,
   unknown: LANDING_COPY.heroStatusUnknown,

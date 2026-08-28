@@ -207,9 +207,10 @@ export const toHeader = (section: CmsSection | null): HeaderData => ({
 
 export interface FooterData {
   // Raw HTML blocks authored in the admin.
+  accreditations: string[];
+  description: string;
   linkColumns: string[];
   socialLinks: string[];
-  tagline: string;
 }
 
 export const toFooter = (section: CmsSection | null): FooterData => {
@@ -220,9 +221,11 @@ export const toFooter = (section: CmsSection | null): FooterData => {
     (items ?? []).map((item) => item.text ?? '').filter((text) => text !== '');
 
   return {
+    // `footerLogo` holds the Giga / UNICEF / ITU accreditation marks.
+    accreditations: html(content?.footerLogo),
+    description: normalise(content?.footerDescription),
     linkColumns: html(content?.footerLinks),
     socialLinks: html(content?.socialLinks),
-    tagline: normalise(section?.text?.[0]),
   };
 };
 

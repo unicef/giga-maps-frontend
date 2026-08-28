@@ -35,7 +35,7 @@ interface GlobePoint {
 }
 
 interface HeroGlobeSceneProps {
-  labels: Record<Status, string> & { school: string };
+  labels: Record<Status, string> & { healthFacility: string; school: string };
   onReady: () => void;
   onUnavailable: () => void;
 }
@@ -59,7 +59,7 @@ const FOCUS_LATITUDE = 0;
 const SWAY = (74 * Math.PI) / 180;
 const SWAY_PERIOD = 180;
 const PULSE_PERIOD = 2.4;
-const POINT_OPACITY = 1;
+const POINT_OPACITY = 0.9;
 // Halo radius; fragment cost scales with its square and the dot size is unaffected.
 const PULSE_GROW = 0.8;
 const CAMERA_DISTANCE = 4.4;
@@ -82,6 +82,11 @@ const toVector = (
     Math.sin(phi) * Math.sin(theta),
   ];
 };
+
+// The hero data is schools only, so the entity type of an unnamed card is
+// decorative. Keyed on the point seed, not re-rolled per card, so the same dot
+// never changes type between appearances.
+const HEALTH_CARD_SHARE = 0.5;
 
 const createRandom = () => {
   let state = 1337;
@@ -107,7 +112,9 @@ const createCard = (
   card.className = 'hero-globe-card';
   card.setAttribute('aria-hidden', 'true');
   marker.style.setProperty('--hero-status-color', color);
-  title.textContent = name || labels.school;
+  title.textContent =
+    name ||
+    (point.seed < HEALTH_CARD_SHARE ? labels.healthFacility : labels.school);
   status.textContent = labels[point.kind as Status];
   card.append(marker, title, status);
 
@@ -393,11 +400,11 @@ export default function HeroGlobeScene({
             : undefined;
         const candidate = named
           ? {
-            kind: STATUS[named.status] ?? 'unknown',
-            latitude: named.latitude,
-            longitude: named.longitude,
-            seed: random(),
-          }
+              kind: STATUS[named.status] ?? 'unknown',
+              latitude: named.latitude,
+              longitude: named.longitude,
+              seed: random(),
+            }
           : points[Math.floor(random() * points.length)];
 
         if (candidate?.kind === 'land' || !isFacingCamera(candidate)) continue;
@@ -405,7 +412,7 @@ export default function HeroGlobeScene({
           named
             ? card.name === named.name
             : card.point.latitude === candidate.latitude &&
-            card.point.longitude === candidate.longitude,
+              card.point.longitude === candidate.longitude,
         );
         if (isOnScreen) continue;
 
@@ -487,8 +494,8 @@ export default function HeroGlobeScene({
         (reducedMotion
           ? 0
           : ((settings.swayDegrees * Math.PI) / 180) *
-          0.5 *
-          (1 - Math.cos((time * 2 * Math.PI) / settings.swayPeriod)));
+            0.5 *
+            (1 - Math.cos((time * 2 * Math.PI) / settings.swayPeriod)));
       globe.updateMatrixWorld();
       pointMaterial.uniforms.time.value = reducedMotion ? 0 : time;
       if (dataReady) updateCards(time);

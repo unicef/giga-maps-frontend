@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 import { ArrowRight, Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import GigaMapsLogo from '~/assets/images/GigaMaps.svg';
 import { Button } from '~/components/ui/button';
@@ -20,6 +20,21 @@ export const LandingHeader = () => {
   const header = useStore($header);
   const isTablet = useStore($isTablet);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // The bar stays transparent at the top so the hero globe reads through it,
+  // and only paints once content starts sliding underneath. The landing owns
+  // its scroll container, so the listener goes on the parent, not the window.
+  useEffect(() => {
+    const scroller = headerRef.current?.parentElement;
+    if (!scroller) return undefined;
+
+    const update = () => setIsScrolled(scroller.scrollTop > 8);
+    update();
+    scroller.addEventListener('scroll', update, { passive: true });
+    return () => scroller.removeEventListener('scroll', update);
+  }, []);
 
   const navLinks = header.items.map((item) => (
     <a
@@ -35,7 +50,7 @@ export const LandingHeader = () => {
   const cta =
     header.ctaText && header.ctaLink ? (
       <a
-        className="group inline-flex items-center gap-2 text-base! font-medium! text-primary! transition-colors hover:text-primary/80!"
+        className="group inline-flex items-center gap-2 text-base! font-medium! text-primary-700! transition-colors hover:text-primary/80!"
         href={header.ctaLink}
         rel="noreferrer"
         target="_blank"
@@ -50,8 +65,14 @@ export const LandingHeader = () => {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b border-border bg-landing-background/95 backdrop-blur"
+      className={cn(
+        // The border keeps its box even when transparent: toggling `border-b`
+        // would shift the whole page by 1px on scroll.
+        'sticky top-0 z-50 w-full border-b border-transparent transition-colors duration-300',
+        isScrolled && 'border-border bg-landing-background/95 backdrop-blur',
+      )}
       data-slot="landing-header"
+      ref={headerRef}
     >
       <div
         className={cn(
