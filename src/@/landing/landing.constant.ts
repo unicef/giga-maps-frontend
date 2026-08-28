@@ -33,6 +33,7 @@ export const LANDING_COPY = {
   brokenImage: 'Image not found',
   closeMenu: 'Close menu',
   goToTestimonial: 'Go to testimonial {{count}}',
+  heroHealthFacility: 'Health facility',
   heroMediaAlt: 'Globe showing mapped schools and their connectivity',
   heroSchool: 'School',
   heroStatusBad: 'No connection',

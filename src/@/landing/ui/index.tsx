@@ -74,7 +74,9 @@ const LandingPage = () => {
 
   return (
     <div
-      className="h-full! w-full! overflow-x-hidden! overflow-y-auto! bg-landing-background! text-foreground!"
+      // `color-scheme` is what paints the native scrollbar: without it the
+      // browser renders a light one over the black landing background.
+      className="h-full! w-full! scheme-light overflow-x-hidden! overflow-y-auto! bg-landing-background! text-foreground! dark:scheme-dark"
       data-slot="landing-page"
     >
       <LandingHeader />

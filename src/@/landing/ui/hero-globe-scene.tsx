@@ -35,7 +35,7 @@ interface GlobePoint {
 }
 
 interface HeroGlobeSceneProps {
-  labels: Record<Status, string> & { school: string };
+  labels: Record<Status, string> & { healthFacility: string; school: string };
   onReady: () => void;
   onUnavailable: () => void;
 }
@@ -83,6 +83,11 @@ const toVector = (
   ];
 };
 
+// The hero data is schools only, so the entity type of an unnamed card is
+// decorative. Keyed on the point seed, not re-rolled per card, so the same dot
+// never changes type between appearances.
+const HEALTH_CARD_SHARE = 0.5;
+
 const createRandom = () => {
   let state = 1337;
   return () => (state = (state * 16_807) % 2_147_483_647) / 2_147_483_647;
@@ -107,7 +112,9 @@ const createCard = (
   card.className = 'hero-globe-card';
   card.setAttribute('aria-hidden', 'true');
   marker.style.setProperty('--hero-status-color', color);
-  title.textContent = name || labels.school;
+  title.textContent =
+    name ||
+    (point.seed < HEALTH_CARD_SHARE ? labels.healthFacility : labels.school);
   status.textContent = labels[point.kind as Status];
   card.append(marker, title, status);
 
