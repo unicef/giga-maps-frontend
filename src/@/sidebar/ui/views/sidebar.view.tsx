@@ -15,15 +15,16 @@ import ZoomButtons from '~/@/map/ui/layer-theme/zoom-buttons';
 import LegendButton from '~/@/map/ui/legend-info/legend-button';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
 import {
+  $getSchoolParams,
   $isMenuOpen,
   $isSidebarCollapsed,
   $isTimeplayer,
-  $getSchoolParams,
   $sidebarHeight,
   onClickSidebar,
   setSidebarHeight,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { $isMobile } from '~/core/media-query';
 import {
   entityView,
@@ -103,21 +104,35 @@ export default function Sidebar() {
         >
           <div className={cn(isMobile && 'bg-background! pb-5!')}>
             <SideInfoPanelHeaderLogoAndMenuButton />
-            {isMenuOpen && <SidebarMenuList />}
+            {isMenuOpen && (
+              <ErrorBoundary name="SidebarMenuList" variant="card">
+                <SidebarMenuList />
+              </ErrorBoundary>
+            )}
             {!isMenuOpen && (
               <div className="relative z-12">
-                <TopSearchBar />
-                <SearchResult />
+                <ErrorBoundary name="SidebarSearch" variant="minimal">
+                  <TopSearchBar />
+                  <SearchResult />
+                </ErrorBoundary>
               </div>
             )}
           </div>
-          {isMobile && <EntityTypeSelector />}
+          {isMobile && (
+            <ErrorBoundary name="MobileEntityTypeSelector" variant="minimal">
+              <EntityTypeSelector />
+            </ErrorBoundary>
+          )}
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col">
-          <BreadcrumbInfo />
+          <ErrorBoundary name="SidebarBreadcrumb" variant="minimal">
+            <BreadcrumbInfo />
+          </ErrorBoundary>
           {mapRoute ? (
-            <LandingPage />
+            <ErrorBoundary name="SidebarLandingView" variant="card">
+              <LandingPage />
+            </ErrorBoundary>
           ) : (
             <div
               className="h-full! min-h-0! flex-1! overflow-hidden! bg-background! max-md:h-[calc(100%-var(--detail-height-offset))]!"
@@ -127,12 +142,22 @@ export default function Sidebar() {
                 } as CSSProperties
               }
             >
-              {countryRoute && <GlobalAndCountryView />}
-              {(schoolRoute || entityRoute) && <SchoolView />}
+              {countryRoute && (
+                <ErrorBoundary name="SidebarCountryView" variant="card">
+                  <GlobalAndCountryView />
+                </ErrorBoundary>
+              )}
+              {(schoolRoute || entityRoute) && (
+                <ErrorBoundary name="SidebarEntityView" variant="card">
+                  <SchoolView />
+                </ErrorBoundary>
+              )}
             </div>
           )}
           {!mapRoute && !countryRoute && detailEntityType && (
-            <CommonComponentGigaLayer entityType={detailEntityType} />
+            <ErrorBoundary name="SidebarGigaLayer" variant="card">
+              <CommonComponentGigaLayer entityType={detailEntityType} />
+            </ErrorBoundary>
           )}
           <button
             className={cn(
@@ -158,18 +183,38 @@ export default function Sidebar() {
         >
           {!isMobile && (
             <BroadcastButton className="broadcast-button">
-              <FilterButton />
+              <ErrorBoundary name="SidebarFilterButton" variant="minimal">
+                <FilterButton />
+              </ErrorBoundary>
             </BroadcastButton>
           )}
           <TakeTourWrapper $bottom={sidebarHeight}>
-            {!isMobile && <ZoomButtons />}
-            {!sidebarHeight && <TimeplayerButton />}
-            <AccessibilityButton />
-            {!sidebarHeight && <ThemeButtons />}
-            <LegendButton />
+            {!isMobile && (
+              <ErrorBoundary name="SidebarZoomButtons" variant="minimal">
+                <ZoomButtons />
+              </ErrorBoundary>
+            )}
+            {!sidebarHeight && (
+              <ErrorBoundary name="SidebarTimeplayerButton" variant="minimal">
+                <TimeplayerButton />
+              </ErrorBoundary>
+            )}
+            <ErrorBoundary name="SidebarAccessibilityButton" variant="minimal">
+              <AccessibilityButton />
+            </ErrorBoundary>
+            {!sidebarHeight && (
+              <ErrorBoundary name="SidebarThemeButtons" variant="minimal">
+                <ThemeButtons />
+              </ErrorBoundary>
+            )}
+            <ErrorBoundary name="SidebarLegendButton" variant="minimal">
+              <LegendButton />
+            </ErrorBoundary>
           </TakeTourWrapper>
         </div>
-        <CountryDisclaimerNotification />
+        <ErrorBoundary name="SidebarDisclaimer" variant="minimal">
+          <CountryDisclaimerNotification />
+        </ErrorBoundary>
       </div>
     </div>
   );

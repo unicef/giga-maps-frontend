@@ -6,13 +6,14 @@ import { lazy, Suspense, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import WebFont from 'webfontloader';
 
+import { ErrorBoundary } from '~/components/ui/error-boundary';
+import { TooltipProvider } from '~/components/ui/tooltip';
 import { aboutus, admin, apiDocs, landing, map, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { appLoadEvent } from './init';
 import PageNotFound from './page-no-found';
 import { $theme, themeData } from './theme.model';
-import { TooltipProvider } from '~/components/ui/tooltip';
 
 const AboutPage = lazy(async () => import('~/@/about-giga-map/ui'));
 const LandingPage = lazy(async () => import('@/landing/ui'));
@@ -53,11 +54,31 @@ export const Root = () => {
     <Suspense fallback={<Loading withOverlay={true} />}>
       <ThemeProvider theme={themeData[theme]}>
         <TooltipProvider>
-          {useRoute(map) && <MapPage />}
-          {(apiDocsRoute || adminRoute) && <AuthRoot />}
-          {useRoute(aboutus) && <AboutPage />}
-          {useRoute(landing) && <LandingPage />}
-          {useStore(router.noMatches) && <PageNotFound />}
+          {useRoute(map) && (
+            <ErrorBoundary name="MapPage" variant="page">
+              <MapPage />
+            </ErrorBoundary>
+          )}
+          {(apiDocsRoute || adminRoute) && (
+            <ErrorBoundary name="AuthRoot" variant="page">
+              <AuthRoot />
+            </ErrorBoundary>
+          )}
+          {useRoute(aboutus) && (
+            <ErrorBoundary name="AboutPage" variant="page">
+              <AboutPage />
+            </ErrorBoundary>
+          )}
+          {useRoute(landing) && (
+            <ErrorBoundary name="LandingPage" variant="page">
+              <LandingPage />
+            </ErrorBoundary>
+          )}
+          {useStore(router.noMatches) && (
+            <ErrorBoundary name="PageNotFound" variant="page">
+              <PageNotFound />
+            </ErrorBoundary>
+          )}
         </TooltipProvider>
       </ThemeProvider>
     </Suspense>

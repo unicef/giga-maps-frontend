@@ -9,6 +9,7 @@ import EntityTypeSelector from '~/@/entities/ui/entity-selector';
 import WelcomeToast from '~/@/entities/ui/welcome-toast';
 import ProductTour from '~/@/product-tour/ui/product-tour.view';
 import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes, mapCountry } from '~/core/routes';
 import { Layout, Main } from '~/ui';
@@ -43,21 +44,45 @@ const MapPage = () => {
   return (
     <Layout>
       <Underlay>
-        <Map />
+        <ErrorBoundary name="MapCanvas" variant="card">
+          <Map />
+        </ErrorBoundary>
       </Underlay>
       <Main>
-        <Sidebar />
+        <ErrorBoundary name="MapSidebar" variant="card">
+          <Sidebar />
+        </ErrorBoundary>
         <PopupContainer>
-          <Popup />
+          <ErrorBoundary name="MapPopup" variant="minimal">
+            <Popup />
+          </ErrorBoundary>
         </PopupContainer>
       </Main>
-      {!isMobile && <EntityTypeSelector />}
-      <TopLoader />
-      <Footer />
-      <WelcomeToast />
+      {!isMobile && (
+        <ErrorBoundary name="EntityTypeSelector" variant="inline">
+          <EntityTypeSelector />
+        </ErrorBoundary>
+      )}
+      <ErrorBoundary name="TopLoader" variant="minimal">
+        <TopLoader />
+      </ErrorBoundary>
+      <ErrorBoundary name="MapFooter" variant="minimal">
+        <Footer />
+      </ErrorBoundary>
+      <ErrorBoundary name="WelcomeToast" variant="minimal">
+        <WelcomeToast />
+      </ErrorBoundary>
       {/* <ZoomLevelDisplay /> */}
-      {isProductTour && <ProductTour />}
-      {isTimeplayer && <TimeplayerContainer />}
+      {isProductTour && (
+        <ErrorBoundary name="ProductTour" variant="minimal">
+          <ProductTour />
+        </ErrorBoundary>
+      )}
+      {isTimeplayer && (
+        <ErrorBoundary name="Timeplayer" variant="inline">
+          <TimeplayerContainer />
+        </ErrorBoundary>
+      )}
     </Layout>
   );
 };

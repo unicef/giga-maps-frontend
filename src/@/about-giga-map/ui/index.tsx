@@ -1,6 +1,11 @@
 import { useStore } from 'effector-react';
 import { useEffect, useMemo } from 'react';
 
+import Toast from '~/@/common/Toast';
+import { fetchGlobalStatsFx } from '~/api/project-connect';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
+
+import { $aboutUsContent, connectivityStatsFx, getAboutUsContentFx } from '../about.model';
 import Acknowledgement from '../Sections/acknowledgement';
 import FooterLinks from '../Sections/footer-links';
 import FrequentlyAskedQuestions from '../Sections/frequently-asked-questions';
@@ -15,13 +20,7 @@ import SchoolConnected from '../Sections/school-connected';
 import SchoolConnectivity from '../Sections/school-connectivity';
 import SchoolLocation from '../Sections/school-location';
 import Sliders from '../Sections/slides';
-import {
-  AboutGigaMapModalStyle,
-} from "../styles/about-giga-map-styles";
-import { $aboutUsContent, connectivityStatsFx, getAboutUsContentFx } from '../about.model';
-import Toast from '~/@/common/Toast';
-import { fetchGlobalStatsFx } from '~/api/project-connect';
-
+import { AboutGigaMapModalStyle } from '../styles/about-giga-map-styles';
 
 const sectionObj = {
   "live-map": LiveMap,
@@ -35,62 +34,66 @@ const sectionObj = {
   "slides": Sliders,
   "partners": GigaPartners,
   "eleventh": Acknowledgement,
-  "live-map-get-in-touch": GetInTouch
-} as const
+  "live-map-get-in-touch": GetInTouch,
+} as const;
 
 type SectionComponentType = typeof sectionObj[keyof typeof sectionObj];
 
 const AboutGigaMapModal = () => {
-  let aboutUsContent = useStore($aboutUsContent)
+  const aboutUsContent = useStore($aboutUsContent);
   const header = useMemo(() => {
     if (!aboutUsContent) {
-      return null
+      return null;
     }
-    return aboutUsContent.find((item) => item.type === 'header')
-  }, [aboutUsContent])
+    return aboutUsContent.find((item) => item.type === 'header');
+  }, [aboutUsContent]);
   const footer = useMemo(() => {
     if (!aboutUsContent) {
-      return null
+      return null;
     }
-    const header = aboutUsContent.find((item) => item.type === 'footer');
-    if (!header) {
-      return null
+    const headerItem = aboutUsContent.find((item) => item.type === 'footer');
+    if (!headerItem) {
+      return null;
     }
-    return header
-    // return header as AboutType
-  }, [aboutUsContent])
+    return headerItem;
+  }, [aboutUsContent]);
+
   useEffect(() => {
     void getAboutUsContentFx();
     void fetchGlobalStatsFx({});
     void connectivityStatsFx();
-
-  }, [])
+  }, []);
 
   return (
     <div>
-      <NavBar data={header} />
+      <ErrorBoundary name="AboutNavBar" variant="banner">
+        <NavBar data={header} />
+      </ErrorBoundary>
       <AboutGigaMapModalStyle>
-        {
-          aboutUsContent?.map((singleSection, index) => {
-            const type = singleSection?.type as keyof typeof sectionObj;
-            const SectionComponent = sectionObj[type] as SectionComponentType;
-            if (!SectionComponent || !singleSection?.status) {
-              return null
-            }
-            if (SectionComponent) {
-              return <div id={singleSection.type} key={`${index}-${singleSection.title}`}>
-                <SectionComponent data={singleSection} />;
-              </div>
-            }
+        {aboutUsContent?.map((singleSection, index) => {
+          const type = singleSection?.type as keyof typeof sectionObj;
+          const SectionComponent = sectionObj[type] as SectionComponentType;
+          if (!SectionComponent || !singleSection?.status) {
             return null;
-          })
-        }
-        <FooterLinks data={footer} />
+          }
+          return (
+            <div id={singleSection.type} key={`${index}-${singleSection.title}`}>
+              <ErrorBoundary
+                name={`AboutSection-${singleSection.type}`}
+                variant="card"
+              >
+                <SectionComponent data={singleSection} />
+              </ErrorBoundary>
+            </div>
+          );
+        })}
+        <ErrorBoundary name="AboutFooterLinks" variant="card">
+          <FooterLinks data={footer} />
+        </ErrorBoundary>
       </AboutGigaMapModalStyle>
       <Toast timeout={7000} />
     </div>
-  )
-}
+  );
+};
 
-
-export default AboutGigaMapModal
+export default AboutGigaMapModal;

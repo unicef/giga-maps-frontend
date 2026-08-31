@@ -1,11 +1,47 @@
-import { RowCollapse } from '@carbon/icons-react'
+import { RowCollapse } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 
 import { Box, Center } from '~/@/common/style/styled-component-style';
 import UserAvatar from '~/@/common/user-avatar';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { $userFullName } from '~/core/auth/models/auth.model';
-import { addAdminCountry, addAdminSchools, addCountryDailySummary, addCountrySummary, addSchoolDailySummary, addSchoolSummary, adminAboutUs, adminAlerts, adminApiKeys, adminCountry, adminFilterRoute, adminRoute, adminSchools, backgroundTask, backgroundTaskView, contactMessage, contactMessageView, dataSource, editAdminCountry, editAdminFilter, editAdminSchools, editCountryDailySummary, editCountrySummary, editRoles, editSchoolDailySummary, editSchoolSummary, gigaLayerRoute, recentActions, roleCreateRoute, router, userDetails, userList, userPermissions, userRoles } from '~/core/routes';
+import {
+  addAdminCountry,
+  addAdminSchools,
+  addCountryDailySummary,
+  addCountrySummary,
+  addSchoolDailySummary,
+  addSchoolSummary,
+  adminAboutUs,
+  adminAlerts,
+  adminApiKeys,
+  adminCountry,
+  adminFilterRoute,
+  adminRoute,
+  adminSchools,
+  backgroundTask,
+  backgroundTaskView,
+  contactMessage,
+  contactMessageView,
+  dataSource,
+  editAdminCountry,
+  editAdminFilter,
+  editAdminSchools,
+  editCountryDailySummary,
+  editCountrySummary,
+  editRoles,
+  editSchoolDailySummary,
+  editSchoolSummary,
+  gigaLayerRoute,
+  recentActions,
+  roleCreateRoute,
+  router,
+  userDetails,
+  userList,
+  userPermissions,
+  userRoles,
+} from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { getAppConfigValues, onGetEntityTypes } from '../../models/admin-model';
@@ -24,6 +60,7 @@ import AddCountrySummary from '../country/country-summary-crud/add-country-summa
 import EditCountySummary from '../country/country-summary-crud/edit-county-summary';
 import MainCountryView from '../country/main-country-view';
 import EditDataSource from '../data-source/edit-data-source';
+import AdminFilters from '../filters';
 import DataLayerMainView from '../giga-layer';
 import AdminRecentActions from '../recent-action/list-recent-actions';
 import CreateRole from '../roles-crud/create-role.view';
@@ -36,24 +73,29 @@ import AddSchools from '../schools/schools-crude/add-schools';
 import EditSchools from '../schools/schools-crude/edit-schools';
 import AddSchoolSummary from '../schools/schools-summary-crud/add-school-summary';
 import EditSchoolSummary from '../schools/schools-summary-crud/edit-school-summary';
-import { AdminMainComponent, AdminMainLeftPanel, AdminMainRightPanel, AdminTopHeading } from '../styles/admin-styles'
+import {
+  AdminMainComponent,
+  AdminMainLeftPanel,
+  AdminMainRightPanel,
+  AdminTopHeading,
+} from '../styles/admin-styles';
 import UserDetailsComponent from '../user-crud/user-detail.view';
 import UserListComponent from '../user-crud/user-list.view';
 import UserPermissionComponent from '../user-permission/list-user-permission';
-import AdminPanelTabs from './admin-panel-tabs';
 import AdminLoaderView from './AdminLoader.view';
-import AdminFilters from '../filters';
+import AdminPanelTabs from './admin-panel-tabs';
 
 const AdminPanelMainComponent = () => {
   const userName = useStore($userFullName);
 
   useEffect(() => {
     onGetEntityTypes();
-  }, [])
+  }, []);
 
   useEffect(() => {
     getAppConfigValues();
-  }, [])
+  }, []);
+
   return (
     <AdminMainComponent>
       <AdminMainLeftPanel>
@@ -61,68 +103,70 @@ const AdminPanelMainComponent = () => {
           <h3>Creator App</h3>
           <RowCollapse
             onClick={() => {
-              router.navigate('/docs/explore-api')
+              router.navigate('/docs/explore-api');
             }}
-            size={20} />
+            size={20}
+          />
         </AdminTopHeading>
         <Box $padding="1">
           <UserAvatar userName={userName} />
         </Box>
-        <AdminPanelTabs />
+        <ErrorBoundary name="AdminPanelTabs" variant="card">
+          <AdminPanelTabs />
+        </ErrorBoundary>
       </AdminMainLeftPanel>
       <AdminMainRightPanel>
-        {useRoute(userList) && <UserListComponent />}
-        {useRoute(userDetails) && <UserDetailsComponent />}
-        {useRoute(userRoles) && <RolesList />}
-        {useRoute(editRoles) && <EditRole />}
-        {useRoute(roleCreateRoute) && <CreateRole />}
-        {useRoute(userPermissions) && <UserPermissionComponent />}
-        {useRoute(adminApiKeys) && <AdminApiKey />}
+        <ErrorBoundary name="AdminActiveView" variant="card">
+          {useRoute(userList) && <UserListComponent />}
+          {useRoute(userDetails) && <UserDetailsComponent />}
+          {useRoute(userRoles) && <RolesList />}
+          {useRoute(editRoles) && <EditRole />}
+          {useRoute(roleCreateRoute) && <CreateRole />}
+          {useRoute(userPermissions) && <UserPermissionComponent />}
+          {useRoute(adminApiKeys) && <AdminApiKey />}
 
-        {useRoute(gigaLayerRoute) && <DataLayerMainView />}
+          {useRoute(gigaLayerRoute) && <DataLayerMainView />}
 
-        {useRoute(adminFilterRoute) && <AdminFilters />}
+          {useRoute(adminFilterRoute) && <AdminFilters />}
 
-        {useRoute(backgroundTask) && <AdminBackgroundTask />}
-        {useRoute(contactMessage) && <AdminContactMessage />}
-        {useRoute(recentActions) && <AdminRecentActions />}
-        {useRoute(backgroundTaskView) && <BackgroundTaskView />}
-        {useRoute(contactMessageView) && <ViewContactMessage />}
-        {useRoute(adminAlerts) && <ListAlertView />}
+          {useRoute(backgroundTask) && <AdminBackgroundTask />}
+          {useRoute(contactMessage) && <AdminContactMessage />}
+          {useRoute(recentActions) && <AdminRecentActions />}
+          {useRoute(backgroundTaskView) && <BackgroundTaskView />}
+          {useRoute(contactMessageView) && <ViewContactMessage />}
+          {useRoute(adminAlerts) && <ListAlertView />}
 
-        {useRoute(adminSchools) && <MainAdminSchoolView />}
-        {useRoute(addAdminSchools) && <AddSchools />}
-        {useRoute(addSchoolSummary) && <AddSchoolSummary />}
-        {useRoute(addSchoolDailySummary) && <AddSchoolDailySummary />}
+          {useRoute(adminSchools) && <MainAdminSchoolView />}
+          {useRoute(addAdminSchools) && <AddSchools />}
+          {useRoute(addSchoolSummary) && <AddSchoolSummary />}
+          {useRoute(addSchoolDailySummary) && <AddSchoolDailySummary />}
 
-        {useRoute(editAdminSchools) && <EditSchools />}
-        {useRoute(editSchoolSummary) && <EditSchoolSummary />}
-        {useRoute(editSchoolDailySummary) && <EditSchoolDailySummary />}
+          {useRoute(editAdminSchools) && <EditSchools />}
+          {useRoute(editSchoolSummary) && <EditSchoolSummary />}
+          {useRoute(editSchoolDailySummary) && <EditSchoolDailySummary />}
 
-        {useRoute(adminCountry) && <MainCountryView />}
-        {useRoute(addAdminCountry) && <AddCountry />}
-        {useRoute(addCountrySummary) && <AddCountrySummary />}
-        {useRoute(addCountryDailySummary) && <AddCountryDailySummary />}
+          {useRoute(adminCountry) && <MainCountryView />}
+          {useRoute(addAdminCountry) && <AddCountry />}
+          {useRoute(addCountrySummary) && <AddCountrySummary />}
+          {useRoute(addCountryDailySummary) && <AddCountryDailySummary />}
 
-        {useRoute(editAdminCountry) && <EditCountry />}
-        {useRoute(editCountrySummary) && <EditCountySummary />}
-        {useRoute(editCountryDailySummary) && <EditCountryDailySummary />}
+          {useRoute(editAdminCountry) && <EditCountry />}
+          {useRoute(editCountrySummary) && <EditCountySummary />}
+          {useRoute(editCountryDailySummary) && <EditCountryDailySummary />}
 
+          {useRoute(dataSource) && <EditDataSource />}
+          {useRoute(adminRoute) && (
+            <Center style={{ height: '100%' }}>
+              <p>Select the menu on the left.</p>
+            </Center>
+          )}
 
-        {useRoute(dataSource) && <EditDataSource />}
-        {useRoute(adminRoute) &&
-          <Center style={{ height: '100%' }}>
-            <p>Select the menu on the left.</p>
-          </Center>
-        }
-
-        {
-          useRoute(adminAboutUs) && <MainAboutUsView />
-        }
+          {useRoute(adminAboutUs) && <MainAboutUsView />}
+        </ErrorBoundary>
         <AdminLoaderView />
       </AdminMainRightPanel>
     </AdminMainComponent>
-  )
-}
+  );
+};
 
-export default AdminPanelMainComponent
+export default AdminPanelMainComponent;

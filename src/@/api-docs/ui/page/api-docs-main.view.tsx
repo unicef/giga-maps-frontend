@@ -1,5 +1,6 @@
-import { apiInfo, docsApiKeys, docsExporeApi } from '~/core/routes'
-import { useRoute } from '~/lib/router'
+import { ErrorBoundary } from '~/components/ui/error-boundary';
+import { apiInfo, docsApiKeys, docsExporeApi } from '~/core/routes';
+import { useRoute } from '~/lib/router';
 
 import ApiInfo from '../components/api-info/api-info.view';
 import ApiKeysRightSection from '../components/api-keys-right-section';
@@ -8,19 +9,26 @@ import Modals from '../components/modals';
 import SideMenuPanel from '../components/side-menu-panel';
 import { ApiRoot, RightSectonPanel } from './api-docs-main.style';
 
-
 const ApiDocsMain = () => {
-  return (<>
-    <ApiRoot>
-      <SideMenuPanel />
-      <RightSectonPanel>
-        {useRoute(docsExporeApi) && <ExploreApiRightSection />}
-        {useRoute(docsApiKeys) && <ApiKeysRightSection />}
-        {useRoute(apiInfo) && <ApiInfo />}
-      </RightSectonPanel>
-    </ApiRoot>
-    <Modals />
-  </>)
-}
+  return (
+    <>
+      <ApiRoot>
+        <ErrorBoundary name="ApiDocsSideMenu" variant="card">
+          <SideMenuPanel />
+        </ErrorBoundary>
+        <RightSectonPanel>
+          <ErrorBoundary name="ApiDocsContent" variant="card">
+            {useRoute(docsExporeApi) && <ExploreApiRightSection />}
+            {useRoute(docsApiKeys) && <ApiKeysRightSection />}
+            {useRoute(apiInfo) && <ApiInfo />}
+          </ErrorBoundary>
+        </RightSectonPanel>
+      </ApiRoot>
+      <ErrorBoundary name="ApiDocsModals" variant="minimal">
+        <Modals />
+      </ErrorBoundary>
+    </>
+  );
+};
 
 export default ApiDocsMain;

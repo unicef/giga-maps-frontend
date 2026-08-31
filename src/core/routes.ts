@@ -1,10 +1,25 @@
 import { combine, guard } from 'effector';
 import { createBrowserHistory } from 'history';
 
+import { addSentryBreadcrumb } from '~/core/sentry';
 import { createRouter } from '~/lib/router';
 
 // Create Browser History
 const history = createBrowserHistory();
+
+// Record navigation breadcrumbs in Sentry
+history.listen(({ location, action }) => {
+  addSentryBreadcrumb({
+    category: 'navigation',
+    message: `Navigated to ${location.pathname}${location.search}${location.hash}`,
+    data: {
+      pathname: location.pathname,
+      search: location.search,
+      hash: location.hash,
+      action,
+    },
+  });
+});
 
 // Create router and use Browser History
 export const router = createRouter({ history });

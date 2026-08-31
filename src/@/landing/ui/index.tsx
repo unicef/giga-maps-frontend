@@ -1,5 +1,7 @@
 import { useStore } from 'effector-react';
 
+import { ErrorBoundary } from '~/components/ui/error-boundary';
+
 import { HERO_GLOBE_VIDEO, LAYER_SECTIONS } from '../landing.constant';
 import { $hero, $landingSections, $layerSections } from '../landing.model';
 import { hasLayerContent, LayerSectionData } from '../landing.types';
@@ -38,24 +40,28 @@ const LandingPage = () => {
       className="h-full! w-full! overflow-x-hidden! overflow-y-auto! bg-landing-background! text-foreground!"
       data-slot="landing-page"
     >
-      <LandingHeader />
+      <ErrorBoundary name="LandingHeader" variant="banner">
+        <LandingHeader />
+      </ErrorBoundary>
 
       <main>
         {sections === null ? <HeroSkeleton /> : null}
 
         {hero ? (
-          <HeroSection
-            data={hero}
-            media={
-              HERO_GLOBE_VIDEO ? (
-                <HeroGlobe src={HERO_GLOBE_VIDEO} />
-              ) : undefined
-            }
-          >
-            {/* The hero column is `items-start`, so the list would shrink to
-                its content and the dividers would stop mid-screen. */}
-            <StatsRow className="w-full!" />
-          </HeroSection>
+          <ErrorBoundary name="LandingHeroSection" variant="card">
+            <HeroSection
+              data={hero}
+              media={
+                HERO_GLOBE_VIDEO ? (
+                  <HeroGlobe src={HERO_GLOBE_VIDEO} />
+                ) : undefined
+              }
+            >
+              {/* The hero column is `items-start`, so the list would shrink to
+                  its content and the dividers would stop mid-screen. */}
+              <StatsRow className="w-full!" />
+            </HeroSection>
+          </ErrorBoundary>
         ) : null}
 
         {LAYER_SECTIONS.map(({ mediaSide, type, ...config }) => {
@@ -63,25 +69,44 @@ const LandingPage = () => {
           if (!hasLayerContent(data)) return null;
 
           return (
-            <LayerSection
-              data={data}
-              id={type}
+            <ErrorBoundary
               key={type}
-              mediaSide={mediaSide}
-              video={'video' in config ? config.video : undefined}
-            />
+              name={`LandingLayerSection-${type}`}
+              variant="card"
+            >
+              <LayerSection
+                data={data}
+                id={type}
+                mediaSide={mediaSide}
+                video={'video' in config ? config.video : undefined}
+              />
+            </ErrorBoundary>
           );
         })}
 
-        <TestimonialsSection />
-        <SuccessStoriesSection />
-        <ServicesSection />
-        <FaqSection />
-        <PartnersSection />
-        <CtaSection />
+        <ErrorBoundary name="LandingTestimonials" variant="card">
+          <TestimonialsSection />
+        </ErrorBoundary>
+        <ErrorBoundary name="LandingSuccessStories" variant="card">
+          <SuccessStoriesSection />
+        </ErrorBoundary>
+        <ErrorBoundary name="LandingServices" variant="card">
+          <ServicesSection />
+        </ErrorBoundary>
+        <ErrorBoundary name="LandingFaq" variant="card">
+          <FaqSection />
+        </ErrorBoundary>
+        <ErrorBoundary name="LandingPartners" variant="card">
+          <PartnersSection />
+        </ErrorBoundary>
+        <ErrorBoundary name="LandingCta" variant="card">
+          <CtaSection />
+        </ErrorBoundary>
       </main>
 
-      <LandingFooter />
+      <ErrorBoundary name="LandingFooter" variant="banner">
+        <LandingFooter />
+      </ErrorBoundary>
     </div>
   );
 };
