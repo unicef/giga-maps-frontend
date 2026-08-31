@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import RolesList from '../user-roles-list.view';
 
 describe('User role', () => {
@@ -8,3 +8,4 @@ describe('User role', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

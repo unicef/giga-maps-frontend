@@ -2,7 +2,7 @@ import { createEffect } from "effector"
 
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
 
-import { ApiConfig, InvalidateCache } from "../types/giga-layer.type"
+import { ApiConfig, Entities, InvalidateCache } from "../types/giga-layer.type"
 
 export const getAppConfigValuesFx = createEffect(() => {
   return createRequestAuthFx({
@@ -12,8 +12,14 @@ export const getAppConfigValuesFx = createEffect(() => {
 
 export const getInvalidateCacheFx = createEffect((data: object) => {
   return createRequestAuthFx({
-    url: `accounts/invalidate-cache-patterns/`,
+    url: `/v2/entities/invalidate-cache-patterns`,
     method: 'DELETE',
     data
   }) as Promise<InvalidateCache>
+})
+
+export const getEntityTypesFx = createEffect(() => {
+  return createRequestAuthFx({
+    url: `/v2/entities/entity-types/`,
+  }) as Promise<Entities>
 })

@@ -1,4 +1,3 @@
-import { describe, expect, test, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useStore } from 'effector-react';
 import AddEditFilterListForm from '../form-filter';
@@ -8,8 +7,8 @@ import { fetchMockResponse } from '~/tests/fetchMock';
 import filterColumnconfigurationData from '~/tests/data/filter-columnconfiguration.data';
 
 
-jest.mock('effector-react', () => ({
-  useStore: jest.fn(),
+vi.mock('effector-react', () => ({
+  useStore: vi.fn(),
 }));
 
 
@@ -32,12 +31,12 @@ describe('AddEditFilterListForm', () => {
 
   beforeEach(() => {
     fetchMock.mockResponse(fetchMockResponse)
-
+    // @ts-ignore
     useStore.mockImplementation((store) => {
       if (store === $formFilterData) return mockFormData;
       if (store === $userPermissions) return mockPermissions;
       if (store === $filterColumnList) return filterColumnconfigurationData.results
-      return {};
+      return [];
     });
   });
 
@@ -77,7 +76,7 @@ describe('AddEditFilterListForm', () => {
         CAN_ADD_ADVANCE_FILTER: false
       };
       if (store === $filterColumnList) return filterColumnconfigurationData.results
-      return {};
+      return [];
     });
 
     render(<AddEditFilterListForm isEditMode={true} id={1} />);
@@ -92,3 +91,5 @@ describe('AddEditFilterListForm', () => {
 
   });
 });
+
+

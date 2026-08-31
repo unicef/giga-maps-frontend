@@ -35,6 +35,7 @@ export const defaultCountryForm = {
   "flag": "",
   "description": "",
   "data_source": "",
+  "health_data_source": "",
   "last_weekly_status_id": "",
   "date_schools_mapped": '',
   "last_weekly_status": null,

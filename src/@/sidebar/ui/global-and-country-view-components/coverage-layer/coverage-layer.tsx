@@ -1,43 +1,47 @@
 import { useStore } from 'effector-react';
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
-import { $stylePaintData } from '~/@/map/map.model';
-import { $isLoadingCountryAdminView, $potentialCoverageOpenStatus, changePotentialCoverageOpenStatus, $layerUtils, $coverageStats } from '~/@/sidebar/sidebar.model';
-import { formatNumber } from '~/lib/utils';
-import styled, { useTheme } from 'styled-components';
-
-import CurrentLayerNameIcon from '../../common-components/current-layer-name-Icon';
+import { $entityConfigMap } from '~/@/entities/models/entity.model';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
 import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
-import { Trans, useTranslation } from 'react-i18next';
+import {
+  $coverageStatsByEntity,
+  $isLoadingCountryAdminView,
+  $layerUtils,
+} from '~/@/sidebar/sidebar.model';
+import { Skeleton } from '~/components/ui/skeleton';
 import { $lng } from '~/core/i18n/store';
+import { formatNumber } from '~/lib/utils';
 
-const CoverageLayerContanier = styled.div` 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  @media (max-width: 768px) {
-    height: auto;
-  }
-`
+import LayerNameWithTooltip from '../common/layer-name-with-tooltip.view';
 
-const CoverageLayer = () => {
+const CoverageLayer = ({ entityType }: { entityType: EntityType }) => {
   const { t } = useTranslation();
-  const lng = useStore($lng)
-  const coverageStats = useStore($coverageStats);
+  const lng = useStore($lng);
+  const coverageStatsByEntity = useStore($coverageStatsByEntity);
+  const entityConfigMap = useStore($entityConfigMap);
+  const entityConfig = entityConfigMap[entityType];
+  const coverageStats = coverageStatsByEntity[entityType];
   const isLoading = useStore($isLoadingCountryAdminView);
-  const legends = coverageStats?.connected_schools;
-  const totalSchools = coverageStats?.total_schools ?? 0;
-  const { selectedLayerData } = useStore($layerUtils);
-  const legendsList = useMemo(() => Object.entries(legends || {}), [legends]);
+  const coverageDistribution = coverageStats?.connected_schools;
+  const { selectedLayerDataByEntity } =
+    useStore($layerUtils);
+  const currentSelectedLayerData = selectedLayerDataByEntity[entityType];
+  const legendsList = useMemo(
+    () => Object.entries(coverageDistribution || {}),
+    [coverageDistribution],
+  );
+  const layerName = currentSelectedLayerData?.name ?? t('cellular-coverage');
+  const layerDescription = currentSelectedLayerData?.description;
 
   const [displayNumber, setDisplayNumber] = useState(0);
-  const [displayText, setDisplayText] = useState<{ key: string, data?: Record<string, any> }>({ key: '', data: {} });
+  const [displayText, setDisplayText] = useState('');
 
-  const styledPaintData = useStore($stylePaintData);
-  const isDataAvailable = legendsList.length
-  const theme = useTheme();
+  const isDataAvailable = legendsList.length;
+  const entityLabel = t(entityConfig?.slug ?? entityType, {
+    count: 2,
+  });
   // this block of useEffect needs refactoring, all this logic should come from column config
   useEffect(() => {
     if (legendsList.length > 1) {
@@ -47,35 +51,50 @@ const CoverageLayer = () => {
       const fourthValue = legendsList[3] ? legendsList[3][1] : 0;
       const sum = firstValue + secondValue + thirdValue + fourthValue;
       setDisplayNumber(firstValue + secondValue + thirdValue);
-      setDisplayText({ key: 'schools-with-coverage-schools-mapped', data: { totalSchools: formatNumber(sum, lng), totalSchoolsExact: t('int', { val: sum }), layerName: selectedLayerData?.name } });
+      setDisplayText(
+        `${entityLabel} with ${layerName} data out of ${formatNumber(
+          sum,
+          lng,
+        )} ${entityLabel} mapped`,
+      );
     } else {
       setDisplayNumber(0);
-      setDisplayText({ key: 'insufficient-data' });
+      setDisplayText(t('insufficient-data'));
     }
-  }, [legendsList, totalSchools, lng]);
+  }, [entityLabel, legendsList, layerName, lng, t]);
 
   return (
-    <CoverageLayerContanier>
-      <Div>
-        <CurrentLayerNameIcon label={selectedLayerData?.name} icon={selectedLayerData?.icon} />
-        <Div $margin={"1rem 0rem 0.75rem 1rem;"} $flex={"center"}>
-          {isLoading ? <LoadingText width="80%" $marginEnd='0' /> :
-            <Div $margin='0rem 0.2rem 0 0'>
-              <Text data-title={t('int', { val: displayNumber })} $size={2.375} $color={isDataAvailable ? styledPaintData["good"] : theme.text}>
-                {isDataAvailable ? formatNumber(displayNumber, lng) : ""}
-              </Text>
-              <Text $color={theme.titleDesc}>
-                <Trans i18nKey={displayText.key}
-                  values={displayText.data}
-                  components={[<span />]}
-                />
-              </Text>
-            </Div>}
-        </Div>
-      </Div>
-      <FooterDataSourcePopUp size={25} isFooter={false} />
-    </CoverageLayerContanier>
-  )
-}
+    <div className="mx-4! py-4! flex! flex-col! justify-start! items-start! gap-6! h-full! max-md:h-auto!">
+      <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-4! min-h-[10.5rem]! max-h-[18.5rem]! h-[24vh]!">
+        <LayerNameWithTooltip
+          description={layerDescription}
+          name={layerName}
+        />
+        {isLoading ? (
+          <div className="self-stretch! flex! flex-col! gap-2!">
+            <Skeleton className="h-10! w-24!" />
+            <Skeleton className="h-4! w-full!" />
+          </div>
+        ) : (
+          <div className="self-stretch! flex! flex-col! justify-start! items-start! gap-2!">
+            <p
+              className={
+                isDataAvailable
+                  ? 'm-0! text-3xl! font-normal! leading-9! text-success!'
+                  : 'm-0! text-3xl! font-normal! leading-9! text-foreground!'
+              }
+              data-title={t('int', { val: displayNumber })}
+            >
+              {isDataAvailable ? formatNumber(displayNumber, lng) : ''}
+            </p>
+            <p className="m-0! text-xs! font-normal! leading-4! text-muted-foreground!">
+              {displayText}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
-export default CoverageLayer
+export default CoverageLayer;

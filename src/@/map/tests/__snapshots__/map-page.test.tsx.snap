@@ -1,59 +1,59 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Render Map-page MapPage snapshot 1`] = `
+exports[`Render Map-page > MapPage snapshot 1`] = `
 <DocumentFragment>
-  .c16 >.cds--modal-container {
+  .c3 >.cds--modal-container {
   background: #383838;
   background: #181818;
   overflow: unset;
 }
 
-.c17 >h3 {
+.c4 >h3 {
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.5rem;
 }
 
-.c17 button svg {
+.c4 button svg {
   fill: #fff;
 }
 
-.c17 .giga-text {
+.c4 .giga-text {
   display: flex;
   color: #fff;
   font-size: 2.4rem;
   font-weight: bolder;
 }
 
-.c17 .giga-text span:first-child {
+.c4 .giga-text span:first-child {
   font-weight: 100;
 }
 
-.c17 .cds--modal-close:hover {
+.c4 .cds--modal-close:hover {
   background-color: #181818;
 }
 
-.c18 {
+.c5 {
   overflow: unset;
 }
 
-.c18 .cds--tooltip-content {
+.c5 .cds--tooltip-content {
   background: #fff!important;
   color: #181818!important;
 }
 
-.c18 .cds--popover-caret {
+.c5 .cds--popover-caret {
   background: #fff;
 }
 
-.c18 .subheading {
-  color: var(--text-text-primary,#161616);
+.c5 .subheading {
+  color: var(--text-text-primary, #161616);
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
 
-.c18 .field-wrapper {
+.c5 .field-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -67,7 +67,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   line-height: 1.125rem;
 }
 
-.c18 .field-wrapper .text-input-container {
+.c5 .field-wrapper .text-input-container {
   display: flex;
   align-items: flex-end;
   gap: 0.625rem;
@@ -76,22 +76,22 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   margin-top: 0.5rem;
 }
 
-.c18 .field-wrapper .text-input-container .copy-button {
+.c5 .field-wrapper .text-input-container .copy-button {
   background: #fff;
 }
 
-.c18 .field-wrapper .text-input-container .copy-button svg {
+.c5 .field-wrapper .text-input-container .copy-button svg {
   fill: #181818;
 }
 
-.c18 .field-wrapper .text-input-container .side-panel-shareURL-text-and-textInput {
+.c5 .field-wrapper .text-input-container .side-panel-shareURL-text-and-textInput {
   width: inherit;
   height: 2.5rem;
-  border-bottom: 1px solid var(--border-border-strong-01,#8D8D8D);
+  border-bottom: 1px solid var(--border-border-strong-01, #8D8D8D);
   background: #fff;
 }
 
-.c18 .social-share-icons {
+.c5 .social-share-icons {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -99,34 +99,34 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   margin-top: 0.5rem;
 }
 
-.c18 .social-share-icons button {
+.c5 .social-share-icons button {
   padding: 0;
   align-items: center;
   justify-content: center;
 }
 
-.c18 .social-share-icons .twitter-icon {
+.c5 .social-share-icons .twitter-icon {
   fill: #277AFF;
 }
 
-.c18 .field-wrapper span {
+.c5 .field-wrapper span {
   color: #fff;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.25rem;
 }
 
-.c18 .field-wrapper input {
+.c5 .field-wrapper input {
   background: #474747;
   color: #fff;
   border: none;
 }
 
-.c18 .share-icons-container span {
+.c5 .share-icons-container span {
   color: #fff;
 }
 
-.c18 .share-icons-container .social-share-icons svg {
+.c5 .share-icons-container .social-share-icons svg {
   fill: #fff;
 }
 
@@ -139,22 +139,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   height: 100%;
 }
 
-.c33 {
-  z-index: 1;
-  background: #181818;
-  border-radius: 62.5rem;
-  margin-top: 0.5rem;
-}
-
-.c34 .cds--popover-content {
-  background: #181818;
-}
-
-.c34 .cds--popover-caret {
-  background-color: #181818;
-}
-
-.c30 {
+.c6 {
   position: fixed;
   z-index: 10;
   top: 1rem;
@@ -164,653 +149,68 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   right: 0.5rem;
 }
 
-.c31 {
+.c7 {
   z-index: 1;
   position: fixed;
   right: .5rem;
   bottom: 2.5rem;
-}
-
-.c36 {
-  background: #181818;
-  margin-top: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2rem;
-  width: 2rem;
-}
-
-.c32 .cds--btn--icon-only {
-  border-radius: 50%;
-  border: 1px solid #181818;
-  background: #181818;
-}
-
-.c32 .cds--btn--primary:focus {
-  box-shadow: 0 0 0 1px #181818;
-}
-
-.c32 svg {
-  fill: #fff;
-}
-
-.c32 .cds--popover {
-  position: relative;
-  z-index: 6001;
-  top: -1rem;
-}
-
-.c32 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c32 .cds--popover-caret {
-  background: #fff!important;
-}
-
-.c35 .cds--btn--icon-only {
-  border-radius: 50%;
-  border: 1px solid #181818;
-  background: #181818;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAoBAMAAABzztUZAAAALVBMVEUkPRZwiitmeyhtbylccCZeZiViXCVSZCNwVCNWWSJKWiBHTyA+Uh07Rx0tQxkYQLqkAAADMUlEQVR42k2Qz2/aZhzG3+u0YSlts52XQKOiXYqTVm13KYWhsF3AGAY7bV7fiUW7IFuvcLLTuqpJTqW1kXF32Ebm5IVJnbYWwYt3mJK5MxDtMmXCNvJpPwr4b6hTUNtH73v5fF99nvd9AQCBh2CWx7smQrH4nR0cioIXocBXaklYStJ3tpv758DLBG5t8xrf3P9MEcPVV/nnmmgWDPZiDoWNOfMcf9sa7jfbqdVMWGDn3HFG1EMD4cO3yteXpHj67KzRl7je6K+CeLhQTjAXMuzyKX/D9WceFcA4YcXEA2aJXmNmGtdf7r9JhPmFsiLw9Nr1GdddClC2saLx0WIZ/7JMvz3j1p9uoDt4uqKVQjXh/mI6MvdMR2Cyg79bqcfWa/HcmcpSasYpd9JHRkzT0HqxdK2SYUtzTj3VNg4TQo6/cKVV5j6Jzns9z3sCH2hsVewVB6Vs5Vxi9qqpPRrKtaiwePyPon1Pp6PRucbSjMIfOeFSjrTqCsfFUvNvGCJx8/cCkiIf6Y/y3M115lROUZ65ZSbqyZgZ2XUO5NtFXDk97vOf3x2KKBHdo3c7ArxdqGV97me6d/UI4USQX4mq9xUpnLznY9d1J0dXDU1g+dL7PVWpyzk24+v99I0vzcNQsCnpYxXKcoYJnva6ni2KWyaK4f1fx/A9matm47P790UcniDhxyfe/5egLFXXQ881ExPj2OZBZzAdncDzytkqnwc+nRgDAxvxauPYdk7aCvw6y+WB6w9sG5kl/sxa09oaqoK8/eZqGlBefyj2kh2eX812HWJ1yxJzK86BY+qkHiLYzCEW9weWbpA6e3fxY+BNWjeUGl+KC/SnxCF6nygyd14GVKDDFOR8MIOYnbZOCLGIcJH+EFBTiV5TJVRo/pY82SCqPxFSkANgoixEpEzlHc+/rUUaDXIUTBXvAmp88wYtX65/4Fkj02o3iNhSvr2SAu50WWaZy5rqOY5fS+wEIT/lFQDGEGp7eYbojuXo1rjbbW3egxC44x82ujhd03Vdc/T//taNVlKCEQBeU9Qv7HRDf25xHn/Ta3QqsAjc1x352qOFB73RVAkTu79F2gcQwmc/QqX7OnX1VwAAAABJRU5ErkJggg==);
-}
-
-.c35 .cds--btn--primary:focus {
-  box-shadow: 0 0 0 1px #181818;
-}
-
-.c35 svg {
-  fill: #fff;
-}
-
-.c35 .cds--popover {
-  position: relative;
-  z-index: 6001;
-  top: -1rem;
-}
-
-.c35 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c35 .cds--popover-caret {
-  background: #fff!important;
-}
-
-.c37 .legend-info-popover-content {
-  background: #181818;
-  max-inline-size: fit-content;
-}
-
-.c37 .cds--popover-caret {
-  background: #181818;
-}
-
-.c38 {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  background: #181818;
-}
-
-.c38 svg {
-  fill: #fff!important;
-}
-
-.c39 {
-  display: flex;
-  background: #181818;
-  padding: 1.2rem;
-}
-
-.c39 .school-status {
-  min-width: 175px;
-}
-
-.c39 .legend-value {
-  margin-top: 1.1rem;
-  margin-left: 0.6rem;
-  color: grey;
-  font-size: 0.7rem;
-}
-
-.c39 .legend-container {
-  display: flex;
-  align-items: center;
-}
-
-.c39 .checkbox-with-label {
-  display: flex;
-  align-items: center;
-}
-
-.c39 h3 {
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.25rem;
-}
-
-.c39 .conneted-info,
-.c39 .real-time-connetivity-info {
-  position: relative;
-  display: flex;
-  margin-top: 1rem;
-  align-items: center;
-}
-
-.c39 .conneted-info .label,
-.c39 .real-time-connetivity-info .label {
-  margin-left: 0.3rem;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1.125rem;
-  text-wrap: nowrap;
-}
-
-.c40 {
-  position: relative;
-  width: clamp(1rem,1rem,1rem);
-  height: clamp(1rem,1rem,1rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.c41 {
-  min-width: 0.4rem;
-  min-height: 0.4rem;
-  max-width: 0.4rem;
-  max-height: 0.4rem;
-  background: #00d661;
-  border-radius: 50%;
-  position: relative;
-  z-index: 2;
-}
-
-.c42 {
-  min-width: 0.4rem;
-  min-height: 0.4rem;
-  max-width: 0.4rem;
-  max-height: 0.4rem;
-  background: #ED5B4C;
-  border-radius: 50%;
-  position: relative;
-  z-index: 2;
-}
-
-.c43 {
-  min-width: 0.4rem;
-  min-height: 0.4rem;
-  max-width: 0.4rem;
-  max-height: 0.4rem;
-  background: #1D8Cf0;
-  border-radius: 50%;
-  position: relative;
-  z-index: 2;
-}
-
-.c52 {
-  min-width: 0.4rem;
-  min-height: 0.4rem;
-  max-width: 0.4rem;
-  max-height: 0.4rem;
-  border-radius: 50%;
-  position: relative;
-  z-index: 2;
-}
-
-.c51 {
-  width: clamp(0.7rem,0.7rem,0.7rem);
-  min-height: clamp(0.7rem,0.7rem,0.7rem);
-  border-radius: 50%;
-  z-index: 1;
-  animation-duration: 1.2s;
-  animation-iteration-count: infinite;
-  animation-delay: 0.2s;
-  animation-direction: alternate;
-  transform-origin: top left;
-  animation-name: glowly;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
-
-.c13 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.88rem 1rem;
-  height: 3rem;
-  width: 100%;
-  background-color: #181818;
-  margin-top: 0.5rem;
-  border-bottom: 1px solid #383838;
-}
-
-.c13 .sidebar-worldview-global-indication {
-  display: flex;
-  justify-content: flex-start;
-  width: 86%;
-}
-
-.c13 .sidebar-worldview-global-indication .sidebar-worldview-global-indication-country-breadcrumb {
-  width: 100%;
-}
-
-.c13 .sidebar-worldview-global-indication .sidebar-worldview-global-indication-country-breadcrumb nav ol {
-  display: flex;
-}
-
-.c13 .sidebar-worldview-global-indication>svg {
-  width: 1rem;
-  height: 1rem;
-  color: black;
-  margin-top: 3px;
-}
-
-.c13 .sidebar-worldview-globalText {
-  margin-left: 0.3rem;
-  font-family: "Open Sans";
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.25rem;
-  letter-spacing: 0.16px;
-  color: #fff;
-}
-
-.c13 .side-info-panel-infomartion-of-worldwideview {
-  margin-left: 3px;
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-}
-
-.c13 .side-info-panel-infomartion-of-worldwideview button {
-  border: none;
-  background: transparent;
-}
-
-.c13 .side-info-panel-worldwideview-infoIcon {
-  display: flex;
-  align-items: center;
-  width: 0.8rem;
-  height: 0.8rem;
-  color: #fff;
-}
-
-.c13 .sidebar-worldview-contriesText {
-  margin-left: 0.5rem;
-  font-family: "Open Sans";
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.25rem;
-  letter-spacing: 0.01rem;
-  color: #fff;
-}
-
-.c13 .sidebar-worldview-global-indication-text-and-contries {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.c13 .sidebar-worldview-global-indication-text-and-contries button {
-  border: none;
-  background: transparent;
-}
-
-.c13 .sidebar-worldview-filterIcon {
-  height: 5rem;
-  width: 6rem;
-}
-
-.c13 .sidebar-worldview-filterIcon.cds--btn.cds--btn--primary.cds--btn--icon-only.cds--btn.cds--btn--primary {
-  background-color: transparent;
-  width: 4rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-}
-
-.c13 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb .cds--breadcrumb-item:first-child svg {
-  color: #fff;
-  width: 1rem;
-  height: 1rem;
-}
-
-.c13 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb .cds--breadcrumb-item:last-child>a,
-.c13 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb .cds--breadcrumb-item:last-child>span {
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5rem;
-}
-
-.c13 .cds--breadcrumb-item:last-child:after {
-  content: '';
-}
-
-.c13 .cds--breadcrumb-item:last-child,
-.c13 .cds--breadcrumb-item:last-child::after {
-  overflow: hidden;
-}
-
-.c13 .sidebar-worldview-global-indication-country-breadcrumb .cds--breadcrumb-item::after {
-  color: var(--cds-text-primary,#fff);
-}
-
-.c13 .filter-and-share-icon {
-  display: flex;
-  align-items: center;
-}
-
-.c15 {
-  fill: #fff!important;
-}
-
-.c14 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c14 .cds--popover-caret {
-  background: #fff;
-}
-
-.c8 {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-}
-
-.c8 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c8 .cds--popover-caret {
-  background: #fff;
-}
-
-.c9 {
-  display: flex;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bolder;
-}
-
-.c9 img {
-  height: 1rem;
-  width: 4.75rem;
-  margin-top: 0.3125rem;
-}
-
-.c7 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.c7 svg {
-  fill: #fff!important;
-}
-
-.c63 {
-  display: flex;
-  align-items: center;
-}
-
-.c10 {
-  display: flex;
-  align-items: center;
-  height: 3.1rem;
-}
-
-.c10 .cds--btn--primary:hover {
-  background-color: #181818!important;
-}
-
-.c10 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c10 .cds--popover-caret {
-  background: #fff;
-}
-
-.c10 .search-icon {
-  margin-right: 0.5rem;
-  height: 1rem;
-  width: 1rem;
-  fill: #fff;
-}
-
-.c10 svg {
-  fill: #fff!important;
-}
-
-.c11 {
-  background: #181818;
-}
-
-.c11 .cds--btn--primary:hover {
-  background-color: #181818!important;
-}
-
-.c11 .cds--btn--primary:active {
-  background-color: #181818!important;
-}
-
-.c11 svg {
-  margin-right: 0.20rem;
-  fill: #fff;
-}
-
-.c4 {
   display: flex;
   flex-direction: column;
-  height: inherit;
-  width: inherit;
-}
-
-.c4 .cds--tooltip-content {
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-}
-
-.c3 {
-  transition: all 0.3s;
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.c3 .sidebar__expander>svg {
-  color: #fff;
-}
-
-.c5 {
-  padding: 0.5rem;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: #181818;
-}
-
-.c6 {
-  width: 56px;
-  height: 4px;
-  border-radius: 20px;
-  background: #ECECEC;
-  cursor: pointer;
-}
-
-.c12 {
-  height: calc(100% - 6rem);
 }
 
 .c29 {
-  position: relative;
-  transition: all .5s;
-  z-index: 10;
-}
-
-.c20 {
-  background: #181818;
-  width: 100%;
-  padding: 1.5rem 1rem 2rem 1rem;
-}
-
-.c21 {
   display: flex;
+  align-items: center;
 }
 
-.c22 {
-  color: #fff;
-  font-family: Open Sans;
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 2rem;
+.c29 .privacy {
+  font-size: 0.75rem;
   margin-right: 0.5rem;
-}
-
-.c23 {
-  margin-top: 1rem;
-}
-
-.c23 p {
-  color: #9E9E9E;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.25rem;
-  letter-spacing: 0.01rem;
+  color: #277AFF;
+  text-decoration: underline;
 }
 
 .c24 {
-  margin-top: 1rem;
-  display: flex;
-}
-
-.c24 svg {
-  fill: #9E9E9E;
-  margin-right: 0.5rem;
-}
-
-.c24 a {
-  cursor: pointer;
-}
-
-.c25 {
-  padding-top: 1.5rem;
-}
-
-.c25 svg {
-  fill: #fff;
-  height: 1rem;
-  width: 1rem;
-}
-
-.c26 {
-  margin-top: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.c26 p {
-  color: #9E9E9E;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 0.75rem;
-  margin: 0;
-}
-
-.c26 p span {
-  color: #9E9E9E;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
-  margin-top: 0.25rem;
-}
-
-.c26 .information-icon button {
-  border: none;
-  background: inherit;
-}
-
-.c26 .information-icon button svg {
-  height: 0.75rem;
-  width: 0.75rem;
-  fill: #7E7E7E;
-}
-
-.c26 .cds--tooltip-content {
-  width: 10rem;
-  max-height: 10rem;
-}
-
-.c27 {
-  display: flex;
-  align-items: center;
-  margin-top: 0.25rem;
-  justify-content: space-between;
-}
-
-.c27 p {
-  color: #6F6F6F;
-  font-size: 0.625rem;
-  font-weight: 400;
-  line-height: 0.75rem;
-}
-
-.c27 span {
-  color: #6F6F6F;
-  font-size: 0.625rem;
-  font-weight: 400;
-  line-height: 0.75rem;
-}
-
-.c19 {
-  max-height: calc(100% - 6.5rem);
-  background: #181818;
-}
-
-.c28 {
-  display: flex;
-  max-width: 100%;
-  margin-top: 0.5rem;
-  height: 0.25rem;
-}
-
-.c60 {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 1.25rem;
   opacity: 0.65;
 }
 
-.c45 {
+.c16 {
+  min-width: 0.625rem;
+  min-height: 0.625rem;
+  max-width: 0.625rem;
+  max-height: 0.625rem;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.c15 {
+  width: 0.625rem;
+  min-height: 0.625rem;
+  border-radius: 50%;
+  z-index: 1;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-delay: 0.2s;
+  animation-direction: alternate;
+  animation-name: k0;
+  transform-origin: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.c9 {
   cursor: pointer;
 }
 
-.c47 {
+.c11 {
   width: 231px;
   border-radius: 2px;
   background: #181818;
@@ -818,24 +218,24 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   box-shadow: 0px 2px 3px 0px #181818;
 }
 
-.c48 {
+.c12 {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.c53 {
+.c17 {
   display: flex;
   align-items: baseline;
   margin-top: 0.75rem;
 }
 
-.c53.hide,
-.c53 .hide {
+.c17.hide,
+.c17 .hide {
   display: none;
 }
 
-.c53 svg {
+.c17 svg {
   width: 0.75rem;
   height: 0.75rem;
   fill: #fff;
@@ -843,12 +243,12 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   margin-top: -0.12rem;
 }
 
-.c57 {
+.c21 {
   display: flex;
   flex-direction: column;
 }
 
-.c49 {
+.c13 {
   color: #fff;
   font-size: 0.875rem;
   font-style: normal;
@@ -860,7 +260,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   margin-right: 1rem;
 }
 
-.c55 {
+.c19 {
   color: #9E9E9E;
   font-size: 0.75rem;
   font-weight: 400;
@@ -868,50 +268,50 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   text-transform: capitalize;
 }
 
-.c56 {
+.c20 {
   color: #9E9E9E;
   font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.125rem;
 }
 
-.c54 {
+.c18 {
   color: #474747;
 }
 
-.c46 {
+.c10 {
   color: #277AFF;
   height: 3rem;
   width: 3rem;
   transform: translateY(-34px);
 }
 
-.c58 {
+.c22 {
   width: 100%;
   outline: none;
   border: none;
 }
 
-.c58.hide {
+.c22.hide {
   display: none;
 }
 
-.c59 {
+.c23 {
   width: 100%;
   height: 1rem;
   margin-block-end: 0.25rem;
 }
 
-.c61 {
+.c25 {
   margin-block-end: 0;
   height: 1.125rem;
 }
 
-.c50 {
+.c14 {
   position: relative;
 }
 
-.c62 {
+.c28 {
   position: fixed;
   right: 0;
   bottom: 0;
@@ -928,17 +328,17 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   width: calc(100vw - 17rem);
 }
 
-.c62 .footer-content {
+.c28 .footer-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.c62 .footer-content .cds--popover-caret {
+.c28 .footer-content .cds--popover-caret {
   display: none;
 }
 
-.c62 .footer-content .link {
+.c28 .footer-content .link {
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -948,35 +348,35 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   cursor: pointer;
 }
 
-.c62 .footer-content .data-source {
+.c28 .footer-content .data-source {
   color: #fff;
   margin-right: 0.5rem;
 }
 
-.c62 .footer-content a {
-  margin-left: .5rem;
+.c28 .footer-content a {
+  margin-left: 0.5rem;
 }
 
-.c62 .footer-content .link:hover {
+.c28 .footer-content .link:hover {
   background: transparent;
 }
 
-.c62 p {
+.c28 p {
   color: #fff;
   font-size: 0.75rem;
   display: flex;
 }
 
-.c62 .itu-logo {
+.c28 .itu-logo {
   width: 1rem;
   height: 1rem;
 }
 
-.c62 .giga-logo {
+.c28 .giga-logo {
   color: #fff;
 }
 
-.c62 svg {
+.c28 svg {
   fill: #fff;
 }
 
@@ -987,24 +387,99 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   right: 0;
   left: 0;
   z-index: 1;
-  bottom: 5.125rem;
+}
+
+.c2 .mapboxgl-popup-tip {
+  width: 0;
+  height: 0;
+  z-index: 1;
+}
+
+.c2 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-bottom: 16px solid var(--giga-border, #393939);
+  border-top: none;
+}
+
+.c2 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.c2 .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-top: 16px solid var(--giga-border, #393939);
+  border-bottom: none;
 }
 
 .c2 .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-  border-right-color: #181818;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-right: 16px solid var(--giga-border, #393939);
+  border-left: none;
 }
 
-.c2 .mapboxgl-popup-content .main-popup-container {
-  background: #181818;
-  box-shadow: 0px 2px 3px 0px #181818;
+.c2 .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-left: 16px solid var(--giga-border, #393939);
+  border-right: none;
 }
 
-.c2 .mapboxgl-popup-content .map-school-name {
-  color: #fff;
+.c2 .mapboxgl-popup-content {
+  background: transparent!important;
+  padding: 0!important;
+  box-shadow: none!important;
 }
 
-.c2 .mapboxgl-popup-content svg {
-  fill: #fff;
+.c26 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 5px;
+  background-color: rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.c27 {
+  height: 100%;
+  background: linear-gradient(90deg, #0f62fe, #3d8dff);
+  width: 20%;
+  transition: width 0.3s ease-in-out;
+  position: relative;
+  box-shadow: 0 0 15px rgba(15, 98, 254, 0.6);
+  border-radius: 0 3px 3px 0;
+  animation: k1 2s infinite;
+  transition: all 0.3s ease-in-out;
+}
+
+.c27::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(       to right,       rgba(255, 255, 255, 0) 0%,       rgba(255, 255, 255, 0.8) 30%,       rgba(255, 255, 255, 0.9) 50%,       rgba(255, 255, 255, 0.8) 70%,       rgba(255, 255, 255, 0) 100%     );
+  transform: translateX(-100%) skewX(-20deg);
+  animation: k2 2s infinite ease-out;
+  width: 60%;
+}
+
+.c27::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(       to right,       rgba(255, 255, 255, 0) 0%,       rgba(255, 255, 255, 0.5) 30%,       rgba(255, 255, 255, 0.7) 50%,       rgba(255, 255, 255, 0.5) 70%,       rgba(255, 255, 255, 0) 100%     );
+  transform: translateX(-100%) skewX(-20deg);
+  animation: k2 1.8s infinite 0.3s ease-out;
+  width: 40%;
 }
 
 .c1 {
@@ -1042,187 +517,72 @@ exports[`Render Map-page MapPage snapshot 1`] = `
   padding: 0;
 }
 
-.c44 {
+.c8 {
   display: none;
 }
 
 @media (max-width:768px) {
-  .c33 {
-    bottom: calc(40vh + 0.5rem);
-  }
-}
-
-@media (max-width:768px) {
-  .c30 {
+  .c6 {
     top: 6.5rem;
   }
 }
 
 @media (max-width:768px) {
-  .c31 {
-    bottom: calc(40vh + 0.5rem);
-  }
-}
-
-@media (max-width:768px) {
-  .c37 .legend-info-popover-content {
-    overflow: auto;
-    width: calc(100vw - 3rem);
-  }
-}
-
-@media (max-width:768px) {
-  .c13 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.88rem 1rem;
-    height: 3rem;
-    width: 100%;
-    background-color: #22222280;
-    margin-top: 0.5rem;
-    position: fixed;
-    top: 2.5rem;
-    z-index: 3;
-  }
-}
-
-@media (max-width:768px) {
   .c7 {
-    position: fixed;
-    top: 0;
-    background: #181818;
-    padding: 0 0.5rem;
+    bottom: calc(32vh + 0.5rem);
   }
 }
 
-@media (max-width:768px) {
-  .c10 {
-    position: fixed;
-    width: auto;
-    top: 0rem;
-    z-index: 2;
-    right: 0;
-    flex-direction: row-reverse;
-  }
-}
-
-@media (max-width:768px) {
-  .c11 {
-    background: #181818;
-  }
-
-  .c11 .cds--btn--primary:hover {
-    background-color: #181818!important;
-  }
-
-  .c11 .cds--btn--primary:active {
-    background-color: #181818!important;
-  }
-}
-
-@media (max-width:768px) {
-  .c3 {
-    z-index: 1;
-    width: 100%;
-    height: 40vh;
-    top: unset;
-    bottom: 0;
-    position: fixed;
-  }
-
-  .c3 .sidebar__expander {
+@media (max-width: 786px) {
+  .c28 {
     display: none;
-    cursor: pointer;
   }
 }
 
-@media (min-width:769px) and (max-width:1584px) {
-  .c3 {
-    transition: all 0.3s;
-    position: fixed;
-    top: 0rem;
-    bottom: 5.3rem;
-    left: 0.5rem;
-    width: 288px;
-    height: 96vh;
+@keyframes k0 {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.72);
   }
 
-  .c3 .sidebar__expander {
-    cursor: pointer;
-    position: absolute;
-    top: 9.5rem;
-    left: 100%;
-    display: flex;
-    width: 16px;
-    height: 48px;
-    align-items: center;
-    justify-content: center;
-    background-color: #7E7E7E;
-    border: none;
-    outline: none;
-    padding: 0;
-  }
-
-  .c3 .sidebar__expander >svg {
-    fill: #fff;
-    transition: all .5s;
-    transform: rotate(180deg);
-    width: 1rem;
-    height: 1rem;
+  to {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1.05);
   }
 }
 
-@media only screen and (min-width:1584px) {
-  .c3 {
-    transition: all 0.3s;
-    position: fixed;
-    top: 0rem;
-    bottom: 5.3rem;
-    left: 0.5rem;
-    width: 296px;
-    height: 96vh;
+@keyframes k1 {
+  0% {
+    box-shadow: 0 0 0 0 rgba(15, 98, 254, 0.7);
   }
 
-  .c3 .sidebar__expander {
-    cursor: pointer;
-    position: absolute;
-    top: 9.5rem;
-    left: 100%;
-    display: flex;
-    width: 16px;
-    height: 48px;
-    align-items: center;
-    justify-content: center;
-    background-color: #7E7E7E;
-    border: none;
-    outline: none;
-    padding: 0;
+  70% {
+    box-shadow: 0 0 0 6px rgba(15, 98, 254, 0);
   }
 
-  .c3 .sidebar__expander >svg {
-    transition: all .5s;
-    transform: rotate(180deg);
-    width: 1rem;
-    height: 1rem;
+  100% {
+    box-shadow: 0 0 0 0 rgba(15, 98, 254, 0);
   }
 }
 
-@media (max-width:768px) {
-  .c12 {
-    height: calc(100%);
+@keyframes k2 {
+  0% {
+    transform: translateX(-100%) translateY(0) scale(1, 1);
+    opacity: 0.6;
   }
-}
 
-@media (max-width:768px) {
-  .c19 {
-    max-height: calc(100%);
+  20% {
+    opacity: 0.8;
   }
-}
 
-@media (max-width:786px) {
-  .c62 {
-    display: none;
+  60% {
+    transform: translateX(100%) translateY(0) scale(1, 1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateX(80%) translateY(0) scale(1, 1);
+    opacity: 0;
   }
 }
 
@@ -1245,1200 +605,1112 @@ exports[`Render Map-page MapPage snapshot 1`] = `
       class="content"
     >
       <div
-        class="c3"
+        class="z-2 flex shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)] fixed top-2 left-2! bottom-[var(--map-footer-offset)] min-[1584px]:bottom-2 w-[320px] min-[1584px]:w-[320px]"
       >
         <div
-          class="c4 sidebar"
+          class="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!"
         >
           <div
-            class="c5"
-            id="mobile-view-slider"
+            class=""
           >
             <div
-              class="c6"
-            />
-          </div>
-          <div
-            class="c7"
-          >
-            <div
-              class="c8"
+              class=""
             >
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+              <div
+                class="flex w-full items-center justify-between border-b border-border text-foreground! [&_.cds--btn--ghost]:!bg-transparent [&_.cds--btn--ghost:hover]:!bg-transparent [&_.cds--btn--ghost:active]:!bg-transparent [&_.cds--btn--ghost:focus]:!bg-transparent [&_.cds--btn--icon-only]:!flex [&_.cds--btn--icon-only]:!min-h-8 [&_.cds--btn--icon-only]:!min-w-8 [&_.cds--btn--icon-only]:!items-center [&_.cds--btn--icon-only]:!justify-center [&_.cds--btn--icon-only]:!p-0 [&_.cds--popover-caret]:!bg-current [&_.cds--tooltip-content]:!bg-current"
               >
                 <div
-                  class="cds--tooltip-trigger__wrapper"
+                  class="flex h-11 w-full items-center justify-start gap-2 px-3.5! py-0"
                 >
                   <button
-                    aria-labelledby="tooltip-:r0:"
-                    class="cds--btn--icon-only sidebar-menuIcon cds--btn cds--layout--size-lg cds--btn--ghost"
-                    type="button"
+                    aria-label="Menu"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 text-foreground!"
+                    data-size="icon"
+                    data-slot="button"
+                    data-state="closed"
+                    data-variant="icon"
                   >
                     <svg
                       aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="20"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 20 20"
-                      width="20"
+                      class="lucide lucide-menu size-5"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M2 14.8H18V16H2zM2 11.2H18V12.399999999999999H2zM2 7.6H18V8.799999999999999H2zM2 4H18V5.2H2z"
+                        d="M4 5h16"
+                      />
+                      <path
+                        d="M4 12h16"
+                      />
+                      <path
+                        d="M4 19h16"
                       />
                     </svg>
                   </button>
+                  <a
+                    aria-label="Giga Maps"
+                    class="flex h-5 items-center no-underline outline-none shadow-none visited:no-underline hover:no-underline focus:no-underline active:no-underline"
+                    href="/map"
+                  >
+                    <svg
+                      class="h-4! w-auto! max-w-[9rem]! [&_path]:fill-[#f4f4f4]!"
+                      fill="none"
+                      height="16"
+                      viewBox="0 0 76 16"
+                      width="76"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.3125 5.77344H9.4375V11.4062C8.83854 11.6094 8.22135 11.763 7.58594 11.8672C6.95052 11.9714 6.23698 12.0234 5.44531 12.0234C4.26823 12.0234 3.27604 11.7891 2.46875 11.3203C1.66146 10.8516 1.04688 10.1797 0.625 9.30469C0.208333 8.42969 0 7.3776 0 6.14844C0 4.96615 0.231771 3.9349 0.695312 3.05469C1.15885 2.17448 1.83333 1.49219 2.71875 1.00781C3.60417 0.523438 4.67188 0.28125 5.92188 0.28125C6.54688 0.28125 7.14583 0.341146 7.71875 0.460938C8.29688 0.580729 8.82812 0.747396 9.3125 0.960938L8.73438 2.3125C8.32812 2.13021 7.8776 1.97656 7.38281 1.85156C6.89323 1.72135 6.38542 1.65625 5.85938 1.65625C4.98438 1.65625 4.23177 1.84115 3.60156 2.21094C2.97656 2.58073 2.49479 3.10156 2.15625 3.77344C1.82292 4.44531 1.65625 5.24219 1.65625 6.16406C1.65625 7.0651 1.79688 7.85156 2.07812 8.52344C2.35938 9.19531 2.79948 9.71875 3.39844 10.0938C3.9974 10.4688 4.76823 10.6562 5.71094 10.6562C6.1849 10.6562 6.58854 10.6302 6.92188 10.5781C7.26042 10.526 7.57031 10.4635 7.85156 10.3906V7.17188H5.3125V5.77344ZM13.5625 3.25781V11.8672H11.9922V3.25781H13.5625ZM12.7891 0C13.0391 0 13.2526 0.0729167 13.4297 0.21875C13.612 0.364583 13.7031 0.601562 13.7031 0.929688C13.7031 1.25781 13.612 1.4974 13.4297 1.64844C13.2526 1.79427 13.0391 1.86719 12.7891 1.86719C12.5339 1.86719 12.3177 1.79427 12.1406 1.64844C11.9688 1.4974 11.8828 1.25781 11.8828 0.929688C11.8828 0.601562 11.9688 0.364583 12.1406 0.21875C12.3177 0.0729167 12.5339 0 12.7891 0ZM18.6797 15.7109C17.5286 15.7109 16.6432 15.5 16.0234 15.0781C15.4089 14.6562 15.1016 14.0677 15.1016 13.3125C15.1016 12.776 15.2708 12.3203 15.6094 11.9453C15.9479 11.5755 16.4219 11.3255 17.0312 11.1953C16.8021 11.0911 16.6042 10.9323 16.4375 10.7188C16.276 10.5 16.1953 10.2552 16.1953 9.98438C16.1953 9.66667 16.2839 9.39323 16.4609 9.16406C16.6432 8.92969 16.9141 8.70312 17.2734 8.48438C16.8203 8.29688 16.4557 7.98698 16.1797 7.55469C15.9036 7.11719 15.7656 6.60677 15.7656 6.02344C15.7656 5.40365 15.8958 4.875 16.1562 4.4375C16.4219 4 16.8021 3.66667 17.2969 3.4375C17.7917 3.20833 18.3932 3.09375 19.1016 3.09375C19.2578 3.09375 19.4193 3.10156 19.5859 3.11719C19.7526 3.1276 19.9115 3.14583 20.0625 3.17188C20.2135 3.19792 20.3359 3.22396 20.4297 3.25H23.3984V4.17969L21.8672 4.41406C22.0182 4.61198 22.1406 4.84635 22.2344 5.11719C22.3281 5.38802 22.375 5.6849 22.375 6.00781C22.375 6.88281 22.0755 7.57552 21.4766 8.08594C20.8828 8.59115 20.0599 8.84375 19.0078 8.84375C18.763 8.83854 18.5156 8.81771 18.2656 8.78125C18.0417 8.91146 17.8724 9.05469 17.7578 9.21094C17.6432 9.36198 17.5859 9.53646 17.5859 9.73438C17.5859 9.88542 17.6354 10.0078 17.7344 10.1016C17.8385 10.1953 17.987 10.2656 18.1797 10.3125C18.3724 10.3542 18.6068 10.375 18.8828 10.375H20.3828C21.3203 10.375 22.0391 10.5729 22.5391 10.9688C23.0391 11.3646 23.2891 11.9427 23.2891 12.7031C23.2891 13.6667 22.8932 14.4089 22.1016 14.9297C21.3099 15.4505 20.1693 15.7109 18.6797 15.7109ZM18.7344 14.5625C19.4062 14.5625 19.9661 14.4948 20.4141 14.3594C20.8672 14.224 21.2083 14.0312 21.4375 13.7812C21.6667 13.5312 21.7812 13.2344 21.7812 12.8906C21.7812 12.5781 21.7057 12.3385 21.5547 12.1719C21.4089 12.0104 21.1901 11.901 20.8984 11.8438C20.6068 11.7865 20.2474 11.7578 19.8203 11.7578H18.3984C18.0339 11.7578 17.7161 11.8151 17.4453 11.9297C17.1745 12.0443 16.9635 12.2083 16.8125 12.4219C16.6615 12.6406 16.5859 12.9089 16.5859 13.2266C16.5859 13.6589 16.7708 13.9896 17.1406 14.2188C17.5156 14.4479 18.0469 14.5625 18.7344 14.5625ZM19.0781 7.77344C19.6562 7.77344 20.0885 7.6224 20.375 7.32031C20.6615 7.01302 20.8047 6.57552 20.8047 6.00781C20.8047 5.39844 20.6589 4.9401 20.3672 4.63281C20.0755 4.32552 19.6432 4.17188 19.0703 4.17188C18.513 4.17188 18.0859 4.33073 17.7891 4.64844C17.4974 4.96094 17.3516 5.41927 17.3516 6.02344C17.3516 6.58073 17.5 7.01302 17.7969 7.32031C18.0938 7.6224 18.5208 7.77344 19.0781 7.77344ZM28.3203 3.10938C29.3828 3.10938 30.1771 3.34635 30.7031 3.82031C31.2292 4.28906 31.4922 5.03125 31.4922 6.04688V11.8672H30.3672L30.0625 10.6172H30C29.7604 10.9297 29.5104 11.1901 29.25 11.3984C28.9896 11.6068 28.6875 11.763 28.3438 11.8672C28.0052 11.9714 27.5911 12.0234 27.1016 12.0234C26.5807 12.0234 26.1172 11.9297 25.7109 11.7422C25.3047 11.5547 24.9844 11.2734 24.75 10.8984C24.5208 10.5182 24.4062 10.0365 24.4062 9.45312C24.4062 8.57812 24.7422 7.91406 25.4141 7.46094C26.0859 7.00781 27.1042 6.76042 28.4688 6.71875L29.9531 6.65625V6.17188C29.9531 5.5 29.8021 5.02604 29.5 4.75C29.2031 4.47396 28.7865 4.33594 28.25 4.33594C27.8073 4.33594 27.3828 4.40104 26.9766 4.53125C26.5703 4.65625 26.1797 4.80729 25.8047 4.98438L25.3047 3.84375C25.7109 3.63542 26.1719 3.46094 26.6875 3.32031C27.2083 3.17969 27.7526 3.10938 28.3203 3.10938ZM29.9375 7.6875L28.7344 7.74219C27.7396 7.77865 27.0391 7.94531 26.6328 8.24219C26.2318 8.53385 26.0312 8.94271 26.0312 9.46875C26.0312 9.92708 26.1693 10.263 26.4453 10.4766C26.7214 10.6901 27.0859 10.7969 27.5391 10.7969C28.237 10.7969 28.8099 10.6016 29.2578 10.2109C29.7109 9.8151 29.9375 9.23177 29.9375 8.46094V7.6875ZM39.0547 11.8672L36.3047 2.90625H36.2344C36.2448 3.11979 36.2604 3.44271 36.2812 3.875C36.3073 4.30208 36.3307 4.75781 36.3516 5.24219C36.3724 5.72656 36.3828 6.16406 36.3828 6.55469V11.8672H34.2188V0.445312H37.5156L40.2188 9.17969H40.2656L43.1328 0.445312H46.4297V11.8672H44.1719V6.46094C44.1719 6.10156 44.1771 5.6875 44.1875 5.21875C44.2031 4.75 44.2214 4.30469 44.2422 3.88281C44.263 3.45573 44.2786 3.13542 44.2891 2.92188H44.2188L41.2734 11.8672H39.0547ZM52.7031 2.95312C53.875 2.95312 54.7734 3.20833 55.3984 3.71875C56.0234 4.22917 56.3359 5.00521 56.3359 6.04688V11.8672H54.6719L54.2109 10.6797H54.1484C53.8984 10.9922 53.6432 11.2474 53.3828 11.4453C53.1224 11.6432 52.8229 11.7891 52.4844 11.8828C52.1458 11.9766 51.7344 12.0234 51.25 12.0234C50.7344 12.0234 50.2708 11.9245 49.8594 11.7266C49.4531 11.5286 49.1328 11.2266 48.8984 10.8203C48.6641 10.4089 48.5469 9.88802 48.5469 9.25781C48.5469 8.33073 48.8724 7.64844 49.5234 7.21094C50.1745 6.76823 51.151 6.52344 52.4531 6.47656L53.9688 6.42969V6.04688C53.9688 5.58854 53.849 5.2526 53.6094 5.03906C53.3698 4.82552 53.0365 4.71875 52.6094 4.71875C52.1875 4.71875 51.7734 4.77865 51.3672 4.89844C50.9609 5.01823 50.5547 5.16927 50.1484 5.35156L49.3594 3.74219C49.8229 3.4974 50.3411 3.30469 50.9141 3.16406C51.4922 3.02344 52.0885 2.95312 52.7031 2.95312ZM53.9688 7.82031L53.0469 7.85156C52.276 7.8724 51.7396 8.01042 51.4375 8.26562C51.1406 8.52083 50.9922 8.85677 50.9922 9.27344C50.9922 9.63802 51.099 9.89844 51.3125 10.0547C51.526 10.2057 51.8047 10.2812 52.1484 10.2812C52.6589 10.2812 53.0885 10.1302 53.4375 9.82812C53.7917 9.52604 53.9688 9.09635 53.9688 8.53906V7.82031ZM63.6562 2.96875C64.6406 2.96875 65.4349 3.35156 66.0391 4.11719C66.6484 4.88281 66.9531 6.00521 66.9531 7.48438C66.9531 8.47396 66.8099 9.30729 66.5234 9.98438C66.237 10.6562 65.8411 11.1641 65.3359 11.5078C64.8307 11.8516 64.25 12.0234 63.5938 12.0234C63.1719 12.0234 62.8099 11.9714 62.5078 11.8672C62.2057 11.7578 61.9479 11.6198 61.7344 11.4531C61.5208 11.2812 61.3359 11.099 61.1797 10.9062H61.0547C61.0964 11.1146 61.1276 11.3281 61.1484 11.5469C61.1693 11.7656 61.1797 11.9792 61.1797 12.1875V15.7109H58.7969V3.13281H60.7344L61.0703 4.26562H61.1797C61.3359 4.03125 61.526 3.8151 61.75 3.61719C61.974 3.41927 62.2422 3.26302 62.5547 3.14844C62.8724 3.02865 63.2396 2.96875 63.6562 2.96875ZM62.8906 4.875C62.474 4.875 62.1432 4.96094 61.8984 5.13281C61.6536 5.30469 61.474 5.5625 61.3594 5.90625C61.25 6.25 61.1901 6.6849 61.1797 7.21094V7.46875C61.1797 8.03125 61.2318 8.50781 61.3359 8.89844C61.4453 9.28906 61.625 9.58594 61.875 9.78906C62.1302 9.99219 62.4792 10.0938 62.9219 10.0938C63.2865 10.0938 63.5859 9.99219 63.8203 9.78906C64.0547 9.58594 64.2292 9.28906 64.3438 8.89844C64.4635 8.5026 64.5234 8.02083 64.5234 7.45312C64.5234 6.59896 64.3906 5.95573 64.125 5.52344C63.8594 5.09115 63.4479 4.875 62.8906 4.875ZM75.0156 9.27344C75.0156 9.86719 74.875 10.3698 74.5938 10.7812C74.3177 11.1875 73.9036 11.4974 73.3516 11.7109C72.7995 11.9193 72.112 12.0234 71.2891 12.0234C70.6797 12.0234 70.1562 11.9844 69.7188 11.9062C69.2865 11.8281 68.849 11.6979 68.4062 11.5156V9.54688C68.8802 9.76042 69.388 9.9375 69.9297 10.0781C70.4766 10.2135 70.9557 10.2812 71.3672 10.2812C71.8307 10.2812 72.1615 10.2135 72.3594 10.0781C72.5625 9.9375 72.6641 9.75521 72.6641 9.53125C72.6641 9.38542 72.6224 9.25521 72.5391 9.14062C72.4609 9.02083 72.2891 8.88802 72.0234 8.74219C71.7578 8.59115 71.3411 8.39583 70.7734 8.15625C70.2266 7.92708 69.776 7.69531 69.4219 7.46094C69.0729 7.22656 68.8125 6.95052 68.6406 6.63281C68.474 6.3099 68.3906 5.90104 68.3906 5.40625C68.3906 4.59896 68.7031 3.99219 69.3281 3.58594C69.9583 3.17448 70.7995 2.96875 71.8516 2.96875C72.3932 2.96875 72.9089 3.02344 73.3984 3.13281C73.8932 3.24219 74.401 3.41667 74.9219 3.65625L74.2031 5.375C73.7708 5.1875 73.362 5.03385 72.9766 4.91406C72.5964 4.79427 72.2083 4.73438 71.8125 4.73438C71.4635 4.73438 71.2005 4.78125 71.0234 4.875C70.8464 4.96875 70.7578 5.11198 70.7578 5.30469C70.7578 5.44531 70.8021 5.57031 70.8906 5.67969C70.9844 5.78906 71.1615 5.91146 71.4219 6.04688C71.6875 6.17708 72.0755 6.34635 72.5859 6.55469C73.0807 6.75781 73.5104 6.97135 73.875 7.19531C74.2396 7.41406 74.5208 7.6875 74.7188 8.01562C74.9167 8.33854 75.0156 8.75781 75.0156 9.27344Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </a>
                 </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r0:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Menu
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-              <a
-                class="c9"
-                href="/map"
-              >
-                <img
-                  alt="Giga logo"
-                  src=""
-                />
-              </a>
-            </div>
-          </div>
-          <div
-            class="c10 top-search-bar"
-          >
-            <span
-              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip cds--icon-tooltip"
-            >
-              <div
-                class="cds--tooltip-trigger__wrapper"
-              >
-                <button
-                  aria-labelledby="tooltip-:r2:"
-                  class="cds--btn--icon-only c11 main-search-list cds--btn cds--layout--size-lg cds--btn--primary"
-                  type="button"
-                >
-                  <svg
-                    aria-hidden="true"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 32 32"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2Zm5,3.1055a12.0136,12.0136,0,0,1,2.9158,1.8994L23.5034,8H21ZM13.3784,27.7026A11.9761,11.9761,0,0,1,8.1157,6.9761L9.4648,9h3.3423l-1.5,4H7.2793L5.8967,17.1475,8.4648,21h5l1.4319,2.1475ZM16,28c-.2034,0-.4016-.02-.6025-.03l1.3967-4.19a1.9876,1.9876,0,0,0-.2334-1.7412l-1.4319-2.1475A1.9962,1.9962,0,0,0,13.4648,19h-3.93L8.1033,16.8525,8.7207,15H11v2h2V14.1812l2.9363-7.83-1.8726-.7022L13.5571,7H10.5352L9.728,5.7891A11.7941,11.7941,0,0,1,19,4.395V8a2.0025,2.0025,0,0,0,2,2h2.5857A1.9865,1.9865,0,0,0,25,9.4141l.1406-.1407.2818-.68A11.9813,11.9813,0,0,1,27.3,12H22.5986a1.9927,1.9927,0,0,0-1.9719,1.665L20.03,17.1064a1.99,1.99,0,0,0,.991,2.086l2.1647,1.4638,1.4585,3.646A11.9577,11.9577,0,0,1,16,28Zm8.8145-8.6563L22.1,17.5088l-.1-.06L22.5986,14h5.2207a11.743,11.743,0,0,1-1.7441,8.4951Z"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                  </svg>
-                </button>
               </div>
-              <span
-                aria-hidden="true"
-                class="cds--popover"
-                id="tooltip-:r2:"
-                role="tooltip"
-              >
-                <span
-                  class="cds--popover-content cds--tooltip-content"
-                >
-                  Country List
-                </span>
-                <span
-                  class="cds--popover-caret"
-                />
-              </span>
-            </span>
-            <svg
-              aria-hidden="true"
-              class="search-icon"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5 C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
-              />
-            </svg>
-          </div>
-          <div
-            class="c12"
-          >
-            <div
-              class="c13"
-            >
               <div
-                class="sidebar-worldview-global-indication"
+                class="relative z-12"
               >
                 <div
-                  class="sidebar-worldview-global-indication-text-and-contries"
-                >
-                  <span
-                    class="sidebar-worldview-globalText"
-                  >
-                    Worldwide
-                  </span>
-                  <span
-                    class="sidebar-worldview-contriesText"
-                  >
-                    0 countries
-                  </span>
-                </div>
-              </div>
-              <div
-                class="c14"
-              >
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
+                  class="top-search-bar mt-2! flex! h-12! items-center! gap-0! bg-transparent! px-3.5! max-md:w-full!"
                 >
                   <div
-                    class="cds--tooltip-trigger__wrapper"
+                    class="flex! min-w-0! flex-1! items-center! gap-0!"
+                    data-slot="popover-anchor"
                   >
                     <button
-                      aria-labelledby="tooltip-:r4:"
-                      class="cds--btn--icon-only sidebar-worldview-shareIcon cds--btn cds--btn--sm cds--layout--size-sm cds--btn--ghost"
+                      aria-expanded="false"
+                      aria-label="Country List"
+                      class="main-search-list relative! z-1! flex! h-12! w-12! shrink-0! items-center! justify-center! gap-0.5! rounded-l-lg! border-0! px-2! py-0! text-foreground! shadow-[inset_0_0_0_1px_var(--country-trigger-border)] focus:outline-none!"
+                      data-state="closed"
+                      style="background-color: rgb(36, 36, 36); --country-trigger-border: #161616;"
                       type="button"
                     >
                       <svg
-                        aria-label="share"
-                        class="c15"
-                        fill="currentColor"
-                        focusable="false"
-                        height="16"
-                        preserveAspectRatio="xMidYMid meet"
-                        role="img"
-                        viewBox="0 0 32 32"
-                        width="16"
+                        aria-hidden="true"
+                        class="lucide lucide-earth"
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M23,20a5,5,0,0,0-3.89,1.89L11.8,17.32a4.46,4.46,0,0,0,0-2.64l7.31-4.57A5,5,0,1,0,18,7a4.79,4.79,0,0,0,.2,1.32l-7.31,4.57a5,5,0,1,0,0,6.22l7.31,4.57A4.79,4.79,0,0,0,18,25a5,5,0,1,0,5-5ZM23,4a3,3,0,1,1-3,3A3,3,0,0,1,23,4ZM7,19a3,3,0,1,1,3-3A3,3,0,0,1,7,19Zm16,9a3,3,0,1,1,3-3A3,3,0,0,1,23,28Z"
+                          d="M21.54 15H17a2 2 0 0 0-2 2v4.54"
+                        />
+                        <path
+                          d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"
+                        />
+                        <path
+                          d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                        />
+                      </svg>
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-chevron-down"
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m6 9 6 6 6-6"
                         />
                       </svg>
                     </button>
-                  </div>
-                  <span
-                    aria-hidden="true"
-                    class="cds--popover"
-                    id="tooltip-:r4:"
-                    role="tooltip"
-                  >
-                    <span
-                      class="cds--popover-content cds--tooltip-content"
-                    >
-                      Share content
-                    </span>
-                    <span
-                      class="cds--popover-caret"
-                    />
-                  </span>
-                </span>
-              </div>
-              <div
-                aria-hidden="true"
-                class="cds--modal c16"
-                role="presentation"
-              >
-                <div
-                  aria-modal="true"
-                  class="cds--modal-container"
-                  role="dialog"
-                >
-                  <button
-                    class="cds--visually-hidden"
-                    type="button"
-                  >
-                    Focus sentinel
-                  </button>
-                  <div
-                    class="cds--modal-container-body"
-                  >
                     <div
-                      class="cds--modal-header c17"
+                      class="sidebar-searchbox relative! min-w-0! flex-1! rounded-r-lg! shadow-[inset_0_0_0_1px_var(--search-shell-border)]!"
+                      style="background-color: rgb(36, 36, 36); --search-shell-border: #0f62fe;"
                     >
-                      <h3
-                        class="cds--modal-header__heading cds--type-beta"
+                      <div
+                        class="flex! h-12! items-center!"
                       >
-                        Share
-                      </h3>
-                      <button
-                        aria-label="Close"
-                        class="cds--modal-close"
-                        title="Close"
-                        type="button"
-                      >
+                        <input
+                          aria-label="Search country, region, or facility"
+                          autocapitalize="none"
+                          autocomplete="off"
+                          autocorrect="off"
+                          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12! min-w-0! flex-1! border-0! bg-transparent! pl-3.5! pr-10! text-[0.9375rem]! font-normal! leading-5! text-foreground! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                          data-slot="input"
+                          id="main-search-bar"
+                          inputmode="search"
+                          placeholder="Search country, region, or facility"
+                          spellcheck="false"
+                          value=""
+                        />
                         <svg
                           aria-hidden="true"
-                          class="cds--modal-close__icon"
-                          fill="currentColor"
-                          focusable="false"
-                          height="20"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                          width="20"
+                          class="lucide lucide-search pointer-events-none! absolute! right-3.5! top-1/2! shrink-0! -translate-y-1/2! text-foreground!"
+                          fill="none"
+                          height="16"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="16"
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                            d="m21 21-4.34-4.34"
+                          />
+                          <circle
+                            cx="11"
+                            cy="11"
+                            r="8"
+                          />
+                        </svg>
+                      </div>
+                      <button
+                        aria-label="Clear search input"
+                        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 h-9 px-4 py-2 has-[>svg]:px-3 main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! text-foreground! hidden!"
+                        data-size="default"
+                        data-slot="button"
+                        data-variant="icon"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-x text-foreground!"
+                          fill="none"
+                          height="16"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M18 6 6 18"
+                          />
+                          <path
+                            d="m6 6 12 12"
                           />
                         </svg>
                       </button>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex min-h-0 flex-1 flex-col"
+          >
+            <div
+              class="relative! overflow-auto! h-auto! max-h-none!"
+              data-slot="scroll-area"
+              dir="ltr"
+              style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"
+            >
+              <style>
+                [data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}
+              </style>
+              <div
+                class="h-full! w-full! rounded-[inherit]!"
+                data-radix-scroll-area-viewport=""
+                data-slot="scroll-area-viewport"
+                style="overflow-x: hidden; overflow-y: scroll;"
+              >
+                <div
+                  style="min-width: 100%; display: table;"
+                >
+                  <div
+                    class="w-full! px-3.5! pt-4! pb-2.5!"
+                  >
                     <div
-                      class="scrollbar-container ps"
+                      class="flex! flex-col! gap-1!"
                     >
                       <div
-                        class="cds--modal-content c18"
+                        class="flex! items-start! justify-between! gap-1!"
+                      >
+                        <p
+                          class="m-0! max-w-56! font-manrope! text-2xl! font-extralight! leading-[36px]! text-foreground!"
+                        >
+                          Global connectivity map for children
+                        </p>
+                        <button
+                          aria-label="Share content"
+                          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-full! bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 text-foreground!"
+                          data-size="icon"
+                          data-slot="button"
+                          data-state="closed"
+                          data-variant="icon"
+                          type="button"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="lucide lucide-share2 lucide-share-2 size-4"
+                            fill="none"
+                            height="24"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle
+                              cx="18"
+                              cy="5"
+                              r="3"
+                            />
+                            <circle
+                              cx="6"
+                              cy="12"
+                              r="3"
+                            />
+                            <circle
+                              cx="18"
+                              cy="19"
+                              r="3"
+                            />
+                            <line
+                              x1="8.59"
+                              x2="15.42"
+                              y1="13.51"
+                              y2="17.49"
+                            />
+                            <line
+                              x1="15.41"
+                              x2="8.59"
+                              y1="6.51"
+                              y2="10.49"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <p
+                        class="m-0! text-xs! font-normal! leading-4.5! tracking-[0.01rem]! text-muted-foreground!"
+                      >
+                        An open & live global map of mapped facilities and their connectivity
+                      </p>
+                    </div>
+                    <div
+                      class="mt-4! flex! flex-col! gap-3!"
+                    >
+                      <div
+                        data-orientation="vertical"
+                        data-slot="accordion"
                       >
                         <div
-                          class="field-wrapper"
+                          class="flex! flex-col! gap-3!"
                         >
-                          <span>
-                            Copy URL
-                          </span>
                           <div
-                            class="text-input-container"
+                            class="overflow-visible! rounded-lg! border! border-card-border!"
+                            data-orientation="vertical"
+                            data-slot="accordion-item"
+                            data-state="closed"
                           >
+                            <h3
+                              class="flex!"
+                              data-orientation="vertical"
+                              data-slot="accordion-header"
+                              data-state="closed"
+                            >
+                              <button
+                                aria-expanded="false"
+                                class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
+                                data-orientation="vertical"
+                                data-radix-collection-item=""
+                                data-slot="accordion-trigger"
+                                data-state="closed"
+                                id="radix-:rl:"
+                                type="button"
+                              >
+                                <div
+                                  class="flex! min-w-0! items-center! gap-2.5!"
+                                >
+                                  <div
+                                    class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
+                                  >
+                                    Schools
+                                  </div>
+                                </div>
+                                <svg
+                                  aria-hidden="true"
+                                  class="lucide lucide-chevron-down"
+                                  fill="none"
+                                  height="16"
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  viewBox="0 0 24 24"
+                                  width="16"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="m6 9 6 6 6-6"
+                                  />
+                                </svg>
+                              </button>
+                            </h3>
                             <div
-                              class="cds--form-item cds--text-input-wrapper cds--text-input-wrapper--readonly"
+                              class="space-y-3! px-4! pb-3!"
                             >
                               <div
-                                class="cds--text-input__label-wrapper"
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
                               />
                               <div
-                                class="cds--text-input__field-outer-wrapper"
-                              >
-                                <div
-                                  class="cds--text-input__field-wrapper"
-                                >
-                                  <input
-                                    class="cds--text-input"
-                                    id="text-input-1"
-                                    readonly=""
-                                    type="text"
-                                    value="http://localhost/map"
-                                  />
-                                  <span
-                                    class="cds--text-input__counter-alert"
-                                    role="alert"
-                                  />
-                                </div>
-                              </div>
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
                             </div>
                             <div
-                              class="cds--layout-constraint--size__default-md cds--layout-constraint--size__max-lg"
-                            >
-                              <span
-                                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
-                              >
-                                <div
-                                  class="cds--tooltip-trigger__wrapper"
-                                >
-                                  <button
-                                    aria-labelledby="tooltip-:r6:"
-                                    class="cds--btn--icon-only copy-button cds--copy-btn cds--copy cds--btn cds--btn--primary"
-                                    type="button"
-                                  >
-                                    <svg
-                                      aria-hidden="true"
-                                      class="cds--snippet__icon"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="16"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 32 32"
-                                      width="16"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
-                                      />
-                                      <path
-                                        d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                                <span
-                                  aria-hidden="true"
-                                  class="cds--popover"
-                                  id="tooltip-:r6:"
-                                  role="tooltip"
-                                >
-                                  <span
-                                    class="cds--popover-content cds--tooltip-content"
-                                  >
-                                    Copy
-                                  </span>
-                                  <span
-                                    class="cds--popover-caret"
-                                  />
-                                </span>
-                              </span>
-                            </div>
+                              aria-labelledby="radix-:rl:"
+                              class="hidden!"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              data-state="closed"
+                              hidden=""
+                              id="radix-:rm:"
+                              role="region"
+                              style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
+                            />
                           </div>
-                        </div>
-                        <div
-                          class="share-icons-container"
-                        >
-                          <span>
-                            Or share using
-                          </span>
                           <div
-                            class="social-share-icons"
+                            class="overflow-visible! rounded-lg! border! border-card-border!"
+                            data-orientation="vertical"
+                            data-slot="accordion-item"
+                            data-state="closed"
                           >
-                            <a
-                              class="cds--link"
-                              href="https://twitter.com/intent/tweet?text=Giga Maps&url=https://twitter.com/intent/tweet?text=giga-maps&url=http%3A%2F%2Flocalhost%2Fmap"
-                              rel="noopener"
-                              target="_blank"
+                            <h3
+                              class="flex!"
+                              data-orientation="vertical"
+                              data-slot="accordion-header"
+                              data-state="closed"
                             >
-                              <span
-                                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                              <button
+                                aria-expanded="false"
+                                class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-3.5! py-3! text-foreground! data-[state=open]:pb-3! data-[state=open]:pt-3!"
+                                data-orientation="vertical"
+                                data-radix-collection-item=""
+                                data-slot="accordion-trigger"
+                                data-state="closed"
+                                id="radix-:rn:"
+                                type="button"
                               >
                                 <div
-                                  class="cds--tooltip-trigger__wrapper"
+                                  class="flex! min-w-0! items-center! gap-2.5!"
                                 >
-                                  <button
-                                    aria-labelledby="tooltip-:r8:"
-                                    class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
-                                    type="button"
+                                  <div
+                                    class="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground"
                                   >
-                                    SvgUrl
-                                  </button>
+                                    Health facilities
+                                  </div>
                                 </div>
-                                <span
+                                <svg
                                   aria-hidden="true"
-                                  class="cds--popover"
-                                  id="tooltip-:r8:"
-                                  role="tooltip"
+                                  class="lucide lucide-chevron-down"
+                                  fill="none"
+                                  height="16"
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  viewBox="0 0 24 24"
+                                  width="16"
+                                  xmlns="http://www.w3.org/2000/svg"
                                 >
-                                  <span
-                                    class="cds--popover-content cds--tooltip-content"
-                                  >
-                                    Twitter
-                                  </span>
-                                  <span
-                                    class="cds--popover-caret"
+                                  <path
+                                    d="m6 9 6 6 6-6"
                                   />
-                                </span>
-                              </span>
-                            </a>
-                            <a
-                              class="cds--link"
-                              href="mailto:?subject=Giga Maps – Navigation Link&body=Dear%20User%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20I%20hope%20this%20email%20finds%20you%20well.%20I'd%20like%20to%20share%20the%20GIGA%20Maps%20URL%20with%20you%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Application%20URL%20-%20http%3A%2F%2Flocalhost%2Fmap%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20This%20link%20will%20take%20you%20to%20the%20GIGA%20Maps%20application%2C%20allowing%20you%20to%20navigate%20through%20it.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Regards%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gigamaps%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Support%20Mail%20Id%3A%20giga%40mail.unicef.org%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%C2%A92023-2024%20All%20rights%20reserved"
-                              rel="noopener"
-                              target="_blank"
+                                </svg>
+                              </button>
+                            </h3>
+                            <div
+                              class="space-y-3! px-4! pb-3!"
                             >
-                              <span
-                                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
-                              >
-                                <div
-                                  class="cds--tooltip-trigger__wrapper"
-                                >
-                                  <button
-                                    aria-labelledby="tooltip-:ra:"
-                                    class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
-                                    type="button"
-                                  >
-                                    <svg
-                                      aria-hidden="true"
-                                      fill="currentColor"
-                                      focusable="false"
-                                      height="32"
-                                      preserveAspectRatio="xMidYMid meet"
-                                      viewBox="0 0 32 32"
-                                      width="32"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M28,6H4A2,2,0,0,0,2,8V24a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V8A2,2,0,0,0,28,6ZM25.8,8,16,14.78,6.2,8ZM4,24V8.91l11.43,7.91a1,1,0,0,0,1.14,0L28,8.91V24Z"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                                <span
-                                  aria-hidden="true"
-                                  class="cds--popover"
-                                  id="tooltip-:ra:"
-                                  role="tooltip"
-                                >
-                                  <span
-                                    class="cds--popover-content cds--tooltip-content"
-                                  >
-                                    Email
-                                  </span>
-                                  <span
-                                    class="cds--popover-caret"
-                                  />
-                                </span>
-                              </span>
-                            </a>
-                            <a
-                              class="cds--link"
-                              href="https://api.whatsapp.com/send?text=Giga%20Maps%20http%3A%2F%2Flocalhost%2Fmap"
-                              rel="noopener"
-                              target="_blank"
-                            >
-                              <span
-                                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
-                              >
-                                <div
-                                  class="cds--tooltip-trigger__wrapper"
-                                >
-                                  <button
-                                    aria-labelledby="tooltip-:rc:"
-                                    class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
-                                    type="button"
-                                  >
-                                    SvgUrl
-                                  </button>
-                                </div>
-                                <span
-                                  aria-hidden="true"
-                                  class="cds--popover"
-                                  id="tooltip-:rc:"
-                                  role="tooltip"
-                                >
-                                  <span
-                                    class="cds--popover-content cds--tooltip-content"
-                                  >
-                                    WhatsApp
-                                  </span>
-                                  <span
-                                    class="cds--popover-caret"
-                                  />
-                                </span>
-                              </span>
-                            </a>
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                              <div
+                                class="animate-pulse rounded-md bg-muted h-4! w-full! rounded-sm!"
+                                data-slot="skeleton"
+                              />
+                            </div>
+                            <div
+                              aria-labelledby="radix-:rn:"
+                              class="hidden!"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              data-state="closed"
+                              hidden=""
+                              id="radix-:ro:"
+                              role="region"
+                              style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width);"
+                            />
                           </div>
                         </div>
-                      </div>
-                      <div
-                        class="ps__rail-x"
-                        style="left: 0px; top: 0px;"
-                      >
-                        <div
-                          class="ps__thumb-x"
-                          style="left: 0px; width: 0px;"
-                          tabindex="0"
-                        />
-                      </div>
-                      <div
-                        class="ps__rail-y"
-                        style="top: 0px; left: 0px;"
-                      >
-                        <div
-                          class="ps__thumb-y"
-                          style="top: 0px; height: 0px;"
-                          tabindex="0"
-                        />
                       </div>
                     </div>
                   </div>
-                  <button
-                    class="cds--visually-hidden"
-                    type="button"
-                  >
-                    Focus sentinel
-                  </button>
                 </div>
               </div>
             </div>
             <div
-              class="scrollbar-container c19 ps"
+              aria-hidden="true"
+              class="cds--modal c3"
+              role="presentation"
             >
               <div
-                class="c20"
+                aria-modal="true"
+                class="cds--modal-container"
+                role="dialog"
               >
+                <button
+                  class="cds--visually-hidden"
+                  type="button"
+                >
+                  Focus sentinel
+                </button>
                 <div
-                  class=""
+                  class="cds--modal-container-body"
                 >
                   <div
-                    class="c21"
+                    class="cds--modal-header c4"
                   >
-                    <p
-                      class="c22"
+                    <h3
+                      class="cds--modal-header__heading cds--type-beta"
                     >
-                      Global School connectivity map
-                    </p>
-                  </div>
-                  <div
-                    class="c23"
-                  >
-                    <p>
-                      An open & live global map of schools and their connectivity
-                    </p>
-                  </div>
-                  <div
-                    class="c24"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 32 32"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M29.4141,24,12,6.5859a2.0476,2.0476,0,0,0-2.8281,0l-2.586,2.586a2.0021,2.0021,0,0,0,0,2.8281L23.999,29.4141a2.0024,2.0024,0,0,0,2.8281,0l2.587-2.5865a1.9993,1.9993,0,0,0,0-2.8281ZM8,10.5859,10.5859,8l5,5-2.5866,2.5869-5-5Z"
-                      />
-                      <path
-                        d="M2.586 14.586H5.414V17.414H2.586z"
-                        transform="rotate(-45 4 16)"
-                      />
-                      <path
-                        d="M14.586 2.586H17.414V5.414H14.586z"
-                        transform="rotate(-45 16 4)"
-                      />
-                      <path
-                        d="M2.586 2.586H5.414V5.414H2.586z"
-                        transform="rotate(-45 4 4)"
-                      />
-                    </svg>
-                    <a
-                      class="cds--link"
-                    >
-                      Take the tour
-                    </a>
-                  </div>
-                </div>
-                <div
-                  class="c25"
-                >
-                  <svg
-                    aria-hidden="true"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 32 32"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M16,18a5,5,0,1,1,5-5A5.0057,5.0057,0,0,1,16,18Zm0-8a3,3,0,1,0,3,3A3.0033,3.0033,0,0,0,16,10Z"
-                    />
-                    <path
-                      d="M16,30,7.5645,20.0513c-.0479-.0571-.3482-.4515-.3482-.4515A10.8888,10.8888,0,0,1,5,13a11,11,0,0,1,22,0,10.8844,10.8844,0,0,1-2.2148,6.5973l-.0015.0025s-.3.3944-.3447.4474ZM8.8125,18.395c.001.0007.2334.3082.2866.3744L16,26.9079l6.91-8.15c.0439-.0552.2783-.3649.2788-.3657A8.901,8.901,0,0,0,25,13,9,9,0,1,0,7,13a8.9054,8.9054,0,0,0,1.8125,5.395Z"
-                    />
-                  </svg>
-                  <div
-                    class="c26"
-                  >
-                    <p>
-                      0 /6M 
-                      <span>
-                        schools location mapped
-                      </span>
-                    </p>
-                    <span
-                      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip information-icon"
-                    >
-                      <div
-                        class="cds--tooltip-trigger__wrapper"
-                      >
-                        <button
-                          aria-labelledby="tooltip-:re:"
-                          class="sb-tooltip-trigger"
-                          type="button"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            fill="currentColor"
-                            focusable="false"
-                            height="16"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 16 16"
-                            width="16"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                            />
-                            <path
-                              d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <span
-                        aria-hidden="true"
-                        class="cds--popover"
-                        id="tooltip-:re:"
-                        role="tooltip"
-                      >
-                        <span
-                          class="cds--popover-content cds--tooltip-content"
-                        >
-                          School geolocations mapped using government, Giga’s AI model and supplemental open data.
-                        </span>
-                        <span
-                          class="cds--popover-caret"
-                        />
-                      </span>
-                    </span>
-                  </div>
-                  <div
-                    class="c27"
-                  >
-                    <p>
-                      across 0 countries
-                    </p>
-                  </div>
-                </div>
-                <div
-                  class="c25"
-                >
-                  <svg
-                    aria-hidden="true"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 32 32"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15 12H17V30H15zM11.33 18.22a7 7 0 010-10.44l1.34 1.49a5 5 0 000 7.46zM20.67 18.22l-1.34-1.49a5 5 0 000-7.46l1.34-1.49a7 7 0 010 10.44z"
-                    />
-                    <path
-                      d="M8.4 21.8a11 11 0 010-17.6L9.6 5.8a9 9 0 000 14.4zM23.6 21.8l-1.2-1.6a9 9 0 000-14.4l1.2-1.6a11 11 0 010 17.6z"
-                    />
-                  </svg>
-                  <div
-                    class="c26"
-                  >
-                    <p>
-                      0 
-                      <span>
-                        schools connectivity status mapped
-                      </span>
-                    </p>
-                    <span
-                      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip information-icon"
-                    >
-                      <div
-                        class="cds--tooltip-trigger__wrapper"
-                      >
-                        <button
-                          aria-labelledby="tooltip-:rf:"
-                          class="sb-tooltip-trigger"
-                          type="button"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            fill="currentColor"
-                            focusable="false"
-                            height="16"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 16 16"
-                            width="16"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                            />
-                            <path
-                              d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <span
-                        aria-hidden="true"
-                        class="cds--popover"
-                        id="tooltip-:rf:"
-                        role="tooltip"
-                      >
-                        <span
-                          class="cds--popover-content cds--tooltip-content"
-                        >
-                          'School connectivity status mapped using government data or a real-time measurement source.
-                        </span>
-                        <span
-                          class="cds--popover-caret"
-                        />
-                      </span>
-                    </span>
-                  </div>
-                  <div
-                    class="c27"
-                  >
-                    <p>
-                      across 0 countries
-                    </p>
-                    <span>
-                      0
-                    </span>
-                  </div>
-                  <div
-                    class="2 c28"
-                  />
-                </div>
-                <div
-                  class="c25"
-                >
-                  <svg
-                    aria-hidden="true"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 32 32"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="16"
-                      cy="25"
-                      r="2"
-                    />
-                    <path
-                      d="M10.47,19.2334l1.4136,1.4131a5.9688,5.9688,0,0,1,8.2229-.0093L21.52,19.2236a7.9629,7.9629,0,0,0-11.05.01Z"
-                    />
-                    <path
-                      d="M6.229,14.9927l1.4136,1.4135a11.955,11.955,0,0,1,16.7041-.01L25.76,14.9829a13.9514,13.9514,0,0,0-19.5313.01Z"
-                    />
-                    <path
-                      d="M30,10.7412a19.94,19.94,0,0,0-28,0v.0225L3.4043,12.168a17.9336,17.9336,0,0,1,25.1811-.01L30,10.7432Z"
-                    />
-                  </svg>
-                  <div
-                    class="c26"
-                  >
-                    <p>
-                      0 
-                      <span>
-                        schools with real-time data mapped
-                      </span>
-                    </p>
-                    <span
-                      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left-bottom cds--tooltip information-icon"
-                    >
-                      <div
-                        class="cds--tooltip-trigger__wrapper"
-                      >
-                        <button
-                          aria-labelledby="tooltip-:rg:"
-                          class="sb-tooltip-rigger"
-                          type="button"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            fill="currentColor"
-                            focusable="false"
-                            height="16"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 16 16"
-                            width="16"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                            />
-                            <path
-                              d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <span
-                        aria-hidden="true"
-                        class="cds--popover"
-                        id="tooltip-:rg:"
-                        role="tooltip"
-                      >
-                        <span
-                          class="cds--popover-content cds--tooltip-content"
-                        >
-                          Schools with periodical in-school internet measurements from software and hardware-based solutions.
-                        </span>
-                        <span
-                          class="cds--popover-caret"
-                        />
-                      </span>
-                    </span>
-                  </div>
-                  <div
-                    class="c27"
-                  >
-                    <p>
-                      across 0 countries
-                    </p>
-                    <span>
-                      0
-                    </span>
-                  </div>
-                  <div
-                    class="2 c28"
-                  />
-                </div>
-              </div>
-              <div
-                class="ps__rail-x"
-                style="left: 0px; top: 0px;"
-              >
-                <div
-                  class="ps__thumb-x"
-                  style="left: 0px; width: 0px;"
-                  tabindex="0"
-                />
-              </div>
-              <div
-                class="ps__rail-y"
-                style="top: 0px; left: 0px;"
-              >
-                <div
-                  class="ps__thumb-y"
-                  style="top: 0px; height: 0px;"
-                  tabindex="0"
-                />
-              </div>
-            </div>
-            <button
-              class="sidebar__expander"
-              type="button"
-            >
-              SvgUrl
-            </button>
-          </div>
-          <div
-            class="c29"
-          >
-            <div
-              class="c30 broadcast-button"
-            />
-            <div
-              class="c31"
-            >
-              <div
-                class="c32"
-              >
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
-                >
-                  <div
-                    class="cds--tooltip-trigger__wrapper"
-                  >
+                      Share
+                    </h3>
                     <button
-                      aria-labelledby="tooltip-:rh:"
-                      class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-                      data-testid="tour-button"
-                      id="tour-button"
+                      aria-label="Close"
+                      class="cds--modal-close"
+                      title="Close"
                       type="button"
                     >
                       <svg
                         aria-hidden="true"
+                        class="cds--modal-close__icon"
                         fill="currentColor"
                         focusable="false"
-                        height="16"
+                        height="20"
                         preserveAspectRatio="xMidYMid meet"
                         viewBox="0 0 32 32"
-                        width="16"
+                        width="20"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M29.4141,24,12,6.5859a2.0476,2.0476,0,0,0-2.8281,0l-2.586,2.586a2.0021,2.0021,0,0,0,0,2.8281L23.999,29.4141a2.0024,2.0024,0,0,0,2.8281,0l2.587-2.5865a1.9993,1.9993,0,0,0,0-2.8281ZM8,10.5859,10.5859,8l5,5-2.5866,2.5869-5-5Z"
-                        />
-                        <path
-                          d="M2.586 14.586H5.414V17.414H2.586z"
-                          transform="rotate(-45 4 16)"
-                        />
-                        <path
-                          d="M14.586 2.586H17.414V5.414H14.586z"
-                          transform="rotate(-45 16 4)"
-                        />
-                        <path
-                          d="M2.586 2.586H5.414V5.414H2.586z"
-                          transform="rotate(-45 4 4)"
+                          d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                         />
                       </svg>
                     </button>
                   </div>
-                  <span
-                    aria-hidden="true"
-                    class="cds--popover"
-                    id="tooltip-:rh:"
-                    role="tooltip"
-                  >
-                    <span
-                      class="cds--popover-content cds--tooltip-content"
-                    >
-                      Tour
-                    </span>
-                    <span
-                      class="cds--popover-caret"
-                    />
-                  </span>
-                </span>
-              </div>
-              <div
-                class="c33 theme-wrapper-popup"
-              >
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left c34 theme-layer-popover-link"
-                >
                   <div
-                    class="c35"
+                    class="scrollbar-container ps"
                   >
-                    <span
-                      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
+                    <div
+                      class="cds--modal-content c5"
                     >
                       <div
-                        class="cds--tooltip-trigger__wrapper"
+                        class="field-wrapper"
                       >
-                        <button
-                          aria-labelledby="tooltip-:rj:"
-                          class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-                          type="button"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            fill="#fff"
-                            focusable="false"
-                            height="16"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 32 32"
-                            width="16"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M16,24a.9967.9967,0,0,1-.4741-.12l-13-7L3.4741,15.12,16,21.8643,28.5259,15.12l.9482,1.7607-13,7A.9967.9967,0,0,1,16,24Z"
-                            />
-                            <path
-                              d="M16 30a.9967.9967 0 01-.4741-.12l-13-7L3.4741 21.12 16 27.8643 28.5259 21.12l.9482 1.7607-13 7A.9967.9967 0 0116 30zM16 18a.9967.9967 0 01-.4741-.12l-13-7a1 1 0 010-1.7607l13-7a.9982.9982 0 01.9482 0l13 7a1 1 0 010 1.7607l-13 7A.9967.9967 0 0116 18zM5.1094 10L16 15.8643 26.8906 10 16 4.1358z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <span
-                        aria-hidden="true"
-                        class="cds--popover"
-                        id="tooltip-:rj:"
-                        role="tooltip"
-                      >
-                        <span
-                          class="cds--popover-content cds--tooltip-content"
-                        >
-                          Theme & Layers
+                        <span>
+                          Copy URL
                         </span>
-                        <span
-                          class="cds--popover-caret"
-                        />
-                      </span>
-                    </span>
-                  </div>
-                </span>
-              </div>
-              <div
-                class="c36 lengend-container"
-              >
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--drop-shadow cds--popover--left-bottom c37 legend-info-popover-link"
-                >
-                  <div
-                    class="c32 contras legend-open-button"
-                  >
-                    <span
-                      class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
-                    >
-                      <div
-                        class="cds--tooltip-trigger__wrapper"
-                      >
-                        <button
-                          aria-labelledby="tooltip-:rl:"
-                          class="cds--btn--icon-only cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-                          type="button"
-                        >
-                          <svg
-                            aria-hidden="true"
-                            fill="currentColor"
-                            focusable="false"
-                            height="16"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 16 16"
-                            width="16"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                            />
-                            <path
-                              d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <span
-                        aria-hidden="true"
-                        class="cds--popover"
-                        id="tooltip-:rl:"
-                        role="tooltip"
-                      >
-                        <span
-                          class="cds--popover-content cds--tooltip-content"
-                        >
-                          Legend
-                        </span>
-                        <span
-                          class="cds--popover-caret"
-                        />
-                      </span>
-                    </span>
-                  </div>
-                  <span
-                    class="cds--popover"
-                  >
-                    <span
-                      class="cds--popover-content legend-info-popover-content"
-                    >
-                      <div
-                        class="c38"
-                      />
-                      <div
-                        class="c39"
-                      >
                         <div
-                          class="school-status"
+                          class="text-input-container"
                         >
-                          <h3>
-                            School status
-                          </h3>
                           <div
-                            class="legend-container"
+                            class="cds--form-item cds--text-input-wrapper cds--text-input-wrapper--readonly"
                           >
                             <div
-                              class="checkbox-with-label"
+                              class="cds--text-input__label-wrapper"
+                            />
+                            <div
+                              class="cds--text-input__field-outer-wrapper"
                             >
                               <div
-                                class="conneted-info"
+                                class="cds--text-input__field-wrapper"
                               >
-                                <div
-                                  class="c40"
-                                >
-                                  <div
-                                    class="c41"
-                                  />
-                                </div>
-                                <p
-                                  class="label"
-                                >
-                                  Connected
-                                </p>
+                                <input
+                                  class="cds--text-input"
+                                  id="text-input-1"
+                                  readonly=""
+                                  type="text"
+                                  value="http://localhost:3000/map"
+                                />
+                                <span
+                                  class="cds--text-input__counter-alert"
+                                  role="alert"
+                                />
                               </div>
                             </div>
                           </div>
                           <div
-                            class="legend-container"
+                            class="cds--layout-constraint--size__default-md cds--layout-constraint--size__max-lg"
                           >
-                            <div
-                              class="checkbox-with-label"
+                            <span
+                              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
                             >
                               <div
-                                class="conneted-info"
+                                class="cds--tooltip-trigger__wrapper"
                               >
-                                <div
-                                  class="c40"
+                                <button
+                                  aria-labelledby="tooltip-:r4:"
+                                  class="cds--btn--icon-only copy-button cds--copy-btn cds--copy cds--btn cds--btn--primary"
+                                  type="button"
                                 >
-                                  <div
-                                    class="c42"
-                                  />
-                                </div>
-                                <p
-                                  class="label"
-                                >
-                                  Not connected
-                                </p>
+                                  <svg
+                                    aria-hidden="true"
+                                    class="cds--snippet__icon"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="16"
+                                    preserveAspectRatio="xMidYMid meet"
+                                    viewBox="0 0 32 32"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
+                                    />
+                                    <path
+                                      d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"
+                                    />
+                                  </svg>
+                                </button>
                               </div>
-                            </div>
-                          </div>
-                          <div
-                            class="legend-container"
-                          >
-                            <div
-                              class="checkbox-with-label"
-                            >
-                              <div
-                                class="conneted-info"
+                              <span
+                                aria-hidden="true"
+                                class="cds--popover"
+                                id="tooltip-:r4:"
+                                role="tooltip"
                               >
-                                <div
-                                  class="c40"
+                                <span
+                                  class="cds--popover-content cds--tooltip-content"
                                 >
-                                  <div
-                                    class="c43"
-                                  />
-                                </div>
-                                <p
-                                  class="label"
-                                >
-                                  Unknown
-                                </p>
-                              </div>
-                            </div>
+                                  Copy
+                                </span>
+                                <span
+                                  class="cds--popover-caret"
+                                />
+                              </span>
+                            </span>
                           </div>
                         </div>
                       </div>
-                    </span>
-                    <span
-                      class="cds--popover-caret"
-                    />
-                  </span>
-                </span>
+                      <div
+                        class="share-icons-container"
+                      >
+                        <span>
+                          Or share using
+                        </span>
+                        <div
+                          class="social-share-icons"
+                        >
+                          <a
+                            class="cds--link"
+                            href="https://twitter.com/intent/tweet?text=Giga Maps&url=https://twitter.com/intent/tweet?text=giga-maps&url=http%3A%2F%2Flocalhost%3A3000%2Fmap"
+                            rel="noopener"
+                            target="_blank"
+                          >
+                            <span
+                              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                            >
+                              <div
+                                class="cds--tooltip-trigger__wrapper"
+                              >
+                                <button
+                                  aria-labelledby="tooltip-:r6:"
+                                  class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
+                                  type="button"
+                                >
+                                  <svg
+                                    fill="none"
+                                    height="24"
+                                    viewBox="0 0 1200 1227"
+                                    width="24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g
+                                      clip-path="url(#clip0_1_2)"
+                                    >
+                                      <path
+                                        d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
+                                      />
+                                    </g>
+                                    <defs>
+                                      <clippath
+                                        id="clip0_1_2"
+                                      >
+                                        <rect
+                                          fill="black"
+                                          height="1227"
+                                          width="1200"
+                                        />
+                                      </clippath>
+                                    </defs>
+                                  </svg>
+                                </button>
+                              </div>
+                              <span
+                                aria-hidden="true"
+                                class="cds--popover"
+                                id="tooltip-:r6:"
+                                role="tooltip"
+                              >
+                                <span
+                                  class="cds--popover-content cds--tooltip-content"
+                                >
+                                  Twitter
+                                </span>
+                                <span
+                                  class="cds--popover-caret"
+                                />
+                              </span>
+                            </span>
+                          </a>
+                          <a
+                            class="cds--link"
+                            href="mailto:?subject=Giga Maps – Navigation Link&body=Dear%20User%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20I%20hope%20this%20email%20finds%20you%20well.%20I'd%20like%20to%20share%20the%20GIGA%20Maps%20URL%20with%20you%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Application%20URL%20-%20http%3A%2F%2Flocalhost%3A3000%2Fmap%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20This%20link%20will%20take%20you%20to%20the%20GIGA%20Maps%20application%2C%20allowing%20you%20to%20navigate%20through%20it.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Regards%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gigamaps%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Support%20Mail%20Id%3A%20giga%40mail.unicef.org%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%C2%A92023-2024%20All%20rights%20reserved"
+                            rel="noopener"
+                            target="_blank"
+                          >
+                            <span
+                              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                            >
+                              <div
+                                class="cds--tooltip-trigger__wrapper"
+                              >
+                                <button
+                                  aria-labelledby="tooltip-:r8:"
+                                  class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
+                                  type="button"
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="32"
+                                    preserveAspectRatio="xMidYMid meet"
+                                    viewBox="0 0 32 32"
+                                    width="32"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M28,6H4A2,2,0,0,0,2,8V24a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V8A2,2,0,0,0,28,6ZM25.8,8,16,14.78,6.2,8ZM4,24V8.91l11.43,7.91a1,1,0,0,0,1.14,0L28,8.91V24Z"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                              <span
+                                aria-hidden="true"
+                                class="cds--popover"
+                                id="tooltip-:r8:"
+                                role="tooltip"
+                              >
+                                <span
+                                  class="cds--popover-content cds--tooltip-content"
+                                >
+                                  Email
+                                </span>
+                                <span
+                                  class="cds--popover-caret"
+                                />
+                              </span>
+                            </span>
+                          </a>
+                          <a
+                            class="cds--link"
+                            href="https://api.whatsapp.com/send?text=Giga%20Maps%20http%3A%2F%2Flocalhost%3A3000%2Fmap"
+                            rel="noopener"
+                            target="_blank"
+                          >
+                            <span
+                              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip cds--icon-tooltip"
+                            >
+                              <div
+                                class="cds--tooltip-trigger__wrapper"
+                              >
+                                <button
+                                  aria-labelledby="tooltip-:ra:"
+                                  class="cds--btn--icon-only cds--btn cds--layout--size-lg cds--btn--ghost"
+                                  type="button"
+                                >
+                                  <svg
+                                    height="32"
+                                    id="Layer_1"
+                                    style="enable-background: new 0 0 56.693 56.693;"
+                                    viewBox="0 0 56.693 56.693"
+                                    width="32"
+                                    xml:space="preserve"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                  >
+                                    <style
+                                      type="text/css"
+                                    >
+                                      
+	.st0{fill-rule:evenodd;clip-rule:evenodd;}
+
+                                    </style>
+                                    <g>
+                                      <path
+                                        class="st0"
+                                        d="M46.3802,10.7138c-4.6512-4.6565-10.8365-7.222-17.4266-7.2247c-13.5785,0-24.63,11.0506-24.6353,24.6333   c-0.0019,4.342,1.1325,8.58,3.2884,12.3159l-3.495,12.7657l13.0595-3.4257c3.5982,1.9626,7.6495,2.9971,11.7726,2.9985h0.01   c0.0008,0-0.0006,0,0.0002,0c13.5771,0,24.6293-11.0517,24.635-24.6347C53.5914,21.5595,51.0313,15.3701,46.3802,10.7138z    M28.9537,48.6163h-0.0083c-3.674-0.0014-7.2777-0.9886-10.4215-2.8541l-0.7476-0.4437l-7.7497,2.0328l2.0686-7.5558   l-0.4869-0.7748c-2.0496-3.26-3.1321-7.028-3.1305-10.8969c0.0044-11.2894,9.19-20.474,20.4842-20.474   c5.469,0.0017,10.6101,2.1344,14.476,6.0047c3.8658,3.8703,5.9936,9.0148,5.9914,14.4859   C49.4248,39.4307,40.2395,48.6163,28.9537,48.6163z"
+                                      />
+                                      <path
+                                        class="st0"
+                                        d="M40.1851,33.281c-0.6155-0.3081-3.6419-1.797-4.2061-2.0026c-0.5642-0.2054-0.9746-0.3081-1.3849,0.3081   c-0.4103,0.6161-1.59,2.0027-1.9491,2.4136c-0.359,0.4106-0.7182,0.4623-1.3336,0.1539c-0.6155-0.3081-2.5989-0.958-4.95-3.0551   c-1.83-1.6323-3.0653-3.6479-3.4245-4.2643c-0.359-0.6161-0.0382-0.9492,0.27-1.2562c0.2769-0.2759,0.6156-0.7189,0.9234-1.0784   c0.3077-0.3593,0.4103-0.6163,0.6155-1.0268c0.2052-0.4109,0.1027-0.7704-0.0513-1.0784   c-0.1539-0.3081-1.3849-3.3379-1.8978-4.5706c-0.4998-1.2001-1.0072-1.0375-1.3851-1.0566   c-0.3585-0.0179-0.7694-0.0216-1.1797-0.0216s-1.0773,0.1541-1.6414,0.7702c-0.5642,0.6163-2.1545,2.1056-2.1545,5.1351   c0,3.0299,2.2057,5.9569,2.5135,6.3676c0.3077,0.411,4.3405,6.6282,10.5153,9.2945c1.4686,0.6343,2.6152,1.013,3.5091,1.2966   c1.4746,0.4686,2.8165,0.4024,3.8771,0.2439c1.1827-0.1767,3.6419-1.489,4.1548-2.9267c0.513-1.438,0.513-2.6706,0.359-2.9272   C41.211,33.7433,40.8006,33.5892,40.1851,33.281z"
+                                      />
+                                    </g>
+                                  </svg>
+                                </button>
+                              </div>
+                              <span
+                                aria-hidden="true"
+                                class="cds--popover"
+                                id="tooltip-:ra:"
+                                role="tooltip"
+                              >
+                                <span
+                                  class="cds--popover-content cds--tooltip-content"
+                                >
+                                  WhatsApp
+                                </span>
+                                <span
+                                  class="cds--popover-caret"
+                                />
+                              </span>
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="ps__rail-x"
+                      style="left: 0px; top: 0px;"
+                    >
+                      <div
+                        class="ps__thumb-x"
+                        style="left: 0px; width: 0px;"
+                        tabindex="0"
+                      />
+                    </div>
+                    <div
+                      class="ps__rail-y"
+                      style="top: 0px; left: 0px;"
+                    >
+                      <div
+                        class="ps__thumb-y"
+                        style="top: 0px; height: 0px;"
+                        tabindex="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="cds--visually-hidden"
+                  type="button"
+                >
+                  Focus sentinel
+                </button>
+              </div>
+            </div>
+            <button
+              class="sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border border-l-0 border-border rounded-r-md shadow-md p-0 outline-none max-md:hidden cursor-pointer bg-background"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-chevron-right transition-all duration-500 text-foreground rotate-180"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m9 18 6-6-6-6"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="relative z-10 transition-all duration-500"
+          >
+            <div
+              class="c6 broadcast-button"
+            />
+            <div
+              class="c7"
+            >
+              <div
+                class="mb-0! flex! flex-col! items-center! overflow-visible!"
+              >
+                <div
+                  class="group relative! z-6010! flex! overflow-visible! mt-0!"
+                >
+                  <button
+                    aria-label="Zoom in"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! transition-colors! bg-background! border-background! text-foreground! rounded-b-none! rounded-t-[1rem]! border-0! border-b! border-b-[#262626]!"
+                    data-size="icon"
+                    data-slot="button"
+                    data-state="closed"
+                    data-variant="icon"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-plus size-4"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 12h14"
+                      />
+                      <path
+                        d="M12 5v14"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div
+                  class="group relative! z-6010! flex! overflow-visible! !mt-0"
+                >
+                  <button
+                    aria-label="Zoom out"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! transition-colors! bg-background! border-background! text-foreground! !mt-0 !rounded-t-none !rounded-b-[1rem] !border-0"
+                    data-size="icon"
+                    data-slot="button"
+                    data-state="closed"
+                    data-variant="icon"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-minus size-4"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 12h14"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="accessibility-wrapper-popup relative! inline-flex!"
+                data-slot="popover-anchor"
+              >
+                <div
+                  class="group relative! z-6010! mt-2! flex! overflow-visible!"
+                >
+                  <button
+                    aria-label="Accessible mode"
+                    class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! border! transition-colors! bg-background! border-background! text-foreground!"
+                    data-size="icon"
+                    data-slot="button"
+                    data-state="closed"
+                    data-testid="accessible-button"
+                    data-variant="icon"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-person-standing size-4"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="12"
+                        cy="5"
+                        r="1"
+                      />
+                      <path
+                        d="m9 20 3-6 3 6"
+                      />
+                      <path
+                        d="m6 8 6 2 6-2"
+                      />
+                      <path
+                        d="M12 10v4"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="theme-wrapper-popup relative! overflow-visible!"
+              >
+                <div
+                  class="theme-layer-popover-link relative! inline-flex!"
+                  data-slot="popover-anchor"
+                >
+                  <div
+                    class="group relative! z-6010! mt-2! flex! overflow-visible!"
+                  >
+                    <button
+                      aria-label="Theme & layers"
+                      class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! border! transition-colors! bg-background! border-background! text-foreground!"
+                      data-size="icon"
+                      data-slot="button"
+                      data-state="closed"
+                      data-variant="icon"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-settings size-4"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="3"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="relative! legend-container"
+              >
+                <div
+                  class="legend-info-popover-link relative! inline-flex!"
+                  data-radix-popper-align="end"
+                  data-radix-popper-side="left"
+                  data-slot="popover-anchor"
+                >
+                  <div
+                    class="group relative! z-6010! mt-2! flex! overflow-visible!"
+                  >
+                    <button
+                      aria-label="Legend"
+                      class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-transparent hover:bg-transparent dark:border-input dark:hover:bg-input/10 size-9 h-8! w-8! rounded-full! border! transition-colors! bg-primary! border-primary! text-white! legend-open-button"
+                      data-size="icon"
+                      data-slot="button"
+                      data-state="closed"
+                      data-variant="icon"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="lucide lucide-list"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 5h.01"
+                        />
+                        <path
+                          d="M3 12h.01"
+                        />
+                        <path
+                          d="M3 19h.01"
+                        />
+                        <path
+                          d="M8 5h13"
+                        />
+                        <path
+                          d="M8 12h13"
+                        />
+                        <path
+                          d="M8 19h13"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div
-        class="c44"
+        class="c8"
       >
         <div
           class="school-popup-data"
         >
           <div
-            class="c45 shool-marker-wrapper"
+            class="c9 shool-marker-wrapper"
           >
             <svg
               aria-label="marker"
-              class="c46 school-map-marker"
+              class="c10 school-map-marker"
               fill="currentColor"
               focusable="false"
               height="46"
@@ -2463,31 +1735,31 @@ exports[`Render Map-page MapPage snapshot 1`] = `
             class="map-popup-template"
           >
             <div
-              class="c47 main-popup-container"
+              class="c11 main-popup-container"
             >
               <div
-                class="c48"
+                class="c12"
               >
                 <h6
-                  class="c49 map-school-name"
+                  class="c13 map-school-name"
                 />
                 <div
-                  class="4 c50 map-school-status-circle"
+                  class="c14 map-school-status-circle"
                 >
                   <div
-                    class="c51 outer-circle"
+                    class="c15 outer-circle"
                   />
                   <div
-                    class="c52 inner-circle"
+                    class="c16 inner-circle"
                   />
                 </div>
               </div>
               <div
-                class="c53"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
-                  class="c54"
+                  class="c18"
                   fill="currentColor"
                   focusable="false"
                   height="16"
@@ -2507,11 +1779,11 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   />
                 </svg>
                 <span
-                  class="c55 c56 label map-school-geo"
+                  class="c19 c20 label map-school-geo"
                 />
               </div>
               <div
-                class="c53 live-container hide"
+                class="c17 live-container hide"
               >
                 <svg
                   aria-hidden="true"
@@ -2539,18 +1811,18 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   />
                 </svg>
                 <div
-                  class="c57"
+                  class="c21"
                 >
                   <span
-                    class="c55 map-school-connectivity-speed"
+                    class="c19 map-school-connectivity-speed"
                   />
                   <span
-                    class="c55 benchmark-value-label hide"
+                    class="c19 benchmark-value-label hide"
                   />
                 </div>
               </div>
               <div
-                class="c53 static-container hide"
+                class="c17 static-container hide"
               >
                 <span
                   class="static-icon"
@@ -2574,12 +1846,12 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="c55 map-school-school-coverage"
+                  class="c19 map-school-school-coverage"
                 />
               </div>
             </div>
             <button
-              class="1 c58 go-to-school hide cds--btn cds--btn--primary"
+              class="c22 go-to-school hide cds--btn cds--btn--primary"
               type="button"
             >
               Go to School page
@@ -2604,21 +1876,21 @@ exports[`Render Map-page MapPage snapshot 1`] = `
             class="popup-template-loading"
           >
             <div
-              class="c47"
+              class="c11"
             >
               <div
-                class="c48"
+                class="c12"
               >
                 <p
-                  class="cds--skeleton__text cds--skeleton__heading 2 c59"
+                  class="cds--skeleton__text cds--skeleton__heading c23"
                   style="width: 100%;"
                 />
                 <div
-                  class="c60"
+                  class="c24"
                 />
               </div>
               <div
-                class="c53"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
@@ -2635,16 +1907,16 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text 3 c61"
+                  class="cds--skeleton__text c25"
                   style="width: 60%;"
                 />
               </div>
               <div
-                class="c53"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
-                  class="c54"
+                  class="c18"
                   fill="currentColor"
                   focusable="false"
                   height="16"
@@ -2664,12 +1936,12 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text 3 c61"
+                  class="cds--skeleton__text c25"
                   style="width: 80%;"
                 />
               </div>
               <div
-                class="c53"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
@@ -2697,12 +1969,12 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text 3 c61"
+                  class="cds--skeleton__text c25"
                   style="width: 40%;"
                 />
               </div>
               <div
-                class="c53"
+                class="c17"
               >
                 <svg
                   aria-hidden="true"
@@ -2722,7 +1994,7 @@ exports[`Render Map-page MapPage snapshot 1`] = `
                   />
                 </svg>
                 <p
-                  class="cds--skeleton__text 3 c61"
+                  class="cds--skeleton__text c25"
                   style="width: 40%;"
                 />
               </div>
@@ -2735,18 +2007,102 @@ exports[`Render Map-page MapPage snapshot 1`] = `
         </div>
       </div>
     </main>
-    <footer
-      class="c62"
+    <div
+      class="fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300 left-86!"
     >
-      <p />
+      <button
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#393939]! bg-[#393939]! text-white! hover:bg-[#4c4c4c]! hover:text-white!"
+        data-size="lg"
+        data-slot="button"
+        data-variant="outline"
+      >
+        All facilities
+      </button>
+      <button
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!"
+        data-size="lg"
+        data-slot="button"
+        data-variant="outline"
+      >
+        <span
+          class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-0!"
+          style="height: 8px; width: 8px;"
+        >
+          <span
+            class="relative! z-1! inline-flex! items-center! justify-center!"
+          >
+            <svg
+              class="block! shrink-0! overflow-visible!"
+              focusable="false"
+              style="height: 8px; width: 8px;"
+              viewBox="0 0 100 100"
+            >
+              <circle
+                cx="50"
+                cy="50"
+                fill="#d9d9d9"
+                r="50"
+              />
+            </svg>
+          </span>
+        </span>
+        Schools
+      </button>
+      <button
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 px-6 has-[>svg]:px-4 h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap! border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!"
+        data-size="lg"
+        data-slot="button"
+        data-variant="outline"
+      >
+        <span
+          class="relative! inline-flex! shrink-0! items-center! justify-center! overflow-visible! ml-0!"
+          style="height: 8px; width: 8px;"
+        >
+          <span
+            class="relative! z-1! inline-flex! items-center! justify-center!"
+          >
+            <svg
+              class="block! shrink-0! overflow-visible!"
+              focusable="false"
+              style="height: 8px; width: 8px;"
+              viewBox="0 0 100 100"
+            >
+              <rect
+                fill="#d9d9d9"
+                height="100"
+                width="100"
+                x="0"
+                y="0"
+              />
+            </svg>
+          </span>
+        </span>
+        Health facilities
+      </button>
+    </div>
+    <div
+      class="c26"
+    >
+      <div
+        class="c27"
+        progress="20"
+        status="active"
+      />
+    </div>
+    <footer
+      class="c28"
+    >
+      <div>
+        <p />
+      </div>
       <div
         class="footer-content"
       >
         <div
-          class="c63"
+          class="c29"
         >
           <p>
-            © 2024  
+            © 2026  
             <a
               class="giga-logo"
               href="https://www.unicef.org/innovation/giga"
@@ -2762,18 +2118,148 @@ exports[`Render Map-page MapPage snapshot 1`] = `
             style="margin-top: 0.1rem;"
             target="_blank"
           >
-            SvgUrl
+            <svg
+              height="20"
+              viewBox="0 0 68 17"
+              width="48"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g
+                fill="currentColor;"
+                fill-rule="evenodd"
+              >
+                <path
+                  d="M58.637.456c-3.502 0-6.351 2.849-6.351 6.351s2.849 6.35 6.35 6.35c3.502 0 6.351-2.848 6.351-6.35S62.137.456 58.637.456zm4.953 2.806c-.324.22-.667.419-1.022.593-.209-.42-.464-.82-.758-1.187.26-.16.51-.336.74-.53.393.33.742.708 1.04 1.124zm-2.672-2.106c.507.204.984.48 1.424.816-.219.181-.455.347-.7.494-.312-.357-.663-.681-1.046-.966.116-.107.225-.22.322-.344zm.493 1.442c-.341.183-.701.334-1.07.447-.154-.354-.332-.702-.53-1.036.205-.09.399-.202.58-.34.372.272.714.584 1.02.929zm-.751-1.539c-.087.103-.18.199-.282.287-.335-.23-.692-.426-1.064-.588.462.05.914.149 1.346.301zm-.497.455c-.153.108-.317.199-.487.272-.185-.291-.393-.576-.613-.853.385.157.754.352 1.1.58zM58.767.977c.234.282.454.583.655.898-.212.066-.433.105-.655.115V.977zm0 1.276c.273-.013.54-.061.799-.148.194.323.368.662.52 1.01-.431.111-.875.173-1.32.183V2.253zM58.502.989V1.99c-.218-.01-.435-.05-.646-.115.195-.304.413-.601.646-.886zm-.896.797c-.175-.073-.336-.165-.488-.272.343-.227.71-.42 1.096-.579-.217.27-.423.556-.608.851zm.366-1.032c-.375.164-.734.36-1.072.591-.103-.09-.195-.187-.282-.287.437-.154.89-.254 1.354-.304zm4.351 10.9c-.845-.463-.861-1.106-.816-1.342.044-.24.21-.135.315-.135.555 0 1.139-.165 1.859-.9.811-.828 1.066-2.668-.181-3.868-1.344-1.293-2.773-1.067-3.695.096-.189.238-.65.412-1.05.399-.59-.023-.217.443-.217.54 0 .097-.09.165-.143.15-.2-.057-.12.24-.12.33 0 .09-.082.135-.126.135-.249 0-.18.223-.173.285.007.06-.015.163-.098.209-.079.045-.172.24-.172.39 0 .27.247.457.66.765.412.308.464.6.472.81.008.209.027.548.12.772.112.27.097.765-.472.787-.697.028-1.934.584-2.039.622-.393.14-.913.19-1.318.088-.218-.154-.426-.323-.623-.505-.081-.28.06-.58.202-.783.232.232.578.217.771.224.195.008 1.147-.14 1.282-.186.136-.045.195-.03.278 0 .363.132.861.171 1.064-.525.203-.697-.277-.502-.337-.472-.06.03-.143.022-.113-.037.09-.178-.044-.16-.12-.166-.194-.02-.449.188-.531.262-.083.076-.165.068-.196.053-.258-.129-1.028.057-1.267-.36.023-.112-.195-1.806-.306-2.099-.024-.062-.046-.164.029-.276.195-.294.735.021 1.027.014.35-.01.406-.155.503-.273.091-.115.16-.05.21-.083.063-.041.003-.124.025-.169.024-.044.05-.022.109-.074.06-.054-.009-.165.022-.21.087-.13.322-.026.181-.367-.077-.187.03-.39.135-.525.17-.219.825-1.141-.33-2.1-1.102-.913-2.22-.84-2.94-.06-.718.78-.359 1.92-.284 2.22.075.3-.141.571-.39.69-.197.092-.646.392-.985.687.054-2.446 1.54-4.597 3.816-5.513.096.121.205.236.322.344-.255.185-.808.68-.808.68s.076.011.146.028c.049.012.152.043.152.043s.488-.414.716-.58c.178.136.373.249.579.34-.11.187-.388.71-.388.71s.064.037.121.075c.058.04.095.073.095.073s.303-.57.417-.762c.255.085.52.134.79.146v1.046c-.15-.004-.533-.02-.689-.035l-.097-.01.054.081c.042.06.074.12.102.175l.01.022.026.003c.113.009.463.021.593.024v1.904h.265v-.435c.387-.019.709-.046 1.099-.08l.016-.002.342-.302-.186.016c-.412.054-.773.079-1.1.097l-.171.01V3.558c.478-.01.956-.077 1.425-.2.127.315.369 1.077.369 1.077l.248-.078s-.241-.756-.367-1.07c.396-.123.779-.287 1.14-.486.292.36.544.75.752 1.167-.187.087-.529.208-.528.208.273.03.481.095.481.095s.097-.041.158-.069l.072.165.342.152-.04-.095-.14-.333c.362-.18.719-.384 1.059-.612.647.99.992 2.14.992 3.33 0 1.974-.945 3.732-2.407 4.847zM51.71 2.144l-.098.088c-.373.33-1.224 1.2-1.093 2.155l.013.067.043.19.118-.11c.521-.476.912-1.284 1.072-2.217l.045-.262-.1.09M49.982 3.794l-.043.115c-.059.16-.166.495-.224.94-.08.63-.062 1.522.486 2.188l.06.079.064.08.081-.404c.09-.716-.029-2.215-.291-2.885l-.09-.227-.043.114M49.351 6.374l-.008.117c-.045.642-.012 2.226 1.27 3.066l.152.098-.007-.18c-.022-.6-.723-2.395-1.25-3.038l-.149-.182-.008.119M49.572 9.207l.022.109c.187.91 1.05 2.384 2.383 2.811l.183.06-.066-.18c-.249-.68-1.533-2.267-2.359-2.79L49.55 9.1l.023.108M52.25 3.515l-.106.064c-.992.606-1.456 1.34-1.421 2.245l.009.207.144-.12c.537-.445 1.208-1.58 1.406-2.225l.072-.235-.104.064M51.666 5.498l-.075.07c-.255.243-1.077 1.117-1.005 2.199.01.167.049.345.112.531l.059.173.106-.149c.393-.553.914-2.012.885-2.69l-.008-.205-.074.07M51.709 7.375l-.057.083c-.414.615-.625 1.247-.613 1.83.012.43.15.842.41 1.225l.086.13.073-.138c.18-.336.321-1.428.3-2.292-.008-.305-.039-.558-.09-.73l-.054-.19-.055.082M52.19 9.382l-.027.088c-.124.399-.183.79-.173 1.161.025.84.395 1.496 1.106 1.951l.12.076.026-.162.01-.129c-.019-.682-.527-2.4-.926-2.926l-.11-.144-.026.085M50.79 12.046l.052.086c.535.895 1.441 2.051 3.137 1.754l.142-.024-.08-.119c-.317-.471-2.376-1.632-3.103-1.751l-.2-.033.053.087zM53.3 14.32l-.267.072.256.105c1.078.441 2.43.572 3.214.308.294-.1.473-.262.692-.475 1.38.143 2.671 1.29 3.425 2.227l.04.046.059-.018c.085-.029.215-.13.27-.189l.053-.057-.048-.063c-.786-1.027-2.016-1.665-2.07-1.69-1.107-.54-3.062-.961-5.625-.266"
+                />
+                <path
+                  d="M53.357 11.452l.015.09c.161 1.017.574 2.35 2.29 2.202l.11-.009-.028-.107c-.116-.462-1.688-1.804-2.237-2.181l-.165-.085.015.09M65.487 2.055l.045.262c.16.933.552 1.74 1.073 2.218l.119.108.041-.19.014-.066c.13-.955-.72-1.826-1.093-2.155l-.099-.088-.1-.089M67.274 3.68l-.09.227c-.264.67-.384 2.17-.293 2.885l.081.405.064-.081.061-.079c.547-.666.566-1.558.485-2.188-.058-.445-.164-.78-.223-.94l-.043-.115-.042-.114M67.939 6.255l-.15.182c-.526.643-1.228 2.437-1.249 3.039l-.007.18.15-.099c1.284-.84 1.316-2.424 1.272-3.066l-.01-.117-.006-.119M67.749 9.1l-.187.118c-.825.522-2.11 2.108-2.358 2.789l-.067.18.183-.06c1.333-.427 2.196-1.901 2.383-2.811l.024-.109.022-.108M64.994 3.42l.068.237c.184.648.833 1.796 1.361 2.251l.144.123.011-.207c.054-.904-.397-1.647-1.377-2.272l-.104-.066-.103-.066M65.557 5.427l-.008.205c-.027.678.492 2.137.886 2.69l.106.149.059-.173c.063-.186.101-.364.111-.531.072-1.082-.75-1.956-1.004-2.199l-.074-.07-.076-.071M65.535 7.293l-.056.19c-.052.172-.082.425-.09.73-.02.864.122 1.956.3 2.292l.074.137.088-.13c.259-.382.396-.794.406-1.224.014-.583-.197-1.215-.612-1.83l-.055-.083-.055-.082M65.08 9.297l-.11.144c-.397.525-.906 2.244-.925 2.926l.01.129.027.162.12-.076c.71-.455 1.082-1.112 1.106-1.95.01-.372-.048-.763-.174-1.162l-.028-.088-.027-.085M66.559 11.959l-.199.033c-.727.119-2.786 1.28-3.103 1.751l-.08.119.142.024c1.697.297 2.602-.859 3.137-1.754l.051-.086.052-.087zM58.374 14.586c-.054.025-1.285.663-2.07 1.69l-.048.063.054.057c.055.06.184.16.27.19l.057.017.04-.046c.753-.937 2.045-2.084 3.425-2.227.219.213.398.375.694.475.783.264 2.134.133 3.214-.308l.255-.105L64 14.32c-2.564-.695-4.518-.274-5.625.266M63.956 11.362l-.165.085c-.55.377-2.121 1.72-2.237 2.181l-.027.107.108.01c1.717.147 2.13-1.186 2.292-2.202l.015-.09.014-.091M20.062 2.882h2.169V.904h-2.169v1.978zm.172 11.88h1.824V5.129h-1.824v9.635zM6.469 5.136h1.823v9.636H6.507V13.35H6.47c-.73 1.21-1.958 1.708-3.302 1.708C1.152 15.059 0 13.524 0 11.585V5.136h1.824v5.7c0 1.671.384 2.899 2.13 2.899.75 0 1.766-.384 2.15-1.381.344-.903.365-2.035.365-2.265V5.136M11.933 6.556h.039c.613-1.209 1.957-1.708 2.917-1.708.671 0 3.646.173 3.646 3.263v6.66h-1.822V8.708c0-1.594-.672-2.457-2.208-2.457 0 0-.999-.058-1.766.71-.268.268-.767.69-.767 2.572v5.24h-1.824V5.136h1.785v1.42M29.693 8.227c-.096-1.202-.667-2.04-1.964-2.04-1.734 0-2.402 1.504-2.402 3.756 0 2.25.668 3.758 2.402 3.758 1.2 0 1.944-.78 2.039-2.156h1.813c-.154 2.156-1.755 3.47-3.872 3.47-3.07 0-4.29-2.172-4.29-4.996 0-2.807 1.41-5.15 4.445-5.15 2.021 0 3.546 1.28 3.638 3.358h-1.809M34.304 10.285c-.133 1.679.553 3.416 2.402 3.416 1.411 0 2.116-.552 2.325-1.948h1.91c-.288 2.177-1.967 3.262-4.253 3.262-3.071 0-4.293-2.172-4.293-4.996 0-2.807 1.414-5.15 4.445-5.15 2.86.06 4.212 1.87 4.212 4.523v.893h-6.748zm4.843-1.256c.039-1.602-.687-2.842-2.441-2.842-1.509 0-2.402 1.274-2.402 2.842h4.843zM43.105 14.73V6.415h-1.647v-1.26h1.647V3.096C43.165 1 44.745.447 46.1.447c.438 0 .86.113 1.3.188v1.506c-.309-.016-.613-.058-.92-.058-1.026 0-1.618.27-1.562 1.317v1.754h2.212v1.261h-2.212v8.315h-1.812"
+                />
+              </g>
+            </svg>
           </a>
           <a
             href="https://www.itu.int/en/Pages/default.aspx"
             rel="noreferrer"
             target="_blank"
           >
-            SvgUrl
+            <svg
+              height="20"
+              viewBox="0 0 37 40"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g
+                fill="currentColor;"
+                fill-rule="evenodd"
+              >
+                <g
+                  fill="currentColor;"
+                >
+                  <g>
+                    <g>
+                      <path
+                        d="M17.886 18.362v.457c.385.229.77.457 1.156.61 1.31.685 2.697 1.219 4.085 1.6v-.381c-1.31-.381-2.62-.915-3.931-1.524-.463-.229-.848-.457-1.31-.762"
+                        transform="translate(-531 -589) translate(316 562) translate(215 27)"
+                      />
+                      <path
+                        d="M36.075 14.78c-1.079-3.2-2.929-5.942-5.395-8.075h-.077c-1.156-.99-2.39-1.829-3.777-2.514-4.393-2.21-9.171-2.515-13.488-1.296-2.08.61-4.007 1.524-5.703 2.82C6.325 3.884 5.09 1.98 3.78 0c.386.914 1.619 3.429 3.16 6.248-2.004 1.6-3.7 3.58-4.933 6.019-1.156 2.21-1.85 4.647-2.003 7.01v.837C-.15 26.895 3.627 33.524 10.178 36.8c4.393 2.21 9.403 2.514 14.105.99 1.002-.304 1.927-.685 2.852-1.142 3.082 1.295 6.242 2.361 9.248 3.352-2.466-1.219-5.318-2.59-7.861-4.19.54-.381 1.156-.762 1.695-1.22l.078-.076c1.926-1.6 3.545-3.58 4.701-5.866.77-1.372 1.233-2.896 1.619-4.343v-.229c.077-.228.077-.38.154-.61v-.152c.462-2.819.231-5.714-.694-8.533zm-9.48-10.285c1.233.61 2.312 1.296 3.314 2.134-.462 0-1.002 0-1.541.076-.617-.61-1.31-1.143-2.158-1.524-.771-.38-1.542-.61-2.235-.762-.309-.457-.617-.914-.926-1.219 1.234.305 2.39.762 3.546 1.295zM10.487 5.867c.154-.153.23-.381.308-.534 2.697-.61 5.78-.61 8.863.077-.077.076-.154.228-.23.304-.31.61-.31 1.296-.078 2.057.154.305.308.686.54.99-2.467 1.068-4.625 2.439-6.552 4.039-1.079-1.143-2.235-2.438-3.314-3.81-.154-1.142 0-2.209.463-3.123zM9.639 8.38c-.54-.686-1.08-1.371-1.542-2.057.694-.305 1.388-.61 2.158-.838 0 .076-.077.152-.077.228-.462.762-.616 1.676-.54 2.667zm10.096-.762c-.23-.61-.23-1.219.078-1.676l.23-.457c1.62.38 3.238.99 4.78 1.752-1.62.305-3.16.838-4.548 1.372-.231-.305-.462-.61-.54-.99zm5.087-.838c-1.464-.686-2.929-1.219-4.393-1.6.154-.152.462-.229.694-.305.77-.305 1.618-.305 2.62-.152.386.686.771 1.447 1.08 2.057zm-.54-1.905c.54.153 1.157.381 1.773.61.694.38 1.31.762 1.773 1.219-.925.076-1.85.305-2.39.38h-.076c-.309-.685-.694-1.523-1.08-2.209zm.849 2.667c.693 1.447 1.233 2.971 1.618 4.495-1.079 0-2.312-.305-3.468-.914-1.156-.534-2.158-1.295-2.775-2.134 1.465-.609 3.006-1.142 4.625-1.447zm.539.076c1.465.762 2.775 1.676 4.008 2.667 0 .152-.077.38-.154.533-.231.457-.694.838-1.387 1.067-.309.076-.617.152-1.002.152-.309-1.448-.848-2.971-1.465-4.419zm.308-.229c.617-.152 1.465-.228 2.235-.304.925.838 1.465 1.828 1.542 2.743-1.156-.915-2.39-1.753-3.777-2.439zM13.492 3.276c2.852-.762 5.935-.914 8.941-.228.308.304.694.762 1.002 1.219-.925-.076-1.696 0-2.466.228-.386.153-.771.305-1.002.61-3.083-.762-6.09-.762-8.787-.229.54-.685 1.31-1.219 2.312-1.6zm-1.927.686c-.385.305-.693.686-1.001 1.067-.925.228-1.85.533-2.698.99 1.156-.838 2.39-1.524 3.7-2.057zm-1.233 32.457c-1.233-.61-2.466-1.371-3.468-2.286-.54-1.371-.693-2.59-.848-3.885 1.619 1.371 3.546 2.666 5.627 3.733 2.158.99 4.316 1.752 6.397 2.21-.925.609-2.235 1.295-3.777 1.676-1.31-.305-2.62-.762-3.93-1.448zm13.797 1.067c-2.93.914-6.09 1.142-9.018.533 1.387-.457 2.62-1.143 3.391-1.6.077-.076.077-.076.154-.076 2.852.533 5.55.533 7.862 0 .077 0 .077.076.154.076-.77.381-1.619.762-2.543 1.067zm-5.01-1.448c.925-.61 1.772-1.371 2.543-2.133 1.387.838 2.852 1.524 4.24 2.133-2.005.457-4.317.457-6.783 0zm15.569-7.543c-1.156 2.286-2.775 4.267-4.702 5.79-.616.458-1.31.915-2.08 1.22-1.388-.915-2.621-1.829-3.7-2.743 2.004-.457 3.545-1.143 5.395-2.286-.386-.152-.771-.305-1.156-.533 1.079-.076 2.004-.305 2.852-.61 1.85-.61 3.314-1.6 4.238-2.895-.23.686-.539 1.372-.847 2.057zm1.695-5.257c-.077.229-.077.534-.154.762v.152c-.154.381-.308.839-.54 1.296-.77 1.6-2.389 2.819-4.47 3.504-1.079.381-2.158.61-3.391.686-.693-.38-1.464-.838-2.158-1.219l.463-1.143c-.078-.076-.232-.076-.309-.152-.154.38-.308.762-.54 1.066-2.543-1.523-5.01-3.428-7.398-5.409v2.59c1.31 1.143 2.62 2.21 3.853 3.277-.154.076-.385.228-.616.304-1.465-.38-2.929-.838-4.394-1.447h-.924c1.541.685 3.16 1.295 4.701 1.676-1.387.61-3.468 1.22-3.93 1.295 1.54 1.22 3.082 2.286 4.7 3.276-.77.762-1.772 1.524-2.774 2.21-2.158-.457-4.47-1.22-6.705-2.362-2.158-1.067-4.162-2.438-5.78-3.886-.078-.762-.078-1.524 0-2.21H5.63c-.077.61-.077 1.22-.077 1.83-.617-.61-1.156-1.22-1.696-1.83h-.54c.617.839 1.465 1.6 2.313 2.363v.152c.077.99.154 2.21.616 3.58-3.082-2.818-5.086-6.628-5.703-10.666.463 1.143 1.08 2.362 1.927 3.505v-.076h.462C1.392 24.229.467 22.095.39 20.038c.077-2.59.693-5.18 1.927-7.619.385-.686.77-1.371 1.156-1.98-.386 1.142-.386 2.437-.154 3.732h.385c-.308-1.6-.154-3.123.54-4.419.23-.457.693-1.066 1.001-1.447.617-.61 1.234-1.067 1.927-1.524 1.388 2.438 2.852 4.952 4.162 6.629-1.233.076-2.003.076-3.237-.077.154.305.308.61.463.838l.154.381c.385.686.77 1.296 1.156 1.905-.848 1.143-1.541 2.286-2.158 3.505v.914c.617-1.448 1.464-2.819 2.39-4.038l.076.076v-2.666h4.702c-.463-.381-.848-.762-1.233-1.143 1.85-1.6 4.084-2.972 6.474-3.962.694.914 1.695 1.752 2.928 2.362 1.31.61 2.621.99 3.777.914.154.61.309 1.22.386 1.829h.385c-.077-.61-.154-1.22-.308-1.829.308 0 .693-.076 1.002-.152.693-.305 1.31-.686 1.618-1.296 0-.152.077-.228.154-.38 1.31 1.142 2.467 2.361 3.469 3.657h.462c-1.08-1.448-2.39-2.896-3.854-4.115 0-.99-.462-2.057-1.387-3.123.617 0 1.233 0 1.696.076 2.235 1.904 3.93 4.343 5.01 7.162.23.914.23 1.828.076 2.59-.23-.457-.539-.99-.847-1.524v.153h-.386c.463.685.771 1.295 1.08 1.98-.078.23-.155.458-.309.686-.308.61-.77 1.143-1.387 1.6v.534c.77-.534 1.387-1.22 1.773-1.981.076-.077.076-.229.154-.305.693 1.752.924 3.505.77 5.257zm-.616-5.79c.154-.458.231-.915.231-1.372.385 1.295.54 2.59.617 3.886-.232-.838-.463-1.676-.848-2.514z"
+                        transform="translate(-531 -589) translate(316 562) translate(215 27)"
+                      />
+                      <path
+                        d="M7.327 26.21V15.619c0-.457.539-.533 1.078-.533v-.534H2.78v.534c.54 0 1.002.076 1.002.533v10.59c0 .382-.385.458-.925.458v.457H8.33v-.457c-.617 0-1.002-.076-1.002-.457M20.506 18.362h.54v-3.733H10.564v3.733h.54c0-1.219.539-1.753 1.387-1.753h1.541v9.524c0 .229-.077.534-1.002.534v.457h5.55v-.457c-.925 0-1.08-.305-1.08-.534V16.61h1.619c.77 0 1.387.534 1.387 1.753M34.302 14.629h-4.007v.457c.539 0 1.078.076 1.078.61v7.77c0 1.144-1.31 1.753-2.312 1.753-1.079 0-2.312-.61-2.312-1.752v-7.772c0-.38.308-.61.77-.61v-.456h-4.855v.457c.463 0 .848.152.848.61v8.076c0 2.438 2.852 3.504 4.933 3.504 2.08 0 4.932-1.143 4.932-3.504v-8.077c0-.457.386-.61.925-.61v-.456"
+                        transform="translate(-531 -589) translate(316 562) translate(215 27)"
+                      />
+                      <path
+                        d="M17.886 17.448c.308-.077.616-.077.925-.153-.155-.152-.309-.228-.463-.38h-.462v.533M13.724 19.048l-1.08-1.067h1.08v-1.067H12.49c-.848 0-1.002.838-1.002 1.448v.305c.693.914 1.464 1.828 2.235 2.666v-2.285M13.492 26.286c.155-.076.232-.076.232-.153v-.152c-2.39-1.371-4.393-3.048-6.012-4.724v.534c1.541 1.676 3.545 3.2 5.78 4.495M27.366 15.467c.23 1.98.23 3.961 0 5.866l-.077.381c-.077.381-.154.838-.232 1.22v.533c0 .228.078.38.155.533.23-.686.385-1.524.462-2.286 1.233.077 2.312-.076 3.314-.304v-.381c-1.002.228-2.08.38-3.237.304.231-1.905.231-3.885.077-5.866H27.366"
+                        transform="translate(-531 -589) translate(316 562) translate(215 27)"
+                      />
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
           </a>
         </div>
       </div>
     </footer>
+    <div
+      class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm border-border! gap-0! rounded-lg! border! p-0! shadow-xl! animate-[notification-enter_200ms_ease-out] z-[6002] fixed left-84 w-96 max-w-[calc(100vw-2rem)] bottom-8"
+      data-slot="card"
+    >
+      <div
+        class="flex items-start gap-4! p-4!"
+      >
+        <div
+          class="bg-primary-300 text-primary! flex size-10 shrink-0 items-center justify-center rounded-lg!"
+        >
+          <svg
+            fill="none"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 21H21M5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21M9 21V17C9 16.4696 9.21071 15.9609 9.58579 15.5858C9.96086 15.2107 10.4696 15 11 15H13C13.5304 15 14.0391 15.2107 14.4142 15.5858C14.7893 15.9609 15 16.4696 15 17V21M10 9H14M12 7V11"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+            />
+          </svg>
+        </div>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1.5!"
+        >
+          <p
+            class="text-card-foreground! text-base! leading-6! font-medium!"
+          >
+            Health facilities are here!
+          </p>
+          <div
+            class="text-muted-foreground! text-sm! leading-5! break-words"
+          >
+            The connectivity map for children now includes health facilities. For more information, 
+            <a
+              class="text-primary! hover:underline"
+              href="/about#live-map-get-in-touch"
+              rel="noreferrer"
+              target="_blank"
+            >
+              contact us
+            </a>
+          </div>
+        </div>
+        <button
+          aria-label="Close notification"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 size-8 text-muted-foreground hover:text-foreground -mt-1 -mr-1 shrink-0"
+          data-size="icon-sm"
+          data-slot="button"
+          data-variant="ghost"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-x size-5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6 6 18"
+            />
+            <path
+              d="m6 6 12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;

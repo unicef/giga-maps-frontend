@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RoleList render CreateRole by click 1`] = `
+exports[`RoleList > render CreateRole by click 1`] = `
 <DocumentFragment>
   .c1 >h3 {
   color: #FFF;
@@ -245,9 +245,9 @@ exports[`RoleList render CreateRole by click 1`] = `
 </DocumentFragment>
 `;
 
-exports[`RoleList render RoleEidt by click 1`] = `<DocumentFragment />`;
+exports[`RoleList > render RoleEidt by click 1`] = `<DocumentFragment />`;
 
-exports[`RoleList render RolesList and take snapshot 1`] = `
+exports[`RoleList > render RolesList and take snapshot 1`] = `
 <DocumentFragment>
   .c1 >h3 {
   color: #FFF;
@@ -569,7 +569,7 @@ exports[`RoleList render RolesList and take snapshot 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>
@@ -627,7 +627,7 @@ exports[`RoleList render RolesList and take snapshot 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>

@@ -1,18 +1,19 @@
 import { fireEvent, render } from "@testing-library/react";
+import { testWrapper } from "~/tests/test-wrapper";
 import TopMenuBar from "..";
 
 describe('TopMenuBar component', () => {
   it('renders correctly with default props', () => {
-    const { getByAltText, getByLabelText } = render(<TopMenuBar />);
+    const { getByLabelText } = render(testWrapper(<TopMenuBar />));
 
-    expect(getByAltText('Giga logo')).toBeInTheDocument();
+    expect(getByLabelText('Giga Maps')).toBeInTheDocument();
 
     expect(getByLabelText('Menu')).toBeInTheDocument();
   });
 
   it('toggles menu state when clicked', () => {
-    const mockOnClickMenu = jest.fn();
-    const { getByLabelText } = render(<TopMenuBar onClickMenu={mockOnClickMenu} />);
+    const mockOnClickMenu = vi.fn();
+    const { getByLabelText } = render(testWrapper(<TopMenuBar onClickMenu={mockOnClickMenu} />));
 
     const button = getByLabelText('Menu')
     fireEvent.click(button)

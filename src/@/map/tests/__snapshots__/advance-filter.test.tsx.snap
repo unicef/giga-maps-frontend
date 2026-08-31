@@ -1,3001 +1,1806 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AdvancedFilter should render Advance filter 1`] = `
+exports[`AdvancedFilter > should render Advance filter 1`] = `
 <DocumentFragment>
-  .c0 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-}
-
-.c0 >h3 {
-  font-family: Open Sans;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.5rem;
-}
-
-.c0 button svg {
-  fill: !important;
-}
-
-.c9 {
-  width: 100%;
-}
-
-.c9 button {
-  width: 50%;
-  padding-right: 0;
-}
-
-.c5 {
-  padding: 0.5rem 1rem;
-}
-
-.c5 .cds--list-box__field {
-  border-bottom: 1px solid;
-}
-
-.c5 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
-  color: #222;
-}
-
-.c1 {
-  height: calc(100vh - 9.9rem);
-  padding-bottom: 2rem;
-}
-
-.c7 {
-  padding: 0.5rem 1rem;
-}
-
-.c7 .group-input {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0;
-}
-
-.c7 .cds--label {
-  margin-bottom: 0.5rem;
-}
-
-.c2 {
-  padding: 0.5rem 1rem;
-}
-
-.c2 .cds--list-box__field--wrapper {
-  border-bottom: 1px solid var(--cds-border-strong);
-}
-
-.c2 .cds--list-box--expanded.cds--list-box--lg .cds--list-box__menu {
-  max-block-size: 20rem;
-}
-
-.c2 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
-  color: #222;
-}
-
-.c2 .cds--checkbox-label-text {
-  font-size: 0.75rem;
-}
-
-.c4 {
-  padding: 0.5rem 1rem;
-}
-
-.c8 {
-  margin: 0.5rem 0;
-}
-
-.c8 .cds--checkbox-label-text {
-  font-size: 0.75rem;
-}
-
-.c3 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c3 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c3 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c3 .cds--popover-content {
-  max-inline-size: 18rem;
-}
-
-.c6 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c6 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c6 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c6 .cds--popover-content {
-  max-inline-size: 12rem;
-}
-
-@media (min-width:769px) {
-  .c0 {
-    min-width: 18rem;
-  }
-}
-
-@media (max-width:768px) {
-  .c9 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-  }
-}
-
-@media (max-width:768px) {
-  .c1 {
-    max-height: calc(100vh - 13rem);
-  }
-}
-
-<span
-    class="cds--popover"
+  <div
+    class="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-background!"
   >
-    <span
-      class="cds--popover-content filter-popover-content"
+    <div
+      class="flex! shrink-0! items-center! justify-between! px-4! py-4!"
+    >
+      <h3
+        class="text-base! leading-6! font-normal! text-filter-text!"
+      >
+        Filters
+      </h3>
+      <button
+        aria-label="Close"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 size-8! text-filter-text!"
+        data-size="icon-sm"
+        data-slot="button"
+        data-testid="filter-close"
+        data-variant="ghost"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x size-4!"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <form
+      aria-label="filter-form"
+      class="flex! min-h-0! flex-1! flex-col! overflow-hidden!"
     >
       <div
-        class="c0"
+        class="relative! overflow-auto! min-h-0! flex-1! px-0! pb-8!"
+        data-slot="scroll-area"
+        dir="ltr"
+        style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"
       >
-        <h3>
-          Filter Schools by
-        </h3>
-        <span
-          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
+        <style>
+          [data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}
+        </style>
+        <div
+          class="h-full! w-full! rounded-[inherit]!"
+          data-radix-scroll-area-viewport=""
+          data-slot="scroll-area-viewport"
+          style="overflow-x: hidden; overflow-y: scroll;"
         >
           <div
-            class="cds--tooltip-trigger__wrapper"
+            style="min-width: 100%; display: table;"
           >
-            <button
-              aria-labelledby="tooltip-:r0:"
-              class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
-              data-testid="filter-close"
-              type="button"
+            <div
+              class="flex! flex-col! gap-3!"
+              data-orientation="vertical"
+              data-slot="accordion"
             >
-              <svg
-                aria-hidden="true"
-                fill="currentColor"
-                focusable="false"
-                height="18"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-                width="18"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                class=""
+                data-orientation="vertical"
+                data-slot="accordion-item"
+                data-state="open"
               >
-                <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
-                />
-              </svg>
-            </button>
+                <h3
+                  class="flex!"
+                  data-orientation="vertical"
+                  data-slot="accordion-header"
+                  data-state="open"
+                >
+                  <button
+                    aria-controls="radix-:r1:"
+                    aria-expanded="true"
+                    class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-4! py-3! text-base! leading-6! font-normal! text-filter-text! data-[state=open]:pt-3! data-[state=open]:pb-3!"
+                    data-orientation="vertical"
+                    data-radix-collection-item=""
+                    data-slot="accordion-trigger"
+                    data-state="open"
+                    id="radix-:r0:"
+                    type="button"
+                  >
+                    <span
+                      class="whitespace-nowrap!"
+                    >
+                      Schools
+                    </span>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-chevron-down transition-transform! duration-200! rotate-180!"
+                      fill="none"
+                      height="16"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m6 9 6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                </h3>
+                <div
+                  aria-labelledby="radix-:r0:"
+                  class=""
+                  data-orientation="vertical"
+                  data-slot="accordion-content"
+                  data-state="open"
+                  id="radix-:r1:"
+                  role="region"
+                  style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width); transition-duration: 0s; animation-name: none;"
+                >
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="multi-select-dropdown-building_id_govt"
+                    >
+                      Building-id
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
+                        id="multi-select-dropdown-building_id_govt"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          Select Building-id
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="text-input-building_id_govt"
+                    >
+                      Building Id
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <input
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                      data-slot="input"
+                      id="text-input-building_id_govt"
+                      placeholder="Enter building id"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="dropdown-computer_availability"
+                    >
+                      Computer availability
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
+                        id="dropdown-computer_availability"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          All
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="multi-select-dropdown-coverage_type"
+                    >
+                      Coverage Type
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
+                        id="multi-select-dropdown-coverage_type"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          Select Coverage Type
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                    >
+                      Equipment's count
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="flex! gap-4!"
+                    >
+                      <input
+                        aria-label="Equipment's count min"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_robotic_equipment-min-input"
+                        placeholder="min(30)"
+                        type="number"
+                        value=""
+                      />
+                      <input
+                        aria-label="Equipment's count max"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_robotic_equipment-max-input"
+                        placeholder="max(100)"
+                        type="number"
+                        value=""
+                      />
+                    </div>
+                    <label
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+                      for="checkbox-school__num_robotic_equipment__range"
+                    >
+                      <input
+                        class="size-4! accent-primary!"
+                        id="checkbox-school__num_robotic_equipment__range"
+                        type="checkbox"
+                      />
+                      <span>
+                        Show null values
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="dropdown-coverage_type"
+                    >
+                      Maps views - Grouped
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
+                        id="dropdown-coverage_type"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          All
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                    >
+                      No of Computer
+                    </label>
+                    <div
+                      class="flex! gap-4!"
+                    >
+                      <input
+                        aria-label="No of Computer min"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_computers-min-input"
+                        placeholder="Min (0)"
+                        type="number"
+                        value=""
+                      />
+                      <input
+                        aria-label="No of Computer max"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_computers-max-input"
+                        placeholder="Max (1450)"
+                        type="number"
+                        value=""
+                      />
+                    </div>
+                    <label
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+                      for="checkbox-school__num_computers__range"
+                    >
+                      <input
+                        class="size-4! accent-primary!"
+                        id="checkbox-school__num_computers__range"
+                        type="checkbox"
+                      />
+                      <span>
+                        Show null values
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="text-input-environment"
+                    >
+                      Region
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <input
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                      data-slot="input"
+                      id="text-input-environment"
+                      placeholder="Enter region"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="dropdown-environment"
+                    >
+                      School area type - Org
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
+                        id="dropdown-environment"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          All
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                    >
+                      Test Filter NG-001
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="flex! gap-4!"
+                    >
+                      <input
+                        aria-label="Test Filter NG-001 min"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="connectivity_speed-min-input"
+                        placeholder="Min (35)"
+                        type="number"
+                        value=""
+                      />
+                      <input
+                        aria-label="Test Filter NG-001 max"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="connectivity_speed-max-input"
+                        placeholder="Max (36)"
+                        type="number"
+                        value=""
+                      />
+                    </div>
+                    <label
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+                      for="checkbox-school__connectivity_speed__range"
+                    >
+                      <input
+                        class="size-4! accent-primary!"
+                        id="checkbox-school__connectivity_speed__range"
+                        type="checkbox"
+                      />
+                      <span>
+                        Show null values
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <span
-            aria-hidden="true"
-            class="cds--popover"
-            id="tooltip-:r0:"
-            role="tooltip"
-          >
-            <span
-              class="cds--popover-content cds--tooltip-content"
-            >
-              Close
-            </span>
-            <span
-              class="cds--popover-caret"
-            />
-          </span>
-        </span>
+        </div>
       </div>
-      <form
-        aria-label="filter-form"
-        class="cds--form"
-      >
-        <div
-          class="scrollbar-container c1 ps"
-        >
-          <div
-            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r2:-toggle-button"
-              id="downshift-:r2:-label"
-            >
-              Building-id
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r3:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r3:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Test filter
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--multi-select cds--list-box cds--list-box--lg"
-              id="mutli-select-dropdown-building_id_govt"
-            >
-              <div
-                class="cds--list-box__field--wrapper"
-              >
-                <button
-                  aria-activedescendant=""
-                  aria-controls="downshift-:r2:-menu"
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  aria-labelledby="downshift-:r2:-label"
-                  class="cds--list-box__field"
-                  id="downshift-:r2:-toggle-button"
-                  role="combobox"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="cds--list-box__label"
-                    id="multiselect-field-label-1"
-                  >
-                    Select Building-id
-                  </span>
-                  <div
-                    class="cds--list-box__menu-icon"
-                  >
-                    <svg
-                      aria-label="Open menu"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      name="chevron--down"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                      />
-                      <title>
-                        Open menu
-                      </title>
-                    </svg>
-                  </div>
-                </button>
-              </div>
-              <ul
-                aria-labelledby="downshift-:r2:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r2:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c4"
-          >
-            <div
-              class="cds--form-item cds--text-input-wrapper"
-            >
-              <div
-                class="cds--text-input__label-wrapper"
-              >
-                <label
-                  class="cds--label"
-                  for="text-input-1"
-                >
-                  Building Id
-                  <span
-                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-                  >
-                    <div
-                      class="cds--tooltip-trigger__wrapper"
-                    >
-                      <button
-                        aria-labelledby="tooltip-:r4:"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          fill="currentColor"
-                          focusable="false"
-                          height="16"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                          />
-                          <path
-                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="cds--popover"
-                      id="tooltip-:r4:"
-                      role="tooltip"
-                    >
-                      <span
-                        class="cds--popover-content cds--tooltip-content"
-                      >
-                        building id
-                      </span>
-                      <span
-                        class="cds--popover-caret"
-                      />
-                    </span>
-                  </span>
-                </label>
-              </div>
-              <div
-                class="cds--text-input__field-outer-wrapper"
-              >
-                <div
-                  class="cds--text-input__field-wrapper"
-                >
-                  <input
-                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                    id="text-input-1"
-                    placeholder="Enter building id"
-                    title="Enter building id"
-                    type="text"
-                    value=""
-                  />
-                  <span
-                    class="cds--text-input__counter-alert"
-                    role="alert"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r5:-toggle-button"
-              id="downshift-:r5:-label"
-            >
-              Computer availability
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r6:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r6:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Enter no.
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-computer_availability"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r5:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r5:-label"
-                class="cds--list-box__field"
-                id="downshift-:r5:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r5:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r5:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r7:-toggle-button"
-              id="downshift-:r7:-label"
-            >
-              Coverage Type
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r8:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r8:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Coverage Type
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--multi-select cds--list-box cds--list-box--lg"
-              id="mutli-select-dropdown-coverage_type"
-            >
-              <div
-                class="cds--list-box__field--wrapper"
-              >
-                <button
-                  aria-activedescendant=""
-                  aria-controls="downshift-:r7:-menu"
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  aria-labelledby="downshift-:r7:-label"
-                  class="cds--list-box__field"
-                  id="downshift-:r7:-toggle-button"
-                  role="combobox"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="cds--list-box__label"
-                    id="multiselect-field-label-2"
-                  >
-                    Select Coverage Type
-                  </span>
-                  <div
-                    class="cds--list-box__menu-icon"
-                  >
-                    <svg
-                      aria-label="Open menu"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      name="chevron--down"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                      />
-                      <title>
-                        Open menu
-                      </title>
-                    </svg>
-                  </div>
-                </button>
-              </div>
-              <ul
-                aria-labelledby="downshift-:r7:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r7:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c7"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              Equipment's count
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r9:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r9:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Filter to check the equipment's count
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_robotic_equipment-min-input"
-                      placeholder="min(30)"
-                      title="min(30)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_robotic_equipment-max-input"
-                      placeholder="max(100)"
-                      title="max(100)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c8"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-num_robotic_equipment__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-num_robotic_equipment__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:ra:-toggle-button"
-              id="downshift-:ra:-label"
-            >
-              Maps views - Grouped
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:rb:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:rb:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Describes the views of maps
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-coverage_type"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:ra:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:ra:-label"
-                class="cds--list-box__field"
-                id="downshift-:ra:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:ra:-label"
-                class="cds--list-box__menu"
-                id="downshift-:ra:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c7"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              No of Computer
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_computers-min-input"
-                      placeholder="Min (0)"
-                      title="Min (0)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_computers-max-input"
-                      placeholder="Max (1450)"
-                      title="Max (1450)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c8"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-num_computers__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-num_computers__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="c4"
-          >
-            <div
-              class="cds--form-item cds--text-input-wrapper"
-            >
-              <div
-                class="cds--text-input__label-wrapper"
-              >
-                <label
-                  class="cds--label"
-                  for="text-input-1"
-                >
-                  Region
-                  <span
-                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-                  >
-                    <div
-                      class="cds--tooltip-trigger__wrapper"
-                    >
-                      <button
-                        aria-labelledby="tooltip-:rc:"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          fill="currentColor"
-                          focusable="false"
-                          height="16"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                          />
-                          <path
-                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="cds--popover"
-                      id="tooltip-:rc:"
-                      role="tooltip"
-                    >
-                      <span
-                        class="cds--popover-content cds--tooltip-content"
-                      >
-                        Enter region
-                      </span>
-                      <span
-                        class="cds--popover-caret"
-                      />
-                    </span>
-                  </span>
-                </label>
-              </div>
-              <div
-                class="cds--text-input__field-outer-wrapper"
-              >
-                <div
-                  class="cds--text-input__field-wrapper"
-                >
-                  <input
-                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                    id="text-input-1"
-                    placeholder="Enter region"
-                    title="Enter region"
-                    type="text"
-                    value=""
-                  />
-                  <span
-                    class="cds--text-input__counter-alert"
-                    role="alert"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:rd:-toggle-button"
-              id="downshift-:rd:-label"
-            >
-              School area type - Org
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:re:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:re:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Urban or rural region in which school is located.
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-environment"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:rd:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:rd:-label"
-                class="cds--list-box__field"
-                id="downshift-:rd:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:rd:-label"
-                class="cds--list-box__menu"
-                id="downshift-:rd:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c7"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              Test Filter NG-001
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:rf:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:rf:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Updating the filter for testing purposes
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="connectivity_speed-min-input"
-                      placeholder="Min (35)"
-                      title="Min (35)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="connectivity_speed-max-input"
-                      placeholder="Max (36)"
-                      title="Max (36)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c8"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-connectivity_speed__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-connectivity_speed__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="ps__rail-x"
-            style="left: 0px; top: 0px;"
-          >
-            <div
-              class="ps__thumb-x"
-              style="left: 0px; width: 0px;"
-              tabindex="0"
-            />
-          </div>
-          <div
-            class="ps__rail-y"
-            style="top: 0px; left: 0px;"
-          >
-            <div
-              class="ps__thumb-y"
-              style="top: 0px; height: 0px;"
-              tabindex="0"
-            />
-          </div>
-        </div>
-        <div
-          class="c9"
-        >
-          <button
-            class="cds--btn cds--btn--secondary"
-            type="reset"
-          >
-            Reset
-          </button>
-          <button
-            class="cds--btn cds--btn--primary"
-            type="submit"
-          >
-            Apply
-          </button>
-        </div>
-      </form>
-    </span>
-    <span
-      class="cds--popover-caret"
-    />
-  </span>
-</DocumentFragment>
-`;
-
-exports[`AdvancedFilter should render Advance filter 2`] = `
-<DocumentFragment>
-  .c0 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-}
-
-.c0 >h3 {
-  font-family: Open Sans;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.5rem;
-}
-
-.c0 button svg {
-  fill: !important;
-}
-
-.c9 {
-  width: 100%;
-}
-
-.c9 button {
-  width: 50%;
-  padding-right: 0;
-}
-
-.c5 {
-  padding: 0.5rem 1rem;
-}
-
-.c5 .cds--list-box__field {
-  border-bottom: 1px solid;
-}
-
-.c5 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
-  color: #222;
-}
-
-.c1 {
-  height: calc(100vh - 9.9rem);
-  padding-bottom: 2rem;
-}
-
-.c7 {
-  padding: 0.5rem 1rem;
-}
-
-.c7 .group-input {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0;
-}
-
-.c7 .cds--label {
-  margin-bottom: 0.5rem;
-}
-
-.c2 {
-  padding: 0.5rem 1rem;
-}
-
-.c2 .cds--list-box__field--wrapper {
-  border-bottom: 1px solid var(--cds-border-strong);
-}
-
-.c2 .cds--list-box--expanded.cds--list-box--lg .cds--list-box__menu {
-  max-block-size: 20rem;
-}
-
-.c2 .cds--list-box__menu-item--active .cds--list-box__menu-item__option {
-  color: #222;
-}
-
-.c2 .cds--checkbox-label-text {
-  font-size: 0.75rem;
-}
-
-.c4 {
-  padding: 0.5rem 1rem;
-}
-
-.c8 {
-  margin: 0.5rem 0;
-}
-
-.c8 .cds--checkbox-label-text {
-  font-size: 0.75rem;
-}
-
-.c3 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c3 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c3 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c3 .cds--popover-content {
-  max-inline-size: 18rem;
-}
-
-.c6 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c6 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c6 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c6 .cds--popover-content {
-  max-inline-size: 12rem;
-}
-
-@media (min-width:769px) {
-  .c0 {
-    min-width: 18rem;
-  }
-}
-
-@media (max-width:768px) {
-  .c9 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-  }
-}
-
-@media (max-width:768px) {
-  .c1 {
-    max-height: calc(100vh - 13rem);
-  }
-}
-
-<span
-    class="cds--popover"
-  >
-    <span
-      class="cds--popover-content filter-popover-content"
-    >
       <div
-        class="c0"
-      >
-        <h3>
-          Filter Schools by
-        </h3>
-        <span
-          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-right cds--tooltip cds--icon-tooltip"
-        >
-          <div
-            class="cds--tooltip-trigger__wrapper"
-          >
-            <button
-              aria-labelledby="tooltip-:r16:"
-              class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
-              data-testid="filter-close"
-              type="button"
-            >
-              <svg
-                aria-hidden="true"
-                fill="currentColor"
-                focusable="false"
-                height="18"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-                width="18"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
-                />
-              </svg>
-            </button>
-          </div>
-          <span
-            aria-hidden="true"
-            class="cds--popover"
-            id="tooltip-:r16:"
-            role="tooltip"
-          >
-            <span
-              class="cds--popover-content cds--tooltip-content"
-            >
-              Close
-            </span>
-            <span
-              class="cds--popover-caret"
-            />
-          </span>
-        </span>
-      </div>
-      <form
-        aria-label="filter-form"
-        class="cds--form"
-      >
-        <div
-          class="scrollbar-container c1 ps"
-        >
-          <div
-            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r18:-toggle-button"
-              id="downshift-:r18:-label"
-            >
-              Building-id
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r19:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r19:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Test filter
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--multi-select cds--list-box cds--list-box--lg"
-              id="mutli-select-dropdown-building_id_govt"
-            >
-              <div
-                class="cds--list-box__field--wrapper"
-              >
-                <button
-                  aria-activedescendant=""
-                  aria-controls="downshift-:r18:-menu"
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  aria-labelledby="downshift-:r18:-label"
-                  class="cds--list-box__field"
-                  id="downshift-:r18:-toggle-button"
-                  role="combobox"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="cds--list-box__label"
-                    id="multiselect-field-label-5"
-                  >
-                    Select Building-id
-                  </span>
-                  <div
-                    class="cds--list-box__menu-icon"
-                  >
-                    <svg
-                      aria-label="Open menu"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      name="chevron--down"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                      />
-                      <title>
-                        Open menu
-                      </title>
-                    </svg>
-                  </div>
-                </button>
-              </div>
-              <ul
-                aria-labelledby="downshift-:r18:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r18:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c4"
-          >
-            <div
-              class="cds--form-item cds--text-input-wrapper"
-            >
-              <div
-                class="cds--text-input__label-wrapper"
-              >
-                <label
-                  class="cds--label"
-                  for="text-input-1"
-                >
-                  Building Id
-                  <span
-                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-                  >
-                    <div
-                      class="cds--tooltip-trigger__wrapper"
-                    >
-                      <button
-                        aria-labelledby="tooltip-:r1a:"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          fill="currentColor"
-                          focusable="false"
-                          height="16"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                          />
-                          <path
-                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="cds--popover"
-                      id="tooltip-:r1a:"
-                      role="tooltip"
-                    >
-                      <span
-                        class="cds--popover-content cds--tooltip-content"
-                      >
-                        building id
-                      </span>
-                      <span
-                        class="cds--popover-caret"
-                      />
-                    </span>
-                  </span>
-                </label>
-              </div>
-              <div
-                class="cds--text-input__field-outer-wrapper"
-              >
-                <div
-                  class="cds--text-input__field-wrapper"
-                >
-                  <input
-                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                    id="text-input-1"
-                    placeholder="Enter building id"
-                    title="Enter building id"
-                    type="text"
-                    value=""
-                  />
-                  <span
-                    class="cds--text-input__counter-alert"
-                    role="alert"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r1b:-toggle-button"
-              id="downshift-:r1b:-label"
-            >
-              Computer availability
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r1c:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r1c:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Enter no.
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-computer_availability"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r1b:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r1b:-label"
-                class="cds--list-box__field"
-                id="downshift-:r1b:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r1b:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r1b:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--multi-select__wrapper cds--list-box__wrapper c2"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r1d:-toggle-button"
-              id="downshift-:r1d:-label"
-            >
-              Coverage Type
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r1e:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r1e:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Coverage Type
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--multi-select cds--list-box cds--list-box--lg"
-              id="mutli-select-dropdown-coverage_type"
-            >
-              <div
-                class="cds--list-box__field--wrapper"
-              >
-                <button
-                  aria-activedescendant=""
-                  aria-controls="downshift-:r1d:-menu"
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  aria-labelledby="downshift-:r1d:-label"
-                  class="cds--list-box__field"
-                  id="downshift-:r1d:-toggle-button"
-                  role="combobox"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="cds--list-box__label"
-                    id="multiselect-field-label-6"
-                  >
-                    Select Coverage Type
-                  </span>
-                  <div
-                    class="cds--list-box__menu-icon"
-                  >
-                    <svg
-                      aria-label="Open menu"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      name="chevron--down"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                      />
-                      <title>
-                        Open menu
-                      </title>
-                    </svg>
-                  </div>
-                </button>
-              </div>
-              <ul
-                aria-labelledby="downshift-:r1d:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r1d:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c7"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              Equipment's count
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r1f:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r1f:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Filter to check the equipment's count
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_robotic_equipment-min-input"
-                      placeholder="min(30)"
-                      title="min(30)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_robotic_equipment-max-input"
-                      placeholder="max(100)"
-                      title="max(100)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c8"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-num_robotic_equipment__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-num_robotic_equipment__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r1g:-toggle-button"
-              id="downshift-:r1g:-label"
-            >
-              Maps views - Grouped
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r1h:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r1h:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Describes the views of maps
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-coverage_type"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r1g:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r1g:-label"
-                class="cds--list-box__field"
-                id="downshift-:r1g:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r1g:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r1g:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c7"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              No of Computer
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_computers-min-input"
-                      placeholder="Min (0)"
-                      title="Min (0)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="num_computers-max-input"
-                      placeholder="Max (1450)"
-                      title="Max (1450)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c8"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-num_computers__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-num_computers__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="c4"
-          >
-            <div
-              class="cds--form-item cds--text-input-wrapper"
-            >
-              <div
-                class="cds--text-input__label-wrapper"
-              >
-                <label
-                  class="cds--label"
-                  for="text-input-1"
-                >
-                  Region
-                  <span
-                    class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-                  >
-                    <div
-                      class="cds--tooltip-trigger__wrapper"
-                    >
-                      <button
-                        aria-labelledby="tooltip-:r1i:"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          fill="currentColor"
-                          focusable="false"
-                          height="16"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                          />
-                          <path
-                            d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <span
-                      aria-hidden="true"
-                      class="cds--popover"
-                      id="tooltip-:r1i:"
-                      role="tooltip"
-                    >
-                      <span
-                        class="cds--popover-content cds--tooltip-content"
-                      >
-                        Enter region
-                      </span>
-                      <span
-                        class="cds--popover-caret"
-                      />
-                    </span>
-                  </span>
-                </label>
-              </div>
-              <div
-                class="cds--text-input__field-outer-wrapper"
-              >
-                <div
-                  class="cds--text-input__field-wrapper"
-                >
-                  <input
-                    class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                    id="text-input-1"
-                    placeholder="Enter region"
-                    title="Enter region"
-                    type="text"
-                    value=""
-                  />
-                  <span
-                    class="cds--text-input__counter-alert"
-                    role="alert"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="cds--dropdown__wrapper cds--list-box__wrapper c5"
-          >
-            <label
-              class="cds--label"
-              for="downshift-:r1j:-toggle-button"
-              id="downshift-:r1j:-label"
-            >
-              School area type - Org
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom-left cds--tooltip c6"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r1k:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r1k:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Urban or rural region in which school is located.
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="cds--dropdown cds--dropdown--md cds--list-box cds--list-box--md"
-              id="dropdown-environment"
-            >
-              <button
-                aria-activedescendant=""
-                aria-controls="downshift-:r1j:-menu"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="downshift-:r1j:-label"
-                class="cds--list-box__field"
-                id="downshift-:r1j:-toggle-button"
-                role="combobox"
-                tabindex="0"
-                title="All"
-                type="button"
-              >
-                <span
-                  class="cds--list-box__label"
-                >
-                  All
-                </span>
-                <div
-                  class="cds--list-box__menu-icon"
-                >
-                  <svg
-                    aria-label="Open menu"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    name="chevron--down"
-                    preserveAspectRatio="xMidYMid meet"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                    />
-                    <title>
-                      Open menu
-                    </title>
-                  </svg>
-                </div>
-              </button>
-              <ul
-                aria-labelledby="downshift-:r1j:-label"
-                class="cds--list-box__menu"
-                id="downshift-:r1j:-menu"
-                role="listbox"
-              />
-            </div>
-          </div>
-          <div
-            class="c7"
-          >
-            <label
-              class="cds--label cds--label--no-margin"
-            >
-              Test Filter NG-001
-              <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c3"
-              >
-                <div
-                  class="cds--tooltip-trigger__wrapper"
-                >
-                  <button
-                    aria-labelledby="tooltip-:r1l:"
-                    type="button"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-                      />
-                      <path
-                        d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <span
-                  aria-hidden="true"
-                  class="cds--popover"
-                  id="tooltip-:r1l:"
-                  role="tooltip"
-                >
-                  <span
-                    class="cds--popover-content cds--tooltip-content"
-                  >
-                    Updating the filter for testing purposes
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
-              </span>
-            </label>
-            <div
-              class="c4 group-input"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="connectivity_speed-min-input"
-                      placeholder="Min (35)"
-                      title="Min (35)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                />
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-                      id="connectivity_speed-max-input"
-                      placeholder="Max (36)"
-                      title="Max (36)"
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="cds--form-item cds--checkbox-wrapper c8"
-            >
-              <input
-                class="cds--checkbox"
-                id="checkbox-connectivity_speed__range"
-                style="padding: 0rem 1rem;"
-                type="checkbox"
-              />
-              <label
-                class="cds--checkbox-label"
-                for="checkbox-connectivity_speed__range"
-                title=""
-              >
-                <span
-                  class="cds--checkbox-label-text"
-                >
-                  Show null values
-                </span>
-              </label>
-              <div
-                class="cds--checkbox__validation-msg"
-              />
-            </div>
-          </div>
-          <div
-            class="ps__rail-x"
-            style="left: 0px; top: 0px;"
-          >
-            <div
-              class="ps__thumb-x"
-              style="left: 0px; width: 0px;"
-              tabindex="0"
-            />
-          </div>
-          <div
-            class="ps__rail-y"
-            style="top: 0px; left: 0px;"
-          >
-            <div
-              class="ps__thumb-y"
-              style="top: 0px; height: 0px;"
-              tabindex="0"
-            />
-          </div>
-        </div>
-        <div
-          class="c9"
-        >
-          <button
-            class="cds--btn cds--btn--secondary"
-            type="reset"
-          >
-            Reset
-          </button>
-          <button
-            class="cds--btn cds--btn--primary"
-            type="submit"
-          >
-            Apply
-          </button>
-        </div>
-      </form>
-    </span>
-    <span
-      class="cds--popover-caret"
-    />
-  </span>
-</DocumentFragment>
-`;
-
-exports[`AdvancedFilter should render Advance filter button  1`] = `
-<DocumentFragment>
-  .c1 .cds--popover>.filter-popover-content {
-  background: #181818;
-  height: calc(100vh - 2.3rem);
-  transform: none;
-  top: -1rem;
-  position: fixed;
-  right: 0;
-  width: 18rem;
-}
-
-.c1 .cds--popover .cds--popover-caret {
-  display: none;
-}
-
-.c0 {
-  z-index: 99;
-  background: #181818;
-  right: .5rem;
-  border-radius: 62.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.c2 {
-  position: relative;
-}
-
-.c2 .cds--btn:not(.cds--btn--disabled) {
-  background: #474747;
-  border-radius: 1.875rem;
-  padding: 0.3rem 0.8rem;
-}
-
-.c2 .cds--btn svg {
-  transform: rotate(90deg);
-  margin-right: 0.325rem;
-  margin-top: 0.0625rem;
-}
-
-.c2 .cds--btn--primary:focus {
-  box-shadow: 0 0 0 1px #181818;
-}
-
-.c2 svg {
-  fill: #fff;
-}
-
-.c2 .cds--popover {
-  position: relative;
-  z-index: 6001;
-  top: -1rem;
-}
-
-.c2 .cds--tooltip-content {
-  background: #fff!important;
-  color: #181818!important;
-}
-
-.c2 .cds--popover-caret {
-  background: #fff!important;
-}
-
-.c2 .cds--btn--primary:focus {
-  border-color: #181818;
-}
-
-@media (max-width:768px) {
-  .c1 .cds--popover>.filter-popover-content {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    max-inline-size: none;
-    height: 100%;
-  }
-}
-
-<div
-    class="c0 filter-wrapper-popup"
-  >
-    <span
-      class="cds--popover-container cds--popover--left c1 filter-popover-link"
-    >
-      <div
-        class="c2"
+        class="flex! shrink-0! gap-3! px-4! pb-4!"
       >
         <button
-          align="left"
-          class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--primary"
-          label="Filter"
-          tooltiptext="Filters"
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-secondary! text-sm! font-medium! text-secondary-foreground! hover:bg-secondary/80!"
+          data-size="default"
+          data-slot="button"
+          data-variant="secondary"
           type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="#fff"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M24 30v-4.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0v14.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v4.1s2 0 2 0zm-4-9c0-1.7 1.3-3 3-3s3 1.3 3 3c0 1.7-1.3 3-3 3s-3-1.3-3-3zM8 2v4.1c-2.3.5-4 2.5-4 4.9 0 2.4 1.7 4.4 4 4.9v14.1s2 0 2 0v-14.1c2.3-.5 4-2.5 4-4.9 0-2.4-1.7-4.4-4-4.9V2s-2 0-2 0zm4 9c0 1.7-1.3 3-3 3s-3-1.3-3-3 1.3-3 3-3 3 1.3 3 3z"
-            />
-          </svg>
-          <span>
-            Filters
-          </span>
+          Clear all
+        </button>
+        <button
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-primary! text-sm! font-medium! text-primary-foreground! hover:bg-primary/90!"
+          data-size="default"
+          data-slot="button"
+          data-variant="default"
+          type="button"
+        >
+          Apply
         </button>
       </div>
-    </span>
+    </form>
   </div>
 </DocumentFragment>
 `;
 
-exports[`AdvancedFilter should render Advance filter button 1`] = `<DocumentFragment />`;
+exports[`AdvancedFilter > should render Advance filter 2`] = `
+<DocumentFragment>
+  <div
+    class="flex! h-full! min-h-0! w-full! flex-1! flex-col! overflow-hidden! bg-background!"
+  >
+    <div
+      class="flex! shrink-0! items-center! justify-between! px-4! py-4!"
+    >
+      <h3
+        class="text-base! leading-6! font-normal! text-filter-text!"
+      >
+        Filters
+      </h3>
+      <button
+        aria-label="Close"
+        class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 size-8! text-filter-text!"
+        data-size="icon-sm"
+        data-slot="button"
+        data-testid="filter-close"
+        data-variant="ghost"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x size-4!"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <form
+      aria-label="filter-form"
+      class="flex! min-h-0! flex-1! flex-col! overflow-hidden!"
+    >
+      <div
+        class="relative! overflow-auto! min-h-0! flex-1! px-0! pb-8!"
+        data-slot="scroll-area"
+        dir="ltr"
+        style="position: relative; --radix-scroll-area-corner-width: 0px; --radix-scroll-area-corner-height: 0px;"
+      >
+        <style>
+          [data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}
+        </style>
+        <div
+          class="h-full! w-full! rounded-[inherit]!"
+          data-radix-scroll-area-viewport=""
+          data-slot="scroll-area-viewport"
+          style="overflow-x: hidden; overflow-y: scroll;"
+        >
+          <div
+            style="min-width: 100%; display: table;"
+          >
+            <div
+              class="flex! flex-col! gap-3!"
+              data-orientation="vertical"
+              data-slot="accordion"
+            >
+              <div
+                class=""
+                data-orientation="vertical"
+                data-slot="accordion-item"
+                data-state="open"
+              >
+                <h3
+                  class="flex!"
+                  data-orientation="vertical"
+                  data-slot="accordion-header"
+                  data-state="open"
+                >
+                  <button
+                    aria-controls="radix-:rn:"
+                    aria-expanded="true"
+                    class="flex! w-full! items-center! justify-between! gap-3! border-0! bg-transparent! outline-none! px-4! py-3! text-base! leading-6! font-normal! text-filter-text! data-[state=open]:pt-3! data-[state=open]:pb-3!"
+                    data-orientation="vertical"
+                    data-radix-collection-item=""
+                    data-slot="accordion-trigger"
+                    data-state="open"
+                    id="radix-:rm:"
+                    type="button"
+                  >
+                    <span
+                      class="whitespace-nowrap!"
+                    >
+                      Schools
+                    </span>
+                    <svg
+                      aria-hidden="true"
+                      class="lucide lucide-chevron-down transition-transform! duration-200! rotate-180!"
+                      fill="none"
+                      height="16"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="m6 9 6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                </h3>
+                <div
+                  aria-labelledby="radix-:rm:"
+                  class=""
+                  data-orientation="vertical"
+                  data-slot="accordion-content"
+                  data-state="open"
+                  id="radix-:rn:"
+                  role="region"
+                  style="--radix-accordion-content-height: var(--radix-collapsible-content-height); --radix-accordion-content-width: var(--radix-collapsible-content-width); transition-duration: 0s; animation-name: none;"
+                >
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="multi-select-dropdown-building_id_govt"
+                    >
+                      Building-id
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
+                        id="multi-select-dropdown-building_id_govt"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          Select Building-id
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="text-input-building_id_govt"
+                    >
+                      Building Id
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <input
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                      data-slot="input"
+                      id="text-input-building_id_govt"
+                      placeholder="Enter building id"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="dropdown-computer_availability"
+                    >
+                      Computer availability
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
+                        id="dropdown-computer_availability"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          All
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="multi-select-dropdown-coverage_type"
+                    >
+                      Coverage Type
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left! text-filter-muted!"
+                        id="multi-select-dropdown-coverage_type"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          Select Coverage Type
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                    >
+                      Equipment's count
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="flex! gap-4!"
+                    >
+                      <input
+                        aria-label="Equipment's count min"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_robotic_equipment-min-input"
+                        placeholder="min(30)"
+                        type="number"
+                        value=""
+                      />
+                      <input
+                        aria-label="Equipment's count max"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_robotic_equipment-max-input"
+                        placeholder="max(100)"
+                        type="number"
+                        value=""
+                      />
+                    </div>
+                    <label
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+                      for="checkbox-school__num_robotic_equipment__range"
+                    >
+                      <input
+                        class="size-4! accent-primary!"
+                        id="checkbox-school__num_robotic_equipment__range"
+                        type="checkbox"
+                      />
+                      <span>
+                        Show null values
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="dropdown-coverage_type"
+                    >
+                      Maps views - Grouped
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
+                        id="dropdown-coverage_type"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          All
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                    >
+                      No of Computer
+                    </label>
+                    <div
+                      class="flex! gap-4!"
+                    >
+                      <input
+                        aria-label="No of Computer min"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_computers-min-input"
+                        placeholder="Min (0)"
+                        type="number"
+                        value=""
+                      />
+                      <input
+                        aria-label="No of Computer max"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="num_computers-max-input"
+                        placeholder="Max (1450)"
+                        type="number"
+                        value=""
+                      />
+                    </div>
+                    <label
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+                      for="checkbox-school__num_computers__range"
+                    >
+                      <input
+                        class="size-4! accent-primary!"
+                        id="checkbox-school__num_computers__range"
+                        type="checkbox"
+                      />
+                      <span>
+                        Show null values
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="text-input-environment"
+                    >
+                      Region
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <input
+                      class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                      data-slot="input"
+                      id="text-input-environment"
+                      placeholder="Enter region"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                      for="dropdown-environment"
+                    >
+                      School area type - Org
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="relative!"
+                    >
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        class="flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary! justify-between! text-left!"
+                        id="dropdown-environment"
+                        type="button"
+                      >
+                        <span
+                          class="truncate!"
+                        >
+                          All
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-down size-4! shrink-0! text-filter-muted!"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m6 9 6 6 6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="flex! flex-col! gap-2! px-4! py-2!"
+                  >
+                    <label
+                      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
+                    >
+                      Test Filter NG-001
+                      <button
+                        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+                        data-state="closed"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-info"
+                          fill="none"
+                          height="12"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                          />
+                          <path
+                            d="M12 16v-4"
+                          />
+                          <path
+                            d="M12 8h.01"
+                          />
+                        </svg>
+                      </button>
+                    </label>
+                    <div
+                      class="flex! gap-4!"
+                    >
+                      <input
+                        aria-label="Test Filter NG-001 min"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="connectivity_speed-min-input"
+                        placeholder="Min (35)"
+                        type="number"
+                        value=""
+                      />
+                      <input
+                        aria-label="Test Filter NG-001 max"
+                        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+                        data-slot="input"
+                        id="connectivity_speed-max-input"
+                        placeholder="Max (36)"
+                        type="number"
+                        value=""
+                      />
+                    </div>
+                    <label
+                      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+                      for="checkbox-school__connectivity_speed__range"
+                    >
+                      <input
+                        class="size-4! accent-primary!"
+                        id="checkbox-school__connectivity_speed__range"
+                        type="checkbox"
+                      />
+                      <span>
+                        Show null values
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex! shrink-0! gap-3! px-4! pb-4!"
+      >
+        <button
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-secondary! text-sm! font-medium! text-secondary-foreground! hover:bg-secondary/80!"
+          data-size="default"
+          data-slot="button"
+          data-variant="secondary"
+          type="button"
+        >
+          Clear all
+        </button>
+        <button
+          class="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 h-10! flex-1! rounded-full! bg-primary! text-sm! font-medium! text-primary-foreground! hover:bg-primary/90!"
+          data-size="default"
+          data-slot="button"
+          data-variant="default"
+          type="button"
+        >
+          Apply
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
 
-exports[`RangeTextInput Component RangeTextInput input 1`] = `
-.c0 {
-  padding: 0.5rem 1rem;
-}
+exports[`AdvancedFilter > should render Advance filter button  1`] = `
+<DocumentFragment>
+  <div
+    class="filter-wrapper-popup relative! z-99! my-2! mr-2! flex! flex-col! items-center!"
+  >
+    <div
+      class="filter-popover-link relative! inline-flex!"
+    >
+      <button
+        aria-label="Filters"
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 gap-1.5 px-3 has-[>svg]:px-2.5 font-['Open_Sans',sans-serif]! h-8! gap-1.5! rounded-md! px-2.5! text-sm! bg-secondary! text-secondary-foreground! hover:bg-secondary/80!"
+        data-size="sm"
+        data-slot="button"
+        data-variant="secondary"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-sliders-horizontal size-4!"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 5H3"
+          />
+          <path
+            d="M12 19H3"
+          />
+          <path
+            d="M14 3v4"
+          />
+          <path
+            d="M16 17v4"
+          />
+          <path
+            d="M21 12h-9"
+          />
+          <path
+            d="M21 19h-5"
+          />
+          <path
+            d="M21 5h-7"
+          />
+          <path
+            d="M8 10v4"
+          />
+          <path
+            d="M8 12H3"
+          />
+        </svg>
+        <span>
+          Filters
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
 
-.c0 .group-input {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0;
-}
+exports[`AdvancedFilter > should render Advance filter button 1`] = `<DocumentFragment />`;
 
-.c0 .cds--label {
-  margin-bottom: 0.5rem;
-}
-
-.c2 {
-  padding: 0.5rem 1rem;
-}
-
-.c3 {
-  margin: 0.5rem 0;
-}
-
-.c3 .cds--checkbox-label-text {
-  font-size: 0.75rem;
-}
-
-.c1 button {
-  border: none;
-  background: inherit;
-  cursor: pointer;
-}
-
-.c1 .cds--popover-content {
-  background: #181818!important;
-}
-
-.c1 svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.c1 .cds--popover-content {
-  max-inline-size: 18rem;
-}
-
+exports[`RangeTextInput Component > RangeTextInput input 1`] = `
 <div>
   <div
-    class="c0"
+    class="flex! flex-col! gap-2! px-4! py-2!"
   >
     <label
-      class="cds--label cds--label--no-margin"
+      class="flex! items-center! text-xs! leading-4! font-normal! text-filter-muted!"
     >
       No of Teachers
-      <span
-        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--tooltip c1"
+      <button
+        class="ml-0.5! -m-1.5! inline-flex! size-6! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-transparent! p-1.5! align-middle! text-filter-muted! transition-colors! hover:text-filter-text!"
+        data-state="closed"
+        type="button"
       >
-        <div
-          class="cds--tooltip-trigger__wrapper"
-        >
-          <button
-            aria-labelledby="tooltip-:r1o:"
-            type="button"
-          >
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
-              />
-              <path
-                d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
-              />
-            </svg>
-          </button>
-        </div>
-        <span
+        <svg
           aria-hidden="true"
-          class="cds--popover"
-          id="tooltip-:r1o:"
-          role="tooltip"
+          class="lucide lucide-info"
+          fill="none"
+          height="12"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="12"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <span
-            class="cds--popover-content cds--tooltip-content"
-          >
-            test range input
-          </span>
-          <span
-            class="cds--popover-caret"
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
           />
-        </span>
-      </span>
+          <path
+            d="M12 16v-4"
+          />
+          <path
+            d="M12 8h.01"
+          />
+        </svg>
+      </button>
     </label>
     <div
-      class="c2 group-input"
+      class="flex! gap-4!"
     >
-      <div
-        class="cds--form-item cds--text-input-wrapper"
-      >
-        <div
-          class="cds--text-input__label-wrapper"
-        />
-        <div
-          class="cds--text-input__field-outer-wrapper"
-        >
-          <div
-            class="cds--text-input__field-wrapper"
-          >
-            <input
-              class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-              id="-min-input"
-              placeholder="Min(0)"
-              title="Min(0)"
-              type="number"
-              value="15"
-            />
-            <span
-              class="cds--text-input__counter-alert"
-              role="alert"
-            />
-          </div>
-        </div>
-      </div>
-      <div
-        class="cds--form-item cds--text-input-wrapper"
-      >
-        <div
-          class="cds--text-input__label-wrapper"
-        />
-        <div
-          class="cds--text-input__field-outer-wrapper"
-        >
-          <div
-            class="cds--text-input__field-wrapper"
-          >
-            <input
-              class="cds--text-input cds--text-input--sm cds--layout--size-sm"
-              id="-max-input"
-              placeholder="Max"
-              title="Max"
-              type="number"
-              value="20"
-            />
-            <span
-              class="cds--text-input__counter-alert"
-              role="alert"
-            />
-          </div>
-        </div>
-      </div>
+      <input
+        aria-label="No of Teachers min"
+        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+        data-slot="input"
+        id="-min-input"
+        placeholder="Min (0)"
+        type="number"
+        value="15"
+      />
+      <input
+        aria-label="No of Teachers max"
+        class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex! h-10! w-full! items-center! gap-1.5! self-stretch! rounded-lg! border-0! bg-filter-field! px-2.5! py-1.5! text-sm! font-medium! text-filter-text! shadow-none! outline-none! placeholder:text-filter-muted! focus-visible:ring-1! focus-visible:ring-primary!"
+        data-slot="input"
+        id="-max-input"
+        placeholder="Max (10K)"
+        type="number"
+        value="20"
+      />
     </div>
-    <div
-      class="cds--form-item cds--checkbox-wrapper c3"
+    <label
+      class="flex! cursor-pointer! items-center! gap-2! pt-1! text-xs! text-filter-muted!"
+      for="checkbox-num_computers__range"
     >
       <input
         checked=""
-        class="cds--checkbox"
+        class="size-4! accent-primary!"
         id="checkbox-num_computers__range"
-        style="padding: 0rem 1rem;"
         type="checkbox"
       />
-      <label
-        class="cds--checkbox-label"
-        for="checkbox-num_computers__range"
-        title=""
-      >
-        <span
-          class="cds--checkbox-label-text"
-        >
-          Show null values
-        </span>
-      </label>
-      <div
-        class="cds--checkbox__validation-msg"
-      />
-    </div>
+      <span>
+        Show null values
+      </span>
+    </label>
   </div>
 </div>
 `;

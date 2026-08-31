@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CaseStudyCard renders CaseStudyCard and take a snapshop 1`] = `
+exports[`CaseStudyCard > renders CaseStudyCard and take a snapshop 1`] = `
 <DocumentFragment>
   .c0 {
   flex: 1 1 0;
@@ -48,14 +48,14 @@ exports[`CaseStudyCard renders CaseStudyCard and take a snapshop 1`] = `
   color: #fff;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .c0 {
     padding-left: 0.3rem;
     padding-right: 0.3rem;
   }
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .c2 {
     padding: 2rem 0;
   }

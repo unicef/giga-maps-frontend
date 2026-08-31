@@ -2,7 +2,7 @@ import { createEffect } from 'effector';
 import mapboxGL from 'mapbox-gl';
 
 import { defaultCenter, defaultZoom, maxZoom, styleUrls } from '~/@/map/map.constant';
-import { changeMap, onStyleLoaded, onZoomStateChange } from '~/@/map/map.model';
+import { changeMap, onStyleLoaded, onZoomLevelChange, onZoomStateChange } from '~/@/map/map.model';
 import { InitMapOptions } from '~/@/map/map.types';
 import { API_MAPBOX_ACCESS_TOKEN } from '~/env';
 let timeout: ReturnType<typeof setTimeout>;
@@ -14,7 +14,7 @@ export const initMapFx = createEffect(
       style: styleUrls[style],
       center: center ?? defaultCenter,
       zoom: zoom ?? defaultZoom,
-      maxZoom: maxZoom,
+      maxZoom,
       container,
     });
     map.dragRotate.disable();
@@ -28,6 +28,10 @@ export const initMapFx = createEffect(
       const date = new Date();
       clearTimeout(timeout);
       onZoomStateChange('start');
+    });
+
+    map.on('zoom', () => {
+      onZoomLevelChange(Number(map.getZoom().toFixed(1)));
     });
 
     // map.on('zoom', () => {

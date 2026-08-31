@@ -1,36 +1,35 @@
-import { useState } from "react";
-import styled from "styled-components";
+import type { EntityType } from '~/@/entities';
+import type { LayerType } from '~/@/sidebar/types';
+import type {
+  ConnectivityStat,
+  EntityConnectivityStat,
+  SchoolStatsType,
+} from '~/api/types';
 
-import { SchoolStatsType } from "~/api/types";
+import HistoryGraph from './history-graph.view';
 
-import HistoryGraph from "./history-graph.view";
-
-const ProgressGraphWrapper = styled.div`
-    margin: 0rem 1rem 0rem 1rem;
-
-`
-
-export function HistoryGraphAccordian({ schoolData, isLoading }: { readonly schoolData?: SchoolStatsType; readonly isLoading?: boolean }) {
+export function HistoryGraphAccordian({
+  connectivityStats,
+  entityType,
+  schoolData,
+  isLoading,
+  selectedLayerData,
+}: {
+  readonly connectivityStats?: ConnectivityStat | EntityConnectivityStat | null;
+  readonly entityType: EntityType;
+  readonly schoolData?: SchoolStatsType;
+  readonly isLoading?: boolean;
+  readonly selectedLayerData?: LayerType | null;
+}) {
   return (
-    // <ProgressGraphWrapper>
-    //   <AccordionDistribution>
-    //     <AccordionItem
-    //       title={
-    //         <AccordionItemTitle
-    //           label=
-    //           {
-    //             <>
-    //               {/* <ChartColumn className="graph" /> */}
-    //               Progress graph
-    //             </>
-    //           }
-    //           tooltipLabel="Progress graph" />}
-    //       open={show}
-    //       onHeadingClick={() => setShow((prev) => !prev)}>
-    //       <HistoryGraph isChartOpen={true} schoolData={schoolData} isLoading={isLoading} />
-    //     </AccordionItem>
-    //   </AccordionDistribution>
-    // </ProgressGraphWrapper>
-    <ProgressGraphWrapper><HistoryGraph isChartOpen={true} schoolData={schoolData} isLoading={isLoading} /></ProgressGraphWrapper>
-  )
+    <div className="mx-4!">
+      <HistoryGraph
+        connectivityStats={connectivityStats}
+        entityType={entityType}
+        schoolData={schoolData}
+        isLoading={isLoading}
+        selectedLayerData={selectedLayerData}
+      />
+    </div>
+  );
 }

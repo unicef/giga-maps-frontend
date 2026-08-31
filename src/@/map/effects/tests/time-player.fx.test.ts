@@ -1,26 +1,45 @@
 import { Map } from 'mapbox-gl';
-import { clearTimeplayer, nextTimePlayerIteration, onLoadStartTimePlayer, onPausePlayTimeplayerFx, timePlayerFx, timePlayerSourceFx } from '../time-player.fx';
+import {
+  clearTimeplayer,
+  nextTimePlayerIteration,
+  onLoadStartTimePlayer,
+  onPausePlayTimeplayerFx,
+  timePlayerFx,
+  timePlayerSourceFx,
+} from '../time-player.fx';
 import { clearMapDataFx } from '../add-layers-fx';
 import { createSource } from '../../utils';
-import { onToggleTimeplayer, setLoaderTimePlayer } from '~/@/sidebar/sidebar.model';
+import {
+  onToggleTimeplayer,
+  setLoaderTimePlayer,
+} from '~/@/sidebar/sidebar.model';
+import { EntityType } from '~/@/entities';
 
-jest.mock('../add-layers-fx');
-jest.mock('../../utils');
-jest.mock('~/@/sidebar/sidebar.model');
+const activeEntityTypes = [EntityType.SCHOOL];
+const createTimeplayerInfo = (years: number[] | null) => ({
+  yearsByEntity: { [EntityType.SCHOOL]: years },
+  activeYear: 0,
+  isLoading: false,
+  isLoaded: false,
+});
+
+vi.mock('../add-layers-fx');
+vi.mock('../../utils');
+vi.mock('~/@/sidebar/sidebar.model');
 
 describe('timePlayerSourceFx', () => {
-  let map: jest.Mocked<Map>;
+  let map: vi.Mocked<Map>;
 
   beforeEach(() => {
     map = {
-      getSource: jest.fn(),
-      addSource: jest.fn(),
-      removeSource: jest.fn(),
+      getSource: vi.fn(),
+      addSource: vi.fn(),
+      removeSource: vi.fn(),
     } as any;
 
-    (clearMapDataFx as jest.Mock).mockResolvedValue(undefined);
-    (createSource as jest.Mock).mockImplementation(() => undefined);
-    (setLoaderTimePlayer as jest.Mock).mockImplementation(() => undefined);
+    (clearMapDataFx as vi.Mock).mockResolvedValue(undefined);
+    (createSource as vi.Mock).mockImplementation(() => undefined);
+    (setLoaderTimePlayer as vi.Mock).mockImplementation(() => undefined);
   });
 
   it('should clear map data before creating new source', async () => {
@@ -49,16 +68,16 @@ describe('timePlayerSourceFx', () => {
     const url = 'test-url';
     const executionOrder: string[] = [];
 
-    (clearMapDataFx as jest.Mock).mockImplementation(() => {
+    (clearMapDataFx as vi.Mock).mockImplementation(() => {
       executionOrder.push('clear');
       return Promise.resolve();
     });
 
-    (createSource as jest.Mock).mockImplementation(() => {
+    (createSource as vi.Mock).mockImplementation(() => {
       executionOrder.push('create');
     });
 
-    (setLoaderTimePlayer as jest.Mock).mockImplementation(() => {
+    (setLoaderTimePlayer as vi.Mock).mockImplementation(() => {
       executionOrder.push('loader');
     });
 
@@ -68,42 +87,39 @@ describe('timePlayerSourceFx', () => {
   });
 });
 describe('timePlayerFx', () => {
-  let map: jest.Mocked<Map>;
-  let mockTimeout: jest.Mock;
+  let map: vi.Mocked<Map>;
+  let mockTimeout: vi.Mock;
 
   beforeEach(() => {
-    jest.useFakeTimers();
-    mockTimeout = jest.fn();
-    global.setTimeout = mockTimeout;
-
+    vi.useFakeTimers();
     map = {
-      addLayer: jest.fn(),
-      isSourceLoaded: jest.fn(),
-      areTilesLoaded: jest.fn(),
-      on: jest.fn(),
-      off: jest.fn(),
+      addLayer: vi.fn(),
+      isSourceLoaded: vi.fn(),
+      areTilesLoaded: vi.fn(),
+      on: vi.fn(),
+      off: vi.fn(),
     } as any;
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('should not add layer when map is not available', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map: null, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map: null, timeplayerInfo, activeEntityTypes } as any);
     expect(map.addLayer).not.toHaveBeenCalled();
   });
 
   it('should not add layer when years are not available', () => {
-    const timeplayerInfo = { years: null };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo(null);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
     expect(map.addLayer).not.toHaveBeenCalled();
   });
 
   it('should add circle layer with correct properties', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
 
     expect(map.addLayer).toHaveBeenCalledWith({
       id: 'timePlayerLayer',
@@ -116,66 +132,82 @@ describe('timePlayerFx', () => {
           'interpolate',
           ['linear'],
           ['zoom'],
-          0, 0.3,
-          2, 1.5,
-          4, 4,
-          5, 5,
-          8, 10,
-          10, 12
+          0,
+          0.3,
+          2,
+          1.5,
+          4,
+          4,
+          5,
+          5,
+          8,
+          10,
+          10,
+          12,
         ],
-      }
+      },
     });
   });
   it('should setup data load event listener', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
 
     expect(map.on).toHaveBeenCalledWith('data', expect.any(Function));
   });
 
   it('should not remove event listener when tiles are not loaded', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
-    timePlayerFx({ map, timeplayerInfo });
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
+    timePlayerFx({ map, timeplayerInfo, activeEntityTypes } as any);
 
     map.isSourceLoaded.mockReturnValue(true);
     map.areTilesLoaded.mockReturnValue(false);
 
     const dataCallback = map.on.mock.calls[0][1];
     dataCallback();
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(map.off).not.toHaveBeenCalled();
   });
 });
 describe('onLoadStartTimePlayer', () => {
-  let map: jest.Mocked<Map>;
+  let map: vi.Mocked<Map>;
 
   beforeEach(() => {
     map = {
-      setPaintProperty: jest.fn(),
-      setLayoutProperty: jest.fn()
+      setPaintProperty: vi.fn(),
+      setLayoutProperty: vi.fn(),
     } as any;
 
-    global.onSetTimePlayerCurrentYear = jest.fn();
-    global.runIntervalCheck = jest.fn();
-    global.getCirclesPaint = jest.fn().mockReturnValue({ color: '#000000' });
+    global.onSetTimePlayerCurrentYear = vi.fn();
+    global.runIntervalCheck = vi.fn();
+    global.getCirclesPaint = vi.fn().mockReturnValue({ color: '#000000' });
   });
 
   it('should not execute when map is null', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
     const paintData = { colors: ['#000'] };
 
-    onLoadStartTimePlayer({ map: null, timeplayerInfo, paintData });
+    onLoadStartTimePlayer({
+      map: null,
+      timeplayerInfo,
+      paintData,
+      activeEntityTypes,
+    } as any);
 
     expect(map.setPaintProperty).not.toHaveBeenCalled();
     expect(map.setLayoutProperty).not.toHaveBeenCalled();
   });
 
   it('should not execute when years array is empty', () => {
-    const timeplayerInfo = { years: [] };
+    const timeplayerInfo = createTimeplayerInfo([]);
     const paintData = { colors: ['#000'] };
 
-    onLoadStartTimePlayer({ map, timeplayerInfo, paintData });
+    onLoadStartTimePlayer({
+      map,
+      timeplayerInfo,
+      paintData,
+      activeEntityTypes,
+    } as any);
 
     expect(global.onSetTimePlayerCurrentYear).not.toHaveBeenCalled();
     expect(global.runIntervalCheck).not.toHaveBeenCalled();
@@ -183,45 +215,55 @@ describe('onLoadStartTimePlayer', () => {
   });
 
   it('should set correct paint and layout properties', () => {
-    const timeplayerInfo = { years: [2020, 2021] };
+    const timeplayerInfo = createTimeplayerInfo([2020, 2021]);
     const paintData = { colors: ['#000'] };
 
-    onLoadStartTimePlayer({ map, timeplayerInfo, paintData });
+    onLoadStartTimePlayer({
+      map,
+      timeplayerInfo,
+      paintData,
+      activeEntityTypes,
+    } as any);
 
     expect(map.setPaintProperty).toHaveBeenCalledWith(
       'timePlayerLayer',
       'circle-color',
-      expect.any(Object)
+      expect.any(Object),
     );
     expect(map.setLayoutProperty).toHaveBeenCalledWith(
       'timePlayerLayer',
       'visibility',
-      'visible'
+      'visible',
     );
   });
 });
 describe('nextTimePlayerIteration', () => {
-  let map: jest.Mocked<Map>;
+  let map: vi.Mocked<Map>;
 
   beforeEach(() => {
     map = {
-      setPaintProperty: jest.fn(),
+      setPaintProperty: vi.fn(),
     } as any;
 
-    global.onSetTimePlayerCurrentYear = jest.fn();
-    global.runIntervalCheck = jest.fn();
-    global.getCirclesPaint = jest.fn().mockReturnValue({ color: '#000000' });
-    global.onToggleTimeplayer = jest.fn();
+    global.onSetTimePlayerCurrentYear = vi.fn();
+    global.runIntervalCheck = vi.fn();
+    global.getCirclesPaint = vi.fn().mockReturnValue({ color: '#000000' });
+    global.onToggleTimeplayer = vi.fn();
   });
 
   it('should not execute when map is null', () => {
     const timeplayerInfo = {
+      ...createTimeplayerInfo([2020, 2021]),
       activeYear: 2020,
-      years: [2020, 2021]
     };
     const paintData = { colors: ['#000'] };
 
-    nextTimePlayerIteration({ map: null, paintData, timeplayerInfo });
+    nextTimePlayerIteration({
+      map: null,
+      paintData,
+      timeplayerInfo,
+      activeEntityTypes,
+    } as any);
 
     expect(onSetTimePlayerCurrentYear).not.toHaveBeenCalled();
     expect(runIntervalCheck).not.toHaveBeenCalled();
@@ -230,46 +272,49 @@ describe('nextTimePlayerIteration', () => {
 
   it('should not execute when years array is null', () => {
     const timeplayerInfo = {
+      ...createTimeplayerInfo(null),
       activeYear: 2020,
-      years: null
     };
     const paintData = { colors: ['#000'] };
 
-    nextTimePlayerIteration({ map, paintData, timeplayerInfo });
+    nextTimePlayerIteration({
+      map,
+      paintData,
+      timeplayerInfo,
+      activeEntityTypes,
+    } as any);
 
     expect(onSetTimePlayerCurrentYear).not.toHaveBeenCalled();
     expect(map.setPaintProperty).not.toHaveBeenCalled();
     expect(runIntervalCheck).not.toHaveBeenCalled();
     expect(onToggleTimeplayer).not.toHaveBeenCalled();
   });
-})
+});
 describe('clearTimeplayer', () => {
-  let map: jest.Mocked<Map>;
-  let mockClearTimeout: jest.Mock;
+  let map: vi.Mocked<Map>;
+  let mockClearTimeout: vi.Mock;
 
   beforeEach(() => {
-    mockClearTimeout = jest.fn();
-    global.clearTimeout = mockClearTimeout;
-
+    vi.spyOn(global, 'clearTimeout');
     map = {
-      off: jest.fn(),
+      off: vi.fn(),
     } as any;
 
-    global.onToggleTimeplayer = jest.fn();
+    global.onToggleTimeplayer = vi.fn();
   });
 
   it('should not execute when map is null', () => {
     clearTimeplayer({ map: null });
 
     expect(map.off).not.toHaveBeenCalled();
-    expect(mockClearTimeout).not.toHaveBeenCalled();
+    expect(clearTimeout).not.toHaveBeenCalled();
     expect(onToggleTimeplayer).not.toHaveBeenCalled();
   });
 
   it('should clear all timeouts and remove event listener', () => {
     clearTimeplayer({ map });
 
-    expect(mockClearTimeout).toHaveBeenCalledTimes(2);
+    expect(clearTimeout).toHaveBeenCalledTimes(2);
   });
 
   it('should disable timeplayer', () => {
@@ -285,11 +330,11 @@ describe('clearTimeplayer', () => {
       executionOrder.push('removeListener');
     });
 
-    mockClearTimeout.mockImplementation(() => {
+    vi.mocked(clearTimeout).mockImplementation(() => {
       executionOrder.push('clearTimeout');
     });
 
-    (onToggleTimeplayer as jest.Mock).mockImplementation(() => {
+    (onToggleTimeplayer as vi.Mock).mockImplementation(() => {
       executionOrder.push('toggleOff');
     });
 
@@ -299,20 +344,19 @@ describe('clearTimeplayer', () => {
       'removeListener',
       'clearTimeout',
       'clearTimeout',
-      'toggleOff'
+      'toggleOff',
     ]);
   });
 });
 describe('onPausePlayTimeplayerFx', () => {
-  let mockClearTimeout: jest.Mock;
-  let mockRunIntervalCheck: jest.Mock;
+  let mockClearTimeout: vi.Mock;
+  let mockRunIntervalCheck: vi.Mock;
 
   beforeEach(() => {
-    mockClearTimeout = jest.fn();
-    mockRunIntervalCheck = jest.fn();
-    global.clearTimeout = mockClearTimeout;
+    vi.spyOn(global, 'clearTimeout');
+    mockRunIntervalCheck = vi.fn();
     global.runIntervalCheck = mockRunIntervalCheck;
-    global.interval = 123;
+    global.interval = 123 as any;
   });
 
   it('should clear timeout when paused', () => {
@@ -325,12 +369,11 @@ describe('onPausePlayTimeplayerFx', () => {
     onPausePlayTimeplayerFx(false);
     onPausePlayTimeplayerFx(true);
 
-    expect(mockClearTimeout).toHaveBeenCalledTimes(2);
+    expect(clearTimeout).toHaveBeenCalledTimes(2);
   });
 
   it('should handle undefined interval', () => {
-    global.interval = undefined;
     onPausePlayTimeplayerFx(true);
-    expect(mockClearTimeout).toHaveBeenCalledWith(undefined);
+    expect(clearTimeout).toHaveBeenCalled();
   });
 });

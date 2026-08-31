@@ -1,3 +1,5 @@
+import { EntityType } from "../entities"
+import { SCHOOL_STATUS_LAYER } from "./sidebar.constant"
 import { LayerTypeChoices } from "./types"
 
 export const isLiveLayer = (type?: LayerTypeChoices) => {
@@ -18,4 +20,11 @@ export const createHistoryIntervalFormat = (startEndDate?: { start_date: string;
     start: new Date(Number(start[2]), Number(start[1]) - 1, Number(start[0])),
     end: new Date(Number(end[2]), Number(end[1]) - 1, Number(end[0]))
   }
+}
+
+export const getEntityStatusId = (
+  entityType: string,
+  entityId?: string,
+) => {
+  return `${entityType ? entityType : EntityType.SCHOOL}_${entityId ? entityId : SCHOOL_STATUS_LAYER.id}`;
 }

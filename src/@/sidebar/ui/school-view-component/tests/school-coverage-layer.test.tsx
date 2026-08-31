@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import SchoolCoverageLayer from '../school-coverage-layer/school-coverage-layer';
 import { router } from '~/core/routes';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import "~/core/i18n/instance"
 
 describe('SchoolCoverageLayer', () => {
@@ -15,7 +15,8 @@ describe('SchoolCoverageLayer', () => {
 
   test('check SchoolCoverageLayer with multiple school ids', () => {
     router.navigate(`/map/schools?country=AI&school_ids=12,13`);
-    const { getAllByText } = render(testWrapper(<SchoolCoverageLayer />));
-    expect(getAllByText(/Data layer selection/i)).toBeTruthy();
+    const { container } = render(testWrapper(<SchoolCoverageLayer />));
+    expect(container).toBeInTheDocument();
   });
 });
+

@@ -1,147 +1,188 @@
-import { Checkbox } from "@carbon/react";
+import { Checkbox } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { useEffect, useState } from 'react';
+import { Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-import { CoverageKeyMapping } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
-
+import { $country } from '~/@/country/country.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import {
-  changeCoverage3g2g,
-  changeCoverage5g4g,
-  changeCoverageNoCoverage,
-  changeCoverageUnknown,
-  $coverageStats,
+  ConnectivityBenchMarks,
+  ConnectivityDistribution,
+} from '~/@/sidebar/sidebar.constant';
+import {
+  $connectivityBenchMarkByEntity,
+  $coverageStatsByEntity,
+  $coverageStatusAllByEntity,
   $layerUtils,
-  $connectivityBenchMark,
-  $benchmarkNamesAllLayers,
-  $coverage5g4g,
-  $coverage3g2g,
-  $coverageNoCoverage,
-  $coverageUnknown,
+  changeEntityCoverageStatus,
 } from '~/@/sidebar/sidebar.model';
-import { CheckBoxContainer, CircleWrapper, InnerCircle, LiveLayerBenchmark } from '../legend-button.style';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
+import { $lng } from '~/core/i18n/store';
+import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
-import { Div, TooltipButton } from "~/@/common/style/styled-component-style";
-import { ConnectivityBenchMarks, ConnectivityDistribution } from "~/@/sidebar/sidebar.constant";
-import { $country, $countryConnectivityNames } from "~/@/country/country.model";
-import { $lng } from "~/core/i18n/store";
-import { useTranslation } from "react-i18next";
 
-interface CheckedStatus {
-  [key: string]: boolean;
-}
+import { CheckBoxContainer } from '../legend-button.style';
+import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
-const StaticLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+const StaticLayerLegend = ({
+  entityType,
+  isCompact = false,
+  isLoading = false,
+  metricSubtitle,
+  metricTitle,
+  shouldShowControls,
+}: {
+  entityType: EntityType;
+  isCompact?: boolean;
+  isLoading?: boolean;
+  metricSubtitle: string;
+  metricTitle: string;
+  shouldShowControls: boolean;
+}) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
-  const countryConnectivityNames = useStore($countryConnectivityNames);
-  const [staticLayerCheckedStatus, setStaticLayerCheckedStatus] = useState<CheckedStatus>({});
-  const { currentLayerLegends: legends, selectedLayerData, selectedLayerId, coverageLayerId } = useStore($layerUtils);
-  const coverageStats: any = useStore($coverageStats);
-  const connectivityBenchMark = useStore($connectivityBenchMark)
+  const { currentLayerLegendsByEntity, selectedLayerDataByEntity } =
+    useStore($layerUtils);
+  const legends = currentLayerLegendsByEntity[entityType]!;
+  const currentSelectedLayerData = selectedLayerDataByEntity[entityType];
+  const coverageStats = useStore($coverageStatsByEntity)[entityType] as {
+    connected_schools?: Record<string, number>;
+  } | null;
+  const connectivityBenchMark =
+    useStore($connectivityBenchMarkByEntity)[entityType] ??
+    ConnectivityBenchMarks.global;
   const countryObj = useStore($country);
-  const countryBenchmarkDescriptions = countryObj?.benchmark_metadata?.layer_descriptions;
+  const countryBenchmarkDescriptions =
+    countryObj?.benchmark_metadata?.layer_descriptions;
   const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
-  const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
-  const benchmarkNames = useStore($benchmarkNamesAllLayers);
-
-  // Get coverage filter values from store (synced with URL params)
-  const coverage5g4g = useStore($coverage5g4g);
-  const coverage3g2g = useStore($coverage3g2g);
-  const coverageNoCoverage = useStore($coverageNoCoverage);
-  const coverageUnknown = useStore($coverageUnknown);
+  const nationalBenchMarkDescription =
+    countryBenchmarkDescriptions?.[currentSelectedLayerData?.id ?? 0] ?? '';
+  const coverageStatus = (useStore($coverageStatusAllByEntity)[entityType] ??
+    {}) as Record<string, boolean>;
 
   const handleStaticLayerToggle = (key: string) => {
-    const newStatus = !staticLayerCheckedStatus[key];
-    setStaticLayerCheckedStatus(prevState => ({
-      ...prevState,
-      [key]: newStatus
-    }));
-
-    // Update layer visibility based on the coverage key
-    switch (key) {
-      case 'good':
-        changeCoverage5g4g(newStatus);
-        break;
-      case 'moderate':
-        changeCoverage3g2g(newStatus);
-        break;
-      case 'bad':
-        changeCoverageNoCoverage(newStatus);
-        break;
-      case 'unknown':
-        changeCoverageUnknown(newStatus);
-        break;
-      default:
-        console.log('Unknown coverage key:', key);
-    }
+    changeEntityCoverageStatus({
+      entityType,
+      key: key as
+        | ConnectivityDistribution.good
+        | ConnectivityDistribution.moderate
+        | ConnectivityDistribution.bad
+        | ConnectivityDistribution.unknown,
+      value: !coverageStatus[key],
+    });
   };
 
-  // Sync local checkbox state with store values (including URL params on first load)
-  useEffect(() => {
-    setStaticLayerCheckedStatus({
-      'good': coverage5g4g,
-      'moderate': coverage3g2g,
-      'bad': coverageNoCoverage,
-      'unknown': coverageUnknown,
-    });
-  }, [coverage5g4g, coverage3g2g, coverageNoCoverage, coverageUnknown]);
-
-  return (<div className='school-status'>
-    <h3>{selectedLayerData?.name}</h3>
-    <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
-      <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-        {isNational && countryConnectivityNames?.[selectedLayerId as number] ? (
-          <LiveLayerBenchmark>
-            {countryConnectivityNames[selectedLayerId as number]}
-          </LiveLayerBenchmark>
-        ) : (!isNational && benchmarkNames[selectedLayerId ?? ""]) ? (
-          <LiveLayerBenchmark>
-            {benchmarkNames[selectedLayerId ?? ""]}
-          </LiveLayerBenchmark>
-        ) : null}
-      </button>
-    </TooltipButton>
-    {
-      legends.values.map(({ key, label, tooltip }) => {
-        const logicLabel = key === ConnectivityDistribution.unknown ? (tooltip || `Doesn't match any criteria`) : tooltip;
-        const toolTiplabel = logicLabel;
-        return (
-          (coverageStats?.connected_schools &&
-            (label) in coverageStats.connected_schools &&
-            coverageStats.connected_schools[label] > 0)
-            ? <Div key={key}>
-              <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
-                <button>
-                  <div className='legend-container' key={`${key}`}>
-                    <div className='checkbox-with-label'>
-                      {shouldShowControls && (
-                        <CheckBoxContainer>
-                          <Checkbox
-                            id={key}
-                            labelText={''}
-                            checked={staticLayerCheckedStatus[key]}
-                            onChange={() => handleStaticLayerToggle(key)}
-                          />
-                        </CheckBoxContainer>
-                      )}
-                      <div key={key} className='real-time-connetivity-info'>
-                        <CircleWrapper>
-                          <InnerCircle $backColor={legends.colors[key]} $large />
-                        </CircleWrapper>
-                        <p className="label">{label}{" "}</p>
-                      </div>
-                    </div>
-                    {shouldShowControls && coverageStats?.connected_schools && (
-                      <div className='legend-value' data-title={t('int', { val: coverageStats?.connected_schools[label] })}>{formatNumber(coverageStats?.connected_schools[label], lng)}</div>
-                    )}
-                  </div>
-                </button>
-              </TooltipButton>
-            </Div> : null)
-      }
+  return (
+    <div
+      className={cn(
+        'flex! flex-col! self-start!',
+        isCompact
+          ? 'w-full! self-stretch!'
+          : 'min-w-0! flex-1! basis-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:basis-full! max-legend-md:min-w-full!',
       )}
-  </div>
-  )
-}
+    >
+      <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
+        <div className="flex! items-center! gap-1.5!">
+          <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
+            {metricTitle}
+          </div>
+          {currentSelectedLayerData?.description ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild stopPropagation>
+                  <button
+                    aria-label={currentSelectedLayerData.description}
+                    className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
+                    type="button"
+                  >
+                    <Info size={12} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" sideOffset={6}>
+                  {currentSelectedLayerData.description}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : null}
+        </div>
+        {metricSubtitle ? (
+          <div className="text-xs! leading-4.5! text-muted-foreground!">
+            {metricSubtitle}
+          </div>
+        ) : null}
+      </div>
 
-export default StaticLayerLegend
+      {legends?.values?.map(({ key, label, tooltip }) => {
+        const tooltipLabel =
+          key === 'unknown' ? tooltip || `Doesn't match any criteria` : tooltip;
+
+        return (
+          <button
+            className="mt-3! flex! w-full! items-center! justify-start! gap-3! border-0! bg-transparent! p-0! text-left!"
+            key={key}
+            type="button"
+          >
+            <div className="flex! min-w-0! items-center!">
+              {shouldShowControls ? (
+                <input
+                  className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
+                  id={key}
+                  type="checkbox"
+                  checked={Boolean(coverageStatus[key])}
+                  onChange={() => handleStaticLayerToggle(key)}
+                />
+              ) : null}
+              <div
+                className="flex! min-w-0! items-center! gap-2!"
+                data-title={tooltipLabel}
+              >
+                <EntityLegendIndicator
+                  color={legends.colors[key]}
+                  entityType={entityType}
+                />
+                {isLoading ? (
+                  <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                ) : (
+                  <span className="text-sm! font-normal! leading-5! text-foreground!">
+                    {label}
+                  </span>
+                )}
+              </div>
+            </div>
+            {shouldShowControls ? (
+              isLoading ? (
+                <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
+              ) : (
+                <div
+                  className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+                  data-title={t('int', {
+                    val: coverageStats?.connected_schools?.[label] ?? 0,
+                  })}
+                >
+                  {formatNumber(
+                    coverageStats?.connected_schools?.[label] ?? 0,
+                    lng,
+                  )}
+                </div>
+              )
+            ) : null}
+          </button>
+        );
+      })}
+
+      <LegendBenchmarkDropdown
+        entityType={entityType}
+        interactive={shouldShowControls}
+        title={isNational ? nationalBenchMarkDescription : undefined}
+      />
+    </div>
+  );
+};
+
+export default StaticLayerLegend;

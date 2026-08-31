@@ -1,10 +1,8 @@
-import { attachLogger } from 'effector-logger';
+import './tailwind.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from './app';
-import './core/analytics';
-import registerServiceWorker from './serviceWorkerRegistration';
 
 // attachLogger();
 

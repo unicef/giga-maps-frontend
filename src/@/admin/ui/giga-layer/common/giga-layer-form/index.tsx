@@ -3,6 +3,7 @@ import { Button, Form } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { FormEvent } from 'react'
 
+import { defaultGigaLayerForm } from '~/@/admin/constants/giga-layer.constant';
 import { $currentGigaLayerItem, $formData, onUdpateGigaLayerForm } from '~/@/admin/models/giga-layer.model';
 import { LayerStatusType, LayerTypeChoices } from '~/@/admin/types/giga-layer.type';
 import { $countryList } from '~/@/api-docs/models/explore-api.model';
@@ -15,7 +16,6 @@ import GigaBenchmarkForm from './giga-benchmark-form.view';
 import GigaFields from './giga-fields-form.view';
 import GigaLegendForm from './giga-legend-form.view';
 import { GigaUploadIcon } from './giga-upload-icon.view';
-import { defaultGigaLayerForm } from '~/@/admin/constants/giga-layer.constant';
 
 const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
   const formData = useStore($formData);
@@ -26,6 +26,7 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
   const isLive = formData.type === LayerTypeChoices.LIVE;
 
   const updateOrCreateLayer = async () => {
+    const entityTypeId = Number(formData.entityType);
     try {
       const body = {
         code: formData.code,
@@ -39,8 +40,9 @@ const GigaLayerForm = ({ isEditMode }: { isEditMode: boolean }) => {
         data_source_column_function: isLive ? formData.supportedFunctions : null,
         applicable_countries: countryList.filter((country) => formData.applicableCountries.includes(country.id)).map((item) => ({ name: item.code })),
         legend_configs: { ...defaultGigaLayerForm.legendConfigs, ...formData.legendConfigs },
-        global_benchmark: { ...(isLive ? { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } : { benchmark_name: formData?.globalBenchmark?.benchmark_name ?? 'Global' }) },
+        global_benchmark: (isLive ? { ...formData.globalBenchmark, convert_unit: formData.benchmarkConvertUnit } : { benchmark_name: formData?.globalBenchmark?.benchmark_name ?? 'Global' }),
         ...(!layerItem?.status ? { status: LayerStatusType.DRAFT } : {}),
+        entity_type: entityTypeId,
       }
 
       await createDataLayerFx({

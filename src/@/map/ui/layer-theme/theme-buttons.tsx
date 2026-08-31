@@ -1,50 +1,39 @@
-import { Settings } from '@carbon/icons-react'
-import { IconButton } from '@carbon/react'
 import { useStore } from 'effector-react';
-import { useTheme } from 'styled-components';
-
-import { $isProductTour, $showThemeLayer, $sidebarHeight, onShowLegend, onShowThemeLayer } from '~/@/sidebar/sidebar.model';
-import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
-
-import { ActiveButtonWrapper } from '../legend-info/legend-button.style';
-import { ThemeWrapper } from './theme-button.style'
-import ThemePopup from './theme-popup';
-import { useEffect } from 'react';
+import { Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+
+import { $isProductTour, $showThemeLayer, onShowThemeLayer } from '~/@/sidebar/sidebar.model';
+import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
+import { cn } from '~/lib/cn';
+
+import MapControlButton from './map-control-button';
+import ThemePopup from './theme-popup';
 
 
 const ThemeButtons = () => {
   const { t } = useTranslation();
   const isProductTour = useStore($isProductTour);
-  const theme = useTheme();
   const isOpen = useStore($showThemeLayer)
   const openLayerTheme = () => {
     onShowThemeLayer(!isOpen);
   };
-  useEffect(() => {
-    if (isOpen) {
-      onShowLegend(false);
-    }
-  }, [isOpen]);
 
-  const sidebarHeight = useStore($sidebarHeight)
   return (
     <>
-      <ThemeWrapper className="theme-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
+      <div className={cn('theme-wrapper-popup relative! overflow-visible!')}>
         <ThemePopup open={isOpen} setOpen={onShowThemeLayer}>
-          <ActiveButtonWrapper >
-            <IconButton
-              align="left"
-              size="sm"
-              label={t("theme-layers")}
-              onClick={openLayerTheme}>
-              <Settings />
-            </IconButton>
-          </ActiveButtonWrapper>
+          <MapControlButton
+            active={isOpen}
+            aria-label={t('theme-layers')}
+            label={t('theme-layers')}
+            onClick={openLayerTheme}
+          >
+            <Settings className="size-4" />
+          </MapControlButton>
         </ThemePopup>
-      </ThemeWrapper>
+      </div>
       {isOpen && <ClickAnywhere
-        classList={['theme-wrapper-popup']}
+        classList={['theme-wrapper-popup', 'theme-layer-popover-content']}
         trigger={isOpen}
         outsideClick={() => {
           if (!isProductTour) {

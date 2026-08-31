@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import ModalUploadImage from "../modal-upload-image";
 
 describe('ModalUploadImage', () => {
-  const setOpen = jest.fn();
+  const setOpen = vi.fn();
   it('should render the modal when open is true', () => {
     render(<ModalUploadImage open={true} setOpen={setOpen} />)
     expect(screen.getByText('Image Upload')).toBeInTheDocument();

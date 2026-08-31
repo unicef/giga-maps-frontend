@@ -2,24 +2,27 @@ import { Map } from 'mapbox-gl'
 import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from '../update-lookup-source-map'
 import { Country, CountryBasic } from '~/api/types'
 
-jest.mock('../../country.model')
+vi.mock('../../country.model')
+vi.mock('../../country.utils', () => ({
+  getAdminCountrySource: vi.fn((level) => `admin${level}`),
+}))
 
 describe('updateLookupSourceForAdmin0', () => {
-  let map: jest.Mocked<Map>
+  let map: vi.Mocked<Map>
   let countries: CountryBasic[]
 
   beforeEach(() => {
     map = {
-      getSource: jest.fn(),
-      addSource: jest.fn(),
-      removeSource: jest.fn(),
-      setFeatureState: jest.fn(),
+      getSource: vi.fn(),
+      addSource: vi.fn(),
+      removeSource: vi.fn(),
+      setFeatureState: vi.fn(),
     } as any
 
     countries = [
-      { id: 1, name: 'Country 1', code: 'C1' },
-      { id: 2, name: 'Country 2', code: 'C2' },
-    ]
+      { id: 1, name: 'Country 1', code: 'C1', admin_metadata: { mapbox_id: '1' } },
+      { id: 2, name: 'Country 2', code: 'C2', admin_metadata: { mapbox_id: '2' } },
+    ] as any
   })
 
   it('should return early if map is null', async () => {
@@ -43,21 +46,21 @@ describe('updateLookupSourceForAdmin0', () => {
 })
 
 describe('updateLookupSourceForAdmin1', () => {
-  let map: jest.Mocked<Map>
+  let map: vi.Mocked<Map>
   let admin1List: Country['admin1_metadata']
 
   beforeEach(() => {
     map = {
-      getSource: jest.fn(),
-      addSource: jest.fn(),
-      removeSource: jest.fn(),
-      setFeatureState: jest.fn(),
+      getSource: vi.fn(),
+      addSource: vi.fn(),
+      removeSource: vi.fn(),
+      setFeatureState: vi.fn(),
     } as any
 
     admin1List = [
-      { id: 1, name: 'Admin1' },
-      { id: 2, name: 'admin2' },
-    ]
+      { id: 1, name: 'Admin1', mapbox_id: 'a1' },
+      { id: 2, name: 'admin2', mapbox_id: 'a2' },
+    ] as any
   })
 
   it('should return early if map is null', async () => {
@@ -80,3 +83,4 @@ describe('updateLookupSourceForAdmin1', () => {
     expect(map.setFeatureState).toHaveBeenCalled();
   })
 })
+

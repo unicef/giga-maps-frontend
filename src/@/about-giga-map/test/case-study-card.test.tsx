@@ -1,4 +1,3 @@
-import { describe, test, } from '@jest/globals';
 import { render, } from '@testing-library/react';
 
 import CaseStudyCard from '../common/case-study-card';

@@ -1,20 +1,20 @@
-import { describe, expect, test, } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
 import FilterRangeFields from '../filter-range-fields';
 import FilterCommonFields from '../filter-common-fields';
 import { useStore } from 'effector-react';
 import { $filterColumnList, $filterTypeChoices, $filterQueryParamsChoices, $formFilterData } from '~/@/admin/models/filter-list.model';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { $entityTypes } from '~/@/admin/models/admin-model';
+import { testWrapper } from '~/tests/test-wrapper';
 
 
-jest.mock('effector-react', () => ({
-  useStore: jest.fn()
+vi.mock('effector-react', () => ({
+  useStore: vi.fn()
 }));
 
 describe('FilterRangeFields', () => {
 
   beforeEach(() => {
-    (useStore as jest.Mock).mockImplementation((store) => {
+    (useStore as vi.Mock).mockImplementation((store) => {
       if (store === $filterColumnList) {
         return [];
       }
@@ -26,6 +26,9 @@ describe('FilterRangeFields', () => {
       }
       if (store === $formFilterData) {
         return {};
+      }
+      if (store === $entityTypes) {
+        return [];
       }
     });
   });
@@ -46,7 +49,7 @@ describe('FilterRangeFields', () => {
 
 describe('FilterCommonFields', () => {
   beforeEach(() => {
-    (useStore as jest.Mock).mockImplementation((store) => {
+    (useStore as vi.Mock).mockImplementation((store) => {
       if (store === $filterColumnList) {
         return [{
           id: 1,
@@ -85,6 +88,9 @@ describe('FilterCommonFields', () => {
           query_param_filter: 'param1'
         };
       }
+      if (store === $entityTypes) {
+        return [];
+      }
     });
   });
 
@@ -110,3 +116,6 @@ describe('FilterCommonFields', () => {
     expect(nameInput.value).toBe('Test Filter');
   });
 });
+
+
+

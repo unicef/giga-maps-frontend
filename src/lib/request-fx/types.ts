@@ -5,7 +5,7 @@ export type Subscription = {
   (): void;
 };
 
-export default interface Controller {
+export interface Controller {
   getSignal: () => AbortSignal;
   cancel: Event<void>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

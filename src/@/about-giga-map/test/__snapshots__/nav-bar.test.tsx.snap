@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`NavBar Component renders Navbar snapshot 1`] = `
+exports[`NavBar Component > renders Navbar snapshot 1`] = `
 <DocumentFragment>
   .c0 {
   display: flex;
@@ -45,19 +45,19 @@ exports[`NavBar Component renders Navbar snapshot 1`] = `
   margin-left: 3rem;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .c0 {
     padding: 0rem;
   }
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .c1 img {
     display: none;
   }
 }
 
-@media (max-width:968px) {
+@media (max-width: 968px) {
   .c2 button {
     margin-left: 0;
   }

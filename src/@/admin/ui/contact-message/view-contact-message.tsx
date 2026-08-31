@@ -13,7 +13,7 @@ import { BottomButtonWrapper, ContactMessageTextWrapper, InputBoxWrapper, InputC
 const ViewContactMessage = () => {
 
   const formContactMessage = useStore($formContactMessage);
-  const { id } = useStore(contactMessageView.params);
+  const { id } = useStore(contactMessageView.params) || {};
   useEffect(() => {
     if (id) {
       void getContactMessageIdFx({ id })

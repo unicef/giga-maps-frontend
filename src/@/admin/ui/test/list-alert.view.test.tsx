@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react"
 
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import ListAlertView from "../alerts/list-alert.view"
 
@@ -10,3 +10,4 @@ describe("ListAlertView", () => {
     expect(asFragment()).toMatchSnapshot();
   })
 })
+

@@ -2,7 +2,7 @@ import { fireEvent, getByTestId, render, screen, waitFor } from "@testing-librar
 import { createEvent } from "effector"
 
 import { mockSchoolList } from "~/tests/data/school-list";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { $schoolListAdmin } from "../../models/school-model";
 import MainAdminSchoolView from "../schools/main-admin-school-view";
@@ -23,23 +23,25 @@ describe("School Crud Tab", () => {
   })
 
   test('change tab by click', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<MainAdminSchoolView onClick={handleClick} />));
     const button = getByTestId('admin-School-tab');
     fireEvent.click(button);
   })
 
-  test("Select School and delete", () => {
+  test("Select School and delete", async () => {
     setSchoolList(mockSchoolList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchools onClick={handleClick} />));
     const checkboxes = container.querySelectorAll('.cds--checkbox');
     if (checkboxes.length > 0) {
       fireEvent.click(checkboxes[1]);
       const button = container.querySelector('#delete-selected-School');
       fireEvent.click(button)
-      const yesButton = screen.getByText('Yes');
-      fireEvent.click(yesButton);
+      await waitFor(() => {
+        const yesButton = screen.getByRole('button', { name: /yes/i });
+        fireEvent.click(yesButton);
+      });
     } else {
       console.error('No button with class name found');
     }
@@ -48,7 +50,7 @@ describe("School Crud Tab", () => {
 
   test("render edit EditSchool by click on edit , and field and sumbit", () => {
     setSchoolList(mockSchoolList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchools onClick={handleClick} />));
     const button = container.querySelector(`#admin-edit-School-${mockSchoolList.results[0]?.id}`);
     fireEvent.click(button)
@@ -83,7 +85,7 @@ describe("School Crud Tab", () => {
   })
 
   test("Render import csv pop up", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(<ListSchools onClick={handleClick} />);
     const importCsv = container.querySelector('#admin-import-csv');
     fireEvent.click(importCsv)
@@ -102,3 +104,5 @@ describe("School Crud Tab", () => {
     render(<AddSchools />)
   })
 })
+
+

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Background Task Crud render AdminBackgroundTask 1`] = `
+exports[`Background Task Crud > render AdminBackgroundTask 1`] = `
 <DocumentFragment>
   .c1 >h3 {
   color: #FFF;
@@ -272,7 +272,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
               />
             </svg>
           </button>
@@ -642,7 +642,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>
@@ -700,7 +700,7 @@ exports[`Background Task Crud render AdminBackgroundTask 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>

@@ -1,14 +1,17 @@
+import { EntityType } from '~/@/entities/types/base-entity.type';
+
 import { changeLayersFx } from '../effects/add-layers-fx';
 import { clearMapDataFx } from '../effects/add-layers-fx';
 import { updateConnectivityFilter } from '../effects/add-layers-fx';
+import { filterConnectivityList } from '../utils';
 
-jest.mock('../utils')
+vi.mock('../utils');
 describe('changeLayersFx', () => {
   let map: any;
   beforeEach(() => {
     map = {
-      getStyle: jest.fn(),
-    }
+      getStyle: vi.fn(),
+    };
   });
 
   it('should return early if map not provided', async () => {
@@ -23,8 +26,8 @@ describe('changeLayersFx', () => {
       lastSelectedLayer: null,
       refresh: true,
       mapRoute: {
-        map: false
-      }
+        map: false,
+      },
     } as any);
     expect(result).toBeUndefined();
   });
@@ -35,27 +38,25 @@ describe('changeLayersFx', () => {
       selectedLayerIds: [1],
       lastSelectedLayer: null,
       mapRoute: {
-        map: true
-      }
+        map: true,
+      },
     } as any);
     expect(result).toBeUndefined();
   });
-
 });
 
 describe('clearMapDataFx', () => {
-
   let map: any;
   beforeEach(() => {
     map = {
-      removeSource: jest.fn(),
+      removeSource: vi.fn(),
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
-          layers: []
-        }
-      })
-    }
+          layers: [],
+        },
+      }),
+    };
   });
 
   it('should return early if map is not provided', async () => {
@@ -66,19 +67,17 @@ describe('clearMapDataFx', () => {
   it('should call cancelAnimation', () => {
     clearMapDataFx({ map });
   });
-
 });
 
 import { updateCoverageFilter } from '../effects/add-layers-fx';
 import { DEFAULT_SOURCE } from '../map.constant';
 
 describe('updateCoverageFilter', () => {
-
   it('should return early if map is not provided', async () => {
     const result = await updateCoverageFilter({
       layerUtils: {},
       coverageFilter: {},
-      lastSelectedLayer: {}
+      lastSelectedLayer: {},
     } as any);
 
     expect(result).toBeUndefined();
@@ -86,15 +85,17 @@ describe('updateCoverageFilter', () => {
 
   it('should set filter on map layer if static layer', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      coverageLayerId: 2,
-      currentLayerTypeUtils: {
-        isStatic: true
-      }
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      coverageLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isStatic: true,
+        },
+      },
     };
     const coverageFilter = {};
     const lastSelectedLayer = {};
@@ -102,8 +103,8 @@ describe('updateCoverageFilter', () => {
     updateCoverageFilter({
       map,
       layerUtils,
-      coverageFilter,
-      lastSelectedLayer
+      coverageFilterByEntity: { [EntityType.SCHOOL]: coverageFilter },
+      lastSelectedLayer,
     } as any);
 
     expect(map.setFilter).toHaveBeenCalled();
@@ -111,15 +112,17 @@ describe('updateCoverageFilter', () => {
 
   it('should not set filter if not static layer', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      coverageLayerId: 2,
-      currentLayerTypeUtils: {
-        isStatic: false
-      }
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      coverageLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isStatic: false,
+        },
+      },
     };
     const coverageFilter = {};
     const lastSelectedLayer = {};
@@ -127,23 +130,21 @@ describe('updateCoverageFilter', () => {
     updateCoverageFilter({
       map,
       layerUtils,
-      coverageFilter,
-      lastSelectedLayer
+      coverageFilterByEntity: { [EntityType.SCHOOL]: coverageFilter },
+      lastSelectedLayer,
     } as any);
 
     expect(map.setFilter).not.toHaveBeenCalled();
   });
-
 });
 
 describe('updateConnectivityFilter', () => {
-
   it('should return early if map is not provided', async () => {
     const result = await updateConnectivityFilter({
       map: null,
       layerUtils: {},
-      connectivitySpeedFilter: {},
-      lastSelectedLayer: {}
+      connectivitySpeedFilterByEntity: {},
+      lastSelectedLayer: {},
     } as any);
 
     expect(result).toBeUndefined();
@@ -151,28 +152,30 @@ describe('updateConnectivityFilter', () => {
 
   it('should set filter on live layer if map and layer provided', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerId: 2,
-      currentLayerTypeUtils: {
-        isLive: true
-      }
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: true,
+        },
+      },
     };
     const connectivitySpeedFilter = {
       range: {
         start: 1000,
-        end: 2000
-      }
+        end: 2000,
+      },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
-      lastSelectedLayer: {}
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).toHaveBeenCalled();
@@ -180,22 +183,24 @@ describe('updateConnectivityFilter', () => {
 
   it('should not set filter on static layer', () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
     };
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerId: 2,
-      currentLayerTypeUtils: {
-        isLive: false
-      }
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: false,
+        },
+      },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter: {},
-      lastSelectedLayer: {}
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: {} },
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).not.toHaveBeenCalled();
@@ -205,8 +210,8 @@ describe('updateConnectivityFilter', () => {
     const result = await updateConnectivityFilter({
       map: null,
       layerUtils: {},
-      connectivitySpeedFilter: null,
-      lastSelectedLayer: {}
+      connectivitySpeedFilterByEntity: null,
+      lastSelectedLayer: {},
     } as any);
 
     expect(result).toBeUndefined();
@@ -214,64 +219,141 @@ describe('updateConnectivityFilter', () => {
 
   it('updateConnectivityFilter: should set correct filter if live layer', async () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
     };
 
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerId: 2,
-      currentLayerTypeUtils: {
-        isLive: true
-      }
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: true,
+        },
+      },
     };
 
     const connectivitySpeedFilter = {
       range: {
         start: 1000,
-        end: 2000
-      }
+        end: 2000,
+      },
     };
 
     await updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
-      lastSelectedLayer: {}
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).toHaveBeenCalled();
   });
 
-  it('updateConnectivityFilter: should not set filter if layer is not live', () => {
+  it('updateConnectivityFilter: should use dynamic filter keys for country download layer', async () => {
     const map = {
-      getLayer: jest.fn(() => true),
-      setFilter: jest.fn()
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
     };
 
     const layerUtils = {
-      selectedLayerId: 1,
-      globalLayerId: 2,
-      currentLayerTypeUtils: {
-        isLive: false
-      }
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 1 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: true,
+        },
+      },
+    };
+
+    const connectivitySpeedFilter = {
+      good: true,
+      moderate: true,
+      bad: true,
+      unknown: true,
+    };
+
+    await updateConnectivityFilter({
+      map,
+      layerUtils,
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
+      mapRoute: { country: true },
+      lastSelectedLayer: {},
+    } as any);
+
+    expect(filterConnectivityList).toHaveBeenCalledWith(
+      connectivitySpeedFilter,
+      true,
+    );
+    expect(map.setFilter).toHaveBeenCalled();
+  });
+
+  it('updateConnectivityFilter: should use active health entity on global map without layer metadata', async () => {
+    const connectivitySpeedFilter = {
+      good: true,
+      moderate: true,
+      bad: true,
+      unknown: true,
+    };
+    const map = {
+      getLayer: vi.fn((id) => id === 'entity-selected-health-10'),
+      setFilter: vi.fn(),
+    };
+
+    await updateConnectivityFilter({
+      map,
+      layerUtils: {
+        selectedLayerId: null,
+        selectedLayerIdByEntity: {},
+        globalLayerDataByEntity: { [EntityType.HEALTH]: { id: 10 } },
+        currentLayerTypeUtils: {
+          isLive: false,
+        },
+        currentLayerTypeUtilsByEntity: {},
+      },
+      connectivitySpeedFilterByEntity: { [EntityType.HEALTH]: connectivitySpeedFilter },
+      mapRoute: { map: true },
+      activeEntityTypes: [EntityType.HEALTH],
+      lastSelectedLayer: {},
+    } as any);
+
+    expect(map.getLayer).toHaveBeenCalledWith('entity-selected-health-10');
+    expect(filterConnectivityList).toHaveBeenCalledWith(
+      connectivitySpeedFilter,
+      false,
+    );
+    expect(map.setFilter).toHaveBeenCalled();
+  });
+  it('updateConnectivityFilter: should not set filter if layer is not live', () => {
+    const map = {
+      getLayer: vi.fn(() => true),
+      setFilter: vi.fn(),
+    };
+
+    const layerUtils = {
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      globalLayerDataByEntity: { [EntityType.SCHOOL]: { id: 2 } },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: {
+          isLive: false,
+        },
+      },
     };
 
     const connectivitySpeedFilter = {
       range: {
         start: 1000,
-        end: 2000
-      }
+        end: 2000,
+      },
     };
 
     updateConnectivityFilter({
       map,
       layerUtils,
-      connectivitySpeedFilter,
-      lastSelectedLayer: {}
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: connectivitySpeedFilter },
+      lastSelectedLayer: {},
     } as any);
 
     expect(map.setFilter).not.toHaveBeenCalled();
   });
-
 });

@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DataLayerMainView render DataLayerMainView and take snapshot 1`] = `<DocumentFragment />`;
+exports[`DataLayerMainView > render DataLayerMainView and take snapshot 1`] = `<DocumentFragment />`;
 
-exports[`DataLayerMainView render ListGigaLayer  1`] = `
+exports[`DataLayerMainView > render ListGigaLayer  1`] = `
 <DocumentFragment>
   .c1 >h3 {
   color: #FFF;
@@ -48,7 +48,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
         class="cds--tooltip-trigger__wrapper"
       >
         <button
-          aria-labelledby="tooltip-:r1d:"
+          aria-labelledby="tooltip-:r1b:"
           class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
           type="button"
         >
@@ -72,7 +72,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
       <span
         aria-hidden="true"
         class="cds--popover"
-        id="tooltip-:r1d:"
+        id="tooltip-:r1b:"
         role="tooltip"
       >
         <span
@@ -185,7 +185,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
               />
             </svg>
           </button>
@@ -197,7 +197,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r1g:"
+              aria-labelledby="tooltip-:r1e:"
               class="cds--btn--icon-only cds--btn cds--btn--secondary"
               type="submit"
             >
@@ -223,7 +223,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r1g:"
+            id="tooltip-:r1e:"
             role="tooltip"
           >
             <span
@@ -265,11 +265,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
       </a>
     </div>
   </section>
-  .c4 {
-  padding: 1rem 1rem 1.5rem 1rem;
-}
-
-.c3 >tr >td {
+  .c3 >tr >td {
   background: #FFFFFF;
   color: #474747;
   font-family: Open Sans;
@@ -300,56 +296,8 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
   overflow-x: initial;
 }
 
-.c7 {
-  margin-left: 0.5rem;
-  color: #277AFF;
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1rem;
-  letter-spacing: 0.02rem;
-  text-decoration-line: underline;
-  cursor: pointer;
-}
-
-.c6 :focus {
-  outline: none!important;
-}
-
-.c6 .cds--popover-content .cds--toggletip-content {
-  padding-top: 0.5rem;
-}
-
-.c6 .cds--popover-caret {
-  display: none!important;
-}
-
-.c8 .list-content {
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1rem;
-}
-
 .c0 {
   max-height: calc(100vh - 13.2rem);
-}
-
-.c5 {
-  color: #474747;
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1rem;
-  background: #B9EFCB;
-  border-radius: 62rem;
-  width: max-content;
-  height: 1.5rem;
-  padding: 0.3rem 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 <div
@@ -376,6 +324,15 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                   class="cds--table-header-label"
                 >
                   Unique Code
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="cds--table-header-label"
+                >
+                  Entity Type
                 </div>
               </th>
               <th
@@ -446,108 +403,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <tbody
             aria-live="polite"
             class="c3"
-          >
-            <tr>
-              <td
-                class="c4"
-              >
-                <a
-                  href="/admin/giga-layer/view/8"
-                />
-              </td>
-              <td
-                class="c4"
-              >
-                <a
-                  href="/admin/giga-layer/view/8"
-                >
-                  School 
-                </a>
-              </td>
-              <td
-                class="c4"
-              >
-                <span>
-                  Daily Check APP and MLab,
-                </span>
-                <span>
-                  QoS
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                <span>
-                  Upload Speed
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                <span>
-                  V1.0
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                <div
-                  class="c5"
-                  color="#B9EFCB"
-                >
-                  Published
-                </div>
-              </td>
-              <td
-                class="c4"
-              >
-                3
-                <span
-                  class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c6"
-                >
-                  <button
-                    aria-controls="id-:r1r:"
-                    aria-expanded="false"
-                    aria-label="Show information"
-                    class="cds--toggletip-button"
-                    type="button"
-                  >
-                    <span
-                      class="c7"
-                    >
-                      View list
-                    </span>
-                  </button>
-                  <span
-                    class="cds--popover"
-                    id="id-:r1r:"
-                  >
-                    <span
-                      class="cds--popover-content c8"
-                    >
-                      <div
-                        class="cds--toggletip-content"
-                      >
-                        <p
-                          class="list-content"
-                        >
-                          Afghanistan, Åland Islands
-                        </p>
-                      </div>
-                    </span>
-                    <span
-                      class="cds--popover-caret"
-                    />
-                  </span>
-                </span>
-              </td>
-              <td
-                class="c4"
-              >
-                Test Admin
-              </td>
-            </tr>
-          </tbody>
+          />
         </table>
       </div>
     </div>
@@ -584,8 +440,8 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
     >
       <label
         class="cds--pagination__text"
-        for="cds-pagination-select-:r1s:"
-        id="cds-pagination-select-:r1s:-count-label"
+        for="cds-pagination-select-:r1q:"
+        id="cds-pagination-select-:r1q:-count-label"
       >
         Items per page
       </label>
@@ -603,7 +459,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r1s:"
+                id="cds-pagination-select-:r1q:"
                 title=""
               >
                 <option
@@ -649,7 +505,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>
@@ -659,7 +515,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
       <span
         class="cds--pagination__text cds--pagination__items-count"
       >
-        1–2 of 2 items
+        0–0 of 0 items
       </span>
     </div>
     <div
@@ -673,7 +529,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
         >
           <label
             class="cds--label cds--visually-hidden"
-            for="cds-pagination-select-:r1s:-right"
+            for="cds-pagination-select-:r1q:-right"
           >
             Page number, of 1 pages
           </label>
@@ -685,7 +541,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             >
               <select
                 class="cds--select-input"
-                id="cds-pagination-select-:r1s:-right"
+                id="cds-pagination-select-:r1q:-right"
                 title=""
               >
                 <option
@@ -707,7 +563,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
               </svg>
             </div>
@@ -729,7 +585,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r1t:"
+              aria-labelledby="tooltip-:r1r:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -753,7 +609,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r1t:"
+            id="tooltip-:r1r:"
             role="tooltip"
           >
             <span
@@ -773,7 +629,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:r1v:"
+              aria-labelledby="tooltip-:r1t:"
               class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
               disabled=""
               type="button"
@@ -797,7 +653,7 @@ exports[`DataLayerMainView render ListGigaLayer  1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:r1v:"
+            id="tooltip-:r1t:"
             role="tooltip"
           >
             <span

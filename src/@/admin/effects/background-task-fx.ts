@@ -15,7 +15,7 @@ export const getBackgroundTaskListFx = createEffect(({ page, pageSize, search }:
   }
 
   return createRequestAuthFx({
-    url: url
+    url
   }) as Promise<APIListType<BackgroundTask>>
 })
 

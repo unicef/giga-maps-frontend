@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ListAlertView Render ListAlertView 1`] = `
+exports[`ListAlertView > Render ListAlertView 1`] = `
 <DocumentFragment>
   .c1 >h3 {
   color: #FFF;

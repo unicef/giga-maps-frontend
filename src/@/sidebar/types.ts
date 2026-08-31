@@ -12,6 +12,8 @@ export type SortKey =
 
 export type Tabs = 'map' | 'content' | 'controls';
 
+export type AccordionScope = 'global' | 'country';
+
 export type CoverageStat = {
   "total_schools": number,
   "connected_schools": {
@@ -54,6 +56,7 @@ export enum LayerTypeChoices {
 }
 export interface LayerType {
   id: number
+  code: string
   name: string
   description: string
   icon: string;
@@ -80,4 +83,6 @@ export interface LayerType {
     round_unit_value: string;
   },
   legend_configs: Record<string, { values: string[], labels: string }>
+  entity_type?: number | string;
+  entity_type__code?: string;
 }

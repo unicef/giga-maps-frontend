@@ -103,7 +103,7 @@ export const AdminSubSingleTab = styled(SideNavMenuItem)`
         height:3rem !important ;
         padding-left:2.7rem !important;
     }
-    
+
 `
 export const LogoutButton = styled.div`
 border: 0.0625rem solid #E6E6E6;
@@ -468,7 +468,40 @@ export const MultiSelectLayerConfig = styled(MultiSelect) <{ $isDark?: boolean }
             ${({ $isDark }) => $isDark && css`
             background-color: #000;
             `}
-    } 
+    }
+
+    .cds--list-box__menu-item {
+        block-size: auto;
+        min-block-size: 2.5rem;
+    }
+
+    .cds--list-box__menu-item__option {
+        align-items: flex-start;
+        block-size: auto;
+        min-block-size: 2.5rem;
+        padding-block: 0.5rem;
+    }
+
+    .cds--list-box__menu .cds--checkbox-label {
+        align-items: flex-start;
+    }
+
+    .cds--list-box__menu .cds--checkbox-label-text {
+        overflow: visible;
+        white-space: normal;
+    }
+
+    .cds--list-box__menu .cds--tag {
+        flex-shrink: 0;
+        max-inline-size: none;
+        white-space: nowrap;
+    }
+
+    .cds--list-box__menu .cds--tag__label {
+        overflow: visible;
+        text-overflow: clip;
+        white-space: nowrap;
+    }
 
 `
 

@@ -5,7 +5,7 @@ import { defaultGigaLayerForm } from "~/@/admin/constants/giga-layer.constant";
 import "~/core/i18n/instance"
 
 describe('CountryLegendBenchmark Component', () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   const mockGlobalConfig: LegendConfigType = {
     legend1: { values: ['value1', 'value2'], labels: 'Label 1', tooltip: 'Tooltip 1' },

@@ -1,53 +1,212 @@
-import { VectorSource } from "mapbox-gl";
+import { Map, VectorSource } from 'mapbox-gl';
 
-import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
+import type { EntityConfig } from '~/@/entities/config/entity-config.types';
+import { DEFAULT_ENTITY_REGISTRY } from '~/@/entities/config/entity-registry';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 
-import { ChangeLayerOptions } from "../map.types";
-import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
-import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from "../map.constant";
+import {
+  CONNECTIVITY_STATUS_SOURCE,
+  DEFAULT_SOURCE,
+  getEntitySelectedLayerId,
+  getEntityRenderedLayerIds,
+  getEntityStatusLayerId,
+  getEntityZoomCircleLayerId,
+  getSourceLayerName,
+} from '../map.constant';
 
-let animateCircleHandler = { requestId: 0 }; // to clear animation;
-const ignoreCountriesForBounds = ['fj']
-export const getLayerIdsAndLastChange = ({ selectedLayerIds, refresh, lastSelectedLayer }: Pick<ChangeLayerOptions, "selectedLayerIds" | "refresh" | "lastSelectedLayer">) => {
-  const { schoolId: schoolLayerId, selectedId: selectedLayerId } = selectedLayerIds;
-  const checkSelectionChange = selectedLayerId && selectedLayerId !== lastSelectedLayer.layerId;
-  const isLastSelectionChange = refresh || !!checkSelectionChange;
-  return { schoolLayerId, selectedLayerId, isLastSelectionChange };
+export const DEFAULT_ENTITY_DISTRIBUTION_FILTER = {
+  good: true,
+  moderate: true,
+  bad: true,
+  unknown: true,
+};
+import { ChangeLayerOptions } from '../map.types';
+import {
+  animateCircles,
+  checkSourceAvailable,
+  createEntitySymbolLayer,
+  createSchoolLayer,
+  createSelectedLayer,
+  createSelectedSymbolLayer,
+  createSource,
+  deleteSourceAndLayers,
+  filterConnectivityList,
+  filterCoverageList,
+  filterSchoolStatus,
+  generateLayerUrls,
+  generateStaticLayerUrl,
+  getCircleMaxZoom,
+  getSymbolMinZoom,
+  hideLayer,
+} from '../utils';
+
+/** Per-entity animation handlers (supports simultaneous animations for multiple entity types) */
+let animateCircleHandlers: Record<string, { requestId: number }> = {};
+
+const ignoreCountriesForBounds = ['fj'];
+
+const getSchoolCircleConfig = (
+  entityRegistry?: Partial<Record<EntityType, EntityConfig>>,
+): EntityConfig =>
+  entityRegistry?.[EntityType.SCHOOL] ??
+  DEFAULT_ENTITY_REGISTRY[EntityType.SCHOOL];
+
+export const getEntityGlobalLayerId = (
+  layerUtils: ChangeLayerOptions['layerUtils'],
+  entityType: EntityType,
+) => layerUtils.globalLayerDataByEntity?.[entityType]?.id ?? null;
+
+export const getFirstGlobalLayerId = (
+  layerUtils: ChangeLayerOptions['layerUtils'],
+  entityTypes: EntityType[],
+) =>
+  entityTypes
+    .map((entityType) => getEntityGlobalLayerId(layerUtils, entityType))
+    .find((id): id is number => Boolean(id)) ?? null;
+
+const moveEntityStatusLayersToTop = (map: Map, entityTypes: EntityType[]) => {
+  if (
+    typeof map.getLayer !== 'function' ||
+    typeof map.moveLayer !== 'function'
+  ) {
+    return;
+  }
+
+  entityTypes.forEach((entityType) => {
+    const statusLayerId = getEntityStatusLayerId(entityType);
+    getEntityRenderedLayerIds(statusLayerId).forEach((layerId) => {
+      if (map.getLayer(layerId)) map.moveLayer(layerId);
+    });
+  });
+};
+
+const hideEntityLayerVariants = (map: Map, layerId: string) => {
+  getEntityRenderedLayerIds(layerId).forEach((renderedLayerId) =>
+    hideLayer(map, renderedLayerId),
+  );
+};
+
+export function cancelAnimation() {
+  Object.values(animateCircleHandlers).forEach((handler) => {
+    cancelAnimationFrame(handler.requestId);
+  });
+  animateCircleHandlers = {};
 }
 
-export const createSourceForMapAndCountry = async ({ map, schoolPageIds, schoolAdminId, countrySearch, connectivityBenchMark, selectedLayerId: layerId, connectivityFilter, layerUtils, mapRoute, country, lastSelectedLayer, admin1Data, isConnectivityStatus }: ChangeLayerOptions & { selectedLayerId: number | null; isConnectivityStatus?: boolean }) => {
+export const getLayerIdsAndLastChange = ({
+  selectedLayerIds,
+  refresh,
+  lastSelectedLayer,
+}: Pick<
+  ChangeLayerOptions,
+  'selectedLayerIds' | 'refresh' | 'lastSelectedLayer'
+>) => {
+  const selectedLayerIdByEntity: Partial<Record<EntityType, number | null>> =
+    selectedLayerIds?.selectedIdByEntity ?? {};
+  const lastLayerIdByEntity: Partial<Record<EntityType, number | null>> =
+    lastSelectedLayer?.layerIdByEntity ?? {};
+  const entityTypes = new Set([
+    ...Object.keys(selectedLayerIdByEntity),
+    ...Object.keys(lastLayerIdByEntity),
+  ]);
+  const checkSelectionChange = entityTypes.size
+    ? Array.from(entityTypes).some((entityType) => {
+      const typedEntityType = entityType as EntityType;
+      return (
+        selectedLayerIdByEntity[typedEntityType] !==
+        lastLayerIdByEntity[typedEntityType]
+      );
+    })
+    : false;
+  const isLastSelectionChange = refresh || checkSelectionChange;
+  return {
+    selectedLayerIdByEntity,
+    isLastSelectionChange,
+  };
+};
+
+export const createSourceForMapAndCountry = ({
+  map,
+  entityPageSelection,
+  schoolAdminId,
+  countrySearch,
+  connectivityBenchMarkByEntity,
+  selectedLayerId: layerId,
+  intervalByEntity,
+  intervalUnitByEntity,
+  layerUtils,
+  mapRoute,
+  country,
+  admin1Data,
+  activeEntityTypes,
+  entityRegistry,
+  isConnectivityStatus,
+}: ChangeLayerOptions & {
+  selectedLayerId: number | null;
+  isConnectivityStatus?: boolean;
+}) => {
   if (!map) return;
-  const sourceId = isConnectivityStatus ? CONNECTIVITY_STATUS_SOURCE : DEFAULT_SOURCE;
+  const sourceId = isConnectivityStatus
+    ? CONNECTIVITY_STATUS_SOURCE
+    : DEFAULT_SOURCE;
   if (!isConnectivityStatus) {
-    // cancel animation;
-    cancelAnimationFrame(animateCircleHandler.requestId)
+    // cancel all entity animations;
+    cancelAnimation();
   }
   // delete existing source;
   deleteSourceAndLayers({ map, sourceId });
   // create new source
-  const { coverageLayerId } = layerUtils;
+  const fallbackLayerId = mapRoute.map
+    ? getFirstGlobalLayerId(layerUtils, activeEntityTypes ?? [])
+    : layerId;
   if (!layerId) {
-    layerId = lastSelectedLayer.layerId ?? coverageLayerId;
+    layerId = fallbackLayerId;
   }
-  let admin1Id = mapRoute.schools ? schoolAdminId : admin1Data?.id;
-  if (mapRoute.schools) {
+  const isEntityDetailRoute = mapRoute.schools || mapRoute.entity;
+  let admin1Id = isEntityDetailRoute ? schoolAdminId : admin1Data?.id;
+  if (isEntityDetailRoute) {
     if (admin1Id) {
-      admin1Data = country?.admin1_metadata?.find(admin => admin.id === admin1Id) ?? null;
-    } else if (admin1Id === 0) {
-      admin1Id = undefined;
+      admin1Data =
+        country?.admin1_metadata?.find((admin) => admin.id === admin1Id) ??
+        null;
     } else {
-      return false;
+      admin1Id = undefined;
+      admin1Data = null;
     }
   }
   let url = null;
   if (!isConnectivityStatus) {
-    url = generateLayerUrls({ layerId, connectivityBenchMark, schoolPageIds, layerUtils, connectivityFilter, mapRoute, country, admin1Id, countrySearch });
+    url = generateLayerUrls({
+      layerId: fallbackLayerId,
+      activeEntityTypes,
+      connectivityBenchMarkByEntity,
+      entityPageSelection,
+      layerUtils,
+      intervalByEntity,
+      intervalUnitByEntity,
+      mapRoute,
+      country,
+      admin1Id,
+      countrySearch,
+      entityRegistry,
+    });
   } else {
-    url = generateStaticLayerUrl({ mapRoute, country, schoolPageIds, admin1Id, countrySearch });
+    url = generateStaticLayerUrl({
+      activeEntityTypes,
+      entityRegistry,
+      mapRoute,
+      country,
+      entityPageSelection,
+      admin1Id,
+      countrySearch,
+    });
   }
+  if (!url) return false;
   const options = {} as VectorSource;
-  if (!!country) {
-    const removeBounds = ignoreCountriesForBounds.includes(country.code.toLocaleLowerCase());
+  if (country) {
+    const removeBounds = ignoreCountriesForBounds.includes(
+      country.code.toLocaleLowerCase(),
+    );
     if (admin1Data) {
       options.bounds = admin1Data.bbox as VectorSource['bounds'];
     } else {
@@ -59,81 +218,343 @@ export const createSourceForMapAndCountry = async ({ map, schoolPageIds, schoolA
       options.maxzoom = 4;
     }
   }
-  createSource({ map, url, source: sourceId }, options)
+  createSource({ map, url, source: sourceId }, options);
   return true;
-}
+};
 
-
-export const createAndUpdateMapLayer = ({ map, mapRoute, connectivitySpeedFilter, coverageFilter, layerUtils, selectedLayerId, paintData, schoolLayerId, lastSelectedLayer, schoolLegends, isMobile }: ChangeLayerOptions & { selectedLayerId: number | null; schoolLayerId: number | null; }) => {
+export const createAndUpdateMapLayer = ({
+  map,
+  mapRoute,
+  connectivitySpeedFilterByEntity,
+  coverageFilterByEntity,
+  layerUtils,
+  selectedLayerIds,
+  paintData,
+  lastSelectedLayer,
+  isMobile,
+  activeEntityTypes,
+  entityRegistry,
+  country,
+}: ChangeLayerOptions & {
+  selectedLayerId: number | null;
+}) => {
   if (!map) return;
-  const { currentLayerTypeUtils, globalLayerId } = layerUtils;
-  const { isLive } = currentLayerTypeUtils;
-  const isDynamicLayer = !(selectedLayerId === globalLayerId);
+  const getIsEntityLive = (entityType: EntityType) =>
+    mapRoute.map ||
+    !!layerUtils.currentLayerTypeUtilsByEntity?.[entityType]?.isLive;
   const isSourceAvailable = checkSourceAvailable(map, DEFAULT_SOURCE);
-  const options: Record<string, any> = {
-    filter: isLive ? filterConnectivityList(connectivitySpeedFilter, isDynamicLayer) : filterCoverageList(coverageFilter, isDynamicLayer),
-    'source-layer': "default"
-  };
-  // create selected layer;
-  if (isSourceAvailable && selectedLayerId) {
-    if (isLive) {
-      animateCircleHandler = animateCircles({ map, id: getMapId(selectedLayerId) });
+
+  // Cancel all previous entity animations
+  cancelAnimation();
+
+  const entityTypes = activeEntityTypes ?? [];
+  const circleMaxZoom = getCircleMaxZoom({
+    countryCode: country?.code,
+    isGlobalView: Boolean(mapRoute.map),
+  });
+  const symbolMinZoom = getSymbolMinZoom(circleMaxZoom);
+
+  const hasSelectedEntityLayer = mapRoute.map
+    ? entityTypes.length > 0
+    : entityTypes.some((entityType) =>
+      Boolean(layerUtils.selectedLayerIdByEntity?.[entityType]),
+    );
+
+  // --- Selected layer (connectivity/coverage) per entity type ---
+  if (isSourceAvailable && hasSelectedEntityLayer) {
+    for (const entityType of entityTypes) {
+      const entityLayerId = mapRoute.map
+        ? getEntityGlobalLayerId(layerUtils, entityType)
+        : layerUtils.selectedLayerIdByEntity?.[entityType];
+      if (!entityLayerId) continue;
+      const isDynamicLayer = !mapRoute.map;
+      const sourceLayer = getSourceLayerName(entityType);
+      const layerIdStr = getEntitySelectedLayerId(entityType, entityLayerId);
+      const entityConnectivityFilter =
+        connectivitySpeedFilterByEntity?.[entityType] ??
+        DEFAULT_ENTITY_DISTRIBUTION_FILTER;
+      const entityCoverageFilter =
+        coverageFilterByEntity?.[entityType] ??
+        DEFAULT_ENTITY_DISTRIBUTION_FILTER;
+      const options: Record<string, unknown> = {
+        filter: getIsEntityLive(entityType)
+          ? filterConnectivityList(entityConnectivityFilter, isDynamicLayer)
+          : filterCoverageList(entityCoverageFilter, isDynamicLayer),
+        'source-layer': sourceLayer,
+      };
+
+      const config = entityRegistry?.[entityType] as EntityConfig | undefined;
+      const markerType = config?.markerType ?? 'circle';
+      const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
+      const circleLayerId = getEntityZoomCircleLayerId(layerIdStr);
+      const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);
+
+      if (getIsEntityLive(entityType) && markerType === 'circle') {
+        animateCircleHandlers[entityType] = animateCircles({
+          map,
+          id: layerIdStr,
+          entityConfig: config,
+          fallbackMarkerType: 'circle',
+        });
+      } else if (getIsEntityLive(entityType) && transitionZoom != null) {
+        animateCircleHandlers[entityType] = animateCircles({
+          map,
+          id: circleLayerId,
+          entityConfig: schoolCircleConfig,
+          fallbackMarkerType: 'circle',
+          maxZoom: transitionZoom,
+          zoomVariant: {
+            id: layerIdStr,
+            entityConfig: config,
+            fallbackMarkerType: 'symbol',
+            minZoom: symbolMinZoom,
+          },
+        });
+      } else if (getIsEntityLive(entityType)) {
+        animateCircleHandlers[entityType] = animateCircles({
+          map,
+          id: layerIdStr,
+          entityConfig: config,
+          fallbackMarkerType: 'symbol',
+        });
+      }
+
+      if (markerType === 'circle') {
+        hideLayer(map, circleLayerId);
+        createSelectedLayer(map, {
+          id: layerIdStr,
+          isMobile,
+          isLive: getIsEntityLive(entityType),
+          isDynamicLayer,
+          paintData,
+          mapRoute,
+          options,
+          entityConfig: config,
+        });
+      } else if (transitionZoom != null) {
+        createSelectedLayer(map, {
+          id: circleLayerId,
+          isMobile,
+          isLive: getIsEntityLive(entityType),
+          isDynamicLayer,
+          paintData,
+          mapRoute,
+          options: { ...options, maxzoom: transitionZoom },
+          entityConfig: schoolCircleConfig,
+        });
+        createSelectedSymbolLayer(map, {
+          id: layerIdStr,
+          symbol: config?.symbol ?? '\u25A0',
+          isMobile,
+          isLive: getIsEntityLive(entityType),
+          isDynamicLayer,
+          paintData,
+          mapRoute,
+          options: { ...options, minzoom: symbolMinZoom },
+          entityConfig: config,
+        });
+      } else {
+        hideLayer(map, circleLayerId);
+        createSelectedSymbolLayer(map, {
+          id: layerIdStr,
+          symbol: config?.symbol ?? '\u25A0',
+          isMobile,
+          isLive: getIsEntityLive(entityType),
+          isDynamicLayer,
+          paintData,
+          mapRoute,
+          options,
+          entityConfig: config,
+        });
+      }
     }
-    createSelectedLayer(map, {
-      id: getMapId(selectedLayerId),
-      isMobile,
-      isLive,
-      isDynamicLayer,
-      paintData,
-      mapRoute,
-      options
-    });
   } else {
-    // cancel animation;
-    cancelAnimationFrame(animateCircleHandler.requestId);
-    hideLayer(map, getMapId(lastSelectedLayer.layerId))
+    // hide previous selected layers for all entity types
+    for (const entityType of entityTypes) {
+      hideEntityLayerVariants(
+        map,
+        getEntitySelectedLayerId(
+          entityType,
+          lastSelectedLayer.layerIdByEntity?.[entityType] ?? null,
+        ),
+      );
+    }
   }
 
+  moveEntityStatusLayersToTop(map, entityTypes);
   if (!mapRoute.map) return;
-  // create school layer;
+
+  // --- Status layer (connectivity_status dots) per entity type in global view ---
   if (isSourceAvailable) {
-    createSchoolLayer(map, {
-      id: getMapId(SCHOOL_LAYER_ID),
-      paintData,
-      isMobile,
-      options: {
-        'source-layer': "default"
-      }, mapRoute
-    });
+    for (const entityType of entityTypes) {
+      const isStatusSelected = selectedLayerIds?.schoolIdByEntity?.[entityType];
+      if (!isStatusSelected) {
+        hideEntityLayerVariants(map, getEntityStatusLayerId(entityType));
+        continue;
+      }
+      const sourceLayer = getSourceLayerName(entityType);
+      const statusLayerId = getEntityStatusLayerId(entityType);
+      const config = entityRegistry?.[entityType] as EntityConfig | undefined;
+      const markerType = config?.markerType ?? 'circle';
+      const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
+      const circleLayerId = getEntityZoomCircleLayerId(statusLayerId);
+      const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);
+
+      if (markerType === 'circle') {
+        hideLayer(map, circleLayerId);
+        // Circle marker (school / legacy) — fast circle layer
+        createSchoolLayer(map, {
+          id: statusLayerId,
+          paintData,
+          isMobile,
+          options: {
+            'source-layer': sourceLayer,
+          },
+          mapRoute,
+          entityConfig: config,
+        });
+      } else if (transitionZoom != null) {
+        createSchoolLayer(map, {
+          id: circleLayerId,
+          paintData,
+          isMobile,
+          options: {
+            'source-layer': sourceLayer,
+            maxzoom: transitionZoom,
+          },
+          mapRoute,
+          entityConfig: schoolCircleConfig,
+        });
+        createEntitySymbolLayer(map, {
+          id: statusLayerId,
+          symbol: config?.symbol ?? '■',
+          paintData,
+          isMobile,
+          options: {
+            'source-layer': sourceLayer,
+            minzoom: symbolMinZoom,
+          },
+          mapRoute,
+          entityConfig: config,
+        });
+      } else {
+        hideLayer(map, circleLayerId);
+        // Symbol marker (health, etc.) — text-based symbol layer
+        const symbol = config?.symbol ?? '■';
+        createEntitySymbolLayer(map, {
+          id: statusLayerId,
+          symbol,
+          paintData,
+          isMobile,
+          options: {
+            'source-layer': sourceLayer,
+          },
+          mapRoute,
+          entityConfig: config,
+        });
+      }
+    }
+    moveEntityStatusLayersToTop(map, entityTypes);
   }
+};
 
-}
-
-export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintData, selectedLayerIds, schoolLegends, isMobile }: ChangeLayerOptions) => {
+export const createAndUpdateConnectiivtyStatusLayer = ({
+  map,
+  mapRoute,
+  paintData,
+  selectedLayerIds,
+  schoolLegendsByEntity,
+  isMobile,
+  activeEntityTypes,
+  entityRegistry,
+  country,
+}: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
-  const { schoolId: schoolLayerId } = selectedLayerIds;
-  const isSourceAvailable = checkSourceAvailable(map, CONNECTIVITY_STATUS_SOURCE);
-  // create school layer;
-  if (isSourceAvailable && schoolLayerId) {
-    createSchoolLayer(map, {
-      source: CONNECTIVITY_STATUS_SOURCE,
-      id: getMapId(SCHOOL_LAYER_ID),
-      paintData,
-      isMobile,
-      options: {
-        'source-layer': "default",
-        filter: filterSchoolStatus(schoolLegends)
-      }, mapRoute
-    });
+  const { schoolIdByEntity = {} } = selectedLayerIds;
+  const isSourceAvailable = checkSourceAvailable(
+    map,
+    CONNECTIVITY_STATUS_SOURCE,
+  );
+  const entityTypes = activeEntityTypes ?? [];
+  const circleMaxZoom = getCircleMaxZoom({ countryCode: country?.code });
+  const symbolMinZoom = getSymbolMinZoom(circleMaxZoom);
+  if (
+    isSourceAvailable &&
+    entityTypes.some((entityType) => schoolIdByEntity[entityType])
+  ) {
+    for (const entityType of entityTypes) {
+      const entityStatusLayerId = schoolIdByEntity[entityType];
+      if (!entityStatusLayerId) {
+        hideEntityLayerVariants(map, getEntityStatusLayerId(entityType));
+        continue;
+      }
+      const config = entityRegistry?.[entityType] as EntityConfig | undefined;
+      const markerType = config?.markerType ?? 'circle';
+      const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
+      const statusLayerId = getEntityStatusLayerId(entityType);
+      const circleLayerId = getEntityZoomCircleLayerId(statusLayerId);
+      const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);
+      const options = {
+        'source-layer': getSourceLayerName(entityType),
+        filter: filterSchoolStatus(schoolLegendsByEntity?.[entityType] ?? []),
+      };
+
+      if (markerType === 'circle') {
+        hideLayer(map, circleLayerId);
+        createSchoolLayer(map, {
+          source: CONNECTIVITY_STATUS_SOURCE,
+          id: statusLayerId,
+          paintData,
+          isMobile,
+          options,
+          mapRoute,
+          entityConfig: config,
+        });
+      } else if (transitionZoom != null) {
+        createSchoolLayer(map, {
+          source: CONNECTIVITY_STATUS_SOURCE,
+          id: circleLayerId,
+          paintData,
+          isMobile,
+          options: { ...options, maxzoom: transitionZoom },
+          mapRoute,
+          entityConfig: schoolCircleConfig,
+        });
+        createEntitySymbolLayer(map, {
+          source: CONNECTIVITY_STATUS_SOURCE,
+          id: statusLayerId,
+          symbol: config?.symbol ?? '■',
+          paintData,
+          isMobile,
+          options: { ...options, minzoom: symbolMinZoom },
+          mapRoute,
+          entityConfig: config,
+        });
+      } else {
+        hideLayer(map, circleLayerId);
+        createEntitySymbolLayer(map, {
+          source: CONNECTIVITY_STATUS_SOURCE,
+          id: statusLayerId,
+          symbol: config?.symbol ?? '■',
+          paintData,
+          isMobile,
+          options,
+          mapRoute,
+          entityConfig: config,
+        });
+      }
+    }
+    moveEntityStatusLayersToTop(map, entityTypes);
   } else {
-    hideLayer(map, getMapId(SCHOOL_LAYER_ID));
+    for (const entityType of entityTypes) {
+      hideEntityLayerVariants(map, getEntityStatusLayerId(entityType));
+    }
   }
-}
+};
 
-export const cancelAnimation = () => {
-  cancelAnimationFrame(animateCircleHandler.requestId)
-}
-
-export const setAnimationHandler = (handler: { requestId: number }) => {
-  animateCircleHandler = handler;
-}
+export const setAnimationHandler = (
+  entityType: string,
+  handler: { requestId: number },
+) => {
+  animateCircleHandlers[entityType] = handler;
+};

@@ -19,7 +19,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { deleteCountryFx, getCountryListFx, makeDataSourceValidFx } from '~/@/admin/effects/api-country-fx';
 import { $countryListAdmin, CountryListGate } from '~/@/admin/models/country-model';
-import { Country } from '~/api/types';
+import { CountryType } from '~/@/admin/types/country.type';
 import { addAdminCountry, editAdminCountry } from '~/core/routes';
 import { Link } from '~/lib/router';
 
@@ -35,16 +35,19 @@ const headers = [
   { key: 'flag', header: 'Flag' },
   { key: 'code', header: 'Code' },
   { key: 'name', header: 'Name' },
-  { key: 'data_source', header: 'Data Source' },
+  { key: 'data_source', header: 'Data source (schools)' },
   { key: 'date_of_join', header: 'Date of join' },
   { key: 'schools_total', header: 'Total schools' },
+  { key: 'health_total', header: 'Total health' },
   { key: 'action', header: 'Action' },
 ];
 
 const ListCountry = () => {
   const { results: countryList, count } = useStore($countryListAdmin) ?? { results: [], count: 0 };
-  const rows = useMemo(() => countryList?.map((country: Country) => ({
+  const rows = useMemo(() => countryList?.map((country: CountryType) => ({
     ...country,
+    schools_total: country.entity_counts?.school ?? country.schools_total ?? 0,
+    health_total: country.entity_counts?.health ?? 0,
     flag: <CountryListWrapper>
       <img src={country.flag} />
     </CountryListWrapper>,
@@ -113,7 +116,7 @@ const ListCountry = () => {
   }
 
   const onEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === "Enter"){
+    if (event.key === "Enter") {
       event.preventDefault()
       serachFn()
     }

@@ -1,14 +1,14 @@
 import { render } from '@testing-library/react';
 import ApiKeyItem from '../api-key-item.view';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import { useStore } from 'effector-react';
 
-jest.mock('effector-react', () => ({
-  useStore: jest.fn()
+vi.mock('effector-react', () => ({
+  useStore: vi.fn()
 }));
 
 describe('ApiKeyItem', () => {
-  const mockSetApiKeyDeleteId = jest.fn();
+  const mockSetApiKeyDeleteId = vi.fn();
   const defaultProps = {
     item: {
       id: '1',
@@ -25,7 +25,7 @@ describe('ApiKeyItem', () => {
   } as any;
 
   beforeEach(() => {
-    (useStore as jest.Mock).mockReturnValue({ CAN_DELETE_API_KEY: true });
+    (useStore as vi.Mock).mockReturnValue({ CAN_DELETE_API_KEY: true });
   });
 
   test('renders api name correctly', () => {
@@ -61,3 +61,5 @@ describe('ApiKeyItem', () => {
     expect(getByText('View list')).toBeInTheDocument();
   });
 });
+
+

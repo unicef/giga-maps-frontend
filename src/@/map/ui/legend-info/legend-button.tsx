@@ -1,66 +1,57 @@
-import { Information } from '@carbon/icons-react'
-import { IconButton } from '@carbon/react'
-import { combine, merge, sample } from 'effector';
 import { useStore } from 'effector-react';
-
-import { $isProductTour, $selectedLayerId, $showAdvancedFilter, $showLegend, $showThemeLayer, onShowLegend } from '~/@/sidebar/sidebar.model';
-import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
-import { $isMobile } from '~/core/media-query';
-import { debounce } from '~/lib/effector-kit';
-
-import { ActiveButtonWrapper, LegendWrapper } from "./legend-button.style";
-import LegendPopup from "./legend-popup";
-import { $country, $countryId } from '~/@/country/country.model';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-sample({
-  clock: merge([debounce($selectedLayerId, { timeout: 0 }), $countryId, $showThemeLayer, $showAdvancedFilter]),
-  source: combine({ isMobile: $isMobile, showAdvancedFilter: $showAdvancedFilter, showThemeLayer: $showThemeLayer }),
-  fn: () => true,
-  filter: ({ isMobile, showAdvancedFilter, showThemeLayer }) => {
-    if (showAdvancedFilter || showThemeLayer) return false;
-    return !isMobile
-  },
-  target: onShowLegend,
-})
+import {
+  $isProductTour,
+  $showLegend,
+  onShowAdvancedFilter,
+  onShowLegend,
+  onShowThemeLayer,
+} from '~/@/sidebar/sidebar.model';
+
+import MapControlButton from '../layer-theme/map-control-button';
+import LegendPopup from './legend-popup';
+import { List } from 'lucide-react';
+
+
 const LegendButton = () => {
   const { t } = useTranslation();
   const showLegend = useStore($showLegend);
-  const isMobile = useStore($isMobile);
   const isProductTour = useStore($isProductTour);
-  const toggleShowLegend = () => {
-    onShowLegend(!showLegend);
+
+  const handleLegendOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen && isProductTour) {
+      return;
+    }
+    onShowLegend(nextOpen);
   };
 
-  // default hidden from mobile screen;
-  useEffect(() => {
-    isMobile && onShowLegend(false)
-  }, [isMobile])
+  const handleLegendClick = () => {
+    const nextOpen = !showLegend;
+
+    if (!isProductTour) {
+      onShowAdvancedFilter(false);
+      onShowThemeLayer(false);
+    }
+
+    handleLegendOpenChange(nextOpen);
+  };
+
   return (
-    <LegendWrapper className="lengend-container">
-      <LegendPopup open={showLegend} setOpen={onShowLegend}>
-        <ActiveButtonWrapper className='contras legend-open-button' onClick={toggleShowLegend}>
-          <IconButton
-            align="left"
-            size="sm"
-            label={t("legend")}
-            onClick={toggleShowLegend}>
-            <Information />
-          </IconButton>
-        </ActiveButtonWrapper>
+    <div className="relative! legend-container">
+      <LegendPopup onOpenChange={handleLegendOpenChange} open={showLegend}>
+        <MapControlButton
+          active={showLegend}
+          aria-label={t('legend')}
+          className="legend-open-button"
+          label={t('legend')}
+          onClick={handleLegendClick}
+        >
+          <List />
+        </MapControlButton>
       </LegendPopup>
-      {showLegend && isMobile && <ClickAnywhere
-        classList={['lengend-container']}
-        trigger={showLegend}
-        outsideClick={() => {
-          if (!isProductTour) {
-            onShowLegend(false)
-          }
-        }}
-      />}
-    </LegendWrapper >
+    </div>
   )
 }
 
-export default LegendButton
+export default LegendButton;

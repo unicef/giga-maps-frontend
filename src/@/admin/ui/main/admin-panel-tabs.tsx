@@ -14,7 +14,7 @@ import { getInvalidateCacheFx } from '../../effects/admin-main-fx';
 import { AdminSideNavMenu, AdminSubSingleTab, InvalidateCacheWrapper, SideBarScrollContainer, SideBarTabsContainer } from '../styles/admin-styles'
 import InvalidatCacheModal from './Invalidate-cache-modal';
 
-const AdminPanelTabs = () => {
+const AdminPanelTabs = ({ onClick }: { onClick?: () => void }) => {
   const permissions = useStore($userPermissions);
   const isAdminUser = useStore($isAdminUser);
   const [invalidateCache, setInvalidateCache] = useState(false)
@@ -109,6 +109,7 @@ const AdminPanelTabs = () => {
                 kind='ghost'
                 onClick={() => {
                   setInvalidateCache(true)
+                  onClick?.();
                 }}
               >Invalidate Cache</Button>
             </InvalidateCacheWrapper>

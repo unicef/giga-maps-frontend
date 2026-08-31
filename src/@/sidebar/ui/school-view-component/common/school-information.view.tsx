@@ -40,7 +40,8 @@ const SchoolInformation = ({ schoolData }: { schoolData?: SchoolStatsType }) => 
   }, [country?.id, schoolData?.id]);
 
   const { connectivityStatus, connectivityStatusColor } = getSchoolStatus({ schoolDetails: schoolData, stylePaintData });
-  const schoolCoordinates = (JSON.parse(JSON.stringify(schoolData?.geopoint?.coordinates ?? []))).reverse();
+  // 
+  const schoolCoordinates = (JSON.parse(JSON.stringify(schoolData?.geopoint?.coordinates ?? []))).toReversed();
 
   const groupStatistics = (statistics: StatisticConfig[]) => {
     const groups = statistics.reduce((acc, stat) => {

@@ -1,7 +1,7 @@
 import { onMsalInstance, onResetLogin } from '../model'
 
 // create jest mock of EventType
-jest.mock('@azure/msal-browser', () => ({
+vi.mock('@azure/msal-browser', () => ({
   EventType: {
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
     ACQUIRE_TOKEN_FAILURE: 'ACQUIRE_TOKEN_FAILURE',
@@ -14,16 +14,16 @@ describe('setUpActiveAccountFx', () => {
 
   beforeEach(() => {
     msalInstance = {
-      initialize: jest.fn(),
-      setAccountListener: jest.fn(),
-      setActiveAccount: jest.fn(),
-      enableAccountStorageEvents: jest.fn(),
-      getActiveAccount: jest.fn().mockImplementation(() => null),
-      handleRedirectPromise: jest.fn().mockImplementation(() => null),
-      getAllAccounts: jest.fn().mockImplementation(() => []),
-      clearCache: jest.fn(),
-      logoutPopup: jest.fn(),
-      addEventCallback: function (callback: any) {
+      initialize: vi.fn(),
+      setAccountListener: vi.fn(),
+      setActiveAccount: vi.fn(),
+      enableAccountStorageEvents: vi.fn(),
+      getActiveAccount: vi.fn().mockImplementation(() => null),
+      handleRedirectPromise: vi.fn().mockImplementation(() => null),
+      getAllAccounts: vi.fn().mockImplementation(() => []),
+      clearCache: vi.fn(),
+      logoutPopup: vi.fn(),
+      addEventCallback (callback: any) {
         callback({
           eventType: '',
           payload: {}
@@ -47,7 +47,7 @@ describe('setUpActiveAccountFx', () => {
 
   it('should set active account', async () => {
     await onMsalInstance({
-      ...msalInstance, addEventCallback: function (callback: any) {
+      ...msalInstance, addEventCallback (callback: any) {
         callback({
           eventType: 'LOGIN_SUCCESS',
           payload: { idToken: "XLK" }
@@ -60,7 +60,7 @@ describe('setUpActiveAccountFx', () => {
 
   it('should not set active account', async () => {
     await onMsalInstance({
-      ...msalInstance, addEventCallback: function (callback: any) {
+      ...msalInstance, addEventCallback (callback: any) {
         callback({
           eventType: 'LOGIN_SUCCESS',
           payload: { idToken: null }
@@ -76,7 +76,7 @@ describe('setUpActiveAccountFx', () => {
     const errorCodes = ["AADB2C90080"]
     const props = {
       ...msalInstance,
-      addEventCallback: function (callback: any) {
+      addEventCallback (callback: any) {
         callback({
           eventType: 'ACQUIRE_TOKEN_FAILURE',
           payload: null,
@@ -96,7 +96,7 @@ describe('setUpActiveAccountFx', () => {
   });
 
   it('should called handleRedirectPromise', async () => {
-    const handleRedirectPromise = jest.fn().mockImplementation(() => {
+    const handleRedirectPromise = vi.fn().mockImplementation(() => {
       return {
         account: {
           homeAccountId: 'test'
@@ -112,7 +112,7 @@ describe('setUpActiveAccountFx', () => {
   });
 
   it('should called acquireAuthToken', async () => {
-    const getActiveAccount = jest.fn().mockImplementation(() => {
+    const getActiveAccount = vi.fn().mockImplementation(() => {
       return {
         homeAccountId: 'test'
       }
@@ -125,7 +125,7 @@ describe('setUpActiveAccountFx', () => {
     await onMsalInstance({
       ...msalInstance,
       getActiveAccount,
-      acquireTokenSilent: jest.fn().mockImplementation(() => {
+      acquireTokenSilent: vi.fn().mockImplementation(() => {
         return {
           accessToken: 'test'
         }
@@ -153,3 +153,4 @@ describe('setUpActiveAccountFx', () => {
     expect(msalInstance.logoutPopup).not.toHaveBeenCalled();
   });
 });
+

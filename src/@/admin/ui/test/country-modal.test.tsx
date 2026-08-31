@@ -1,14 +1,14 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 
 import { countryList } from "~/tests/data/country-filter-modal"
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import CountryFilterModal from "../common-components/country-filter-modal"
 
 describe("CountryFilterModal", () => {
   test("render CountryFilterModal and click on checkbox", () => {
-    const handleClick = jest.fn();
-    const { getByTestId } = render(testWrapper(<CountryFilterModal open={true} setOpen={jest.fn()} list={countryList} filterValues={[]} setFilterValues={jest.fn()} updateList={jest.fn()} name={""} onClick={handleClick} />));
+    const handleClick = vi.fn();
+    const { getByTestId } = render(testWrapper(<CountryFilterModal open={true} setOpen={vi.fn()} list={countryList} filterValues={[]} setFilterValues={vi.fn()} updateList={vi.fn()} name={""} onClick={handleClick} />));
     const button = getByTestId(`checkbox-country-${countryList[0]?.id}`);
     fireEvent.click(button);
     expect(screen.getByText(countryList[0]?.name))
@@ -18,10 +18,10 @@ describe("CountryFilterModal", () => {
     render(testWrapper(
       <CountryFilterModal
         open={true}
-        setOpen={jest.fn()}
+        setOpen={vi.fn()}
         list={countryList}
         filterValues={[]}
-        updateList={jest.fn()}
+        updateList={vi.fn()}
         name={""}
       />))
     const checkbox = screen.getByTestId(`checkbox-country-${countryList[0]?.id}`);
@@ -30,15 +30,15 @@ describe("CountryFilterModal", () => {
   })
 
   test("renders CountryFilterModal and unchecks an already checked checkbox", () => {
-    const setFilterValues = jest.fn();
+    const setFilterValues = vi.fn();
     render(testWrapper(
       <CountryFilterModal
         open={true}
-        setOpen={jest.fn()}
+        setOpen={vi.fn()}
         list={countryList}
         filterValues={[countryList[0]?.id]}
         setFilterValues={setFilterValues}
-        updateList={jest.fn()}
+        updateList={vi.fn()}
         name={""}
       />))
     const checkbox = screen.getByTestId(`checkbox-country-${countryList[0]?.id}`);
@@ -47,15 +47,15 @@ describe("CountryFilterModal", () => {
   })
 
   test("closes CountryFilterModal when close button is clicked", () => {
-    const setOpen = jest.fn();
+    const setOpen = vi.fn();
     render(testWrapper(
       <CountryFilterModal
         open={true}
         setOpen={setOpen}
         list={countryList}
         filterValues={[]}
-        setFilterValues={jest.fn()}
-        updateList={jest.fn()}
+        setFilterValues={vi.fn()}
+        updateList={vi.fn()}
         name={""}
       />
     ))
@@ -65,9 +65,9 @@ describe("CountryFilterModal", () => {
   })
 
   test("calls updateList and setOpen when Apply button is clicked", () => {
-    const setFilterValues = jest.fn();
-    const setOpen = jest.fn();
-    const updateList = jest.fn();
+    const setFilterValues = vi.fn();
+    const setOpen = vi.fn();
+    const updateList = vi.fn();
     render(testWrapper(
       <CountryFilterModal
         open={true}
@@ -87,13 +87,12 @@ describe("CountryFilterModal", () => {
     expect(setOpen).toHaveBeenCalledWith(false);
   })
 
-  test("render CountryFilterModal and click on reset", () => {
-    const handleClick = jest.fn();
-    const { getByTestId } = render(testWrapper(<CountryFilterModal open={true} setOpen={jest.fn()} list={countryList} filterValues={[]} setFilterValues={jest.fn()} updateList={jest.fn()} name={""} onClick={handleClick} />));
+  test("render CountryFilterModal and click on reset", async () => {
+    const setOpen = vi.fn();
+    const { getByTestId } = render(testWrapper(<CountryFilterModal open={true} setOpen={setOpen} list={countryList} filterValues={[]} setFilterValues={vi.fn()} updateList={vi.fn()} name={""} />));
     const button = getByTestId(`reset-country-filter`);
     fireEvent.click(button);
-    void waitFor(() => {
-      expect(screen.getByText('Filter By Country')).not.toBeInTheDocument()
-    })
+    expect(setOpen).toHaveBeenCalledWith(false);
   })
 })
+

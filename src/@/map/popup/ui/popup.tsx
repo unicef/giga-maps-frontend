@@ -5,8 +5,6 @@ import { styled } from 'styled-components';
 import { ConnectivityStatusCircle } from '~/@/sidebar/ui/school-view-component/styles/school-view-style';
 
 import { InnerCircle, InnerCircleConnectivity } from '../../ui/legend-info/legend-button.style';
-import { $country } from '~/@/country/country.model';
-import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
 
 const SchoolMarkerWrapper = styled.div`

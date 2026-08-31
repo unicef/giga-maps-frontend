@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FeatureCardWrapper renders FeatureCardWrapper and take a snapshop 1`] = `
+exports[`FeatureCardWrapper > renders FeatureCardWrapper and take a snapshop 1`] = `
 <DocumentFragment>
   .c0 {
   flex: 1;
@@ -52,7 +52,7 @@ exports[`FeatureCardWrapper renders FeatureCardWrapper and take a snapshop 1`] =
   height: 1.5rem;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .c0 {
     min-width: 100%;
   }

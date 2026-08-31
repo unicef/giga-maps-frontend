@@ -1,22 +1,49 @@
-import { createEvent, createStore, restore } from 'effector';
+import {
+  createEffect,
+  createEvent,
+  createStore,
+  restore,
+  sample,
+} from 'effector';
 
-import { fetchAdvanceFilterFx, fetchDublicateSchoolPopupDataFx, fetchGlobalStatsFx, fetchSchoolPopupDataFx } from '~/api/project-connect';
-import { AdvanceFilterType, GlobalStats, SchoolStatsType } from '~/api/types';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import {
+  fetchAdvanceFilterFx,
+  fetchDublicateSchoolPopupDataFx,
+  fetchEntityGlobalStatsFx,
+  fetchSchoolPopupDataFx,
+} from '~/api/project-connect';
+import {
+  AdvanceFilterType,
+  EntitiesGlobalStatsResponse,
+  SchoolStatsType,
+} from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
 import { map } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
-
 import { getLocalStorage, setLocalStorage } from '~/lib/utils';
-import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+import {
+  extractDataWithMapping,
+  reconstructJson,
+} from '~/lib/utils/json-mapper.util';
+
 import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import {
   defaultGigaLayers,
-  defaultGlobalStats,
   defaultStyle,
   filterListMapping,
   stylePaintData,
 } from './map.constant';
-import { Center, DuplicateSchoolsRequestPayload, Map, MapType, Marker, SchoolMarker, Style, StylePaintData } from './map.types';
+import {
+  Center,
+  DuplicateSchoolsRequestPayload,
+  Map,
+  MapType,
+  Marker,
+  SchoolMarker,
+  Style,
+  StylePaintData,
+} from './map.types';
 
 export const $reloadStyle = createStore<boolean>(false);
 export const onReloadedMap = createEvent();
@@ -31,9 +58,15 @@ export const onZoomStateChange = createEvent<'start' | 'end' | null>();
 export const $zoomState = createStore<'start' | 'end' | null>(null);
 $zoomState.on(onZoomStateChange, setPayload);
 
-export const updateSchoolMarker = createEvent<SchoolMarker[]>()
-export const $schoolMarkers = createStore<SchoolMarker[]>([])
-  .on(updateSchoolMarker, setPayload);
+export const onZoomLevelChange = createEvent<number>();
+export const $zoomLevel = createStore<number>(2);
+$zoomLevel.on(onZoomLevelChange, setPayload);
+
+export const updateSchoolMarker = createEvent<SchoolMarker[]>();
+export const $schoolMarkers = createStore<SchoolMarker[]>([]).on(
+  updateSchoolMarker,
+  setPayload,
+);
 
 export const changeMap = createEvent<Map>();
 export const $map = createStore<Map | null>(null);
@@ -43,28 +76,44 @@ export const changeStyle = createEvent<Style>();
 export const $style = createStore<Style>(defaultStyle);
 $style.on(changeStyle, setPayload);
 
-const adminBoundariesStored = getLocalStorage('admin-boundaries') as boolean | undefined;
+const adminBoundariesStored = getLocalStorage('admin-boundaries') as
+  | boolean
+  | undefined;
 export const onEnableAdminBoundaries = createEvent<boolean>();
-export const $isAdminBoundaries = restore(onEnableAdminBoundaries, (typeof adminBoundariesStored === 'boolean' ? adminBoundariesStored : undefined) ?? true);
+export const $isAdminBoundaries = restore(
+  onEnableAdminBoundaries,
+  (typeof adminBoundariesStored === 'boolean'
+    ? adminBoundariesStored
+    : undefined) ?? true,
+);
 onEnableAdminBoundaries.watch((value) => {
-  setLocalStorage('admin-boundaries', value)
-})
+  setLocalStorage('admin-boundaries', value);
+});
 
-export const onEnableTitlesAndLabels = createEvent<boolean>()
+export const onEnableTitlesAndLabels = createEvent<boolean>();
 export const $isTilesAndLables = restore(onEnableTitlesAndLabels, true);
 
-export const onEnableNavigateByAdminLevel = createEvent<boolean>()
-const navigateByAdminStored = getLocalStorage('navigate-by-admin-level') as boolean | undefined;
-export const $isNavigateByAdminLevel = restore(onEnableNavigateByAdminLevel, (typeof navigateByAdminStored === 'boolean' ? navigateByAdminStored : undefined) ?? true);
+export const onEnableNavigateByAdminLevel = createEvent<boolean>();
+const navigateByAdminStored = getLocalStorage('navigate-by-admin-level') as
+  | boolean
+  | undefined;
+export const $isNavigateByAdminLevel = restore(
+  onEnableNavigateByAdminLevel,
+  (typeof navigateByAdminStored === 'boolean'
+    ? navigateByAdminStored
+    : undefined) ?? true,
+);
 onEnableNavigateByAdminLevel.watch((value) => {
-  setLocalStorage('navigate-by-admin-level', value)
-})
+  setLocalStorage('navigate-by-admin-level', value);
+});
 
 export const $stylePaintData = createStore<StylePaintData>(
-  stylePaintData[defaultStyle]
+  stylePaintData[defaultStyle],
 );
-export const $globalStats = createStore<GlobalStats>(defaultGlobalStats);
-$globalStats.on(fetchGlobalStatsFx.doneData, setPayload);
+export const $globalStatsByEntity = createStore<EntitiesGlobalStatsResponse>(
+  {},
+);
+$globalStatsByEntity.on(fetchEntityGlobalStatsFx.doneData, setPayload);
 
 export const $pending = createStore<boolean>(false);
 export const $loader = createStore<Marker | null>(null);
@@ -81,22 +130,47 @@ $schoolInfoOpenStatus.on(changeSchoolInfoOpenStatus, setPayload);
 
 export const changeRealtimeSchoolConnectedOpenStatus = createEvent<boolean>();
 export const $realtimeSchoolConnectedOpenStatus = createStore<boolean>(true);
-$realtimeSchoolConnectedOpenStatus.on(changeRealtimeSchoolConnectedOpenStatus, setPayload);
+$realtimeSchoolConnectedOpenStatus.on(
+  changeRealtimeSchoolConnectedOpenStatus,
+  setPayload,
+);
 
-export const changeGigaSelection = createEvent<{ layerId: number | null }>();
-export const $selectedGigaLayers = restore(changeGigaSelection, defaultGigaLayers);
+type SelectedGigaLayers = {
+  layerIdByEntity: Partial<Record<EntityType, number | null>>;
+};
 
-export const setPopupOnClickDot = createEvent<{ id: number; geopoint?: GeoJSONPoint | null; allowDublicateSchoolIds?: boolean; } | null>();
+export const changeGigaSelection = createEvent<SelectedGigaLayers>();
+export const $selectedGigaLayers = restore<SelectedGigaLayers>(
+  changeGigaSelection,
+  defaultGigaLayers,
+);
+
+type EntityDotPopupPayload = {
+  id: number;
+  entityType: EntityType;
+  geopoint?: GeoJSONPoint | null;
+  allowDublicateSchoolIds?: boolean;
+};
+
+export const setPopupOnClickDot = createEvent<EntityDotPopupPayload | null>();
+export const closeEntityPopup = createEvent();
 export const $activeSchoolPopup = restore(setPopupOnClickDot, null);
 
-export const setSchoolIdsOnPopupClickDot = createEvent<DuplicateSchoolsRequestPayload | null>();
-export const $activeDublicateSchoolsPopup = createStore<DuplicateSchoolsRequestPayload | null>(null)
-  .on(setSchoolIdsOnPopupClickDot, (prev, next) => {
-    return prev && next && prev.requestId === next.requestId ? prev : next;
-  });
+export const setSchoolIdsOnPopupClickDot =
+  createEvent<DuplicateSchoolsRequestPayload | null>();
+export const $activeDublicateSchoolsPopup =
+  createStore<DuplicateSchoolsRequestPayload | null>(null).on(
+    setSchoolIdsOnPopupClickDot,
+    (prev, next) => {
+      return prev && next && prev.requestId === next.requestId ? prev : next;
+    },
+  );
 
 export const setAllowedDublicateSchoolIds = createEvent<boolean>();
-export const $allowDublicateSchoolIds = createStore<boolean>(false).on(setAllowedDublicateSchoolIds, (_, v) => v);
+export const $allowDublicateSchoolIds = createStore<boolean>(false).on(
+  setAllowedDublicateSchoolIds,
+  (_, v) => v,
+);
 
 export const onCreateSchoolPopup = createEvent<null | mapboxgl.Popup>();
 export const $popup = createStore<mapboxgl.Popup | null>(null);
@@ -104,40 +178,78 @@ $popup.on(onCreateSchoolPopup, setPayload);
 
 type SchoolClickupPopupType = {
   id: number;
-  element: HTMLElement,
+  element: HTMLElement;
   isClicked?: boolean;
-}
+};
 
 export const $schoolClickedId = $activeSchoolPopup.map((data) => data?.id ?? 0);
-export const $dublicateSchoolsClickedId = $activeDublicateSchoolsPopup.map((data) => data);
-export const setSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
-export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setSchoolCLickupPopupDiv, null);
+export const $schoolClickedEntityType = $activeSchoolPopup.map(
+  (data) => data?.entityType ?? null,
+);
+export const $dublicateSchoolsClickedId = $activeDublicateSchoolsPopup.map(
+  (data) => data,
+);
+export const setSchoolCLickupPopupDiv = createEvent<
+  SchoolClickupPopupType[] | null
+>();
+export const $schoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(
+  setSchoolCLickupPopupDiv,
+  null,
+);
 
-export const setMultipleSchoolPopup = createEvent<SchoolClickupPopupType[] | null>();
+const removeEntityPopupFx = createEffect((popup: mapboxgl.Popup | null) => {
+  popup?.remove();
+});
+
+sample({
+  clock: closeEntityPopup,
+  source: $popup,
+  target: removeEntityPopupFx,
+});
+
+sample({
+  clock: closeEntityPopup,
+  fn: () => null,
+  target: [setPopupOnClickDot, onCreateSchoolPopup, setSchoolCLickupPopupDiv],
+});
+
+export const setMultipleSchoolPopup = createEvent<
+  SchoolClickupPopupType[] | null
+>();
 export const $multipleSchoolPopup = restore(setMultipleSchoolPopup, null);
-export const $schoolClickData = createStore<SchoolStatsType[] | null>(null)
+export const $schoolClickData = createStore<SchoolStatsType[] | null>(null);
 $schoolClickData.on(fetchSchoolPopupDataFx.doneData, setPayload);
 
 export const resetDublicateSchoolClickData = createEvent();
-export const setDublicateSchoolCLickupPopupDiv = createEvent<SchoolClickupPopupType[] | null>();
-export const $dublicateSchoolClickedPopupDiv = restore<SchoolClickupPopupType[] | null>(setDublicateSchoolCLickupPopupDiv, null);
-export const $dublicateSchoolClickData = createStore<SchoolStatsType[] | null>(null)
-$dublicateSchoolClickData.on(fetchDublicateSchoolPopupDataFx.doneData, setPayload);
+export const setDublicateSchoolCLickupPopupDiv = createEvent<
+  SchoolClickupPopupType[] | null
+>();
+export const $dublicateSchoolClickedPopupDiv = restore<
+  SchoolClickupPopupType[] | null
+>(setDublicateSchoolCLickupPopupDiv, null);
+export const $dublicateSchoolClickData = createStore<SchoolStatsType[] | null>(
+  null,
+);
+$dublicateSchoolClickData.on(
+  fetchDublicateSchoolPopupDataFx.doneData,
+  setPayload,
+);
 $dublicateSchoolClickData.reset(resetDublicateSchoolClickData);
 
 export const $advanceFilterList = createStore<AdvanceFilterType[]>([]);
 $advanceFilterList.on(fetchAdvanceFilterFx.doneData, setPayloadResults);
 $advanceFilterList.on(filterTranslationFx.doneData, (state, payload) => {
-  const { data } = payload as { data: Record<string, string> }
-  const list = reconstructJson(data, { filterList: state }).filterList
-  return [...list]
-})
+  const { data } = payload as { data: Record<string, string> };
+  const list = reconstructJson(data, { filterList: state }).filterList;
+  return [...list];
+});
 export const $filterListMapping = createStore<[string, string][]>([]);
 $filterListMapping.on(fetchAdvanceFilterFx.doneData, (_, payload) => {
-  const list = Object.entries(extractDataWithMapping({ filterList: payload.results }, filterListMapping)).filter(([_key, value]) => !!value);
+  const list = Object.entries(
+    extractDataWithMapping({ filterList: payload.results }, filterListMapping),
+  ).filter(([_key, value]) => !!value);
   return list;
-})
-
+});
 
 $map.reset(map.visible);
 $schoolConnectedOpenStatus.reset(resetSchoolConnectedOpenStatus);

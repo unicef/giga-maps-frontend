@@ -6,13 +6,19 @@ import {
   CountryBasic
 } from '~/api/types';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapOverview, mapSchools } from '~/core/routes';
+import { mapCountry, mapEntity, mapOverview, mapSchools } from '~/core/routes';
 import { setPayload } from '~/lib/effector-kit';
-
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
+
 import { PointCoordinates } from "../../core/global-types";
+import { $activeEntityTypes } from '../entities/models/entity.model';
+import { EntityType } from '../entities/types/base-entity.type';
 import { defaultWorldView } from '../map/map.constant';
 import { $isAdminBoundaries, $isTilesAndLables, $map, $style, $stylePaintData, onReloadedMap } from '../map/map.model';
+import {
+  parseAdvancedFilters,
+  selectAdvancedFiltersForEntities,
+} from '../map/ui/advanced-filter/advanced-filter.model';
 import { countryTranslationFx } from '../sidebar/effects/all-translation-fx';
 import { countryMapping } from './country.constant';
 import { getCountryAdminCode } from './country.utils';
@@ -51,7 +57,20 @@ $countryMapping.on(fetchCountryFx.doneData, (_, payload) => {
   return Object.entries(extractDataWithMapping(payload, countryMapping)).filter(([_key, value]) => !!value);
 })
 
-export const $dataSource = $country.map((country) => country?.data_source ?? null);
+const dataSourceFieldByEntity: Record<EntityType, 'data_source' | 'health_data_source'> = {
+  [EntityType.SCHOOL]: 'data_source',
+  [EntityType.HEALTH]: 'health_data_source',
+};
+
+export const $dataSourceByEntity = $country.map(
+  (country) =>
+    Object.fromEntries(
+      Object.entries(dataSourceFieldByEntity).map(([entityType, field]) => [
+        entityType,
+        country?.[field] ?? '',
+      ]),
+    ) as Record<EntityType, string>,
+);
 export const $countryActiveFiltersList = $country.map((country) => country?.active_filters_list ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
@@ -80,36 +99,37 @@ export const setZoomCountryCode = createEvent<string>();
 export const $zoomedCountryCode = restore(setZoomCountryCode, '');
 $zoomedCountryCode.on(zoomToCountryFx.doneData, setPayload);
 
-export const $countrySearchParams = mapCountry.router.search.map(search => {
+const $allCountrySearchParams = mapCountry.router.search.map(search => {
   const searchParams = new URLSearchParams(search);
-  // iterate over all params and try to parse them to numbers
-  const filterSearchParams = new URLSearchParams();
-  let actualSelectedCount = 0;
-  const urlFieldList: Record<string, { field: string; filter: string; value: string }> = {};
-  const searchEntires = searchParams.entries();
-  for (const [key, value] of searchEntires) {
-    try {
-      const [start, field, filter] = key.split('__');
-      if (start === 'filter' && field && filter) {
-        if (!field.startsWith('ignore_')) {
-          filterSearchParams.set(`${field}__${filter}`, value);
-        }
-        urlFieldList[`${field}__${filter}`] = { field, filter, value };
-        if (!field.startsWith('ignore_')) {
-          actualSelectedCount++;
-        }
-      }
-    } catch (e) { }
-  }
   return {
     searchParamsURL: searchParams,
-    searchParams: filterSearchParams.toString(),
-    urlFieldList,
-    selectedCount: actualSelectedCount
+    filtersByEntity: parseAdvancedFilters(searchParams),
   };
 });
 
-export const $countrySearchString = $countrySearchParams.map(params => params.searchParams);
+export const $advancedFiltersByEntity = $allCountrySearchParams.map(
+  ({ filtersByEntity }) => filtersByEntity,
+);
+
+export const $countrySearchParams = combine(
+  $allCountrySearchParams,
+  $activeEntityTypes,
+  (params, activeEntityTypes) => {
+    const activeFilters = selectAdvancedFiltersForEntities(
+      params.filtersByEntity,
+      activeEntityTypes,
+    );
+
+    return {
+      ...params,
+      ...activeFilters,
+    };
+  },
+);
+
+export const $countrySearchString = $countrySearchParams.map(
+  ({ searchParams }) => searchParams,
+);
 
 const $mapContext = combine({
   map: $map,
@@ -120,26 +140,45 @@ const $mapContext = combine({
   isMobile: $isMobile,
 });
 
-// school view
+// detail and country view
 sample({
-  clock: merge([$map, mapSchools.router.historyUpdate, mapCountry.params]),
+  clock: merge([
+    $map,
+    mapSchools.router.historyUpdate,
+    mapEntity.visible,
+    mapEntity.router.historyUpdate,
+    mapEntity.router.search,
+    mapCountry.params,
+  ]),
   source: combine({
     schoolParams: mapSchools.router.search,
+    entityParams: mapEntity.router.search,
     countryParams: mapCountry.params,
     isSchoolView: mapSchools.visible,
+    isEntityView: mapEntity.visible,
     isCountryView: mapCountry.visible,
   }),
-  fn: ({ schoolParams, isCountryView, isSchoolView, countryParams }) => {
+  fn: ({
+    countryParams,
+    entityParams,
+    isCountryView,
+    isEntityView,
+    isSchoolView,
+    schoolParams,
+  }) => {
     let countryCode = '';
     if (isCountryView) {
-      countryCode = countryParams?.code ?? ''
+      countryCode = countryParams?.code ?? '';
+    } else if (isEntityView) {
+      const params = new URLSearchParams(entityParams);
+      countryCode = params.get('country')?.toLowerCase() ?? '';
     } else if (isSchoolView) {
       const params = new URLSearchParams(schoolParams);
       countryCode = params.get('country')?.toLowerCase() ?? '';
     }
     return countryCode;
   },
-  target: changeCountryCode
+  target: changeCountryCode,
 });
 
 // Routing
@@ -258,6 +297,5 @@ sample({
 onLoadPage();
 $countryCode.reset(mapOverview.visible);
 $country.reset($countryCode, fetchCountryFx.fail, mapOverview.visible);
-$schoolFocusLatLng.reset(mapSchools.router.historyUpdated)
+$schoolFocusLatLng.reset(mapSchools.router.historyUpdated, mapEntity.router.historyUpdated)
 $zoomedCountryCode.reset(onRecenterView);
-

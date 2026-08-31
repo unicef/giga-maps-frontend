@@ -3,7 +3,7 @@ import SearchToolbar from "../search-toolbar";
 
 describe('SearchToolbar Component', () => {
   it('should update the input value on change', () => {
-    const mockOnSearchChange = jest.fn();
+    const mockOnSearchChange = vi.fn();
     render(<SearchToolbar onSearchChange={mockOnSearchChange} />);
     const searchInput = screen.getByRole('searchbox');
     fireEvent.change(searchInput, { target: { value: 'test' } });

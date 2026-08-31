@@ -1,4 +1,3 @@
-import { describe, expect, test, } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
 import { useStore } from 'effector-react';
 
@@ -484,14 +483,17 @@ const mockedResponse = [
 ]
 
 
-jest.mock('effector-react', () => ({
-  ...jest.requireActual('effector-react'),
-  useStore: jest.fn(),
-  $aboutUsContent: {
-    getState: jest.fn(),
-    updates: jest.fn(),
-  },
-}));
+vi.mock('effector-react', async () => {
+  const actual = await vi.importActual('effector-react');
+  return {
+    ...actual as any,
+    useStore: vi.fn(),
+    $aboutUsContent: {
+      getState: vi.fn(),
+      updates: vi.fn(),
+    },
+  };
+});
 
 
 describe('AboutGigaMapModal', () => {
@@ -506,3 +508,4 @@ describe('AboutGigaMapModal', () => {
     expect(screen.getByText('Understand connectivity infrastructure available around schools')).toBeInTheDocument();
   })
 })
+

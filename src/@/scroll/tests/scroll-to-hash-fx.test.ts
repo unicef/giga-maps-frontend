@@ -1,18 +1,18 @@
 import { scrollToHashFx } from "../scroll-to-hash-fx";
 
 describe('scrollToHash', () => {
-  let mockDocument: { querySelector: jest.Mock };
-  let mockWindow: { scrollTo: jest.Mock };
-  let mockGetElementYPosition: jest.Mock;
+  let mockDocument: { querySelector: vi.Mock };
+  let mockWindow: { scrollTo: vi.Mock };
+  let mockGetElementYPosition: vi.Mock;
 
   beforeEach(() => {
     mockDocument = {
-      querySelector: jest.fn()
+      querySelector: vi.fn()
     };
     mockWindow = {
-      scrollTo: jest.fn()
+      scrollTo: vi.fn()
     };
-    mockGetElementYPosition = jest.fn();
+    mockGetElementYPosition = vi.fn();
 
     global.document = mockDocument as any;
     global.window = mockWindow as any;
@@ -24,3 +24,4 @@ describe('scrollToHash', () => {
     expect(mockWindow.scrollTo).not.toHaveBeenCalled();
   });
 });
+

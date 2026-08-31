@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import { SchoolInformation } from '../school-information.view';
 import { SchoolDetailItem, SchoolDetailTitle } from '../../styles/school-view-style';
 
@@ -19,3 +19,4 @@ describe('School information', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

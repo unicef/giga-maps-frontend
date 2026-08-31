@@ -1,4 +1,3 @@
-import { describe, test, } from '@jest/globals';
 import { fireEvent, render, waitFor, } from '@testing-library/react';
 
 import Acknowledgement from '../Sections/acknowledgement';

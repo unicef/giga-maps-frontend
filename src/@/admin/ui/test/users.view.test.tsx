@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react"
 
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 
 import UserListComponent from "../user-crud/user-list.view"
 import UserPermissionComponent from "../user-permission/list-user-permission";

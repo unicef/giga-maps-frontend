@@ -1,0 +1,327 @@
+@import "tailwindcss";
+@import 'tw-animate-css';
+
+/*
+ * `dark:` must follow the APP theme, not the OS.
+ * The app sets .dark / .light / .accessible on <html> (see core/root.tsx).
+ * Without this, shadcn's built-in `dark:` classes fall back to
+ * prefers-color-scheme and break for anyone whose OS and app themes differ.
+ * `accessible` is a dark theme too, so it opts in as well.
+ */
+@custom-variant dark (&:where(.dark, .dark *, .accessible, .accessible *));
+
+/*
+ * Tailwind CSS v4 — shadcn/ui compatible theme
+ * Using 'tw' prefix to avoid conflicts with Carbon Design System.
+ *
+ * Color tokens follow the shadcn/ui naming convention so that any new
+ * shadcn component added via `npx shadcn add <name>` works out of the box.
+ *
+ * Mapped from styled-components theme (theme.model.ts) + global-style.ts.
+ * Dark is the default; .light / .accessible selectors override the values.
+ */
+
+/* ── CSS custom properties (dark = default) ─────────────────── */
+:root {
+  /* Core surfaces */
+  --giga-background: #161616;
+  --giga-foreground: #fff;
+
+  /* Landing page only: the design calls for pure black behind the cards.
+     Scoped so the map and admin keep #161616. */
+  --giga-landing-background: #000;
+
+  /* Card */
+  --giga-card: #181818;
+  --giga-card-foreground: #fff;
+
+  /* Popover */
+  --giga-popover: #181818;
+  --giga-popover-foreground: #fff;
+
+  /* Primary (brand blue — Giga Primary600) */
+  --giga-primary: #277aff;
+  --giga-primary-foreground: #fff;
+
+  /* Secondary */
+  --giga-secondary: #383838;
+  --giga-secondary-foreground: #fff;
+
+  /* Muted */
+  --giga-muted: #333333;
+  --giga-muted-foreground: #9E9E9E;
+
+  /* Accent */
+  --giga-accent: #277aff;
+  --giga-accent-foreground: #fff;
+
+  /* Destructive */
+  --giga-destructive: #F94B4B;
+  --giga-destructive-foreground: #fff;
+
+  /* Border / Input / Ring */
+  --giga-border: #393939;
+  /* Cards use a darker border than the sidebar/popovers on purpose (Grey900). */
+  --giga-card-border: #242424;
+  --giga-input: #C7C7C7;
+  --giga-ring: #277aff;
+
+  /* ── Extended tokens (not standard shadcn, but useful) ──── */
+  --giga-surface-elevated: #383838;
+  --giga-surface-overlay: #353535;
+  --giga-surface-highlight: #494949;
+  --giga-on-surface-subtle: #6F6F6F;
+  --giga-on-surface-dim: #7E7E7E;
+  /* Secondary text on panels (Grey400). */
+  --giga-on-surface-muted: #CACACA;
+
+  /* Status colors */
+  --giga-success: #00A651;
+  --giga-warning: #FAA61A;
+  --giga-error-brand: #ED1C24;
+  --giga-neutral: #A7A9AC;
+
+  /* Filter */
+  --giga-filter-text: #f5f5f5;
+  --giga-filter-muted: #c0c0c0;
+  --giga-filter-field: #262626;
+
+  /* Misc */
+  --giga-icon-secondary: #fff;
+  --giga-mapped: #C6C6C6;
+
+  /* Floating search panels (country browser + school list) */
+  --giga-surface-panel: #242424;
+
+  /* Vertical space taken by the top bar + search box above the panels */
+  --search-panel-top-offset: 7.7rem;
+
+  /* Keeps the panels clear of the fixed disclaimer footer (map/ui/footer.tsx),
+     which they otherwise reach or slip under depending on where the popover
+     anchors. */
+  --search-panel-bottom-offset: 1.5rem;
+
+  /* Vertical space the fixed disclaimer footer (map/ui/footer.tsx) occupies.
+     Every panel anchored to the bottom of the map subtracts it so the footer
+     stays readable, and they all stay aligned with each other. */
+  --map-footer-offset: 1.8rem;
+
+  /* Gap between legend sections. A section column subtracts half of it, so both
+     have to move together. */
+  --legend-section-gap: 0.875rem;
+  --giga-accessible-panel: #646973;
+}
+
+/* ── Light theme overrides ──────────────────────────────────── */
+:root.light,
+[data-theme="light"] {
+  --giga-background: #fff;
+  --giga-foreground: #222222;
+
+  --giga-landing-background: #fff;
+
+  --giga-card: #fff;
+  --giga-card-foreground: #222222;
+
+  --giga-popover: #fff;
+  --giga-popover-foreground: #222222;
+
+  --giga-primary-foreground: #fff;
+
+  --giga-secondary: #cdcdcd;
+  --giga-secondary-foreground: #222222;
+
+  --giga-muted: #f4f4f4;
+  --giga-muted-foreground: #474747;
+
+  --giga-accent: #277aff;
+  --giga-accent-foreground: #222222;
+
+  --giga-border: #E0E0E0;
+  --giga-card-border: #E0E0E0;
+  --giga-input: #C7C7C7;
+
+  --giga-surface-elevated: #cdcdcd;
+  --giga-surface-overlay: #ededed;
+  --giga-surface-highlight: #c1c1c1;
+  --giga-on-surface-subtle: #6F6F6F;
+  --giga-on-surface-dim: #7E7E7E;
+  --giga-on-surface-muted: #6F6F6F;
+
+  --giga-filter-text: #222222;
+  --giga-filter-muted: #6F6F6F;
+  --giga-filter-field: #f4f4f4;
+  --giga-icon-secondary: #595959;
+
+  --giga-surface-panel: #f4f4f4;
+}
+
+/* ── Accessible theme overrides ──────────────────────────────── */
+:root.accessible,
+[data-theme="accessible"] {
+  --giga-background: #181818;
+  --giga-foreground: #fff;
+
+  --giga-landing-background: #000;
+
+  --giga-card: #181818;
+  --giga-card-foreground: #fff;
+
+  --giga-popover: #181818;
+  --giga-popover-foreground: #fff;
+
+  --giga-secondary: #383838;
+  --giga-secondary-foreground: #fff;
+
+  --giga-muted: #333333;
+  --giga-muted-foreground: #9ca3af;
+
+  --giga-accent: #383838;
+  --giga-accent-foreground: #fff;
+
+  --giga-border: #374151;
+  --giga-card-border: #374151;
+  --giga-input: #C7C7C7;
+
+  --giga-surface-elevated: #383838;
+  --giga-surface-overlay: #353535;
+  --giga-surface-highlight: #494949;
+  --giga-on-surface-subtle: #9ca3af;
+  --giga-on-surface-dim: #9ca3af;
+  --giga-on-surface-muted: #9ca3af;
+
+  --giga-filter-text: #f5f5f5;
+  --giga-filter-muted: #9ca3af;
+  --giga-filter-field: #262626;
+  --giga-icon-secondary: #fff;
+}
+
+/* ── Tailwind @theme — references CSS vars for dynamic theming ── */
+@theme {
+  /* Standard shadcn/ui tokens */
+  --color-background: var(--giga-background);
+  --color-foreground: var(--giga-foreground);
+
+  --color-landing-background: var(--giga-landing-background);
+
+  --color-card: var(--giga-card);
+  --color-card-foreground: var(--giga-card-foreground);
+
+  --color-popover: var(--giga-popover);
+  --color-popover-foreground: var(--giga-popover-foreground);
+
+  --color-primary: var(--giga-primary);
+  --color-primary-foreground: var(--giga-primary-foreground);
+
+  --color-secondary: var(--giga-secondary);
+  --color-secondary-foreground: var(--giga-secondary-foreground);
+
+  --color-muted: var(--giga-muted);
+  --color-muted-foreground: var(--giga-muted-foreground);
+
+  --color-accent: var(--giga-accent);
+  --color-accent-foreground: var(--giga-accent-foreground);
+
+  --color-destructive: var(--giga-destructive);
+  --color-destructive-foreground: var(--giga-destructive-foreground);
+
+  --color-border: var(--giga-border);
+  --color-card-border: var(--giga-card-border);
+  --color-input: var(--giga-input);
+  --color-ring: var(--giga-ring);
+
+  /* Extended tokens */
+  --color-surface-elevated: var(--giga-surface-elevated);
+  --color-surface-overlay: var(--giga-surface-overlay);
+  --color-surface-highlight: var(--giga-surface-highlight);
+  --color-on-surface-subtle: var(--giga-on-surface-subtle);
+  --color-on-surface-dim: var(--giga-on-surface-dim);
+  --color-on-surface-muted: var(--giga-on-surface-muted);
+
+  --color-success: var(--giga-success);
+  --color-warning: var(--giga-warning);
+  --color-error-brand: var(--giga-error-brand);
+  --color-neutral: var(--giga-neutral);
+
+  --color-filter-text: var(--giga-filter-text);
+  --color-filter-muted: var(--giga-filter-muted);
+  --color-filter-field: var(--giga-filter-field);
+  --color-icon-secondary: var(--giga-icon-secondary);
+  --color-mapped: var(--giga-mapped);
+  --color-accessible-panel: var(--giga-accessible-panel);
+
+  --color-connectivity-green-200: #85FFBC;
+  --color-connectivity-green-600: #00D661;
+  --color-gray-200: #E9E9E9;
+  --color-gray-300: #D1D5DB;
+  --color-gray-400: #CACACA;
+  --color-gray-500: #6B7280;
+  --color-gray-600: #6F6F6F;
+  --color-gray-700: #374151;
+  --color-gray-800: #393939;
+  --color-gray-900: #242424;
+  --color-gray-950: #161616;
+  --color-surface-panel: var(--giga-surface-panel);
+  --color-primary-300: #A9CAFF;
+
+  --font-manrope: "Manrope", sans-serif;
+
+  /* Brand type scale: text-xs is 12/18 (Tailwind ships 12/16), plus a 10/18 step */
+  --text-xs--line-height: 1.125rem;
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 1.125rem;
+
+  /* Marketing container: 1728px content width (96px gutters at 1920) */
+  --container-giga: 108rem;
+
+  /* Matches $isTablet (max-width: 996px) in core/media-query.ts, so the CSS
+     and JS breakpoints agree. Use as `tablet:` / `max-tablet:`. */
+  --breakpoint-tablet: 62.25rem;
+
+  /* Steps of the legend panel width ladder (420 / 560 / 768px). */
+  --breakpoint-legend-sm: 26.25rem;
+  --breakpoint-legend-md: 35rem;
+  --breakpoint-legend-lg: 48rem;
+}
+
+@media (width >=theme(--breakpoint-legend-lg)) {
+  :root {
+    --legend-section-gap: 1rem;
+  }
+}
+
+@keyframes notification-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes legend-connectivity-glow {
+  from {
+    opacity: 0.9;
+    transform: scale(0.72);
+  }
+
+  to {
+    opacity: 0.35;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes legend-bar-glow {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(1.09, 2);
+  }
+}

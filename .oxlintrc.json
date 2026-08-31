@@ -1,0 +1,66 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "react",
+    "jsx-a11y",
+    "import",
+    "unicorn",
+    "oxc"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".jsx", ".tsx"] }],
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-console": "warn",
+    "react-hooks/exhaustive-deps": "off",
+    "import/no-unassigned-import": "off",
+    "import/no-named-as-default": "off",
+    "object-shorthand": "error",
+    "no-plusplus": "warn",
+    "jsx-a11y/alt-text": "warn",
+    "react/jsx-key": "warn",
+    "no-extra-boolean-cast": "warn",
+    "no-constant-binary-expression": "warn",
+    "unicorn/no-empty-file": "warn",
+    "import/default": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/prefer-tag-over-role": "warn",
+    "no-self-assign": "warn",
+    "oxc/only-used-in-recursion": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/iframe-has-title": "warn"
+  },
+  "env": {
+    "browser": true,
+    "builtin": true
+  },
+  "ignorePatterns": [
+    ".typescript",
+    "node_modules",
+    "package-lock.json",
+    "build",
+    "dist",
+    "storybook-static",
+    ".coverage",
+    ".temp",
+    ".npm",
+    ".cache",
+    ".*-cache",
+    ".env",
+    ".vscode",
+    ".idea",
+    "*.DS_Store",
+    "*.log",
+    "src/lib/storybook-kit/*",
+    "/__mocks__/*",
+    "/webpack/*",
+    "*.config.js"
+  ]
+}

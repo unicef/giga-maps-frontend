@@ -67,6 +67,10 @@ export const FormContentList = ({ field: content }: { field: AboutusFormType["co
   </FormContentListWrapper>
 }
 
+// Kept local rather than shared with the landing feature, to avoid coupling the
+// admin to it for one regex.
+const isVideoAsset = (url?: string) => /\.(mp4|webm)(\?|#|$)/i.test(url ?? '');
+
 const SelectSearch = styled(SelectCountry)``
 const MultiSelectSearch = styled(MultiSelect)``
 
@@ -104,18 +108,26 @@ export const SelectImageDropdown = ({ field }: { field: AboutFormFieldType }) =>
       placeholder={`Select ${field.name}`}
       items={imageList || []}
       itemToString={(item) => item?.name}
-      itemToElement={(item) => (
+      itemToElement={(item) => {
+        const { image, name } = (item ?? {}) as AboutUsImage;
+
+        return (
         <span style={{ display: 'flex' }}>
-          {item?.name}
-          <Link style={{ marginLeft: '10px', background: 'grey' }} href={item?.image} onClick={(e) => {
+          {name}
+          <Link style={{ marginLeft: '10px', background: 'grey' }} href={image} onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            window.open(item.image, "_blank");
+            window.open(image, "_blank");
           }} target='_blank'>
-            <img src={item?.image} alt={item?.name} style={{ height: '30px' }} />
+            {/* The uploader takes mp4/webm now, and an <img> shows those as a
+                broken thumbnail. */}
+            {isVideoAsset(image)
+              ? <video src={image} style={{ height: '30px' }} muted playsInline preload="metadata" />
+              : <img src={image} alt={name} style={{ height: '30px' }} />}
           </Link>
         </span>
-      )}
+        );
+      }}
       initialSelectedItem={selectedItem}
       selectedItem={selectedItem}
       onChange={({ selectedItem }: { selectedItem: AboutUsImage }) => {
@@ -235,7 +247,7 @@ export const SelectDropDownSection = ({ field }: { field: AboutFormFieldType }) 
       )}
       selectedItems={selectedItem}
       onChange={({ selectedItems }: { selectedItems: any[] }) => {
-        const selectedValue = selectedItems.map(item => item.value).sort((a, b) => aboutUsFormType.indexOf(a) - aboutUsFormType.indexOf(b)).join(',');
+        const selectedValue = selectedItems.map(item => item.value).toSorted((a, b) => aboutUsFormType.indexOf(a) - aboutUsFormType.indexOf(b)).join(',');
         onChangeFormField({
           path: field.path,
           value: selectedValue,

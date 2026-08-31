@@ -1,4 +1,4 @@
-import { describe, test, expect, jest } from '@jest/globals'
+import { describe, test, expect, beforeEach, vi } from 'vitest'
 import { zoomToCountryFx } from '../zoom-to-country-fx'
 import { defaultCenter, defaultZoom } from '~/@/map/map.constant'
 
@@ -7,8 +7,9 @@ describe('zoomToCountryFx', () => {
 
   beforeEach(() => {
     map = {
-      flyTo: jest.fn(),
-      fitBounds: jest.fn(),
+      flyTo: vi.fn(),
+      fitBounds: vi.fn(),
+      getZoom: vi.fn().mockReturnValue(0),
     }
   })
 
@@ -23,6 +24,19 @@ describe('zoomToCountryFx', () => {
     expect(map.flyTo).toHaveBeenCalledWith({
       center: schoolFocusLatLng,
       zoom: 10,
+      offset: [0, -180],
+    })
+    expect(result).toBe(schoolFocusLatLng.toString())
+  })
+
+  test('should not zoom out when current zoom is greater than school default zoom', async () => {
+    map.getZoom = vi.fn().mockReturnValue(14)
+    const schoolFocusLatLng = [10, 20]
+    const result = await zoomToCountryFx({ map, schoolFocusLatLng, levelsCode: ['US'] } as any)
+    expect(map.flyTo).toHaveBeenCalledWith({
+      center: schoolFocusLatLng,
+      zoom: 14,
+      offset: [0, -180],
     })
     expect(result).toBe(schoolFocusLatLng.toString())
   })
@@ -68,3 +82,4 @@ describe('zoomToCountryFx', () => {
     expect(result).toBe(zoomedCountryCode)
   })
 })
+

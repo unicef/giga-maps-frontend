@@ -1,16 +1,31 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
-import ConnectivityLayer from '../connectivity-layer/connectivity-layer.view';
-jest.mock('@carbon/charts-react', () => ({
-  SimpleBarChart: jest.fn().mockReturnValue(null),
-}))
 
+import { EntityType } from '~/@/entities';
+import { testWrapper } from '~/tests/test-wrapper';
+
+import ConnectivityLayer from '../connectivity-layer/connectivity-layer.view';
+
+vi.mock('@carbon/charts-react', () => ({
+  SimpleBarChart: vi.fn().mockReturnValue(null),
+}));
 
 describe('ConnectivityLayer', () => {
-
   it('should render component', () => {
-    const { asFragment } = render(testWrapper(<ConnectivityLayer />));
+    const { asFragment } = render(
+      testWrapper(<ConnectivityLayer entityType={EntityType.SCHOOL} />),
+    );
     expect(asFragment).toMatchSnapshot();
   });
 
+  it('keeps the live panel loading during the bridged request pipeline', () => {
+    const { container } = render(
+      testWrapper(
+        <ConnectivityLayer entityType={EntityType.SCHOOL} isLiveDataLoading />,
+      ),
+    );
+
+    expect(
+      container.querySelector('[data-slot="skeleton"]'),
+    ).toBeInTheDocument();
+  });
 });

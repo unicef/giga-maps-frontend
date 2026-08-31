@@ -1,38 +1,36 @@
-import { Information } from "@carbon/icons-react";
-import { Tooltip } from "@carbon/react";
-import { ReactElement } from "react";
-import styled from "styled-components";
+import { Info } from 'lucide-react';
+import { ReactElement } from 'react';
 
-const AccordionItemTitleWrapper = styled.div`
-  display:flex;
-  align-items:center;
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 
-.graph{
-fill:#fff;
-width: 0.75rem;
-height: 0.75rem;
-margin-right:0.25rem;
-}
-button{
-  border: none;
-    background: inherit;
-    margin-top: 0.3rem;
-    svg{
-      fill:#7E7E7E;
-      width: 0.75rem;
-      height: 0.75rem;
-    }
-}
-
-`
-
-export const AccordionItemTitle = ({ label, tooltipLabel }: { label: ReactElement, tooltipLabel: string }) => (
-  <AccordionItemTitleWrapper>
-    {label}
-    <Tooltip align="top" label={tooltipLabel}>
-      <button className="sb-tooltip-trigger" type="button">
-        <Information />
-      </button>
-    </Tooltip>
-  </AccordionItemTitleWrapper>
+export const AccordionItemTitle = ({
+  label,
+  tooltipLabel,
+}: {
+  label: ReactElement;
+  tooltipLabel: string;
+}) => (
+  <TooltipProvider>
+    <div className="flex! items-center!">
+      {label}
+      <Tooltip>
+        <TooltipTrigger asChild stopPropagation>
+          <span
+            aria-label={tooltipLabel}
+            className="ml-0.5! inline-flex! size-6! -m-0.5! p-1.5! items-center! justify-center! rounded-full! text-muted-foreground!"
+          >
+            <Info aria-hidden="true" className="size-3!" />
+          </span>
+        </TooltipTrigger>
+        <TooltipContent align="center" side="top" sideOffset={4}>
+          {tooltipLabel}
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  </TooltipProvider>
 );

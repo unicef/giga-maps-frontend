@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react"
 import { createEvent } from "effector"
 
 import { aboutUsImageList } from "~/tests/data/admin-about-us-image-list";
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import { $imageList } from "../../models/about-us-model";
 import ListImage from "../about-us/about-us-image-upload/list-image"
@@ -20,7 +20,7 @@ describe("About Us image upload", () => {
   })
 
   test("Click on delete icon", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<ListImage onClick={handleClick} />));
     const button = getByTestId(`delete-about-us-image${aboutUsImageList?.results[0].id}`);
     fireEvent.click(button);
@@ -30,7 +30,7 @@ describe("About Us image upload", () => {
   })
 
   test("Click on yes to delete image", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<ListImage onClick={handleClick} />));
     const button = getByTestId(`delete-about-us-image${aboutUsImageList?.results[0].id}`);
     fireEvent.click(button);
@@ -49,7 +49,7 @@ describe("About Us image upload", () => {
   })
 
   test("Click submit", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(<ModalUploadImageContent setOpen={handleClick} />)
     // const nameInput = getByTestId('image-upload-name');
     // fireEvent.change(nameInput, { target: { value: 'Test Name' } });
@@ -59,3 +59,5 @@ describe("About Us image upload", () => {
     fireEvent.submit(getByTestId('form-image-uplaod'));
   })
 })
+
+
