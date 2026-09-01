@@ -78,7 +78,7 @@ export const useTargetLiveButtonLayer = (targetEntityType: EntityType) => {
   );
   const targetGlobalLayerData =
     targetGlobalLayerCandidate &&
-    isLayerApplicableToCountry(targetGlobalLayerCandidate, countryId)
+      isLayerApplicableToCountry(targetGlobalLayerCandidate, countryId)
       ? targetGlobalLayerCandidate
       : null;
   const targetLiveButtonLayer =
@@ -155,7 +155,7 @@ const GigaLayerButtonIcons = ({
   );
   const targetCoverageLayerData =
     targetCoverageLayerCandidate &&
-    isLayerApplicableToCountry(targetCoverageLayerCandidate, countryId)
+      isLayerApplicableToCountry(targetCoverageLayerCandidate, countryId)
       ? targetCoverageLayerCandidate
       : null;
   const targetStaticButtonLayer =
@@ -290,47 +290,43 @@ const GigaLayerButtonIcons = ({
             );
           }}
         />
-        {!countryId || targetLiveButtonLayer ? (
-          <GigaLayerButton
-            label={targetLiveButtonLayer?.name ?? t('average-download-speed')}
-            disabled={isLiveButtonDisabled}
-            popup={popup}
-            isActive={isLive}
-            icon={<Wifi />}
-            onClick={() => {
-              if (targetLiveButtonLayer) {
-                updateLayer(targetLiveButtonLayer.id);
-              }
-            }}
-          />
-        ) : null}
-        {!countryId || targetStaticButtonLayer ? (
-          <GigaLayerButton
-            label={targetStaticButtonLayer?.name ?? t('cellular-coverage')}
-            popup={popup}
-            disabled={
-              !targetStaticButtonLayer ||
-              !targetActiveLayerByCountryCode[
-                String(targetStaticButtonLayer.id)
-              ]
+        <GigaLayerButton
+          label={targetLiveButtonLayer?.name ?? t('average-download-speed')}
+          disabled={isLiveButtonDisabled}
+          popup={popup}
+          isActive={isLive}
+          icon={<Wifi />}
+          onClick={() => {
+            if (targetLiveButtonLayer) {
+              updateLayer(targetLiveButtonLayer.id);
             }
-            isActive={targetStaticButtonLayer?.id === targetSelectedLayerId}
-            icon={
-              <span
-                className=""
-                dangerouslySetInnerHTML={{
-                  __html: targetStaticButtonLayer?.icon ?? '',
-                }}
-              />
+          }}
+        />
+        <GigaLayerButton
+          label={targetStaticButtonLayer?.name ?? t('cellular-coverage')}
+          popup={popup}
+          disabled={
+            !targetStaticButtonLayer ||
+            !targetActiveLayerByCountryCode[
+            String(targetStaticButtonLayer.id)
+            ]
+          }
+          isActive={targetStaticButtonLayer?.id === targetSelectedLayerId}
+          icon={
+            <span
+              className=""
+              dangerouslySetInnerHTML={{
+                __html: targetStaticButtonLayer?.icon ?? '',
+              }}
+            />
+          }
+          onClick={() => {
+            if (targetStaticButtonLayer) {
+              updateLayer(targetStaticButtonLayer.id);
+              resetEntityCoverageFilterSelection(targetEntityType);
             }
-            onClick={() => {
-              if (targetStaticButtonLayer) {
-                updateLayer(targetStaticButtonLayer.id);
-                resetEntityCoverageFilterSelection(targetEntityType);
-              }
-            }}
-          />
-        ) : null}
+          }}
+        />
         {popup &&
           entityStaticLayers.map(
             (layer) =>
