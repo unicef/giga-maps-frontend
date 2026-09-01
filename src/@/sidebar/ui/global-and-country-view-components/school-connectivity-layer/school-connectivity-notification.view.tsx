@@ -26,7 +26,7 @@ const SchoolConnectivityNotification = ({
         <p className="m-0! mt-1! p-0! font-sans! text-xs! font-normal! leading-4.5! text-gray-400!">
           {t('for-more-information', { defaultValue: 'For more information,' })}{' '}
           <a
-            href="/about#live-map-get-in-touch"
+            href="/about#contact"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary! font-medium! hover:underline!"
@@ -51,7 +51,7 @@ const SchoolConnectivityNotification = ({
         <p className="m-0! mt-1! p-0! font-sans! text-xs! font-normal! leading-4.5! text-gray-400!">
           {t('want-to-help-map-it', { defaultValue: 'Want to help map it?' })}{' '}
           <a
-            href="/about#live-map-get-in-touch"
+            href="/about#contact"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary! font-medium! hover:underline!"

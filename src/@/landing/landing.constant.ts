@@ -8,6 +8,9 @@ export const LANDING_CONTAINER =
 // Clears the sticky header (h-16) when a section is reached via anchor.
 export const LANDING_ANCHOR = 'scroll-mt-20!';
 
+// Deep link: /about#contact opens the Get in touch dialog straight away.
+export const CONTACT_HASH = 'contact';
+
 // Brand scale (CLAUDE.md 7.2); Tailwind's default line heights do not match.
 export const TYPE_H1 =
   'font-manrope! text-4xl! leading-[2.625rem]! font-medium! text-foreground! tablet:text-6xl! tablet:leading-[4.25rem]!';
