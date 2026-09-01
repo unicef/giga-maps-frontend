@@ -35,7 +35,10 @@ import {
   changeSchoolConnectedOpenStatus,
   setSchoolIdsOnPopupClickDot,
 } from '~/@/map/map.model';
-import { $countryAdvancedFiltersReady } from '~/@/map/ui/advanced-filter/country-filter-readiness.model';
+import {
+  $countryAdvancedFiltersReady,
+  $isAdvancedFilterUnavailable,
+} from '~/@/map/ui/advanced-filter/country-filter-readiness.model';
 import {
   $connectivityBenchMarkByEntity,
   $connectivityLayers,
@@ -805,6 +808,7 @@ sample({
     !info.isMobile &&
     !!activePopup?.id &&
     !!activePopup.entityType &&
+    info.activeEntityTypes.includes(activePopup.entityType) &&
     hasEntityDetailInfoLayer(info, activePopup.entityType),
   fn: ({ info, activePopup }) =>
     entityPopupInfoFn(info, {
@@ -1160,6 +1164,14 @@ sample({
   filter: (isOpen) => isOpen,
   fn: () => false,
   target: [onShowAdvancedFilter, onShowThemeLayer],
+});
+
+// The modal has nothing left to show once the active entities lose their filters.
+sample({
+  clock: $isAdvancedFilterUnavailable,
+  filter: (isUnavailable) => isUnavailable,
+  fn: () => false,
+  target: onShowAdvancedFilter,
 });
 
 const $isSidebarControlOpen = combine(
