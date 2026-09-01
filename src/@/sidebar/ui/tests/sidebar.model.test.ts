@@ -1,8 +1,46 @@
 import { allSettled, fork } from 'effector';
-import { $connectivityLayers, $staticLayers, $layersList, $staticLegendsSelected, staticLegendsSelection, makeEmptyStaticLegendsSelection, selectAllStaticLegendsSelection, $multiSelectionSchoolCheckbox, changeMultiSelectionSchoolCheckbox, $benchmarkmarkUtils, $connectivityBenchMark, $selectedLayerData } from '../../sidebar.model';
-import { LayerType, LayerTypeChoices } from '../../types';
-import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '../../sidebar.constant';
-import { $countryBenchmark, $countryConnectivityNames } from '~/@/country/country.model';
+import {
+  $accordionExpandedByScope,
+  $accordionExpandedEntities,
+  $accordionScope,
+  $benchmarkmarkUtilsByEntity,
+  $connectivityBenchMarkByEntity,
+  $connectivityLayers,
+  $coverageStatusAllByEntity,
+  $isLiveLegendLoading,
+  $layersList,
+  $multiSelectionSchoolCheckboxByEntity,
+  $selectedLayerDataByEntity,
+  $staticLayers,
+  $staticLegendsSelectedByEntity,
+  changeEntityCoverageStatus,
+  changeMultiSelectionSchoolCheckbox,
+  liveLegendLoadingFinished,
+  liveLegendLoadingStarted,
+  makeEmptyEntityStaticLegendsSelection,
+  resetCoverageFilterSelection,
+  resetEntityCoverageFilterSelection,
+  selectAllEntityStaticLegendsSelection,
+  entityStaticLegendsSelection,
+  buildBenchmarkUtils,
+  toggleAccordionEntity,
+} from '../../sidebar.model';
+import { AccordionScope, LayerType, LayerTypeChoices } from '../../types';
+import {
+  ConnectivityBenchMarks,
+  ConnectivityDistribution,
+  ConnectivityStatusDistribution,
+} from '../../sidebar.constant';
+import {
+  $countryBenchmark,
+  $countryConnectivityNames,
+} from '~/@/country/country.model';
+import {
+  EntityType,
+  $activeEntityTypes,
+  changeActiveEntityTypes,
+} from '~/@/entities';
+import { fetchSchoolLayerInfoFx } from '~/api/project-connect';
 
 describe('Sidebar Model Layer Tests', () => {
   const mockLayers = [
@@ -40,7 +78,9 @@ describe('Sidebar Model Layer Tests', () => {
     expect(connectivityLayers.length).toBe(2);
 
     // All layers should be of type LIVE
-    expect(connectivityLayers.every(layer => layer.type === LayerTypeChoices.LIVE)).toBe(true);
+    expect(
+      connectivityLayers.every((layer) => layer.type === LayerTypeChoices.LIVE),
+    ).toBe(true);
   });
 
   it('should correctly filter static layers', async () => {
@@ -54,7 +94,9 @@ describe('Sidebar Model Layer Tests', () => {
     expect(staticLayers.length).toBe(1);
 
     // All layers should be of type STATIC
-    expect(staticLayers.every(layer => layer.type === LayerTypeChoices.STATIC)).toBe(true);
+    expect(
+      staticLayers.every((layer) => layer.type === LayerTypeChoices.STATIC),
+    ).toBe(true);
 
     // Should contain the correct static layer
     expect(staticLayers[0].name).toBe('Static Layer 1');
@@ -85,6 +127,37 @@ describe('Sidebar Model Layer Tests', () => {
   });
 });
 
+describe('Live legend loading', () => {
+  it('stays loading until the full live legend request pipeline finishes', async () => {
+    const scope = fork();
+
+    await allSettled(liveLegendLoadingStarted, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(true);
+
+    await allSettled(liveLegendLoadingFinished, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(false);
+  });
+
+  it('finishes when the entity-detail layer info request settles', async () => {
+    const scope = fork({
+      handlers: new Map().set(fetchSchoolLayerInfoFx, () => []),
+    });
+
+    await allSettled(liveLegendLoadingStarted, { scope });
+    expect(scope.getState($isLiveLegendLoading)).toBe(true);
+
+    await allSettled(fetchSchoolLayerInfoFx, {
+      scope,
+      params: {
+        entityType: EntityType.HEALTH,
+        query: '',
+        url: '',
+      },
+    });
+    expect(scope.getState($isLiveLegendLoading)).toBe(false);
+  });
+});
+
 describe('Static Legends Selection Tests', () => {
   const scope = fork();
 
@@ -93,11 +166,11 @@ describe('Static Legends Selection Tests', () => {
   });
 
   it('should initialize with default values', async () => {
-    const state = scope.getState($staticLegendsSelected);
+    const state = scope.getState($staticLegendsSelectedByEntity).school;
     expect(state).toEqual([
       ConnectivityStatusDistribution.connected,
       ConnectivityStatusDistribution.notConnected,
-      ConnectivityStatusDistribution.unknown
+      ConnectivityStatusDistribution.unknown,
     ]);
   });
 
@@ -105,51 +178,78 @@ describe('Static Legends Selection Tests', () => {
     const initialState = [
       ConnectivityStatusDistribution.connected,
       ConnectivityStatusDistribution.notConnected,
-      ConnectivityStatusDistribution.unknown
+      ConnectivityStatusDistribution.unknown,
     ];
-    await allSettled(staticLegendsSelection, { scope, params: 'test_legend' });
-    const state = scope.getState($staticLegendsSelected);
+    await allSettled(entityStaticLegendsSelection, {
+      scope,
+      params: { entityType: EntityType.SCHOOL, legends: 'test_legend' },
+    });
+    const state = scope.getState($staticLegendsSelectedByEntity).school;
     expect(state).toEqual(initialState);
   });
 
   it('should remove a legend when selecting an already selected item', async () => {
-    await allSettled(staticLegendsSelection, {
+    await allSettled(entityStaticLegendsSelection, {
       scope,
-      params: ConnectivityStatusDistribution.connected
+      params: {
+        entityType: EntityType.SCHOOL,
+        legends: ConnectivityStatusDistribution.connected,
+      },
     });
-    const state = scope.getState($staticLegendsSelected);
+    const state = scope.getState($staticLegendsSelectedByEntity).school;
     expect(state).not.toContain(ConnectivityStatusDistribution.connected);
   });
 
   it('should handle array input by replacing current selection', async () => {
-    const newSelection = [ConnectivityStatusDistribution.connected, ConnectivityStatusDistribution.notConnected];
-    await allSettled(staticLegendsSelection, { scope, params: newSelection });
-    const state = scope.getState($staticLegendsSelected);
+    const newSelection = [
+      ConnectivityStatusDistribution.connected,
+      ConnectivityStatusDistribution.notConnected,
+    ];
+    await allSettled(entityStaticLegendsSelection, {
+      scope,
+      params: { entityType: EntityType.SCHOOL, legends: newSelection },
+    });
+    const state = scope.getState($staticLegendsSelectedByEntity).school;
     expect(state).toEqual(newSelection);
   });
 
-  it('should clear all selections when using makeEmptyStaticLegendsSelection', async () => {
-    await allSettled(makeEmptyStaticLegendsSelection, { scope, params: [] });
-    const state = scope.getState($staticLegendsSelected);
+  it('should clear all selections for one entity', async () => {
+    await allSettled(makeEmptyEntityStaticLegendsSelection, {
+      scope,
+      params: { entityType: EntityType.SCHOOL },
+    });
+    const state = scope.getState($staticLegendsSelectedByEntity).school;
     expect(state).toEqual([]);
   });
 
-  it('should selection when using selectAllStaticLegendsSelection', async () => {
-    await allSettled(selectAllStaticLegendsSelection, { scope, params: [] });
-    const state = scope.getState($staticLegendsSelected);
+  it('should select all legends for one entity', async () => {
+    await allSettled(selectAllEntityStaticLegendsSelection, {
+      scope,
+      params: { entityType: EntityType.SCHOOL },
+    });
+    const state = scope.getState($staticLegendsSelectedByEntity).school;
     expect(state.length).toEqual(3);
-  })
+  });
 
   it('should handle select all functionality', async () => {
     const scope = fork();
 
     // Add some initial selections
-    await allSettled(staticLegendsSelection, { scope, params: 'connected' });
-    expect(scope.getState($staticLegendsSelected).length).toEqual(2);
+    await allSettled(entityStaticLegendsSelection, {
+      scope,
+      params: { entityType: EntityType.SCHOOL, legends: 'connected' },
+    });
+    expect(
+      scope.getState($staticLegendsSelectedByEntity).school?.length,
+    ).toEqual(2);
 
     // Test select all
-    await allSettled(selectAllStaticLegendsSelection, { scope });
-    const finalState = scope.getState($staticLegendsSelected);
+    await allSettled(selectAllEntityStaticLegendsSelection, {
+      scope,
+      params: { entityType: EntityType.SCHOOL },
+    });
+    const finalState =
+      scope.getState($staticLegendsSelectedByEntity).school ?? [];
     expect(Array.isArray(finalState)).toBe(true);
     expect(finalState.length).toBeGreaterThan(0);
   });
@@ -163,40 +263,55 @@ describe('Multi Selection School Checkbox Tests', () => {
   });
 
   it('should initialize with empty selection', () => {
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state).toEqual({ countryId: 0, schoolIds: [] });
   });
 
   it('should add a school to selection', async () => {
     const mockSelection = { countryId: 1, schoolIds: [123] };
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: mockSelection });
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    await allSettled(changeMultiSelectionSchoolCheckbox, {
+      scope,
+      params: { ...mockSelection, entityType: EntityType.SCHOOL },
+    });
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state.countryId).toBe(1);
   });
 
   it('should remove a school from selection', async () => {
     // First add schools
     const initialSelection = { countryId: 1, schoolIds: [123, 456] };
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: initialSelection });
+    await allSettled(changeMultiSelectionSchoolCheckbox, {
+      scope,
+      params: { ...initialSelection, entityType: EntityType.SCHOOL },
+    });
 
     // Then remove one
     const removeSelection = { countryId: 1, schoolIds: 123 };
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: removeSelection });
+    await allSettled(changeMultiSelectionSchoolCheckbox, {
+      scope,
+      params: { ...removeSelection, entityType: EntityType.SCHOOL },
+    });
 
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state.schoolIds).toHaveLength(3);
   });
 
   it('should clear selection when changing country', async () => {
     // First add schools for country 1
     const initialSelection = { countryId: 1, schoolIds: [123, 456] };
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: initialSelection });
+    await allSettled(changeMultiSelectionSchoolCheckbox, {
+      scope,
+      params: { ...initialSelection, entityType: EntityType.SCHOOL },
+    });
 
     // Change to country 2
     const newSelection = { countryId: 2, schoolIds: [789] };
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: newSelection });
+    await allSettled(changeMultiSelectionSchoolCheckbox, {
+      scope,
+      params: { ...newSelection, entityType: EntityType.SCHOOL },
+    });
 
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state.countryId).toBe(2);
   });
 
@@ -204,40 +319,47 @@ describe('Multi Selection School Checkbox Tests', () => {
     const selections = [
       { countryId: 1, schoolIds: [123] },
       { countryId: 1, schoolIds: [456] },
-      { countryId: 1, schoolIds: [789] }
+      { countryId: 1, schoolIds: [789] },
     ];
 
     for (const selection of selections) {
-      await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: selection });
+      await allSettled(changeMultiSelectionSchoolCheckbox, {
+        scope,
+        params: { ...selection, entityType: EntityType.SCHOOL },
+      });
     }
 
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state.schoolIds).toHaveLength(8);
   });
 
   it('should handle clearing all selections', async () => {
     // First add some schools
     const initialSelection = { countryId: 1, schoolIds: [123, 456, 789] };
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: initialSelection });
+    await allSettled(changeMultiSelectionSchoolCheckbox, {
+      scope,
+      params: { ...initialSelection, entityType: EntityType.SCHOOL },
+    });
 
     // Clear all selections
-    await allSettled(changeMultiSelectionSchoolCheckbox, { scope });
-
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state.countryId).toEqual(1);
   });
 
   it('should not add duplicate school IDs', async () => {
     const selections = [
       { countryId: 1, schoolIds: [123] },
-      { countryId: 1, schoolIds: [123] } // Duplicate selection
+      { countryId: 1, schoolIds: [123] }, // Duplicate selection
     ];
 
     for (const selection of selections) {
-      await allSettled(changeMultiSelectionSchoolCheckbox, { scope, params: selection });
+      await allSettled(changeMultiSelectionSchoolCheckbox, {
+        scope,
+        params: { ...selection, entityType: EntityType.SCHOOL },
+      });
     }
 
-    const state = scope.getState($multiSelectionSchoolCheckbox);
+    const state = scope.getState($multiSelectionSchoolCheckboxByEntity).school!;
     expect(state.schoolIds).toHaveLength(11);
   });
 });
@@ -249,73 +371,77 @@ describe('Benchmark Utils Tests', () => {
     global_benchmark: {
       convert_unit: 'Mbps',
       value: '10',
-      benchmark_name: 'Global Benchmark'
+      benchmark_name: 'Global Benchmark',
     },
     is_reverse: false,
     benchmark_metadata: {
       base_benchmark: '5',
-      round_unit_value: 'x => Math.round(x)'
-    }
+      round_unit_value: 'x => Math.round(x)',
+    },
   };
 
   const mockCountryBenchmark = {
-    1: '15' // for layer id 1
+    1: '15', // for layer id 1
   };
 
   const mockConnectivityNames = {
-    1: 'National Benchmark' // for layer id 1
+    1: 'National Benchmark', // for layer id 1
   };
 
   it('should return empty object if layer data is missing or not live', async () => {
-    const scope = fork({
-      values: new Map()
-        .set($selectedLayerData, null)
-        .set($countryBenchmark, mockCountryBenchmark)
-        .set($connectivityBenchMark, ConnectivityBenchMarks.global)
-        .set($countryConnectivityNames, mockConnectivityNames)
-    });
-
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = buildBenchmarkUtils(
+      mockCountryBenchmark,
+      null,
+      ConnectivityBenchMarks.global,
+      mockConnectivityNames,
+      { map: false } as any,
+    );
     expect(result).toEqual({});
   });
 
   it('should calculate global benchmark values correctly', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, mockSelectedLayerData)
+        .set($selectedLayerDataByEntity, { school: mockSelectedLayerData })
         .set($countryBenchmark, mockCountryBenchmark)
-        .set($connectivityBenchMark, ConnectivityBenchMarks.global)
-        .set($countryConnectivityNames, mockConnectivityNames)
+        .set($connectivityBenchMarkByEntity, {
+          school: ConnectivityBenchMarks.global,
+        })
+        .set($countryConnectivityNames, mockConnectivityNames),
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.isReverse).toEqual(false);
-    expect(result.baseBenchmark).toEqual("5");
+    expect(result.baseBenchmark).toEqual('5');
   });
 
   it('should calculate national benchmark values correctly', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, mockSelectedLayerData)
+        .set($selectedLayerDataByEntity, { school: mockSelectedLayerData })
         .set($countryBenchmark, mockCountryBenchmark)
-        .set($connectivityBenchMark, ConnectivityBenchMarks.national)
-        .set($countryConnectivityNames, mockConnectivityNames)
+        .set($connectivityBenchMarkByEntity, {
+          school: ConnectivityBenchMarks.national,
+        })
+        .set($countryConnectivityNames, mockConnectivityNames),
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.nationalBenchmarkValue).toEqual(0);
   });
 
   it('should handle missing national benchmark value', async () => {
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, mockSelectedLayerData)
+        .set($selectedLayerDataByEntity, { school: mockSelectedLayerData })
         .set($countryBenchmark, {})
-        .set($connectivityBenchMark, ConnectivityBenchMarks.national)
-        .set($countryConnectivityNames, mockConnectivityNames)
+        .set($connectivityBenchMarkByEntity, {
+          school: ConnectivityBenchMarks.national,
+        })
+        .set($countryConnectivityNames, mockConnectivityNames),
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.nationalBenchmarkValue).toBe(0);
     expect(result.isNational).toBe(false);
   });
@@ -323,18 +449,20 @@ describe('Benchmark Utils Tests', () => {
   it('should handle reversed benchmark logic', async () => {
     const reversedLayerData = {
       ...mockSelectedLayerData,
-      is_reverse: true
+      is_reverse: true,
     };
 
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, reversedLayerData)
+        .set($selectedLayerDataByEntity, { school: reversedLayerData })
         .set($countryBenchmark, mockCountryBenchmark)
-        .set($connectivityBenchMark, ConnectivityBenchMarks.global)
-        .set($countryConnectivityNames, mockConnectivityNames)
+        .set($connectivityBenchMarkByEntity, {
+          school: ConnectivityBenchMarks.global,
+        })
+        .set($countryConnectivityNames, mockConnectivityNames),
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.isReverse).toBe(true);
     expect(result.benchmarkLogic).toBeDefined();
   });
@@ -342,19 +470,166 @@ describe('Benchmark Utils Tests', () => {
   it('should handle missing benchmark metadata', async () => {
     const layerWithoutMetadata = {
       ...mockSelectedLayerData,
-      benchmark_metadata: undefined
+      benchmark_metadata: undefined,
     };
 
     const scope = fork({
       values: new Map()
-        .set($selectedLayerData, layerWithoutMetadata)
+        .set($selectedLayerDataByEntity, { school: layerWithoutMetadata })
         .set($countryBenchmark, mockCountryBenchmark)
-        .set($connectivityBenchMark, ConnectivityBenchMarks.global)
-        .set($countryConnectivityNames, mockConnectivityNames)
+        .set($connectivityBenchMarkByEntity, {
+          school: ConnectivityBenchMarks.global,
+        })
+        .set($countryConnectivityNames, mockConnectivityNames),
     });
 
-    const result = scope.getState($benchmarkmarkUtils);
+    const result = scope.getState($benchmarkmarkUtilsByEntity).school;
     expect(result.baseBenchmark).toBeUndefined();
     expect(result.benchmarkLogic).toBeDefined();
+  });
+});
+
+describe('Entity coverage filter reset', () => {
+  afterEach(() => {
+    resetCoverageFilterSelection();
+  });
+
+  it('resets only the requested entity type', () => {
+    changeEntityCoverageStatus({
+      entityType: EntityType.SCHOOL,
+      key: ConnectivityDistribution.good,
+      value: false,
+    });
+    changeEntityCoverageStatus({
+      entityType: EntityType.HEALTH,
+      key: ConnectivityDistribution.good,
+      value: false,
+    });
+    resetEntityCoverageFilterSelection(EntityType.HEALTH);
+
+    const filters = $coverageStatusAllByEntity.getState();
+    expect(filters[EntityType.HEALTH]?.good).toBe(true);
+    expect(filters[EntityType.SCHOOL]?.good).toBe(false);
+  });
+});
+
+const forkMultiEntity = (accordionScope: AccordionScope = 'global') =>
+  fork({
+    values: new Map()
+      .set($accordionScope, accordionScope)
+      .set($activeEntityTypes, [EntityType.HEALTH, EntityType.SCHOOL]),
+  });
+
+describe('Accordion Expanded Entities Store', () => {
+  it('collapses every card by default in both views', () => {
+    expect(
+      forkMultiEntity('global').getState($accordionExpandedEntities),
+    ).toEqual({});
+    expect(
+      forkMultiEntity('country').getState($accordionExpandedEntities),
+    ).toEqual({});
+  });
+
+  it('keeps global and country expansion state independent', async () => {
+    const countryScope = forkMultiEntity('country');
+    await allSettled(toggleAccordionEntity, {
+      scope: countryScope,
+      params: EntityType.HEALTH,
+    });
+
+    expect(countryScope.getState($accordionExpandedByScope)).toEqual({
+      country: { [EntityType.HEALTH]: true },
+      global: {},
+    });
+
+    const globalScope = forkMultiEntity('global');
+    await allSettled(toggleAccordionEntity, {
+      scope: globalScope,
+      params: EntityType.SCHOOL,
+    });
+
+    expect(globalScope.getState($accordionExpandedByScope)).toEqual({
+      country: {},
+      global: { [EntityType.SCHOOL]: true },
+    });
+  });
+
+  it('expands the card by default when a single entity type is selected', async () => {
+    const scope = forkMultiEntity();
+
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.SCHOOL],
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({
+      [EntityType.SCHOOL]: true,
+    });
+  });
+
+  it('returns to the collapsed multi-entity state when the user never expanded it', async () => {
+    const scope = forkMultiEntity();
+
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.SCHOOL],
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.HEALTH, EntityType.SCHOOL],
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({});
+  });
+
+  it('restores the expanded multi-entity state after a single-entity round trip', async () => {
+    const scope = forkMultiEntity();
+
+    await allSettled(toggleAccordionEntity, {
+      scope,
+      params: EntityType.HEALTH,
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.SCHOOL],
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.HEALTH, EntityType.SCHOOL],
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({
+      [EntityType.HEALTH]: true,
+    });
+  });
+
+  it('does not leak a collapse done in single-entity view into the multi-entity state', async () => {
+    const scope = forkMultiEntity();
+
+    await allSettled(toggleAccordionEntity, {
+      scope,
+      params: EntityType.SCHOOL,
+    });
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.SCHOOL],
+    });
+    await allSettled(toggleAccordionEntity, {
+      scope,
+      params: EntityType.SCHOOL,
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({
+      [EntityType.SCHOOL]: false,
+    });
+
+    await allSettled(changeActiveEntityTypes, {
+      scope,
+      params: [EntityType.HEALTH, EntityType.SCHOOL],
+    });
+
+    expect(scope.getState($accordionExpandedEntities)).toEqual({
+      [EntityType.SCHOOL]: true,
+    });
   });
 });

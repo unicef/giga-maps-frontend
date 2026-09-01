@@ -1,8 +1,10 @@
 import { createEffect } from "effector"
+
 import { APIListType } from "~/api/types"
 import { createRequestAuthFx } from "~/core/auth/effects/common.fx"
+
+import { ColumnDBChoicesType, FilterConfiguration, FilterListType, FilterListWithOptionsTypes } from "../types/filter-list.type"
 import { FilterAllValueType } from "../types/filter-list-type"
-import { ColumnDBChoicesType, FilterConfiguration, FilterListType, FilterListWithOptionsTypes, FiltersDefaultValueType } from "../types/filter-list.type"
 
 export const getFilterListFx = createEffect(({ page, pageSize, search }: { page: number, pageSize: number, search?: string }) => {
   const query = new URLSearchParams()
@@ -12,19 +14,21 @@ export const getFilterListFx = createEffect(({ page, pageSize, search }: { page:
     query.set('search', search)
   }
   return createRequestAuthFx({
-    url: `accounts/adv_filters/?${query.toString()}&ordering=-last_modified_at&expand=column_configuration,published_by`
+    url: `v2/entities/filters/?${query.toString()}&ordering=-last_modified_at&expand=column_configuration,published_by`
   }) as Promise<APIListType<FilterListType>>
 })
 
 export const getFilterPublishedListFx = createEffect(() => {
   return createRequestAuthFx({
-    url: `accounts/adv_filters/?status=PUBLISHED`
+    // page_size must cover the full published catalog; default pagination
+    // only returns the first page and breaks country active-filter selection.
+    url: `v2/entities/filters/?status=PUBLISHED&page_size=1000`
   }) as Promise<APIListType<FilterListType>>
 })
 
 export const filterColumnListFx = createEffect(() => {
   return createRequestAuthFx({
-    url: `accounts/column_configurations/?is_filter_applicable=true`
+    url: `v2/entities/column_configurations/?is_filter_applicable=true`
   }) as Promise<APIListType<FilterConfiguration>>
 })
 
@@ -36,21 +40,21 @@ export const getFilterListWithOptionsFx = createEffect((countryId: number) => {
 
 export const deleteFilterFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
-    url: `accounts/adv_filters/${id}/`,
+    url: `v2/entities/filters/${id}/`,
     method: 'DELETE'
   }) as Promise<FilterListType>
 })
 
 export const addFilterFx = createEffect(({ body }: { body: FilterAllValueType }) => {
   return createRequestAuthFx({
-    url: `accounts/adv_filters/`,
+    url: `v2/entities/filters/`,
     method: 'POST',
     data: body
   }) as Promise<FilterListType>
 })
 export const editFilterFx = createEffect(({ id, body }: { id: number, body: FilterAllValueType | { status: string } }) => {
   return createRequestAuthFx({
-    url: `accounts/adv_filters/${id + '/'}`,
+    url: `v2/entities/filters/${id + '/'}`,
     method: 'PUT',
     data: body
   }) as Promise<FilterListType>
@@ -58,19 +62,19 @@ export const editFilterFx = createEffect(({ id, body }: { id: number, body: Filt
 
 export const getFilterListIdFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
-    url: `accounts/adv_filters/?id=${id}`
+    url: `v2/entities/filters/?id=${id}`
   }) as Promise<APIListType<FilterListType>>
 })
 
 export const publishFilterFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
     method: 'PUT',
-    url: `accounts/adv_filters/${id}/publish/`,
+    url: `v2/entities/filters/${id}/publish/`,
   }) as Promise<FilterListType>
 })
 
 export const getFilterChoicesFx = createEffect(({ id }: { id: number }) => {
   return createRequestAuthFx({
-    url: `accounts/column_configurations/${id}/choices/`,
+    url: `v2/entities/column_configurations/${id}/choices/`,
   }) as Promise<ColumnDBChoicesType>
 })

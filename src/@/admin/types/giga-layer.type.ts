@@ -24,6 +24,8 @@ export interface DataLayer {
   data_source_column: DataSourceColumn
   last_modified_by: LastModifiedBy
   created_by: CreatedBy
+  entity_type: number;
+  entity_type__code?: string;
 }
 
 export enum LayerStatusType {
@@ -75,9 +77,11 @@ export interface Headers {
 
 export interface ColumnConfig {
   name: string
+  alias?: string
   type: string
   on?: string
   unit?: string
+  is_parameter: boolean
   is_parameters: boolean;
   base_benchmark: number;
   display_unit: string;
@@ -161,6 +165,11 @@ export enum LayerTypeChoices {
   STATIC = "STATIC"
 }
 
+export type SourceTypeItem = {
+  type: string
+  name: string
+}
+
 export interface LayerCategoryChoices {
   CONNECTIVITY: string
   COVERAGE: string
@@ -191,7 +200,7 @@ export type LegendConfigType = Record<string, { values: string[], labels: string
 export type GigaLayerFormType = {
   legendConfigs: LegendConfigType;
   isReverse: boolean;
-  sourceType: DataSourceTypeChoices[];
+  sourceType: SourceTypeItem[];
   code: DataLayer['code'],
   name: DataLayer['name'],
   icon: string,
@@ -203,6 +212,7 @@ export type GigaLayerFormType = {
   globalBenchmark: DataLayer['global_benchmark'] | null,
   benchmarkConvertUnit: string,
   supportedFunctions: SupportedFunctionType | null,
+  entityType: number | '';
 }
 
 export type GigaLayerAllValueType = ValuesType<GigaLayerFormType>;
@@ -253,4 +263,23 @@ interface Geopoint {
 
 export interface InvalidateCache {
   message: string
+}
+
+export interface Entities {
+  [key: string]: EntityMeta;
+}
+
+export interface EntityMeta {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  display_order: number;
+  is_legacy: boolean;
+  extra_config: ExtraConfig;
+}
+
+export interface ExtraConfig {
+  tile_cache_prefix: string;
+  tile_master_data_table: string;
 }

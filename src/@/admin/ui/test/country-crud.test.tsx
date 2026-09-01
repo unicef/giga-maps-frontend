@@ -3,7 +3,7 @@ import { createEvent } from "effector"
 
 import Toast from "~/@/common/Toast";
 import { AdminCountryList, countryList } from "~/tests/data/country-filter-modal";
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import { $countryListAdmin } from "../../models/country-model";
 import AddCountry from "../country/country-crud/add-country";
@@ -22,7 +22,7 @@ describe("Country Crud Tab", () => {
   })
 
   test('change tab by click', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<MainCountryView onClick={handleClick} />));
     const button = getByTestId('admin-Country Summary-tab');
     fireEvent.click(button);
@@ -30,7 +30,7 @@ describe("Country Crud Tab", () => {
 
   test("Select county and delete and verify", () => {
     setCountryList(AdminCountryList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container, getByTestId } = render(testWrapper(<ListCountry onClick={handleClick} />));
     const checkboxes = container.querySelectorAll('.cds--checkbox');
     if (checkboxes.length > 0) {
@@ -53,7 +53,7 @@ describe("Country Crud Tab", () => {
 
   test("render edit EditCountry by click on edit , and field and sumbit", () => {
     setCountryList(AdminCountryList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<ListCountry onClick={handleClick} />));
     const button = getByTestId(`admin-edit-country-${AdminCountryList.results[0]?.id}`);
     fireEvent.click(button)
@@ -84,3 +84,5 @@ describe("Country Crud Tab", () => {
     render(<AddCountry />)
   })
 })
+
+

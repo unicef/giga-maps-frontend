@@ -103,7 +103,7 @@ describe('createSourceForAdminCountry', () => {
 
   beforeEach(() => {
     map = {
-      addSource: jest.fn(),
+      addSource: vi.fn(),
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
@@ -126,7 +126,7 @@ describe('createSourceForAdminCountry', () => {
 
     createSourceForAdminCountry({
       map: {
-        addSource: jest.fn(),
+        addSource: vi.fn(),
         getStyle: () => ({
           sources: {
             [getAdminCountrySource(1)]: true,
@@ -147,12 +147,12 @@ describe('createFillLayerForCountry', () => {
 
   beforeEach(() => {
     map = {
-      addSource: jest.fn(),
-      addLayer: jest.fn(),
+      addSource: vi.fn(),
+      addLayer: vi.fn(),
       getLayer: () => { },
-      setPaintProperty: jest.fn(),
-      setLayoutProperty: jest.fn(),
-      setFilter: jest.fn(),
+      setPaintProperty: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      setFilter: vi.fn(),
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
@@ -197,7 +197,7 @@ describe('createFillLayerForCountry', () => {
   });
 
   it('should update existing layer', () => {
-    map.getLayer = jest.fn(() => true);
+    map.getLayer = vi.fn(() => true);
     const result = createFillLayerForCountry({
       map,
       paintData: {},
@@ -212,8 +212,8 @@ describe('createFillLayerForCountry', () => {
   });
 
   it('should handle lower level', () => {
-    map.addLayer = jest.fn();
-    map.getLayer = jest.fn(() => true);
+    map.addLayer = vi.fn();
+    map.getLayer = vi.fn(() => true);
 
     const result = createFillLayerForCountry({
       map,
@@ -239,11 +239,12 @@ describe('createLineLayerForCountry', () => {
 
   beforeEach(() => {
     map = {
-      getLayer: jest.fn(),
-      addLayer: jest.fn(),
-      setFilter: jest.fn(),
-      showLayer: jest.fn(),
-      setLayoutProperty: jest.fn()
+      getLayer: vi.fn(),
+      addLayer: vi.fn(),
+      setFilter: vi.fn(),
+      showLayer: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      setPaintProperty: vi.fn()
     };
   });
 
@@ -344,7 +345,7 @@ describe('setCountryBound', () => {
 
   beforeEach(() => {
     map = {
-      fitBounds: jest.fn()
+      fitBounds: vi.fn()
     };
   });
 
@@ -369,16 +370,16 @@ describe('addAdminCountryLayerEvents', () => {
 
   beforeEach(() => {
     map = {
-      queryRenderedFeatures: jest.fn(),
-      on: jest.fn(),
-      addSource: jest.fn(),
-      addLayer: jest.fn(),
+      queryRenderedFeatures: vi.fn(),
+      on: vi.fn(),
+      addSource: vi.fn(),
+      addLayer: vi.fn(),
       getLayer: () => { },
-      mapSetFeatureState: jest.fn(),
-      fitBounds: jest.fn(),
-      setPaintProperty: jest.fn(),
-      setLayoutProperty: jest.fn(),
-      setFilter: jest.fn(),
+      mapSetFeatureState: vi.fn(),
+      fitBounds: vi.fn(),
+      setPaintProperty: vi.fn(),
+      setLayoutProperty: vi.fn(),
+      setFilter: vi.fn(),
       getStyle: () => ({
         sources: {
           [DEFAULT_SOURCE]: true,
@@ -517,8 +518,8 @@ describe('addAdminCountryLayerEvents', () => {
 
   it('should handle mousemove event', () => {
     const level = 'level0';
-    const setFeatureState = jest.fn();
-    const getCanvas = jest.fn(() => ({
+    const setFeatureState = vi.fn();
+    const getCanvas = vi.fn(() => ({
       style: {}
     }))
     addAdminCountryLayerEvents({ map: { ...map, setFeatureState, getCanvas }, level } as any);
@@ -541,8 +542,8 @@ describe('addAdminCountryLayerEvents', () => {
 
   it('should handle mousemove event: else case', () => {
     const level = 'level0';
-    const setFeatureState = jest.fn();
-    const getCanvas = jest.fn(() => ({
+    const setFeatureState = vi.fn();
+    const getCanvas = vi.fn(() => ({
       style: {}
     }))
     addAdminCountryLayerEvents({ map: { ...map, setFeatureState, getCanvas }, level } as any);
@@ -558,8 +559,8 @@ describe('addAdminCountryLayerEvents', () => {
 
   it('should handle mouseout event', () => {
     const level = 0;
-    const setFeatureState = jest.fn();
-    const getCanvas = jest.fn(() => ({
+    const setFeatureState = vi.fn();
+    const getCanvas = vi.fn(() => ({
       style: {}
     }))
     addAdminCountryLayerEvents({ map: { ...map, getCanvas, setFeatureState }, level } as any);
@@ -633,10 +634,10 @@ describe('onChangeLabelLayer', () => {
 
   beforeEach(() => {
     map = {
-      getLayer: jest.fn().mockImplementation(() => true),
-      setLayoutProperty: jest.fn(),
-      showLayer: jest.fn(),
-      hideLayer: jest.fn()
+      getLayer: vi.fn().mockImplementation(() => true),
+      setLayoutProperty: vi.fn(),
+      showLayer: vi.fn(),
+      hideLayer: vi.fn()
     };
   });
 
@@ -660,10 +661,10 @@ describe('onChangeAdminBoundariesLayer', () => {
 
   beforeEach(() => {
     map = {
-      getLayer: jest.fn().mockImplementation(() => true),
-      setLayoutProperty: jest.fn(),
-      showLayer: jest.fn(),
-      hideLayer: jest.fn()
+      getLayer: vi.fn().mockImplementation(() => true),
+      setLayoutProperty: vi.fn(),
+      showLayer: vi.fn(),
+      hideLayer: vi.fn()
     };
   });
 

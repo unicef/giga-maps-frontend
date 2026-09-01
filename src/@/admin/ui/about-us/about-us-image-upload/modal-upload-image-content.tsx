@@ -64,8 +64,11 @@ const ModalUploadImageContent = ({ setOpen }: { setOpen: (value: boolean) => voi
     try {
       await uploadImagesFx({ formData });
       const nextIndex = currentIndex + 1;
-      uploadNextFile(nextIndex); // Recursive call 
+      uploadNextFile(nextIndex); // Recursive call
     } catch (e) {
+      // The endpoint answers 502 on a rejected file, so without this the upload
+      // fails silently and only shows up in the console.
+      setToasterWarning(`Could not upload "${name}". Check the file type and size.`);
       console.error(e);
     }
   };
@@ -119,13 +122,15 @@ const ModalUploadImageContent = ({ setOpen }: { setOpen: (value: boolean) => voi
             <FileUploader
               className="file-uploader"
               labelTitle=""
-              labelDescription="Only .png, .jpg and .gif file is supported."
+              labelDescription="Supported: .png, .jpg, .jpeg, .svg, .mp4 and .webm. Max 10MB per file."
               buttonLabel="Upload"
               data-testid='image-uploader'
               buttonKind="primary"
               size="md"
               filenameStatus="edit"
-              accept={['.png', '.jpg', '.gif']}
+              // Mirrors slide_media_allowed_extensions on the backend. `.gif` is
+              // gone: the FileField whitelist rejects it now.
+              accept={['.png', '.jpg', '.jpeg', '.svg', '.mp4', '.webm']}
               multiple
               iconDescription="Delete file"
               onChange={handleFileChange}

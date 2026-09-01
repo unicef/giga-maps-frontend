@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AdminApiKey render AdminApiKey 1`] = `
+exports[`AdminApiKey > render AdminApiKey 1`] = `
 <DocumentFragment>
   .c6 {
   margin-top: 0;
@@ -441,7 +441,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -587,6 +587,15 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   <div
                     class="cds--table-header-label"
                   >
+                    Category
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
                     Valid till
                   </div>
                 </th>
@@ -648,7 +657,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                       class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c8"
                     >
                       <button
-                        aria-controls="id-:rf:"
+                        aria-controls="id-:rg:"
                         aria-expanded="false"
                         aria-label="Show information"
                         class="cds--toggletip-button"
@@ -668,7 +677,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                         </span>
                       </button>
                       <button
-                        aria-labelledby="tooltip-:rg:"
+                        aria-labelledby="tooltip-:rh:"
                         class="sb-tooltip-trigger"
                         type="button"
                       >
@@ -696,7 +705,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   <span
                     aria-hidden="true"
                     class="cds--popover"
-                    id="tooltip-:rg:"
+                    id="tooltip-:rh:"
                     role="tooltip"
                   >
                     <span
@@ -710,7 +719,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   </span>
                   <span
                     class="cds--popover"
-                    id="id-:rf:"
+                    id="id-:rg:"
                   >
                     <span
                       class="cds--popover-content c10"
@@ -729,6 +738,50 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                       class="cds--popover-caret"
                     />
                   </span>
+                </td>
+                <td>
+                  <div
+                    class="cds--form-item"
+                  >
+                    <div
+                      class="cds--select cds--select--inline"
+                    >
+                      <label
+                        class="cds--label"
+                        for="select"
+                      />
+                      <div
+                        class="cds--select-input--inline__wrapper"
+                      >
+                        <div
+                          class="cds--select-input__wrapper"
+                        >
+                          <select
+                            class="cds--select-input"
+                            id="select"
+                            name="category"
+                            placeholder="Choose a category"
+                            title=""
+                          />
+                          <svg
+                            aria-hidden="true"
+                            class="cds--select__arrow"
+                            fill="currentColor"
+                            focusable="false"
+                            height="16"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 16 16"
+                            width="16"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <span
@@ -776,7 +829,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                       class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cds--toggletip c8"
                     >
                       <button
-                        aria-controls="id-:rh:"
+                        aria-controls="id-:ri:"
                         aria-expanded="false"
                         aria-label="Show information"
                         class="cds--toggletip-button"
@@ -796,7 +849,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                         </span>
                       </button>
                       <button
-                        aria-labelledby="tooltip-:ri:"
+                        aria-labelledby="tooltip-:rj:"
                         class="sb-tooltip-trigger"
                         type="button"
                       >
@@ -824,7 +877,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   <span
                     aria-hidden="true"
                     class="cds--popover"
-                    id="tooltip-:ri:"
+                    id="tooltip-:rj:"
                     role="tooltip"
                   >
                     <span
@@ -838,7 +891,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   </span>
                   <span
                     class="cds--popover"
-                    id="id-:rh:"
+                    id="id-:ri:"
                   >
                     <span
                       class="cds--popover-content c10"
@@ -857,6 +910,50 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                       class="cds--popover-caret"
                     />
                   </span>
+                </td>
+                <td>
+                  <div
+                    class="cds--form-item"
+                  >
+                    <div
+                      class="cds--select cds--select--inline"
+                    >
+                      <label
+                        class="cds--label"
+                        for="select"
+                      />
+                      <div
+                        class="cds--select-input--inline__wrapper"
+                      >
+                        <div
+                          class="cds--select-input__wrapper"
+                        >
+                          <select
+                            class="cds--select-input"
+                            id="select"
+                            name="category"
+                            placeholder="Choose a category"
+                            title=""
+                          />
+                          <svg
+                            aria-hidden="true"
+                            class="cds--select__arrow"
+                            fill="currentColor"
+                            focusable="false"
+                            height="16"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 16 16"
+                            width="16"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td>
                   <span
@@ -900,6 +997,51 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                     class="c7"
                   >
                     -
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="cds--form-item"
+                  >
+                    <div
+                      class="cds--select cds--select--inline cds--select--disabled"
+                    >
+                      <label
+                        class="cds--label cds--label--disabled"
+                        for="select"
+                      />
+                      <div
+                        class="cds--select-input--inline__wrapper"
+                      >
+                        <div
+                          class="cds--select-input__wrapper"
+                        >
+                          <select
+                            class="cds--select-input"
+                            disabled=""
+                            id="select"
+                            name="category"
+                            placeholder="Choose a category"
+                            title=""
+                          />
+                          <svg
+                            aria-hidden="true"
+                            class="cds--select__arrow"
+                            fill="currentColor"
+                            focusable="false"
+                            height="16"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 16 16"
+                            width="16"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </td>
                 <td>
@@ -958,8 +1100,8 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
       >
         <label
           class="cds--pagination__text"
-          for="cds-pagination-select-:rj:"
-          id="cds-pagination-select-:rj:-count-label"
+          for="cds-pagination-select-:rk:"
+          id="cds-pagination-select-:rk:-count-label"
         >
           Items per page
         </label>
@@ -977,7 +1119,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
               >
                 <select
                   class="cds--select-input"
-                  id="cds-pagination-select-:rj:"
+                  id="cds-pagination-select-:rk:"
                   title=""
                 >
                   <option
@@ -1023,7 +1165,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                 </svg>
               </div>
@@ -1047,7 +1189,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
           >
             <label
               class="cds--label cds--visually-hidden"
-              for="cds-pagination-select-:rj:-right"
+              for="cds-pagination-select-:rk:-right"
             >
               Page number, of 1 pages
             </label>
@@ -1059,7 +1201,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
               >
                 <select
                   class="cds--select-input"
-                  id="cds-pagination-select-:rj:-right"
+                  id="cds-pagination-select-:rk:-right"
                   title=""
                 >
                   <option
@@ -1081,7 +1223,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                 </svg>
               </div>
@@ -1103,7 +1245,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:rk:"
+                aria-labelledby="tooltip-:rl:"
                 class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
                 disabled=""
                 type="button"
@@ -1127,7 +1269,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:rk:"
+              id="tooltip-:rl:"
               role="tooltip"
             >
               <span
@@ -1147,7 +1289,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:rm:"
+                aria-labelledby="tooltip-:rn:"
                 class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
                 disabled=""
                 type="button"
@@ -1171,7 +1313,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:rm:"
+              id="tooltip-:rn:"
               role="tooltip"
             >
               <span
@@ -1233,7 +1375,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -1303,7 +1445,7 @@ exports[`AdminApiKey render AdminApiKey 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AdminApiKey render with empty AdminApiKey 1`] = `
+exports[`AdminApiKey > render with empty AdminApiKey 1`] = `
 <DocumentFragment>
   .c6 {
   margin-top: 0;
@@ -1562,7 +1704,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-labelledby="tooltip-:rq:"
+            aria-labelledby="tooltip-:rr:"
             class="cds--btn--icon-only cds--btn cds--btn--md cds--layout--size-md cds--btn--ghost"
             type="button"
           >
@@ -1586,7 +1728,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-:rq:"
+          id="tooltip-:rr:"
           role="tooltip"
         >
           <span
@@ -1679,7 +1821,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>
@@ -1691,7 +1833,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:rt:"
+                aria-labelledby="tooltip-:ru:"
                 class="cds--btn--icon-only cds--btn cds--btn--secondary"
                 type="submit"
               >
@@ -1717,7 +1859,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:rt:"
+              id="tooltip-:ru:"
               role="tooltip"
             >
               <span
@@ -1738,7 +1880,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-:rv:"
+              aria-labelledby="tooltip-:r10:"
               class="cds--btn--icon-only cds--btn cds--btn--ghost"
               type="button"
             >
@@ -1762,7 +1904,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-:rv:"
+            id="tooltip-:r10:"
             role="tooltip"
           >
             <span
@@ -1817,6 +1959,15 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
                     class="cds--table-header-label"
                   >
                     Country
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                >
+                  <div
+                    class="cds--table-header-label"
+                  >
+                    Category
                   </div>
                 </th>
                 <th
@@ -1900,8 +2051,8 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
       >
         <label
           class="cds--pagination__text"
-          for="cds-pagination-select-:r19:"
-          id="cds-pagination-select-:r19:-count-label"
+          for="cds-pagination-select-:r1b:"
+          id="cds-pagination-select-:r1b:-count-label"
         >
           Items per page
         </label>
@@ -1919,7 +2070,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               >
                 <select
                   class="cds--select-input"
-                  id="cds-pagination-select-:r19:"
+                  id="cds-pagination-select-:r1b:"
                   title=""
                 >
                   <option
@@ -1965,7 +2116,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                 </svg>
               </div>
@@ -1989,7 +2140,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
           >
             <label
               class="cds--label cds--visually-hidden"
-              for="cds-pagination-select-:r19:-right"
+              for="cds-pagination-select-:r1b:-right"
             >
               Page number, of 1 pages
             </label>
@@ -2001,7 +2152,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               >
                 <select
                   class="cds--select-input"
-                  id="cds-pagination-select-:r19:-right"
+                  id="cds-pagination-select-:r1b:-right"
                   title=""
                 >
                   <option
@@ -2023,7 +2174,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                 </svg>
               </div>
@@ -2045,7 +2196,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:r1a:"
+                aria-labelledby="tooltip-:r1c:"
                 class="cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
                 disabled=""
                 type="button"
@@ -2069,7 +2220,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:r1a:"
+              id="tooltip-:r1c:"
               role="tooltip"
             >
               <span
@@ -2089,7 +2240,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
               class="cds--tooltip-trigger__wrapper"
             >
               <button
-                aria-labelledby="tooltip-:r1c:"
+                aria-labelledby="tooltip-:r1e:"
                 class="cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled"
                 disabled=""
                 type="button"
@@ -2113,7 +2264,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
             <span
               aria-hidden="true"
               class="cds--popover"
-              id="tooltip-:r1c:"
+              id="tooltip-:r1e:"
               role="tooltip"
             >
               <span
@@ -2175,7 +2326,7 @@ exports[`AdminApiKey render with empty AdminApiKey 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                 />
               </svg>
             </button>

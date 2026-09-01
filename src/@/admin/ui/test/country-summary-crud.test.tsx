@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { createEvent } from "effector";
 
 import { adminCountrySummaryList } from "~/tests/data/country-filter-modal";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { $countrySummaryList } from "../../models/country-model";
 import AddCountrySummary from "../country/country-summary-crud/add-country-summary";
@@ -19,7 +19,7 @@ describe("Country Crud Tab", () => {
 
   test("Select county summary and delete and verify", () => {
     setCountrySummaryList(adminCountrySummaryList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container, getByTestId } = render(testWrapper(<ListCountySummary onClick={handleClick} />));
     const checkboxes = container.querySelectorAll('.cds--checkbox');
     if (checkboxes.length > 0) {
@@ -36,7 +36,7 @@ describe("Country Crud Tab", () => {
 
   test("render EditCountySummary by click on edit , and field and sumbit", () => {
     setCountrySummaryList(adminCountrySummaryList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<ListCountySummary onClick={handleClick} />));
     const button = getByTestId(`admin-edit-country-summry-${adminCountrySummaryList.results[0]?.id}`);
     fireEvent.click(button)
@@ -87,3 +87,4 @@ describe("Country Crud Tab", () => {
     render(<AddCountrySummary />)
   })
 })
+

@@ -1,29 +1,59 @@
-import { describe, expect, test } from '@jest/globals';
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { allSettled, fork } from 'effector';
 import userEvent from '@testing-library/user-event';
+
+import { changeCountryCode } from '~/@/country/country.model';
+import {
+  $showAdvancedFilter,
+  $showLegend,
+  $showThemeLayer,
+  onSelectMainLayer,
+  onShowAdvancedFilter,
+  onShowLegend,
+  onShowThemeLayer,
+} from '~/@/sidebar/sidebar.model';
+
 import LegendButton from '../legend-button';
-import { $showLegend, onShowLegend } from '~/@/sidebar/sidebar.model';
+import { $isMobile } from '~/core/media-query';
+import { testWrapper } from '~/tests/test-wrapper';
+import '~/core/i18n/instance';
+import '@/sidebar/init';
 
 describe('LegendButton', () => {
+  beforeEach(() => {
+    onShowLegend(false);
+  });
+
   test('renders legend button in desktop view', () => {
-    render(<LegendButton />);
-    expect(screen.getByText('legend')).toBeInTheDocument();
+    render(testWrapper(<LegendButton />));
+    expect(screen.getByLabelText(/legend/i)).toBeInTheDocument();
   });
 
   test('toggles legend visibility on button click', async () => {
-    render(<LegendButton />);
-    const button = screen.getByText('legend');
-    await userEvent.click(button);
+    const { container } = render(testWrapper(<LegendButton />));
+    const button = container.querySelector('button[aria-label="Legend"]');
+
+    expect(button).toBeInTheDocument();
+
+    if (!button) {
+      throw new Error('Legend button is missing');
+    }
+
+    await act(async () => {
+      fireEvent.click(button);
+    });
     expect($showLegend.getState()).toBe(true);
 
-    await userEvent.click(button);
+    await act(async () => {
+      fireEvent.click(button);
+    });
     expect($showLegend.getState()).toBe(false);
   });
 
   test('hides legend by default on mobile', () => {
     global.innerWidth = 400;
     window.dispatchEvent(new Event('resize'));
-    render(<LegendButton />);
+    render(testWrapper(<LegendButton />));
 
     expect($showLegend.getState()).toBe(false);
   });
@@ -32,19 +62,107 @@ describe('LegendButton', () => {
     global.innerWidth = 400;
     window.dispatchEvent(new Event('resize'));
     onShowLegend(true);
-    render(<LegendButton />);
+    render(testWrapper(<LegendButton />));
 
-    const clickAnywhere = document.querySelector('.lengend-container');
+    const clickAnywhere = document.querySelector('.legend-container');
     expect(clickAnywhere).toBeInTheDocument();
   });
 
-  test('close legend on outside click during product tour', async () => {
+  test('keeps legend open on outside click on desktop', async () => {
     global.innerWidth = 1200;
     window.dispatchEvent(new Event('resize'));
     onShowLegend(true);
-    render(<LegendButton />);
+    const { getByTestId } = render(testWrapper(
+      <div>
+        <div data-testid="outside">Outside</div>
+        <LegendButton />
+      </div>
+    ));
 
-    await userEvent.click(document.body);
+    await act(async () => {
+      await userEvent.click(getByTestId('outside'));
+    });
+
+    await waitFor(() => {
+      expect($showLegend.getState()).toBe(true);
+    });
+  });
+
+  test('preserves legend open state while switching layers', async () => {
+    global.innerWidth = 1200;
+    window.dispatchEvent(new Event('resize'));
+    onShowLegend(true);
+    render(testWrapper(<LegendButton />));
+
+    onSelectMainLayer(123);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect($showLegend.getState()).toBe(true);
+
+    onShowLegend(false);
+    onSelectMainLayer(456);
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect($showLegend.getState()).toBe(false);
+  });
+
+  test('reopens legend when filter or theme layer closes', () => {
+    onShowLegend(true);
+    onShowAdvancedFilter(true);
+    expect($showLegend.getState()).toBe(false);
+
+    onShowAdvancedFilter(false);
+    expect($showLegend.getState()).toBe(true);
+
+    onShowThemeLayer(true);
+    expect($showLegend.getState()).toBe(false);
+
+    onShowThemeLayer(false);
+    expect($showLegend.getState()).toBe(true);
+  });
+
+  test('keeps legend closed while switching from theme layer to filter', () => {
+    onShowLegend(true);
+    onShowThemeLayer(true);
+
+    expect($showLegend.getState()).toBe(false);
+    expect($showThemeLayer.getState()).toBe(true);
+
+    onShowAdvancedFilter(true);
+
+    expect($showAdvancedFilter.getState()).toBe(true);
+    expect($showThemeLayer.getState()).toBe(false);
+    expect($showLegend.getState()).toBe(false);
+  });
+
+  test('reopens legend on desktop after a country change', () => {
+    onShowLegend(false);
+    expect($showLegend.getState()).toBe(false);
+
+    changeCountryCode('af');
+
+    expect($showLegend.getState()).toBe(true);
+  });
+
+  test('preserves the last legend state on mobile after a country change', async () => {
+    const closedScope = fork({
+      values: new Map()
+        .set($isMobile, true)
+        .set($showLegend, false),
+    });
+    await allSettled(changeCountryCode, {
+      scope: closedScope,
+      params: 'br',
+    });
+    expect(closedScope.getState($showLegend)).toBe(false);
+
+    const openScope = fork({
+      values: new Map()
+        .set($isMobile, true)
+        .set($showLegend, true),
+    });
+    await allSettled(changeCountryCode, {
+      scope: openScope,
+      params: 'ke',
+    });
+    expect(openScope.getState($showLegend)).toBe(true);
   });
 });

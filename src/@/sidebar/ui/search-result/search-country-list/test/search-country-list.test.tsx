@@ -1,4 +1,3 @@
-import { describe, expect, jest, test } from '@jest/globals';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import { createEvent } from 'effector';
@@ -9,7 +8,7 @@ import { setPayload } from '~/lib/effector-kit';
 import { $isSearchFocused, changeIsSearchFocused } from '../../../common-components/top-search-bar/top-search-bar.model';
 import { MAX_SCHOOL_SELECTED } from '../../container/search-result.constant';
 import { fetchSchoolListFx } from '../../container/search-result.fx';
-import { $searchCountryList, $searchHistoryData, $searchSchoolIds, $searchSchoolList, onSearchItemClick, setSchoolSelection, setSearchCountryExpand, setSearchExpandLevel1, setSearchExpandLevel2 } from '../../container/search-result.model';
+import { $schoolListCurrentPage, $searchCountryList, $searchHistoryData, $searchSchoolIds, $searchSchoolList, onSchoolListCurrentPage, onSearchItemClick, setSchoolSelection, setSearchCountryExpand, setSearchExpandLevel1, setSearchExpandLevel2 } from '../../container/search-result.model';
 import { CountryWithDistrictCount, SearchResultApi } from '../../container/search-result.type';
 import { SearchCountryList } from "..";
 import { SearchButtonGroup } from '../search-button-group';
@@ -19,6 +18,23 @@ import { SearchSchool, setShowMessage } from '../search-school-item-view';
 import SearchSchoolListPanel from '../search-school-list-view';
 import SearchSchoolPanel from '../search-school-panel-view';
 import "~/core/i18n/instance"
+
+vi.mock('../../container/search-result.model', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../container/search-result.model')>();
+  return {
+    ...actual,
+    onSearchItemClick: vi.fn().mockImplementation(actual.onSearchItemClick),
+    setSearchExpandLevel2: vi.fn().mockImplementation(actual.setSearchExpandLevel2),
+  };
+});
+
+vi.mock('../search-district-view', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../search-district-view')>();
+  return {
+    ...actual,
+    expandDistrict2: vi.fn().mockImplementation(actual.expandDistrict2),
+  };
+});
 
 const updateContryList = createEvent<CountryWithDistrictCount[]>();
 $isSearchFocused.on(changeIsSearchFocused, setPayload);
@@ -42,7 +58,7 @@ describe('SearchCountryList', () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test('renders SearchCountryList', () => {
+  test('renders SearchCountryList', async () => {
     changeIsSearchFocused(true);
     updateContryList([{
       "country_id": 45,
@@ -58,30 +74,30 @@ describe('SearchCountryList', () => {
       },
       "admin1_count": 1
     }])
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchCountryList />);
     });
     expect(screen.getByText('India')).toBeVisible();
   });
 
-  test('renders SearchSchoolListPanel with loading state', () => {
-    const spy = jest.spyOn(fetchSchoolListFx.pending, 'getState');
+  test('renders SearchSchoolListPanel with loading state', async () => {
+    const spy = vi.spyOn(fetchSchoolListFx.pending, 'getState');
     spy.mockReturnValue(true);
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchSchoolListPanel />);
     });
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     spy.mockRestore();
   });
 
-  test('renders SearchSchoolListPanel with empty data', () => {
+  test('renders SearchSchoolListPanel with empty data', async () => {
     changeIsSearchFocused(true);
     updateSearchSchoolList({
       count: 0,
       results: []
     } as unknown as APIListType<SearchResultApi>)
 
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchSchoolListPanel />);
     });
     expect(screen.getByText('Not found')).toBeInTheDocument();
@@ -95,7 +111,7 @@ describe('SearchCountryList', () => {
     void waitFor(() => { expect(screen.queryByText('School List')).not.toBeInTheDocument(); })
   })
 
-  test('renders SearchSchoolListPanel with mock data', () => {
+  test('renders SearchSchoolListPanel with mock data', async () => {
     changeIsSearchFocused(true);
     updateSearchSchoolList({
       count: 2,
@@ -123,25 +139,24 @@ describe('SearchCountryList', () => {
       }]
     } as unknown as APIListType<SearchResultApi>)
 
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchSchoolListPanel />);
     });
     expect(screen.getByText('abdak high school')).toBeInTheDocument();
     expect(screen.getByText('abdul baqi shaheed girls middle school / boys high school')).toBeInTheDocument();
   });
 
-  test('render SearchSchoolPanel with isExpanded=true', () => {
+  test('render SearchSchoolPanel with isExpanded=true', async () => {
     changeIsSearchFocused(true)
     setSearchExpandLevel2(" ")
     render(<SearchSchoolPanel />)
-    void waitFor(() => {
+    await waitFor(() => {
       expect(screen.queryByText('School List')).toBeInTheDocument();
-      expect(screen.queryByText('Search schools')).toBeInTheDocument();
-
+      expect(screen.getByPlaceholderText('Search schools')).toBeInTheDocument();
     })
   })
 
-  test('renders school item with name and id', () => {
+  test('renders school item with name and id', async () => {
     const school = {
       "country_code": "AF",
       "admin1_name": "Unknown",
@@ -152,7 +167,7 @@ describe('SearchCountryList', () => {
       "admin2_name": "Unknown",
       "external_id": "4550763",
     };
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchSchool school={school} />);
     })
     expect(screen.queryByText('abdak high school')).toBeInTheDocument();
@@ -184,7 +199,7 @@ describe('SearchCountryList', () => {
   //   setSchoolSelection([school, false])
   // });
 
-  test('display warning toast when maximum schools are selected', () => {
+  test('display warning toast when maximum schools are selected', async () => {
     const school = {
       "country_code": "AF",
       "admin1_name": "Unknown",
@@ -221,13 +236,13 @@ describe('SearchCountryList', () => {
       "4550480"
     ]))
     setShowMessage(school.id)
-    void waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
       expect(screen.queryByText(`Maximum of ${MAX_SCHOOL_SELECTED} school selection allowed`)).toBeInTheDocument();
     })
   });
 
-  test('render SearchHistory', () => {
+  test('render SearchHistory', async () => {
     changeIsSearchFocused(true);
     const country = {
       "countryId": 45,
@@ -238,14 +253,14 @@ describe('SearchCountryList', () => {
       "type": "COUNTRY"
     }
     updateSearchHistory([country])
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchHistory />);
     })
     expect(screen.queryByText('Recent')).toBeInTheDocument();
     expect(screen.queryByText('India')).toBeInTheDocument();
   })
 
-  test('calls onSearchItemClick when a history item is clicked', () => {
+  test('calls onSearchItemClick when a history item is clicked', async () => {
     changeIsSearchFocused(true);
     const country = {
       "countryId": 45,
@@ -256,14 +271,14 @@ describe('SearchCountryList', () => {
       "type": "COUNTRY"
     }
     updateSearchHistory([country])
-    void waitFor(() => {
+    await waitFor(() => {
       render(<SearchHistory />);
     })
     const searchItem = screen.getByText('India');
     act(() => {
       fireEvent.click(searchItem);
     })
-    void waitFor(() => {
+    await waitFor(() => {
       expect(onSearchItemClick).toHaveBeenCalledWith(country);
     })
   })
@@ -327,7 +342,7 @@ describe('SearchCountryList', () => {
   // })
 
 
-  test('render search district list and expand school list', () => {
+  test('render search district list and expand school list', async () => {
     const districtData = {
       "admin1_name": "Unknown",
       "data": {},
@@ -338,18 +353,16 @@ describe('SearchCountryList', () => {
     const code = 'AF'
     const { getByText } = render(<SearchDistrict districtData={districtData} countryId={countryId} code={code} />)
     fireEvent.click(getByText(`${districtData.school_count} Schools`));
-    void waitFor(() => {
-      expect(expandDistrict2).toHaveBeenCalledWith(districtData.admin1_name, false);
+    await waitFor(() => {
+      expect(setSearchExpandLevel2).toHaveBeenCalledWith(districtData.admin1_name);
     })
   })
 
   test('render SearchButtonGroup', () => {
     changeIsSearchFocused(true)
     setSearchExpandLevel2("")
-    void waitFor(() => {
-      render(<SearchButtonGroup />)
-    })
-    expect(screen.queryByText('School(s) Selected')).not.toBeInTheDocument();
+    render(<SearchButtonGroup />)
+    expect(screen.queryByTestId('selected-school-apply-button')).not.toBeInTheDocument();
   })
 
   test("onclick of close button", () => {
@@ -368,10 +381,22 @@ describe('SearchCountryList', () => {
       count: 0,
       results: []
     } as unknown as APIListType<SearchResultApi>)
-    void waitFor(() => {
-      render(<SearchButtonGroup />)
-    })
-    expect(screen.queryByText('0–0 of 0 items')).toBeInTheDocument();
+    render(<SearchButtonGroup />)
+    expect(screen.getByText('of 1 page')).toBeInTheDocument();
+  })
+
+  test('page select keeps the 0-based page index', () => {
+    setSearchExpandLevel2(" ")
+    onSchoolListCurrentPage(0)
+    updateSearchSchoolList({
+      count: 120,
+      results: []
+    } as unknown as APIListType<SearchResultApi>)
+    const { getByLabelText } = render(<SearchButtonGroup />)
+    // 120 schools / 50 per page = 3 pages
+    expect(screen.getByText('of 3 pages')).toBeInTheDocument();
+    fireEvent.change(getByLabelText('Page'), { target: { value: '2' } });
+    expect($schoolListCurrentPage.getState()).toBe(2);
   })
 
   test("onclick of apply button", () => {
@@ -384,3 +409,4 @@ describe('SearchCountryList', () => {
     })
   })
 })
+

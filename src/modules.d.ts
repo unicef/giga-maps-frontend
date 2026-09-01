@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 // Support imports
 import '@carbon/react';
 
@@ -21,6 +23,11 @@ declare module '*.woff2' {
   // noinspection all
   export default url;
 }
+declare module '*.mp4' {
+  const url: string;
+  // noinspection all
+  export default url;
+}
 declare module '*.svg' {
   import { ComponentType } from 'react';
 
@@ -30,21 +37,23 @@ declare module '*.svg' {
 }
 declare module '*.css';
 
-// global.d.ts
-declare namespace NodeJS {
-  interface Process {
-    env: {
-      API_MAPBOX_ACCESS_TOKEN: string;
-      API_BASE_URL: string;
-      NODE_ENV: string;
-      ENV: string;
-      WEBPACK_DEV_SERVER: string;
-      B2C_CLIENT_ID: string;
-      POSTHOG_KEY: string;
-      POSTHOG_HOST: string;
-    };
+// Vite environment variables
+interface ImportMetaEnv {
+  readonly VITE_API_MAPBOX_ACCESS_TOKEN: string;
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_B2C_CLIENT_ID: string;
+  readonly VITE_ENV: string;
+  readonly VITE_MATOMO_SITE_ID: string;
+  readonly VITE_GIGA_METER_API_HOST: string;
+  readonly VITE_AIRTABLE_API_KEY: string;
+  readonly VITE_LOOMFLOW_API_KEY: string;
+  readonly MODE: string;
+  readonly VITE_POSTHOG_KEY: string;
+  readonly VITE_POSTHOG_HOST: string;
+}
 
-  }
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
 
 declare module 'webfontloader' {
@@ -88,7 +97,7 @@ declare module '@carbon/react' {
     type?: string;
     renderIcon?: (props: IconButtonProps) => React.ReactNode;
     onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    kind?: 'primary' | 'secondary' | 'tertiary' | "ghost";
+    kind?: 'primary' | 'secondary' | 'tertiary' | 'ghost';
     size?: 'sm' | 'md' | 'lg';
     tooltipPosition?: 'top' | 'right' | 'bottom' | 'left';
     tooltipAlignment?: 'start' | 'center' | 'end';
@@ -97,8 +106,7 @@ declare module '@carbon/react' {
 
   export const IconButton: React.FC<IconButtonProps>;
 
-  export const InlineLoading = React.FC<any>
+  export const InlineLoading = React.FC<any>;
 
-  export const OverflowMenu = React.FC<any>
+  export const OverflowMenu = React.FC<any>;
 }
-

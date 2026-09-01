@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { createEvent } from "effector"
 
 import { backgroundTaskList } from "~/tests/data/background-task-list";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { $backgroundTaskList } from "../../models/background-task-model";
 import BackgroundTaskForm from "../background-task-crud/form-background-task";
@@ -21,7 +21,7 @@ describe("Background Task Crud", () => {
   })
 
   test("render form background task", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<AdminBackgroundTask onClick={handleClick} />));
     const button = getByTestId(`background-task-view${backgroundTaskList?.results[0]?.task_id}`);
     fireEvent.click(button);
@@ -32,4 +32,6 @@ describe("Background Task Crud", () => {
     expect(screen.getByText(backgroundTaskList?.results[0]?.task_id)).toBeInTheDocument()
   })
 })
+
+
 

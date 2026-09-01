@@ -1,60 +1,90 @@
-import { ChevronLeft, ChevronRight } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
+import { ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
 
-import { $historyInterval, $historyIntervalUnit, $isNextHistoryIntervalAvailable, $lastAvailableDates, changeHistoryInterval, nextHistoryInterval, previousHistoryInterval } from '~/@/sidebar/history-graph.model';
+import { EntityType } from '~/@/entities';
+import {
+  $historyIntervalByEntity,
+  $historyIntervalUnitByEntity,
+  $isNextHistoryIntervalAvailableByEntity,
+  $lastAvailableDatesByEntity,
+  changeEntityHistoryInterval,
+  nextEntityHistoryInterval,
+  previousEntityHistoryInterval,
+} from '~/@/sidebar/history-graph.model';
 import { defaultInterval } from '~/@/sidebar/sidebar.constant';
+import { Button } from '~/components/ui/button';
 import { formatDateInterval } from '~/lib/date-fns-kit/format-date-interval';
+import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
-import { WeekSliderWrapper } from './week-slider.style'
-
-export default function WeekSlider() {
-  const intervalUnit = useStore($historyIntervalUnit);
-  const interval = useStore($historyInterval);
-  const historyInterval = useStore($historyInterval)
-  const lastAvailableDates = useStore($lastAvailableDates);
-  const isNextIntervalAvailable = useStore($isNextHistoryIntervalAvailable);
-  const formattedInterval = formatDateInterval(
-    interval,
-    intervalUnit,
-    false
+export default function WeekSlider({ entityType }: { entityType: EntityType }) {
+  const historyIntervalUnitByEntity = useStore($historyIntervalUnitByEntity);
+  const intervalUnit =
+    historyIntervalUnitByEntity[entityType] ?? IntervalUnit.week;
+  const historyIntervalByEntity = useStore($historyIntervalByEntity);
+  const historyInterval =
+    historyIntervalByEntity[entityType] ?? defaultInterval();
+  const lastAvailableDatesByEntity = useStore($lastAvailableDatesByEntity);
+  const lastAvailableDates = lastAvailableDatesByEntity[entityType];
+  const isNextIntervalAvailableByEntity = useStore(
+    $isNextHistoryIntervalAvailableByEntity,
   );
-  const currentAvailableDate = lastAvailableDates ? lastAvailableDates[intervalUnit] : defaultInterval();
+  const isNextIntervalAvailable =
+    isNextIntervalAvailableByEntity[entityType] ?? true;
+  const formattedInterval = formatDateInterval(
+    historyInterval,
+    intervalUnit,
+    false,
+  );
+  const currentAvailableDate = lastAvailableDates
+    ? lastAvailableDates[intervalUnit]
+    : defaultInterval();
 
   return (
-    <WeekSliderWrapper>
-      <div className="week_control_style">
-        {/* <Calendar size={32} className="week-control-calendar" /> */}
-        <button
-          onClick={() => previousHistoryInterval()}
-          type="button"
-          className="previous_week_button"
-        >
-          <ChevronLeft size="32" />
-        </button>
-        <div className="week_control_text">{formattedInterval}</div>
-        <button
-          onClick={() => nextHistoryInterval()}
-          disabled={!isNextIntervalAvailable}
-          type="button"
-          className="next_week_button"
-        >
-          <ChevronRight size="32" />
-
-        </button>
-        <button
-          onClick={() => {
-            changeHistoryInterval(currentAvailableDate)
-          }}
-          disabled={historyInterval === currentAvailableDate}
-          type="button"
-          className="next_week_button"
-        >
-          <div className='skip-to-end' >
-            <ChevronRight />
-            <ChevronRight />
-          </div>
-        </button>
+    <div className="inline-flex! justify-start! items-center! gap-2! h-8!">
+      <Button
+        aria-label="Previous week"
+        className="previous_week_button size-8! p-0! text-foreground! hover:bg-transparent!"
+        onClick={() => {
+          previousEntityHistoryInterval(entityType);
+        }}
+        size="icon-sm"
+        type="button"
+        variant="icon"
+      >
+        <ChevronLeft aria-hidden="true" className="size-4!" />
+      </Button>
+      <div className="inline-flex! items-center! justify-center! text-xs! font-normal! uppercase! leading-4! text-foreground!">
+        {formattedInterval}
       </div>
-    </WeekSliderWrapper>
+      <Button
+        aria-label="Next week"
+        className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground! hover:bg-transparent!"
+        onClick={() => {
+          nextEntityHistoryInterval(entityType);
+        }}
+        disabled={!isNextIntervalAvailable}
+        size="icon-sm"
+        type="button"
+        variant="icon"
+      >
+        <ChevronRight aria-hidden="true" className="size-4!" />
+      </Button>
+      <Button
+        aria-label="Latest week"
+        className="next_week_button size-8! p-0! text-foreground! disabled:text-muted-foreground! hover:bg-transparent!"
+        onClick={() => {
+          changeEntityHistoryInterval({
+            entityType,
+            interval: currentAvailableDate,
+          });
+        }}
+        disabled={historyInterval === currentAvailableDate}
+        size="icon-sm"
+        type="button"
+        variant="icon"
+      >
+        <ChevronsRight aria-hidden="true" className="size-4!" />
+      </Button>
+    </div>
   );
-};
+}

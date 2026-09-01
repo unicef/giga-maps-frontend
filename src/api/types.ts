@@ -1,3 +1,4 @@
+import { EntityType } from "~/@/entities";
 import { GeoJSONGeometry, GeoJSONPoint } from "~/core/global-types";
 
 export type ConnectionStatus = 'no' | 'moderate' | 'good' | 'unknown';
@@ -18,12 +19,44 @@ export type GlobalStats = {
   schools_with_connectivity_status_mapped: number;
 }
 
+export type EntityStatsResponseKey = 'school' | 'health';
+export type EntityConnectivityBenchmark = {
+  value: number;
+  unit: string;
+};
+export type EntityConnectedEntitiesGroup = {
+  connected: number;
+  not_connected: number;
+  unknown: number;
+};
+
+export type EntityTotalMetrics = {
+  entities_connected?: number;
+  entities_total?: number;
+  connected_entities?: EntityConnectedEntitiesGroup;
+  no_of_entities_measure?: number;
+  [key: string]: unknown;
+};
+
+export type EntityGlobalStats = {
+  no_of_countries: number;
+  countries_with_connectivity_status_mapped: number;
+  connectivity_global_benchmark: EntityConnectivityBenchmark;
+  connected_entities: EntityConnectedEntitiesGroup;
+  entities_connected?: number;
+  entities_total?: number;
+  entities_with_connectivity_status_mapped?: number;
+  total_metrics?: EntityTotalMetrics;
+};
+
+export type EntitiesGlobalStatsResponse = Partial<Record<EntityStatsResponseKey, EntityGlobalStats>>;
+
 export type GraphData = {
   group: string;
   key: string;
-  value: number;
+  value: number | null;
 }
-export type defaultLegendValuesType = {
+export type DefaultLegendValuesType = {
   good: number;
   moderate: number;
   no_internet: number;
@@ -35,7 +68,7 @@ export type ConnectivityStat = {
   no_of_schools_measure: number;
   school_with_realtime_data: number;
   is_data_synced: boolean;
-  real_time_connected_schools: defaultLegendValuesType;
+  real_time_connected_schools: DefaultLegendValuesType;
   graph_data: GraphData[];
   live_avg_connectivity: string;
   countries_with_realtime_data: number;
@@ -45,10 +78,35 @@ export type ConnectivityStat = {
     benchmark_value: string;
     parameter_column_unit: string;
     round_unit_value: string;
-    rounded_benchmark_value: string;
+    rounded_benchmark_value: number | string;
     display_unit: string;
+    convert_unit?: string;
   }
 };
+
+export type EntityConnectivityTotalMetrics = {
+  no_of_entities_measure?: number;
+  entity_with_realtime_data?: number;
+  real_time_connected_entities?: DefaultLegendValuesType;
+  [key: string]: unknown;
+};
+
+export type EntityConnectivityStat = {
+  benchmark_metadata: ConnectivityStat['benchmark_metadata'];
+  countries_with_realtime_data: number;
+  entity_with_realtime_data: number;
+  graph_data: GraphData[];
+  is_data_synced: boolean;
+  live_avg: number;
+  live_avg_connectivity: string;
+  no_of_entities_measure: number;
+  real_time_connected_entities: DefaultLegendValuesType;
+  total_metrics?: EntityConnectivityTotalMetrics;
+};
+
+export type EntitiesConnectivityStatsResponse = Partial<Record<EntityStatsResponseKey, EntityConnectivityStat>>;
+export type EntityLayerInfoStat = Partial<ConnectivityStat & EntityConnectivityStat> & Record<string, unknown>;
+export type EntitiesLayerInfoResponse = Partial<Record<EntityStatsResponseKey, EntityLayerInfoStat>>;
 export type SchoolInfoStats = {
   num_students: number;
   num_teachers: number;
@@ -147,6 +205,7 @@ export type CountryBasic = {
   map_preview: string;
   description: string;
   data_source: string;
+  health_data_source: string;
   integration_status: IntegrationStatus;
   date_of_join: string;
   schools_with_data_percentage: number;
@@ -199,9 +258,12 @@ export type Country = {
   map_preview: string;
   description: string;
   data_source: string;
+  health_data_source: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
   country_disclaimer: string;
+  entity_counts?: Partial<Record<EntityType | string, number>>;
+  connected_entities?: Partial<Record<EntityType | string, { connected?: number }>>;
   benchmark_metadata: {
     live_layer: Record<string, string>
     default_national_benchmark: Record<string, boolean>
@@ -332,6 +394,7 @@ export interface AdvanceFilterType {
   name: string
   type: string
   description: string
+  entity_type: EntityType
   column_configuration: ColumnConfiguration
   options?: {
     choices?: Choice[]

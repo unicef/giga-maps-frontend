@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import SingleSchoolStatus from '../single-school-status-view';
 
 describe('Single school status', () => {
@@ -8,3 +8,4 @@ describe('Single school status', () => {
     expect(asFragment).toMatchSnapshot();
   });
 });
+

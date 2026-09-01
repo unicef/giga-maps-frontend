@@ -1,38 +1,40 @@
-import { createAndUpdateMapLayer, createSourceForMapAndCountry, createSourceForSchool, getLayerIdsAndLastChange } from '../effects/add-layers-utils';
+import {
+  createAndUpdateMapLayer,
+  createSourceForMapAndCountry,
+  getLayerIdsAndLastChange,
+} from '../effects/add-layers-utils';
+import { EntityType } from '~/@/entities';
 
 describe('addLayerUtils', () => {
-
-  it('should return schoolLayerId, selectedLayerId, and isLastSelectionChange', () => {
+  it('should return entity layer ids and selection change status', () => {
     const lastSelectedLayer = {
-      layerId: 2,
-      schoolId: 1,
+      layerIdByEntity: { [EntityType.SCHOOL]: 2 },
     };
-    const { schoolLayerId, selectedLayerId, isLastSelectionChange } = getLayerIdsAndLastChange({
-      lastSelectedLayer,
-      refresh: false,
-      selectedLayerIds: {
-        schoolId: 1,
-        selectedId: 3
-      }
-    });
+    const { selectedLayerIdByEntity, isLastSelectionChange } =
+      getLayerIdsAndLastChange({
+        lastSelectedLayer,
+        refresh: false,
+        selectedLayerIds: {
+          schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
+          selectedIdByEntity: { [EntityType.SCHOOL]: 3 },
+        },
+      });
 
-    expect(schoolLayerId).toBe(1);
-    expect(selectedLayerId).toBe(3);
+    expect(selectedLayerIdByEntity[EntityType.SCHOOL]).toBe(3);
     expect(isLastSelectionChange).toBe(true);
   });
 
   it('should set isLastSelectionChange to false if selectedLayerId matches lastSelectedLayer.layerId', () => {
     const selectedLayerIds = {
-      schoolId: 1,
-      selectedId: 2
+      schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
+      selectedIdByEntity: { [EntityType.SCHOOL]: 2 },
     };
     const lastSelectedLayer = {
-      layerId: 2,
-      schoolId: 0
+      layerIdByEntity: { [EntityType.SCHOOL]: 2 },
     };
     const { isLastSelectionChange } = getLayerIdsAndLastChange({
       selectedLayerIds,
-      lastSelectedLayer
+      lastSelectedLayer,
     });
 
     expect(isLastSelectionChange).toBe(false);
@@ -40,17 +42,16 @@ describe('addLayerUtils', () => {
 
   it('should set isLastSelectionChange to true if refresh is true', () => {
     const selectedLayerIds = {
-      schoolId: 1,
-      selectedId: 2
+      schoolIdByEntity: { [EntityType.SCHOOL]: 'school_status' },
+      selectedIdByEntity: { [EntityType.SCHOOL]: 2 },
     };
     const lastSelectedLayer = {
-      layerId: 2,
-      schoolId: 0
+      layerIdByEntity: { [EntityType.SCHOOL]: 2 },
     };
     const { isLastSelectionChange } = getLayerIdsAndLastChange({
       selectedLayerIds,
       lastSelectedLayer,
-      refresh: true
+      refresh: true,
     });
 
     expect(isLastSelectionChange).toBe(true);
@@ -58,31 +59,32 @@ describe('addLayerUtils', () => {
 
   it('createSourceForMapAndCountry: should create source with bounds when country and admin1Data provided', () => {
     const map = {
-      addSource: jest.fn(),
+      addSource: vi.fn(),
       getStyle: () => ({
-        sources: {}
-      })
+        sources: {},
+      }),
     } as any;
 
     const selectedLayerId = 1;
 
     const layerUtils = {
-      coverageLayerId: 1,
-      currentLayerTypeUtils: {
-        isLive: true
-      }
+      coverageLayerDataByEntity: { school: { id: 1 } },
+      selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      currentLayerTypeUtilsByEntity: {
+        [EntityType.SCHOOL]: { isLive: true },
+      },
     } as any;
 
     const mapRoute = {
-      country: true
+      country: true,
     } as any;
 
     const country = {
       id: 1,
       code: 'AI',
       admin_metadata: {
-        bbox: [1, 2, 3, 4]
-      }
+        bbox: [1, 2, 3, 4],
+      },
     };
 
     createSourceForMapAndCountry({
@@ -91,63 +93,23 @@ describe('addLayerUtils', () => {
       country,
       layerUtils,
       mapRoute,
-      connectivityFilter: {
-        range: {
+      activeEntityTypes: [EntityType.SCHOOL],
+      entityRegistry: { [EntityType.SCHOOL]: { visible: true } },
+      intervalByEntity: {
+        [EntityType.SCHOOL]: {
           start: 324242424,
-          end: 3232342424
+          end: 3232342424,
         },
-        isWeek: true
       },
+      intervalUnitByEntity: { [EntityType.SCHOOL]: 'week' },
+      connectivityBenchMarkByEntity: { [EntityType.SCHOOL]: 'global' },
       lastSelectedLayer: {
-        layerId: 1,
-        schoolId: 0
-      }
+        layerIdByEntity: { [EntityType.SCHOOL]: 1 },
+      },
     } as any);
 
     expect(map.addSource).toHaveBeenCalled();
   });
-
-  it('should return early if map is not provided', () => {
-    const func = createSourceForSchool({
-      layerUtils: {},
-      schoolStats: [],
-      selectedLayerId: 1,
-      lastSelectedLayer: {
-        schoolId: 0,
-        layerId: 0
-      }
-    } as any);
-
-    expect(func).toBeUndefined();
-  });
-
-  it('should delete existing sources and layers', () => {
-    const map = {
-      addSource: jest.fn(),
-      createSource: jest.fn(),
-      getStyle: () => ({
-        sources: {}
-      })
-    } as any;
-    const layerUtils = {};
-    const schoolStats = [{ id: 1 }];
-    const selectedLayerId = 1;
-    const lastSelectedLayer = {
-      schoolId: 0,
-      layerId: 0
-    };
-
-    createSourceForSchool({
-      map,
-      layerUtils,
-      schoolStats,
-      selectedLayerId,
-      lastSelectedLayer
-    } as any);
-
-    expect(map.addSource).toHaveBeenCalled();
-  });
-
 
   it('createAndUpdateMapLayers: should return empty createAndUpdateMapLayers', () => {
     const func = createAndUpdateMapLayer({} as any);
@@ -156,32 +118,32 @@ describe('addLayerUtils', () => {
 
   it('createAndUpdateMapLayers: should called map create layer', () => {
     const map = {
-      addLayer: jest.fn(),
+      addLayer: vi.fn(),
       getStyle: () => ({
-        sources: {}
+        sources: {},
       }),
-      getLayer: jest.fn(() => false)
-    }
+      getLayer: vi.fn(() => false),
+    };
     createAndUpdateMapLayer({
       map,
-      mapRoute: {},
-      connectivitySpeedFilter: {},
-      coverageFilter: {},
+      mapRoute: { country: true },
+      connectivitySpeedFilterByEntity: { [EntityType.SCHOOL]: {} },
+      coverageFilterByEntity: { [EntityType.SCHOOL]: {} },
       layerUtils: {
-        currentLayerTypeUtils: {
-          isLive: true
-        }
+        selectedLayerIdByEntity: { [EntityType.SCHOOL]: 1 },
+        currentLayerTypeUtilsByEntity: {
+          [EntityType.SCHOOL]: { isLive: true },
+        },
       },
       selectedLayerId: 1,
       paintData: {},
       schoolLayerId: 1,
       lastSelectedLayer: {
-        layerId: 0,
-        schoolId: 0
+        layerIdByEntity: {},
       },
-      schoolLegends: {}
+      activeEntityTypes: [EntityType.SCHOOL],
+      entityRegistry: {},
     } as any);
     expect(map.getLayer).toHaveBeenCalled();
   });
-
 });

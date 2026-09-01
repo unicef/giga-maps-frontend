@@ -135,7 +135,20 @@ export const aboutUsFormList = [
     ]
   },
   {
-    sectionName: 'Section 4 - School connectivity',
+    sectionName: 'Section 4 - Health center location',
+    type: 'health-center-location',
+    fields: [
+      textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Label', path: 'text.1' }),
+      textType({ name: 'Description', path: 'text.0' }),
+      textType({ name: 'Cta text', path: 'cta.text.0' }),
+      textType({ name: 'Cta link', path: 'cta.link.0' }),
+      imageType({ name: 'Image', path: 'image' }),
+      textareaType({ name: 'Style', path: 'style' }),
+    ]
+  },
+  {
+    sectionName: 'Section 5 - School connectivity',
     type: 'school-connectivity',
     fields: [
       textType({ name: 'Title', path: 'title' }),
@@ -148,7 +161,7 @@ export const aboutUsFormList = [
     ]
   },
   {
-    sectionName: 'Section 5 - Infrastructure',
+    sectionName: 'Section 6 - Infrastructure',
     type: 'infrastructure',
     fields: [
       textType({ name: 'Title', path: 'title' }),
@@ -161,7 +174,20 @@ export const aboutUsFormList = [
     ]
   },
   {
-    sectionName: 'Section 6 - Gigamaps enabled',
+    sectionName: 'Section 7 - Open data & APIs',
+    type: 'open-data-apis',
+    fields: [
+      textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Label', path: 'text.1' }),
+      textType({ name: 'Description', path: 'text.0' }),
+      textType({ name: 'Cta text', path: 'cta.text.0' }),
+      textType({ name: 'Cta link', path: 'cta.link.0' }),
+      imageType({ name: 'Image', path: 'image' }),
+      textareaType({ name: 'Style', path: 'style' }),
+    ]
+  },
+  {
+    sectionName: 'Section 8 - Gigamaps enabled',
     type: 'gigamaps-enabled',
     fields: [],
     content: {
@@ -183,9 +209,11 @@ export const aboutUsFormList = [
     }
   },
   {
-    sectionName: 'Section 7 - Slides',
+    sectionName: 'Section 9 - Slides',
     type: 'slides',
     fields: [
+      textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Subtitle', path: 'text.0' }),
       textType({ name: 'Cta text', path: 'cta.text.0' }),
       textType({ name: 'Cta link', path: 'cta.link.0' }),
       textareaType({ name: 'Style', path: 'style' }),
@@ -200,6 +228,7 @@ export const aboutUsFormList = [
           fields: [
             textType({ name: 'Title', path: 'content.0.title' }),
             textType({ name: 'Description', path: 'content.0.text.0' }),
+            textType({ name: 'Cta link', path: 'content.0.cta.link.0' }),
             imageType({ name: 'Image', path: 'content.0.image' }),
             textareaType({ name: 'Style', path: 'content.0.style' }),
           ]
@@ -208,9 +237,12 @@ export const aboutUsFormList = [
     }
   },
   {
-    sectionName: 'Section 8 - Resources',
+    sectionName: 'Section 10 - Resources',
     type: 'resources',
-    fields: [],
+    fields: [
+      textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Subtitle', path: 'text.0' }),
+    ],
     content: {
       name: 'Content',
       path: 'content',
@@ -231,10 +263,11 @@ export const aboutUsFormList = [
     }
   },
   {
-    sectionName: 'Section 9 - Faqs',
+    sectionName: 'Section 11 - Faqs',
     type: 'faqs',
     fields: [
       textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Subtitle', path: 'text.0' }),
     ],
     content: {
       name: 'Content',
@@ -253,10 +286,11 @@ export const aboutUsFormList = [
     }
   },
   {
-    sectionName: 'Section 10 - Giga partners',
+    sectionName: 'Section 12 - Giga partners',
     type: 'partners',
     fields: [
       textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Subtitle', path: 'text.0' }),
       textareaType({ name: 'Style', path: 'style' }),
     ],
     content: {
@@ -275,7 +309,7 @@ export const aboutUsFormList = [
     }
   },
   {
-    sectionName: 'Section 11 - Acknowledgement',
+    sectionName: 'Section 13 - Acknowledgement',
     type: 'eleventh',
     fields: [
       textType({ name: 'Title', path: 'title' }),
@@ -297,16 +331,16 @@ export const aboutUsFormList = [
     }
   },
   {
-    sectionName: 'Section 12 - Live map - Get in touch',
+    sectionName: 'Section 14 - Live map - Get in touch',
     type: 'live-map-get-in-touch',
     fields: [
-      // textType({ name: 'Title', path: 'title' }),
-      // textType({ name: 'Description', path: 'text.0' }),
+      textType({ name: 'Title', path: 'title' }),
+      textType({ name: 'Description', path: 'text.0' }),
+      textType({ name: 'Note', path: 'text.1' }),
       textType({ name: 'Cta text 1', path: 'cta.text.0' }),
       textType({ name: 'Cta link 1', path: 'cta.link.0' }),
-      // textType({ name: 'Cta text 2', path: 'cta.text.1' }),
-      // textType({ name: 'Cta link 2', path: 'cta.link.1' }),
-      // imageType({ name: 'Image', path: 'image' }),
+      textType({ name: 'Cta text 2', path: 'cta.text.1' }),
+      textType({ name: 'Cta link 2', path: 'cta.link.1' }),
       textareaType({ name: 'Style', path: 'style' }),
     ]
   },

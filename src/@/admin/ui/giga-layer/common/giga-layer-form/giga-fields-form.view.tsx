@@ -2,10 +2,10 @@ import { SelectItem, TextInput } from "@carbon/react";
 import { useStore } from "effector-react";
 import { useMemo } from "react";
 
-import { DataSourceName, LayerDataSource, LayerTypeNames } from "~/@/admin/constants/giga-layer.constant";
-import { $appConfigValues } from "~/@/admin/models/admin-model";
+import { DataSourceName, EntityCode, LayerDataSourceByEntityCode, LayerDataSourceKey, LayerTypeNames } from "~/@/admin/constants/giga-layer.constant";
+import { $appConfigValues, $entityTypes } from "~/@/admin/models/admin-model";
 import { $apiSourceValues, $formData, onUdpateGigaLayerForm } from "~/@/admin/models/giga-layer.model";
-import { DataSource, LayerTypeChoices } from "~/@/admin/types/giga-layer.type";
+import { ColumnConfig, DataSource, LayerTypeChoices, SourceTypeItem } from "~/@/admin/types/giga-layer.type";
 import { $countryList } from "~/@/api-docs/models/explore-api.model";
 import { CountryListType } from "~/@/api-docs/types/country-list.type";
 
@@ -16,14 +16,19 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
   const appConfigValues = useStore($appConfigValues)
   const countryList = useStore($countryList);
   const apiSourceValues = useStore($apiSourceValues)
+  const entityTypes = useStore($entityTypes);
   const apiSourceSelected = useMemo(() => {
     return apiSourceValues.filter((item) => formData?.dataSource.includes(item.id))
   }, [formData.dataSource, apiSourceValues])
-  const parameters = useMemo(() => {
+  const parameters = useMemo<ColumnConfig[]>(() => {
     const list = apiSourceSelected
-      ?.flatMap(item => item.column_config).filter((item) => item.is_parameter) ?? [];
-    return Array.from(
-      list.reduce((map, obj) => map.set(obj.name, obj), new Map()).values());
+      .flatMap((item) => item.column_config)
+      .filter((item) => item.is_parameter);
+    const uniqueByName = new Map<string, ColumnConfig>();
+    list.forEach((item) => {
+      uniqueByName.set(item.name, item);
+    });
+    return Array.from(uniqueByName.values());
   }, [apiSourceSelected])
 
   const supportedFunctions = useMemo(() => {
@@ -35,15 +40,24 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
     return countryList?.filter(item => formData?.applicableCountries.includes(item.id))
   }, [formData?.applicableCountries, countryList])
 
-  const dataSourceList = useMemo(() => {
+  const dataSourceList = useMemo<SourceTypeItem[]>(() => {
     const type = formData.type;
-    if (!type) return [];
-    const source = LayerDataSource[type];
+    const entityType = Number(formData.entityType);
+    if (!type || !entityType) return [];
+
+    const selectedEntity = entityTypes.find((entity) => entity.id === entityType);
+    const normalized = `${selectedEntity?.code ?? ''} ${selectedEntity?.name ?? ''}`.toLowerCase();
+    const entityCode = normalized.includes(EntityCode.HEALTH) ? EntityCode.HEALTH : normalized.includes(EntityCode.SCHOOL) ? EntityCode.SCHOOL : null;
+    if (!entityCode) return [];
+
+    const key = `${entityCode}_${type}` as LayerDataSourceKey;
+    const source = LayerDataSourceByEntityCode[key] ?? [];
     return source.map((sourceName) => ({
       type: sourceName,
       name: DataSourceName[sourceName]
     }))
-  }, [formData.type])
+  }, [entityTypes, formData.type, formData.entityType])
+
   const isLive = String(formData.type) === String(LayerTypeChoices.LIVE);
 
   return <>
@@ -99,6 +113,24 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
         />
       </DataLayerNameField>
     </DataLayerFieldContainer>
+
+    <SelectLayerConfig
+      required
+      name='entityType'
+      labelText="Entity Type"
+      id={`entity-type`}
+      value={String(formData.entityType)}
+      disabled={isEditMode}
+      onChange={(e) => onUdpateGigaLayerForm([e.target.name, e.target.value ? Number(e.target.value) : ''])}
+      placeholder="Choose entity type">
+      <SelectItem value="" text="Choose entity type" />
+      {entityTypes &&
+        entityTypes.map((entity) => (
+          <SelectItem key={entity.id} value={String(entity.id)} text={entity.name} />
+        ))
+      }
+    </SelectLayerConfig>
+
     <SelectLayerConfig
       required
       name='type'
@@ -110,7 +142,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       placeholder="Choose layer type">
       <SelectItem value="" text="Choose layer type" />
       {appConfigValues?.LAYER_TYPE_CHOICES &&
-        Object.entries(appConfigValues?.LAYER_TYPE_CHOICES).map(([value, text]) => (
+        Object.entries(appConfigValues?.LAYER_TYPE_CHOICES).map(([value]) => (
           <SelectItem key={value} value={value} text={LayerTypeNames[value]} />
         ))
       }
@@ -121,18 +153,17 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       label="Choose source type"
       titleText="Source Type"
       disabled={isDefaultLayer}
-      itemToString={(item) => item?.name}
-      itemToElement={(item) => (
+      itemToString={(item: SourceTypeItem | null) => item?.name ?? ''}
+      itemToElement={(item: SourceTypeItem | null) => (
         <span>
           {item?.name}
         </span>
       )}
       items={dataSourceList}
       id={`source-type`}
-      value={formData?.sourceType}
       placeholder="Select data source"
-      onChange={({ selectedItems }: { selectedItems: string[] }) => {
-        onUdpateGigaLayerForm(['sourceType', selectedItems])
+      onChange={({ selectedItems }: { selectedItems: SourceTypeItem[] }) => {
+        onUdpateGigaLayerForm(['sourceType', selectedItems ?? []])
       }}
       selectedItems={formData.sourceType}
     />
@@ -143,7 +174,7 @@ export default function GigaFields({ isEditMode, isDefaultLayer }: { readonly is
       items={apiSourceValues}
       ListBoxSize={"sm"}
       disabled={isDefaultLayer}
-      itemToString={(item: DataSource) => item?.name}
+      itemToString={(item: DataSource) => item?.name ?? ''}
       itemToElement={(item: DataSource) => (
         <span>
           {item?.name}

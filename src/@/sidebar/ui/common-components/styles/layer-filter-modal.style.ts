@@ -16,7 +16,7 @@ max-height: 100%;
 position: absolute;
 left: 0.5rem;
 height: calc(100vh - 8.4rem);
-bottom: 1.8rem;
+bottom: var(--map-footer-offset);
 top: auto;
 }
 `

@@ -1,5 +1,5 @@
 import { fireEvent, getByRole, render, waitFor } from "@testing-library/react";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 import ListFilterView from "../filter-list.view";
 import AddFilterList from "../add-filter.view";
 import AdminFilters from "..";

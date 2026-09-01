@@ -1,6 +1,6 @@
 import { act, render } from "@testing-library/react"
 
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import MapPage from "../ui/map-page"
 import { mapCountry, router } from "~/core/routes"
@@ -42,7 +42,7 @@ describe("Render Map-page", () => {
   });
 
   // test("should render without optional components", () => {
-  //   jest.spyOn(require("effector-react"), "useStore").mockImplementation((store) => {
+  //   vi.spyOn(require("effector-react"), "useStore").mockImplementation((store) => {
   //     if (store === mapCountry.params) return { code: "" };
   //     if (store === $isProductTour) return false;
   //     if (store === $isTimeplayer) return false;
@@ -54,3 +54,4 @@ describe("Render Map-page", () => {
   //   expect(queryByTestId("timeplayer-container")).not.toBeInTheDocument();
   // });
 })
+

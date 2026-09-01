@@ -1,28 +1,28 @@
 import { addSchoolMarkers } from '../effects/add-marker-fx';
 import { Marker, Popup } from 'mapbox-gl';
 
-jest.mock('mapbox-gl', () => ({
-  Marker: jest.fn().mockImplementation(() => ({
-    addTo: jest.fn(),
-    remove: jest.fn(),
-    setPopup: jest.fn().mockImplementation(() => ({
-      a: jest.fn(),
+vi.mock('mapbox-gl', () => ({
+  Marker: vi.fn().mockImplementation(() => ({
+    addTo: vi.fn(),
+    remove: vi.fn(),
+    setPopup: vi.fn().mockImplementation(() => ({
+      a: vi.fn(),
     })),
-    setLngLat: jest.fn().mockImplementation(() => ({
-      setPopup: jest.fn().mockImplementation(() => ({
-        addTo: jest.fn().mockImplementation(() => ({
-          getElement: jest.fn().mockImplementation(() => ({
-            addEventListener: jest.fn(),
-            remove: jest.fn(),
+    setLngLat: vi.fn().mockImplementation(() => ({
+      setPopup: vi.fn().mockImplementation(() => ({
+        addTo: vi.fn().mockImplementation(() => ({
+          getElement: vi.fn().mockImplementation(() => ({
+            addEventListener: vi.fn(),
+            remove: vi.fn(),
           }))
         }))
       }))
     })),
   })),
-  Popup: jest.fn().mockImplementation(() => ({
-    addTo: jest.fn(),
-    remove: jest.fn(),
-    setDOMContent: jest.fn(),
+  Popup: vi.fn().mockImplementation(() => ({
+    addTo: vi.fn(),
+    remove: vi.fn(),
+    setDOMContent: vi.fn(),
   }))
 }));
 describe('addSchoolMarkers', () => {
@@ -64,7 +64,7 @@ describe('addSchoolMarkers', () => {
   });
 
   it('should remove existing markers not in new schoolStats', async () => {
-    const schoolMarkers = [{ id: 3, marker: { remove: jest.fn() } }] as any;
+    const schoolMarkers = [{ id: 3, marker: { remove: vi.fn() } }] as any;
 
     await addSchoolMarkers({
       ...props,
@@ -84,7 +84,7 @@ describe('addSchoolMarkers', () => {
     const existingMarker = {
       id: 1,
       marker: {
-        setPopup: jest.fn()
+        setPopup: vi.fn()
       }
     };
     const schoolMarkers = [existingMarker];
@@ -93,3 +93,4 @@ describe('addSchoolMarkers', () => {
   });
 
 });
+

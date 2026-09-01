@@ -4,14 +4,16 @@ export interface FilterListType {
   id: number
   code: string
   name: string
-  description: any
+  description: string | null
   type: string
   options: FilterOptionsField
   query_param_filter: string
-  column_configuration: ColumnConfiguration
+  column_configuration: ColumnConfiguration | number
   status: string
   published_by: null | { id: number; first_name: string }
   active_countries_list: number[]
+  entity_type: number | string | null;
+  entity_type__code?: string;
 }
 
 export interface FilterListWithOptionsTypes
@@ -40,6 +42,7 @@ export interface FilterOptionsField {
 }
 
 export interface ColumnConfiguration {
+  id?: number
   name: string
   label: string
   type: string
@@ -53,7 +56,7 @@ export interface FilterConfiguration {
   name: string
   label: string
   type: string
-  description: any
+  description: string | null
   table_name: string
   table_alias: string
   table_label: string
@@ -63,9 +66,10 @@ export interface FilterConfiguration {
     applicable_filter_types: Record<string, string[]>
   }
   last_modified_at: string
-  last_modified_by: any
+  last_modified_by: { id: number } | null
   created: string
-  created_by: any
+  created_by: { id: number } | null
+  entity_type: number | string | null;
 }
 
 

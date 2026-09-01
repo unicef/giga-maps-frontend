@@ -1,23 +1,46 @@
-import { FilterListType } from "~/@/admin/types/filter-list.type";
 import { ActiveFilterListType, AdvanceFilterType } from "~/api/types";
-import { router } from "~/core/routes";
+
+export function buildActiveEntityFilterUrl(
+  activeEntityTypes: string[],
+  isAllEntitiesMode: boolean,
+): string {
+  const params = new URLSearchParams(window.location.search);
+
+  if (isAllEntitiesMode) {
+    params.delete('entity');
+    params.delete('global');
+  } else {
+    params.set('entity', activeEntityTypes.join(','));
+    params.set('global', '0');
+  }
+
+  const queryString = params.toString();
+  return queryString
+    ? window.location.pathname + '?' + queryString
+    : window.location.pathname;
+}
 
 export function buildFilterQueryFromSelections(
   selections: ActiveFilterListType[],
   filters: AdvanceFilterType[],
+  activeEntityTypes?: string[],
+  isAllEntitiesMode = false,
+  selectedEntityTypes = activeEntityTypes,
   prefix = "filter__",
   multiValueDelimiter = "|"
 ) {
   // Start from current query so we preserve non-filter params
   const params = new URLSearchParams(window.location.search);
 
-  // 1) Delete any existing keys that belong to filter__* (clean stale filter keys)
-  for (const key of Array.from(params.keys())) {
-    if (key.startsWith(prefix) || key.startsWith(`${prefix}ignore_`)) {
-      params.delete(key);
-    }
+  // Entity changes also trigger this country-filter navigation. Keep the
+  // selection in the URL without removing cached filters for inactive entities.
+  if (isAllEntitiesMode) {
+    params.delete('entity');
+    params.delete('global');
+  } else if (selectedEntityTypes?.length) {
+    params.set('entity', selectedEntityTypes.join(','));
+    params.set('global', '0');
   }
-
   // 2) Build a map of filters for lookup
   const filtersById = new Map<number, AdvanceFilterType>();
   filters.forEach((f) => filtersById.set(f.id, f));
@@ -28,6 +51,14 @@ export function buildFilterQueryFromSelections(
     const id = sel.advance_filter_id;
     const filter = filtersById.get(id);
     if (!filter) continue;
+
+    // Apply defaults for every active entity. Multi-entity mode must not be
+    // narrowed to a separate single-entity selection.
+    if (activeEntityTypes) {
+      if (!activeEntityTypes.includes(filter.entity_type)) {
+        continue;
+      }
+    }
 
     const colName = filter.column_configuration?.name ?? String(id);
     const qFilter = filter.query_param_filter ?? "iexact";
@@ -44,19 +75,19 @@ export function buildFilterQueryFromSelections(
       // other object shapes are intentionally NOT supported here
       return String(v).trim();
     };
-
+    const entiryTypePrefix = filter.entity_type + "__";
     // RANGE handling — ONLY accept object shape { min, max, none_range? }
     if (filter.type === "RANGE") {
-      if (typeof raw === "object" && raw !== null && !Array.isArray(raw) && "min" in (raw as any)) {
+      if (typeof raw === "object" && raw !== null && !Array.isArray(raw) && "min" in raw) {
         const obj = raw as { min?: number | string; max?: number | string; none_range?: boolean };
         const min = obj.min ?? "";
         const max = obj.max ?? "";
         const str = `${min},${max}`;
-        const noneRangeFlag = Boolean(obj.none_range ?? df?.none_range);
+        const noneRangeFlag = Boolean(obj.none_range);
         if (noneRangeFlag) {
-          params.set(`${prefix}${colName}__none__${qFilter}`, str);
+          params.set(`${prefix}${entiryTypePrefix}${colName}__none_${qFilter}`, str);
         } else {
-          params.set(`${prefix}${colName}__${qFilter}`, str);
+          params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, str);
         }
       }
       // if it's not the expected object shape, skip (per your request)
@@ -67,7 +98,7 @@ export function buildFilterQueryFromSelections(
     if (filter.type === "BOOLEAN") {
       const v = makeStringValue(raw);
       if (v === "") continue;
-      params.set(`${prefix}${colName}__${qFilter}`, v);
+      params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, v);
       continue;
     }
 
@@ -77,7 +108,7 @@ export function buildFilterQueryFromSelections(
       if (!Array.isArray(raw)) continue;
       const v = makeStringValue(raw);
       if (v === "") continue;
-      params.set(`${prefix}${colName}__${qFilter}`, v);
+      params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, v);
 
       // optional grouped choices -> ignore_<col>
       if (filter.options?.group_choices && Array.isArray(filter.options.choices)) {
@@ -93,7 +124,7 @@ export function buildFilterQueryFromSelections(
         const labels = matchedLabels.join(multiValueDelimiter);
 
         if (labels !== "") {
-          params.set(`${prefix}ignore_${colName}__${qFilter}`, labels);
+          params.set(`${prefix}ignore_${entiryTypePrefix}${colName}__${qFilter}`, labels);
         }
       }
       continue;
@@ -103,7 +134,7 @@ export function buildFilterQueryFromSelections(
     if (typeof raw === "string" || typeof raw === "number" || typeof raw === "boolean") {
       const value = makeStringValue(raw);
       if (value === "") continue;
-      params.set(`${prefix}${colName}__${qFilter}`, value);
+      params.set(`${prefix}${entiryTypePrefix}${colName}__${qFilter}`, value);
     }
   }
 

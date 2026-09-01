@@ -1,5 +1,6 @@
 import { Email } from '@carbon/icons-react';
 import { CopyButton, IconButton, Link, TextInput } from '@carbon/react';
+import { useTranslation } from 'react-i18next';
 
 import { Modal, ModalBody, ModalHeader } from '~/@/common/modal';
 
@@ -9,7 +10,6 @@ import Twitter from '../../../../../assets/images/twitter.svg'
 import WhatsApp from '../../../../../assets/images/whatsapp.svg'
 import { $layerFilterHeadingStyle } from '../styles/layer-filter-modal.style';
 import { ShareModalStyle, ShareUrlStyle } from './share-url.style';
-import { useTranslation } from 'react-i18next';
 
 const ShareURLModal = ({ shareModalOpen, setshareModalOpen, currentLink }:
   { shareModalOpen: boolean, setshareModalOpen: React.Dispatch<React.SetStateAction<boolean>>, currentLink: string }) => {
@@ -49,7 +49,7 @@ const ShareURLModal = ({ shareModalOpen, setshareModalOpen, currentLink }:
                   align={'bottom'}
                 >
                   {/* <LogoTwitter size={32} className="twitter-icon" /> */}
-                  <Twitter className="twitter-icon" />
+                  <Twitter />
                 </IconButton>
               </Link>
               <Link target="_blank"

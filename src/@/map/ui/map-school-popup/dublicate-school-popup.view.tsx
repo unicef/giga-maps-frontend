@@ -1,39 +1,38 @@
-import { ArrowRight, Information } from '@carbon/icons-react';
-import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
+import { ArrowRight, Info } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
+import type { EntityType } from '~/@/entities/types/base-entity.type';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
+import { normalizeEntityLayerInfoList } from '~/@/entities/utils/entity-resolver';
 import { $layerUtils, schoolStatsMap } from '~/@/sidebar/sidebar.model';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
 import { fetchDublicateSchoolPopupDataFx } from '~/api/project-connect';
 import { SchoolStatsType } from '~/api/types';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Scroll } from '~/@/scroll';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 import { PointCoordinates } from '~/core/global-types';
-import { router } from '~/core/routes';
-import { $dublicateSchoolClickData, $stylePaintData, setSchoolIdsOnPopupClickDot } from '../../map.model';
+import {
+  $dublicateSchoolClickData,
+  $stylePaintData,
+  setSchoolIdsOnPopupClickDot,
+} from '../../map.model';
 import { UNKNOWN } from '../../map.types';
-import {
-  InnerCircle,
-  InnerCircleConnectivity
-} from '../legend-info/legend-button.style';
 import DublicateSchoolLoader from './dublicate-school-popup-loader.view';
-import {
-  DublicateSchoolList,
-  DublicateSchoolListWrapper,
-  GoToSchoolInfo,
-  ItemBottomSection,
-  ItemTopSection,
-  SchoolInternetSpeed,
-  SchoolItemCount,
-  SchoolListItem,
-  SchoolName,
-  TotalCountLabel
-} from './dublicate-school-popup.style';
-import { ConnectivityCircleWrapper, Label, LiveContent, LiveStatusRow, SchoolVerificationTag } from './school-popup.style';
 
 type Props = {
   schoolIds: number[];
+  entityType: EntityType;
   countryCode: string;
   /**
    * ID of the scroll container managed by the parent.
@@ -46,13 +45,16 @@ type Props = {
 
 export default function DublicateSchoolPopup({
   schoolIds,
+  entityType,
   countryCode,
   scrollableTargetId,
   batchSize = 10,
 }: Props) {
   const { t } = useTranslation();
   const total = schoolIds?.length ?? 0;
-  const [visibleSchools, setVisibleSchools] = useState<ReturnType<typeof schoolStatsMap>[]>([]);
+  const [visibleSchools, setVisibleSchools] = useState<
+    ReturnType<typeof schoolStatsMap>[]
+  >([]);
   const requestedCountRef = useRef<number>(0);
   const lastRequestedIdsRef = useRef<number[] | null>(null);
   const isLoadingRef = useRef<boolean>(false);
@@ -66,8 +68,11 @@ export default function DublicateSchoolPopup({
   const layerUtils = useStore($layerUtils);
 
   // derived from layer utils (kept from your code)
-  const { currentLayerTypeUtils, selectedLayerData } = layerUtils ?? {};
-  const { isLive = false, isStatic = false } = currentLayerTypeUtils ?? {};
+  const currentLayerTypeUtils =
+    layerUtils.currentLayerTypeUtilsByEntity[entityType];
+  const selectedLayerData = layerUtils.selectedLayerDataByEntity[entityType];
+  const isLive = currentLayerTypeUtils?.isLive ?? false;
+  const isStatic = currentLayerTypeUtils?.isStatic ?? false;
   const { global_benchmark } = selectedLayerData ?? {};
   const unit = global_benchmark?.convert_unit ?? '';
   const formatConnectivityValue = (value: number, valueUnit?: string) => {
@@ -88,7 +93,8 @@ export default function DublicateSchoolPopup({
     const changed =
       prev === null ||
       prev.length !== schoolIds.length ||
-      (prev.length === schoolIds.length && prev.some((v, i) => v !== schoolIds[i]));
+      (prev.length === schoolIds.length &&
+        prev.some((v, i) => v !== schoolIds[i]));
 
     if (changed) {
       prevSchoolIdsRef.current = [...schoolIds];
@@ -123,6 +129,7 @@ export default function DublicateSchoolPopup({
     // dispatch to effector — other parts of app handle the effect
     setSchoolIdsOnPopupClickDot({
       ids: nextIds,
+      entityType,
     });
   }
 
@@ -132,31 +139,14 @@ export default function DublicateSchoolPopup({
     requestNextBatch();
   };
 
-  // normalize incoming effector payload into array of SchoolStatsType
-  function normalizeFetchPayload(payload: any): SchoolStatsType[] {
-    if (!payload) return [];
-    if (Array.isArray(payload)) return payload as SchoolStatsType[];
-
-    if (typeof payload === 'object') {
-      // if it's a map of id -> object, return values
-      const vals = Object.values(payload);
-      // detect whether it's an array-like values of objects
-      if (vals.length > 0 && typeof vals[0] === 'object') {
-        return vals as SchoolStatsType[];
-      }
-      // fallback: maybe single object (one school)
-      return [payload as SchoolStatsType];
-    }
-
-    // unexpected shape
-    return [];
-  }
-
   useEffect(() => {
     if (!mountedRef.current) return;
 
     try {
-      const payloadArr = normalizeFetchPayload(globalFetchStore);
+      const payloadArr = normalizeEntityLayerInfoList<SchoolStatsType>(
+        globalFetchStore,
+        entityType,
+      );
 
       if (payloadArr.length === 0) {
         // if there's no payload and no pending request, clear loading trackers
@@ -168,10 +158,14 @@ export default function DublicateSchoolPopup({
       }
 
       // Build set of currently visible IDs to avoid duplicates
-      const existingIdsSet = new Set(visibleSchools.map((s) => Number((s as any).id)));
+      const existingIdsSet = new Set(
+        visibleSchools.map((s) => Number((s as any).id)),
+      );
 
       // Filter payload for items not already in UI
-      const newItemsRaw = payloadArr.filter((s) => !existingIdsSet.has(Number((s as any).id)));
+      const newItemsRaw = payloadArr.filter(
+        (s) => !existingIdsSet.has(Number((s as any).id)),
+      );
 
       if (newItemsRaw.length === 0) {
         // nothing to add; clear loading if not pending
@@ -187,7 +181,9 @@ export default function DublicateSchoolPopup({
 
       setVisibleSchools((prev) => {
         const prevIds = new Set(prev.map((p) => Number((p as any).id)));
-        const toAdd = mappedNew.filter((n) => !prevIds.has(Number((n as any).id)));
+        const toAdd = mappedNew.filter(
+          (n) => !prevIds.has(Number((n as any).id)),
+        );
         return [...prev, ...toAdd];
       });
 
@@ -220,83 +216,157 @@ export default function DublicateSchoolPopup({
   const hasMore = visibleSchools.length < total;
 
   return (
-    <DublicateSchoolListWrapper>
-      <TotalCountLabel>
-        {`(${schoolIds.length}) ${t('school-location-duplicates')}`}{' '}
-        <Tooltip className='info-icon' align="top" label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}>
-          <button className="sb-tooltip-trigger" type="button">
-            <Information size={16} color={'#7e7e7e'} style={{ verticalAlign: 'middle' }} />
-          </button>
-        </Tooltip>
-      </TotalCountLabel>
+    <div className="relative! flex! w-[300px]! flex-col! rounded-xl! border! border-border! bg-popover! p-4! text-foreground! shadow-xl! dark:border-gray-800! dark:bg-gray-900!">
+      {/* Header: Total Count with Info Tooltip */}
+      <div className="flex! items-center! justify-between! gap-2! border-b! border-border! pb-3! dark:border-gray-800!">
+        <div className="flex! items-center! gap-1.5!">
+          <span className="text-[14px]! font-medium! text-black! dark:text-foreground!">
+            {`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+          </span>
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex! cursor-pointer! text-gray-700! transition-colors! hover:text-black! focus:outline-none! dark:text-white/80! dark:hover:text-white!"
+                  aria-label={`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+                >
+                  <Info className="size-3.5!" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-xs! text-xs!">
+                {`(${schoolIds.length}) ${t('school-location-duplicates')}`}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
 
-      {/* NOTE: parent must provide a scroll container with id={scrollableTargetId} */}
-      <DublicateSchoolList id={scrollableTargetId}>
+      {/* Scrollable Duplicate List with custom scrollbar */}
+      <Scroll
+        id={scrollableTargetId}
+        className="max-h-[50vh]! -mr-3! pr-3!"
+        options={{ suppressScrollX: true }}
+      >
         <InfiniteScroll
           dataLength={visibleSchools.length}
           next={loadMore}
           hasMore={hasMore}
-          loader={
-            <DublicateSchoolLoader />
-          }
+          loader={<DublicateSchoolLoader />}
           scrollableTarget={scrollableTargetId}
         >
           {visibleSchools.map((s, idx) => {
             const isLiveNotUnknown = isLive && s?.connectivityType !== UNKNOWN;
-            const connectivityValue = isLiveNotUnknown ? formatConnectivityValue(s?.liveAvg ?? 0, unit) : t('unknown');
+            const connectivityValue = isLiveNotUnknown
+              ? formatConnectivityValue(s?.liveAvg ?? 0, unit)
+              : t('unknown');
             const staticValue = getStaticValue(s?.staticValue);
 
-            const connecitivityColor = stylePaintData[s?.connectivityType ?? UNKNOWN];
+            const connecitivityColor =
+              stylePaintData[s?.connectivityType ?? UNKNOWN];
             const staticColor = stylePaintData[s?.staticType ?? UNKNOWN];
-            const connecitivityStatusColor = stylePaintData[s?.connectivityStatus ?? UNKNOWN];
+            const connecitivityStatusColor =
+              stylePaintData[s?.connectivityStatus ?? UNKNOWN];
 
             return (
-              <SchoolListItem key={String(s.id)} aria-label={`Open ${s.name}`}>
-                <ItemTopSection>
-                  <SchoolName title={s.name}>
-                    <span>{s.name ?? s.id}</span>
-                    {s?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
-                  </SchoolName>
-                  <SchoolItemCount>{`${idx + 1} ${t('of')} (${total})`}</SchoolItemCount>
-                </ItemTopSection>
+              <div
+                key={String(s.id)}
+                aria-label={`Open ${s.name}`}
+                className="flex! flex-col! gap-2! border-b! border-border/60! py-3.5! last:border-b-0! dark:border-gray-800!"
+              >
+                {/* Line 1: School Name & Verification Tag */}
+                <div className="flex! min-w-0! flex-1! flex-wrap! items-center! gap-1.5!">
+                  <h6
+                    title={s.name}
+                    className="text-[20px]! font-normal! not-italic! leading-[30px]! text-black! dark:text-foreground! capitalize! line-clamp-2! break-words!"
+                  >
+                    {s.name?.toLocaleLowerCase() ?? s.id}
+                  </h6>
+                  {s?.isVerifiedSchool === false && (
+                    <Badge
+                      variant="outline"
+                      className="min-h-5! rounded-md! border-transparent! bg-warning/15! px-2! py-0.5! text-xs! font-normal! leading-4! text-warning! hover:bg-warning/15!"
+                    >
+                      Unverified
+                    </Badge>
+                  )}
+                </div>
 
-                <ItemBottomSection>
-                  <SchoolInternetSpeed>
-                    <ConnectivityCircleWrapper className="map-school-status-circle">
-                      {!isStatic && s?.isRealTime && (
-                        <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />
+                {/* Line 2: Status Indicator & Value */}
+                <div className="flex! items-center! gap-2!">
+                  <div className="map-school-status-circle flex! items-center!">
+                    <EntityLegendIndicator
+                      color={
+                        (isStatic ? staticColor : connecitivityStatusColor) ?? ''
+                      }
+                      entityType={entityType}
+                      glowColor={
+                        !isStatic && s?.isRealTime
+                          ? connecitivityColor
+                            ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
+                            : undefined
+                          : undefined
+                      }
+                      size={14}
+                    />
+                  </div>
+
+                  {isLive && s?.isRealTime ? (
+                    <span
+                      className="text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                      style={{ color: connecitivityColor }}
+                    >
+                      {connectivityValue}
+                    </span>
+                  ) : isStatic ? (
+                    <span
+                      className="text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                      style={{ color: staticColor }}
+                    >
+                      {staticValue}
+                    </span>
+                  ) : (
+                    <span
+                      className="whitespace-nowrap! text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                      style={{ color: connecitivityStatusColor }}
+                    >
+                      {t(
+                        ConnectivityStatusNames[
+                        s?.connectivityStatus ?? UNKNOWN
+                        ] ?? UNKNOWN,
                       )}
-                      <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
-                    </ConnectivityCircleWrapper>
-                    <LiveContent>
-                      {isLive && s?.isRealTime && (
-                        <LiveStatusRow>
-                          <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                        </LiveStatusRow>
-                      )}
-                      {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
-                      {!isStatic && (!isLive || !s?.isRealTime) && (
-                        <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[s?.connectivityStatus])}</Label>
-                      )}
-                    </LiveContent>
-                  </SchoolInternetSpeed>
-                  <GoToSchoolInfo
-                    className="cds--btn cds--btn--primary"
+                    </span>
+                  )}
+                </div>
+
+                {/* Line 3: Counter (Left) & Circular Action Button (Right, 40px) */}
+                <div className="flex! items-center! justify-between! gap-2! pt-0.5!">
+                  <span className="text-[14px]! font-normal! not-italic! leading-[20px]! text-gray-700! dark:text-gray-400!">
+                    {`${idx + 1} ${t('of')} ${total}`}
+                  </span>
+
+                  <Button
+                    size="icon"
+                    className="size-10! shrink-0! cursor-pointer! rounded-full! border-0! bg-primary! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
                     onClick={() => {
-                      router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${s.id}`);
-                      setSchoolFocusLatLng(s.geopoint.coordinates as PointCoordinates);
+                      navigateToEntity(entityType, countryCode, s.id);
+                      if (s?.geopoint?.coordinates) {
+                        setSchoolFocusLatLng(
+                          s.geopoint.coordinates as PointCoordinates,
+                        );
+                      }
                     }}
                     aria-label={`View ${s.name}`}
                     type="button"
                   >
-                    <ArrowRight size={16} />
-                  </GoToSchoolInfo>
-                </ItemBottomSection>
-              </SchoolListItem>
+                    <ArrowRight className="size-5!" />
+                  </Button>
+                </div>
+              </div>
             );
           })}
         </InfiniteScroll>
-      </DublicateSchoolList>
-    </DublicateSchoolListWrapper>
+      </Scroll>
+    </div>
   );
 }

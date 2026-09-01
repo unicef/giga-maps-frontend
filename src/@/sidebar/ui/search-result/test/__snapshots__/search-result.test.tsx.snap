@@ -1,129 +1,115 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
+exports[`SearchResultList > renders SearchResult and take a snapshop 1`] = `
 <DocumentFragment>
-  .c9 {
-  padding: 1rem 0;
+  .c2 {
+  padding: 1rem 0.5rem;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
-  flex-direction: column;
+  color: #F4F4F4;
+  flex-direction: row;
+  gap: 0.25rem 0.5rem;
+  text-align: center;
+  background: #242424;
 }
 
-.c11 {
-  display: flex;
+.c4 {
+  display: inline-flex;
   align-items: center;
+  white-space: nowrap;
+  line-height: 12px;
 }
 
-.c11 a:hover {
+.c4 a:hover {
   text-decoration: underline!important;
 }
 
-.c10 {
+.c3 {
   font-size: 0.75rem;
+  white-space: pre-line;
+  text-align: center;
+  margin: 0;
+  margin-right: 0.25rem;
 }
 
-.c12 {
+.c5 {
   font-size: 0.75rem!important;
   font-style: normal;
   font-weight: 400;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .c0 {
-  position: absolute;
-  width: 100%;
-  height: calc(100% - 6rem);
-  z-index: 5;
-  top: 6rem;
-}
-
-.c1 {
-  height: calc(100% - 4rem);
-}
-
-.c2 {
-  display: flex;
-  align-items: center;
-  height: 2rem;
-  padding: 1rem 1rem;
-  font-size: 0.75rem;
-}
-
-.c4 {
-  padding: 1rem;
-  justify-content: space-between;
-  align-items: center;
-  display: flex;
-  width: calc(100% - 1rem);
-  margin-left: .5rem;
-  border-bottom: 0.0625rem solid;
-}
-
-.c4 .type-name {
-  display: block;
-}
-
-.c4 .highlight {
-  color: var(--primary-blue);
-}
-
-.c4 .light {
-  color: var(--text-text-tertiary);
-}
-
-.c4 .sidebar-history-remove >svg {
-  fill: !important;
-}
-
-.c5 {
-  font-size: 0.875rem;
-  position: relative;
-  max-width: 8rem;
-}
-
-.c5 a:hover {
-  text-decoration: underline;
-}
-
-.c7 {
+  margin: 2.5rem 1rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  flex-direction: column;
 }
 
-.c8 {
-  pointer-events: none;
+.c0 h3 {
+  color: #C6C6C6;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.125rem;
+  margin-top: 1.5rem;
 }
 
-.c3 {
-  text-align: left;
-  padding: 0!important;
+.c0 p {
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+  margin-top: 0.5rem;
 }
 
-.c6 {
-  text-align: left;
-  margin-block-end: 0rem;
-  padding: 0!important;
+.c0 button {
+  margin-top: 2rem;
 }
 
-@media (max-width:768px) {
-  .c0 {
-    position: fixed;
-    top: 3.1rem;
-    height: calc(100% - 3rem);
-    z-index: 11;
-  }
+.c1 {
+  width: 5rem;
+  height: 5rem;
 }
 
 <div
-    class="c0"
+    class="search-results-container absolute! top-[calc(100%+0.125rem)]! right-3.5! left-3.5! z-[13]! flex! max-h-[80vh]! flex-col! overflow-hidden! rounded-md! bg-surface-panel! shadow-md!"
   >
     <div
-      class="scrollbar-container c1 search-container ps"
+      class="scrollbar-container max-h-[calc(80vh-4.5rem)]! ps"
+      id="scrollableDiv"
     >
+      <div
+        class="c0"
+      >
+        <svg
+          aria-hidden="true"
+          class="c1"
+          fill="currentColor"
+          focusable="false"
+          height="64"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="64"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M27.5,5c0,0.276-0.224,0.5-0.5,0.5c-0.275,0-0.5-0.224-0.5-0.5s0.225-0.5,0.5-0.5	C27.276,4.5,27.5,4.724,27.5,5z M29,2.5c-0.275,0-0.5,0.224-0.5,0.5s0.225,0.5,0.5,0.5c0.276,0,0.5-0.224,0.5-0.5S29.276,2.5,29,2.5	z M25,6.5c-0.275,0-0.5,0.224-0.5,0.5s0.225,0.5,0.5,0.5c0.276,0,0.5-0.224,0.5-0.5S25.276,6.5,25,6.5z M7,24.5	c-0.275,0-0.5,0.224-0.5,0.5s0.225,0.5,0.5,0.5c0.276,0,0.5-0.224,0.5-0.5S7.276,24.5,7,24.5z M5,26.5c-0.275,0-0.5,0.224-0.5,0.5	s0.225,0.5,0.5,0.5c0.276,0,0.5-0.224,0.5-0.5S5.276,26.5,5,26.5z M3,28.5c-0.275,0-0.5,0.224-0.5,0.5s0.225,0.5,0.5,0.5	c0.276,0,0.5-0.224,0.5-0.5S3.276,28.5,3,28.5z M29.255,28.745l-5.68-5.679c1.799-1.925,2.785-4.42,2.785-7.066	c0-5.712-4.647-10.36-10.36-10.36C10.288,5.64,5.64,10.288,5.64,16c0,5.713,4.647,10.36,10.36,10.36	c2.646,0,5.142-0.986,7.066-2.785l5.679,5.68L29.255,28.745z M25.64,16c0,2.574-1.003,4.994-2.824,6.815S18.574,25.64,16,25.64	c-5.315,0-9.64-4.324-9.64-9.64S10.685,6.36,16,6.36S25.64,10.685,25.64,16z M13.36,21v-2c0-0.199-0.161-0.36-0.36-0.36h-2	c-0.199,0-0.36,0.161-0.36,0.36v2c0,0.199,0.161,0.36,0.36,0.36h2C13.199,21.36,13.36,21.199,13.36,21z M11.36,19.36h1.28v1.279	h-1.28V19.36z M17.36,17v-2c0-0.199-0.161-0.36-0.36-0.36h-2c-0.199,0-0.36,0.161-0.36,0.36v2c0,0.199,0.161,0.36,0.36,0.36h2	C17.199,17.36,17.36,17.199,17.36,17z M15.36,15.36h1.28v1.28h-1.28V15.36z M21.36,13v-2c0-0.199-0.161-0.36-0.36-0.36h-2	c-0.199,0-0.36,0.161-0.36,0.36v2c0,0.199,0.161,0.36,0.36,0.36h2C21.199,13.36,21.36,13.199,21.36,13z M19.36,11.36h1.279v1.28	H19.36V11.36z"
+          />
+        </svg>
+        <h3>
+          No results found.
+        </h3>
+        <p>
+          Try a different search.
+        </p>
+      </div>
       <div
         class="ps__rail-x"
         style="left: 0px; top: 0px;"
@@ -144,776 +130,20 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
           tabindex="0"
         />
       </div>
-      <span
-        class="c2"
-      >
-        <p
-          class="cds--skeleton__text c3"
-          style="width: 80%;"
-        />
-      </span>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div
-        class="c4"
-      >
-        <h4
-          class="c5"
-          style="width: 40%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-        </h4>
-        <div
-          class="c7"
-          style="width: 30%;"
-        >
-          <p
-            class="cds--skeleton__text c6"
-            style="width: 100%;"
-          />
-          <svg
-            aria-hidden="true"
-            class="0 c8"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-            />
-          </svg>
-        </div>
-      </div>
     </div>
     <div
-      class="c9"
+      class="c2"
     >
       <p
-        class="c10"
+        class="c3"
       >
         Not the results you expected?
       </p>
       <div
-        class="c11"
+        class="c4"
       >
         <a
-          class="cds--link c12"
-        >
-          Take the tour
-        </a>
-        <span>
-          &or;
-        </span>
-        <a
-          class="cds--link c12"
+          class="cds--link c5"
           href="/about#live-map-get-in-touch"
           rel="noopener"
           target="_blank"
@@ -925,5 +155,3 @@ exports[`SearchResultList renders SearchResult and take a snapshop 1`] = `
   </div>
 </DocumentFragment>
 `;
-
-exports[`SearchResultList should render component 1`] = `[Function]`;

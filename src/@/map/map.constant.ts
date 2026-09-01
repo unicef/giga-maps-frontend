@@ -11,19 +11,71 @@ export const defaultCenter: Center = [-40, -14];
 export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
 export const MAP_SAMPLING = 300000;
-export const SCHOOL_LAYER_ID = 10001
+export const SCHOOL_LAYER_ID = 1;
 export const DEFAULT_SOURCE = 'map-data-source';
 export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
 export const COVERAGE_URL = 'api/locations/schools/tiles';
-export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
-export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
+export const CONNECTIVITY_URL = 'api/v2/entities/tiles/connectivity';
+export const CONNECTIVITY_STATUS_URL =
+  'api/v2/entities/tiles/connectivity_status';
+
+
+/**
+ * Circle-to-symbol transition zoom used by map entity layers.
+ * Country-code keys are case-insensitive; add overrides in lowercase.
+ */
+export const CIRCLE_MAX_ZOOM_CONFIG: {
+  default: number;
+  byCountryCode: Record<string, number>;
+  /** Start symbol placement this many zoom levels before circles end. */
+  symbolPreloadZoomOffset: number;
+} = {
+  default: 5.5,
+  byCountryCode: {
+  },
+  symbolPreloadZoomOffset: 0.5,
+};
+/** Source-layer names returned by the v2 tiles API */
+export const SOURCE_LAYER_SCHOOLS = 'school';
+export const SOURCE_LAYER_ENTITIES = 'entities';
+
+/** Get the correct source-layer name based on entity type */
+export const getSourceLayerName = (entityType: string): string =>
+  entityType === 'school' ? SOURCE_LAYER_SCHOOLS : SOURCE_LAYER_ENTITIES;
+
+/** Generate a unique Mapbox layer ID for entity status dots */
+export const getEntityStatusLayerId = (entityType: string): string =>
+  `entity-status-${entityType}`;
+
+/** Generate a unique Mapbox layer ID for entity selected/metric layer */
+export const getEntitySelectedLayerId = (
+  entityType: string,
+  layerId: number | null,
+): string => `entity-selected-${entityType}-${layerId}`;
+
+const ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX = '-zoom-circle';
+
+/** Low-zoom circle companion for an entity layer whose primary layer is a symbol. */
+export const getEntityZoomCircleLayerId = (layerId: string): string =>
+  `${layerId}${ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX}`;
+
+/** Both render variants of one logical entity layer. Non-transition layers use the first ID. */
+export const getEntityRenderedLayerIds = (layerId: string): string[] => [
+  layerId,
+  getEntityZoomCircleLayerId(layerId),
+];
+
+export const getEntityLogicalLayerId = (layerId: string): string =>
+  layerId.endsWith(ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX)
+    ? layerId.slice(0, -ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX.length)
+    : layerId;
 
 export const styleUrls: { [style in Style]: string } = {
-  light: 'mapbox://styles/gigamapbox/cls33kbwm00sf01qs9k73ggih',
-  dark: 'mapbox://styles/gigamapbox/clradfsin005z01pifl2j5tee',
-  accessible: 'mapbox://styles/gigamapbox/cls342q3h00sj01qseasb49ul',
-  satellite: 'mapbox://styles/gigamapbox/cls34bmbm011301pla5rrfety',
-  street: 'mapbox://styles/gigamapbox/cls337tpy016b01qyd46ybhcs',
+  light: 'mapbox://styles/gigamapbox/cmrvoj0c5007g01sg7di86ql0',
+  dark: 'mapbox://styles/gigamapbox/cmrvo760i00gj01qzdhki9s2w',
+  accessible: 'mapbox://styles/gigamapbox/cmrvoins6007f01sgg4gvbcj7',
+  satellite: 'mapbox://styles/gigamapbox/cmrvoivbb00fw01sc850vavp1',
+  street: 'mapbox://styles/gigamapbox/cmrvojdo000h401qtfzalgjsi',
 };
 
 export const Colors = {
@@ -31,10 +83,10 @@ export const Colors = {
   GREEN: '#00D26A',
   ORANGE: '#f6C344',
   GREY: '#A7A9AC',
-  BLUE: "#1D8Cf0",
+  BLUE: '#1D8Cf0',
   BLACK: '#000',
   BLACK1: '#121212',
-  BLACK2: "#1c1c1c",
+  BLACK2: '#1c1c1c',
   DARK_GREY: '#383838',
   DARK_GREY1: '#474747',
   DARK_GREY2: '#595959',
@@ -45,29 +97,29 @@ export const Colors = {
   LIGHT_GREY: '#ececec',
   LIGHT_GREY1: '#c8c8c8',
   LIME_GREEN: '#00d661',
-  DARK_GREEN: "#009E73",
-  YELLOW: "#F0E442",
-  PINK: "#CC79A7",
-  ORANGE_RED: "#D55E00",
-  LIGHT_GREEN: "#C8ECD4",
-  LIGHT_RED: "#FFE5E5",
-  LIGHT_BLUE: "#D6E4FD",
+  DARK_GREEN: '#009E73',
+  YELLOW: '#F0E442',
+  PINK: '#CC79A7',
+  ORANGE_RED: '#D55E00',
+  LIGHT_GREEN: '#C8ECD4',
+  LIGHT_RED: '#FFE5E5',
+  LIGHT_BLUE: '#D6E4FD',
   LIGHT_ORANGE: '#f6c344',
   SOFT_RED: '#ff5538',
-  MAGENTA_DARK: "#aa5aa1",
+  MAGENTA_DARK: '#aa5aa1',
   BRIGHT_ORANGE: '#f5793a',
-  SOFT_BLUE: "#85c0f9",
+  SOFT_BLUE: '#85c0f9',
   TRANSPARENT: 'transparent',
   ACCESSIBILITY_DOTS_GREEN: '#0CFC92',
-  ACCESSIBILITY_DOTS_YELLOW: '#FBFF05',
+  ACCESSIBILITY_DOTS_YELLOW: '#D98A00',
   ACCESSIBILITY_DOTS_MAGENTA: '#E13DF0',
   ACCESSIBILITY_DOTS_GRAY: '#ABABAB',
-}
+};
 
 const mapCountryOpacity = {
   active: 1,
   hover: 0.7,
-}
+};
 const commonThemeStyle = {
   allCountryColor: Colors.BLACK1,
   countryColor: Colors.BLACK2,
@@ -84,24 +136,24 @@ const commonThemeStyle = {
 
 export const LayerDataProps = {
   connectivityStatus: {
-    key: 'connectivity_status'
+    key: 'connectivity_status',
   },
   coverage: {
-    key: 'coverage_status'
+    key: 'coverage_status',
   },
   connectivity: {
-    key: 'connectivity'
+    key: 'connectivity',
   },
   fieldStatus: {
-    key: 'field_status'
-  }
-}
+    key: 'field_status',
+  },
+};
 
 export const styles = Object.keys(styleUrls) as Style[];
 
 export let stylePaintData: { [style in Style]: StylePaintData } = {
   dark: {
-    ...commonThemeStyle
+    ...commonThemeStyle,
   },
   light: {
     ...commonThemeStyle,
@@ -132,12 +184,14 @@ export let stylePaintData: { [style in Style]: StylePaintData } = {
   },
 };
 
-const storeStyling = getLocalStorage('paint-style') as { [style in Style]: StylePaintData };
+const storeStyling = getLocalStorage('paint-style') as {
+  [style in Style]: StylePaintData;
+};
 if (storeStyling) {
   stylePaintData = storeStyling;
 }
 export const getDefaultCountryOpacity = (
-  paintData: StylePaintData
+  paintData: StylePaintData,
 ): Expression => [
     'case',
     ['boolean', ['feature-state', 'hover'], false],
@@ -145,21 +199,18 @@ export const getDefaultCountryOpacity = (
     mapCountryOpacity.active,
   ];
 
-export const getDefaultCountryColor = (
-  paintData: StylePaintData
-): string => paintData.allCountryColor;
+export const getDefaultCountryColor = (paintData: StylePaintData): string =>
+  paintData.allCountryColor;
 
-export const getCountryLine = (
-  paintData: StylePaintData
-): string =>
-  paintData.countryOutline
+export const getCountryLine = (paintData: StylePaintData): string =>
+  paintData.countryOutline;
 
 export const getCountryLineWidth = (): Expression => [
   'case',
   ['boolean', ['feature-state', 'hover'], false],
   2,
-  1
-]
+  1,
+];
 
 export const defaultGlobalStats: GlobalStats = {
   no_of_countries: 0,
@@ -171,119 +222,141 @@ export const defaultGlobalStats: GlobalStats = {
   },
   connectivity_global_benchmark: {
     value: 20000000,
-    unit: 'bytes'
-  }
-
+    unit: 'bytes',
+  },
 };
 
 export const defaultLegendValue = {
   good: 0,
   moderate: 0,
   no_internet: 0,
-  unknown: 0
-}
+  unknown: 0,
+};
 export const defaultConnectivityStats = {
   live_avg: 0,
   no_of_schools_measure: 0,
   school_with_realtime_data: 0,
   real_time_connected_schools: defaultLegendValue,
   graph_data: [],
-  live_avg_connectivity: "unknown"
+  live_avg_connectivity: 'unknown',
 };
 
-export const defaultSchoolStatsTypes: SchoolStatsType[] = [
-];
+export const defaultSchoolStatsTypes: SchoolStatsType[] = [];
 
 export const extraMapPaintData = {
-  staticWithConnectivityStatusOpacity: .65,
-}
+  staticWithConnectivityStatusOpacity: 0.65,
+};
 
 export const mapPaintData = {
   connectivityStatus: {
-    "circle-radius": [
-      "interpolate", ["linear"], ["zoom"],
-      0, 0.3,
-      2, 1,
-      4, 1.5,
-      5, 2,
-      8, 3,
-      10, 4
+    'circle-radius': [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      0,
+      0.3,
+      2,
+      1,
+      4,
+      1.5,
+      5,
+      2,
+      8,
+      3,
+      10,
+      4,
     ],
-    "circle-color": [
-      "match",
-      ["get", LayerDataProps.connectivityStatus.key],
+    'circle-color': [
+      'match',
+      ['get', LayerDataProps.connectivityStatus.key],
       // circle data push base on color scheme
     ],
-    "circle-opacity": 1,
-    "circle-blur": 0
+    'circle-opacity': 1,
+    'circle-blur': 0,
   },
   coverage: {
-    "circle-radius": [
-      "interpolate", ["linear"], ["zoom"],
-      0, 0.4,
-      2, 1.35,
-      4, 1.975,
-      5, 2.66,
-      8, 4,
-      10, 5.32
+    'circle-radius': [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      0,
+      0.4,
+      2,
+      1.35,
+      4,
+      1.975,
+      5,
+      2.66,
+      8,
+      4,
+      10,
+      5.32,
     ],
-    "circle-color": [
-      "match",
+    'circle-color': [
+      'match',
       // circle data push base on color scheme
-
     ],
-    "circle-opacity": 1,
+    'circle-opacity': 1,
   },
   connectivity: {
-    "circle-radius": [
-      "interpolate", ["linear"], ["zoom"],
-      0, 0.3,
-      2, 1.5,
-      4, 4,
-      5, 5,
-      8, 10,
-      10, 12
+    'circle-radius': [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      0,
+      0.3,
+      2,
+      1.5,
+      4,
+      4,
+      5,
+      5,
+      8,
+      10,
+      10,
+      12,
     ],
-    "circle-color": [
+    'circle-color': [
       'case',
-      ["==", ["get", 'is_rt_connected'], true],
+      ['==', ['get', 'is_rt_connected'], true],
       // circle data push base on color scheme
     ],
   },
   singleConnectivity: {
-    "circle-radius": [
-      "interpolate", ["linear"], ["zoom"],
-      0, 0.3,
-      2, 0.5,
-      4, 1,
-      5, 1.5,
-      8, 6,
-      10, 8
+    'circle-radius': [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      0,
+      0.3,
+      2,
+      0.5,
+      4,
+      1,
+      5,
+      1.5,
+      8,
+      6,
+      10,
+      8,
     ],
-  }
-}
+  },
+};
 
 export const matchConnectivityCase = {
-  good: [
-    ">",
-    ["get", LayerDataProps.connectivity.key], 250000
-  ],
+  good: ['>', ['get', LayerDataProps.connectivity.key], 250000],
   moderate: [
-    "all",
-    [">", ["get", LayerDataProps.connectivity.key], 125000],
-    ["<", ["get", LayerDataProps.connectivity.key], 250000
-    ]
+    'all',
+    ['>', ['get', LayerDataProps.connectivity.key], 125000],
+    ['<', ['get', LayerDataProps.connectivity.key], 250000],
   ],
-  no_internet: [
-    "<",
-    ["get", LayerDataProps.connectivity.key], 125000
-  ],
-  unknown: ['!', ['has', LayerDataProps.connectivity.key]]
-}
+  no_internet: ['<', ['get', LayerDataProps.connectivity.key], 125000],
+  unknown: ['!', ['has', LayerDataProps.connectivity.key]],
+};
 
 export const defaultGigaLayers = {
-  layerId: 0 // require for on/off
-}
+  layerIdByEntity: {},
+};
 export const animateCircleConfig = {
   duration: 1000, // Animation duration in milliseconds
   minRadius: 0.5,
@@ -292,8 +365,10 @@ export const animateCircleConfig = {
   maxRadius: 12,
   opacityMax: 1,
   opacityMin: 0.2,
-  zoomDivisible: []
-}
+  symbolHaloActivationWidth: 0.01,
+  symbolHaloMaxBlur: 1,
+  zoomDivisible: [],
+};
 
 export const filterListMapping = [
   'filterList.*.description',
@@ -302,40 +377,63 @@ export const filterListMapping = [
   'filterList.*.options.placeholder',
   // 'filterList.*.options.active_range.min_place_holder',
   // 'filterList.*.options.active_range.max_place_holder',
-]
+];
 
 export const CountryPaintData = {
-  "lk": {
+  lk: {
     connectivityStatus: {
-      "circle-radius": [
-        "interpolate", ["linear"], ["zoom"],
-        0, 0.1,
-        2, 0.5,
-        4, 1,
-        6, 1.4,
-        8, 1.8,
-        10, 4
-      ]
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        0.1,
+        2,
+        0.5,
+        4,
+        1,
+        6,
+        1.4,
+        8,
+        1.8,
+        10,
+        4,
+      ],
     },
     coverage: {
-      "circle-radius": [
-        "interpolate", ["linear"], ["zoom"],
-        0, 0.2,
-        2, 0.85,
-        4, 1.275,
-        5, 1.66,
-        8, 4,
-        10, 5.32
-      ]
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        0.2,
+        2,
+        0.85,
+        4,
+        1.275,
+        5,
+        1.66,
+        8,
+        4,
+        10,
+        5.32,
+      ],
     },
     connectivity: {
-      "circle-radius": [
-        "interpolate", ["linear"], ["zoom"],
-        0, 0.3,
-        2, 0.85,
-        4, 1.275,
-        8, 4,
-        10, 5.32
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        0.3,
+        2,
+        0.85,
+        4,
+        1.275,
+        8,
+        4,
+        10,
+        5.32,
       ],
     },
     animatedCircle: {
@@ -344,41 +442,64 @@ export const CountryPaintData = {
         [2, 2.5],
         [4, 2.2],
         [6, 2],
-        [8, 1.2]
-      ] as [number, number][]
-    }
+        [8, 1.2],
+      ] as [number, number][],
+    },
   },
-  "uz": {
+  uz: {
     connectivityStatus: {
-      "circle-radius": [
-        "interpolate", ["linear"], ["zoom"],
-        0, 0.1,
-        2, 0.5,
-        4, 1,
-        6, 1.4,
-        8, 1.8,
-        10, 4
-      ]
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        0.1,
+        2,
+        0.5,
+        4,
+        1,
+        6,
+        1.4,
+        8,
+        1.8,
+        10,
+        4,
+      ],
     },
     coverage: {
-      "circle-radius": [
-        "interpolate", ["linear"], ["zoom"],
-        0, 0.2,
-        2, 0.85,
-        4, 1.275,
-        5, 1.66,
-        8, 4,
-        10, 5.32
-      ]
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        0.2,
+        2,
+        0.85,
+        4,
+        1.275,
+        5,
+        1.66,
+        8,
+        4,
+        10,
+        5.32,
+      ],
     },
     connectivity: {
-      "circle-radius": [
-        "interpolate", ["linear"], ["zoom"],
-        0, 0.3,
-        2, 0.85,
-        4, 1.275,
-        8, 4,
-        10, 5.32
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        0,
+        0.3,
+        2,
+        0.85,
+        4,
+        1.275,
+        8,
+        4,
+        10,
+        5.32,
       ],
     },
     animatedCircle: {
@@ -387,10 +508,10 @@ export const CountryPaintData = {
         [2, 2.5],
         [4, 2.2],
         [6, 2],
-        [8, 1.2]
-      ] as [number, number][]
-    }
-  }
+        [8, 1.2],
+      ] as [number, number][],
+    },
+  },
 } as const;
 
 export const MaxAllowedDublicateSchoolIds = 500;

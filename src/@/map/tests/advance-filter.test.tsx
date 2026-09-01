@@ -6,7 +6,7 @@ import { fetchAdvanceFilterFx, fetchCountryFx } from "~/api/project-connect"
 import filterData from "~/tests/data/filter-data"
 import RangeTextInput from "../ui/advanced-filter/range-text-input"
 import FilterButton from "../ui/advanced-filter/filter"
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 import "~/core/i18n/instance"
 import userEvent from "@testing-library/user-event"
 
@@ -14,9 +14,16 @@ describe('AdvancedFilter', () => {
 
   beforeEach(() => {
     fetchMock.mockResponse((req) => {
-      if (req.url.includes('accounts/adv_filters')) {
-        return Promise.resolve(JSON.stringify(filterData))
-      } else if (req.url.includes('api/locations/countries/br')) {
+      if (req.url.includes('accounts/adv_filters') || req.url.includes('api/v2/entities/filters')) {
+        const enrichedResults = filterData.results.map((item) => ({
+          ...item,
+          entity_type: 'school',
+        }));
+        return Promise.resolve(JSON.stringify({
+          ...filterData,
+          results: enrichedResults,
+        }));
+      } else if (req.url.includes('api/locations/countries/br') || req.url.includes('api/v2/entities/countries/br')) {
         return Promise.resolve(JSON.stringify({
           id: 1,
           name: 'Brazil',
@@ -51,7 +58,7 @@ describe('AdvancedFilter', () => {
     await fetchCountryFx('br')
     await fetchAdvanceFilterFx()
     render(testWrapper(<FilterButton />))
-    const button = (await screen.findByText("Filters")).parentNode as HTMLElement;
+    const button = (await screen.findByText(/filter/i)).closest('button') as HTMLElement;
     await userEvent.click(button);
 
     const textInput = (await screen.findByPlaceholderText("Enter building id"))
@@ -69,7 +76,7 @@ describe('AdvancedFilter', () => {
 })
 
 describe.skip('TextField with StyledTextInput', () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   test('should call onChange handler when user types in the input', async () => {
     const { getByPlaceholderText } = render(<TextField
@@ -107,22 +114,22 @@ describe('RangeTextInput Component', () => {
     },
     options: {
       include_none_filter: true,
-    },
-    query_param_filter: "",
-    name: "No of Teachers",
-    type: "range",
-    active_countries_range: {
-      "30": {
+      active_range: {
+        min_value: 0,
+        max_value: 10000,
         min_place_holder: "Min (0)",
         max_place_holder: "Max (10K)"
       }
     },
+    query_param_filter: "",
+    name: "No of Teachers",
+    type: "range",
     value: {
       none_range: true,
       value: "15,20",
     },
     itemKey: 'num_computers__range',
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     description: 'test range input',
   };
 
@@ -133,7 +140,7 @@ describe('RangeTextInput Component', () => {
 
   it('should handle onChange event for min input (valid value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} />);
-    const minInput = getByPlaceholderText('Min(0)');
+    const minInput = getByPlaceholderText('Min (0)');
 
     fireEvent.change(minInput, { target: { value: '25' } });
 
@@ -142,7 +149,7 @@ describe('RangeTextInput Component', () => {
 
   it('should handle onChange event for min input (valid value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} value={{ "none_range": false, "value": "" }} />);
-    const minInput = getByPlaceholderText('Min(0)');
+    const minInput = getByPlaceholderText('Min (0)');
 
     fireEvent.change(minInput, { target: { value: '0' } });
 
@@ -153,18 +160,21 @@ describe('RangeTextInput Component', () => {
   it('should handle onChange event for min input (invalid value)', () => {
     mockProps.onChange.mockReset();
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} />);
-    const minInput = getByPlaceholderText('Min(0)');
-    const maxInput = getByPlaceholderText('Max');
-    fireEvent.change(minInput, { target: { value: 'abc' } }); // Invalid input
-    fireEvent.change(maxInput, { target: { value: 'test' } }); // Invalid input
-    expect(mockProps.onChange).toHaveBeenCalled(); // Expect no call
+    const minInput = getByPlaceholderText('Min (0)');
+    const maxInput = getByPlaceholderText('Max (10K)');
+    fireEvent.change(minInput, { target: { value: 'abc' } }); // Invalid input (treated as empty)
+    expect(mockProps.onChange).toHaveBeenCalledWith('num_computers__range', { "none_range": true, "value": "null,20" });
+    
+    mockProps.onChange.mockReset();
+    fireEvent.change(maxInput, { target: { value: 'test' } }); // Invalid input (treated as empty)
+    expect(mockProps.onChange).toHaveBeenCalledWith('num_computers__range', { "none_range": true, "value": "15,null" });
   });
 
   it('should handle onChange event for min input (empty value)', () => {
-    const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} value={{ "none_range": false, "value": "" }} />);
-    const maxInput = getByPlaceholderText('Max');
+    const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} value={{ "none_range": false, "value": ",20" }} />);
+    const maxInput = getByPlaceholderText('Max (10K)');
 
-    fireEvent.change(maxInput, { target: { value: '0' } });
+    fireEvent.change(maxInput, { target: { value: '' } });
 
     expect(mockProps.onChange).toHaveBeenCalledWith('num_computers__range', { "none_range": false, "value": "" });
   });
@@ -172,7 +182,7 @@ describe('RangeTextInput Component', () => {
 
   it('should handle onChange event for max input (valid value)', () => {
     const { getByPlaceholderText } = render(<RangeTextInput {...mockProps} />);
-    const maxInput = getByPlaceholderText('Max');
+    const maxInput = getByPlaceholderText('Max (10K)');
 
     fireEvent.change(maxInput, { target: { value: '25' } });
 
@@ -198,3 +208,5 @@ describe('RangeTextInput Component', () => {
   });
 
 });
+
+

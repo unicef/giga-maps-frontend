@@ -1,10 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { render } from '@testing-library/react';
+import { EntityType } from '~/@/entities';
+import { testWrapper } from '~/tests/test-wrapper';
 import CoverageLayer from '../coverage-layer/coverage-layer';
 describe('CoverageLayer', () => {
 
   it('should render component', () => {
-    const { asFragment } = render(testWrapper(<CoverageLayer />));
+    const { asFragment } = render(
+      testWrapper(<CoverageLayer entityType={EntityType.SCHOOL} />),
+    );
     expect(asFragment).toMatchSnapshot();
   });
 
@@ -16,3 +19,4 @@ describe('CoverageLayer', () => {
   // });
 
 });
+

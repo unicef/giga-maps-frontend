@@ -1,11 +1,12 @@
 
+import { EntityType } from "~/@/entities/types/base-entity.type";
 import { request } from "~/api/request-setup";
 import { APIListType } from "~/api/types";
+import { createRequestFx } from "~/lib/request-fx";
+import type { Controller } from "~/lib/request-fx/types";
 
 import { ADMIN_UNKNOWN_TYPE, SEARCH_SCHOOL_RESULT_SIZE } from "./search-result.constant";
 import { CountryWithDistrictCount, SearchResultApi } from "./search-result.type";
-import { createRequestFx } from "~/lib/request-fx";
-import Controller from "~/lib/request-fx/types";
 
 export const fetchCountriesWithDistrictFx = createRequestFx(
   (_?: unknown, controller?: Controller): Promise<Record<string, CountryWithDistrictCount>> => request({
@@ -27,7 +28,7 @@ export const fetchSchoolListFx = createRequestFx(
     }
 
     return request({
-      url: `api/locations/gsearch/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,external_id&page=${page}&page_size=${limit}&country_id__in=${countryId}&ordering=name${admin2 ? '&admin2_id__exact=' + admin2 : ''}${admin1 ? `&${admin1Abbr}=${admin1}` : ''}${query ? `&q=${query}*&search_fields=name,giga_id_school,external_id` : ''}`,
+      url: `api/v2/entities/gentity-search/?fields=country_id,country_name,country_code,admin1_name,admin2_name,id,name,external_id&page=${page}&page_size=${limit}&country_id__in=${countryId}&ordering=name${admin2 ? '&admin2_id__exact=' + admin2 : ''}${admin1 ? `&${admin1Abbr}=${admin1}` : ''}&entity_type__code=${EntityType.SCHOOL}${query ? `&q=${query}*&search_fields=name,giga_id_school,external_id` : ''}`,
       signal: controller?.getSignal(),
     })
   }
@@ -39,13 +40,15 @@ export const getSearchResultsFx = createRequestFx(
     limit = SEARCH_SCHOOL_RESULT_SIZE,
     countryId,
     page = 0,
-    excludeCountryId = false
+    excludeCountryId = false,
+    selectedSearchEntityTags = []
   }: {
     query: string;
     page?: number;
     limit?: number;
     countryId?: number;
     excludeCountryId?: boolean;
+    selectedSearchEntityTags?: EntityType[];
   }, controller?: Controller): Promise<APIListType<SearchResultApi[]>> => {
     const splitQuery = query.split(" ");
     if (query && splitQuery.length > 1) {
@@ -65,8 +68,13 @@ export const getSearchResultsFx = createRequestFx(
       countryFilter = `&country_id__exact=${countryId}`;
     }
 
+    let entityFilter = '&entity_type__code=all';
+    if (selectedSearchEntityTags.length > 0) {
+      entityFilter = `&entity_type__code=${selectedSearchEntityTags.join(',')}`;
+    }
+
     return request({
-      url: `api/locations/gsearch/?${selectFields}&${orderingFields}&page=${page}&page_size=${limit}&q=${query}*${searchFields}${countryFilter}`,
+      url: `api/v2/entities/gentity-search/?${selectFields}&${orderingFields}&page=${page}&page_size=${limit}&q=${query}*${searchFields}${countryFilter}${entityFilter}`,
       signal: controller?.getSignal(),
     })
   }

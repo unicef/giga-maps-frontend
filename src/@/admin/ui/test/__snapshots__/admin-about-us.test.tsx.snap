@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`About Us Render MainAboutUsView 1`] = `
+exports[`About Us > Render MainAboutUsView 1`] = `
 <DocumentFragment>
   .c1 >h3 {
   color: #FFF;
@@ -120,7 +120,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+            d="M5 8 10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
           />
         </svg>
       </button>
@@ -169,7 +169,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                    d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                   />
                 </svg>
               </div>
@@ -216,7 +216,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                    d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
                   />
                 </svg>
               </div>
@@ -242,7 +242,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+            d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
           />
         </svg>
       </button>
@@ -336,7 +336,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -649,7 +649,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                             xmlns="http://www.w3.org/2000/svg"
                           >
                             <path
-                              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                              d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                             />
                             <title>
                               Open menu
@@ -698,7 +698,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -923,7 +923,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </button>
@@ -996,7 +996,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -1367,7 +1367,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -1632,7 +1632,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </button>
@@ -1705,13 +1705,13 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 4 - School connectivity
+              Section 4 - Health center location
             </div>
           </button>
           <div
@@ -1970,7 +1970,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </button>
@@ -2043,13 +2043,13 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 5 - Infrastructure
+              Section 5 - School connectivity
             </div>
           </button>
           <div
@@ -2308,7 +2308,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </button>
@@ -2381,18 +2381,694 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 6 - Gigamaps enabled
+              Section 6 - Infrastructure
             </div>
           </button>
           <div
             class="cds--accordion__content"
             id="accordion-item-:rc:"
+          >
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="title"
+                  >
+                    Title
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="title"
+                      min="0"
+                      name="title"
+                      placeholder="Enter Title"
+                      title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.1"
+                  >
+                    Label
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.1"
+                      min="0"
+                      name="text.1"
+                      placeholder="Enter Label"
+                      title="Enter Label"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Description
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Description"
+                      title="Enter Description"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="cta.text.0"
+                  >
+                    Cta text
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="cta.text.0"
+                      min="0"
+                      name="cta.text.0"
+                      placeholder="Enter Cta text"
+                      title="Enter Cta text"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="cta.link.0"
+                  >
+                    Cta link
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="cta.link.0"
+                      min="0"
+                      name="cta.link.0"
+                      placeholder="Enter Cta link"
+                      title="Enter Cta link"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--list-box__wrapper c5"
+            >
+              <label
+                class="cds--label"
+                for="image"
+                id="downshift-4-label"
+              >
+                Image
+              </label>
+              <div
+                class="cds--combo-box cds--list-box"
+              >
+                <div
+                  class="cds--list-box__field"
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="downshift-4-label"
+                    aria-owns="downshift-4-menu"
+                    autocomplete="off"
+                    class="cds--text-input cds--text-input--empty"
+                    id="image"
+                    placeholder="Select Image"
+                    role="combobox"
+                    tabindex="0"
+                    type="text"
+                    value=""
+                  />
+                  <button
+                    aria-haspopup="true"
+                    aria-label="Open"
+                    class="cds--list-box__menu-icon"
+                    data-toggle="true"
+                    role="button"
+                    tabindex="-1"
+                    title="Open"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <ul
+                  aria-label="Choose an item"
+                  class="cds--list-box__menu"
+                  id="downshift-4-menu"
+                  role="listbox"
+                />
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item"
+              >
+                <div
+                  class="cds--text-area__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="style"
+                  >
+                    Style
+                  </label>
+                </div>
+                <div
+                  class="cds--text-area__wrapper"
+                >
+                  <textarea
+                    aria-invalid="false"
+                    class="cds--text-area"
+                    id="style"
+                    min="0"
+                    name="style"
+                    placeholder="Enter Style"
+                    rows="2"
+                    style="width: 100%;"
+                    type="text"
+                  />
+                  <span
+                    class="cds--text-area__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li
+          class="cds--accordion__item cds--accordion__item--active"
+        >
+          <button
+            aria-controls="accordion-item-:rd:"
+            aria-expanded="true"
+            class="cds--accordion__heading"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--accordion__arrow"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+              />
+            </svg>
+            <div
+              class="cds--accordion__title"
+            >
+              Section 7 - Open data & APIs
+            </div>
+          </button>
+          <div
+            class="cds--accordion__content"
+            id="accordion-item-:rd:"
+          >
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="title"
+                  >
+                    Title
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="title"
+                      min="0"
+                      name="title"
+                      placeholder="Enter Title"
+                      title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.1"
+                  >
+                    Label
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.1"
+                      min="0"
+                      name="text.1"
+                      placeholder="Enter Label"
+                      title="Enter Label"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Description
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Description"
+                      title="Enter Description"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="cta.text.0"
+                  >
+                    Cta text
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="cta.text.0"
+                      min="0"
+                      name="cta.text.0"
+                      placeholder="Enter Cta text"
+                      title="Enter Cta text"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="cta.link.0"
+                  >
+                    Cta link
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="cta.link.0"
+                      min="0"
+                      name="cta.link.0"
+                      placeholder="Enter Cta link"
+                      title="Enter Cta link"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="cds--list-box__wrapper c5"
+            >
+              <label
+                class="cds--label"
+                for="image"
+                id="downshift-5-label"
+              >
+                Image
+              </label>
+              <div
+                class="cds--combo-box cds--list-box"
+              >
+                <div
+                  class="cds--list-box__field"
+                >
+                  <input
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="downshift-5-label"
+                    aria-owns="downshift-5-menu"
+                    autocomplete="off"
+                    class="cds--text-input cds--text-input--empty"
+                    id="image"
+                    placeholder="Select Image"
+                    role="combobox"
+                    tabindex="0"
+                    type="text"
+                    value=""
+                  />
+                  <button
+                    aria-haspopup="true"
+                    aria-label="Open"
+                    class="cds--list-box__menu-icon"
+                    data-toggle="true"
+                    role="button"
+                    tabindex="-1"
+                    title="Open"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <ul
+                  aria-label="Choose an item"
+                  class="cds--list-box__menu"
+                  id="downshift-5-menu"
+                  role="listbox"
+                />
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item"
+              >
+                <div
+                  class="cds--text-area__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="style"
+                  >
+                    Style
+                  </label>
+                </div>
+                <div
+                  class="cds--text-area__wrapper"
+                >
+                  <textarea
+                    aria-invalid="false"
+                    class="cds--text-area"
+                    id="style"
+                    min="0"
+                    name="style"
+                    placeholder="Enter Style"
+                    rows="2"
+                    style="width: 100%;"
+                    type="text"
+                  />
+                  <span
+                    class="cds--text-area__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li
+          class="cds--accordion__item cds--accordion__item--active"
+        >
+          <button
+            aria-controls="accordion-item-:re:"
+            aria-expanded="true"
+            class="cds--accordion__heading"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--accordion__arrow"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+              />
+            </svg>
+            <div
+              class="cds--accordion__title"
+            >
+              Section 8 - Gigamaps enabled
+            </div>
+          </button>
+          <div
+            class="cds--accordion__content"
+            id="accordion-item-:re:"
           >
             <div
               class="c2"
@@ -2575,7 +3251,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                   <label
                     class="cds--label"
                     for="content.0.image"
-                    id="downshift-4-label"
+                    id="downshift-6-label"
                   >
                     Image
                   </label>
@@ -2589,8 +3265,8 @@ exports[`About Us Render MainAboutUsView 1`] = `
                         aria-autocomplete="list"
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="downshift-4-label"
-                        aria-owns="downshift-4-menu"
+                        aria-labelledby="downshift-6-label"
+                        aria-owns="downshift-6-menu"
                         autocomplete="off"
                         class="cds--text-input cds--text-input--empty"
                         id="content.0.image"
@@ -2621,7 +3297,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                           />
                         </svg>
                       </button>
@@ -2629,7 +3305,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                     <ul
                       aria-label="Choose an item"
                       class="cds--list-box__menu"
-                      id="downshift-4-menu"
+                      id="downshift-6-menu"
                       role="listbox"
                     />
                   </div>
@@ -2686,7 +3362,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           class="cds--accordion__item cds--accordion__item--active"
         >
           <button
-            aria-controls="accordion-item-:re:"
+            aria-controls="accordion-item-:rg:"
             aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
@@ -2703,19 +3379,99 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 7 - Slides
+              Section 9 - Slides
             </div>
           </button>
           <div
             class="cds--accordion__content"
-            id="accordion-item-:re:"
+            id="accordion-item-:rg:"
           >
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="title"
+                  >
+                    Title
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="title"
+                      min="0"
+                      name="title"
+                      placeholder="Enter Title"
+                      title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Subtitle
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Subtitle"
+                      title="Enter Subtitle"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
             <div
               class="c1"
             >
@@ -2969,12 +3725,52 @@ exports[`About Us Render MainAboutUsView 1`] = `
                   </div>
                 </div>
                 <div
+                  class="c1"
+                >
+                  <div
+                    class="cds--form-item cds--text-input-wrapper"
+                  >
+                    <div
+                      class="cds--text-input__label-wrapper"
+                    >
+                      <label
+                        class="cds--label"
+                        for="content.0.cta.link.0"
+                      >
+                        Cta link
+                      </label>
+                    </div>
+                    <div
+                      class="cds--text-input__field-outer-wrapper"
+                    >
+                      <div
+                        class="cds--text-input__field-wrapper"
+                      >
+                        <input
+                          class="cds--text-input"
+                          id="content.0.cta.link.0"
+                          min="0"
+                          name="content.0.cta.link.0"
+                          placeholder="Enter Cta link"
+                          title="Enter Cta link"
+                          type="text"
+                          value=""
+                        />
+                        <span
+                          class="cds--text-input__counter-alert"
+                          role="alert"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
                   class="cds--list-box__wrapper c5"
                 >
                   <label
                     class="cds--label"
                     for="content.0.image"
-                    id="downshift-5-label"
+                    id="downshift-7-label"
                   >
                     Image
                   </label>
@@ -2988,8 +3784,8 @@ exports[`About Us Render MainAboutUsView 1`] = `
                         aria-autocomplete="list"
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="downshift-5-label"
-                        aria-owns="downshift-5-menu"
+                        aria-labelledby="downshift-7-label"
+                        aria-owns="downshift-7-menu"
                         autocomplete="off"
                         class="cds--text-input cds--text-input--empty"
                         id="content.0.image"
@@ -3020,7 +3816,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                           />
                         </svg>
                       </button>
@@ -3028,7 +3824,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                     <ul
                       aria-label="Choose an item"
                       class="cds--list-box__menu"
-                      id="downshift-5-menu"
+                      id="downshift-7-menu"
                       role="listbox"
                     />
                   </div>
@@ -3085,7 +3881,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           class="cds--accordion__item cds--accordion__item--active"
         >
           <button
-            aria-controls="accordion-item-:rg:"
+            aria-controls="accordion-item-:ri:"
             aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
@@ -3102,19 +3898,99 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 8 - Resources
+              Section 10 - Resources
             </div>
           </button>
           <div
             class="cds--accordion__content"
-            id="accordion-item-:rg:"
+            id="accordion-item-:ri:"
           >
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="title"
+                  >
+                    Title
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="title"
+                      min="0"
+                      name="title"
+                      placeholder="Enter Title"
+                      title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Subtitle
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Subtitle"
+                      title="Enter Subtitle"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
             <div
               class="c2"
             >
@@ -3379,7 +4255,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           class="cds--accordion__item cds--accordion__item--active"
         >
           <button
-            aria-controls="accordion-item-:ri:"
+            aria-controls="accordion-item-:rk:"
             aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
@@ -3396,18 +4272,18 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 9 - Faqs
+              Section 11 - Faqs
             </div>
           </button>
           <div
             class="cds--accordion__content"
-            id="accordion-item-:ri:"
+            id="accordion-item-:rk:"
           >
             <div
               class="c1"
@@ -3438,6 +4314,46 @@ exports[`About Us Render MainAboutUsView 1`] = `
                       name="title"
                       placeholder="Enter Title"
                       title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Subtitle
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Subtitle"
+                      title="Enter Subtitle"
                       type="text"
                       value=""
                     />
@@ -3636,285 +4552,6 @@ exports[`About Us Render MainAboutUsView 1`] = `
           class="cds--accordion__item cds--accordion__item--active"
         >
           <button
-            aria-controls="accordion-item-:rk:"
-            aria-expanded="true"
-            class="cds--accordion__heading"
-            type="button"
-          >
-            <svg
-              aria-hidden="true"
-              class="cds--accordion__arrow"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 16 16"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
-              />
-            </svg>
-            <div
-              class="cds--accordion__title"
-            >
-              Section 10 - Giga partners
-            </div>
-          </button>
-          <div
-            class="cds--accordion__content"
-            id="accordion-item-:rk:"
-          >
-            <div
-              class="c1"
-            >
-              <div
-                class="cds--form-item cds--text-input-wrapper"
-              >
-                <div
-                  class="cds--text-input__label-wrapper"
-                >
-                  <label
-                    class="cds--label"
-                    for="title"
-                  >
-                    Title
-                  </label>
-                </div>
-                <div
-                  class="cds--text-input__field-outer-wrapper"
-                >
-                  <div
-                    class="cds--text-input__field-wrapper"
-                  >
-                    <input
-                      class="cds--text-input"
-                      id="title"
-                      min="0"
-                      name="title"
-                      placeholder="Enter Title"
-                      title="Enter Title"
-                      type="text"
-                      value=""
-                    />
-                    <span
-                      class="cds--text-input__counter-alert"
-                      role="alert"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="c1"
-            >
-              <div
-                class="cds--form-item"
-              >
-                <div
-                  class="cds--text-area__label-wrapper"
-                >
-                  <label
-                    class="cds--label"
-                    for="style"
-                  >
-                    Style
-                  </label>
-                </div>
-                <div
-                  class="cds--text-area__wrapper"
-                >
-                  <textarea
-                    aria-invalid="false"
-                    class="cds--text-area"
-                    id="style"
-                    min="0"
-                    name="style"
-                    placeholder="Enter Style"
-                    rows="2"
-                    style="width: 100%;"
-                    type="text"
-                  />
-                  <span
-                    class="cds--text-area__counter-alert"
-                    role="alert"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              class="c2"
-            >
-              <p>
-                 
-                <svg
-                  aria-hidden="true"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 32 32"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M18,31H6c-1.1,0-2-0.9-2-2V12h2v17h12V31z"
-                  />
-                  <path
-                    d="M22,27H10c-1.1,0-2-0.9-2-2V8h2v17h12V27z"
-                  />
-                  <path
-                    d="M16 16H24V18H16z"
-                  />
-                  <path
-                    d="M27.7,9.3l-7-7C20.5,2.1,20.3,2,20,2h-6c-1.1,0-2,0.9-2,2v17c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V10 C28,9.7,27.9,9.5,27.7,9.3z M20,4.4l5.6,5.6H20V4.4z M26,21H14V4h4v6c0,1.1,0.9,2,2,2h6V21z"
-                  />
-                </svg>
-                 Content 
-              </p>
-              <div
-                class="c3"
-              >
-                <div
-                  class="c4"
-                >
-                  <h6>
-                     
-                    <svg
-                      aria-hidden="true"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 32 32"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M28 6H30V26H28zM17 6L15.57 7.393 23.15 15 2 15 2 17 23.15 17 15.57 24.573 17 26 27 16 17 6z"
-                      />
-                    </svg>
-                     Item 1
-                  </h6>
-                </div>
-                <div
-                  class="cds--list-box__wrapper c5"
-                >
-                  <label
-                    class="cds--label"
-                    for="content.0.image"
-                    id="downshift-6-label"
-                  >
-                    Image
-                  </label>
-                  <div
-                    class="cds--combo-box cds--list-box"
-                  >
-                    <div
-                      class="cds--list-box__field"
-                    >
-                      <input
-                        aria-autocomplete="list"
-                        aria-expanded="false"
-                        aria-haspopup="listbox"
-                        aria-labelledby="downshift-6-label"
-                        aria-owns="downshift-6-menu"
-                        autocomplete="off"
-                        class="cds--text-input cds--text-input--empty"
-                        id="content.0.image"
-                        placeholder="Select Image"
-                        role="combobox"
-                        tabindex="0"
-                        type="text"
-                        value=""
-                      />
-                      <button
-                        aria-haspopup="true"
-                        aria-label="Open"
-                        class="cds--list-box__menu-icon"
-                        data-toggle="true"
-                        role="button"
-                        tabindex="-1"
-                        title="Open"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          fill="currentColor"
-                          focusable="false"
-                          height="16"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <ul
-                      aria-label="Choose an item"
-                      class="cds--list-box__menu"
-                      id="downshift-6-menu"
-                      role="listbox"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="c1"
-                >
-                  <div
-                    class="cds--form-item"
-                  >
-                    <div
-                      class="cds--text-area__label-wrapper"
-                    >
-                      <label
-                        class="cds--label"
-                        for="content.0.style"
-                      >
-                        Style
-                      </label>
-                    </div>
-                    <div
-                      class="cds--text-area__wrapper"
-                    >
-                      <textarea
-                        aria-invalid="false"
-                        class="cds--text-area"
-                        id="content.0.style"
-                        min="0"
-                        name="content.0.style"
-                        placeholder="Enter Style"
-                        rows="2"
-                        style="width: 100%;"
-                        type="text"
-                      />
-                      <span
-                        class="cds--text-area__counter-alert"
-                        role="alert"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button
-                class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--ghost"
-                style="margin-left: auto;"
-                type="button"
-              >
-                Add new item
-              </button>
-            </div>
-          </div>
-        </li>
-        <li
-          class="cds--accordion__item cds--accordion__item--active"
-        >
-          <button
             aria-controls="accordion-item-:rm:"
             aria-expanded="true"
             class="cds--accordion__heading"
@@ -3932,13 +4569,13 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 11 - Acknowledgement
+              Section 12 - Giga partners
             </div>
           </button>
           <div
@@ -3989,6 +4626,46 @@ exports[`About Us Render MainAboutUsView 1`] = `
               class="c1"
             >
               <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Subtitle
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Subtitle"
+                      title="Enter Subtitle"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
                 class="cds--form-item"
               >
                 <div
@@ -4083,7 +4760,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                   <label
                     class="cds--label"
                     for="content.0.image"
-                    id="downshift-7-label"
+                    id="downshift-8-label"
                   >
                     Image
                   </label>
@@ -4097,8 +4774,8 @@ exports[`About Us Render MainAboutUsView 1`] = `
                         aria-autocomplete="list"
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="downshift-7-label"
-                        aria-owns="downshift-7-menu"
+                        aria-labelledby="downshift-8-label"
+                        aria-owns="downshift-8-menu"
                         autocomplete="off"
                         class="cds--text-input cds--text-input--empty"
                         id="content.0.image"
@@ -4129,7 +4806,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                            d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                           />
                         </svg>
                       </button>
@@ -4137,7 +4814,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
                     <ul
                       aria-label="Choose an item"
                       class="cds--list-box__menu"
-                      id="downshift-7-menu"
+                      id="downshift-8-menu"
                       role="listbox"
                     />
                   </div>
@@ -4211,19 +4888,418 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
               class="cds--accordion__title"
             >
-              Section 12 - Live map - Get in touch
+              Section 13 - Acknowledgement
             </div>
           </button>
           <div
             class="cds--accordion__content"
             id="accordion-item-:ro:"
           >
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="title"
+                  >
+                    Title
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="title"
+                      min="0"
+                      name="title"
+                      placeholder="Enter Title"
+                      title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item"
+              >
+                <div
+                  class="cds--text-area__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="style"
+                  >
+                    Style
+                  </label>
+                </div>
+                <div
+                  class="cds--text-area__wrapper"
+                >
+                  <textarea
+                    aria-invalid="false"
+                    class="cds--text-area"
+                    id="style"
+                    min="0"
+                    name="style"
+                    placeholder="Enter Style"
+                    rows="2"
+                    style="width: 100%;"
+                    type="text"
+                  />
+                  <span
+                    class="cds--text-area__counter-alert"
+                    role="alert"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="c2"
+            >
+              <p>
+                 
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18,31H6c-1.1,0-2-0.9-2-2V12h2v17h12V31z"
+                  />
+                  <path
+                    d="M22,27H10c-1.1,0-2-0.9-2-2V8h2v17h12V27z"
+                  />
+                  <path
+                    d="M16 16H24V18H16z"
+                  />
+                  <path
+                    d="M27.7,9.3l-7-7C20.5,2.1,20.3,2,20,2h-6c-1.1,0-2,0.9-2,2v17c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V10 C28,9.7,27.9,9.5,27.7,9.3z M20,4.4l5.6,5.6H20V4.4z M26,21H14V4h4v6c0,1.1,0.9,2,2,2h6V21z"
+                  />
+                </svg>
+                 Content 
+              </p>
+              <div
+                class="c3"
+              >
+                <div
+                  class="c4"
+                >
+                  <h6>
+                     
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M28 6H30V26H28zM17 6L15.57 7.393 23.15 15 2 15 2 17 23.15 17 15.57 24.573 17 26 27 16 17 6z"
+                      />
+                    </svg>
+                     Item 1
+                  </h6>
+                </div>
+                <div
+                  class="cds--list-box__wrapper c5"
+                >
+                  <label
+                    class="cds--label"
+                    for="content.0.image"
+                    id="downshift-9-label"
+                  >
+                    Image
+                  </label>
+                  <div
+                    class="cds--combo-box cds--list-box"
+                  >
+                    <div
+                      class="cds--list-box__field"
+                    >
+                      <input
+                        aria-autocomplete="list"
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        aria-labelledby="downshift-9-label"
+                        aria-owns="downshift-9-menu"
+                        autocomplete="off"
+                        class="cds--text-input cds--text-input--empty"
+                        id="content.0.image"
+                        placeholder="Select Image"
+                        role="combobox"
+                        tabindex="0"
+                        type="text"
+                        value=""
+                      />
+                      <button
+                        aria-haspopup="true"
+                        aria-label="Open"
+                        class="cds--list-box__menu-icon"
+                        data-toggle="true"
+                        role="button"
+                        tabindex="-1"
+                        title="Open"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <ul
+                      aria-label="Choose an item"
+                      class="cds--list-box__menu"
+                      id="downshift-9-menu"
+                      role="listbox"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="c1"
+                >
+                  <div
+                    class="cds--form-item"
+                  >
+                    <div
+                      class="cds--text-area__label-wrapper"
+                    >
+                      <label
+                        class="cds--label"
+                        for="content.0.style"
+                      >
+                        Style
+                      </label>
+                    </div>
+                    <div
+                      class="cds--text-area__wrapper"
+                    >
+                      <textarea
+                        aria-invalid="false"
+                        class="cds--text-area"
+                        id="content.0.style"
+                        min="0"
+                        name="content.0.style"
+                        placeholder="Enter Style"
+                        rows="2"
+                        style="width: 100%;"
+                        type="text"
+                      />
+                      <span
+                        class="cds--text-area__counter-alert"
+                        role="alert"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="cds--btn cds--btn--sm cds--layout--size-sm cds--btn--ghost"
+                style="margin-left: auto;"
+                type="button"
+              >
+                Add new item
+              </button>
+            </div>
+          </div>
+        </li>
+        <li
+          class="cds--accordion__item cds--accordion__item--active"
+        >
+          <button
+            aria-controls="accordion-item-:rq:"
+            aria-expanded="true"
+            class="cds--accordion__heading"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="cds--accordion__arrow"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+              />
+            </svg>
+            <div
+              class="cds--accordion__title"
+            >
+              Section 14 - Live map - Get in touch
+            </div>
+          </button>
+          <div
+            class="cds--accordion__content"
+            id="accordion-item-:rq:"
+          >
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="title"
+                  >
+                    Title
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="title"
+                      min="0"
+                      name="title"
+                      placeholder="Enter Title"
+                      title="Enter Title"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.0"
+                  >
+                    Description
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.0"
+                      min="0"
+                      name="text.0"
+                      placeholder="Enter Description"
+                      title="Enter Description"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="text.1"
+                  >
+                    Note
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="text.1"
+                      min="0"
+                      name="text.1"
+                      placeholder="Enter Note"
+                      title="Enter Note"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
             <div
               class="c1"
             >
@@ -4308,6 +5384,86 @@ exports[`About Us Render MainAboutUsView 1`] = `
               class="c1"
             >
               <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="cta.text.1"
+                  >
+                    Cta text 2
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="cta.text.1"
+                      min="0"
+                      name="cta.text.1"
+                      placeholder="Enter Cta text 2"
+                      title="Enter Cta text 2"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
+                class="cds--form-item cds--text-input-wrapper"
+              >
+                <div
+                  class="cds--text-input__label-wrapper"
+                >
+                  <label
+                    class="cds--label"
+                    for="cta.link.1"
+                  >
+                    Cta link 2
+                  </label>
+                </div>
+                <div
+                  class="cds--text-input__field-outer-wrapper"
+                >
+                  <div
+                    class="cds--text-input__field-wrapper"
+                  >
+                    <input
+                      class="cds--text-input"
+                      id="cta.link.1"
+                      min="0"
+                      name="cta.link.1"
+                      placeholder="Enter Cta link 2"
+                      title="Enter Cta link 2"
+                      type="text"
+                      value=""
+                    />
+                    <span
+                      class="cds--text-input__counter-alert"
+                      role="alert"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="c1"
+            >
+              <div
                 class="cds--form-item"
               >
                 <div
@@ -4347,7 +5503,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           class="cds--accordion__item cds--accordion__item--active"
         >
           <button
-            aria-controls="accordion-item-:rp:"
+            aria-controls="accordion-item-:rr:"
             aria-expanded="true"
             class="cds--accordion__heading"
             type="button"
@@ -4364,7 +5520,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
               />
             </svg>
             <div
@@ -4375,7 +5531,7 @@ exports[`About Us Render MainAboutUsView 1`] = `
           </button>
           <div
             class="cds--accordion__content"
-            id="accordion-item-:rp:"
+            id="accordion-item-:rr:"
           >
             <div
               class="c1"

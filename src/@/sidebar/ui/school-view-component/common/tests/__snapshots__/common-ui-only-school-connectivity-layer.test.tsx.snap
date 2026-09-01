@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CommonUIOnlySchoolConnectivityLayer component > should render without crashing 1`] = `
+<DocumentFragment>
+  .c0 {
+  margin: 1.5rem 1rem 1.5rem 1rem;
+}
+
+.c1 {
+  color: #1D8Cf0;
+  text-transform: capitalize;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 2.125rem;
+}
+
+.c2 {
+  font-size: 2.375rem;
+}
+
+<div
+    class="c0"
+  >
+    <div
+      class="relative! flex! w-full! flex-col! pt-3! pb-6! [&>p]:pt-[0.56rem]! [&>p]:pb-4!"
+    >
+      <span
+        class="c1 c2"
+      >
+        unknown
+      </span>
+    </div>
+  </div>
+  .c0 {
+  padding: 1rem;
+  color: #fff;
+  padding-top: 2rem;
+}
+
+<div
+    class="c0"
+  />
+</DocumentFragment>
+`;

@@ -1,141 +1,246 @@
-import { Checkbox } from "@carbon/react";
 import { useStore } from 'effector-react';
-import { useEffect, useState } from 'react';
+import { Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+import { $country } from '~/@/country/country.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+import { $stylePaintData } from '~/@/map/map.model';
 import {
-  $connectivitySpeedGood,
-  $connectivitySpeedModerate,
-  $connectivitySpeednoInternet,
-  $connectivitySpeedUnknown,
-  $connectivityStats,
-  changeConnectivitySpeedGood,
-  changeConnectivitySpeedModerate,
-  changeConnectivitySpeednoInternet,
-  changeConnectivitySpeedUnknown,
-  $connectivityBenchMark,
-  $benchmarkmarkUtils,
+  ConnectivityBenchMarks,
+  ConnectivityDistribution,
+  ConnectivityStatusDistribution,
+} from '~/@/sidebar/sidebar.constant';
+import {
+  $benchmarkmarkUtilsByEntity,
+  $connectivityBenchMarkByEntity,
+  $connectivitySpeedFilterByEntity,
+  $connectivityStatsByEntity,
   $layerUtils,
   $schoolStats,
-  $benchmarkNamesAllLayers,
+  changeEntityConnectivitySpeed,
 } from '~/@/sidebar/sidebar.model';
-import { $country, $countryConnectivityNames } from '~/@/country/country.model';
-import { ConnectivityBenchMarks, ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
-import { CheckBoxContainer, CircleWrapper, InnerCircle, InnerCircleConnectivity, LiveLayerBenchmark } from '../legend-button.style';
+import { DefaultLegendValuesType } from '~/api/types';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
+import { $lng } from '~/core/i18n/store';
+import { $mapRoutes } from '~/core/routes';
+import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
-import { $stylePaintData } from "~/@/map/map.model";
-import { defaultLegendValuesType } from "~/api/types";
-import { TooltipButton } from "~/@/common/style/styled-component-style";
-import { $mapRoutes } from "~/core/routes";
-import { $lng } from "~/core/i18n/store";
-import { useTranslation } from "react-i18next";
 
-interface CheckedStatus {
-  [key: string]: boolean;
-}
+import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
 
-const LiveLayerLegend = ({ shouldShowControls }: { shouldShowControls: boolean }) => {
+
+const LiveLayerLegend = ({
+  entityType,
+  isCompact = false,
+  isLoading = false,
+  metricSubtitle,
+  metricTitle,
+  shouldShowControls,
+}: {
+  entityType: EntityType;
+  isCompact?: boolean;
+  isLoading?: boolean;
+  metricSubtitle: string;
+  metricTitle: string;
+  shouldShowControls: boolean;
+}) => {
   const lng = useStore($lng);
   const { t } = useTranslation();
-  const { schools } = useStore($mapRoutes);
+  const { entity, map, schools } = useStore($mapRoutes);
   const paintData = useStore($stylePaintData);
-  const { currentLayerLegends: legends, selectedLayerData, selectedLayerId } = useStore($layerUtils);
-  const { benchmarkLogic } = useStore($benchmarkmarkUtils)
-  const countryConnectivityNames = useStore($countryConnectivityNames);
-  const benchmarkNames = useStore($benchmarkNamesAllLayers);
-  const speedGood = useStore($connectivitySpeedGood);
-  const speedModerate = useStore($connectivitySpeedModerate);
-  const speedNoInternet = useStore($connectivitySpeednoInternet);
-  const speedUnknown = useStore($connectivitySpeedUnknown);
-  const connectivityBenchMark = useStore($connectivityBenchMark)
+  const {
+    currentLayerLegendsByEntity,
+    globalLayerDataByEntity,
+    selectedLayerDataByEntity,
+  } = useStore($layerUtils);
+  const legends = currentLayerLegendsByEntity[entityType]!;
+  const { benchmarkLogic } =
+    useStore($benchmarkmarkUtilsByEntity)[entityType] ?? {};
+  const connectivitySpeedFilter = (useStore($connectivitySpeedFilterByEntity)[
+    entityType
+  ] ?? {}) as Record<string, boolean>;
+  const connectivityBenchMark =
+    useStore($connectivityBenchMarkByEntity)[entityType] ??
+    ConnectivityBenchMarks.global;
   const countryObj = useStore($country);
-  const countryBenchmarkDescriptions = countryObj?.benchmark_metadata?.layer_descriptions;
-  const [realtimeCheckedStatus, setRealtimeCheckedStatus] = useState<CheckedStatus>({});
-  const realtimeStatsFromStore = useStore($connectivityStats);
+  const countryBenchmarkDescriptions =
+    countryObj?.benchmark_metadata?.layer_descriptions;
+  const metricLayerData = map
+    ? globalLayerDataByEntity[entityType]
+    : selectedLayerDataByEntity[entityType];
+  const realtimeStatsFromStore = useStore($connectivityStatsByEntity)[
+    entityType
+  ];
   const schoolRealTimeStats = useStore($schoolStats);
-  const realtimeStats = realtimeStatsFromStore?.real_time_connected_schools ?? {} as defaultLegendValuesType;
-  const bencharkmarkValue = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.rounded_benchmark_value;
-  const unitLabel = (!schools ? realtimeStatsFromStore : schoolRealTimeStats?.[0])?.benchmark_metadata?.display_unit;
-  const nationalBenchMarkDescription = countryBenchmarkDescriptions?.[selectedLayerData?.id ?? 0] ?? "";
-  const isNational = connectivityBenchMark === ConnectivityBenchMarks.national;
+  const isEntityDetailView = schools || entity;
+  const realtimeStats =
+    realtimeStatsFromStore?.real_time_connected_entities ??
+    ({} as DefaultLegendValuesType);
+  const benchmarkValue = (
+    !isEntityDetailView ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
+  )?.benchmark_metadata?.rounded_benchmark_value;
+  const unitLabel = (
+    !isEntityDetailView ? realtimeStatsFromStore : schoolRealTimeStats?.[0]
+  )?.benchmark_metadata?.display_unit;
+  const nationalBenchMarkDescription =
+    countryBenchmarkDescriptions?.[metricLayerData?.id ?? 0] ?? '';
+
   const handleRealtimeLayerChange = (key: string) => {
-    const newStatus = !realtimeCheckedStatus[key];
-    setRealtimeCheckedStatus(prevState => ({
-      ...prevState,
-      [key]: newStatus
-    }));
-    // Call the appropriate function based on the key
-    switch (key) {
-      case 'good':
-        changeConnectivitySpeedGood(newStatus);
-        break;
-      case 'moderate':
-        changeConnectivitySpeedModerate(newStatus);
-        break;
-      case 'bad':
-        changeConnectivitySpeednoInternet(newStatus);
-        break;
-      case 'unknown':
-        changeConnectivitySpeedUnknown(newStatus);
-        break;
-      default:
-        console.log('Unknown key:', key);
-    }
+    changeEntityConnectivitySpeed({
+      entityType,
+      key: key as
+        | ConnectivityDistribution.good
+        | ConnectivityDistribution.moderate
+        | ConnectivityDistribution.bad
+        | ConnectivityDistribution.unknown,
+      value: !connectivitySpeedFilter[key],
+    });
   };
 
-  useEffect(() => {
-    setRealtimeCheckedStatus({
-      good: speedGood,
-      moderate: speedModerate,
-      bad: speedNoInternet,
-      unknown: speedUnknown
-    });
-  }, [speedGood, speedModerate, speedNoInternet, speedUnknown]);
+  const isNational =
+    !map && connectivityBenchMark === ConnectivityBenchMarks.national;
+  const currentBenchmarkLabel =
+    benchmarkValue && unitLabel ? `${benchmarkValue}${unitLabel}` : undefined;
 
   return (
-    <div className='school-status'>
-      <h3>{selectedLayerData?.name}</h3>
-      <TooltipButton $hideLabel={(!isNational || !nationalBenchMarkDescription)} label={nationalBenchMarkDescription ?? ""} align='top'>
-        <button style={{ background: 'none', border: 'none', padding: 0, margin: 0 }}>
-          {isNational ? <LiveLayerBenchmark>
-            {countryConnectivityNames?.[selectedLayerId as number] ?? t('national-benchmark')} - {bencharkmarkValue}&nbsp;{unitLabel}
-          </LiveLayerBenchmark> : <LiveLayerBenchmark>
-            {benchmarkNames[selectedLayerId ?? ""] ?? t('global-benchmark')} - {bencharkmarkValue}&nbsp;{unitLabel}
-          </LiveLayerBenchmark>}
-        </button>
-      </TooltipButton>
-      {
-        legends.values.map(({ key, label, tooltip }: { key: string, label: string, tooltip?: string }) => {
-          const logicLabel = `${(benchmarkLogic && key) != "unknown" ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
-          const toolTiplabel = tooltip ? tooltip : logicLabel;
+    <div
+      className={cn(
+        'flex! flex-col! self-start!',
+        isCompact
+          ? 'w-full! self-stretch!'
+          : 'min-w-0! flex-1! basis-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:basis-full! max-legend-md:min-w-full!',
+      )}
+    >
+      <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
+        <div className="flex! items-center! gap-1.5!">
+          <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
+            {metricSubtitle}
+          </div>
+          {metricLayerData?.description ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild stopPropagation>
+                  <button
+                    aria-label={metricLayerData.description}
+                    className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
+                    type="button"
+                  >
+                    <Info size={12} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" sideOffset={6}>
+                  {metricLayerData.description}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : null}
+        </div>
+        <div className="text-xs! leading-4.5! text-muted-foreground!">
+          {metricTitle}
+        </div>
+      </div>
+      {legends?.values?.map(
+        ({
+          key,
+          label,
+          tooltip,
+        }: {
+          key: string;
+          label: string;
+          tooltip?: string;
+        }) => {
+          const logicLabel = `${(benchmarkLogic && key) !== 'unknown' ? benchmarkLogic?.[key] : t('doesnt-match-any-criteria')}`;
+          const tooltipLabel = tooltip || logicLabel;
+          const displayLabel = metricLayerData?.name
+            ?.toLowerCase()
+            .includes('download')
+            ? ({
+              good: t('high'),
+              moderate: t('moderate'),
+              bad: t('low'),
+              unknown: t('unknown'),
+            }[key] ?? label)
+            : label;
+          const legendColor =
+            legends.colors[key] ?? paintData[key] ?? paintData.unknown;
+          const liveMetricFill =
+            paintData[ConnectivityStatusDistribution.connected];
+
           return (
-            <div key={key}>
-              <TooltipButton leaveDelayMs={50} $hideLabel={!toolTiplabel} label={toolTiplabel} align='left'>
-                <button>
-                  <div className='legend-container'>
-                    <div className='checkbox-with-label'>
-                      {shouldShowControls && <CheckBoxContainer><Checkbox id={key}
-                        labelText={''}
-                        checked={realtimeCheckedStatus[key]}
-                        onChange={() => handleRealtimeLayerChange(key)} >
-                      </Checkbox></CheckBoxContainer>}
-
-                      <div key={key} className='real-time-connetivity-info'>
-                        <CircleWrapper>
-                          <InnerCircleConnectivity $backColor={legends.colors[key]} className="outer-circle" />
-                          <InnerCircle className="inner-circle" $backColor={paintData[ConnectivityStatusDistribution.connected as string]} />
-                        </CircleWrapper>
-                        <p className="label">{label}</p>
-                      </div>
-                    </div>
-                    {shouldShowControls && key === 'bad' ? <div className='legend-value' data-title={t('int', { val: realtimeStats?.['no_internet'] ?? 0 })}>{formatNumber(realtimeStats?.['no_internet'] ?? 0, lng)}</div> : shouldShowControls && <div className='legend-value' data-title={t('int', { val: realtimeStats?.[key] ?? 0 })}>{formatNumber(realtimeStats?.[key] ?? 0, lng)}</div>}
+            <button
+              className="mt-1! flex! w-full! items-center! justify-start! gap-3! border-0! bg-transparent! p-0! text-left!"
+              key={key}
+              type="button"
+            >
+              <div className="flex! min-w-0! items-center!">
+                {shouldShowControls ? (
+                  <input
+                    aria-label={label}
+                    checked={Boolean(connectivitySpeedFilter[key])}
+                    className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
+                    onChange={() => handleRealtimeLayerChange(key)}
+                    type="checkbox"
+                  />
+                ) : null}
+                <div
+                  className="flex! min-w-0! items-center! gap-2!"
+                  data-title={tooltipLabel}
+                >
+                  <EntityLegendIndicator
+                    color={liveMetricFill}
+                    entityType={entityType}
+                    glowColor={legendColor}
+                  />
+                  {isLoading ? (
+                    <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                  ) : (
+                    <span className="text-sm! font-normal! leading-5! text-foreground!">
+                      {displayLabel}
+                    </span>
+                  )}
+                </div>
+              </div>
+              {shouldShowControls ? (
+                isLoading ? (
+                  <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
+                ) : (
+                  <div
+                    className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
+                    data-title={t('int', {
+                      val:
+                        key === 'bad'
+                          ? (realtimeStats?.no_internet ?? 0)
+                          : (realtimeStats?.[key] ?? 0),
+                    })}
+                  >
+                    {formatNumber(
+                      key === 'bad'
+                        ? (realtimeStats?.no_internet ?? 0)
+                        : (realtimeStats?.[key] ?? 0),
+                      lng,
+                    )}
                   </div>
-                </button>
-              </TooltipButton>
-            </div>
-          )
-        }
-        )}
+                )
+              ) : null}
+            </button>
+          );
+        },
+      )}
+      <LegendBenchmarkDropdown
+        entityType={entityType}
+        interactive={shouldShowControls}
+        staticLabel={map ? `${t('global-benchmark')} 20Mbps` : undefined}
+        title={isNational ? nationalBenchMarkDescription : undefined}
+        valueLabel={currentBenchmarkLabel}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default LiveLayerLegend
+export default LiveLayerLegend;

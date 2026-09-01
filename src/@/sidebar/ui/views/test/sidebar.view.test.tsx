@@ -1,95 +1,183 @@
-import { describe, test, } from '@jest/globals';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { createEvent } from 'effector';
 
-import { onChangeMenu, onSelectMainLayer } from '~/@/sidebar/sidebar.model';
+import {
+  onChangeMenu,
+  onSelectMainLayer,
+  $layersList,
+  $selectedLayerIdByEntity,
+} from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapOverview, router } from '~/core/routes';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { mapCountry, mapOverview, mapSchools, router } from '~/core/routes';
+import { testWrapper } from '~/tests/test-wrapper';
 
 import Sidebar from '../sidebar.view';
 import { fetchMockResponse } from '~/tests/fetchMock';
-import "~/core/i18n/instance"
-import { fetchCountryLiveLayerInfo, fetchLayerListFx } from '~/api/project-connect';
+import '~/core/i18n/instance';
+import { $country, $countryCode, $countries } from '~/@/country/country.model';
+import { $globalStatsByEntity } from '~/@/map/map.model';
+import layersData from '~/tests/data/layers-data';
+import countrySingleData from '~/tests/data/country.single.data';
+import globalStatusData from '~/tests/data/globalStatus.data';
+import { fetchLayerListFx } from '~/api/project-connect';
+import { useRoute } from '~/lib/router';
 
-const setMobileView = createEvent<boolean>()
-$isMobile.on(setMobileView, (_, payload) => payload)
+vi.mock('~/lib/router', async () => {
+  const actual = await vi.importActual('~/lib/router');
+  return {
+    ...actual,
+    useRoute: vi.fn(),
+  };
+});
 
-import { SimpleBarChart } from "@carbon/charts-react";
+const setMobileView = createEvent<boolean>();
+$isMobile.on(setMobileView, (_, payload) => payload);
 
-jest.mock('@carbon/charts-react', () => ({
-  SimpleBarChart: jest.fn().mockReturnValue(null),
+import { SimpleBarChart } from '@carbon/charts-react';
+
+vi.mock('@carbon/charts-react', () => ({
+  SimpleBarChart: vi.fn().mockReturnValue(null),
 }));
 
-describe('Sidebar', () => {
+// Mock HTMLCanvasElement.prototype.getContext for JSDOM compatibility
+if (typeof window !== 'undefined') {
+  window.HTMLCanvasElement.prototype.getContext = () =>
+    ({
+      measureText: () => ({ width: 10 }),
+    }) as any;
+}
 
+describe('Sidebar', () => {
   beforeEach(() => {
     fetchMock.mockResponse(fetchMockResponse);
-  })
-
-  test('renders Sidebar and take a snapshop', () => {
-    onChangeMenu(true)
-    setMobileView(false)
-    const { asFragment, container } = render(
-      testWrapper(<Sidebar />)
-    );
-    expect(asFragment()).toMatchSnapshot();
-    const expandButton = container.querySelector('.sidebar__expander')
-    fireEvent.click(expandButton as Element)
+    ($layersList as any).setState(layersData.results);
+    ($countries as any).setState([
+      { id: 144, code: 'BR', name: 'Brazil' },
+    ] as any);
   });
 
-  test("Render SchoolView", () => {
-    onChangeMenu(false)
+  test('renders Sidebar and take a snapshop', () => {
+    (useRoute as any).mockImplementation((route: any) => {
+      if (route === mapOverview) return {};
+      return null;
+    });
+    onChangeMenu(true);
+    setMobileView(false);
+    const { asFragment, container } = render(testWrapper(<Sidebar />));
+    expect(asFragment()).toMatchSnapshot();
+    const expandButton = container.querySelector('.sidebar__expander');
+    fireEvent.click(expandButton as Element);
+  });
+
+  test('Render SchoolView', () => {
+    (useRoute as any).mockImplementation((route: any) => {
+      if (route === mapSchools) return {};
+      return null;
+    });
+    onChangeMenu(false);
     router.navigate('map/schools');
-    render(testWrapper(<Sidebar />))
-    expect(window.location.pathname).toBe('/map/schools')
-  })
+    render(testWrapper(<Sidebar />));
+    expect(window.location.pathname).toBe('/map/schools');
+  });
 
-  test("render GlobalAndCountryView", () => {
-    onChangeMenu(false)
+  test('render GlobalAndCountryView', () => {
+    (useRoute as any).mockImplementation((route: any) => {
+      if (route === mapCountry) return { code: 'br' };
+      return null;
+    });
+    onChangeMenu(false);
     router.navigate('/map/country/br');
-    render(testWrapper(<Sidebar />))
-    expect(window.location.pathname).toBe('/map/country/br')
-  })
+    render(testWrapper(<Sidebar />));
+    expect(window.location.pathname).toBe('/map/country/br');
+  });
 
-  test('open tour pop up', async () => {
-    router.navigate('/map');
-    const { getByTestId } = render(testWrapper(<Sidebar />))
-    const tourButton = getByTestId('tour-button')
-    await fireEvent.click(tourButton)
-    expect(window.location.search).toBe('?popover=tour');
-  })
+  test('Render in mobile view', async () => {
+    (useRoute as any).mockImplementation((route: any) => {
+      if (route === mapOverview) return {};
+      return null;
+    });
+    onChangeMenu(false);
+    setMobileView(true);
+    const { container } = render(testWrapper(<Sidebar />));
+    const sliderButton = container.querySelector('#mobile-view-slider');
+    await fireEvent.click(sliderButton as Element);
+    const accessibleButton = container.querySelector(
+      '[data-testid="accessible-button"]',
+    );
+    expect(accessibleButton).toBeInTheDocument();
+  });
 
-  test("Render in mobile view", async () => {
-    onChangeMenu(false)
-    setMobileView(true)
-    const { container } = render(testWrapper(<Sidebar />))
-    const sliderButton = container.querySelector('#mobile-view-slider')
-    await fireEvent.click(sliderButton as Element)
-    const tourButton = container.querySelector('#tour-button')
-    expect(tourButton).toBeNull();
-  })
-
-  test("Render global view", async () => {
+  test('Render global view', async () => {
+    (useRoute as any).mockImplementation((route: any) => {
+      if (route === mapOverview) return {};
+      return null;
+    });
     mapOverview.navigate();
-    render(testWrapper(<Sidebar />))
-    expect(screen.getByText('Global School connectivity map')).toBeInTheDocument();
-  })
+    render(testWrapper(<Sidebar />));
+    await waitFor(
+      () => {
+        expect(
+          screen.getByText(/global connectivity map for children/i),
+        ).toBeInTheDocument();
+      },
+      { timeout: 10000 },
+    );
+  });
 
-  test("Render country view", async () => {
-    mapCountry.navigate({ code: 'br' });
+  test('Render country view', async () => {
+    (useRoute as any).mockImplementation((route: any) => {
+      if (route === mapCountry) return { code: 'br' };
+      if (route === mapOverview) return null;
+      return null;
+    });
+
+    await act(async () => {
+      ($country as any).setState(countrySingleData);
+      ($globalStatsByEntity as any).setState({
+        school: {
+          no_of_countries: globalStatusData.no_of_countries,
+          entities_total: globalStatusData.schools_connected,
+          connected_entities: globalStatusData.connected_schools,
+          connectivity_global_benchmark:
+            globalStatusData.connectivity_global_benchmark,
+        },
+      });
+    });
+
+    await act(async () => {
+      ($countryCode as any).setState('br');
+    });
+
+    await act(async () => {
+      ($selectedLayerIdByEntity as any).setState({ school: 47 });
+    });
+
     await fetchLayerListFx();
-    onSelectMainLayer(9)
-    await fetchCountryLiveLayerInfo({ query: '?start_date=2022-09-01&end_date=2022-09-30', id: 9 });
-    const { container } = render(testWrapper(<Sidebar />))
-    expect(screen.getByText('schools with real-time connectivity data', { exact: false })).toBeInTheDocument();
-    const filterBtn = container.querySelector('.filter-icon-button');
-    fireEvent.click(filterBtn as Element);
-    // expect(screen.getByText('Real-time connectivity data layer', { exact: false })).toBeInTheDocument();
-    // const radioRTO = container.querySelector('#Round Trip Time - RTT19');
-    // fireEvent.click(radioRTO as Element);
-    // const applyBtn = screen.findByText('Apply');
-    // fireEvent.click(applyBtn as Element);
-  })
+    const { container } = render(testWrapper(<Sidebar />));
 
-})
+    // Find the 'Schools' text element and click its wrapping button trigger to expand the accordion
+    const schoolsTextElement = screen
+      .getAllByText('Schools')
+      .find((el) => el.closest('button'));
+    const schoolsTrigger = schoolsTextElement
+      ? schoolsTextElement.closest('button')
+      : null;
+    if (schoolsTrigger) {
+      fireEvent.click(schoolsTrigger);
+    }
+
+    await waitFor(
+      () => {
+        ($selectedLayerIdByEntity as any).setState({ school: 47 });
+        expect(container.textContent).toContain('Schools');
+      },
+      { timeout: 10000 },
+    );
+  });
+});

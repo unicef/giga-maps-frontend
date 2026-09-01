@@ -1,132 +1,243 @@
-import { ArrowRight, Launch } from '@carbon/icons-react';
+import { useStore } from 'effector-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from 'styled-components';
+
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
+import { $entityRegistry } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
+import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
+import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
 import { PointCoordinates } from '~/core/global-types';
-import { router } from '~/core/routes';
-import {
-  InnerCircle,
-  InnerCircleConnectivity,
-} from '../legend-info/legend-button.style';
+
 import DublicateSchoolPopup from './dublicate-school-popup.view';
-import useSchoolPopupData from './school-popup-hook';
+import SchoolPopupDataSource from './school-popup-data-source';
+import useSchoolPopupData, { PopupFeatureItem } from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
-import {
-  ConnectivityCircleWrapper,
-  GoToSchoolButton,
-  Label,
-  LiveContainer,
-  LiveContent,
-  LiveStatusRow,
-  OSMLink,
-  PopupTemplate,
-  SchoolInfoWrapper,
-  SchoolName,
-  SchoolNameContent,
-  SchoolNameWrapper,
-  SchoolVerificationTag,
-} from './school-popup.style';
+import { UNKNOWN } from '../../map.types';
+
+const ENTITY_PAGE_COPY_KEYS: Record<EntityType, string> = {
+  [EntityType.SCHOOL]: 'go-to-school-page',
+  [EntityType.HEALTH]: 'go-to-health-facility-page',
+};
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
+  const entityRegistry = useStore($entityRegistry);
   const {
     isLoading,
     features,
-    isLive,
-    isSchoolBenchmark,
-    getFeatureInfo,
-    isStatic,
     countryCode,
     formattedInterval,
+    entityType,
+    getFeatureInfo,
   } = useSchoolPopupData();
 
-  if (!features?.length) return null;
+  if (!entityType || !features?.length) return null;
+
+  const entityLabel = entityType
+    ? t(`${entityType}-entity-label`, {
+      defaultValue: t(entityRegistry[entityType]?.slug ?? entityType, {
+        count: 1,
+      }),
+    })
+    : '';
 
   return (
     <>
-      {features.map(({ isClicked, element, feature }) => {
-        const {
-          connecitivityColor,
-          connecitivityStatusColor,
-          connectivityStatusValue,
-          schoolCoords,
-          connectivityValue,
-          benchmarkTitle,
-          staticValue,
-          staticColor,
-          schoolAtSameLocation,
-          schoolId
-        } = getFeatureInfo(feature);
-
-        const hasDublicateSchools = schoolAtSameLocation?.schoolIds.length > 0;
-
-        return createPortal(
-          isLoading && isClicked ? (
-            <SchoolPopupLoading />
-          ) : (
-            <div className="school-popup-data">
-              {(!isLoading && isClicked && hasDublicateSchools) ?
-                <DublicateSchoolPopup
-                  schoolIds={[schoolId, ...schoolAtSameLocation.schoolIds]}
-                  countryCode={countryCode}
-                  scrollableTargetId="parentPopupScrollContainer"
-                  batchSize={10}
-                /> :
-                <div className="map-popup-template">
-                  <PopupTemplate>
-                    <SchoolNameWrapper>
-                      <SchoolNameContent>
-                        <SchoolName className="map-school-name">{feature?.name?.toLocaleLowerCase()}</SchoolName>
-                        {feature?.isVerifiedSchool === false && <SchoolVerificationTag>Unverified</SchoolVerificationTag>}
-                      </SchoolNameContent>
-                      <OSMLink
-                        href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Open in OpenStreetMap"
-                      >
-                        <Launch />
-                      </OSMLink>
-                    </SchoolNameWrapper>
-                    <SchoolInfoWrapper className="live-container">
-                      <LiveContainer>
-                        <ConnectivityCircleWrapper className="map-school-status-circle">
-                          {!isStatic && feature?.isRealTime && <InnerCircleConnectivity className="outer-circle" $backColor={connecitivityColor} />}
-                          <InnerCircle className="inner-circle" $margin="0.35rem 0 0 0" $backColor={isStatic ? staticColor : connecitivityStatusColor} />
-                        </ConnectivityCircleWrapper>
-                        <LiveContent>
-                          {isLive && feature?.isRealTime && <LiveStatusRow>
-                            <Label $color={connecitivityColor} style={{ whiteSpace: 'nowrap' }}>{connectivityValue}</Label>
-                            <Label $size="0.875rem" $textTransform="none" $color={theme.filterText}>{formattedInterval}</Label>
-                          </LiveStatusRow>}
-                          {isStatic && <Label $color={staticColor}>{staticValue}</Label>}
-                          {!isStatic && (!isLive || !feature?.isRealTime) &&
-                            <Label $color={connecitivityStatusColor} style={{ whiteSpace: 'nowrap' }}>{t(ConnectivityStatusNames[connectivityStatusValue])}</Label>
-                          }
-                        </LiveContent>
-                      </LiveContainer>
-                      {isSchoolBenchmark && benchmarkTitle && <Label style={{ marginTop: '0.5rem' }} $size=".875rem">{benchmarkTitle} - {feature?.schoolBenchmark}</Label>}
-                    </SchoolInfoWrapper>
-
-                    {/* Data source section tailored for popup */}
-                    {/* <SchoolPopupDataSource /> */}
-                  </PopupTemplate>
-                  {isClicked && <GoToSchoolButton className="go-to-school" onClick={() => {
-                    router.navigate(`/map/schools?country=${countryCode.toLowerCase()}&school_ids=${feature?.id}`);
-                    setSchoolFocusLatLng(feature?.geopoint.coordinates as PointCoordinates);
-                  }} type="button"
-                    renderIcon={ArrowRight} >
-                    {t('go-to-school-page')}
-                  </GoToSchoolButton>}
-                </div>}
-            </div>
-          ),
+      {features.map(
+        ({
+          isClicked,
           element,
-        );
-      })}
+          feature,
+          entityType: itemEntityType,
+        }: PopupFeatureItem) => {
+          const targetEntityType = itemEntityType ?? entityType;
+          const {
+            connecitivityColor,
+            connecitivityStatusColor,
+            connectivityStatusValue,
+            schoolCoords,
+            connectivityValue,
+            benchmarkTitle,
+            staticValue,
+            staticColor,
+            schoolAtSameLocation,
+            schoolId,
+            isLive: featureIsLive,
+            isStatic: featureIsStatic,
+            isEntityBenchmark: featureIsEntityBenchmark,
+          } = getFeatureInfo(feature, targetEntityType);
+
+          const duplicateSchoolIds = schoolAtSameLocation?.schoolIds ?? [];
+          const hasDublicateSchools = duplicateSchoolIds.length > 0;
+
+          const itemEntityLabel = targetEntityType
+            ? t(`${targetEntityType}-entity-label`, {
+              defaultValue: t(
+                entityRegistry[targetEntityType]?.slug ?? targetEntityType,
+                { count: 1 },
+              ),
+            })
+            : entityLabel;
+
+          return createPortal(
+            isLoading && isClicked ? (
+              <SchoolPopupLoading />
+            ) : (
+              <div className="school-popup-data">
+                {!isLoading && isClicked && hasDublicateSchools && targetEntityType ? (
+                  <DublicateSchoolPopup
+                    schoolIds={[...(schoolId ? [schoolId] : []), ...duplicateSchoolIds]}
+                    entityType={targetEntityType}
+                    countryCode={countryCode}
+                    scrollableTargetId="parentPopupScrollContainer"
+                    batchSize={10}
+                  />
+                ) : (
+                  <div className="map-popup-template">
+                    <div className="relative! flex! w-[300px]! flex-col! gap-3! rounded-xl! border! border-border! bg-popover! dark:border-gray-800! dark:bg-gray-900! p-4! text-foreground! shadow-xl!">
+                      {/* Header: Title, verification badge & OSM link */}
+                      <div className="flex! items-start! justify-between! gap-3!">
+                        <div className="flex! min-w-0! flex-1! flex-wrap! items-center! gap-2!">
+                          <h6 className="map-school-name text-[20px]! font-normal! not-italic! leading-[30px]! text-black! dark:text-foreground! capitalize! break-words!">
+                            {feature?.name?.toLocaleLowerCase()}
+                          </h6>
+                          {feature?.isVerifiedSchool === false && (
+                            <Badge
+                              variant="outline"
+                              className="min-h-5! rounded-md! border-transparent! bg-warning/15! px-2! py-0.5! text-xs! font-normal! leading-4! text-warning! hover:bg-warning/15!"
+                            >
+                              Unverified
+                            </Badge>
+                          )}
+                        </div>
+                        {schoolCoords?.length >= 2 && (
+                          <a
+                            href={`https://www.openstreetmap.org/#map=19/${schoolCoords[1]}/${schoolCoords[0]}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Open in OpenStreetMap"
+                            className="inline-flex! size-auto! shrink-0! items-center! self-start! text-primary! transition-colors! hover:text-primary/80! focus:text-primary/80! active:text-primary!"
+                          >
+                            <ExternalLink className="size-4!" />
+                          </a>
+                        )}
+                      </div>
+
+                      {/* Metric / Status Row */}
+                      <div className="flex! flex-col! gap-1!">
+                        <div className="flex! flex-wrap! items-center! gap-2!">
+                          <div className="map-school-status-circle flex! items-center!">
+                            <EntityLegendIndicator
+                              color={
+                                (featureIsStatic
+                                  ? staticColor
+                                  : connecitivityStatusColor) ?? ''
+                              }
+                              entityType={targetEntityType}
+                              glowColor={
+                                !featureIsStatic && feature?.isRealTime
+                                  ? connecitivityColor
+                                    ? `color-mix(in srgb, ${connecitivityColor} 42%, white)`
+                                    : undefined
+                                  : undefined
+                              }
+                              size={16}
+                            />
+                          </div>
+
+                          {featureIsLive && feature?.isRealTime ? (
+                            <div className="flex! flex-wrap! items-center! gap-2!">
+                              <span
+                                className="text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                                style={{ color: connecitivityColor }}
+                              >
+                                {connectivityValue}
+                              </span>
+                              {formattedInterval && (
+                                <span className="inline-flex! items-center! rounded-md! border! border-border! dark:border-gray-800! px-2.5! py-0.5! text-xs! font-normal! text-black! dark:text-foreground!">
+                                  {formattedInterval}
+                                </span>
+                              )}
+                            </div>
+                          ) : featureIsStatic ? (
+                            <span
+                              className="text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                              style={{ color: staticColor }}
+                            >
+                              {staticValue}
+                            </span>
+                          ) : (
+                            <span
+                              className="whitespace-nowrap! text-[14px]! font-normal! not-italic! leading-[20px]! capitalize!"
+                              style={{ color: connecitivityStatusColor }}
+                            >
+                              {t(
+                                ConnectivityStatusNames[
+                                connectivityStatusValue ?? UNKNOWN
+                                ] ?? UNKNOWN,
+                              )}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Benchmark Subtitle */}
+                        {featureIsEntityBenchmark &&
+                          benchmarkTitle &&
+                          feature?.schoolBenchmark && (
+                            <span className="text-[14px]! font-normal! not-italic! leading-[20px]! text-gray-700! dark:text-gray-400!">
+                              {benchmarkTitle} - {feature?.schoolBenchmark}
+                            </span>
+                          )}
+                      </div>
+
+                      {/* Data Source Section */}
+                      <SchoolPopupDataSource entityType={targetEntityType} />
+
+                      {/* Action Button */}
+                      {targetEntityType && (feature?.id || schoolId) && isClicked && (
+                        <Button
+                          className="go-to-school mt-1! w-full! cursor-pointer! justify-center! gap-1.5! rounded-full! border-0! bg-primary! px-2.5! py-2! text-sm! font-medium! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
+                          onClick={() => {
+                            const targetId = feature?.id ?? schoolId;
+                            if (targetId && targetEntityType) {
+                              navigateToEntity(
+                                targetEntityType,
+                                countryCode,
+                                targetId,
+                              );
+                              if (feature?.geopoint?.coordinates) {
+                                setSchoolFocusLatLng(
+                                  feature.geopoint
+                                    .coordinates as PointCoordinates,
+                                );
+                              }
+                            }
+                          }}
+                          type="button"
+                        >
+                          <span>
+                            {t(ENTITY_PAGE_COPY_KEYS[targetEntityType], {
+                              entity: itemEntityLabel,
+                              defaultValue: `Go to ${itemEntityLabel} page`,
+                            })}
+                          </span>
+                          <ArrowRight className="size-4! shrink-0!" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ),
+            element,
+          );
+        },
+      )}
     </>
   );
 };

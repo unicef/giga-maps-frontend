@@ -50,19 +50,19 @@ a{
   text-decoration:none;
 }
 
-@keyframes pulse {
-	0% {
-		transform: scale(0.85);
-	}
+// @keyframes pulse {
+// 	0% {
+// 		transform: scale(0.85);
+// 	}
 
-	70% {
-		transform: scale(1.2);
-	}
+// 	70% {
+// 		transform: scale(1.2);
+// 	}
 
-	100% {
-		transform: scale(0.85);
-	}
-}
+// 	100% {
+// 		transform: scale(0.85);
+// 	}
+// }
 
  @keyframes glowly {
    from {
@@ -160,36 +160,51 @@ a{
     display: inline-block;
   }
 
-  [data-title]:hover::after {
-    content: attr(data-title);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 1000;
-    pointer-events: none;
-    opacity: 0;
-    animation: tooltipFadeIn 0.2s ease-in-out forwards;
-  }
+  /* Touch keeps :hover stuck after a tap, which pins the bubble and its
+     caret on screen until the next tap elsewhere. */
+  @media (hover: hover) and (pointer: fine) {
+    [data-title='']:hover::after,
+    [data-title='']:hover::before {
+      display: none;
+    }
 
-  [data-title]:hover::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-    border: 5px solid transparent;
-    border-top-color: #333;
-    z-index: 1000;
-    pointer-events: none;
-    opacity: 0;
-    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+    [data-title]:hover::after {
+      content: attr(data-title);
+      -webkit-text-fill-color: white;
+      -webkit-background-clip: border-box;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: normal;
+      max-width: 250px;
+      width: max-content;
+      word-break: break-word;
+      text-align: center;
+      z-index: 10000;
+      pointer-events: none;
+      opacity: 0;
+      animation: tooltipFadeIn 0.2s ease-in-out 0.5s forwards;
+    }
+
+    [data-title]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      border: 5px solid transparent;
+      border-top-color: #333;
+      z-index: 10000;
+      pointer-events: none;
+      opacity: 0;
+      animation: tooltipFadeIn 0.2s ease-in-out 0.5s forwards;
+    }
   }
 
   @keyframes tooltipFadeIn {
@@ -200,6 +215,31 @@ a{
     to {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  @keyframes tooltipFadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(0) translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    [data-title-pos='right']:hover::after {
+      left: 0;
+      transform: translateX(0);
+      animation-name: tooltipFadeInRight;
+    }
+
+    [data-title-pos='right']:hover::before {
+      left: 8px;
+      transform: translateX(0) translateY(100%);
+      animation-name: tooltipFadeInRight;
     }
   }
 `;

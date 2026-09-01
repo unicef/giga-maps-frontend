@@ -1,8 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { createEvent } from "effector";
 
 import { mockSchoolSummaryList } from "~/tests/data/school-list";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { $schoolSummaryListAdmin } from "../../models/school-model";
 import MainAdminSchoolView from "../schools/main-admin-school-view";
@@ -20,23 +20,25 @@ $schoolSummaryListAdmin.on(setSummarySummaryListAdmin, (_, payload) => payload)
 describe("School Summary Crud Tab", () => {
 
   test('change tab by click', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<MainAdminSchoolView onClick={handleClick} />));
     const button = getByTestId('admin-School Summary-tab');
     fireEvent.click(button);
   })
 
-  test("Select school summary and delete", () => {
+  test("Select school summary and delete", async () => {
     setSummarySummaryListAdmin(mockSchoolSummaryList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchoolSummary onClick={handleClick} />));
     const checkboxes = container.querySelectorAll('.cds--checkbox');
     if (checkboxes.length > 0) {
       fireEvent.click(checkboxes[1]);
       const button = container.querySelector('#delete-selected-School-Summary');
       fireEvent.click(button)
-      const yesButton = screen.getByText('Yes');
-      fireEvent.click(yesButton);
+      await waitFor(() => {
+        const yesButton = screen.getByRole('button', { name: /yes/i });
+        fireEvent.click(yesButton);
+      });
     } else {
       console.error('No button with class name found');
     }
@@ -45,7 +47,7 @@ describe("School Summary Crud Tab", () => {
 
   test("render edit EditSchoolSummary by click on edit , and field and sumbit", () => {
     setSummarySummaryListAdmin(mockSchoolSummaryList)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { container } = render(testWrapper(<ListSchoolSummary onClick={handleClick} />));
     const button = container.querySelector(`#admin-edit-School-summary-${mockSchoolSummaryList.results[0]?.id}`);
     fireEvent.click(button)
@@ -86,3 +88,4 @@ describe("School Summary Crud Tab", () => {
   })
 
 })
+

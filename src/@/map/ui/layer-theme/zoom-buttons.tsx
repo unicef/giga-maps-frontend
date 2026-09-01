@@ -1,21 +1,33 @@
-import { Add, Subtract } from '@carbon/icons-react'
+import { Minus, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { zoomIn, zoomOut } from '../../map.model';
-import { ButtonWrapperDown, ButtonWrapperUp, ZoomButtonWrapper } from "./theme-button.style"
-import { useTranslation } from 'react-i18next';
+import MapControlButton from './map-control-button';
 
 const ZoomButtons = () => {
   const { t } = useTranslation();
 
   return (
-    <ZoomButtonWrapper>
-      <ButtonWrapperUp onClick={() => zoomIn()} label={t("zoom-in")} align='left' kind='ghost'>
-        <Add size={16} />
-      </ButtonWrapperUp>
-      <ButtonWrapperDown onClick={() => zoomOut()} label={t("zoom-out")} align='left' kind='ghost'>
-        <Subtract size={16} />
-      </ButtonWrapperDown>
-    </ZoomButtonWrapper >
+    <div className="mb-0! flex! flex-col! items-center! overflow-visible!">
+      <MapControlButton
+        aria-label={t('zoom-in')}
+        buttonClassName="rounded-b-none! rounded-t-[1rem]! border-0! border-b! border-b-[#262626]!"
+        containerClassName="mt-0!"
+        label={t('zoom-in')}
+        onClick={() => zoomIn()}
+      >
+        <Plus className="size-4" />
+      </MapControlButton>
+      <MapControlButton
+        aria-label={t('zoom-out')}
+        buttonClassName="!mt-0 !rounded-t-none !rounded-b-[1rem] !border-0"
+        containerClassName="!mt-0"
+        label={t('zoom-out')}
+        onClick={() => zoomOut()}
+      >
+        <Minus className="size-4" />
+      </MapControlButton>
+    </div>
   )
 }
 

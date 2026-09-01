@@ -20,7 +20,7 @@ export const getSchoolListFx = createEffect(({ page, pageSize, search, filter }:
   }
 
   return createRequestAuthFx({
-    url: url
+    url
   }) as Promise<APIListType<SchoolType>>
 })
 

@@ -2,8 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import PromptActionable from "../prompt-actionable";
 
 describe('PromptActionable Component', () => {
-  const mockOnActionDone = jest.fn();
-  const mockOnActionButtonClick = jest.fn();
+  const mockOnActionDone = vi.fn();
+  const mockOnActionButtonClick = vi.fn();
 
   const defaultProps: PromptActionableType = {
     $style: 'background-color: red;',
@@ -30,7 +30,7 @@ describe('PromptActionable Component', () => {
   it('should apply custom styles if $style prop is provided', () => {
     const { container } = render(<PromptActionable {...defaultProps} />);
     const wrapper = container.querySelector('div');
-    expect(wrapper).toHaveStyle('background-color: red');
+    expect(wrapper).toHaveStyle('background-color: rgb(255, 0, 0)');
   });
 
   // it('should render the notification with low contrast and inline', () => {

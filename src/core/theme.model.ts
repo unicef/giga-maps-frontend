@@ -1,3 +1,5 @@
+/* this is depricated theme model file, for new changes use taildwind css*/
+
 import { createEvent, restore } from "effector";
 
 declare module 'styled-components' {
@@ -51,7 +53,7 @@ export const themeData = {
     schoolId: "#6F6F6F",
     schoolListBack: "#383838",
     gigaButtonBack: "#383838",
-    searchSchoolBorder: "#C7C7C7",
+    searchSchoolBorder: "#393939",
     notFoundRed: "#F94B4B",
     graphWeekMonthBorder: "#474747",
     skeleton: "#353535",
@@ -90,23 +92,23 @@ export const themeData = {
     white: "#fff",
     grayDark: "#383838",
     titleBlue: "#277AFF",
-    titleDesc: "#9E9E9E",
+    titleDesc: "#9ca3af",
     iconSecondary: '#fff',
     mappedCountry: "#C6C6C6",
-    textTertiary: '#6F6F6F',
-    grey60: "#7E7E7E",
-    bottomBorder: "#E0E0E0",
-    schoolId: "#6F6F6F",
+    textTertiary: '#9ca3af',
+    grey60: "#9ca3af",
+    bottomBorder: "#374151",
+    schoolId: "#9ca3af",
     schoolListBack: "#383838",
     gigaButtonBack: "#383838",
-    searchSchoolBorder: "#C7C7C7",
+    searchSchoolBorder: "#374151",
     notFoundRed: "#F94B4B",
-    graphWeekMonthBorder: "#474747",
+    graphWeekMonthBorder: "#374151",
     skeleton: "#353535",
     skeletonHighlight: "#494949",
     grey80: "#333333",
     filterText: "#f5f5f5",
-    filterGrey: "#c0c0c0",
+    filterGrey: "#9ca3af",
   }
 }
 

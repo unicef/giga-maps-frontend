@@ -8,9 +8,9 @@ import DownloadApiKeyModal from '../download-api-key-modal.view';
 import { getExploreApiListFx } from '~/@/api-docs/effects/explore-api-fx';
 
 // Mock the navigation function
-jest.mock('~/core/routes', () => ({
+vi.mock('~/core/routes', () => ({
   apiInfo: {
-    navigate: jest.fn(),
+    navigate: vi.fn(),
   },
 }));
 
@@ -22,7 +22,7 @@ describe('DownloadApiKeyModal', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Set initial store values using events
     onDownloadAPIPopup(true);
     onDocumentAPIPopup(false);
@@ -39,7 +39,7 @@ describe('DownloadApiKeyModal', () => {
 
   it('shows error message when submitting empty API key', async () => {
     onDocumentAPIPopup(true);
-    const mockValidateApiKey = jest.fn().mockRejectedValueOnce(new Error('Invalid API key'));
+    const mockValidateApiKey = vi.fn().mockRejectedValueOnce(new Error('Invalid API key'));
     validateApiKeyFx.use(mockValidateApiKey);
 
     render(<DownloadApiKeyModal />);
@@ -62,7 +62,7 @@ describe('DownloadApiKeyModal', () => {
   });
 
   it('validates API key on submit', async () => {
-    const mockValidateApiKey = jest.fn().mockResolvedValueOnce(true);
+    const mockValidateApiKey = vi.fn().mockResolvedValueOnce(true);
     validateApiKeyFx.use(mockValidateApiKey);
 
     render(<DownloadApiKeyModal />);
@@ -84,14 +84,14 @@ describe('DownloadApiKeyModal', () => {
 
   it('request api key on button is clicked', () => {
     render(<DownloadApiKeyModal />);
-    const submitButton = screen.getByText('Request API Key');
+    const submitButton = screen.getByText('request one');
     fireEvent.click(submitButton);
   });
 
   it('request api key on button is clicked when api is public', () => {
     getExploreApiListFx.doneData({ results: [{ ...testApiData, category: 'public' }] });
     render(<DownloadApiKeyModal />);
-    const submitButton = screen.getByText('Request API Key');
+    const submitButton = screen.getByText('request one');
     fireEvent.click(submitButton);
   });
 

@@ -1,80 +1,91 @@
-import { Tuning } from '@carbon/icons-react'
-import { IconButton, Tag as FilterTag, Button } from '@carbon/react';
 import { useStore } from 'effector-react';
-import { useTheme } from 'styled-components';
-
-import { $showAdvancedFilter, $sidebarHeight, onShowAdvancedFilter, onShowLegend } from '~/@/sidebar/sidebar.model';
-import ClickAnywhere from '~/@/sidebar/ui/common-components/click-anywhere';
-
-import { useEffect, useMemo } from 'react';
-import { FilterButtonWrapper, FilterTagContainer, FilterWrapper, Tag } from './filter-button.style';
-import FilterPopup from './filter-popup';
-import { $mapRoutes, router } from '~/core/routes';
-import { $country, $countrySearchParams, $countrySearchString } from '~/@/country/country.model';
-import { $advanceFilterList } from '../../map.model';
-import { $isMobile } from '~/core/media-query';
+import { SlidersHorizontal } from 'lucide-react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import FilterSelectedChips from './filter-selected-chips';
+
+import { $country, $countrySearchParams } from '~/@/country/country.model';
+import { $showAdvancedFilter, onShowAdvancedFilter } from '~/@/sidebar/sidebar.model';
+import { Button } from '~/components/ui/button';
+import { cn } from '~/lib/cn';
+import { $mapRoutes } from '~/core/routes';
+
+import { $advanceFilterList } from '../../map.model';
+import FilterPopup from './filter-popup';
 
 const FilterButton = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const isOpen = useStore($showAdvancedFilter)
+  const isOpen = useStore($showAdvancedFilter);
   const country = useStore($country);
   const routes = useStore($mapRoutes);
-  const isMobile = useStore($isMobile);
-  const countrySearchString = useStore($countrySearchString);
   const advanceFilterList = useStore($advanceFilterList);
-  const showFilter = () => {
-    onShowAdvancedFilter(!isOpen);
-  };
-  useEffect(() => {
-    if (isOpen) {
-      onShowLegend(false);
-    }
-  }, [isOpen]);
+  const { selectedCount } = useStore($countrySearchParams);
+
   const isDisabled = useMemo(() => {
-    if (routes.schools || !country?.id || !advanceFilterList?.length) {
+    if (
+      routes.schools ||
+      routes.entity ||
+      routes.entityView ||
+      !country?.id ||
+      !advanceFilterList?.length
+    ) {
       return true;
     }
     return false;
-  }, [advanceFilterList, country?.id, routes.schools]);
+  }, [
+    advanceFilterList,
+    country?.id,
+    routes.schools,
+    routes.entity,
+    routes.entityView,
+  ]);
 
-  const sidebarHeight = useStore($sidebarHeight)
   if (isDisabled) return null;
+
   return (
-    <>
-      <FilterWrapper className="filter-wrapper-popup" $zIndex={isOpen ? 0 : 1} $bottom={sidebarHeight}>
+    <div className="filter-wrapper-popup relative! z-99! my-2! mr-2! flex! flex-col! items-center!">
+      <FilterPopup open={isOpen} setOpen={onShowAdvancedFilter}>
+        <Button
+          aria-label={t('filters')}
+          className={cn(
+            "font-['Open_Sans',sans-serif]! h-8! gap-1.5! rounded-md! px-2.5! text-sm!",
+            isOpen
+              ? 'bg-primary! text-primary-foreground! hover:bg-primary/90!'
+              : 'bg-secondary! text-secondary-foreground! hover:bg-secondary/80!',
+          )}
+          disabled={isDisabled}
+          onClick={() => {
+            onShowAdvancedFilter(!isOpen);
+          }}
+          onKeyDown={(event) => {
+            if (
+              isOpen &&
+              (event.key === 'Enter' || event.key === ' ')
+            ) {
+              event.preventDefault();
+            }
+          }}
+          size="sm"
+          type="button"
+          variant={isOpen ? 'default' : 'secondary'}
+        >
+          <SlidersHorizontal className="size-4!" />
+          <span>{t('filters')}</span>
+          {selectedCount > 0 && (
+            <span
+              className={cn(
+                'ml-0.5! inline-flex! h-5! min-w-5! items-center! justify-center! rounded-full! px-1.5! text-xs! font-normal! leading-none!',
+                isOpen
+                  ? 'bg-primary-foreground! text-primary!'
+                  : 'bg-primary! text-primary-foreground!',
+              )}
+            >
+              {selectedCount}
+            </span>
+          )}
+        </Button>
+      </FilterPopup>
+    </div>
+  );
+};
 
-        <FilterPopup caret={false} open={isOpen} setOpen={onShowAdvancedFilter} align={isMobile ? "left" : "left"}>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <FilterSelectedChips />
-            <FilterButtonWrapper $iconColor={theme.white}>
-              <Button
-                align="left"
-                onClick={showFilter}
-                disabled={isDisabled}
-                size="sm"
-                label="Filter"
-                tooltipText='Filters'
-              >
-                <Tuning fill={theme.white} />
-                <span>{t('filters')}</span>
-              </Button>
-              {!!countrySearchString && <Tag />}
-            </FilterButtonWrapper>
-          </div>
-        </FilterPopup>
-      </FilterWrapper>
-      {isOpen && <ClickAnywhere
-        classList={['filter-wrapper-popup', 'filter-tag-container']}
-        trigger={isOpen}
-        outsideClick={() => {
-          onShowAdvancedFilter(false)
-        }}
-      />}
-    </>
-  )
-}
-
-export default FilterButton
+export default FilterButton;

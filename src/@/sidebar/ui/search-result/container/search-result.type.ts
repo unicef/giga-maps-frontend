@@ -1,3 +1,5 @@
+import { EntityType } from "~/@/entities";
+
 export type DistrictWithSchoolCount = {
   admin1_description_ui_label: any;
   admin2_description: string;
@@ -29,6 +31,7 @@ export type SearchResultApi = {
   admin1_name: string
   name: string;
   external_id: string;
+  entity_type_code?: EntityType;
 }
 
 export type SearchResultCollection = {
@@ -38,7 +41,9 @@ export type SearchResultCollection = {
   countryId: number
   countryCode: string
   name: string
+  entityTypetag?: EntityType
   id: number
+
 }
 
 export type Country = {
@@ -59,4 +64,13 @@ export type SearchType = {
   type: string;
   adminName?: string;
   schoolId?: number;
+  entityTypetag?: EntityType
+
 } & AdminType
+
+export type SelectedPlace =
+  | { kind: 'country'; countryName: string }
+  | { kind: 'region'; name: string; countryName: string }
+  | { kind: 'entity'; name: string; countryName: string }
+  | { kind: 'entities'; count: number; countryName: string; entityType?: EntityType }
+  | { kind: 'entity-pending'; countryName: string };

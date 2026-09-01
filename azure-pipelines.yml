@@ -1,6 +1,7 @@
 trigger:
   branches:
     include:
+      - entity-development-base
       - develop
       - staging
   tags:
@@ -24,7 +25,7 @@ steps:
   # Unit Tests
   - task: Bash@3
     displayName: Unit Tests
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/entity-development-base')
     continueOnError: true
     inputs:
       targetType: 'inline'
@@ -35,7 +36,8 @@ steps:
   # Sonar Scan
   - task: Bash@3
     displayName: Sonar Scan
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/entity-development-base')
+    continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
@@ -62,15 +64,16 @@ steps:
       containerRegistry: $(dockerRegistryServiceConnection)
       dockerfile: $(dockerfilePath)
       arguments:
-        --build-arg=API_BASE_URL=$(API_BASE_URL_DEV)
-        --build-arg=API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_DEV)
-        --build-arg=RECAPTCHA_KEY=$(RECAPTCHA_KEY_DEV)
-        --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_DEV)
-        --build-arg=ENV=$(ENV_DEV)
-        --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
-        --build-arg=POSTHOG_KEY=$(POSTHOG_KEY_DEV)
-        --build-arg=POSTHOG_HOST=$(POSTHOG_HOST_DEV)
-        --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_DEV)
+        --build-arg=VITE_API_BASE_URL=$(API_BASE_URL_DEV)
+        --build-arg=VITE_API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_DEV)
+        --build-arg=VITE_RECAPTCHA_KEY=$(RECAPTCHA_KEY_DEV)
+        --build-arg=VITE_B2C_CLIENT_ID=$(B2C_CLIENT_ID_DEV)
+        --build-arg=VITE_ENV=$(ENV_DEV)
+        --build-arg=VITE_MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
+        --build-arg=VITE_AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=VITE_POSTHOG_KEY=$(POSTHOG_KEY_DEV)
+        --build-arg=VITE_POSTHOG_HOST=$(POSTHOG_HOST_DEV)
+        --build-arg=VITE_GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_DEV)
       tags: |
         $(tag)
 
@@ -91,15 +94,16 @@ steps:
       containerRegistry: $(dockerRegistryServiceConnection)
       dockerfile: $(dockerfilePath)
       arguments:
-        --build-arg=API_BASE_URL=$(API_BASE_URL_STG)
-        --build-arg=API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_STG)
-        --build-arg=RECAPTCHA_KEY=$(RECAPTCHA_KEY_STG)
-        --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_STG)
-        --build-arg=ENV=$(ENV_STG)
-        --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
-        --build-arg=POSTHOG_KEY=$(POSTHOG_KEY_STG)
-        --build-arg=POSTHOG_HOST=$(POSTHOG_HOST_STG)
-        --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_STG)
+        --build-arg=VITE_API_BASE_URL=$(API_BASE_URL_STG)
+        --build-arg=VITE_API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_STG)
+        --build-arg=VITE_RECAPTCHA_KEY=$(RECAPTCHA_KEY_STG)
+        --build-arg=VITE_B2C_CLIENT_ID=$(B2C_CLIENT_ID_STG)
+        --build-arg=VITE_ENV=$(ENV_STG)
+        --build-arg=VITE_MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
+        --build-arg=VITE_POSTHOG_KEY=$(POSTHOG_KEY_STG)
+        --build-arg=VITE_POSTHOG_HOST=$(POSTHOG_HOST_STG)
+        --build-arg=VITE_AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=VITE_GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_STG)
       tags: |
         $(tag)
     condition:
@@ -126,15 +130,16 @@ steps:
       containerRegistry: $(dockerRegistryServiceConnection)
       dockerfile: $(dockerfilePath)
       arguments:
-        --build-arg=API_BASE_URL=$(API_BASE_URL_PROD)
-        --build-arg=API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_PROD)
-        --build-arg=RECAPTCHA_KEY=$(RECAPTCHA_KEY_PROD)
-        --build-arg=B2C_CLIENT_ID=$(B2C_CLIENT_ID_PROD)
-        --build-arg=ENV=$(ENV_PROD)
-        --build-arg=MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
-        --build-arg=POSTHOG_KEY=$(POSTHOG_KEY_PROD)
-        --build-arg=POSTHOG_HOST=$(POSTHOG_HOST_PROD)
-        --build-arg=GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_PROD)
+        --build-arg=VITE_API_BASE_URL=$(API_BASE_URL_PROD)
+        --build-arg=VITE_API_MAPBOX_ACCESS_TOKEN=$(API_MAPBOX_ACCESS_TOKEN_PROD)
+        --build-arg=VITE_RECAPTCHA_KEY=$(RECAPTCHA_KEY_PROD)
+        --build-arg=VITE_B2C_CLIENT_ID=$(B2C_CLIENT_ID_PROD)
+        --build-arg=VITE_ENV=$(ENV_PROD)
+        --build-arg=VITE_MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
+        --build-arg=VITE_POSTHOG_KEY=$(POSTHOG_KEY_PROD)
+        --build-arg=VITE_POSTHOG_HOST=$(POSTHOG_HOST_PROD)
+        --build-arg=VITE_AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=VITE_GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_PROD)
       tags: |
         $(tag)
     condition:

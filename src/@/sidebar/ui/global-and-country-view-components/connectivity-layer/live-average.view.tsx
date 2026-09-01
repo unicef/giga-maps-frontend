@@ -1,123 +1,55 @@
-import { Information } from '@carbon/icons-react';
-import { Tooltip } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { useTranslation } from 'react-i18next';
-import styled, { useTheme } from 'styled-components';
 
-import { Div, LoadingText, Text } from '~/@/common/style/styled-component-style';
-import { $historyIntervalUnit } from '~/@/sidebar/history-graph.model';
-import { $selectedLayerData } from '~/@/sidebar/sidebar.model';
+import type { LayerType } from '~/@/sidebar/types';
+import { Skeleton } from '~/components/ui/skeleton';
 
-const LiverAverageWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  .chart-icon{
-    height: 1rem;
-    width: 1rem;
-    fill:#277AFF !important;
-  }
-  .download-icon{
-    fill:${props => props.theme.text};
-    margin-right:0.5rem;
-    height:1rem;
-    width:1rem;
-    svg {
-      width: 16px;
-      height: 16px;
-    }
-  }
-  .download-wrapper{
-    display: flex;
-    align-items: center;
-  }
-  .layer-speed {
-    display: flex;
-    flex-direction: column;
-    margin: 0.5rem 0 0rem 0;
-
-    >span {
-      margin-top: 0.9375rem;
-    }
-    .sb-tooltip-trigger {
-      border: none;
-      background: transparent;
-    }
-    .tooltip-icon {
-      display: flex;
-      align-items: center;
-      width: .75rem;
-      height: .75rem;
-      color: #7E7E7E;
-    }
-
-    .layer-text {
-      align-self: flex-end;
-      line-height: 0 0 0.6rem 0.25rem;
-      font-size: 0.875rem;
-      color: ${props => props.theme.text};
-      margin: 0;
-    }
-    .speed-text-container {
-      display: flex;
-      align-items: baseline;
-      
-    }
-
-  }
-  
-`
-
-const LayerNameWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  .cds--tooltip-content{
-    font-size: 0.8rem;
-    max-width: 10rem;
-  }
-`
+import LayerNameWithTooltip from '../common/layer-name-with-tooltip.view';
 
 export default function LiveAverage({
   value,
-  color,
-  isLoading
-}: { readonly value: number, readonly color: string, readonly isLoading: boolean }) {
+  connectivityColor,
+  isLoading,
+  currentLayerData,
+}: {
+  readonly value: number;
+  readonly connectivityColor: string;
+  readonly isLoading: boolean;
+  readonly currentLayerData?: LayerType | null;
+}) {
   const { t } = useTranslation();
-  const currentLayer = useStore($selectedLayerData);
-  const heading = currentLayer?.name;
-  const theme = useTheme();
-  const dataSourceId = currentLayer?.data_sources_list?.length ? currentLayer.data_sources_list[0].id : undefined;
-  const unitLabel = currentLayer?.data_source_column[dataSourceId ?? ""]?.display_unit;
-  return (<>
-    {isLoading ? <>
-      <LoadingText $blockSize="0.9" width="10rem" $marginEnd='1.2' $marginStart="0.6" />
-      <LoadingText $blockSize='2.5' width="11rem" $marginEnd='0.5' />
-    </> :
-      <LiverAverageWrapper>
-        {value ? <div className="layer-speed">
-          <div>
-            <LayerNameWrapper>
-              <div className='download-wrapper'>
-                <Text className="layer-text" $color="#9E9E9E">{heading}</Text>
-              </div>
-              <Tooltip align="left" autoAlign={true} label={`${currentLayer?.description} `}>
-                <button className="sb-tooltip-trigger">
-                  <Information className='tooltip-icon' />
-                </button>
-              </Tooltip>
-            </LayerNameWrapper>
-            <div className='speed-text-container'>
-              <Text style={{ margin: 0 }} $size={2} $color={color}>
-                {value}
-              </Text>
-              <Text style={{ margin: 0 }} $size={1} $color={'#9E9E9E'}>&nbsp;<span>{unitLabel}</span></Text>
-            </div>
-          </div>
-        </div> : <Div $margin='1rem 0 2.6rem 0'><Text $size={0.75} $color={theme.text}>
-          {t('no-data-available')}
-        </Text></Div>}
-      </LiverAverageWrapper>
-    }
-  </>)
+  const currentLayer = currentLayerData;
+  const heading = currentLayer?.name ?? t('average-download-speed');
+  const layerDescription = currentLayer?.description;
+  const dataSourceId = currentLayer?.data_sources_list?.length
+    ? currentLayer.data_sources_list[0].id
+    : undefined;
+  const unitLabel =
+    currentLayer?.data_source_column[dataSourceId ?? '']?.display_unit;
+  return (
+    <div className="flex! w-full! flex-col! gap-2!">
+      <LayerNameWithTooltip description={layerDescription} name={heading} />
+      {isLoading ? (
+        <Skeleton className="mb-2! h-10! w-44!" />
+      ) : value ? (
+        <div className="inline-flex! justify-start! items-end! gap-1!">
+          <p
+            className="m-0! text-3xl! font-normal! leading-9!"
+            style={{ color: connectivityColor }}
+          >
+            {value}
+          </p>
+          <p className="m-0! text-base! font-normal! leading-6! text-muted-foreground!">
+            <span>{unitLabel}</span>
+          </p>
+        </div>
+      ) : (
+        <div className="mb-[2.6rem]!">
+          <p className="m-0! text-xs! font-normal! leading-4! text-foreground!">
+            {t('no-data-available')}
+          </p>
+        </div>
+      )}
+    </div>
+  );
 }

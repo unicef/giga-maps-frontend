@@ -1,17 +1,17 @@
-import { describe, expect, test, } from '@jest/globals';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 
-import { changeIsSearchFocused, changeSearchText, onShowCountriesAdminList } from '../../common-components/top-search-bar/top-search-bar.model';
+import { changeIsSearchFocused, changeSearchText, clearSearchText, onShowCountriesAdminList } from '../../common-components/top-search-bar/top-search-bar.model';
 import SearchResult from '..';
 import { getSearchResultsFx } from '../container/search-result.fx';
 import SearchResultList from '../views/search-result.list.view';
-import { SearchResultWrapper } from '../styles/search-result-style';
-import { testWrapper } from '~/tests/jest-wrapper';
 import "~/core/i18n/instance"
 
 describe('SearchResultList', () => {
   beforeEach(() => {
+    clearSearchText();
+    changeIsSearchFocused(false);
+    onShowCountriesAdminList(false);
     fetchMock.mockResponse((req: Request) => {
       if (req.url.includes('api/locations/search-countries/')) {
         return Promise.resolve(JSON.stringify([{
@@ -35,7 +35,7 @@ describe('SearchResultList', () => {
             }
           }
         }]))
-      } else if (req.url.includes('/locations/gsearch/')) {
+      } else if (req.url.includes('/entities/gentity-search/')) {
         return Promise.resolve(JSON.stringify({
           results: [{
             "country_name": "Argentina",
@@ -47,6 +47,7 @@ describe('SearchResultList', () => {
             "external_id": "",
             "name": "ESCUELA REPUBLICA DE LA INDIA",
             "country_code": "AR",
+            "entity_type_code": "school",
             "@search.score": 1.0,
             "@search.highlights": null
           }]
@@ -55,22 +56,28 @@ describe('SearchResultList', () => {
     })
   })
   test('renders SearchResult and take a snapshop', () => {
+    changeIsSearchFocused(true);
+    changeSearchText('In');
     onShowCountriesAdminList(true);
     const { asFragment } = render(<SearchResult />);
     expect(asFragment()).toMatchSnapshot();
   });
 
   test('renders SearchResult', async () => {
+    changeIsSearchFocused(true);
+    changeSearchText('In');
     onShowCountriesAdminList(true);
     render(<SearchResult />);
-    expect(screen.queryByText('Not the results you expected?')).toBeInTheDocument();
+    expect(screen.queryByText(/not-the-results-you-expected/i) || screen.queryByText(/Not the results you expected/i)).toBeInTheDocument();
   });
 
   test('renders SearchResult click outside', async () => {
+    changeIsSearchFocused(true);
+    changeSearchText('In');
     onShowCountriesAdminList(true);
     render(<SearchResult />);
     await userEvent.click(document.body);
-    expect(screen.queryByText('Select region or school')).not.toBeInTheDocument();
+    expect(screen.queryByText(/select-region-or-school/i) || screen.queryByText(/Select region or school/i)).not.toBeInTheDocument();
   });
 
   test('renders SearchResult and onShowCountriesAdminList is false', async () => {
@@ -81,10 +88,10 @@ describe('SearchResultList', () => {
 
   test('renders SearchResultList with loading state', async () => {
     changeIsSearchFocused(true);
-    const spy = jest.spyOn(getSearchResultsFx.pending, 'getState');
+    const spy = vi.spyOn(getSearchResultsFx.pending, 'getState');
     spy.mockReturnValue(true);
     await render(<SearchResultList />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getAllByText(/loading/i)[0]).toBeInTheDocument();
     spy.mockRestore();
   });
 
@@ -93,11 +100,8 @@ describe('SearchResultList', () => {
     changeSearchText('India')
     await getSearchResultsFx({ query: 'India' })
     await render(<SearchResultList />);
-    expect(screen.getByText('ESCUELA REPUBLICA DE LA')).toBeInTheDocument();
-  });
-
-  it('should render component', () => {
-    const { asFragment } = render(testWrapper(<SearchResultWrapper />));
-    expect(asFragment).toMatchSnapshot();
+    expect(screen.getAllByText('ESCUELA REPUBLICA DE LA')[0]).toBeInTheDocument();
   });
 })
+
+

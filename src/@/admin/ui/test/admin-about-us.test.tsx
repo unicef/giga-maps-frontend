@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/react"
 
-import { testWrapper } from "~/tests/jest-wrapper"
+import { testWrapper } from "~/tests/test-wrapper"
 
 import MainAboutUsView from "../about-us/main-about-us.view"
 import aboutusData from "~/tests/data/aboutus-data"
@@ -29,4 +29,5 @@ describe("About Us", () => {
     expect(form).not.toBeNull()
   })
 })
+
 

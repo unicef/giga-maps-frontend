@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { testWrapper } from '~/tests/jest-wrapper';
+import { testWrapper } from '~/tests/test-wrapper';
 import TourInstructionPopover from '../modal/tour-instruction-popover';
 
 describe('Layer schools connectivity status', () => {
@@ -47,7 +47,7 @@ describe('TourInstructionPopover', () => {
       content: []
     };
     const { queryByRole } = render(testWrapper(<TourInstructionPopover {...props} />));
-    expect(queryByRole('button', { name: 'previous' })).not.toBeInTheDocument();
+    expect(queryByRole('button', { name: /previous/i })).not.toBeInTheDocument();
   });
 
   it('should handle last sub step state', () => {
@@ -59,7 +59,7 @@ describe('TourInstructionPopover', () => {
       content: []
     };
     const { getByRole } = render(testWrapper(<TourInstructionPopover {...props} />));
-    const nextButton = getByRole('button', { name: 'Next' });
+    const nextButton = getByRole('button', { name: /next/i });
     expect(nextButton).toBeInTheDocument();
   });
 
@@ -88,3 +88,4 @@ describe('TourInstructionPopover', () => {
     expect(getByText('skip-tour')).toBeInTheDocument();
   });
 });
+

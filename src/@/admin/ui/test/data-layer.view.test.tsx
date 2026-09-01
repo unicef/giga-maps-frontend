@@ -4,10 +4,10 @@ import { createEvent } from "effector";
 import { $loggedInUser } from "~/core/auth/models";
 import { currentLayerMockWithDraftStaus, currentLayerMockWithReadyToPublishStaus, dataLayerlistMock, singleLayerMock } from "~/tests/data/admin-data-layer";
 import { loggedInUser } from "~/tests/data/admin-main-data";
-import { testWrapper } from "~/tests/jest-wrapper";
+import { testWrapper } from "~/tests/test-wrapper";
 
 import { getDataPreviewFx } from "../../effects/giga-layer-fx";
-import { $currentGigaLayerItem, $dataLayerListResponce, $previewData, resetPreviewData } from "../../models/giga-layer.model";
+import { $currentGigaLayerItem, $dataLayerListResponce, $previewData, onUdpateGigaLayerForm, resetPreviewData } from "../../models/giga-layer.model";
 import DataLayerMainView from "../giga-layer";
 import AddEditGigaLayer from "../giga-layer/add-edit-giga-layer.view";
 import ListGigaLayer from "../giga-layer/list-giga-layer.view";
@@ -82,7 +82,7 @@ describe('DataLayerMainView', () => {
 
   test("render with getDataPreviewFx is in pending state", () => {
     resetPreviewData();
-    const spy = jest.spyOn(getDataPreviewFx.pending, 'getState');
+    const spy = vi.spyOn(getDataPreviewFx.pending, 'getState');
     spy.mockReturnValue(true);
     void waitFor(() => {
       render(<PreviewGigaLayer isPreviewAvailable={true} />);
@@ -100,7 +100,7 @@ describe('DataLayerMainView', () => {
     const { getByTestId } = render(testWrapper(<PreviewGigaLayer isPreviewAvailable={true} />));
     const button = getByTestId('data-layer-preview');
     fireEvent.click(button);
-    const spy = jest.spyOn(getDataPreviewFx.pending, 'getState');
+    const spy = vi.spyOn(getDataPreviewFx.pending, 'getState');
     spy.mockReturnValue(true);
     render(<PreviewGigaLayer isPreviewAvailable={true} />);
     // expect(screen.getByText('Loading data...')).toBeInTheDocument();
@@ -118,7 +118,7 @@ describe('DataLayerMainView', () => {
   test("click on publish button ", () => {
     setLoggedInUser(loggedInUser as any)
     setCurrentGigaLayerItem(currentLayerMockWithReadyToPublishStaus as any)
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const { getByTestId } = render(testWrapper(<AdminViewLayer />));
     const button = getByTestId('giga-layer-publish');
     fireEvent.click(button);
@@ -141,20 +141,10 @@ describe('DataLayerMainView', () => {
     await fireEvent.change(description, { target: { value: 'Test' } });
     const layerype = container.querySelector('#layer-type-select') as HTMLSelectElement;
     await fireEvent.change(layerype, { target: { value: 'STATIC' } });
-    const sourceType = container.querySelector('#source-type') as HTMLSelectElement;
-    fireEvent.click(sourceType.querySelector('button') as Element);
-    await fireEvent.click(sourceType.querySelector('.cds--list-box__menu-item') as Element);
-    // await fireEvent.change(sourceType, { selectedItems: [DataSourceType.DAILY_CHECK_APP] });
-    const apiSource = container.querySelector('#apiSource-select') as HTMLSelectElement;
-    fireEvent.click(apiSource.querySelector('button') as Element);
-    await fireEvent.click(apiSource.querySelector('.cds--list-box__menu-item') as Element);
-
-    const parameter = container.querySelector('#parameter-select') as HTMLSelectElement;
-    await fireEvent.change(parameter, { target: { value: 'connectivity_speed' } });
-
-    const countries = container.querySelector('#country-select') as HTMLSelectElement;
-    fireEvent.click(countries.querySelector('button') as Element);
-    await fireEvent.click(countries.querySelector('.cds--list-box__menu-item') as Element);
+    onUdpateGigaLayerForm(['sourceType', [{ type: 'DAILY_CHECK_APP', name: 'Daily Check App' }]]);
+    onUdpateGigaLayerForm(['dataSource', [5]]);
+    onUdpateGigaLayerForm(['dataSourceColumn', { name: 'connectivity_speed', alias: 'Download Speed' }]);
+    onUdpateGigaLayerForm(['applicableCountries', [24]]);
 
     const legendName0 = container.querySelector('#legend-name-0') as HTMLInputElement;
     await fireEvent.change(legendName0, { target: { value: '5G/5G' } });
@@ -189,28 +179,25 @@ describe('DataLayerMainView', () => {
     await fireEvent.change(description, { target: { value: 'Test' } });
     const layerype = container.querySelector('#layer-type-select') as HTMLSelectElement;
     await fireEvent.change(layerype, { target: { value: 'LIVE' } });
-    const sourceType = container.querySelector('#source-type') as HTMLSelectElement;
-    fireEvent.click(sourceType.querySelector('button') as Element);
-    await fireEvent.click(sourceType.querySelector('.cds--list-box__menu-item') as Element);
-    // await fireEvent.change(sourceType, { selectedItems: [DataSourceType.DAILY_CHECK_APP] });
-    const apiSource = container.querySelector('#apiSource-select') as HTMLSelectElement;
-    fireEvent.click(apiSource.querySelector('button') as Element);
-    await fireEvent.click(apiSource.querySelector('.cds--list-box__menu-item') as Element);
+    onUdpateGigaLayerForm(['sourceType', [{ type: 'DAILY_CHECK_APP', name: 'Daily Check App' }]]);
+    onUdpateGigaLayerForm(['dataSource', [5]]);
+    onUdpateGigaLayerForm(['dataSourceColumn', { name: 'connectivity_speed', alias: 'Download Speed' }]);
+    onUdpateGigaLayerForm(['applicableCountries', [24]]);
 
-    const parameter = container.querySelector('#parameter-select') as HTMLSelectElement;
-    await fireEvent.change(parameter, { target: { value: 'connectivity_speed' } });
+    await waitFor(() => {
+      const selectUnit = container.querySelector('#unit-select') as HTMLSelectElement;
+      if (!selectUnit) throw new Error('Unit select not found');
+      fireEvent.change(selectUnit, { target: { value: 'mbps' } });
+    });
 
-    const countries = container.querySelector('#country-select') as HTMLSelectElement;
-    fireEvent.click(countries.querySelector('button') as Element);
-    await fireEvent.click(countries.querySelector('.cds--list-box__menu-item') as Element);
-
-    const selectUnit = container.querySelector('#unit-select') as HTMLSelectElement;
-    await fireEvent.change(selectUnit, { target: { value: 'mbps' } });
-
-    const benchmark = container.querySelector('#global-giga-benchmark') as HTMLInputElement;
-    await fireEvent.change(benchmark, { target: { value: 200000 } });
+    await waitFor(() => {
+      const benchmark = container.querySelector('#global-giga-benchmark') as HTMLInputElement;
+      if (!benchmark) throw new Error('Benchmark input not found');
+      fireEvent.change(benchmark, { target: { value: 200000 } });
+    });
 
     const submit = getByTestId('submit-giga-layer-form')
     await fireEvent.click(submit)
   })
 })
+
