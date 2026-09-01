@@ -47,20 +47,34 @@ export const LandingHeader = () => {
     </a>
   ));
 
+  // Outlined while the bar is transparent, filled once it paints: the outline
+  // would lose contrast against the solid bar.
   const cta =
     header.ctaText && header.ctaLink ? (
-      <a
-        className="group inline-flex items-center gap-2 text-base! font-medium! text-primary-700! transition-colors hover:text-primary/80!"
-        href={header.ctaLink}
-        rel="noreferrer"
-        target="_blank"
+      <Button
+        asChild={true}
+        className={cn(
+          'group gap-2! self-start! rounded-full! border! border-primary! px-5! text-base! font-medium! shadow-sm! transition-colors! duration-300 hover:shadow-md!',
+          isScrolled
+            ? 'bg-primary! text-primary-foreground! hover:bg-primary-700! hover:border-primary-700!'
+            : 'bg-transparent! text-primary! hover:bg-primary/10!',
+        )}
+        size="lg"
+        variant="outline"
       >
-        {header.ctaText}
-        <ArrowRight
-          aria-hidden="true"
-          className="size-4 transition-transform group-hover:translate-x-1"
-        />
-      </a>
+        <a
+          href={header.ctaLink}
+          onClick={() => setIsMenuOpen(false)}
+          rel="noreferrer"
+          target="_blank"
+        >
+          {header.ctaText}
+          <ArrowRight
+            aria-hidden="true"
+            className="size-4 transition-transform group-hover:translate-x-1"
+          />
+        </a>
+      </Button>
     ) : null;
 
   return (
