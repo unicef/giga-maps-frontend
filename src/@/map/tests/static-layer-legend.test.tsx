@@ -28,7 +28,6 @@ describe('StaticLayerLegend', () => {
         <StaticLayerLegend
           entityType={EntityType.HEALTH}
           metricSubtitle="Coverage"
-          metricTitle="Internet quality"
           shouldShowControls={false}
         />
       </Provider>,

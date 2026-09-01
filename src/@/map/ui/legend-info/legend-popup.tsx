@@ -193,7 +193,6 @@ const LegendPopup = ({
     wasFlyoutOpen.current = isFlyoutOpen;
   }, [isMenuOpen, isMobile, sidebarHeight]);
 
-  const legendMetricTitle = t('internet-quality');
   const activeLayerTypeUtils =
     currentLayerTypeUtilsByEntity[activeTab];
   const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils ?? {
@@ -277,9 +276,6 @@ const LegendPopup = ({
                 {legendMetricSubtitle}
               </span>
             )}
-            {/* <span className="text-xs! leading-4.5! text-muted-foreground!">
-              {legendMetricTitle}
-            </span> */}
           </div>
           <div
             className={cn(
@@ -493,7 +489,6 @@ const LegendPopup = ({
               isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading,
             )}
             metricSubtitle={legendMetricSubtitle}
-            metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
           />
         ) : null}
@@ -506,7 +501,6 @@ const LegendPopup = ({
               isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading,
             )}
             metricSubtitle={legendMetricSubtitle}
-            metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
           />
         ) : null}

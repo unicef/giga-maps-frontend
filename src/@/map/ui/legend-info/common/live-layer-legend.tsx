@@ -40,14 +40,12 @@ const LiveLayerLegend = ({
   isCompact = false,
   isLoading = false,
   metricSubtitle,
-  metricTitle,
   shouldShowControls,
 }: {
   entityType: EntityType;
   isCompact?: boolean;
   isLoading?: boolean;
   metricSubtitle: string;
-  metricTitle: string;
   shouldShowControls: boolean;
 }) => {
   const lng = useStore($lng);
@@ -117,33 +115,28 @@ const LiveLayerLegend = ({
           : 'min-w-0! flex-1! basis-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:basis-full! max-legend-md:min-w-full!',
       )}
     >
-      <div className="mb-1! flex! flex-col! items-start! gap-0.5!">
-        <div className="flex! items-center! gap-1.5!">
-          <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
-            {metricSubtitle}
-          </div>
-          {metricLayerData?.description ? (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild stopPropagation>
-                  <button
-                    aria-label={metricLayerData.description}
-                    className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
-                    type="button"
-                  >
-                    <Info size={12} />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top" sideOffset={6}>
-                  {metricLayerData.description}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : null}
+      <div className="mb-1! flex! items-center! gap-1.5!">
+        <div className="text-sm! font-normal! leading-5! text-muted-foreground!">
+          {metricSubtitle}
         </div>
-        <div className="text-xs! leading-4.5! text-muted-foreground!">
-          {metricTitle}
-        </div>
+        {metricLayerData?.description ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild stopPropagation>
+                <button
+                  aria-label={metricLayerData.description}
+                  className="inline-flex! size-6! -m-1.5! p-1.5! items-center! justify-center! rounded-full! border-0! bg-transparent! text-muted-foreground!"
+                  type="button"
+                >
+                  <Info size={12} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" sideOffset={6}>
+                {metricLayerData.description}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : null}
       </div>
       {legends?.values?.map(
         ({
