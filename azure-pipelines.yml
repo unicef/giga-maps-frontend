@@ -4,7 +4,7 @@ trigger:
       - entity-development-base
       - develop
       - staging
-      - entity-staging
+      - entity-stg-base
   tags:
     include:
       - 'release-*'
@@ -110,7 +110,7 @@ steps:
     condition:
       and(
         succeeded(),
-        in(variables['Build.SourceBranch'], 'refs/heads/staging', 'refs/heads/entity-staging')
+        in(variables['Build.SourceBranch'], 'refs/heads/staging', 'refs/heads/entity-stg-base')
       )
 
   - task: Docker@2
@@ -124,7 +124,7 @@ steps:
     condition:
       and(
         succeeded(),
-        in(variables['Build.SourceBranch'], 'refs/heads/staging', 'refs/heads/entity-staging')
+        in(variables['Build.SourceBranch'], 'refs/heads/staging', 'refs/heads/entity-stg-base')
       )
 
   - task: Docker@2
