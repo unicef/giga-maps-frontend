@@ -46,7 +46,7 @@ export const EntityEmptyState = ({
               contact: (
                 <a
                   className="font-medium! text-primary! underline! hover:opacity-80!"
-                  href="/about#live-map-get-in-touch"
+                  href="/about#contact"
                   rel="noopener noreferrer"
                   target="_blank"
                 />
@@ -63,7 +63,7 @@ export const EntityEmptyState = ({
               contact: (
                 <a
                   className="font-medium! text-primary! underline! hover:opacity-80!"
-                  href="/about#live-map-get-in-touch"
+                  href="/about#contact"
                   rel="noopener noreferrer"
                   target="_blank"
                 />
