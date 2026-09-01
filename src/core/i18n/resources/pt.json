@@ -47,6 +47,7 @@
   "filter-schools-by": "Filtrar escolas por",
   "filter-applied": "filtro aplicado",
   "filters": "Filtro(s)",
+  "no-filters-available": "Nenhum filtro disponível",
   "filter-s": "Filtro(s)",
   "filter-by": "Filtrar por",
   "filter-chip-no-field": "Sem {{field}}",

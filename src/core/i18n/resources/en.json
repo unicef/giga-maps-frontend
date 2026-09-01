@@ -47,6 +47,7 @@
   "filter-schools-by": "Filter schools by",
   "filter-applied": "filter applied",
   "filters": "Filters",
+  "no-filters-available": "No filters available",
   "filter-by": "Filter by",
   "filter-chip-no-field": "No {{field}}",
   "filter-chip-unknown-field": "Unknown {{field}}",
