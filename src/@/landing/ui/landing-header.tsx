@@ -47,17 +47,18 @@ export const LandingHeader = () => {
     </a>
   ));
 
-  // Outlined while the bar is transparent, filled once it paints: the outline
-  // would lose contrast against the solid bar.
+  // Outlined over a 50% scrim while the bar is transparent, so it stays legible
+  // over the bright parts of the globe; filled once the bar paints, where the
+  // outline would lose contrast.
   const cta =
     header.ctaText && header.ctaLink ? (
       <Button
         asChild={true}
         className={cn(
-          'group gap-2! self-start! rounded-full! border! border-primary! px-5! text-base! font-medium! shadow-sm! transition-colors! duration-300 hover:shadow-md!',
+          'group gap-2! self-start! rounded-full! border! px-6! text-base! font-medium! shadow-sm! transition-colors! duration-300 hover:shadow-md!',
           isScrolled
-            ? 'bg-primary! text-primary-foreground! hover:bg-primary-700! hover:border-primary-700!'
-            : 'bg-transparent! text-primary! hover:bg-primary/10!',
+            ? 'border-primary! bg-primary! text-primary-foreground! hover:border-primary-700! hover:bg-primary-700!'
+            : 'border-primary-600! bg-landing-background/50! text-primary-600! hover:bg-landing-background/70!',
         )}
         size="lg"
         variant="outline"
