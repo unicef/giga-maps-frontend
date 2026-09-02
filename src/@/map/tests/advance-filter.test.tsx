@@ -8,6 +8,9 @@ import RangeTextInput from "../ui/advanced-filter/range-text-input"
 import FilterButton from "../ui/advanced-filter/filter"
 import { testWrapper } from "~/tests/test-wrapper"
 import "~/core/i18n/instance"
+import { fork } from "effector"
+import { Provider } from "effector-react"
+import { $isMobile } from "~/core/media-query"
 import userEvent from "@testing-library/user-event"
 
 describe('AdvancedFilter', () => {
@@ -207,6 +210,24 @@ describe('RangeTextInput Component', () => {
     expect(mockProps.onChange).toHaveBeenCalled();
   });
 
+});
+
+describe('FilterButton mobile', () => {
+  test('should render only filter icon on mobile without text', async () => {
+    const scope = fork({
+      values: new Map().set($isMobile, true),
+    });
+    await fetchCountryFx('br');
+    await fetchAdvanceFilterFx();
+    render(
+      <Provider value={scope}>
+        {testWrapper(<FilterButton />)}
+      </Provider>,
+    );
+    const button = screen.getByRole('button', { name: /filters/i });
+    expect(button).toBeInTheDocument();
+    expect(button.querySelector('span')).not.toBeInTheDocument();
+  });
 });
 
 

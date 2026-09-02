@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from '~/components/ui/tooltip';
 import { $mapRoutes } from '~/core/routes';
+import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 
 import { $isAdvancedFilterUnavailable } from './country-filter-readiness.model';
@@ -21,11 +22,13 @@ import FilterPopup from './filter-popup';
 
 const FilterButton = () => {
   const { t } = useTranslation();
+  const isMobile = useStore($isMobile);
   const isOpen = useStore($showAdvancedFilter);
   const country = useStore($country);
   const routes = useStore($mapRoutes);
   const isUnavailable = useStore($isAdvancedFilterUnavailable);
   const { selectedCount } = useStore($countrySearchParams);
+  const hasBadge = !isUnavailable && selectedCount > 0;
 
   const isHidden =
     routes.schools || routes.entity || routes.entityView || !country?.id;
@@ -40,6 +43,7 @@ const FilterButton = () => {
       aria-label={t('filters')}
       className={cn(
         "font-['Open_Sans',sans-serif]! h-8! gap-1.5! rounded-md! px-2.5! text-sm!",
+        isMobile && !hasBadge && 'w-8! px-0!',
         isOpen
           ? 'bg-primary! text-primary-foreground! hover:bg-primary/90!'
           : 'bg-secondary! text-secondary-foreground! hover:bg-secondary/80!',
@@ -55,13 +59,13 @@ const FilterButton = () => {
           event.preventDefault();
         }
       }}
-      size="sm"
+      size={isMobile && !hasBadge ? 'icon-sm' : 'sm'}
       type="button"
       variant={isOpen ? 'default' : 'secondary'}
     >
       <SlidersHorizontal className="size-4!" />
-      <span>{t('filters')}</span>
-      {!isUnavailable && selectedCount > 0 && (
+      {!isMobile && <span>{t('filters')}</span>}
+      {hasBadge && (
         <span
           className={cn(
             'ml-0.5! inline-flex! h-5! min-w-5! items-center! justify-center! rounded-full! px-1.5! text-xs! font-normal! leading-none!',
@@ -77,7 +81,12 @@ const FilterButton = () => {
   );
 
   return (
-    <div className="filter-wrapper-popup relative! z-99! my-2! mr-2! flex! flex-col! items-center!">
+    <div
+      className={cn(
+        'filter-wrapper-popup relative! z-99! my-2! mr-2! flex! flex-col! items-center!',
+        isMobile && 'my-0! mr-0!',
+      )}
+    >
       <FilterPopup open={isOpen} setOpen={onShowAdvancedFilter}>
         {isUnavailable ? (
           <Tooltip>
