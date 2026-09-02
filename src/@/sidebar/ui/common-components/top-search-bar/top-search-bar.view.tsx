@@ -342,7 +342,7 @@ const TopSearchBar = () => {
         </PopoverAnchor>
         <PopoverContent
           align="start"
-          className="relative z-60 rounded-lg border-0 bg-transparent p-0 shadow-none outline-none!"
+          className="relative z-6003 rounded-lg border-0 bg-transparent p-0 shadow-none outline-none!"
           side="bottom"
           sideOffset={2}
           style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}
