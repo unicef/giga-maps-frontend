@@ -102,7 +102,7 @@ const EntitySummaryCard = ({
         <>
           {!isLoading && expanded && showSummaryRowsWhenExpanded ? (
             <div className="px-3.5! pb-2!">
-              <div className="flex! items-center! gap-4! pb-3! pt-0.5! flex-wrap!">
+              <div className="flex! items-center! justify-between! gap-2! pb-3! pt-0.5!">
                 {/* Locations Mapped */}
                 <div className="flex! items-center! gap-1.5!">
                   <EntityLegendIndicator
