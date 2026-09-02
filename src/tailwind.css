@@ -93,10 +93,16 @@
   /* Floating search panels (country browser + school list) */
   --giga-surface-panel: #242424;
 
-  /* Entity type pills over the map. Their own tokens because no shared
-     surface pair keeps the active/inactive hierarchy in both light and dark. */
-  --giga-pill-active: #393939;
-  --giga-pill-inactive: #161616;
+  /* Entity type pills over the map (Figma 19728:132662). Their own tokens
+     because no shared surface pair keeps the rest/hover/selected hierarchy in
+     all three themes. Dark hover and selected share a fill on purpose — only
+     the label separates them. */
+  --giga-pill-bg: #242424;
+  --giga-pill-bg-hover: #393939;
+  --giga-pill-bg-active: #393939;
+  --giga-pill-foreground: #989898;
+  --giga-pill-foreground-active: #fff;
+  --giga-pill-indicator: #989898;
 
   /* Vertical space taken by the top bar + search box above the panels */
   --search-panel-top-offset: 7.7rem;
@@ -174,8 +180,12 @@
 
   --giga-surface-panel: #fafafa;
 
-  --giga-pill-active: #fafafa;
-  --giga-pill-inactive: #f4f4f4;
+  --giga-pill-bg: #e9e9e9;
+  --giga-pill-bg-hover: #fafafa;
+  --giga-pill-bg-active: #fff;
+  --giga-pill-foreground: #525252;
+  --giga-pill-foreground-active: #000;
+  --giga-pill-indicator: #989898;
 }
 
 /* ── Accessible theme overrides ──────────────────────────────── */
@@ -217,8 +227,14 @@
   --giga-filter-field: #262626;
   --giga-icon-secondary: #fff;
 
-  --giga-pill-active: #383838;
-  --giga-pill-inactive: #181818;
+  /* The design only covers light and dark; accessible keeps dark's structure
+     with this theme's higher-contrast secondary text. */
+  --giga-pill-bg: #242424;
+  --giga-pill-bg-hover: #393939;
+  --giga-pill-bg-active: #393939;
+  --giga-pill-foreground: #9ca3af;
+  --giga-pill-foreground-active: #fff;
+  --giga-pill-indicator: #9ca3af;
 }
 
 /* ── Tailwind @theme — references CSS vars for dynamic theming ── */
@@ -287,8 +303,12 @@
   --color-gray-900: #242424;
   --color-gray-950: #161616;
   --color-surface-panel: var(--giga-surface-panel);
-  --color-pill-active: var(--giga-pill-active);
-  --color-pill-inactive: var(--giga-pill-inactive);
+  --color-pill-bg: var(--giga-pill-bg);
+  --color-pill-bg-hover: var(--giga-pill-bg-hover);
+  --color-pill-bg-active: var(--giga-pill-bg-active);
+  --color-pill-foreground: var(--giga-pill-foreground);
+  --color-pill-foreground-active: var(--giga-pill-foreground-active);
+  --color-pill-indicator: var(--giga-pill-indicator);
   --color-primary-300: #a9caff;
   --color-primary-600: #277aff;
   --color-primary-700: #0050e6;

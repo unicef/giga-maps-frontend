@@ -325,14 +325,14 @@ const EntitySummaryCard = ({
           </AccordionContent>
 
           {!isLoading && EntityType.SCHOOL === card.value ? (
-            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-card-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
               <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
                 <SchoolAccordionFooterLogo />
               </div>
             </div>
           ) : null}
           {!isLoading && EntityType.HEALTH === card.value ? (
-            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-card-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
               <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
                 <HealthCentersAccordionFooterLogo />
               </div>
