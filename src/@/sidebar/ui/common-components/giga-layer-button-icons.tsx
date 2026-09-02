@@ -312,14 +312,6 @@ const GigaLayerButtonIcons = ({
             ]
           }
           isActive={targetStaticButtonLayer?.id === targetSelectedLayerId}
-          icon={
-            <span
-              className=""
-              dangerouslySetInnerHTML={{
-                __html: targetStaticButtonLayer?.icon ?? '',
-              }}
-            />
-          }
           onClick={() => {
             if (targetStaticButtonLayer) {
               updateLayer(targetStaticButtonLayer.id);

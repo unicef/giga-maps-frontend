@@ -6,12 +6,11 @@ import {
   $isWelcomeToastVisible,
   dismissWelcomeToast,
 } from '~/@/entities/models/welcome-toast.model';
+import { $isSidebarCollapsed } from '~/@/sidebar/sidebar.model';
 import { $showDisclaimerNotification } from '~/@/sidebar/ui/common-components/country-disclaimer-notification/country-disclaimer-notification';
 import BuildingHospital from '~/assets/images/building-hospital.svg';
-import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
-
 
 /** One-off health-facilities announcement. Shows once per browser. */
 const WelcomeToast = () => {
@@ -19,32 +18,27 @@ const WelcomeToast = () => {
   const isVisible = useStore($isWelcomeToastVisible);
   const isMobile = useStore($isMobile);
   const isCountryDisclaimerOpen = useStore($showDisclaimerNotification);
+  const isSidebarCollapsed = useStore($isSidebarCollapsed);
 
   if (!isVisible) return null;
 
   return (
     <DisclaimerNotification
       className={cn(
-        'z-[6002]',
+        'z-[6002] w-96 max-w-[calc(100vw-2rem)]',
         isMobile
           ? // Clears the fixed sidebar header and its entity-type pill row.
-            'fixed inset-x-4 top-42'
-          : 'fixed left-84 w-96 max-w-[calc(100vw-2rem)]',
+            'fixed inset-x-4 top-42 mx-auto'
+          : cn(
+              'fixed transition-all duration-300',
+              // Clears the panel's collapse arrow in either state, with the
+              // same 8px gutter the panel itself sits on.
+              isSidebarCollapsed ? 'left-6!' : 'left-88!',
+            ),
         // Stack above the country disclaimer, which shares this anchor.
         !isMobile && (isCountryDisclaimerOpen ? 'bottom-44' : 'bottom-8'),
       )}
       closeLabel={t('close-notification')}
-      footer={
-        isMobile ? (
-          <Button
-            className="w-full rounded-full! text-sm! leading-5! font-medium!"
-            onClick={() => dismissWelcomeToast()}
-            size="lg"
-          >
-            {t('welcome-toast-cta')}
-          </Button>
-        ) : null
-      }
       icon={<BuildingHospital />}
       onClose={() => dismissWelcomeToast()}
       title={t('welcome-toast-title')}
@@ -56,7 +50,7 @@ const WelcomeToast = () => {
             // eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/control-has-associated-label
             <a
               className="text-primary! hover:underline"
-              href={'/about#live-map-get-in-touch'}
+              href={'/about#contact'}
               rel="noreferrer"
               target="_blank"
             />

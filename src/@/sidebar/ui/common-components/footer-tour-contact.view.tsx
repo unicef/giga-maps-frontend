@@ -64,7 +64,7 @@ export default function FooterTourContact({
             <OrText>&nbsp;{t('or')}&nbsp;</OrText>
           </>
         )}
-        <Link href='/about#live-map-get-in-touch' target='_blank'>{t('contact-us')}</Link>
+        <Link href='/about#contact' target='_blank'>{t('contact-us')}</Link>
       </LinkButtons>
     </RootWrapper>
   )

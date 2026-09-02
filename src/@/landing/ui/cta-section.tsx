@@ -1,11 +1,15 @@
 import { useStore } from 'effector-react';
 import { ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
 
-import { LANDING_ANCHOR, LANDING_CONTAINER } from '../landing.constant';
+import {
+  CONTACT_HASH,
+  LANDING_ANCHOR,
+  LANDING_CONTAINER,
+} from '../landing.constant';
 import { $closingCta } from '../landing.model';
 import { CmsSectionType } from '../landing.types';
 import { GetInTouchDialog } from './get-in-touch-dialog';
@@ -17,11 +21,54 @@ import { StatsRow } from './stats-row';
 const opensContactForm = (link: string) =>
   link.replace(/\/$/, '').endsWith('/about');
 
+const hashOpensContact = () => window.location.hash.slice(1) === CONTACT_HASH;
+
+// Honours the `scroll-mt` that clears the sticky header. Not deferred to a
+// frame: `requestAnimationFrame` never runs while the tab is in the background.
+const scrollToSection = () =>
+  document.getElementById(CmsSectionType.closingCta)?.scrollIntoView();
+
 export const CtaSection = () => {
   const cta = useStore($closingCta);
-  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(hashOpensContact);
+  const hasSection = Boolean(cta.heading) || cta.ctas.length > 0;
 
-  if (!cta.heading && cta.ctas.length === 0) return null;
+  // In-page anchors do not remount the landing, so a link to #contact coming
+  // from the header or the footer only fires `hashchange`.
+  useEffect(() => {
+    const openFromHash = () => {
+      if (hashOpensContact()) setIsContactOpen(true);
+    };
+
+    window.addEventListener('hashchange', openFromHash);
+    return () => window.removeEventListener('hashchange', openFromHash);
+  }, []);
+
+  // #contact matches no element, so the browser leaves the page at the top:
+  // bring the CTA the dialog belongs to into view behind it. The section only
+  // mounts once the CMS answers, long after the browser looked for the hash.
+  useEffect(() => {
+    if (!hasSection || !isContactOpen || !hashOpensContact()) return;
+    scrollToSection();
+  }, [hasSection, isContactOpen]);
+
+  const setContactOpen = (open: boolean) => {
+    setIsContactOpen(open);
+    if (open || !hashOpensContact()) return;
+
+    // Keeping the hash would reopen the dialog on reload and stop a second
+    // click on the same link from firing `hashchange`.
+    const { pathname, search } = window.location;
+    window.history.replaceState(null, '', `${pathname}${search}`);
+    // Anything still loading above the CTA has pushed it down since the open.
+    scrollToSection();
+  };
+
+  // The deep link has to work even when the CMS sends no closing CTA copy.
+  if (!hasSection)
+    return (
+      <GetInTouchDialog onOpenChange={setContactOpen} open={isContactOpen} />
+    );
 
   return (
     <section
@@ -64,7 +111,7 @@ export const CtaSection = () => {
                   <Button
                     className={buttonClass}
                     key={item.link}
-                    onClick={() => setIsContactOpen(true)}
+                    onClick={() => setContactOpen(true)}
                     size="lg"
                     type="button"
                   >
@@ -92,7 +139,7 @@ export const CtaSection = () => {
         ) : null}
       </div>
 
-      <GetInTouchDialog onOpenChange={setIsContactOpen} open={isContactOpen} />
+      <GetInTouchDialog onOpenChange={setContactOpen} open={isContactOpen} />
     </section>
   );
 };
