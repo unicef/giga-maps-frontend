@@ -22,9 +22,10 @@ import { cn } from '~/lib/cn';
 const base =
   'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-semibold! leading-5! shadow-sm! whitespace-nowrap!';
 const active =
-  'border-border! bg-pill-active! text-foreground! hover:bg-pill-active! hover:text-foreground!';
+  'border-border! bg-pill-bg-active! text-pill-foreground-active! hover:bg-pill-bg-active! hover:text-pill-foreground-active!';
+// Hover only moves the fill; the label keeps its resting colour.
 const inactive =
-  'border-border! bg-pill-inactive! text-muted-foreground! hover:bg-surface-elevated! hover:text-foreground!';
+  'border-border! bg-pill-bg! text-pill-foreground! hover:bg-pill-bg-hover! hover:text-pill-foreground!';
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -96,8 +97,8 @@ export default function EntityTypeSelector() {
             onClick={(event) => handleEntityClick(entityType, event)}
           >
             <EntityLegendIndicator
-              className="ml-0!"
-              color={isActive ? '#f4f4f4' : '#d9d9d9'}
+              className="ml-0! text-pill-indicator!"
+              color="currentColor"
               entityType={type}
               fitToViewBox
               size={8}
