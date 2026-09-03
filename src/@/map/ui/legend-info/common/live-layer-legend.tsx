@@ -114,6 +114,7 @@ const LiveLayerLegend = ({
           ? 'w-full! self-stretch!'
           : 'min-w-0! flex-1! basis-[calc(50%-var(--legend-section-gap)/2)]! max-legend-md:basis-full! max-legend-md:min-w-full!',
       )}
+      data-testid="live-layer-legend"
     >
       <div className="mb-1! flex! items-center! gap-1.5!">
         <div className="text-sm! font-normal! leading-5! text-muted-foreground!">

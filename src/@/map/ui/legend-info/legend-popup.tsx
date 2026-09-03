@@ -20,6 +20,7 @@ import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
+  $connectivityStatsByEntity,
   $getSchoolParams,
   $isGlobalLegendLoading,
   $isLiveLegendLoading,
@@ -210,7 +211,16 @@ const LegendPopup = ({
   };
   const activeEntityLayerData =
     selectedLayerDataByEntity[activeTab] ?? null;
-  const showLiveLegend = isGlobalView || isLive;
+  const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
+  const activeConnectivityStats = connectivityStatsByEntity[activeTab];
+  const reportingInternetQuality = Number(
+    activeConnectivityStats?.no_of_entities_measure ??
+    (activeConnectivityStats as any)?.no_of_schools_measure ??
+    0,
+  );
+  const showLiveLegend = isGlobalView
+    ? reportingInternetQuality > 0
+    : isLive;
   const showStaticLegend = !isGlobalView && isStatic;
   const activeEntityLayerLegends = currentLayerLegendsByEntity[activeTab]!;
   const metricLayerData = isGlobalView
