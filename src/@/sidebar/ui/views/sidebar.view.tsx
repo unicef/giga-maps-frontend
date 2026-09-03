@@ -84,7 +84,7 @@ export default function Sidebar() {
       onClick={() => onClickSidebar()}
     >
       <div className="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!">
-        {isMobile && (
+        {isMobile && !isTimeplayer && (
           <div
             className="-mb-0.25 flex w-full items-center justify-center p-[0.6rem] bg-background"
             id="mobile-view-slider"
@@ -134,26 +134,28 @@ export default function Sidebar() {
           {!mapRoute && !countryRoute && detailEntityType && (
             <CommonComponentGigaLayer entityType={detailEntityType} />
           )}
-          <button
-            className={cn(
-              'sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border border-l-0 border-border rounded-r-md shadow-md p-0 outline-none max-md:hidden',
-              'cursor-pointer bg-background',
-            )}
-            type="button"
-            onClick={onToggleSidebar}
-          >
-            <ChevronRight
+          {!isTimeplayer && (
+            <button
               className={cn(
-                'transition-all duration-500 text-foreground',
-                isSidebarCollapsed ? 'rotate-0' : 'rotate-180',
+                'sidebar__expander absolute bottom-22 left-full flex h-12 w-4 items-center justify-center border border-l-0 border-border rounded-r-md shadow-md p-0 outline-none max-md:hidden',
+                'cursor-pointer bg-background',
               )}
-            />
-          </button>
+              type="button"
+              onClick={onToggleSidebar}
+            >
+              <ChevronRight
+                className={cn(
+                  'transition-all duration-500 text-foreground',
+                  isSidebarCollapsed ? 'rotate-0' : 'rotate-180',
+                )}
+              />
+            </button>
+          )}
         </div>
         <div
           className={cn(
             'relative z-10 transition-all duration-500',
-            isTimeplayer && '-translate-x-full',
+            isTimeplayer && 'hidden',
           )}
         >
           {!isMobile && (

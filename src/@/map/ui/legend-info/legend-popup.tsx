@@ -26,6 +26,7 @@ import {
   $isMenuOpen,
   $isStaticLegendLoading,
   $isStatusLegendLoading,
+  $isTimeplayer,
   $layerUtils,
   $sidebarHeight,
 } from '~/@/sidebar/sidebar.model';
@@ -78,14 +79,19 @@ export const shouldOpenLegendPopup = ({
   isCountryListOpen,
   isSearchListOpen,
   isMenuOpen,
+  isTimeplayer,
 }: {
   open: boolean;
   isMobile: boolean;
   isCountryListOpen: boolean;
   isSearchListOpen: boolean;
   isMenuOpen?: boolean;
+  isTimeplayer?: boolean;
 }) =>
-  open && !isMenuOpen && !(isMobile && (isCountryListOpen || isSearchListOpen));
+  open &&
+  !isMenuOpen &&
+  !isTimeplayer &&
+  !(isMobile && (isCountryListOpen || isSearchListOpen));
 
 const schoolSummaryOrder = [
   ConnectivityStatusDistribution.connected,
@@ -130,12 +136,14 @@ const LegendPopup = ({
   const isStaticLegendLoading = useStore($isStaticLegendLoading);
   const isStatusLegendLoading = useStore($isStatusLegendLoading);
   const isSearchListOpen = isSearchFocused && hasSearchInput;
+  const isTimeplayer = useStore($isTimeplayer);
   const isLegendPopupOpen = shouldOpenLegendPopup({
     open,
     isMobile,
     isCountryListOpen,
     isSearchListOpen,
     isMenuOpen,
+    isTimeplayer,
   });
   const visibleLegendEntityTypes = useMemo(() => {
     return entityTypesFiltered.filter((type) =>

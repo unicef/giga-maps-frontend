@@ -13,7 +13,7 @@ import {
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
-import { $isSidebarCollapsed } from '~/@/sidebar/sidebar.model';
+import { $isSidebarCollapsed, $isTimeplayer } from '~/@/sidebar/sidebar.model';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
 import { mapEntity } from '~/core/routes';
@@ -37,10 +37,11 @@ export default function EntityTypeSelector() {
   const isGlobalMode = useStore($isGlobalMode);
   const isEntityView = useStore(mapEntity.visible);
   const isSidebarCollapsed = useStore($isSidebarCollapsed);
+  const isTimeplayer = useStore($isTimeplayer);
 
   const entityTypes = Object.entries(entityRegistry);
 
-  if (entityTypes.length <= 1 || isEntityView) {
+  if (entityTypes.length <= 1 || isEntityView || isTimeplayer) {
     return null;
   }
 

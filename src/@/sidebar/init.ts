@@ -68,6 +68,7 @@ import {
   onShowAdvancedFilter,
   onShowLegend,
   onShowThemeLayer,
+  onToggleTimeplayer,
   resetCoverageFilterSelection,
   resetFilterModal,
   setConnectivityBenchmarksByEntity,
@@ -1189,6 +1190,13 @@ sample({
     $showThemeLayer.updates,
   ],
   filter: (isOpen) => isOpen,
+  fn: () => false,
+  target: onShowLegend,
+});
+
+sample({
+  clock: onToggleTimeplayer,
+  filter: (isTimeplayer) => Boolean(isTimeplayer),
   fn: () => false,
   target: onShowLegend,
 });
