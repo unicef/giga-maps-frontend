@@ -32,6 +32,7 @@
   "of-total": "de {{total}}",
   "contact-us": "Contate-nos",
   "facilities": "Instalações",
+  "schools-and-health-facilities": "Escolas e instalações de saúde",
   "facilities-not-mapped": "Instalações não mapeadas",
   "subject-in-country-arent-mapped-here-yet": "{{subject}} em <country>{{countryName}}</country> ainda não foram mapeadas. Para mais informações, <contact>contate-nos</contact>.",
   "subject-arent-mapped-here-yet": "As {{subject}} ainda não estão mapeadas aqui. Para mais informações, <contact>contate-nos</contact>.",

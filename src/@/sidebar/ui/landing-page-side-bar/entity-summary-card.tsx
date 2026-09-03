@@ -97,7 +97,7 @@ const EntitySummaryCard = ({
       ) : null}
 
       {isEmptyState ? (
-        <EntityEmptyState entityTitle={card.title} t={t} />
+        <EntityEmptyState entityType={card.value} t={t} />
       ) : (
         <>
           {!isLoading && expanded && showSummaryRowsWhenExpanded ? (

@@ -8,7 +8,7 @@ import {
   $entityConfigMap,
   $entityTypesFiltered,
 } from '~/@/entities/models/entity.model';
-import type { EntityType } from '~/@/entities/types/base-entity.type';
+import type { EntityType } from '~/@/entities';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
 import {
   $accordionExpandedEntities,
@@ -97,7 +97,7 @@ const EntitySummaryAccordion = ({
       type,
       Boolean(
         advancedFiltersByEntity?.[type] &&
-          Object.keys(advancedFiltersByEntity[type]).length > 0,
+        Object.keys(advancedFiltersByEntity[type]).length > 0,
       ),
     ]),
   );
