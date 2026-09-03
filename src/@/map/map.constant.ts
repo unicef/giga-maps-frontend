@@ -5,9 +5,9 @@ import { getLocalStorage } from '~/lib/utils';
 
 import { Center, Style, StylePaintData } from './map.types';
 
-export const defaultZoom = 2;
+export const defaultZoom = 1.55;
 export const maxZoom = 24;
-export const defaultCenter: Center = [-40, -14];
+export const defaultCenter: Center = [-0.5, -14];
 export const defaultStyle: Style = 'dark';
 export const defaultWorldView = 'US';
 export const MAP_SAMPLING = 300000;

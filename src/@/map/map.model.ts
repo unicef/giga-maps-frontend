@@ -31,6 +31,7 @@ import { filterTranslationFx } from '../sidebar/effects/all-translation-fx';
 import {
   defaultGigaLayers,
   defaultStyle,
+  defaultZoom,
   filterListMapping,
   stylePaintData,
 } from './map.constant';
@@ -59,7 +60,7 @@ export const $zoomState = createStore<'start' | 'end' | null>(null);
 $zoomState.on(onZoomStateChange, setPayload);
 
 export const onZoomLevelChange = createEvent<number>();
-export const $zoomLevel = createStore<number>(2);
+export const $zoomLevel = createStore<number>(defaultZoom);
 $zoomLevel.on(onZoomLevelChange, setPayload);
 
 export const updateSchoolMarker = createEvent<SchoolMarker[]>();

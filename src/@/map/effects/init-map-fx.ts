@@ -31,7 +31,7 @@ export const initMapFx = createEffect(
     });
 
     map.on('zoom', () => {
-      onZoomLevelChange(Number(map.getZoom().toFixed(1)));
+      onZoomLevelChange(Number(map.getZoom().toFixed(2)));
     });
 
     // map.on('zoom', () => {
