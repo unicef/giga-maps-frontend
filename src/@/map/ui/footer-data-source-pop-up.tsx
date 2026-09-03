@@ -3,7 +3,7 @@ import { type PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSourceByEntity } from '~/@/country/country.model';
-import { EntityType } from '~/@/entities';
+import { type EntityType } from '~/@/entities';
 import {
   $currentLayerCountryDataSource,
   $currentLayerTypeUtilsByEntity,
@@ -68,7 +68,9 @@ const FooterDataSourcePopUp = ({
     $currentLayerCountryDataSource,
   );
   const currentDataSource =
-    (currentLayerCountryDataSource[currentEntityType] as LayerDataSource | null) ?? null;
+    (currentLayerCountryDataSource[
+      currentEntityType
+    ] as LayerDataSource | null) ?? null;
   const oldDataSource = dataSourceByEntity[currentEntityType] ?? '';
   const dataSourceName = useMemo(() => {
     const data: string[] = currentDataSource?.name
@@ -88,7 +90,6 @@ const FooterDataSourcePopUp = ({
     [currentDataSource?.description],
   );
 
-  if (currentEntityType === EntityType.HEALTH) return null;
   if (showOldDataSource && !oldDataSource.trim()) return null;
 
   if (showOldDataSource) {
