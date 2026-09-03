@@ -38,7 +38,7 @@ export const SearchTopHead = styled.span`
   font-size: 0.75rem;
   border-radius: 0.5rem 0.5rem 0 0;
 `
-export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $justify?: string; $gap?: number; $history?: ReturnType<typeof css> }>`
+export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $justify?: string; $gap?: number; $selected?: boolean; $history?: ReturnType<typeof css> }>`
    padding: 0.875rem 1rem;
    justify-content: ${props => props.$justify ?? 'space-between'};
    align-items: center;
@@ -49,6 +49,9 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
    &:hover {
      background: ${props => (props.theme.main === '#fff' ? '#e8e8e8' : '#393939')};
    }
+   ${props => props.$selected && css`
+     background: ${props.theme.main === '#fff' ? '#e9e9e9' : '#393939'};
+   `}
       ${props => props.$nested && css`
     padding: 0.5rem;
     padding-left: 1.7rem; 

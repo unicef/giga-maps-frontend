@@ -70,6 +70,15 @@ export const getEntityLogicalLayerId = (layerId: string): string =>
     ? layerId.slice(0, -ENTITY_ZOOM_CIRCLE_LAYER_SUFFIX.length)
     : layerId;
 
+/**
+ * The hosted light basemap paints the ocean grey; the design (Figma 19311:47754)
+ * asks for a pale blue. Applied at runtime by bindWaterColor — the durable
+ * fix is to repaint the water layer in Mapbox Studio.
+ */
+export const waterColorByStyle: Partial<Record<Style, string>> = {
+  light: '#d2dde9',
+};
+
 export const styleUrls: { [style in Style]: string } = {
   light: 'mapbox://styles/gigamapbox/cmrvoj0c5007g01sg7di86ql0',
   dark: 'mapbox://styles/gigamapbox/cmrvo760i00gj01qzdhki9s2w',
