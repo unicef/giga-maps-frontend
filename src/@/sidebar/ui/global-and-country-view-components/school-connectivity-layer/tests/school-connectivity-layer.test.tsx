@@ -18,13 +18,41 @@ describe('SchoolConnectivityLayer & SchoolConnectivityNotification', () => {
         countryName="Brazil"
         isConnectivityStatusZero={true}
         isLiveButtonDisabled={true}
+        entityType={EntityType.SCHOOL}
       />
     );
 
     expect(
-      screen.getByText(/Brazil isn't reporting connectivity status/i)
+      screen.getByText(/School connectivity status is unknown for Brazil/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/For more information,/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (_, el) => el?.textContent?.trim() === 'Contact us for more information.'
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /contact us/i })).toBeInTheDocument();
+  });
+
+  it('renders unknown connectivity status notification for health facilities in United Republic of Tanzania', () => {
+    render(
+      <SchoolConnectivityNotification
+        countryName="United Republic of Tanzania"
+        isConnectivityStatusZero={true}
+        isLiveButtonDisabled={true}
+        entityType={EntityType.HEALTH}
+      />
+    );
+
+    expect(
+      screen.getByText(
+        /Health facility connectivity status is unknown for United Republic of Tanzania/i
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (_, el) => el?.textContent?.trim() === 'Contact us for more information.'
+      )
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact us/i })).toBeInTheDocument();
   });
 
@@ -34,13 +62,41 @@ describe('SchoolConnectivityLayer & SchoolConnectivityNotification', () => {
         countryName="Brazil"
         isConnectivityStatusZero={false}
         isLiveButtonDisabled={true}
+        entityType={EntityType.SCHOOL}
       />
     );
 
     expect(
-      screen.getByText(/Brazil isn't reporting internet quality/i)
+      screen.getByText(/School internet quality is unknown for Brazil/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/Want to help map it\?/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Contact us/i })).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (_, el) => el?.textContent?.trim() === 'Contact us for more information.'
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /contact us/i })).toBeInTheDocument();
+  });
+
+  it('renders unknown internet quality notification for health facilities in United Republic of Tanzania', () => {
+    render(
+      <SchoolConnectivityNotification
+        countryName="United Republic of Tanzania"
+        isConnectivityStatusZero={false}
+        isLiveButtonDisabled={true}
+        entityType={EntityType.HEALTH}
+      />
+    );
+
+    expect(
+      screen.getByText(
+        /Health facility internet quality is unknown for United Republic of Tanzania/i
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (_, el) => el?.textContent?.trim() === 'Contact us for more information.'
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /contact us/i })).toBeInTheDocument();
   });
 });

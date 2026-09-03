@@ -86,6 +86,7 @@ const SchoolConnectivityLayer = ({
           countryName={countryName}
           isConnectivityStatusZero={isConnectivityStatusZero}
           isLiveButtonDisabled={isLiveButtonDisabled}
+          entityType={entityType}
         />
       </div>
     </div>
