@@ -5,9 +5,6 @@ import { defaultCenter, defaultZoom, maxZoom, styleUrls } from '~/@/map/map.cons
 import { changeMap, onStyleLoaded, onZoomLevelChange, onZoomStateChange } from '~/@/map/map.model';
 import { InitMapOptions } from '~/@/map/map.types';
 import { API_MAPBOX_ACCESS_TOKEN } from '~/env';
-
-import { bindWaterColor } from './apply-water-color';
-
 let timeout: ReturnType<typeof setTimeout>;
 export const initMapFx = createEffect(
   ({ style, container, center, zoom }: InitMapOptions) => {
@@ -49,8 +46,6 @@ export const initMapFx = createEffect(
         onZoomStateChange('end');
       }, 10);
     });
-
-    bindWaterColor(map, style);
 
     map.on('styledata', (e) => {
       onStyleLoaded();
