@@ -1,12 +1,13 @@
 import { useStore } from 'effector-react';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { mapCountry } from '~/core/routes';
+import { Link } from '~/lib/router';
 
 import { $searchAdminLevel1, $searchAdminLevel2, $searchSchoolAdmin1, $searchSchoolAdmin2, setSearchExpandLevel1, setSearchExpandLevel2 } from '../container/search-result.model';
 import { DistrictWithSchoolCount } from '../container/search-result.type';
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, DistictWrapper, Dot, LeftItem, LinkItem, RightItem, SearchItem } from '../styles/search-result-style';
-import { mapCountry } from '~/core/routes';
-import { Link } from '~/lib/router';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export const expandDistrict = ({ districtCode, isExpanded }: { isExpanded: boolean; districtCode: string }) => {
   setSearchExpandLevel1(isExpanded ? "" : districtCode);
@@ -37,7 +38,7 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
   const districtName = showAdmin2Button ? nestedDistrictData[0].admin2_description : ""
   return <>
     <DistictWrapper>
-      <SearchItem $nested={isSchool && !isAdminLevel1}>
+      <SearchItem $nested={isSchool && !isAdminLevel1} $selected={isExpanded2}>
         <LeftItem $bold={isExpanded}>
           {isAdminLevel1 && admin1_code ? <Link to={mapCountry} params={{ code: countryCode, path: `/${admin1_code}` }}>{name}</Link> :
             name}

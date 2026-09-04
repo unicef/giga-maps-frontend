@@ -53,7 +53,7 @@ const SearchSchoolListPanel = () => {
         <div className="relative!">
           <Input
             aria-label={t('search-schools')}
-            className="h-10! w-full! rounded-md! border-0! bg-surface-elevated! pr-10! pl-4! text-xs! text-foreground! shadow-none! placeholder:text-xs! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
+            className="h-10! w-full! rounded-md! border-0! bg-surface-field! pr-10! pl-4! text-xs! text-foreground! shadow-none! placeholder:text-xs! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
             onChange={(event) => setSearchSchoolListValue(event.target.value)}
             placeholder={t('search-schools')}
             value={searchValue}

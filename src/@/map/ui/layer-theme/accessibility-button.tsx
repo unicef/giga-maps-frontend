@@ -86,6 +86,9 @@ export const AccessibilityButton = () => {
           sideOffset={12}
         >
           <div className="flex! flex-col! gap-4!">
+            <p className="m-0! text-sm! leading-5! text-foreground!">
+              {t('accessible-mode')}
+            </p>
             <div className="inline-flex! items-center!">
               <Toggle
                 aria-label={t('accessible-mode')}
