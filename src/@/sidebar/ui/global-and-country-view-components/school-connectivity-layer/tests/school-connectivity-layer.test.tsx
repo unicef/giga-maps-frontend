@@ -99,4 +99,41 @@ describe('SchoolConnectivityLayer & SchoolConnectivityNotification', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact us/i })).toBeInTheDocument();
   });
+
+  it('renders SchoolConnectivityLayer without unnecessary space', () => {
+    const { container } = render(
+      <SchoolConnectivityLayer entityType={EntityType.SCHOOL} />
+    );
+    expect(container.querySelector('.h-\\[24vh\\]\\!')).toBeNull();
+    expect(container.querySelector('.min-h-\\[10\\.5rem\\]\\!')).toBeNull();
+    const outerContainer = container.firstElementChild as HTMLElement;
+    expect(outerContainer.className).toContain('mx-4!');
+    expect(outerContainer.className).toContain('py-4!');
+  });
+
+  it('renders notification inside sticky container padding class', () => {
+    const { container } = render(
+      <SchoolConnectivityNotification
+        countryName="Brazil"
+        isConnectivityStatusZero={true}
+        isLiveButtonDisabled={true}
+        entityType={EntityType.SCHOOL}
+      />
+    );
+    const outerWrapper = container.firstElementChild as HTMLElement;
+    expect(outerWrapper.className).toContain('px-4!');
+    expect(outerWrapper.className).toContain('pb-3!');
+  });
+
+  it('returns null when notification conditions are not met', () => {
+    const { container } = render(
+      <SchoolConnectivityNotification
+        countryName="Brazil"
+        isConnectivityStatusZero={false}
+        isLiveButtonDisabled={false}
+        entityType={EntityType.SCHOOL}
+      />
+    );
+    expect(container.firstElementChild).toBeNull();
+  });
 });
