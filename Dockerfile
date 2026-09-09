@@ -34,15 +34,14 @@ RUN echo $VITE_RECAPTCHA_KEY \
 RUN yarn build
 
 # Stage 2
-FROM nginx:1.24 AS s2
+FROM nginx:1.26-bookworm AS s2
 
 # ssh
 ENV SSH_PASSWD="root:Docker!"
 RUN apt-get update \
-        && apt-get install -y --no-install-recommends dialog \
-        && apt-get update \
-	&& apt-get install -y --no-install-recommends openssh-server \
-	&& echo "$SSH_PASSWD" | chpasswd
+        && apt-get install -y --no-install-recommends dialog openssh-server curl \
+	&& echo "$SSH_PASSWD" | chpasswd \
+	&& rm -rf /var/lib/apt/lists/*
 
 COPY sshd_config /etc/ssh/
 
