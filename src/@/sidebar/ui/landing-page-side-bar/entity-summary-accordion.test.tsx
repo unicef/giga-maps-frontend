@@ -169,7 +169,7 @@ describe('EntitySummaryAccordion allEntitiesEmpty state', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders "Health facility in Gabon have not been mapped yet. For more information, contact us" when only health entity is selected and empty', () => {
+  it('renders "Health facilities in Gabon have not been mapped yet. For more information, contact us" when only health entity is selected and empty', () => {
     const scope = fork({
       values: new Map()
         .set($activeEntityTypes, [EntityType.HEALTH])
@@ -195,7 +195,7 @@ describe('EntitySummaryAccordion allEntitiesEmpty state', () => {
     );
 
     expect(
-      screen.getByText(/Health facility in/i),
+      screen.getByText(/Health facilities in/i),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/have not been mapped yet/i),
@@ -205,7 +205,7 @@ describe('EntitySummaryAccordion allEntitiesEmpty state', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders "Health facility in Gabon have not been mapped yet" when entityType is HEALTH', () => {
+  it('renders "Health facilities in Gabon have not been mapped yet" when entityType is HEALTH', () => {
     const scope = fork({
       values: new Map().set($country, { name: 'Gabon' } as any),
     });
@@ -216,7 +216,7 @@ describe('EntitySummaryAccordion allEntitiesEmpty state', () => {
       </Provider>,
     );
 
-    expect(screen.getByText(/Health facility in/i)).toBeInTheDocument();
+    expect(screen.getByText(/Health facilities in/i)).toBeInTheDocument();
     expect(screen.getByText(/have not been mapped yet/i)).toBeInTheDocument();
   });
 

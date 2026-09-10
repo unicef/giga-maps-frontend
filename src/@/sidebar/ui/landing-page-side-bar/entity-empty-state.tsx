@@ -36,16 +36,12 @@ export const EntityEmptyState = ({
 
   const targetEntities = entityType ? [entityType] : visibleEntityTypes;
 
-  const getEntityName = (type: EntityType, isSingle: boolean): string => {
+  const getEntityName = (type: EntityType): string => {
     if (type === EntityType.HEALTH) {
-      return isSingle
-        ? t('health-entity-label', {
-            defaultValue: formatEntityTypeLabel(type),
-          })
-        : t('health-facilities', {
-            count: 2,
-            defaultValue: 'health facilities',
-          });
+      return t('health-facilities', {
+        count: 2,
+        defaultValue: 'Health facilities',
+      });
     }
     if (type === EntityType.SCHOOL) {
       return t('school', { count: 2, defaultValue: 'Schools' });
@@ -53,9 +49,8 @@ export const EntityEmptyState = ({
     return formatEntityTypeLabel(type);
   };
 
-  const isSingle = targetEntities.length === 1;
   const labels = targetEntities.map((type, index) => {
-    const name = getEntityName(type, isSingle);
+    const name = getEntityName(type);
     return index === 0 ? name : name.toLowerCase();
   });
 
