@@ -160,6 +160,10 @@
   box-shadow: 0 0 0.625rem var(--hero-status-color);
 }
 
+.hero-globe-card[data-entity='health'] i {
+  border-radius: 0.125rem;
+}
+
 .hero-globe-card b {
   overflow: hidden;
   font-weight: 600;
