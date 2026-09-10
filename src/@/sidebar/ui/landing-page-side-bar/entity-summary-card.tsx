@@ -226,6 +226,7 @@ const EntitySummaryCard = ({
                         card.collapsedRows[2].label.slice(1)
                         : undefined
                     }
+                    dataTitlePos="left"
                     entityType={card.value}
                     glowColor={stylePaintData.good ?? stylePaintData.connected}
                     size={14}
@@ -236,6 +237,7 @@ const EntitySummaryCard = ({
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
+                      data-title-pos="left"
                     >
                       NA
                     </span>
@@ -244,6 +246,7 @@ const EntitySummaryCard = ({
                       <span
                         className="text-[16px]! font-normal! leading-[18px]! text-foreground"
                         data-title={t('int', { val: card.collapsedRows[2]?.value ?? 0 })}
+                        data-title-pos="left"
                       >
                         {formatNumber(card.collapsedRows[2]?.value ?? 0, lng)}
                       </span>
@@ -253,6 +256,7 @@ const EntitySummaryCard = ({
                           data-title={t('int', {
                             val: card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value ?? 0,
                           })}
+                          data-title-pos="left"
                         >
                           {t('of-total', {
                             total: formatNumber(
