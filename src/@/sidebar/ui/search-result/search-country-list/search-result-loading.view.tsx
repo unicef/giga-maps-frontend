@@ -7,7 +7,7 @@ export default function SearchResultLoading({ count = 20 }: Readonly<{ count?: n
       <LoadingText width='80%' />
     </SearchTopHead>
     {Array(count).fill(0).map((_, index) => (
-      <SearchItem key={`${index}-loading`} $border>
+      <SearchItem key={`${index}-loading`} $border $country>
         <LeftItem style={{ width: '40%' }}>
           <LoadingText width="100%" $marginEnd='0' />
         </LeftItem>
