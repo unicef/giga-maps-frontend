@@ -39,7 +39,7 @@ export const SearchDistrict = ({ districtData, countryId, code: countryCode, pre
   return <>
     <DistictWrapper>
       <SearchItem $nested={isSchool && !isAdminLevel1} $selected={isExpanded2}>
-        <LeftItem $bold={isExpanded}>
+        <LeftItem $bold={isExpanded} $fullWidth>
           {isAdminLevel1 && admin1_code ? <Link to={mapCountry} params={{ code: countryCode, path: `/${admin1_code}` }}>{name}</Link> :
             name}
           {showDot && <Dot />}
