@@ -31,6 +31,9 @@ import {
 const breadcrumbEllipsisClassName =
   'inline-block! max-w-[var(--breadcrumb-max-width)]! overflow-hidden! text-ellipsis! whitespace-nowrap! align-bottom!';
 
+// Country and admin1 read as the page title in the design, not as list chrome.
+const breadcrumbTitleClassName = `${breadcrumbEllipsisClassName} text-xl! font-semibold! leading-[1.875rem]! text-foreground!`;
+
 export const GoToMap = () => {
   return (
     <BreadcrumbItem>
@@ -70,7 +73,7 @@ export const GoToCountry = ({
         <BreadcrumbItem>
           {isCurrentPage ? (
             <BreadcrumbPage
-              className={breadcrumbEllipsisClassName}
+              className={breadcrumbTitleClassName}
               style={{ '--breadcrumb-max-width': '10rem' } as CSSProperties}
               title={countryName}
             >
@@ -79,7 +82,7 @@ export const GoToCountry = ({
           ) : (
             <BreadcrumbLink asChild>
               <Link
-                className={breadcrumbEllipsisClassName}
+                className={breadcrumbTitleClassName}
                 params={{ code: code.toLocaleLowerCase() }}
                 query={!isDetailView ? getCurrentCountrySearchPath(code) : ''}
                 style={{ '--breadcrumb-max-width': '5rem' } as CSSProperties}
@@ -97,7 +100,7 @@ export const GoToCountry = ({
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage
-              className={breadcrumbEllipsisClassName}
+              className={breadcrumbTitleClassName}
               style={{ '--breadcrumb-max-width': '5rem' } as CSSProperties}
               title={admin1Name}
             >

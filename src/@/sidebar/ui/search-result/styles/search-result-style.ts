@@ -28,18 +28,26 @@ export const SearchResultScroll = styled(Scroll)`
   background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
   max-height: calc(80vh - 4.5rem);
 `
+const searchRowBorder = css`
+  border-bottom: 0.0625rem solid ${props => (props.theme.main === '#fff' ? '#dfdfdf' : props.theme.searchSchoolBorder)};
+`
+
 export const SearchTopHead = styled.span`
   display: flex;
   align-items: center;
-  min-height: 2.75rem;
-  padding: 0.625rem 1rem;
+  padding: 0.5rem 1rem;
   background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
-  color: ${props => props.theme.grey60};
+  color: var(--giga-on-surface-muted);
   font-size: 0.75rem;
-  border-radius: 0.5rem 0.5rem 0 0;
+  line-height: 1.125rem;
+  ${searchRowBorder}
 `
-export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $justify?: string; $gap?: number; $history?: ReturnType<typeof css> }>`
-   padding: 0.875rem 1rem;
+export const SearchCountryGroup = styled.div`
+  ${searchRowBorder}
+`
+export const SearchItem = styled.div<{ $nested?: boolean; $country?: boolean; $border?: boolean; $justify?: string; $gap?: number; $selected?: boolean; $history?: ReturnType<typeof css> }>`
+   padding: 1rem 1rem 1rem 1.5rem;
+   gap: 0.5rem;
    justify-content: ${props => props.$justify ?? 'space-between'};
    align-items: center;
    display: flex;
@@ -49,20 +57,22 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
    &:hover {
      background: ${props => (props.theme.main === '#fff' ? '#e8e8e8' : '#393939')};
    }
-      ${props => props.$nested && css`
-    padding: 0.5rem;
-    padding-left: 1.7rem; 
-    padding-right: 1rem;
-  `}
+   ${props => props.$selected && css`
+     background: ${props.theme.main === '#fff' ? '#e9e9e9' : '#393939'};
+   `}
+   ${props => props.$country && css`
+    padding-left: 0.375rem;
+   `}
+   ${props => props.$nested && css`
+    padding-left: 2.25rem;
+   `}
    ${props => props.onClick && css`
     cursor: pointer; 
   `}
    ${props => props.$gap && `
       gap: ${props.$gap}rem;  
    `}
-   ${props => props.$border && css`
-      border-bottom: 0.0625rem solid ${props.theme.searchSchoolBorder};
-   `}
+   ${props => props.$border && searchRowBorder}
    ${props => props.$history}
 
    .type-name {
@@ -86,11 +96,10 @@ export const SearchItem = styled.div<{ $nested?: boolean; $border?: boolean; $ju
 `;
 
 export const DistictWrapper = styled.div`
-  padding-left: 0.5rem;
   background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
 `
 
-export const LeftItem = styled.h4<{ $recent?: boolean; $bold?: boolean; $highlight?: boolean; $fullWidth?: boolean }>`
+export const LeftItem = styled.h4<{ $recent?: boolean; $country?: boolean; $bold?: boolean; $highlight?: boolean; $fullWidth?: boolean }>`
   color:  ${props => props.$highlight ? props.theme.titleBlue : props.theme.text};
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -107,6 +116,12 @@ export const LeftItem = styled.h4<{ $recent?: boolean; $bold?: boolean; $highlig
     justify-content: center;
     gap: 1rem;
   `}
+  ${props => props.$country && css`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  `}
   a:hover {
     text-decoration: underline;
   }
@@ -114,8 +129,10 @@ export const LeftItem = styled.h4<{ $recent?: boolean; $bold?: boolean; $highlig
 
 export const RightItem = styled.div`
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   cursor: pointer;
 `
 
@@ -130,9 +147,8 @@ color:  ${({ $secondary, $highlight }) => {
     }
   }}; 
 font-size: 0.75rem;
-line-height: 1rem;
+line-height: 1.125rem;
 text-transform: capitalize;
-  margin-right: 0.25rem;
   max-width: 6rem;
   text-align: right;
   ${props => props.$underline && css`
@@ -178,6 +194,10 @@ export const Dot = styled.span<{ $color?: string; }>`
   display: inline-block;
   border-radius: 1.25rem;
   margin-left: 0.375rem;
+`
+export const StatusDot = styled(Dot)`
+  flex-shrink: 0;
+  margin-left: 0;
 `
 export const NotFoundContainer = styled.div`
 margin: 2.5rem 1rem 1.5rem;

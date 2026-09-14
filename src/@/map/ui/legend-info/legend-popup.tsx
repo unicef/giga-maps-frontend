@@ -20,12 +20,14 @@ import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $stylePaintData } from '~/@/map/map.model';
 import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
+  $connectivityStatsByEntity,
   $getSchoolParams,
   $isGlobalLegendLoading,
   $isLiveLegendLoading,
   $isMenuOpen,
   $isStaticLegendLoading,
   $isStatusLegendLoading,
+  $isTimeplayer,
   $layerUtils,
   $sidebarHeight,
 } from '~/@/sidebar/sidebar.model';
@@ -78,14 +80,19 @@ export const shouldOpenLegendPopup = ({
   isCountryListOpen,
   isSearchListOpen,
   isMenuOpen,
+  isTimeplayer,
 }: {
   open: boolean;
   isMobile: boolean;
   isCountryListOpen: boolean;
   isSearchListOpen: boolean;
   isMenuOpen?: boolean;
+  isTimeplayer?: boolean;
 }) =>
-  open && !isMenuOpen && !(isMobile && (isCountryListOpen || isSearchListOpen));
+  open &&
+  !isMenuOpen &&
+  !isTimeplayer &&
+  !(isMobile && (isCountryListOpen || isSearchListOpen));
 
 const schoolSummaryOrder = [
   ConnectivityStatusDistribution.connected,
@@ -130,12 +137,14 @@ const LegendPopup = ({
   const isStaticLegendLoading = useStore($isStaticLegendLoading);
   const isStatusLegendLoading = useStore($isStatusLegendLoading);
   const isSearchListOpen = isSearchFocused && hasSearchInput;
+  const isTimeplayer = useStore($isTimeplayer);
   const isLegendPopupOpen = shouldOpenLegendPopup({
     open,
     isMobile,
     isCountryListOpen,
     isSearchListOpen,
     isMenuOpen,
+    isTimeplayer,
   });
   const visibleLegendEntityTypes = useMemo(() => {
     return entityTypesFiltered.filter((type) =>
@@ -193,7 +202,6 @@ const LegendPopup = ({
     wasFlyoutOpen.current = isFlyoutOpen;
   }, [isMenuOpen, isMobile, sidebarHeight]);
 
-  const legendMetricTitle = t('internet-quality');
   const activeLayerTypeUtils =
     currentLayerTypeUtilsByEntity[activeTab];
   const { isStatic, isLive, isSchoolStatus } = activeLayerTypeUtils ?? {
@@ -203,7 +211,16 @@ const LegendPopup = ({
   };
   const activeEntityLayerData =
     selectedLayerDataByEntity[activeTab] ?? null;
-  const showLiveLegend = isGlobalView || isLive;
+  const connectivityStatsByEntity = useStore($connectivityStatsByEntity);
+  const activeConnectivityStats = connectivityStatsByEntity[activeTab];
+  const reportingInternetQuality = Number(
+    activeConnectivityStats?.no_of_entities_measure ??
+    (activeConnectivityStats as any)?.no_of_schools_measure ??
+    0,
+  );
+  const showLiveLegend = isGlobalView
+    ? reportingInternetQuality > 0
+    : isLive;
   const showStaticLegend = !isGlobalView && isStatic;
   const activeEntityLayerLegends = currentLayerLegendsByEntity[activeTab]!;
   const metricLayerData = isGlobalView
@@ -277,9 +294,6 @@ const LegendPopup = ({
                 {legendMetricSubtitle}
               </span>
             )}
-            {/* <span className="text-xs! leading-4.5! text-muted-foreground!">
-              {legendMetricTitle}
-            </span> */}
           </div>
           <div
             className={cn(
@@ -493,7 +507,6 @@ const LegendPopup = ({
               isGlobalView ? isGlobalLegendLoading : isLiveLegendLoading,
             )}
             metricSubtitle={legendMetricSubtitle}
-            metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
           />
         ) : null}
@@ -506,7 +519,6 @@ const LegendPopup = ({
               isGlobalView ? isGlobalLegendLoading : isStaticLegendLoading,
             )}
             metricSubtitle={legendMetricSubtitle}
-            metricTitle={legendMetricTitle}
             shouldShowControls={shouldShowControls}
           />
         ) : null}

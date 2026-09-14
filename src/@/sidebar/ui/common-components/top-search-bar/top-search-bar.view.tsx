@@ -342,12 +342,12 @@ const TopSearchBar = () => {
         </PopoverAnchor>
         <PopoverContent
           align="start"
-          className="relative z-60 rounded-lg border-0 bg-transparent p-0 shadow-none outline-none!"
+          className="relative z-6003 rounded-lg border-0 bg-transparent p-0 shadow-none outline-none!"
           side="bottom"
-          sideOffset={2}
+          sideOffset={6}
           style={{ width: dropdownWidth ? `${dropdownWidth}px` : undefined, maxWidth: 'calc(100vw - 2rem)' }}
         >
-          <div className="countries-browse-panel overflow-hidden! rounded-lg! border! border-border! bg-surface-panel! [&_.search-container]:bg-surface-panel! [&>div]:bg-surface-panel!">
+          <div className="countries-browse-panel overflow-hidden! rounded-md! border! border-border! bg-surface-panel! [&_.search-container]:bg-surface-panel! [&>div]:bg-surface-panel!">
             <SearchResultScroll className="search-container max-h-[calc(80vh-6.5rem)] bg-surface-panel!">
               <SearchCountryList />
             </SearchResultScroll>

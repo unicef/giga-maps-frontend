@@ -94,11 +94,11 @@ export const buildEntityCard = ({
   const totalMeasureValue = isStaticLayer
     ? 0
     : Number(
-        totalMetricsConn?.no_of_entities_measure ??
-        totalMetricsConn?.no_of_schools_measure ??
-        totalMetricsGlobal?.no_of_entities_measure ??
-        measureValue,
-      );
+      totalMetricsConn?.no_of_entities_measure ??
+      totalMetricsConn?.no_of_schools_measure ??
+      totalMetricsGlobal?.no_of_entities_measure ??
+      measureValue,
+    );
 
   const connectedValue = Number(connectedGroup?.connected ?? 0);
   const totalConnectedValue = Number(
@@ -185,8 +185,8 @@ export const buildEntityCardContent = ({
         label: t('locations-mapped'),
         tooltip: showMetricTooltips
           ? t('locations-mapped-from-datasets-tooltip', {
-              entity: entityLabel,
-            })
+            entity: entityLabel,
+          })
           : undefined,
         value: mappedValue,
       },
@@ -198,8 +198,8 @@ export const buildEntityCardContent = ({
         label: connectedEntityLabel,
         tooltip: showMetricTooltips
           ? t('with-mapped-connectivity-status-tooltip', {
-              entity: entityLabel,
-            })
+            entity: entityLabel,
+          })
           : undefined,
         value: connectedValue,
       },
@@ -235,8 +235,8 @@ export const buildEntityCardContent = ({
         label: t('reporting-internet-quality'),
         tooltip: showMetricTooltips
           ? t('reporting-internet-quality-tooltip', {
-              entity: entityLabel,
-            })
+            entity: entityLabel,
+          })
           : undefined,
         value: measureValue,
       },

@@ -51,7 +51,7 @@ const MapPage = () => {
           <Popup />
         </PopupContainer>
       </Main>
-      {!isMobile && <EntityTypeSelector />}
+      {!isMobile && !isTimeplayer && <EntityTypeSelector />}
       <TopLoader />
       <Footer />
       <WelcomeToast />

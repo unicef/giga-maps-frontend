@@ -97,12 +97,12 @@ const EntitySummaryCard = ({
       ) : null}
 
       {isEmptyState ? (
-        <EntityEmptyState entityTitle={card.title} t={t} />
+        <EntityEmptyState entityType={card.value} t={t} />
       ) : (
         <>
           {!isLoading && expanded && showSummaryRowsWhenExpanded ? (
             <div className="px-3.5! pb-2!">
-              <div className="flex! items-center! gap-4! pb-3! pt-0.5! flex-wrap!">
+              <div className="flex! items-center! justify-between! gap-2! pb-3! pt-0.5!">
                 {/* Locations Mapped */}
                 <div className="flex! items-center! gap-1.5!">
                   <EntityLegendIndicator
@@ -226,6 +226,7 @@ const EntitySummaryCard = ({
                         card.collapsedRows[2].label.slice(1)
                         : undefined
                     }
+                    dataTitlePos="left"
                     entityType={card.value}
                     glowColor={stylePaintData.good ?? stylePaintData.connected}
                     size={14}
@@ -236,6 +237,7 @@ const EntitySummaryCard = ({
                     <span
                       className="text-[16px]! font-semibold! leading-[18px]! text-gray-600!"
                       data-title={t('no-data-available')}
+                      data-title-pos="left"
                     >
                       NA
                     </span>
@@ -244,6 +246,7 @@ const EntitySummaryCard = ({
                       <span
                         className="text-[16px]! font-normal! leading-[18px]! text-foreground"
                         data-title={t('int', { val: card.collapsedRows[2]?.value ?? 0 })}
+                        data-title-pos="left"
                       >
                         {formatNumber(card.collapsedRows[2]?.value ?? 0, lng)}
                       </span>
@@ -253,6 +256,7 @@ const EntitySummaryCard = ({
                           data-title={t('int', {
                             val: card.collapsedRows[2]?.totalValue ?? card.collapsedRows[2]?.value ?? 0,
                           })}
+                          data-title-pos="left"
                         >
                           {t('of-total', {
                             total: formatNumber(
@@ -325,14 +329,14 @@ const EntitySummaryCard = ({
           </AccordionContent>
 
           {!isLoading && EntityType.SCHOOL === card.value ? (
-            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-card-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
               <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
                 <SchoolAccordionFooterLogo />
               </div>
             </div>
           ) : null}
           {!isLoading && EntityType.HEALTH === card.value ? (
-            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! border-t! border-card-border! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
+            <div className="flex! items-center! justify-start! gap-3! rounded-b-lg! px-3.5! pt-3! pb-3.5! [&_img]:!block [&_img]:!h-[0.875rem] [&_img]:!w-auto [&_svg]:!block [&_svg]:!h-7 [&_svg]:!w-auto [&_svg_circle]:!fill-muted-foreground [&_svg_g]:!fill-muted-foreground [&_svg_path]:!fill-muted-foreground [&_svg_polygon]:!fill-muted-foreground [&_svg_rect]:!fill-muted-foreground">
               <div className="inline-flex! items-center! justify-center! text-xs! font-semibold! leading-4!">
                 <HealthCentersAccordionFooterLogo />
               </div>

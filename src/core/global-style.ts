@@ -229,6 +229,17 @@ a{
     }
   }
 
+  @keyframes tooltipFadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(0) translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+
   @media (hover: hover) and (pointer: fine) {
     [data-title-pos='right']:hover::after {
       left: 0;
@@ -240,6 +251,20 @@ a{
       left: 8px;
       transform: translateX(0) translateY(100%);
       animation-name: tooltipFadeInRight;
+    }
+
+    [data-title-pos='left']:hover::after {
+      left: auto;
+      right: 0;
+      transform: translateX(0);
+      animation-name: tooltipFadeInLeft;
+    }
+
+    [data-title-pos='left']:hover::before {
+      left: auto;
+      right: 8px;
+      transform: translateX(0) translateY(100%);
+      animation-name: tooltipFadeInLeft;
     }
   }
 `;

@@ -9,8 +9,6 @@ type DisclaimerNotificationProps = {
   children: ReactNode;
   className?: string;
   closeLabel: string;
-  /** Action row below a divider. Mobile only. */
-  footer?: ReactNode;
   /** Glyph for the accent chip. Omit for a text-only card. */
   icon?: ReactNode;
   onClose?: () => void;
@@ -22,7 +20,6 @@ const DisclaimerNotification = ({
   children,
   className,
   closeLabel,
-  footer,
   icon,
   onClose,
   title,
@@ -63,12 +60,6 @@ const DisclaimerNotification = ({
         </Button>
       ) : null}
     </div>
-
-    {footer ? (
-      <div className="border-border! flex items-center justify-end gap-2! border-t! p-4!">
-        {footer}
-      </div>
-    ) : null}
   </Card>
 );
 

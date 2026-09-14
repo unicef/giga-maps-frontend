@@ -108,13 +108,14 @@ const createCard = (
   const marker = document.createElement('i');
   const title = document.createElement('b');
   const status = document.createElement('span');
+  const isHealthFacility = !name && point.seed < HEALTH_CARD_SHARE;
 
   card.className = 'hero-globe-card';
   card.setAttribute('aria-hidden', 'true');
+  card.dataset.entity = isHealthFacility ? 'health' : 'school';
   marker.style.setProperty('--hero-status-color', color);
   title.textContent =
-    name ||
-    (point.seed < HEALTH_CARD_SHARE ? labels.healthFacility : labels.school);
+    name || (isHealthFacility ? labels.healthFacility : labels.school);
   status.textContent = labels[point.kind as Status];
   card.append(marker, title, status);
 

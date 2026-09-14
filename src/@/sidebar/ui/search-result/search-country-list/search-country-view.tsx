@@ -8,7 +8,7 @@ import { Link } from "~/lib/router";
 
 import { $currentExpandCountry, $searchSchoolIds, setSearchCountryExpand } from '../container/search-result.model';
 import { CountryWithDistrictCount } from "../container/search-result.type";
-import { ChevronDownIcon, ChevronUpIcon, Dot, LeftItem, LinkItem, RightItem, SearchItem } from "../styles/search-result-style"
+import { ChevronDownIcon, ChevronUpIcon, Dot, LeftItem, LinkItem, RightItem, SearchCountryGroup, SearchItem, StatusDot } from "../styles/search-result-style"
 import { SearchDistrict } from "./search-district-view"
 
 
@@ -26,11 +26,10 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
   const isExpanded = countryId === id?.toString();
   const districtName = districtCount >= 1 ? districtsList[0].admin1_description_ui_label : "District"
   return (
-    <>
-      <SearchItem
-        $border={!isExpanded}>
-        <LeftItem $bold={isExpanded}>
-          <Dot $color={CountryIntegrationStatusColor[integrationStatus]} style={{ left: '-1.0rem', top: '0.5rem', position: 'absolute' }} />
+    <SearchCountryGroup>
+      <SearchItem $country>
+        <LeftItem $bold={isExpanded} $country $fullWidth>
+          <StatusDot $color={CountryIntegrationStatusColor[integrationStatus]} />
           <Link to={mapCountry} params={{ code: code.toLowerCase() }}>
             {t(name)}
           </Link>
@@ -39,8 +38,8 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
         <RightItem onClick={() => {
           expandCountry(String(id), isExpanded)
         }}>
-          <LinkItem $highlight={isExpanded}>{districtCount} {districtName || "District"}</LinkItem>
-          {isExpanded ? <ChevronUpIcon $highlight={isExpanded} /> :
+          <LinkItem>{districtCount} {districtName || "District"}</LinkItem>
+          {isExpanded ? <ChevronUpIcon /> :
             <ChevronDownIcon />}
         </RightItem>
       </SearchItem>
@@ -56,6 +55,6 @@ export const SearchCountry = ({ countryData }: { countryData: CountryWithDistric
           />
         ))
       }
-    </>
+    </SearchCountryGroup>
   )
 }

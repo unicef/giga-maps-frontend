@@ -35,7 +35,10 @@ import {
   changeSchoolConnectedOpenStatus,
   setSchoolIdsOnPopupClickDot,
 } from '~/@/map/map.model';
-import { $countryAdvancedFiltersReady } from '~/@/map/ui/advanced-filter/country-filter-readiness.model';
+import {
+  $countryAdvancedFiltersReady,
+  $isAdvancedFilterUnavailable,
+} from '~/@/map/ui/advanced-filter/country-filter-readiness.model';
 import {
   $connectivityBenchMarkByEntity,
   $connectivityLayers,
@@ -65,6 +68,7 @@ import {
   onShowAdvancedFilter,
   onShowLegend,
   onShowThemeLayer,
+  onToggleTimeplayer,
   resetCoverageFilterSelection,
   resetFilterModal,
   setConnectivityBenchmarksByEntity,
@@ -805,6 +809,7 @@ sample({
     !info.isMobile &&
     !!activePopup?.id &&
     !!activePopup.entityType &&
+    info.activeEntityTypes.includes(activePopup.entityType) &&
     hasEntityDetailInfoLayer(info, activePopup.entityType),
   fn: ({ info, activePopup }) =>
     entityPopupInfoFn(info, {
@@ -1162,6 +1167,14 @@ sample({
   target: [onShowAdvancedFilter, onShowThemeLayer],
 });
 
+// The modal has nothing left to show once the active entities lose their filters.
+sample({
+  clock: $isAdvancedFilterUnavailable,
+  filter: (isUnavailable) => isUnavailable,
+  fn: () => false,
+  target: onShowAdvancedFilter,
+});
+
 const $isSidebarControlOpen = combine(
   $showAccessibility,
   $showAdvancedFilter,
@@ -1177,6 +1190,13 @@ sample({
     $showThemeLayer.updates,
   ],
   filter: (isOpen) => isOpen,
+  fn: () => false,
+  target: onShowLegend,
+});
+
+sample({
+  clock: onToggleTimeplayer,
+  filter: (isTimeplayer) => Boolean(isTimeplayer),
   fn: () => false,
   target: onShowLegend,
 });

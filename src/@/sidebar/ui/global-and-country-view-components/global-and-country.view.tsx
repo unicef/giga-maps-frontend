@@ -18,8 +18,9 @@ import EntitySummaryAccordion from '../landing-page-side-bar/entity-summary-acco
 import CommonComponentGigaLayer from './common-component-gigalayer';
 import ConnectivityLayer from './connectivity-layer/connectivity-layer.view';
 import SchoolConnectivityLayer from './school-connectivity-layer/school-connectivity-layer.view';
+import SchoolConnectivityNotification from './school-connectivity-layer/school-connectivity-notification.view';
 
-const EntityLayerContent = ({
+const EntityCardContent = ({
   entityType,
   isLiveDataLoading,
 }: {
@@ -44,16 +45,33 @@ const EntityLayerContent = ({
   const defaultUIEnable = !selectedLayerId && statusLayerId;
 
   return (
-    <>
-      {defaultUIEnable && <SchoolConnectivityLayer entityType={entityType} />}
-      {isStatic && <CoverageLayer entityType={entityType} />}
-      {isLive && (
-        <ConnectivityLayer
+    <div className="min-h-[calc(100vh-14rem)]! flex! flex-col! justify-between!">
+      <div className="flex-1! flex! flex-col! min-h-0!">
+        {defaultUIEnable && <SchoolConnectivityLayer entityType={entityType} />}
+        {isStatic && <CoverageLayer entityType={entityType} />}
+        {isLive && (
+          <ConnectivityLayer
+            entityType={entityType}
+            isLiveDataLoading={isLiveDataLoading}
+          />
+        )}
+      </div>
+      <div className="sticky! bottom-0! z-10! bg-background! mt-auto! flex! flex-col! gap-0!">
+        {defaultUIEnable && (
+          <SchoolConnectivityNotification entityType={entityType} />
+        )}
+        <div className="px-4!">
+          <FooterDataSourcePopUp
+            isFooter={false}
+            entityType={entityType}
+          />
+        </div>
+        <CommonComponentGigaLayer
           entityType={entityType}
-          isLiveDataLoading={isLiveDataLoading}
+          isCountryView
         />
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 
@@ -73,26 +91,10 @@ const GlobalAndCountryView = () => {
           showSummaryRowsWhenExpanded={true}
         >
           {(card) => (
-            <div className="min-h-[calc(100vh-14rem)]! flex! flex-col! justify-between!">
-              <div>
-                <EntityLayerContent
-                  entityType={card.accordionItem.value}
-                  isLiveDataLoading={isLiveDataLoading}
-                />
-              </div>
-              <div className="sticky! bottom-0! z-10! bg-background! mt-auto! flex! flex-col! gap-0!">
-                <div className="px-4!">
-                  <FooterDataSourcePopUp
-                    isFooter={false}
-                    entityType={card.accordionItem.value}
-                  />
-                </div>
-                <CommonComponentGigaLayer
-                  entityType={card.accordionItem.value}
-                  isCountryView
-                />
-              </div>
-            </div>
+            <EntityCardContent
+              entityType={card.accordionItem.value}
+              isLiveDataLoading={isLiveDataLoading}
+            />
           )}
         </EntitySummaryAccordion>
       </div>

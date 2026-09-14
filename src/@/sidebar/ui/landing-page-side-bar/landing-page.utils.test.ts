@@ -1,3 +1,4 @@
+import { createInstance } from 'i18next';
 import { describe, expect, it } from 'vitest';
 
 import { DEFAULT_ENTITY_REGISTRY } from '~/@/entities/config/entity-registry';
@@ -21,6 +22,21 @@ const translations: Record<string, string> = {
 };
 
 const t: LandingPageTranslationFn = (key) => translations[key] ?? key;
+
+const createTestT = (lng: 'en' | 'es' | 'pt'): LandingPageTranslationFn => {
+  const instance = createInstance();
+  instance.init({
+    fallbackLng: 'en',
+    lng,
+    resources: {
+      en: { translation: en },
+      es: { translation: es },
+      pt: { translation: pt },
+    },
+  });
+  return ((key: string, options?: Record<string, unknown>) =>
+    instance.t(key, options as any)) as LandingPageTranslationFn;
+};
 
 const globalStats = {
   connected_entities: {
@@ -117,8 +133,147 @@ describe('landing page entity copy', () => {
     expect(es['go-to-health-facility-page']).toBe(
       'Ir a la página de la instalación de salud',
     );
-    expect(pt['go-to-health-facility-page']).toBe(
-      'Ir para a página da instalação de saúde',
+    expect(en['across-no-countries_one']).toBe('across {{count}} country');
+    expect(en['across-no-countries_other']).toBe('across {{count}} countries');
+    expect(en['across-no-countries-and-territories_one']).toBe(
+      'across {{count}} country and territory',
     );
+    expect(en['across-no-countries-and-territories_other']).toBe(
+      'across {{count}} countries and territories',
+    );
+
+    expect(es['across-no-countries_one']).toBe('en {{count}} país');
+    expect(es['across-no-countries_other']).toBe('en {{count}} países');
+    expect(es['across-no-countries-and-territories_one']).toBe(
+      'en {{count}} país y territorio',
+    );
+    expect(es['across-no-countries-and-territories_other']).toBe(
+      'en {{count}} países y territorios',
+    );
+
+    expect(pt['across-no-countries_one']).toBe('em {{count}} país');
+    expect(pt['across-no-countries_other']).toBe('em {{count}} países');
+    expect(pt['across-no-countries-and-territories_one']).toBe(
+      'em {{count}} país e território',
+    );
+    expect(pt['across-no-countries-and-territories_other']).toBe(
+      'em {{count}} países e territórios',
+    );
+  });
+
+  describe('singular and plural country detail formatting', () => {
+    it('formats singular and plural country details for school entities', () => {
+      const tEn = createTestT('en');
+
+      const singleContent = buildEntityCardContent({
+        ...buildArgs(EntityType.SCHOOL),
+        connectivityStats: {
+          ...connectivityStats,
+          countries_with_realtime_data: 1,
+        },
+        globalStats: {
+          ...globalStats,
+          countries_with_connectivity_status_mapped: 1,
+          no_of_countries: 1,
+        },
+        t: tEn,
+      });
+
+      expect(singleContent?.metrics[0]?.detail).toBe(
+        'across 1 country and territory',
+      );
+      expect(singleContent?.metrics[1]?.detail).toBe(
+        'across 1 country and territory',
+      );
+      expect(singleContent?.metrics[2]?.detail).toBe(
+        'across 1 country and territory',
+      );
+
+      const pluralContent = buildEntityCardContent({
+        ...buildArgs(EntityType.SCHOOL),
+        t: tEn,
+      });
+
+      expect(pluralContent?.metrics[0]?.detail).toBe(
+        'across 95 countries and territories',
+      );
+      expect(pluralContent?.metrics[1]?.detail).toBe(
+        'across 90 countries and territories',
+      );
+      expect(pluralContent?.metrics[2]?.detail).toBe(
+        'across 75 countries and territories',
+      );
+    });
+
+    it('formats singular and plural country details for health entities', () => {
+      const tEn = createTestT('en');
+
+      const singleContent = buildEntityCardContent({
+        ...buildArgs(EntityType.HEALTH),
+        connectivityStats: {
+          ...connectivityStats,
+          countries_with_realtime_data: 1,
+        },
+        globalStats: {
+          ...globalStats,
+          countries_with_connectivity_status_mapped: 1,
+          no_of_countries: 1,
+        },
+        t: tEn,
+      });
+
+      expect(singleContent?.metrics[0]?.detail).toBe('across 1 country');
+      expect(singleContent?.metrics[1]?.detail).toBe('across 1 country');
+      expect(singleContent?.metrics[2]?.detail).toBe('across 1 country');
+
+      const pluralContent = buildEntityCardContent({
+        ...buildArgs(EntityType.HEALTH),
+        t: tEn,
+      });
+
+      expect(pluralContent?.metrics[0]?.detail).toBe('across 95 countries');
+      expect(pluralContent?.metrics[1]?.detail).toBe('across 90 countries');
+      expect(pluralContent?.metrics[2]?.detail).toBe('across 75 countries');
+    });
+
+    it('formats country singular and plural in Spanish and Portuguese', () => {
+      const tEs = createTestT('es');
+      const singleEs = buildEntityCardContent({
+        ...buildArgs(EntityType.SCHOOL),
+        connectivityStats: {
+          ...connectivityStats,
+          countries_with_realtime_data: 1,
+        },
+        globalStats: {
+          ...globalStats,
+          countries_with_connectivity_status_mapped: 1,
+          no_of_countries: 1,
+        },
+        lng: 'es',
+        t: tEs,
+      });
+      expect(singleEs?.metrics[0]?.detail).toBe('en 1 país y territorio');
+      expect(singleEs?.metrics[1]?.detail).toBe('en 1 país y territorio');
+      expect(singleEs?.metrics[2]?.detail).toBe('en 1 país y territorio');
+
+      const tPt = createTestT('pt');
+      const singlePt = buildEntityCardContent({
+        ...buildArgs(EntityType.SCHOOL),
+        connectivityStats: {
+          ...connectivityStats,
+          countries_with_realtime_data: 1,
+        },
+        globalStats: {
+          ...globalStats,
+          countries_with_connectivity_status_mapped: 1,
+          no_of_countries: 1,
+        },
+        lng: 'pt',
+        t: tPt,
+      });
+      expect(singlePt?.metrics[0]?.detail).toBe('em 1 país e território');
+      expect(singlePt?.metrics[1]?.detail).toBe('em 1 país e território');
+      expect(singlePt?.metrics[2]?.detail).toBe('em 1 país e território');
+    });
   });
 });

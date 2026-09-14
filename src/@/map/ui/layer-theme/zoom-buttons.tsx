@@ -11,7 +11,7 @@ const ZoomButtons = () => {
     <div className="mb-0! flex! flex-col! items-center! overflow-visible!">
       <MapControlButton
         aria-label={t('zoom-in')}
-        buttonClassName="rounded-b-none! rounded-t-[1rem]! border-0! border-b! border-b-[#262626]!"
+        buttonClassName="rounded-b-none! rounded-t-[1rem]! border-0! border-b! border-b-border!"
         containerClassName="mt-0!"
         label={t('zoom-in')}
         onClick={() => zoomIn()}

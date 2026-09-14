@@ -38,7 +38,7 @@ export const getEntityMapValue = <T>(
 export const formatEntityTypeLabel = (entityType: EntityType): string => {
   if (entityType === EntityType.HEALTH) return 'Health facility';
   if (entityType === EntityType.SCHOOL) return 'School';
-  return `${entityType.charAt(0).toUpperCase()}${entityType.slice(1)}`;
+  return '';
 };
 
 /**

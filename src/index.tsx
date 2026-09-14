@@ -3,6 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from './app';
+import './core/analytics';
 
 // attachLogger();
 
@@ -14,7 +15,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-// if (process.env.NODE_ENV === 'production') {
-//   registerServiceWorker();
-// } 

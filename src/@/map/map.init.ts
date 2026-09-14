@@ -126,6 +126,7 @@ import {
   $stylePaintData,
   $zoomState,
   changeStyle,
+  closeEntityPopup,
   onCreateSchoolPopup,
   onLoadPage,
   onReloadedMap,
@@ -632,6 +633,17 @@ sample({
       entityType: EntityType;
     }) => navigateToEntity(entityType, countryCode, entityId),
   ),
+});
+
+// A popup pinned to an entity type the user just switched off would hover over
+// a dot that is no longer rendered.
+sample({
+  clock: $activeEntityTypes,
+  source: $activeSchoolPopup,
+  filter: (activePopup, activeEntityTypes) =>
+    !!activePopup?.entityType &&
+    !activeEntityTypes.includes(activePopup.entityType),
+  target: closeEntityPopup,
 });
 
 export const $schoolPopupConnectivityMap = $schoolClickData.map((data) =>

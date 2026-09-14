@@ -1,4 +1,10 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { testWrapper } from '~/tests/test-wrapper';
@@ -86,10 +92,13 @@ describe('WelcomeToast', () => {
     expect(screen.queryByText(TITLE_EN)).not.toBeInTheDocument();
   });
 
-  it('dismisses from the mobile confirm button', async () => {
+  it('dismisses from the close button on mobile, with no confirm CTA', async () => {
     await renderToast('en', true);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
+    expect(
+      screen.queryByRole('button', { name: 'Got it' }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Close notification' }));
 
     expect(screen.queryByText(TITLE_EN)).not.toBeInTheDocument();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBe('true');
@@ -102,7 +111,7 @@ describe('WelcomeToast', () => {
     expect(screen.getByRole('link')).toHaveTextContent('escríbenos');
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
-      '/about#live-map-get-in-touch',
+      '/about#contact',
     );
   });
 });
