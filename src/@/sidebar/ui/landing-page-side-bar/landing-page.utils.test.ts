@@ -180,7 +180,7 @@ describe('landing page entity copy', () => {
       });
 
       expect(singleContent?.metrics[0]?.detail).toBe(
-        'across 1 country and territory',
+        'across 50+ countries and territories',
       );
       expect(singleContent?.metrics[1]?.detail).toBe(
         'across 1 country and territory',
@@ -195,7 +195,7 @@ describe('landing page entity copy', () => {
       });
 
       expect(pluralContent?.metrics[0]?.detail).toBe(
-        'across 95 countries and territories',
+        'across 50+ countries and territories',
       );
       expect(pluralContent?.metrics[1]?.detail).toBe(
         'across 90 countries and territories',
@@ -252,7 +252,7 @@ describe('landing page entity copy', () => {
         lng: 'es',
         t: tEs,
       });
-      expect(singleEs?.metrics[0]?.detail).toBe('en 1 país y territorio');
+      expect(singleEs?.metrics[0]?.detail).toBe('en 50+ países y territorios');
       expect(singleEs?.metrics[1]?.detail).toBe('en 1 país y territorio');
       expect(singleEs?.metrics[2]?.detail).toBe('en 1 país y territorio');
 
@@ -271,7 +271,7 @@ describe('landing page entity copy', () => {
         lng: 'pt',
         t: tPt,
       });
-      expect(singlePt?.metrics[0]?.detail).toBe('em 1 país e território');
+      expect(singlePt?.metrics[0]?.detail).toBe('em 50+ países e territórios');
       expect(singlePt?.metrics[1]?.detail).toBe('em 1 país e território');
       expect(singlePt?.metrics[2]?.detail).toBe('em 1 país e território');
     });
