@@ -116,7 +116,7 @@ const SchoolPopupDataSource = ({
               type="button"
               onClick={() => handleClick(raw)}
               className={cn(
-                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-gray-400! dark:hover:text-white!',
+                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-left! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-gray-400! dark:hover:text-white!',
                 url ? 'cursor-pointer!' : 'cursor-default!',
               )}
             >
