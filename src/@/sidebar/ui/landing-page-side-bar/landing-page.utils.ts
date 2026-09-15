@@ -179,7 +179,11 @@ export const buildEntityCardContent = ({
     metrics: [
       {
         detail: t(countriesDetailKey, {
-          count: entityGlobalStats?.no_of_countries ?? 0,
+          // Hardcoded by product; a string count makes i18next skip plural keys.
+          count:
+            entityType === EntityType.SCHOOL
+              ? '50+'
+              : (entityGlobalStats?.no_of_countries ?? 0),
         }),
         estimate: estimate ? `${estimate} ${t('estimated')}` : undefined,
         label: t('locations-mapped'),

@@ -126,11 +126,6 @@ export interface LandingStat {
 export const $headlineStats = $globalStats.map((stats): LandingStat[] => [
   { id: 'schools', value: `${compact(stats?.school?.entities_total)}+` },
   { id: 'health', value: compact(stats?.health?.entities_total) },
-  {
-    id: 'countries',
-    value: `${Math.max(
-      stats?.school?.no_of_countries ?? 0,
-      stats?.health?.no_of_countries ?? 0,
-    )}+`,
-  },
+  // Hardcoded by product instead of global-stat's no_of_countries.
+  { id: 'countries', value: '50+' },
 ]);
