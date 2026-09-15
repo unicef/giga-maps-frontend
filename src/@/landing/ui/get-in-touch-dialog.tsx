@@ -198,10 +198,17 @@ export const GetInTouchDialog = ({
                 >
                   <SelectValue placeholder={CONTACT_COPY.purposePlaceholder} />
                 </SelectTrigger>
-                <SelectContent>
+                {/* The default item-aligned mode measures the list before Carbon
+                  resets its padding, so it sizes it wrong and the scroll buttons
+                  drag it off-screen on hover. */}
+                <SelectContent
+                  className="rounded-md! border! border-border! bg-popover! text-popover-foreground! shadow-lg! [&>[data-radix-select-viewport]]:p-1!"
+                  position="popper"
+                  sideOffset={4}
+                >
                   {CONTACT_PURPOSES.map((purpose) => (
                     <SelectItem
-                      className="cursor-pointer!"
+                      className="cursor-pointer! rounded-sm! py-2! pr-8! pl-3! text-base! leading-6! focus:bg-accent! focus:text-accent-foreground!"
                       key={purpose}
                       value={purpose}
                     >
