@@ -10,6 +10,7 @@
     "build": "vite build",
     "build:hero-data": "node scripts/build-hero-data.mjs --max 450000",
     "preview": "vite preview",
+    "proxy": "node scripts/proxy.mjs",
     "serve": "npm run build && npx serve -s bulild -l 9510",
     "ts": "tsc -p tsconfig.json",
     "ts-files": "tsc --listFiles -p tsconfig.json",

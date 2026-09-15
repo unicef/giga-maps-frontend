@@ -1,17 +1,133 @@
 /// <reference types="vitest" />
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import http from 'http';
+import https from 'https';
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, Plugin } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
+
+const STAGING_BACKEND_HOST = 'uni-ooi-giga-maps-backend-stg.azurewebsites.net';
+const PROXY_PORT = 8081;
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __backendProxyServer: http.Server | undefined;
+}
+
+const backendProxyPlugin = (): Plugin => ({
+  name: 'backend-proxy-8081',
+  configureServer(server) {
+    if (globalThis.__backendProxyServer) {
+      return;
+    }
+
+    const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
+    const proxyServer = http.createServer((clientReq, clientRes) => {
+      const origin = clientReq.headers.origin || '*';
+      const reqHeaders =
+        clientReq.headers['access-control-request-headers'] || '*';
+
+      clientRes.setHeader('Access-Control-Allow-Origin', origin);
+      clientRes.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD'
+      );
+      clientRes.setHeader('Access-Control-Allow-Headers', reqHeaders);
+      clientRes.setHeader('Access-Control-Allow-Credentials', 'true');
+
+      if (clientReq.method === 'OPTIONS') {
+        clientRes.writeHead(200);
+        clientRes.end();
+        return;
+      }
+
+      const headers = {
+        ...clientReq.headers,
+        host: STAGING_BACKEND_HOST,
+        origin: `https://${STAGING_BACKEND_HOST}`,
+        referer: `https://${STAGING_BACKEND_HOST}/`,
+      };
+
+      const proxyReq = https.request(
+        {
+          host: STAGING_BACKEND_HOST,
+          port: 443,
+          path: clientReq.url,
+          method: clientReq.method,
+          headers,
+          agent: httpsAgent,
+        },
+        (proxyRes) => {
+          const responseHeaders = { ...proxyRes.headers };
+          responseHeaders['access-control-allow-origin'] = origin;
+          responseHeaders['access-control-allow-methods'] =
+            'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD';
+          responseHeaders['access-control-allow-headers'] = reqHeaders;
+          responseHeaders['access-control-allow-credentials'] = 'true';
+
+          clientRes.writeHead(proxyRes.statusCode || 200, responseHeaders);
+          proxyRes.pipe(clientRes, { end: true });
+        }
+      );
+
+      proxyReq.on('error', (err) => {
+        console.error(
+          `[Proxy 8081 Error] ${clientReq.method} ${clientReq.url}:`,
+          err.message
+        );
+        if (!clientRes.headersSent) {
+          clientRes.writeHead(502, { 'Content-Type': 'application/json' });
+        }
+        clientRes.end(
+          JSON.stringify({ error: 'Proxy error', message: err.message })
+        );
+      });
+
+      clientReq.pipe(proxyReq, { end: true });
+    });
+
+    proxyServer.on('error', (err: NodeJS.ErrnoException) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(
+          `[Proxy 8081] Port ${PROXY_PORT} is already in use by an active instance.`
+        );
+      } else {
+        console.error('[Proxy 8081] Server error:', err);
+      }
+    });
+
+    proxyServer.listen(PROXY_PORT, () => {
+      console.log(
+        `\n  ➜  Backend Proxy: http://localhost:${PROXY_PORT}/ -> https://${STAGING_BACKEND_HOST}\n`
+      );
+    });
+
+    globalThis.__backendProxyServer = proxyServer;
+
+    const cleanup = () => {
+      if (globalThis.__backendProxyServer) {
+        globalThis.__backendProxyServer.close();
+        globalThis.__backendProxyServer = undefined;
+      }
+    };
+
+    server.httpServer?.on('close', cleanup);
+    process.once('SIGINT', cleanup);
+    process.once('SIGTERM', cleanup);
+    process.once('exit', cleanup);
+  },
+});
 
 const resolveFromRoot = (...paths: string[]) =>
   path.resolve(__dirname, ...paths);
 
 export default defineConfig(({ mode }) => ({
   plugins: [
+    backendProxyPlugin(),
     tsconfigPaths(),
     tailwindcss(),
     react({
@@ -76,6 +192,18 @@ export default defineConfig(({ mode }) => ({
     port: 9500,
     open: true,
     host: '0.0.0.0',
+    proxy: {
+      '/api': {
+        target: 'https://uni-ooi-giga-maps-backend-stg.azurewebsites.net',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/media': {
+        target: 'https://uni-ooi-giga-maps-backend-stg.azurewebsites.net',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   build: {
     outDir: 'build',
