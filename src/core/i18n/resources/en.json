@@ -195,7 +195,7 @@
   "map-themes-layers": "Map themes & layers",
   "dark-mode": "Dark mode",
   "light-mode": "Light mode",
-  "accessible-mode": "Accessible mode",
+  "accessible-mode": "Accessibility mode",
   "accessible-mode-on": "On",
   "accessible-mode-off": "Off",
   "accessible-mode-description": "Increase interface contrast and use a colour-blind friendly colour palette across the map and related content.",
