@@ -20,18 +20,6 @@ import type { Controller } from '~/lib/request-fx/types';
 
 import { apiBaseUrl, request } from './request-setup';
 
-const ensureCacheParam = (query = ''): string => {
-  const normalized = query.startsWith('?') ? query.slice(1) : query;
-  const params = new URLSearchParams(normalized);
-
-  if (!params.has('cache')) {
-    params.set('cache', 'False');
-  }
-
-  const nextQuery = params.toString();
-  return nextQuery ? `?${nextQuery}` : '';
-};
-
 export const getDatasetUrl = (countryCode: string): string =>
   `${apiBaseUrl}api/locations/countries/${encodeURIComponent(countryCode)}/schools/export-csv-schools/`;
 
@@ -153,13 +141,13 @@ export const fetchConnectivityLayerFx = createEffect(
 
 export const fetchEntitiesConnectivityStatsFx = createEffect(
   async ({
-    query
+    query = ''
   }: {
     query: string;
   },
   ): Promise<EntitiesConnectivityStatsResponse> => {
     return fetchLayerInfoFx(
-      `api/v2/entities/connectivity-stat/${ensureCacheParam(query)}`
+      `api/v2/entities/connectivity-stat/${query}`
     ) as Promise<EntitiesConnectivityStatsResponse>
   }
 );
