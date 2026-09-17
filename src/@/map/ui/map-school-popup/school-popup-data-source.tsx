@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSourceByEntity } from '~/@/country/country.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
+import { type EntityType } from '~/@/entities/types/base-entity.type';
 import { $activeSchoolPopup } from '~/@/map/map.model';
 import {
   $currentLayerCountryDataSource,
@@ -73,11 +73,7 @@ const SchoolPopupDataSource = ({
       dataSourceName: names.filter(Boolean),
       dataSourceDescription: desc,
     };
-  }, [
-    currentDataSource?.name,
-    currentDataSource?.description,
-    dataSource,
-  ]);
+  }, [currentDataSource?.name, currentDataSource?.description, dataSource]);
 
   const handleClick = (name: string) => {
     const { url } = parseNameAndUrl(name);
@@ -94,12 +90,7 @@ const SchoolPopupDataSource = ({
     : dataSourceName.slice(0, MAX_VISIBLE_CHIPS);
   const remainingCount = dataSourceName.length - MAX_VISIBLE_CHIPS;
 
-  if (
-    currentEntityType === EntityType.HEALTH ||
-    !dataSourceName?.length
-  ) {
-    return null;
-  }
+  if (!dataSourceName?.length) return null;
 
   return (
     <div className="flex! flex-col! gap-2!">
@@ -136,7 +127,9 @@ const SchoolPopupDataSource = ({
               </TooltipProvider>
             );
           }
-          return <React.Fragment key={`${raw}-${index}`}>{chipNode}</React.Fragment>;
+          return (
+            <React.Fragment key={`${raw}-${index}`}>{chipNode}</React.Fragment>
+          );
         })}
 
         {hasOverflow && !isExpanded && (
