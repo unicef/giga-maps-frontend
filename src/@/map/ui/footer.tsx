@@ -110,7 +110,9 @@ const Footer = () => {
   const { country: isCountry } = useStore($mapRoutes);
   const isMobile = useStore($isMobile);
   const showNotification = useStore($showDisclaimerNotification);
-  const showDisclaimer = isCountry && !showNotification && !isMobile;
+  const disclaimerText = country?.country_disclaimer?.trim();
+  const showDisclaimer =
+    isCountry && !showNotification && !isMobile && Boolean(disclaimerText);
 
   return (
     <FooterWrapper>

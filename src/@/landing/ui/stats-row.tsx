@@ -8,7 +8,7 @@ import { $headlineStats, $isStatsLoading } from '../landing.model';
 
 const STAT_LABELS: Record<string, string> = {
   countries: LANDING_COPY.statCountries,
-  health: LANDING_COPY.statHealthCenters,
+  health: LANDING_COPY.statHealthFacilities,
   schools: LANDING_COPY.statSchools,
 };
 

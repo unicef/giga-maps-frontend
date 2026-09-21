@@ -41,7 +41,6 @@ export const aboutus = router.add('/about');
 export const tour = router.add('/map/tour');
 
 // Project section
-export const landing = router.add('/landing');
 export const media = router.add('/media');
 export const countryProgress = router.add('/country-progress');
 export const joinUs = router.add('/join-us');

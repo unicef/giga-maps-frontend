@@ -77,20 +77,18 @@ const ProgressBar = ({
                 id={toggleControlId}
                 onPressedChange={() => toggleProps?.onToggle?.()}
                 pressed={isToggled}
-                className="relative! h-5! min-w-11! rounded-full! bg-[#dadada]! p-0! hover:bg-[#dadada]! data-[state=on]:bg-[var(--toggle-on-bg)]!"
+                className="relative! h-5! min-w-11! rounded-full! bg-surface-elevated! p-0! hover:bg-surface-elevated! data-[state=on]:bg-[var(--toggle-on-bg)]!"
                 style={
                   {
-                    '--toggle-on-bg': backColor || colorType || '#dadada',
+                    '--toggle-on-bg': backColor || colorType,
                   } as CSSProperties
                 }
               >
                 <span
-                  className="absolute! left-[0.1875rem]! top-[0.125rem]! size-[0.9rem]! rounded-full! bg-[#595959]! transition-transform! data-[state=on]:translate-x-[1.625rem]!"
+                  className="absolute! left-[0.1875rem]! top-[0.125rem]! size-[0.9rem]! rounded-full! bg-icon-secondary! transition-transform! data-[state=on]:translate-x-[1.625rem]!"
                   data-state={isToggled ? 'on' : 'off'}
                   style={{
-                    backgroundColor: isToggled
-                      ? colorType || '#595959'
-                      : '#595959',
+                    backgroundColor: isToggled ? colorType : undefined,
                     boxShadow: isToggled ? '0 3px 7px #aba8a8' : undefined,
                   }}
                 />
@@ -114,7 +112,7 @@ const ProgressBar = ({
             <TooltipTrigger asChild>
               <button
                 aria-label={label}
-                className="flex! h-2! flex-1! cursor-pointer! items-center! rounded-full! border-0! bg-[#f2f2f2]! p-0! shadow-none!"
+                className="flex! h-2! flex-1! cursor-pointer! items-center! rounded-full! border-0! bg-muted! p-0! shadow-none!"
                 type="button"
               >
                 <span

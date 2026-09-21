@@ -18,6 +18,7 @@ import { HeroGlobe } from './hero-globe';
 interface HeroSectionProps {
   data: HeroData;
   media?: React.ReactNode;
+  showMedia?: boolean;
 }
 
 // The globe slot is mounted conditionally rather than hidden with CSS, so the
@@ -26,14 +27,18 @@ export const HeroSection = ({
   children,
   data,
   media,
+  showMedia = true,
 }: React.PropsWithChildren<HeroSectionProps>) => {
-  const isMobile = useStore($isMobile);
+  const storeIsMobile = useStore($isMobile);
+  const isMobile =
+    storeIsMobile || window.matchMedia('(max-width: 768px)').matches;
 
   return (
     <section
       className={cn(
         LANDING_CONTAINER,
         LANDING_ANCHOR,
+        'relative! z-[1]!',
         'py-12! tablet:py-24!',
         // First screen on desktop, minus the sticky header (h-16). `min-h` so
         // longer translated copy grows the section instead of overflowing it.
@@ -72,7 +77,7 @@ export const HeroSection = ({
           ) : null}
         </div>
 
-        {isMobile ? null : (
+        {isMobile || !showMedia ? null : (
           <div
             className="flex! items-center! justify-center!"
             data-slot="hero-media"
@@ -80,7 +85,7 @@ export const HeroSection = ({
             {media ??
               (data.media ? (
                 isVideoUrl(data.media) ? (
-                  <HeroGlobe src={data.media} />
+                  <HeroGlobe fallbackSrc={data.media} />
                 ) : (
                   // LCP of the page: never lazy.
                   <img

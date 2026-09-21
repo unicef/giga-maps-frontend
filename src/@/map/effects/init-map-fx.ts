@@ -32,10 +32,8 @@ export const initMapFx = createEffect(
         }
       });
 
-      map.dragRotate.disable();
-      map.touchZoomRotate.disableRotation();
-      map.on('load', () => {
-        changeMap(map);
+      map.on('zoom', () => {
+        onZoomLevelChange(Number(map.getZoom().toFixed(2)));
       });
 
       map.on('zoomstart', (e) => {

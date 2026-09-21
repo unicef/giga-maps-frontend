@@ -33,7 +33,7 @@ export const SearchButtonGroup = () => {
     <div className="shrink-0!">
       <div className="flex! gap-2! p-2!">
         <Button
-          className="h-10! flex-1! rounded-full! border! border-border! bg-surface-panel! text-sm! font-medium! text-foreground! shadow-none! hover:bg-surface-elevated! hover:shadow-sm!"
+          className="h-10! flex-1! rounded-full! border-0! bg-secondary! text-sm! font-medium! text-secondary-foreground! shadow-none! hover:bg-surface-highlight! hover:shadow-sm!"
           data-testid="selected-school-close-button"
           disabled={!size}
           onClick={() => resetSchoolSelection()}
@@ -56,7 +56,7 @@ export const SearchButtonGroup = () => {
         </Button>
       </div>
 
-      <div className="flex! items-center! justify-end! gap-2! bg-surface-panel! px-4! py-2!">
+      <div className="flex! items-center! justify-end! gap-2! bg-surface-panel-raised! px-4! py-2!">
         <div className="relative! flex! items-center!">
           <select
             aria-label={t('page')}
@@ -69,7 +69,7 @@ export const SearchButtonGroup = () => {
           >
             {Array.from({ length: pageCount }, (_, index) => (
               <option
-                className="bg-surface-panel! text-foreground!"
+                className="bg-surface-panel-raised! text-foreground!"
                 key={index}
                 value={index}
               >

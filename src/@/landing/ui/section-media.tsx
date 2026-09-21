@@ -11,7 +11,6 @@ import { useInViewport } from '../use-in-viewport';
 interface SectionMediaProps {
   className?: string;
   image: string;
-  video?: string;
 }
 
 const ASPECT = 'aspect-[824/588]';
@@ -102,12 +101,8 @@ const SectionVideo = ({ src }: { src: string }) => {
 const FRAME = 'order-2 overflow-hidden! rounded-lg! bg-card!';
 const CHROME = 'border! border-border!';
 
-export const SectionMedia = ({
-  className,
-  image,
-  video,
-}: SectionMediaProps) => {
-  const source = video || (isVideoUrl(image) ? image : '');
+export const SectionMedia = ({ className, image }: SectionMediaProps) => {
+  const source = isVideoUrl(image) ? image : '';
 
   if (source) {
     return (

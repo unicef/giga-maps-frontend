@@ -1411,6 +1411,8 @@ export const $selectedSchoolIds = $getSchoolParams.map(
 
 // all reset model
 $statusLayerIdByEntity.reset(mapOverview.visible);
+
+$selectedLayerIdByEntity.reset(mapOverview.visible);
 $staticLegendsSelectedByEntity.reset([resetFilterModal, mapOverview.visible]);
 $connectivityBenchMarkByEntity.reset(resetFilterModal, mapOverview.visible);
 $connectivitySpeedFilterByEntity.reset([resetFilterModal, mapOverview.visible]);

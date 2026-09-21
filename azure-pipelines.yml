@@ -4,6 +4,7 @@ trigger:
       - entity-development-base
       - develop
       - staging
+      - entity-stg-base
   tags:
     include:
       - 'release-*'
@@ -71,6 +72,8 @@ steps:
         --build-arg=VITE_ENV=$(ENV_DEV)
         --build-arg=VITE_MATOMO_SITE_ID=$(MATOMO_SITE_ID_DEV)
         --build-arg=VITE_AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
+        --build-arg=VITE_POSTHOG_KEY=$(POSTHOG_KEY_DEV)
+        --build-arg=VITE_POSTHOG_HOST=$(POSTHOG_HOST_DEV)
         --build-arg=VITE_GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_DEV)
       tags: |
         $(tag)
@@ -98,13 +101,17 @@ steps:
         --build-arg=VITE_B2C_CLIENT_ID=$(B2C_CLIENT_ID_STG)
         --build-arg=VITE_ENV=$(ENV_STG)
         --build-arg=VITE_MATOMO_SITE_ID=$(MATOMO_SITE_ID_STG)
+        --build-arg=VITE_POSTHOG_KEY=$(POSTHOG_KEY_STG)
+        --build-arg=VITE_POSTHOG_HOST=$(POSTHOG_HOST_STG)
         --build-arg=VITE_AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
         --build-arg=VITE_GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_STG)
       tags: |
         $(tag)
     condition:
-      and( succeeded(), eq(variables['Build.SourceBranch'],
-      'refs/heads/staging') )
+      and(
+        succeeded(),
+        in(variables['Build.SourceBranch'], 'refs/heads/staging', 'refs/heads/entity-stg-base')
+      )
 
   - task: Docker@2
     displayName: Stg - Push image
@@ -115,8 +122,10 @@ steps:
       tags: |
         $(tag)
     condition:
-      and( succeeded(), eq(variables['Build.SourceBranch'],
-      'refs/heads/staging') )
+      and(
+        succeeded(),
+        in(variables['Build.SourceBranch'], 'refs/heads/staging', 'refs/heads/entity-stg-base')
+      )
 
   - task: Docker@2
     displayName: Prod - Build image
@@ -132,6 +141,8 @@ steps:
         --build-arg=VITE_B2C_CLIENT_ID=$(B2C_CLIENT_ID_PROD)
         --build-arg=VITE_ENV=$(ENV_PROD)
         --build-arg=VITE_MATOMO_SITE_ID=$(MATOMO_SITE_ID_PROD)
+        --build-arg=VITE_POSTHOG_KEY=$(POSTHOG_KEY_PROD)
+        --build-arg=VITE_POSTHOG_HOST=$(POSTHOG_HOST_PROD)
         --build-arg=VITE_AIRTABLE_API_KEY=$(AIRTABLE_API_KEY)
         --build-arg=VITE_GIGA_METER_API_HOST=$(GIGA_METER_API_HOST_PROD)
       tags: |

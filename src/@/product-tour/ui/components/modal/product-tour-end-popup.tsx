@@ -30,7 +30,7 @@ const ProductTourEndPopup = ({ open, setOpen }:
       </ModalHeader>
       <ModalBody $style={$tourStartModalBody}>
         <TourStartDescription>
-          {t('have-any-comment-or-feedback')} <CarbonLink href={'/about#live-map-get-in-touch'} target='_blank'> {t('contact-us')}</CarbonLink>
+          {t('have-any-comment-or-feedback')} <CarbonLink href={'/about#contact'} target='_blank'> {t('contact-us')}</CarbonLink>
         </TourStartDescription>
         <BottonContainer>
           <Link to={map}>

@@ -87,12 +87,12 @@ const EntitySummaryCardContent = ({
                   >
                     {formatNumber(metric.value, lng)}
                     {metric.estimate ? (
-                      <span className="ml-1.5! text-[11px]! font-medium! leading-[14px]! text-[#a8a8a8]">
+                      <span className="ml-1.5! text-[11px]! font-medium! leading-[14px]! text-muted-foreground">
                         {metric.estimate}
                       </span>
                     ) : null}
                   </div>
-                  <p className="m-0! mt-1! text-[11px]! leading-3.5! text-[#a8a8a8]">
+                  <p className="m-0! mt-1! text-[11px]! leading-3.5! text-muted-foreground">
                     {metric.detail}
                   </p>
                 </>

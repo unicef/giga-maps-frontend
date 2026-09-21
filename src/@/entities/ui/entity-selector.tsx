@@ -13,18 +13,19 @@ import {
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import FilterButton from '~/@/map/ui/advanced-filter/filter';
-import { $isSidebarCollapsed } from '~/@/sidebar/sidebar.model';
+import { $isSidebarCollapsed, $isTimeplayer } from '~/@/sidebar/sidebar.model';
 import { Button } from '~/components/ui/button';
 import { $isMobile } from '~/core/media-query';
 import { mapEntity } from '~/core/routes';
 import { cn } from '~/lib/cn';
 
 const base =
-  'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-medium! leading-5! shadow-none! whitespace-nowrap!';
+  'h-9! gap-2! rounded-lg! border px-4! py-2! text-sm! font-semibold! leading-5! shadow-sm! whitespace-nowrap!';
 const active =
-  'border-[#393939]! bg-[#393939]! text-white! hover:bg-[#4c4c4c]! hover:text-white!';
+  'border-border! bg-pill-bg-active! text-pill-foreground-active! hover:bg-pill-bg-active! hover:text-pill-foreground-active!';
+// Hover only moves the fill; the label keeps its resting colour.
 const inactive =
-  'border-[#161616]! bg-[#161616]! text-white! hover:bg-[#262626]! hover:text-white!';
+  'border-border! bg-pill-bg! text-pill-foreground! hover:bg-pill-bg-hover! hover:text-pill-foreground!';
 
 /**
  * Entity type selector - floating pill bar over the map.
@@ -37,10 +38,11 @@ export default function EntityTypeSelector() {
   const isGlobalMode = useStore($isGlobalMode);
   const isEntityView = useStore(mapEntity.visible);
   const isSidebarCollapsed = useStore($isSidebarCollapsed);
+  const isTimeplayer = useStore($isTimeplayer);
 
   const entityTypes = Object.entries(entityRegistry);
 
-  if (entityTypes.length <= 1 || isEntityView) {
+  if (entityTypes.length <= 1 || isEntityView || isTimeplayer) {
     return null;
   }
 
@@ -66,9 +68,9 @@ export default function EntityTypeSelector() {
       className={
         !isMobile
           ? cn(
-            'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
-            isSidebarCollapsed ? 'left-4!' : 'left-86!',
-          )
+              'fixed top-2 z-[3] flex items-center gap-2 rounded-full transition-all duration-300',
+              isSidebarCollapsed ? 'left-4!' : 'left-86!',
+            )
           : cn('flex items-center gap-2 p-1! overflow-auto')
       }
     >
@@ -95,8 +97,8 @@ export default function EntityTypeSelector() {
             onClick={(event) => handleEntityClick(entityType, event)}
           >
             <EntityLegendIndicator
-              className="ml-0!"
-              color={isActive ? '#f4f4f4' : '#d9d9d9'}
+              className="ml-0! text-pill-indicator!"
+              color="currentColor"
               entityType={type}
               fitToViewBox
               size={8}

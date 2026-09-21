@@ -46,9 +46,10 @@ interface ImportMetaEnv {
   readonly VITE_MATOMO_SITE_ID: string;
   readonly VITE_GIGA_METER_API_HOST: string;
   readonly VITE_AIRTABLE_API_KEY: string;
-  readonly VITE_RECAPTCHA_KEY: string;
   readonly VITE_LOOMFLOW_API_KEY: string;
   readonly MODE: string;
+  readonly VITE_POSTHOG_KEY: string;
+  readonly VITE_POSTHOG_HOST: string;
 }
 
 interface ImportMeta {

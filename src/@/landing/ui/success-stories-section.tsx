@@ -13,13 +13,15 @@ import {
   STORIES_PAGE_SIZE,
 } from '../landing.constant';
 import { $stories, $storiesIntro } from '../landing.model';
-import { CmsSectionType } from '../landing.types';
+import { CmsSectionType, StoryData } from '../landing.types';
 import { SectionHeading } from './section-heading';
+import { StoryDialog } from './story-dialog';
 
 export const SuccessStoriesSection = () => {
   const intro = useStore($storiesIntro);
   const stories = useStore($stories);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selected, setSelected] = useState<StoryData | null>(null);
 
   if (stories.length === 0) return null;
 
@@ -36,41 +38,42 @@ export const SuccessStoriesSection = () => {
       <ul className="m-0! grid! list-none! gap-8! p-0! tablet:grid-cols-3! tablet:gap-6!">
         {visible.map((story) => (
           <li className="flex!" key={story.id}>
-            <Card className="h-full! w-full! gap-0! overflow-hidden! rounded-lg! border-border! py-0! transition-shadow hover:bg-muted! hover:shadow-md!">
-              {story.image ? (
-                <img
-                  alt=""
-                  className="aspect-[16/10]! w-full! object-cover!"
-                  loading="lazy"
-                  src={story.image}
-                />
-              ) : null}
-
-              <CardContent className="flex! flex-1! flex-col! items-start! p-6!">
-                {story.title ? (
-                  <h3 className="m-0! text-base! font-semibold! text-foreground!">
-                    {story.title}
-                  </h3>
+            {/* The whole card opens the dialog, so the CMS link cannot stay
+                nested here; it moves inside the dialog. */}
+            <button
+              className="flex! w-full! cursor-pointer! appearance-none! border-0! bg-transparent! p-0! text-left!"
+              onClick={() => setSelected(story)}
+              type="button"
+            >
+              <Card className="h-full! w-full! gap-0! overflow-hidden! rounded-lg! border-border! py-0! transition-shadow hover:bg-muted! hover:shadow-md!">
+                {story.image ? (
+                  <img
+                    alt=""
+                    className="aspect-[16/10]! w-full! object-cover!"
+                    loading="lazy"
+                    src={story.image}
+                  />
                 ) : null}
 
-                {story.body ? (
-                  <p className="mt-2! mb-0! line-clamp-3! text-sm! text-muted-foreground!">
-                    {story.body}
-                  </p>
-                ) : null}
+                <CardContent className="flex! flex-1! flex-col! items-start! p-6!">
+                  {story.title ? (
+                    <h3 className="m-0! text-base! font-semibold! text-foreground!">
+                      {story.title}
+                    </h3>
+                  ) : null}
 
-                {story.ctaLink ? (
-                  <a
-                    className="mt-4! text-sm! font-medium! text-primary! transition-colors hover:text-primary/80!"
-                    href={story.ctaLink}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {LANDING_COPY.readStory}
-                  </a>
-                ) : null}
-              </CardContent>
-            </Card>
+                  {story.body ? (
+                    <p className="mt-2! mb-0! line-clamp-3! text-sm! text-muted-foreground!">
+                      {story.body}
+                    </p>
+                  ) : null}
+
+                  <span className="mt-4! text-sm! font-medium! text-primary!">
+                    {LANDING_COPY.readMore}
+                  </span>
+                </CardContent>
+              </Card>
+            </button>
           </li>
         ))}
       </ul>
@@ -86,6 +89,13 @@ export const SuccessStoriesSection = () => {
           </Button>
         </div>
       ) : null}
+
+      <StoryDialog
+        onOpenChange={(open) => {
+          if (!open) setSelected(null);
+        }}
+        story={selected}
+      />
     </section>
   );
 };

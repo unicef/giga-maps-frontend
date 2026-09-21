@@ -34,7 +34,7 @@ const $loadingStatus = restore(setLoadingState, 'active');
 
 // check for data load
 let timeout: ReturnType<typeof setTimeout>;
-let mapDataTilesOnLoad = (e: MapEventType) => {};
+let mapDataTilesOnLoad = (_e?: MapEventType) => {};
 
 sample({
   clock: merge([$map, $loadingStatus]),
@@ -49,7 +49,7 @@ sample({
     ({ map, dataChecking }: { map: Map; dataChecking: boolean }) => {
       if (!map || dataChecking) return;
       setDataChecking(true);
-      mapDataTilesOnLoad = function (e: MapEventType) {
+      mapDataTilesOnLoad = function (_e?: MapEventType) {
         clearTimeout(timeout);
         setLoadingState('loading');
         if ($mapPercent.getState() < 73) {
@@ -58,7 +58,15 @@ sample({
         timeout = setTimeout(() => {
           const hasDefaultSource = !!map.getSource(DEFAULT_SOURCE);
           const hasStaticSource = !!map.getSource(CONNECTIVITY_STATUS_SOURCE);
-          const defaultSourceLoaded = !hasDefaultSource || map.isSourceLoaded(DEFAULT_SOURCE);
+          const defaultSource = map.getSource(DEFAULT_SOURCE) as any;
+          const admin1Code = $admin1Code.getState();
+          const defaultSourceLoaded = admin1Code
+            ? Boolean(
+                defaultSource &&
+                (defaultSource?.tiles?.[0] ?? '').includes('admin1_id') &&
+                map.isSourceLoaded(DEFAULT_SOURCE)
+              )
+            : !hasDefaultSource || map.isSourceLoaded(DEFAULT_SOURCE);
           const staticSourceLoaded = !hasStaticSource || map.isSourceLoaded(CONNECTIVITY_STATUS_SOURCE);
           const areTilesLoaded = map.areTilesLoaded();
 
@@ -76,6 +84,8 @@ sample({
               setLoadingState('finished');
             }, 600);
             map.off('data', mapDataTilesOnLoad);
+          } else if (admin1Code) {
+            timeout = setTimeout(mapDataTilesOnLoad, 200);
           }
         });
       };
@@ -94,6 +104,7 @@ const resetState = [
 $isMapLoading.reset(resetState);
 $loadingStatus.reset(resetState);
 $mapPercent.reset(resetState);
+$dataChecking.reset(resetState);
 
 const TopLoader = () => {
   const loadingStatus = useStore($loadingStatus);

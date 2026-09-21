@@ -86,10 +86,13 @@ export const AccessibilityButton = () => {
           sideOffset={12}
         >
           <div className="flex! flex-col! gap-4!">
+            <p className="m-0! text-sm! leading-5! text-foreground!">
+              {t('accessible-mode')}
+            </p>
             <div className="inline-flex! items-center!">
               <Toggle
                 aria-label={t('accessible-mode')}
-                className="h-6! w-11! min-w-11! shrink-0! justify-start! gap-0! rounded-full! bg-[#474747]! p-0.5! shadow-none! hover:bg-[#474747]! data-[state=on]:bg-connectivity-green-600! data-[state=on]:text-white!"
+                className="h-6! w-11! min-w-11! shrink-0! justify-start! gap-0! rounded-full! bg-gray-800! p-0.5! shadow-none! hover:bg-gray-800! data-[state=on]:bg-connectivity-green-600! data-[state=on]:text-white!"
                 onPressedChange={(nextPressed) => {
                   void onAccessibleModeChange(nextPressed);
                 }}

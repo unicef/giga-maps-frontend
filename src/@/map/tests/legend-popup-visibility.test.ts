@@ -48,4 +48,25 @@ describe('legend popup visibility', () => {
       }),
     ).toBe(false);
   });
+
+  test('hides when timeplayer is active', () => {
+    expect(
+      shouldOpenLegendPopup({
+        open: true,
+        isMobile: false,
+        isCountryListOpen: false,
+        isSearchListOpen: false,
+        isTimeplayer: true,
+      }),
+    ).toBe(false);
+    expect(
+      shouldOpenLegendPopup({
+        open: true,
+        isMobile: true,
+        isCountryListOpen: false,
+        isSearchListOpen: false,
+        isTimeplayer: true,
+      }),
+    ).toBe(false);
+  });
 });

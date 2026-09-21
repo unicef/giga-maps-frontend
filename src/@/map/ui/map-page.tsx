@@ -58,7 +58,7 @@ const MapPage = () => {
           </ErrorBoundary>
         </PopupContainer>
       </Main>
-      {!isMobile && (
+      {!isMobile && !isTimeplayer && (
         <ErrorBoundary name="EntityTypeSelector" variant="inline">
           <EntityTypeSelector />
         </ErrorBoundary>

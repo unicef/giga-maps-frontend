@@ -1,10 +1,9 @@
 import { useStore } from 'effector-react';
-import { Info } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { $dataSourceByEntity } from '~/@/country/country.model';
-import { EntityType } from '~/@/entities/types/base-entity.type';
+import { type EntityType } from '~/@/entities/types/base-entity.type';
 import { $activeSchoolPopup } from '~/@/map/map.model';
 import {
   $currentLayerCountryDataSource,
@@ -74,13 +73,7 @@ const SchoolPopupDataSource = ({
       dataSourceName: names.filter(Boolean),
       dataSourceDescription: desc,
     };
-  }, [
-    currentDataSource?.name,
-    currentDataSource?.description,
-    dataSource,
-  ]);
-
-  if (!dataSourceName?.length) return null;
+  }, [currentDataSource?.name, currentDataSource?.description, dataSource]);
 
   const handleClick = (name: string) => {
     const { url } = parseNameAndUrl(name);
@@ -97,29 +90,12 @@ const SchoolPopupDataSource = ({
     : dataSourceName.slice(0, MAX_VISIBLE_CHIPS);
   const remainingCount = dataSourceName.length - MAX_VISIBLE_CHIPS;
 
+  if (!dataSourceName?.length) return null;
+
   return (
     <div className="flex! flex-col! gap-2!">
       <div className="flex! items-center! gap-1.5! text-xs! font-normal! leading-[18px]! text-black! dark:text-white!">
         <span>{t('data-source', { defaultValue: 'Data source' })}</span>
-        <TooltipProvider delayDuration={150}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                className="inline-flex! cursor-pointer! text-gray-700! transition-colors! hover:text-black! focus:outline-none! dark:text-white/80! dark:hover:text-white!"
-                aria-label={t('data-is-sourced-research-institutions')}
-              >
-                <Info className="size-3.5!" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="max-w-xs! text-xs!">
-              {t('data-is-sourced-research-institutions', {
-                defaultValue:
-                  'Data is sourced from various public and research institutions',
-              })}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
 
       <div className="flex! flex-wrap! items-center! gap-2!">
@@ -131,7 +107,7 @@ const SchoolPopupDataSource = ({
               type="button"
               onClick={() => handleClick(raw)}
               className={cn(
-                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-gray-400! dark:hover:text-white!',
+                'inline-flex! items-center! gap-2.5! rounded-md! bg-gray-200! px-2.5! py-0.5! text-left! text-xs! font-normal! leading-[18px]! text-gray-700! transition-colors! hover:bg-surface-highlight! hover:text-foreground! dark:bg-gray-800! dark:text-gray-400! dark:hover:text-white!',
                 url ? 'cursor-pointer!' : 'cursor-default!',
               )}
             >
@@ -151,7 +127,9 @@ const SchoolPopupDataSource = ({
               </TooltipProvider>
             );
           }
-          return <React.Fragment key={`${raw}-${index}`}>{chipNode}</React.Fragment>;
+          return (
+            <React.Fragment key={`${raw}-${index}`}>{chipNode}</React.Fragment>
+          );
         })}
 
         {hasOverflow && !isExpanded && (

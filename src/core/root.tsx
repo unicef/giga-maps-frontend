@@ -8,15 +8,14 @@ import WebFont from 'webfontloader';
 
 import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { TooltipProvider } from '~/components/ui/tooltip';
-import { aboutus, admin, apiDocs, landing, map, router } from '~/core/routes';
+import { aboutus, admin, apiDocs, map, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { appLoadEvent } from './init';
 import PageNotFound from './page-no-found';
 import { $theme, themeData } from './theme.model';
 
-const AboutPage = lazy(async () => import('~/@/about-giga-map/ui'));
-const LandingPage = lazy(async () => import('@/landing/ui'));
+const AboutPage = lazy(async () => import('@/landing/ui'));
 const MapPage = lazy(async () => import('@/map/ui'));
 const AuthRoot = lazy(async () => import('./auth-root'));
 
@@ -31,7 +30,7 @@ export const Root = () => {
         families: [
           'Open Sans:100,200,300,400,500,600,700,800,900',
           // 200 is used by the sidebar (font-extralight); 500 is the brand
-          // weight for Manrope headings and is required by the landing page.
+          // weight for Manrope headings and is required by the About page.
           'Manrope:200,500',
         ],
       },
@@ -54,33 +53,36 @@ export const Root = () => {
     <Suspense fallback={<Loading withOverlay={true} />}>
       <ThemeProvider theme={themeData[theme]}>
         <TooltipProvider>
-          {useRoute(map) && (
-            <ErrorBoundary name="MapPage" variant="page">
-              <MapPage />
-            </ErrorBoundary>
-          )}
-          {(apiDocsRoute || adminRoute) && (
-            <ErrorBoundary name="AuthRoot" variant="page">
-              <AuthRoot />
-            </ErrorBoundary>
-          )}
-          {useRoute(aboutus) && (
-            <ErrorBoundary name="AboutPage" variant="page">
-              <AboutPage />
-            </ErrorBoundary>
-          )}
-          {useRoute(landing) && (
-            <ErrorBoundary name="LandingPage" variant="page">
-              <LandingPage />
-            </ErrorBoundary>
-          )}
-          {useStore(router.noMatches) && (
-            <ErrorBoundary name="PageNotFound" variant="page">
-              <PageNotFound />
-            </ErrorBoundary>
-          )}
-        </TooltipProvider>
-      </ThemeProvider>
-    </Suspense>
+          {
+            useRoute(map) && (
+              <ErrorBoundary name="MapPage" variant="page">
+                <MapPage />
+              </ErrorBoundary>
+            )
+          }
+          {
+            (apiDocsRoute || adminRoute) && (
+              <ErrorBoundary name="AuthRoot" variant="page">
+                <AuthRoot />
+              </ErrorBoundary>
+            )
+          }
+          {
+            useRoute(aboutus) && (
+              <ErrorBoundary name="AboutPage" variant="page">
+                <AboutPage />
+              </ErrorBoundary>
+            )
+          }
+          {
+            useStore(router.noMatches) && (
+              <ErrorBoundary name="PageNotFound" variant="page">
+                <PageNotFound />
+              </ErrorBoundary>
+            )
+          }
+        </TooltipProvider >
+      </ThemeProvider >
+    </Suspense >
   );
 };

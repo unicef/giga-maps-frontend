@@ -80,3 +80,33 @@ export const $countryAdvancedFiltersReady = combine(
     );
   },
 );
+
+/** Active entity types that have published filters, in popup display order. */
+export const $entitiesWithFilters = combine(
+  { activeEntityTypes: $activeEntityTypes, filters: $advanceFilterList },
+  ({ activeEntityTypes, filters }) =>
+    activeEntityTypes
+      .filter((entityType) =>
+        filters.some((item) => item.entity_type === entityType),
+      )
+      .sort((a, b) => (a < b ? 1 : -1)),
+);
+
+// $advanceFilterList keeps the previous country's rows until the new fetch
+// lands, so availability stays unknown — not "none" — while it is in flight.
+const $advancedFilterListSettled = combine(
+  {
+    countryId: $country.map((country) => country?.id ?? null),
+    loadedCountryId: $advancedFilterCountryId,
+    isPending: fetchAdvanceFilterFx.pending,
+  },
+  ({ countryId, loadedCountryId, isPending }) =>
+    !isPending && countryId !== null && loadedCountryId === countryId,
+);
+
+export const $isAdvancedFilterUnavailable = combine(
+  $advancedFilterListSettled,
+  $entitiesWithFilters,
+  (isSettled, entitiesWithFilters) =>
+    isSettled && entitiesWithFilters.length === 0,
+);

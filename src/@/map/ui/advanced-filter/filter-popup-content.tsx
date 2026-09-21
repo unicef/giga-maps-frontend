@@ -33,6 +33,7 @@ import {
   suppressDefaultAdvancedFilters,
 } from './advanced-filter.model';
 import CollapsibleFilterChips from './collapsible-filter-chips';
+import { $entitiesWithFilters } from './country-filter-readiness.model';
 import {
   buildFilterChipsByEntity,
   dedupeAdvanceFiltersByColumnKey,
@@ -195,13 +196,7 @@ const FilterPopupContent = ({
     navigateWithSearchParams(params);
   };
 
-  const entitiesWithFilters = useMemo(() => {
-    return activeEntityTypes
-      .filter((el) =>
-        uniqueAdvanceFilterList.some((item) => item.entity_type === el),
-      )
-      .sort((a, b) => (a < b ? 1 : -1));
-  }, [activeEntityTypes, uniqueAdvanceFilterList]);
+  const entitiesWithFilters = useStore($entitiesWithFilters);
 
   const selectedFilterChipsByEntity = useMemo(() => {
     return buildFilterChipsByEntity(

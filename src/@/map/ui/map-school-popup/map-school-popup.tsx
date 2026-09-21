@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { setSchoolFocusLatLng } from '~/@/country/country.model';
 import { $entityRegistry } from '~/@/entities/models/entity.model';
+import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { navigateToEntity } from '~/@/entities/utils/entity-navigation';
 import { ConnectivityStatusNames } from '~/@/sidebar/ui/global-and-country-view-components/container/layer-view.constant';
@@ -17,6 +18,11 @@ import SchoolPopupDataSource from './school-popup-data-source';
 import useSchoolPopupData, { PopupFeatureItem } from './school-popup-hook';
 import { SchoolPopupLoading } from './school-popup-loading.view';
 import { UNKNOWN } from '../../map.types';
+
+const ENTITY_PAGE_COPY_KEYS: Record<EntityType, string> = {
+  [EntityType.SCHOOL]: 'go-to-school-page',
+  [EntityType.HEALTH]: 'go-to-health-facility-page',
+};
 
 export const MapSchoolPopup = () => {
   const { t } = useTranslation();
@@ -103,7 +109,7 @@ export const MapSchoolPopup = () => {
                           {feature?.isVerifiedSchool === false && (
                             <Badge
                               variant="outline"
-                              className="min-h-5! rounded-md! border-transparent! bg-[#FCD34D]! px-2! py-0.5! text-xs! font-normal! leading-4! text-[#44403C]! hover:bg-[#FCD34D]!"
+                              className="min-h-5! rounded-md! border-transparent! bg-warning/15! px-2! py-0.5! text-xs! font-normal! leading-4! text-warning! hover:bg-warning/15!"
                             >
                               Unverified
                             </Badge>
@@ -195,7 +201,7 @@ export const MapSchoolPopup = () => {
                       {/* Action Button */}
                       {targetEntityType && (feature?.id || schoolId) && isClicked && (
                         <Button
-                          className="go-to-school mt-1! w-full! cursor-pointer! justify-center! gap-1.5! rounded-full! border-0! bg-[#005BED]! px-2.5! py-2! text-sm! font-medium! text-[#FAFAFA]! shadow-xs! transition-all! hover:bg-[#0052D6]! focus:outline-none! active:bg-[#0047B3]!"
+                          className="go-to-school mt-1! w-full! cursor-pointer! justify-center! gap-1.5! rounded-full! border-0! bg-primary! px-2.5! py-2! text-sm! font-medium! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
                           onClick={() => {
                             const targetId = feature?.id ?? schoolId;
                             if (targetId && targetEntityType) {
@@ -215,7 +221,7 @@ export const MapSchoolPopup = () => {
                           type="button"
                         >
                           <span>
-                            {t('go-to-entity-page', {
+                            {t(ENTITY_PAGE_COPY_KEYS[targetEntityType], {
                               entity: itemEntityLabel,
                               defaultValue: `Go to ${itemEntityLabel} page`,
                             })}

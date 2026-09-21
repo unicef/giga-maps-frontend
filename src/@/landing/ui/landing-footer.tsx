@@ -1,6 +1,5 @@
 import { useStore } from 'effector-react';
 
-import GigaMapsLogo from '~/assets/images/GigaMaps.svg';
 import { Card } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 import { cn } from '~/lib/cn';
@@ -23,6 +22,16 @@ const cmsHtml = cn(
   '[&_svg]:size-5! [&_img]:h-5! [&_img]:w-auto!',
 );
 
+// The marks keep the intrinsic size the admin authored: UNICEF is a wordmark and
+// ITU a square, so a shared height distorts one of the two.
+const accreditationHtml = cn(
+  'flex! items-center!',
+  '[&_a]:text-xs! [&_a]:text-muted-foreground! [&_a]:transition-colors [&_a:hover]:text-foreground!',
+  // Several marks are authored as `<svg fill="none">`; without this the paths
+  // inherit `none` and the mark renders blank. See the social links below.
+  '[&_svg]:block! [&_svg]:fill-foreground!',
+);
+
 export const LandingFooter = () => {
   const footer = useStore($footer);
 
@@ -32,19 +41,8 @@ export const LandingFooter = () => {
       data-slot="landing-footer"
     >
       <div className={LANDING_CONTAINER}>
-        {/* See landing-header.tsx. */}
-        <span className="flex! h-8! items-center! [&_path]:fill-foreground! [&_svg]:h-full! [&_svg]:w-auto!">
-          <GigaMapsLogo />
-        </span>
-
-        {footer.tagline ? (
-          <p className="mt-4! max-w-prose! text-base! text-muted-foreground!">
-            {footer.tagline}
-          </p>
-        ) : null}
-
         {footer.linkColumns.length > 0 ? (
-          <div className="mt-12! grid! gap-4! tablet:grid-cols-3! tablet:gap-6!">
+          <div className="grid! gap-4! tablet:grid-cols-3! tablet:gap-6!">
             {footer.linkColumns.map((column, index) => (
               <Card
                 className={cn(
@@ -63,17 +61,38 @@ export const LandingFooter = () => {
         <Separator className="my-10!" />
 
         <div className="flex! flex-col! gap-6! tablet:flex-row! tablet:items-center! tablet:justify-between!">
-          <p className="text-sm! text-muted-foreground!">
-            {`© ${new Date().getFullYear()}`}
-          </p>
+          <div className="flex! flex-wrap! items-center! gap-x-3! gap-y-2!">
+            {footer.description ? (
+              <p className="text-xs! text-muted-foreground!">
+                {footer.description}
+              </p>
+            ) : null}
+
+            <p className="text-xs! text-muted-foreground!">
+              {`© ${new Date().getFullYear()}`}
+            </p>
+
+            {footer.accreditations.map((mark, index) => (
+              <span
+                className={accreditationHtml}
+                dangerouslySetInnerHTML={{ __html: mark }}
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+              />
+            ))}
+          </div>
 
           {footer.socialLinks.length > 0 ? (
-            <div className="flex! items-center! gap-3!">
+            <div className="flex! items-center! gap-4!">
               {footer.socialLinks.map((link, index) => (
                 <div
                   className={cn(
-                    'flex! size-10! items-center! justify-center! rounded-md! border! border-border! bg-card! transition-shadow hover:bg-muted! hover:shadow-sm!',
+                    'flex! size-11! items-center! justify-center! rounded-md! border! border-border! bg-card! transition-shadow hover:bg-muted! hover:shadow-sm!',
                     cmsHtml,
+                    // The CMS authors the X mark as `<svg fill="none">` with an
+                    // unfilled path, so it renders blank without this. Paths that
+                    // carry their own `fill` are untouched.
+                    '[&_a]:flex! [&_a]:size-full! [&_a]:items-center! [&_a]:justify-center! [&_svg]:fill-foreground!',
                   )}
                   dangerouslySetInnerHTML={{ __html: link }}
                   // eslint-disable-next-line react/no-array-index-key

@@ -11,9 +11,9 @@ const RootWrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
-  color: ${props => (props.theme.main === '#fff' ? '#161616' : '#F4F4F4')};
-  flex-direction: row;
-  gap: 0.25rem 0.5rem;
+  line-height: 1.125rem;
+  color: var(--giga-on-surface-muted);
+  flex-direction: column;
   text-align: center;
   background: ${props => (props.theme.main === '#fff' ? '#f4f4f4' : '#242424')};
 `
@@ -21,7 +21,7 @@ const LinkButtons = styled.div`
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  line-height: 12px;
+  line-height: 1.125rem;
   a:hover {
     text-decoration: underline !important;
   }
@@ -32,7 +32,6 @@ const Message = styled.p`
   white-space: pre-line;
   text-align: center;
   margin: 0;
-  margin-right: 0.25rem;
 `
 const Link = styled(CarbonLink)`
   font-size: 0.75rem !important;
@@ -64,7 +63,7 @@ export default function FooterTourContact({
             <OrText>&nbsp;{t('or')}&nbsp;</OrText>
           </>
         )}
-        <Link href='/about#live-map-get-in-touch' target='_blank'>{t('contact-us')}</Link>
+        <Link href='/about#contact' target='_blank'>{t('contact-us')}</Link>
       </LinkButtons>
     </RootWrapper>
   )
