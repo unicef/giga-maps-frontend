@@ -7,6 +7,7 @@ import FooterDataSourcePopUp from '~/@/map/ui/footer-data-source-pop-up';
 import {
   $currentLayerTypeUtilsByEntity,
   $getSchoolParams,
+  $isFlyoutExpanded,
   $isLoadingSchoolView,
   $schoolStats,
 } from '~/@/sidebar/sidebar.model';
@@ -14,6 +15,7 @@ import { SchoolStatsType } from '~/api/types';
 import { Badge } from '~/components/ui/badge';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { mapEntity } from '~/core/routes';
+import { cn } from '~/lib/cn';
 
 import { EntityDetailContent } from './entity-detail-content';
 import {
@@ -35,6 +37,7 @@ const SchoolView = () => {
       ? activeEntityTypes[0]
       : null;
   const isLoading = useStore($isLoadingSchoolView);
+  const isFlyoutExpanded = useStore($isFlyoutExpanded);
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
   );
@@ -60,7 +63,13 @@ const SchoolView = () => {
         id="school-sidebar-scroll"
         viewportClassName="h-full! [&>div]:block! [&>div]:min-w-0! [&>div]:w-full!"
       >
-        <div className="w-full! min-w-0! px-3.5! pb-12! pt-2!">
+        <div
+          className={cn(
+            'w-full! min-w-0! px-3.5! pb-12! pt-2!',
+            // The giga-layer bar is fixed over the flyout once it is expanded.
+            isFlyoutExpanded && 'max-md:pb-24!',
+          )}
+        >
           {isLoading && !selectedEntities.length ? (
             schoolIds.length > 1 ? (
               <EntityDetailSkeleton count={schoolIds.length} />
@@ -114,7 +123,7 @@ const SchoolView = () => {
             </div>
           )}
           {showDataSource && (
-            <div className="sticky! bottom-0! z-10! bg-background! mt-4!">
+            <div className="mt-4! md:sticky! md:bottom-0! md:z-10! md:bg-background!">
               <FooterDataSourcePopUp isFooter={false} entityType={entityType} />
             </div>
           )}
