@@ -176,8 +176,6 @@
   "connected-schools": "Connected schools",
   "connected-health-facilities": "Connected health facilities",
   "not-connected": "Not connected",
-  "expand-legend": "Expand legend",
-  "collapse-legend": "Collapse legend",
   "national-benchmark": "National benchmark",
   "global-benchmark": "Global benchmark",
   "legend-global-benchmark-value": "Global benchmark: {{value}}",

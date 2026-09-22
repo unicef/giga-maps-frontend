@@ -371,15 +371,3 @@
     transform: scale(1.05);
   }
 }
-
-@keyframes legend-bar-glow {
-  from {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  to {
-    opacity: 0.25;
-    transform: translate(-50%, -50%) scale(1.09, 2);
-  }
-}

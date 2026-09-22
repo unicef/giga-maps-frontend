@@ -177,8 +177,6 @@
   "connected-schools": "Escuelas conectadas",
   "connected-health-facilities": "Instalaciones de salud conectadas",
   "not-connected": "No conectada",
-  "expand-legend": "Expandir leyenda",
-  "collapse-legend": "Contraer leyenda",
   "national-benchmark": "Punto de referencia nacional",
   "global-benchmark": "Punto de referencia global",
   "legend-global-benchmark-value": "Punto de referencia global: {{value}}",
