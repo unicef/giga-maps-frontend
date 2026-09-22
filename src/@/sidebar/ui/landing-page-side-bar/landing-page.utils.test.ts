@@ -121,7 +121,7 @@ describe('landing page entity copy', () => {
       'Connected health facilities',
     );
     expect(es['connected-health-facilities']).toBe(
-      'Instalaciones de salud conectadas',
+      'Centros de salud conectados',
     );
     expect(pt['connected-health-facilities']).toBe(
       'Instalações de saúde conectadas',
@@ -131,7 +131,7 @@ describe('landing page entity copy', () => {
       'Go to health facility page',
     );
     expect(es['go-to-health-facility-page']).toBe(
-      'Ir a la página de la instalación de salud',
+      'Ir a la página del centro de salud',
     );
     expect(en['across-no-countries_one']).toBe('across {{count}} country');
     expect(en['across-no-countries_other']).toBe('across {{count}} countries');

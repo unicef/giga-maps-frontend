@@ -14,7 +14,7 @@ const BEFORE_EXPIRY = new Date('2026-08-05T00:00:00Z');
 const AFTER_EXPIRY = new Date('2026-11-06T00:00:00Z');
 
 const TITLE_EN = 'Health facilities are here!';
-const TITLE_ES = '¡Ya están las instalaciones de salud!';
+const TITLE_ES = '¡Ya están los centros de salud!';
 
 /**
  * The model reads localStorage and the expiry date at import time, so each case
