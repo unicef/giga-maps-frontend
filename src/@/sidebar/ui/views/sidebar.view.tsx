@@ -15,14 +15,14 @@ import ThemeButtons from '~/@/map/ui/layer-theme/theme-buttons';
 import ZoomButtons from '~/@/map/ui/layer-theme/zoom-buttons';
 import LegendButton from '~/@/map/ui/legend-info/legend-button';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
-import { FLYOUT_HEIGHT, FLYOUT_STATES } from '~/@/sidebar/sidebar.constant';
+import { FLYOUT_HEIGHT, FLYOUT_MAX_HEIGHT } from '~/@/sidebar/sidebar.constant';
 import {
   $isMenuOpen,
   $isSidebarCollapsed,
   $isTimeplayer,
   $getSchoolParams,
   $sidebarFlyoutState,
-  setSidebarFlyoutState,
+  cycleSidebarFlyoutState,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { $isMobile } from '~/core/media-query';
@@ -47,6 +47,7 @@ import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
 import { useFlyoutDrag } from './use-flyout-drag';
+import { useFlyoutTopOffset } from './use-flyout-top-offset';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation(),
@@ -59,10 +60,12 @@ export default function Sidebar() {
   const flyoutState = useStore($sidebarFlyoutState);
   const isFlyoutExpanded = flyoutState === 'expanded';
   const panelRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const { dragHandlers, wasDragged } = useFlyoutDrag({
     disabled: !isMobile,
     panelRef,
   });
+  useFlyoutTopOffset({ enabled: isMobile, headerRef, panelRef });
   const countryRoute = useRoute(mapCountry);
   const schoolRoute = useRoute(mapSchools);
   const entityRoute = useRoute(entityView) || useRoute(mapEntity);
@@ -76,10 +79,7 @@ export default function Sidebar() {
 
   const cycleFlyoutState = () => {
     if (wasDragged()) return;
-
-    const next =
-      (FLYOUT_STATES.indexOf(flyoutState) + 1) % FLYOUT_STATES.length;
-    setSidebarFlyoutState(FLYOUT_STATES[next]);
+    cycleSidebarFlyoutState();
   };
 
   return (
@@ -101,14 +101,21 @@ export default function Sidebar() {
             ),
       )}
       ref={panelRef}
-      style={{ '--flyout-height': FLYOUT_HEIGHT[flyoutState] } as CSSProperties}
+      style={
+        isMobile
+          ? ({
+              '--flyout-height': FLYOUT_HEIGHT[flyoutState],
+              maxHeight: FLYOUT_MAX_HEIGHT,
+            } as CSSProperties)
+          : undefined
+      }
     >
       <div className="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!">
         {isMobile && !isTimeplayer && (
           <button
             aria-expanded={isFlyoutExpanded}
             aria-label={t('resize-panel')}
-            className="-mb-0.25 flex w-full cursor-grab touch-none items-center justify-center border-0 bg-background p-[0.6rem] active:cursor-grabbing"
+            className="-mb-0.25 flex w-full shrink-0 cursor-grab touch-none items-center justify-center border-0 bg-background p-[0.6rem] active:cursor-grabbing"
             id="mobile-view-slider"
             onClick={cycleFlyoutState}
             type="button"
@@ -119,6 +126,7 @@ export default function Sidebar() {
         )}
         <div
           className={cn(isMobile && 'fixed! top-0! left-0! right-0! z-[6001]!')}
+          ref={headerRef}
         >
           <div className={cn(isMobile && 'bg-background! pb-5!')}>
             <SideInfoPanelHeaderLogoAndMenuButton />

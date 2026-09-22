@@ -23,7 +23,7 @@ type DragSession = {
 const resolveSnapHeights = (panel: HTMLElement) => {
   const probe = document.createElement('div');
   probe.style.cssText =
-    'position:absolute;top:0;left:0;width:0;visibility:hidden;pointer-events:none';
+    'position:fixed;top:0;left:0;width:0;visibility:hidden;pointer-events:none';
   panel.append(probe);
 
   const snapHeights = {} as Record<SidebarFlyoutState, number>;
@@ -71,16 +71,13 @@ export const useFlyoutDrag = ({
     }
   };
 
+  // The panel's own max-height caps the top, so only the floor needs clamping.
   const getHeight = (event: ReactPointerEvent<HTMLElement>) => {
     const current = session.current!;
-    const snaps = Object.values(current.snapHeights);
 
-    return Math.min(
-      Math.max(
-        current.startHeight + (current.startY - event.clientY),
-        Math.min(...snaps),
-      ),
-      Math.max(...snaps),
+    return Math.max(
+      current.startHeight + (current.startY - event.clientY),
+      current.snapHeights.collapsed,
     );
   };
 

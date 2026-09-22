@@ -65,6 +65,7 @@ import {
   ConnectivityBenchMarks,
   ConnectivityDistribution,
   ConnectivityStatusDistribution,
+  FLYOUT_STATES,
   getDefaultFormula,
   Layers,
   multiSchoolSelection,
@@ -1277,9 +1278,14 @@ export const $timePlayerInfo = combine({
 });
 
 export const setSidebarFlyoutState = createEvent<SidebarFlyoutState>();
+export const cycleSidebarFlyoutState = createEvent();
 export const $sidebarFlyoutState = restore<SidebarFlyoutState>(
   setSidebarFlyoutState,
   'default',
+).on(
+  cycleSidebarFlyoutState,
+  (state) =>
+    FLYOUT_STATES[(FLYOUT_STATES.indexOf(state) + 1) % FLYOUT_STATES.length]!,
 );
 export const $isFlyoutExpanded = $sidebarFlyoutState.map(
   (state) => state === 'expanded',

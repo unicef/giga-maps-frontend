@@ -106,11 +106,14 @@ export const FLYOUT_STATES = [
   'expanded',
 ] as const satisfies readonly SidebarFlyoutState[];
 
-// The header (logo + search bar) is fixed on top of the map, so the expanded
-// flyout stops right under it instead of covering it.
+// A percentage resolves against the same box the panel's `bottom: 0` uses; dvh
+// tracks the iOS toolbar instead and let the panel creep over the header.
+export const FLYOUT_MAX_HEIGHT =
+  'calc(100% - var(--flyout-top-offset, var(--search-panel-top-offset)))';
+
 export const FLYOUT_HEIGHT: Record<SidebarFlyoutState, string> = {
   collapsed: '15vh',
   default: '30vh',
-  expanded: 'calc(100dvh - var(--search-panel-top-offset))',
+  expanded: FLYOUT_MAX_HEIGHT,
 };
 
