@@ -128,6 +128,12 @@ export const useFlyoutDrag = ({
       onPointerMove,
       onPointerUp,
     },
-    wasDragged: () => didDrag.current,
+    // One-shot: it only suppresses the click that closes a drag. Without the
+    // reset a keyboard activation after a drag would be swallowed too.
+    wasDragged: () => {
+      const dragged = didDrag.current;
+      didDrag.current = false;
+      return dragged;
+    },
   };
 };

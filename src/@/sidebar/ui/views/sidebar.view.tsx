@@ -115,7 +115,7 @@ export default function Sidebar() {
           <button
             aria-expanded={isFlyoutExpanded}
             aria-label={t('resize-panel')}
-            className="-mb-0.25 flex w-full shrink-0 cursor-grab touch-none items-center justify-center border-0 bg-background p-[0.6rem] active:cursor-grabbing"
+            className="-mb-0.25 flex w-full shrink-0 cursor-grab touch-none items-center justify-center border-0 bg-background py-5 active:cursor-grabbing"
             id="mobile-view-slider"
             onClick={cycleFlyoutState}
             type="button"
