@@ -19,6 +19,7 @@ import {
   SchoolStatsType,
 } from '~/api/types';
 import { GeoJSONPoint } from '~/core/global-types';
+import { isMobileViewport } from '~/core/media-query';
 import { map } from '~/core/routes';
 import { setPayload, setPayloadResults } from '~/lib/effector-kit';
 import { getLocalStorage, setLocalStorage } from '~/lib/utils';
@@ -95,14 +96,18 @@ export const onEnableTitlesAndLabels = createEvent<boolean>();
 export const $isTilesAndLables = restore(onEnableTitlesAndLabels, true);
 
 export const onEnableNavigateByAdminLevel = createEvent<boolean>();
-const navigateByAdminStored = getLocalStorage('navigate-by-admin-level') as
-  | boolean
-  | undefined;
+const navigateByAdminStored = getLocalStorage('navigate-by-admin-level');
+
+// Off on mobile: navigating by admin area swallows the tap that should open the
+// facility page. An explicit choice always wins over the viewport default.
+export const getNavigateByAdminLevelDefault = (
+  stored: unknown,
+  isMobile: boolean,
+) => (typeof stored === 'boolean' ? stored : !isMobile);
+
 export const $isNavigateByAdminLevel = restore(
   onEnableNavigateByAdminLevel,
-  (typeof navigateByAdminStored === 'boolean'
-    ? navigateByAdminStored
-    : undefined) ?? true,
+  getNavigateByAdminLevelDefault(navigateByAdminStored, isMobileViewport()),
 );
 onEnableNavigateByAdminLevel.watch((value) => {
   setLocalStorage('navigate-by-admin-level', value);
