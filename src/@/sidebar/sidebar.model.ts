@@ -80,6 +80,7 @@ import {
   LayerTypeChoices,
   MultischoolSelectionStats,
   SelectedSchool,
+  SidebarFlyoutState,
 } from './types';
 import {
   ConnectivityDistributionNames,
@@ -109,7 +110,6 @@ const getSelectedEntityLayerId = (
   return getEntityValue(selectedLayerIdByEntity, entityType, null);
 };
 
-export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
 
 export const resetFilterModal = createEvent();
@@ -1276,8 +1276,14 @@ export const $timePlayerInfo = combine({
   isLoaded: $isLoadedTimePlayer,
 });
 
-export const setSidebarHeight = createEvent<boolean>();
-export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
+export const setSidebarFlyoutState = createEvent<SidebarFlyoutState>();
+export const $sidebarFlyoutState = restore<SidebarFlyoutState>(
+  setSidebarFlyoutState,
+  'default',
+);
+export const $isFlyoutExpanded = $sidebarFlyoutState.map(
+  (state) => state === 'expanded',
+);
 
 export const toggleAccordionEntity = createEvent<EntityType>();
 
@@ -1439,6 +1445,6 @@ $isTimeplayer.reset(router.historyUpdated);
 $timePlayerCurrentYear.reset($isTimeplayer);
 $isLoadedTimePlayer.reset($isTimeplayer);
 $isLoadingTimeplayer.reset($isTimeplayer);
-$sidebarHeight.reset([router.historyUpdated, $showLegend]);
+$sidebarFlyoutState.reset(router.historyUpdated);
 
 $showAdvancedFilter.reset([$countryCode, $admin1Code, $countrySearchString]);

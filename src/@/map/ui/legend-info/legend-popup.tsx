@@ -25,7 +25,7 @@ import {
   $isStatusLegendLoading,
   $isTimeplayer,
   $layerUtils,
-  $sidebarHeight,
+  $isFlyoutExpanded,
 } from '~/@/sidebar/sidebar.model';
 import {
   $hasSearchInput,
@@ -95,7 +95,7 @@ const LegendPopup = ({
   const isSearchFocused = useStore($isSearchFocused);
   const isCountryListOpen = useStore($showCountries);
   const isMenuOpen = useStore($isMenuOpen);
-  const sidebarHeight = useStore($sidebarHeight);
+  const isFlyoutExpanded = useStore($isFlyoutExpanded);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
@@ -313,7 +313,7 @@ const LegendPopup = ({
       </PopoverAnchor>
       <PopoverContent
         ref={popoverContentRef}
-        align={isMobile && sidebarHeight ? 'center' : 'end'}
+        align={isMobile && isFlyoutExpanded ? 'center' : 'end'}
         className={cn(
           'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
           // A single section hugs its content; several need the width ladder so

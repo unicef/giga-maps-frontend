@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import { PropsWithChildren, useCallback } from 'react';
 
-import { $sidebarHeight } from '~/@/sidebar/sidebar.model';
+import { $isFlyoutExpanded } from '~/@/sidebar/sidebar.model';
 import {
   Popover,
   PopoverAnchor,
@@ -21,7 +21,7 @@ const ThemePopup = ({
   setOpen: (open: boolean) => void;
 }>) => {
   const isMobile = useStore($isMobile);
-  const sidebarHeight = useStore($sidebarHeight);
+  const isFlyoutExpanded = useStore($isFlyoutExpanded);
 
   const popoverContentRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -84,7 +84,7 @@ const ThemePopup = ({
         requestAnimationFrame(() => applyPosition());
       });
     },
-    [isMobile, sidebarHeight],
+    [isMobile, isFlyoutExpanded],
   );
 
   return (
@@ -104,7 +104,7 @@ const ThemePopup = ({
       </PopoverAnchor>
       <PopoverContent
         ref={popoverContentRef}
-        align={isMobile && sidebarHeight ? 'center' : 'end'}
+        align={isMobile && isFlyoutExpanded ? 'center' : 'end'}
         avoidCollisions={true}
         className={cn(
           'theme-layer-popover-content z-[10000]! flex! max-h-[calc(100dvh-1rem)]! w-[17rem]! max-w-[min(17rem,calc(100vw-4rem))]! flex-col! overflow-hidden! rounded-xl! border! border-border! bg-popover! p-0! shadow-xs! max-md:max-h-[var(--radix-popper-available-height)]!',

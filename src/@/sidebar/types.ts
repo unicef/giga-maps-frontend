@@ -1,3 +1,5 @@
+export type SidebarFlyoutState = 'collapsed' | 'default' | 'expanded';
+
 export type SortType =
   | 'number'
   | 'date'

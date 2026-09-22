@@ -3,7 +3,11 @@ import { sub } from 'date-fns';
 import { getInterval } from '~/lib/date-fns-kit';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
-import { LayerType, MultischoolSelectionStats } from '@/sidebar/types';
+import {
+  LayerType,
+  MultischoolSelectionStats,
+  SidebarFlyoutState,
+} from '@/sidebar/types';
 
 const date = new Date();
 // date.setMonth(date.getMonth())
@@ -95,3 +99,18 @@ export const publishLayersListMapping = [
   'layersList.*.legend_configs.unknown.labels',
   'layersList.*.legend_configs.unknown.tooltip'
 ]
+
+export const FLYOUT_STATES = [
+  'collapsed',
+  'default',
+  'expanded',
+] as const satisfies readonly SidebarFlyoutState[];
+
+// The header (logo + search bar) is fixed on top of the map, so the expanded
+// flyout stops right under it instead of covering it.
+export const FLYOUT_HEIGHT: Record<SidebarFlyoutState, string> = {
+  collapsed: '15vh',
+  default: '30vh',
+  expanded: 'calc(100dvh - var(--search-panel-top-offset))',
+};
+
