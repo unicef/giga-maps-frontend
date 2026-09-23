@@ -13,7 +13,7 @@ right: 0.5rem;
     top:6.5rem;
 }
 `
-export const TakeTourWrapper = styled.div<{ $bottom: boolean }>`
+export const TakeTourWrapper = styled.div`
 z-index: 1;
 position:fixed;
 right:.5rem;
@@ -23,7 +23,7 @@ flex-direction:column;
 align-items:center;
 
  @media (max-width:768px){
-     bottom:${props => props.$bottom ? "calc(60vh + 1rem)" : "calc(32vh + 0.5rem)"};
+     bottom:calc(var(--flyout-height, 30vh) + 0.5rem);
  }
 `
 

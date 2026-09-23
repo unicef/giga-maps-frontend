@@ -39,6 +39,7 @@ import {
   SchoolStatsType,
 } from '~/api/types';
 import { $lng } from '~/core/i18n/store';
+import { isMobileViewport } from '~/core/media-query';
 import {
   $mapRoutes,
   mapEntity,
@@ -64,6 +65,7 @@ import {
   ConnectivityBenchMarks,
   ConnectivityDistribution,
   ConnectivityStatusDistribution,
+  FLYOUT_STATES,
   getDefaultFormula,
   Layers,
   multiSchoolSelection,
@@ -79,6 +81,7 @@ import {
   LayerTypeChoices,
   MultischoolSelectionStats,
   SelectedSchool,
+  SidebarFlyoutState,
 } from './types';
 import {
   ConnectivityDistributionNames,
@@ -108,7 +111,6 @@ const getSelectedEntityLayerId = (
   return getEntityValue(selectedLayerIdByEntity, entityType, null);
 };
 
-export const onClickSidebar = createEvent();
 export const toggleSidebar = createEvent();
 
 export const resetFilterModal = createEvent();
@@ -1228,7 +1230,8 @@ export const $isStatusLegendLoading = combine(
 );
 
 export const onShowLegend = createEvent<boolean>();
-export const $showLegend = restore(onShowLegend, true);
+// On mobile the map is the point: the legend only opens when the user asks.
+export const $showLegend = restore(onShowLegend, !isMobileViewport());
 
 export const onShowThemeLayer = createEvent<boolean>();
 export const $showThemeLayer = restore(onShowThemeLayer, false);
@@ -1274,8 +1277,19 @@ export const $timePlayerInfo = combine({
   isLoaded: $isLoadedTimePlayer,
 });
 
-export const setSidebarHeight = createEvent<boolean>();
-export const $sidebarHeight = restore<boolean>(setSidebarHeight, false);
+export const setSidebarFlyoutState = createEvent<SidebarFlyoutState>();
+export const cycleSidebarFlyoutState = createEvent();
+export const $sidebarFlyoutState = restore<SidebarFlyoutState>(
+  setSidebarFlyoutState,
+  'default',
+).on(
+  cycleSidebarFlyoutState,
+  (state) =>
+    FLYOUT_STATES[(FLYOUT_STATES.indexOf(state) + 1) % FLYOUT_STATES.length]!,
+);
+export const $isFlyoutExpanded = $sidebarFlyoutState.map(
+  (state) => state === 'expanded',
+);
 
 export const toggleAccordionEntity = createEvent<EntityType>();
 
@@ -1437,6 +1451,6 @@ $isTimeplayer.reset(router.historyUpdated);
 $timePlayerCurrentYear.reset($isTimeplayer);
 $isLoadedTimePlayer.reset($isTimeplayer);
 $isLoadingTimeplayer.reset($isTimeplayer);
-$sidebarHeight.reset([router.historyUpdated, $showLegend]);
+$sidebarFlyoutState.reset(router.historyUpdated);
 
 $showAdvancedFilter.reset([$countryCode, $admin1Code, $countrySearchString]);

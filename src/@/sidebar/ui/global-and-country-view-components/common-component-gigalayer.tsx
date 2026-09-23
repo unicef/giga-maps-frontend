@@ -20,7 +20,7 @@ import {
 import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 
-import { $sidebarHeight } from '../../sidebar.model';
+import { $isFlyoutExpanded } from '../../sidebar.model';
 import GigaLayerButtonIcons from '../common-components/giga-layer-button-icons';
 
 const CommonComponentGigaLayer = ({
@@ -31,7 +31,7 @@ const CommonComponentGigaLayer = ({
   isCountryView?: boolean;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const sidebarHeight = useStore($sidebarHeight);
+  const isFlyoutExpanded = useStore($isFlyoutExpanded);
   const isMobile = useStore($isMobile);
   const { t } = useTranslation();
   return (
@@ -42,7 +42,10 @@ const CommonComponentGigaLayer = ({
           isCountryView
             ? 'relative! mt-auto! w-full! justify-center! pb-2!'
             : 'fixed! bottom-[var(--map-footer-offset)]! w-[inherit]! justify-between! border-t! border-secondary! max-md:bottom-0! max-md:w-full!',
-          isMobile && !sidebarHeight && !isCountryView && 'translate-y-full!',
+          isMobile &&
+            !isFlyoutExpanded &&
+            !isCountryView &&
+            'translate-y-full!',
         )}
       >
         <div

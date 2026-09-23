@@ -201,7 +201,7 @@ export const MapSchoolPopup = () => {
                       {/* Action Button */}
                       {targetEntityType && (feature?.id || schoolId) && isClicked && (
                         <Button
-                          className="go-to-school mt-1! w-full! cursor-pointer! justify-center! gap-1.5! rounded-full! border-0! bg-primary! px-2.5! py-2! text-sm! font-medium! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
+                          className="go-to-school mt-1! h-auto! min-h-9! w-full! cursor-pointer! justify-center! gap-1.5! whitespace-normal! rounded-full! border-0! bg-primary! px-4! py-2! text-center! text-sm! font-medium! text-primary-foreground! shadow-xs! transition-all! hover:bg-primary/90! focus:outline-none! active:bg-primary/80!"
                           onClick={() => {
                             const targetId = feature?.id ?? schoolId;
                             if (targetId && targetEntityType) {
@@ -220,7 +220,7 @@ export const MapSchoolPopup = () => {
                           }}
                           type="button"
                         >
-                          <span>
+                          <span className="min-w-0!">
                             {t(ENTITY_PAGE_COPY_KEYS[targetEntityType], {
                               entity: itemEntityLabel,
                               defaultValue: `Go to ${itemEntityLabel} page`,

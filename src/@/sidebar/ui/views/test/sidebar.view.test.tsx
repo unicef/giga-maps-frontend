@@ -10,6 +10,7 @@ import { createEvent } from 'effector';
 import {
   onChangeMenu,
   onSelectMainLayer,
+  setSidebarFlyoutState,
   $layersList,
   $selectedLayerIdByEntity,
 } from '~/@/sidebar/sidebar.model';
@@ -104,13 +105,22 @@ describe('Sidebar', () => {
     });
     onChangeMenu(false);
     setMobileView(true);
+    setSidebarFlyoutState('default');
     const { container } = render(testWrapper(<Sidebar />));
     const sliderButton = container.querySelector('#mobile-view-slider');
+    const getAccessibleButton = () =>
+      container.querySelector('[data-testid="accessible-button"]');
+
+    expect(getAccessibleButton()).toBeInTheDocument();
+
+    // Expanded covers the map, so the map controls go with it.
     await fireEvent.click(sliderButton as Element);
-    const accessibleButton = container.querySelector(
-      '[data-testid="accessible-button"]',
-    );
-    expect(accessibleButton).toBeInTheDocument();
+    expect(sliderButton).toHaveAttribute('aria-expanded', 'true');
+    expect(getAccessibleButton()).not.toBeInTheDocument();
+
+    await fireEvent.click(sliderButton as Element);
+    expect(sliderButton).toHaveAttribute('aria-expanded', 'false');
+    expect(getAccessibleButton()).toBeInTheDocument();
   });
 
   test('Render global view', async () => {

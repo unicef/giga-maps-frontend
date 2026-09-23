@@ -324,8 +324,11 @@
 
   --font-manrope: 'Manrope', sans-serif;
 
-  /* Brand type scale: text-xs is 12/18 (Tailwind ships 12/16), plus a 10/18 step */
+  /* Brand type scale (CLAUDE.md 7.2); Tailwind's own line-heights are tighter.
+     text-4xl and text-5xl still ship Tailwind's, they are landing-only. */
   --text-xs--line-height: 1.125rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl--line-height: 2.25rem;
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 1.125rem;
 
@@ -369,17 +372,5 @@
   to {
     opacity: 0.35;
     transform: scale(1.05);
-  }
-}
-
-@keyframes legend-bar-glow {
-  from {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  to {
-    opacity: 0.25;
-    transform: translate(-50%, -50%) scale(1.09, 2);
   }
 }

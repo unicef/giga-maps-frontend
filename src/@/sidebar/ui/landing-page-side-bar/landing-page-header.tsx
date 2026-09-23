@@ -15,7 +15,7 @@ const LandingPageHeader = ({ onShareClicked, subtitle, title }: LandingPageHeade
   return (
     <div className="flex! flex-col! gap-1!">
       <div className="flex! items-start! justify-between! gap-1!">
-        <p className="m-0! max-w-56! font-manrope! text-2xl! font-extralight! leading-[36px]! text-foreground!">
+        <p className="m-0! text-xl! text-foreground!">
           {t(title)}
         </p>
         <Tooltip>
