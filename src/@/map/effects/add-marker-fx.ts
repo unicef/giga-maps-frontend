@@ -6,7 +6,7 @@ import { setMultipleSchoolPopup, updateSchoolMarker } from '../map.model';
 import { createAndSetPopupTemplate, createPopup, getPopupElement } from '../popup/popup.util';
 
 
-export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchoolPopup, schoolMarkers, layerUtils, stylePaintData }: ReturnType<typeof mapMarkerSource.getState>) => {
+export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchoolPopup, schoolMarkers, layerUtils, stylePaintData, isMobile }: ReturnType<typeof mapMarkerSource.getState>) => {
   if (!map) return;
   let collectMarker = schoolMarkers || [];
   let multipleSchoolPopupList = multipleSchoolPopup || [];
@@ -36,8 +36,9 @@ export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchool
       const markerInfo = collectMarker.find(item => item.id === schoolStat.id);
       if (markerInfo?.marker) {
         const popup = createPopup(isSingle ? { closeOnClick: false, closeOnMove: false } : {}).setDOMContent(template)
-        markerInfo.marker.setPopup(popup);
-        if (isSingle && !popup.isOpen()) {
+        // On mobile the flyout shows the entity details, so the pin carries no popup.
+        markerInfo.marker.setPopup(isMobile ? undefined : popup);
+        if (isSingle && !isMobile && !popup.isOpen()) {
           markerInfo.marker.togglePopup();
         }
       }
@@ -52,10 +53,7 @@ export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchool
     const popup = createPopup(isSingle ? { closeOnClick: false, closeOnMove: false } : {})
     const marker = new Marker(markerIcon)
       .setLngLat(feature.geopoint.coordinates)
-      .setPopup(
-        popup
-          .setDOMContent(popupTemplate)
-      )
+      .setPopup(isMobile ? undefined : popup.setDOMContent(popupTemplate))
       .addTo(map);
     collectMarker.push({
       id: feature.id,
@@ -66,7 +64,7 @@ export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchool
       element: popupTemplate,
       isClicked: false
     })
-    if (isSingle && !popup.isOpen()) {
+    if (isSingle && !isMobile && !popup.isOpen()) {
       marker.togglePopup();
     }
     marker.getElement().addEventListener('click', function (e) {
