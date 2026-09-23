@@ -13,7 +13,8 @@ export const zoomToCountryFx = createEffect(
     isMobile,
     levelsCode,
     zoomedCountryCode,
-    schoolFocusLatLng
+    schoolFocusLatLng,
+    keepCurrentView
   }: ZoomToCountryBounds): string => {
     if (!map) return '';
     const [countryCode, admin1Code] = levelsCode;
@@ -32,7 +33,7 @@ export const zoomToCountryFx = createEffect(
     }
 
     // country and admin center;
-    if (zoomedCountryCode === adminCode) {
+    if (zoomedCountryCode?.toUpperCase() === adminCode?.toUpperCase()) {
       return zoomedCountryCode;
     }
     if (adminCode) {
@@ -53,6 +54,8 @@ export const zoomToCountryFx = createEffect(
       return adminCode;
     }
     // global view center;
+    if (keepCurrentView) return 'map';
+
     map.flyTo({
       center: defaultCenter,
       zoom: defaultZoom,

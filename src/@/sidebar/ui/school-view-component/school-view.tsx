@@ -14,6 +14,7 @@ import {
 import { SchoolStatsType } from '~/api/types';
 import { Badge } from '~/components/ui/badge';
 import { ScrollArea } from '~/components/ui/scroll-area';
+import { $isMobile } from '~/core/media-query';
 import { mapEntity } from '~/core/routes';
 import { cn } from '~/lib/cn';
 
@@ -38,6 +39,7 @@ const SchoolView = () => {
       : null;
   const isLoading = useStore($isLoadingSchoolView);
   const isFlyoutExpanded = useStore($isFlyoutExpanded);
+  const isMobile = useStore($isMobile);
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
   );
@@ -104,7 +106,7 @@ const SchoolView = () => {
             </div>
           ) : (
             <div className={isLoading ? 'opacity-70!' : undefined}>
-              {selectedEntities[0]?.name && (
+              {!isMobile && selectedEntities[0]?.name && (
                 <div className="px-4! pt-1!">
                   <div className="flex! min-w-0! flex-wrap! items-center! gap-2!">
                     <h2

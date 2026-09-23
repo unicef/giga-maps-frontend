@@ -92,6 +92,10 @@ export const $admin1Name = $admin1Data.map((data) => (data?.name ?? data?.name_e
 export const setSchoolFocusLatLng = createEvent<PointCoordinates>();
 export const $schoolFocusLatLng = restore<PointCoordinates>(setSchoolFocusLatLng, null);
 export const onRecenterView = createEvent();
+// Clearing the selection goes back to the global view but leaves the camera
+// where the user had it, unlike navigating there by any other means.
+export const clearMapSelection = createEvent();
+export const $keepMapView = restore(clearMapSelection.map(() => true), false);
 export const $worldview = createStore<string>(defaultWorldView);
 $worldview.on(getUserCurrentCountryISOFx.doneData, setPayload);
 
@@ -251,8 +255,8 @@ sample({
 // Zoom to country bounds
 sample({
   clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView, $countryAdminSchoolId]),
-  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId }),
-  fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId }) => {
+  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId, keepCurrentView: $keepMapView }),
+  fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId, keepCurrentView }) => {
     const { admin1: admin1Code } = getCountryAdminCode(params?.path);
     const levelsCode = [mapContext.countryCode, (admin1Code ?? countryAdminSchoolId)].filter(Boolean)
     const levelLength = levelsCode.length;
@@ -260,11 +264,14 @@ sample({
       ...mapContext,
       levelsCode,
       selectedLevel: levelLength,
-      schoolFocusLatLng
+      schoolFocusLatLng,
+      keepCurrentView
     }
   },
   target: zoomToCountryFx,
 });
+
+$keepMapView.reset(zoomToCountryFx.doneData.filter({ fn: (result) => result === 'map' }));
 
 sample({
   clock: merge([$countryId, $map]),
