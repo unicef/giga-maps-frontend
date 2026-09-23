@@ -37,6 +37,7 @@ import { cn } from '~/lib/cn';
 import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
+import MobileFlyoutHeader from '../breadcrumb/mobile-flyout-header';
 import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
 import SidebarMenuList from '../common-components/sidebar-menu-list';
@@ -142,7 +143,7 @@ export default function Sidebar() {
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col">
-          <BreadcrumbInfo />
+          {isMobile ? <MobileFlyoutHeader /> : <BreadcrumbInfo />}
           {mapRoute ? (
             <LandingPage />
           ) : (
