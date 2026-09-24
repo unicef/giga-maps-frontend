@@ -206,6 +206,7 @@ export default function Sidebar() {
               'relative z-10 transition-all duration-500',
               isTimeplayer && 'hidden',
             )}
+            data-flyout-no-drag
           >
             {!isMobile && (
               <BroadcastButton className="broadcast-button">
