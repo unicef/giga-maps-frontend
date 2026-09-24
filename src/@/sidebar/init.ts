@@ -1203,8 +1203,9 @@ sample({
 
 sample({
   clock: $isSidebarControlOpen.updates,
-  source: $isProductTour,
-  filter: (isProductTour, isOpen) => !isProductTour && !isOpen,
+  source: { isMobile: $isMobile, isProductTour: $isProductTour },
+  filter: ({ isMobile, isProductTour }, isOpen) =>
+    !isProductTour && !isMobile && !isOpen,
   fn: () => true,
   target: onShowLegend,
 });
@@ -1218,7 +1219,8 @@ sample({
 
 sample({
   clock: changeCountryCode,
-  filter: (countryCode) => Boolean(countryCode),
+  source: $isMobile,
+  filter: (isMobile, countryCode) => !isMobile && Boolean(countryCode),
   fn: () => true,
   target: onShowLegend,
 });

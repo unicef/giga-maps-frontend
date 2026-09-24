@@ -1,6 +1,7 @@
 import { useStore } from 'effector-react';
-import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
-import { type CSSProperties, type MouseEvent } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { type CSSProperties, type MouseEvent, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { EntityType } from '~/@/entities';
 import EntityTypeSelector from '~/@/entities/ui/entity-selector';
@@ -14,14 +15,14 @@ import ThemeButtons from '~/@/map/ui/layer-theme/theme-buttons';
 import ZoomButtons from '~/@/map/ui/layer-theme/zoom-buttons';
 import LegendButton from '~/@/map/ui/legend-info/legend-button';
 import TimeplayerButton from '~/@/map/ui/timeplayer/timeplayer-button';
+import { FLYOUT_HEIGHT, FLYOUT_MAX_HEIGHT } from '~/@/sidebar/sidebar.constant';
 import {
-  $getSchoolParams,
   $isMenuOpen,
   $isSidebarCollapsed,
   $isTimeplayer,
-  $sidebarHeight,
-  onClickSidebar,
-  setSidebarHeight,
+  $getSchoolParams,
+  $sidebarFlyoutState,
+  cycleSidebarFlyoutState,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import { ErrorBoundary } from '~/components/ui/error-boundary';
@@ -37,6 +38,7 @@ import { cn } from '~/lib/cn';
 import { useRoute } from '~/lib/router';
 
 import BreadcrumbInfo from '../breadcrumb';
+import MobileFlyoutHeader from '../breadcrumb/mobile-flyout-header';
 import CountryDisclaimerNotification from '../common-components/country-disclaimer-notification';
 import SideInfoPanelHeaderLogoAndMenuButton from '../common-components/side-info-panel-header-menubutton-and-logo';
 import SidebarMenuList from '../common-components/sidebar-menu-list';
@@ -46,15 +48,26 @@ import CommonComponentGigaLayer from '../global-and-country-view-components/comm
 import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
+import { useFlyoutDrag } from './use-flyout-drag';
+import { useFlyoutTopOffset } from './use-flyout-top-offset';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
   (event) => event.stopPropagation(),
 );
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   const isMenuOpen = useStore($isMenuOpen);
   const isMobile = useStore($isMobile);
-  const sidebarHeight = useStore($sidebarHeight);
+  const flyoutState = useStore($sidebarFlyoutState);
+  const isFlyoutExpanded = flyoutState === 'expanded';
+  const panelRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const { dragHandlers, wasDragged } = useFlyoutDrag({
+    disabled: !isMobile,
+    panelRef,
+  });
+  useFlyoutTopOffset({ enabled: isMobile, headerRef, panelRef });
   const countryRoute = useRoute(mapCountry);
   const schoolRoute = useRoute(mapSchools);
   const entityRoute = useRoute(entityView) || useRoute(mapEntity);
@@ -64,43 +77,58 @@ export default function Sidebar() {
   const { entityType } = useStore($getSchoolParams);
   const detailEntityType =
     entityType ?? (schoolRoute ? EntityType.SCHOOL : undefined);
-  const detailHeightOffset = isMobile && !sidebarHeight ? '0rem' : '6rem';
+  const detailHeightOffset = isMobile && !isFlyoutExpanded ? '0rem' : '6rem';
+
+  const cycleFlyoutState = () => {
+    if (wasDragged()) return;
+    cycleSidebarFlyoutState();
+  };
+
   return (
     <div
       className={cn(
-        'relative z-2 flex w-full shrink-0 transition-all duration-300 h-[calc(100%-2.2rem)]',
+        'relative z-2 flex w-full shrink-0 duration-300 h-[calc(100%-2.2rem)]',
+        'transition-[height,left,transform]',
+        'motion-reduce:transition-none! data-[dragging]:transition-none!',
         isMobile
           ? cn(
-              'fixed inset-x-0',
-              sidebarHeight ? 'h-[60vh]' : 'h-[32vh]',
-              isSidebarCollapsed ? 'bottom-[-24vh]' : 'bottom-0',
-            )
+            'fixed inset-x-0 bottom-0 h-[var(--flyout-height)]',
+            isSidebarCollapsed && 'translate-y-full',
+          )
           : cn(
-              'fixed top-2',
-              isSidebarCollapsed ? 'left-[-320px]!' : 'left-2!',
-              'bottom-[var(--map-footer-offset)] min-[1584px]:bottom-2',
-              'w-[320px] min-[1584px]:w-[320px]',
-            ),
+            'fixed top-2',
+            isSidebarCollapsed ? 'left-[-320px]!' : 'left-2!',
+            'bottom-[var(--map-footer-offset)] min-[1584px]:bottom-2',
+            'w-[320px] min-[1584px]:w-[320px]',
+          ),
       )}
-      onClick={() => onClickSidebar()}
+      ref={panelRef}
+      style={
+        isMobile
+          ? ({
+            '--flyout-height': FLYOUT_HEIGHT[flyoutState],
+            maxHeight: FLYOUT_MAX_HEIGHT,
+          } as CSSProperties)
+          : undefined
+      }
     >
       <div className="sidebar flex h-inherit w-full! flex-col overflow-y-auto overflow-x-hidden rounded-lg! border! border-border! bg-background shadow-card! max-md:rounded-none ! max-md:border-none! max-md:shadow-none!">
         {isMobile && !isTimeplayer && (
-          <div
-            className="-mb-0.25 flex w-full items-center justify-center p-[0.6rem] bg-background"
+          <button
+            aria-expanded={isFlyoutExpanded}
+            aria-label={t('resize-panel')}
+            className="-mb-0.25 flex w-full shrink-0 cursor-grab touch-none items-center justify-center border-0 bg-background py-5 active:cursor-grabbing"
             id="mobile-view-slider"
-            onClick={() => setSidebarHeight(!sidebarHeight)}
+            onClick={cycleFlyoutState}
+            type="button"
+            {...dragHandlers}
           >
-            {/* <VerticalSliderButton /> */}
-            {sidebarHeight ? (
-              <ChevronDown className="text-foreground" />
-            ) : (
-              <ChevronUp className="text-foreground" />
-            )}
-          </div>
+            <span aria-hidden className="h-1 w-14 rounded-full bg-border" />
+          </button>
         )}
         <div
           className={cn(isMobile && 'fixed! top-0! left-0! right-0! z-[6001]!')}
+          ref={headerRef}
         >
           <div className={cn(isMobile && 'bg-background! pb-5!')}>
             <SideInfoPanelHeaderLogoAndMenuButton />
@@ -118,17 +146,11 @@ export default function Sidebar() {
               </div>
             )}
           </div>
-          {isMobile && (
-            <ErrorBoundary name="MobileEntityTypeSelector" variant="minimal">
-              <EntityTypeSelector />
-            </ErrorBoundary>
-          )}
+          {isMobile && !isFlyoutExpanded && <EntityTypeSelector />}
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col">
-          <ErrorBoundary name="SidebarBreadcrumb" variant="minimal">
-            <BreadcrumbInfo />
-          </ErrorBoundary>
+          {isMobile ? <MobileFlyoutHeader /> : <BreadcrumbInfo />}
           {mapRoute ? (
             <ErrorBoundary name="SidebarLandingView" variant="card">
               <LandingPage />
@@ -190,29 +212,17 @@ export default function Sidebar() {
               </ErrorBoundary>
             </BroadcastButton>
           )}
-          <TakeTourWrapper $bottom={sidebarHeight}>
-            {!isMobile && (
-              <ErrorBoundary name="SidebarZoomButtons" variant="minimal">
-                <ZoomButtons />
-              </ErrorBoundary>
-            )}
-            {!sidebarHeight && (
-              <ErrorBoundary name="SidebarTimeplayerButton" variant="minimal">
-                <TimeplayerButton />
-              </ErrorBoundary>
-            )}
-            <ErrorBoundary name="SidebarAccessibilityButton" variant="minimal">
+          {/* Expanded on mobile leaves no map to control, and the stack would
+              be pushed off the top of the screen. */}
+          {!(isMobile && isFlyoutExpanded) && (
+            <TakeTourWrapper>
+              {!isMobile && <ZoomButtons />}
+              <TimeplayerButton />
               <AccessibilityButton />
-            </ErrorBoundary>
-            {!sidebarHeight && (
-              <ErrorBoundary name="SidebarThemeButtons" variant="minimal">
-                <ThemeButtons />
-              </ErrorBoundary>
-            )}
-            <ErrorBoundary name="SidebarLegendButton" variant="minimal">
+              <ThemeButtons />
               <LegendButton />
-            </ErrorBoundary>
-          </TakeTourWrapper>
+            </TakeTourWrapper>
+          )}
         </div>
         <ErrorBoundary name="SidebarDisclaimer" variant="minimal">
           <CountryDisclaimerNotification />

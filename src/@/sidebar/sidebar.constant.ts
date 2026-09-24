@@ -3,7 +3,11 @@ import { sub } from 'date-fns';
 import { getInterval } from '~/lib/date-fns-kit';
 import { IntervalUnit } from '~/lib/date-fns-kit/types';
 
-import { LayerType, MultischoolSelectionStats } from '@/sidebar/types';
+import {
+  LayerType,
+  MultischoolSelectionStats,
+  SidebarFlyoutState,
+} from '@/sidebar/types';
 
 const date = new Date();
 // date.setMonth(date.getMonth())
@@ -95,3 +99,21 @@ export const publishLayersListMapping = [
   'layersList.*.legend_configs.unknown.labels',
   'layersList.*.legend_configs.unknown.tooltip'
 ]
+
+export const FLYOUT_STATES = [
+  'collapsed',
+  'default',
+  'expanded',
+] as const satisfies readonly SidebarFlyoutState[];
+
+// A percentage resolves against the same box the panel's `bottom: 0` uses; dvh
+// tracks the iOS toolbar instead and let the panel creep over the header.
+export const FLYOUT_MAX_HEIGHT =
+  'calc(100% - var(--flyout-top-offset, var(--search-panel-top-offset)))';
+
+export const FLYOUT_HEIGHT: Record<SidebarFlyoutState, string> = {
+  collapsed: '15vh',
+  default: '30vh',
+  expanded: FLYOUT_MAX_HEIGHT,
+};
+

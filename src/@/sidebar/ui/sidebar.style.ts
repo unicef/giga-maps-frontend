@@ -77,11 +77,3 @@ export const HashtagIcon = styled(HashtagSvg)`
   fill: ${(props) => (props.theme as SidebarTheme).text ?? 'currentColor'};
   margin-right: 0.325rem;
 `;
-
-export const VerticalSliderButton = styled.div`
-  width: 56px;
-  height: 4px;
-  border-radius: 20px;
-  background: #ececec;
-  cursor: pointer;
-`;

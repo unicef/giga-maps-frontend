@@ -79,7 +79,7 @@ const EntitySummaryCard = ({
         )}
       >
         <div className="flex! min-w-0! items-center! gap-2.5!">
-          <div className="min-w-0! text-left! text-[15px]! font-semibold! leading-[18px]! text-foreground">
+          <div className="min-w-0! text-left! text-base! font-semibold! text-foreground">
             {card.title}
           </div>
         </div>
@@ -287,7 +287,7 @@ const EntitySummaryCard = ({
                       <Skeleton className="h-5! w-12! rounded-sm!" />
                     ) : isNoData(row) ? (
                       <span
-                        className="shrink-0! text-[16px]! font-semibold! leading-[22px]! text-gray-600!"
+                        className="shrink-0! text-base! font-semibold! text-gray-600!"
                         data-title={t('no-data-available')}
                         data-title-pos="right"
                       >
@@ -296,14 +296,14 @@ const EntitySummaryCard = ({
                     ) : (
                       <div className="flex! items-baseline! gap-1.5!">
                         <span
-                          className="shrink-0! text-[16px]! font-semibold! leading-[22px]! text-foreground"
+                          className="shrink-0! text-base! font-semibold! text-foreground"
                           data-title={t('int', { val: row.value ?? 0 })}
                         >
                           {formatNumber(row.value ?? 0, lng)}
                         </span>
                         {isFiltered ? (
                           <span
-                            className="shrink-0! text-[12px]! font-normal! leading-[22px]! text-muted-foreground"
+                            className="shrink-0! text-xs! font-normal! text-muted-foreground"
                             data-title={t('int', { val: row.totalValue ?? row.value ?? 0 })}
                           >
                             {t('of-total', {
@@ -314,7 +314,7 @@ const EntitySummaryCard = ({
                         ) : null}
                       </div>
                     )}
-                    <span className="min-w-0! text-right! text-xs! leading-4! text-muted-foreground">
+                    <span className="min-w-0! text-right! text-xs! text-muted-foreground">
                       {row.label.charAt(0).toUpperCase() + row.label.slice(1)}
                     </span>
                   </div>

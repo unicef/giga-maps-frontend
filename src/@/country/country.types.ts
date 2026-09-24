@@ -41,7 +41,8 @@ export type ZoomToCountryBounds = {
   selectedLevel: number;
   levelsCode: string[];
   zoomedCountryCode: string;
-  schoolFocusLatLng: number[]
+  schoolFocusLatLng: number[];
+  keepCurrentView: boolean;
 };
 
 export type LeaveCountryRoute = {

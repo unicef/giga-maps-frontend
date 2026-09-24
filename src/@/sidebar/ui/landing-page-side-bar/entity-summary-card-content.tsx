@@ -70,7 +70,7 @@ const EntitySummaryCardContent = ({
           <div key={metric.label}>
             {index > 0 ? <MetricDivider /> : null}
             <div className="py-3.5!">
-              <div className="flex! items-center! gap-1.5! text-xs! leading-5! text-muted-foreground">
+              <div className="flex! items-center! gap-1.5! text-xs! text-muted-foreground">
                 <span>{metric.label}</span>
                 <InfoTooltip content={metric.tooltip} />
               </div>

@@ -76,7 +76,7 @@ export const EntityEmptyState = ({
         }}
         src={SchoolNotMappedImg}
       />
-      <p className="m-0! text-xs! leading-5! text-muted-foreground!">
+      <p className="m-0! text-xs! text-muted-foreground!">
         {countryName ? (
           <Trans
             components={{
