@@ -18,8 +18,6 @@ import {
 } from '../../sidebar.model';
 import RightShareBDB from './right-share-bdb.view';
 
-// The mobile flyout shows the current level as a title with its parents as a
-// subtitle, where the desktop sidebar shows a breadcrumb trail.
 export const getFlyoutHeading = ({
   admin1Name,
   countryName,

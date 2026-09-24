@@ -324,8 +324,7 @@
 
   --font-manrope: 'Manrope', sans-serif;
 
-  /* Brand type scale (CLAUDE.md 7.2); Tailwind's own line-heights are tighter.
-     text-4xl and text-5xl still ship Tailwind's, they are landing-only. */
+  /* Brand line-heights (CLAUDE.md 7.2). */
   --text-xs--line-height: 1.125rem;
   --text-xl--line-height: 1.875rem;
   --text-2xl--line-height: 2.25rem;

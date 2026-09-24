@@ -36,7 +36,6 @@ export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchool
       const markerInfo = collectMarker.find(item => item.id === schoolStat.id);
       if (markerInfo?.marker) {
         const popup = createPopup(isSingle ? { closeOnClick: false, closeOnMove: false } : {}).setDOMContent(template)
-        // On mobile the flyout shows the entity details, so the pin carries no popup.
         markerInfo.marker.setPopup(isMobile ? undefined : popup);
         if (isSingle && !isMobile && !popup.isOpen()) {
           markerInfo.marker.togglePopup();

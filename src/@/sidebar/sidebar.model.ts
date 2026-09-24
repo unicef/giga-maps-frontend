@@ -1229,7 +1229,6 @@ export const $isStatusLegendLoading = combine(
 );
 
 export const onShowLegend = createEvent<boolean>();
-// On mobile the map is the point: the legend only opens when the user asks.
 export const $showLegend = restore(onShowLegend, !isMobileViewport());
 
 export const onShowThemeLayer = createEvent<boolean>();

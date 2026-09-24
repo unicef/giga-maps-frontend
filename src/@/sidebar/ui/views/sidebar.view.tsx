@@ -70,7 +70,7 @@ export default function Sidebar() {
     panelRef,
     state: flyoutState,
   });
-  useFlyoutTopOffset({ enabled: isMobile, headerRef, panelRef });
+  useFlyoutTopOffset({ enabled: isMobile, headerRef });
   const countryRoute = useRoute(mapCountry);
   const schoolRoute = useRoute(mapSchools);
   const entityRoute = useRoute(entityView) || useRoute(mapEntity);
@@ -100,8 +100,7 @@ export default function Sidebar() {
         )}
       </div>
       {isMobile && (
-        // Out of flow so the header box ends at the search band; otherwise its
-        // empty area sits over the flyout handle in full and eats the taps.
+        // Out of flow, or its empty box covers the handle in full and eats taps.
         <div
           aria-hidden={isFlyoutExpanded}
           className={cn(
@@ -215,8 +214,6 @@ export default function Sidebar() {
               <FilterButton />
             </BroadcastButton>
           )}
-          {/* Expanded on mobile leaves no map to control, and the stack would
-            be pushed off the top of the screen. */}
           {!(isMobile && isFlyoutExpanded) && (
             <TakeTourWrapper>
               {!isMobile && <ZoomButtons />}
@@ -228,8 +225,7 @@ export default function Sidebar() {
           )}
         </div>
       </div>
-      {/* Outside the panel: its translate would make this fixed header scroll
-        along with it. */}
+      {/* Outside the panel, whose translate would drag this fixed header. */}
       {isMobile && header}
     </>
   );

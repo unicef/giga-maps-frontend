@@ -1,22 +1,18 @@
 import { type RefObject, useLayoutEffect } from 'react';
 
-// The header is fixed over the map and its height varies per device (safe
-// areas, font scaling), so a hardcoded offset buried the drag handle under it.
+// Measured: the header height varies per device. On <html> for the map camera.
 export const useFlyoutTopOffset = ({
   enabled,
   headerRef,
-  panelRef,
 }: {
   enabled: boolean;
   headerRef: RefObject<HTMLElement | null>;
-  panelRef: RefObject<HTMLElement | null>;
 }) => {
   useLayoutEffect(() => {
     const header = headerRef.current;
-    const panel = panelRef.current;
-    if (!panel) return;
+    const root = document.documentElement;
 
-    const clear = () => panel.style.removeProperty('--flyout-top-offset');
+    const clear = () => root.style.removeProperty('--flyout-top-offset');
 
     if (!enabled || !header || typeof ResizeObserver === 'undefined') {
       clear();
@@ -24,7 +20,7 @@ export const useFlyoutTopOffset = ({
     }
 
     const sync = () => {
-      panel.style.setProperty(
+      root.style.setProperty(
         '--flyout-top-offset',
         `${header.getBoundingClientRect().height}px`,
       );
@@ -38,5 +34,5 @@ export const useFlyoutTopOffset = ({
       observer.disconnect();
       clear();
     };
-  }, [enabled, headerRef, panelRef]);
+  }, [enabled, headerRef]);
 };

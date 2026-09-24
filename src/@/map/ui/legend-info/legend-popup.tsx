@@ -316,8 +316,7 @@ const LegendPopup = ({
         align={isMobile && isFlyoutExpanded ? 'center' : 'end'}
         className={cn(
           'z-[10000]! overflow-hidden! rounded-[6px]! border! border-border! p-0! shadow-xs!',
-          // A single section hugs its content; several need the width ladder so
-          // the columns line up across entity types.
+          // Several sections share widths so columns align across entity types.
           isCompactLegend
             ? 'w-max! max-w-[min(21rem,calc(100vw-1rem))]!'
             : [

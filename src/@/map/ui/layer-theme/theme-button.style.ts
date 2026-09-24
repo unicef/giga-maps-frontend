@@ -23,8 +23,7 @@ flex-direction:column;
 align-items:center;
 
  @media (max-width:768px){
-     /* Fixed inside the translated flyout, so 100% is the panel: it rides
-        the same animation instead of chasing it. */
+     /* Fixed inside the translated flyout, so 100% is the panel. */
      bottom:calc(100% + 0.5rem);
  }
 `

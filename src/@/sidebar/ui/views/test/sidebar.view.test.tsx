@@ -113,7 +113,6 @@ describe('Sidebar', () => {
 
     expect(getAccessibleButton()).toBeInTheDocument();
 
-    // Expanded covers the map, so the map controls go with it.
     await fireEvent.click(sliderButton as Element);
     expect(sliderButton).toHaveAttribute('aria-expanded', 'true');
     expect(getAccessibleButton()).not.toBeInTheDocument();
@@ -122,7 +121,6 @@ describe('Sidebar', () => {
     expect(sliderButton).toHaveAttribute('aria-expanded', 'false');
     expect(getAccessibleButton()).toBeInTheDocument();
 
-    // Taps only alternate default and expanded; collapsing takes a drag.
     await fireEvent.click(sliderButton as Element);
     expect(sliderButton).toHaveAttribute('aria-expanded', 'true');
   });

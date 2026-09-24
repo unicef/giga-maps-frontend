@@ -41,6 +41,24 @@ describe('zoomToCountryFx', () => {
     expect(result).toBe(schoolFocusLatLng.toString())
   })
 
+  test('should centre the school between the header and the flyout on mobile', async () => {
+    map.getContainer = vi.fn().mockReturnValue({
+      getBoundingClientRect: () => ({ height: 900, top: 0 }),
+    })
+    vi.stubGlobal('innerHeight', 1000)
+    document.documentElement.style.setProperty('--flyout-top-offset', '120px')
+
+    await zoomToCountryFx({ map, schoolFocusLatLng: [10, 20], levelsCode: ['US'], isMobile: true } as any)
+
+    // Visible map 120–600, middle 360; container centre 450.
+    expect(map.flyTo).toHaveBeenCalledWith(
+      expect.objectContaining({ offset: [0, -90] }),
+    )
+
+    document.documentElement.style.removeProperty('--flyout-top-offset')
+    vi.unstubAllGlobals()
+  })
+
   test('should return zoomedCountryCode when it matches adminCode', async () => {
     const zoomedCountryCode = 'US'
     const result = await zoomToCountryFx({ map, zoomedCountryCode, levelsCode: ['US'] } as any)

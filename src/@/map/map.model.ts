@@ -98,8 +98,7 @@ export const $isTilesAndLables = restore(onEnableTitlesAndLabels, true);
 export const onEnableNavigateByAdminLevel = createEvent<boolean>();
 const navigateByAdminStored = getLocalStorage('navigate-by-admin-level');
 
-// Off on mobile: navigating by admin area swallows the tap that should open the
-// facility page. An explicit choice always wins over the viewport default.
+// Off on mobile, where it swallows the tap that opens the facility.
 export const getNavigateByAdminLevelDefault = (
   stored: unknown,
   isMobile: boolean,

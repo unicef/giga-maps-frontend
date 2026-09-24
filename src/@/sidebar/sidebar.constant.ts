@@ -106,14 +106,15 @@ export const FLYOUT_STATES = [
   'expanded',
 ] as const satisfies readonly SidebarFlyoutState[];
 
-// Matches devmap: a peek of 100px, the top edge at 60dvh, and full up to the header.
+export const FLYOUT_DEFAULT_VISIBLE_RATIO = 0.4;
+
+// Snap points from devmap.
 export const FLYOUT_VISIBLE_HEIGHT: Record<SidebarFlyoutState, string> = {
   collapsed: 'calc(100px + env(safe-area-inset-bottom, 0px))',
-  default: '40dvh',
+  default: `${FLYOUT_DEFAULT_VISIBLE_RATIO * 100}dvh`,
   expanded: '100%',
 };
 
-// The panel keeps its full height and slides, so the animation stays on the
-// compositor; a translate percentage is relative to the panel itself.
+// A translate % is relative to the panel, which keeps its full height.
 export const getFlyoutOffset = (visibleHeight: string) =>
   `max(0px, calc(100% - ${visibleHeight}))`;

@@ -92,8 +92,7 @@ export const $admin1Name = $admin1Data.map((data) => (data?.name ?? data?.name_e
 export const setSchoolFocusLatLng = createEvent<PointCoordinates>();
 export const $schoolFocusLatLng = restore<PointCoordinates>(setSchoolFocusLatLng, null);
 export const onRecenterView = createEvent();
-// Clearing the selection goes back to the global view but leaves the camera
-// where the user had it, unlike navigating there by any other means.
+// Back to the global view without moving the camera.
 export const clearMapSelection = createEvent();
 export const $keepMapView = restore(clearMapSelection.map(() => true), false);
 export const $worldview = createStore<string>(defaultWorldView);
@@ -258,8 +257,7 @@ const $isEntityRoute = combine(mapEntity.visible, mapSchools.visible, (entity, s
 sample({
   clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView, $countryAdminSchoolId]),
   source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId, keepCurrentView: $keepMapView, isEntityRoute: $isEntityRoute }),
-  // Opening an entity clears its focus until the entity loads; refitting the
-  // country in that gap zoomed out only to fly straight back in.
+  // The focus is empty until the entity loads; refitting then zooms out and back.
   filter: ({ isEntityRoute, schoolFocusLatLng, countryAdminSchoolId }) =>
     !isEntityRoute || Boolean(schoolFocusLatLng) || Boolean(countryAdminSchoolId),
   fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId, keepCurrentView }) => {

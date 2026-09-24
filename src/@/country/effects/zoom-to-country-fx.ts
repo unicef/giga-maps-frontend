@@ -1,10 +1,25 @@
 import { createEffect } from 'effector';
-import { LngLatBoundsLike, LngLatLike } from 'mapbox-gl';
+import { LngLatBoundsLike, LngLatLike, Map, PointLike } from 'mapbox-gl';
 
 import { ZoomToCountryBounds } from '~/@/country/country.types';
 import { defaultCenter, defaultZoom } from '~/@/map/map.constant';
+import { FLYOUT_DEFAULT_VISIBLE_RATIO } from '~/@/sidebar/sidebar.constant';
 
 import { zoomPaddingDesktop, zoomPaddingMobile } from '../country.constant';
+
+// No popup on mobile: centre the dot between the header and the default flyout.
+const getMobileFocusOffset = (map: Map): PointLike => {
+  const { height, top } = map.getContainer().getBoundingClientRect();
+  const headerBottom =
+    parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--flyout-top-offset',
+      ),
+    ) || 0;
+  const flyoutTop = window.innerHeight * (1 - FLYOUT_DEFAULT_VISIBLE_RATIO);
+
+  return [0, (headerBottom + flyoutTop) / 2 - (top + height / 2)];
+};
 
 export const zoomToCountryFx = createEffect(
   ({
@@ -27,7 +42,7 @@ export const zoomToCountryFx = createEffect(
       map.flyTo({
         center: schoolFocusLatLng as LngLatLike,
         zoom: Math.max(currentZoom, predefinedSchoolZoom),
-        offset: [0, -180]
+        offset: isMobile ? getMobileFocusOffset(map) : [0, -180]
       });
       return schoolFocusLatLng.toString();
     }

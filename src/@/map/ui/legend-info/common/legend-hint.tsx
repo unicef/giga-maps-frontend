@@ -6,8 +6,7 @@ import {
   TooltipTrigger,
 } from '~/components/ui/tooltip';
 
-// The legend popover clips overflow, so the global `data-title` CSS tooltip
-// gets cut off at its edges; a portalled tooltip escapes it.
+// Portalled: the popover's overflow clips the global `data-title` tooltip.
 const LegendHint = ({
   label,
   children,

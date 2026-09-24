@@ -12,9 +12,7 @@ import {
 import { setSidebarFlyoutState } from '~/@/sidebar/sidebar.model';
 import { SidebarFlyoutState } from '~/@/sidebar/types';
 
-// Below this the gesture is a tap, and the handle's onClick cycles instead.
 const TAP_SLOP_PX = 6;
-// A release faster than this jumps to the next snap regardless of distance.
 const FLICK_PX_PER_MS = 0.3;
 const VELOCITY_WINDOW_MS = 120;
 const RUBBER_BAND_RATIO = 1 / 4;
@@ -40,8 +38,7 @@ type TouchGesture = {
   startY: number;
 };
 
-// The snap points are CSS lengths (dvh, env(), %), so let the browser resolve
-// them; the probe is absolute so `100%` is the panel's own height.
+// Let the browser resolve the CSS lengths; absolute so 100% is the panel.
 const resolveSnapHeights = (panel: HTMLElement) => {
   const probe = document.createElement('div');
   probe.style.cssText =
@@ -61,8 +58,7 @@ const resolveSnapHeights = (panel: HTMLElement) => {
   return snapHeights;
 };
 
-// The computed `translate` stays an unresolved calc(), but offsetTop ignores
-// transforms, so the rect gives the live offset even mid-transition.
+// Computed `translate` stays an unresolved calc(); offsetTop ignores transforms.
 const getVisibleHeight = (panel: HTMLElement) =>
   panel.clientHeight - (panel.getBoundingClientRect().top - panel.offsetTop);
 
@@ -114,8 +110,7 @@ export const useFlyoutDrag = ({
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  // Outside full, the bottom of the content is off screen, so a list left
-  // scrolled halfway would open there next time.
+  // Outside full the list bottom is off screen, so don't leave it scrolled.
   useEffect(() => {
     if (disabled || state === 'expanded') return;
     panelRef.current?.querySelectorAll('*').forEach((element) => {
@@ -197,8 +192,6 @@ export const useFlyoutDrag = ({
     if (target) setSidebarFlyoutState(target);
   };
 
-  // Touch drags from anywhere on the panel; content keeps the gesture when it
-  // is horizontal, or when full and the list can still scroll that way.
   useEffect(() => {
     const panel = panelRef.current;
     if (disabled || !panel) return;
@@ -288,11 +281,11 @@ export const useFlyoutDrag = ({
       panel.removeEventListener('touchcancel', onTouchCancel);
       if (gesture?.mode === 'drag') endSession();
     };
-    // The helpers only read refs, so rebinding on every render buys nothing.
+    // The helpers only read refs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled, panelRef]);
 
-  // Mouse drags on the handle only; touch goes through the listeners above.
+  // Mouse only; touch goes through the listeners above.
   const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (disabled || event.pointerType === 'touch' || !event.isPrimary) return;
     if (!startSession(event.clientY, event.timeStamp)) return;
@@ -330,8 +323,7 @@ export const useFlyoutDrag = ({
       onPointerMove,
       onPointerUp,
     },
-    // One-shot: it only suppresses the click that closes a drag. Without the
-    // reset a keyboard activation after a drag would be swallowed too.
+    // One-shot, so a later keyboard activation isn't swallowed.
     wasDragged: () => {
       const dragged = didDrag.current;
       didDrag.current = false;
