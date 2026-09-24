@@ -13,18 +13,18 @@ const ApiDocsMain = () => {
   return (
     <>
       <ApiRoot>
-        <ErrorBoundary name="ApiDocsSideMenu" variant="card">
+        <ErrorBoundary name="ApiDocsSideMenu">
           <SideMenuPanel />
         </ErrorBoundary>
         <RightSectonPanel>
-          <ErrorBoundary name="ApiDocsContent" variant="card">
+          <ErrorBoundary name="ApiDocsContent">
             {useRoute(docsExporeApi) && <ExploreApiRightSection />}
             {useRoute(docsApiKeys) && <ApiKeysRightSection />}
             {useRoute(apiInfo) && <ApiInfo />}
           </ErrorBoundary>
         </RightSectonPanel>
       </ApiRoot>
-      <ErrorBoundary name="ApiDocsModals" variant="minimal">
+      <ErrorBoundary name="ApiDocsModals">
         <Modals />
       </ErrorBoundary>
     </>

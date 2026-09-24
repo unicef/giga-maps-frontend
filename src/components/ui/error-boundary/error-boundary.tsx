@@ -2,18 +2,10 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 import { captureComponentError } from '~/core/sentry';
 
-export type ErrorBoundaryVariant =
-  | 'page'
-  | 'card'
-  | 'inline'
-  | 'banner'
-  | 'minimal';
-
 export interface ErrorBoundaryProps {
   name?: string;
   componentName?: string;
   fallback?: ReactNode | ((error: Error, resetError: () => void) => ReactNode);
-  variant?: ErrorBoundaryVariant;
   onReset?: () => void;
   showDetails?: boolean;
   children: ReactNode;
@@ -54,7 +46,6 @@ export class ErrorBoundary extends Component<
 
     captureComponentError(error, identifier, {
       componentStack: errorInfo.componentStack,
-      variant: this.props.variant,
     });
   }
 
@@ -89,7 +80,6 @@ export function withErrorBoundary<P extends object>(
   options: {
     name?: string;
     componentName?: string;
-    variant?: ErrorBoundaryVariant;
     fallback?:
       | ReactNode
       | ((error: Error, resetError: () => void) => ReactNode);

@@ -2,7 +2,6 @@ export {
   ErrorBoundary,
   withErrorBoundary,
   type ErrorBoundaryProps,
-  type ErrorBoundaryVariant,
   // Backward-compatible aliases
   ComponentErrorBoundary,
   withComponentErrorBoundary,

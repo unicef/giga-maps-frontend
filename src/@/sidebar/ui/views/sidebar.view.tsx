@@ -133,13 +133,13 @@ export default function Sidebar() {
           <div className={cn(isMobile && 'bg-background! pb-5!')}>
             <SideInfoPanelHeaderLogoAndMenuButton />
             {isMenuOpen && (
-              <ErrorBoundary name="SidebarMenuList" variant="card">
+              <ErrorBoundary name="SidebarMenuList">
                 <SidebarMenuList />
               </ErrorBoundary>
             )}
             {!isMenuOpen && (
               <div className="relative z-12">
-                <ErrorBoundary name="SidebarSearch" variant="minimal">
+                <ErrorBoundary name="SidebarSearch">
                   <TopSearchBar />
                   <SearchResult />
                 </ErrorBoundary>
@@ -152,7 +152,7 @@ export default function Sidebar() {
         <div className="flex min-h-0 flex-1 flex-col">
           {isMobile ? <MobileFlyoutHeader /> : <BreadcrumbInfo />}
           {mapRoute ? (
-            <ErrorBoundary name="SidebarLandingView" variant="card">
+            <ErrorBoundary name="SidebarLandingView">
               <LandingPage />
             </ErrorBoundary>
           ) : (
@@ -165,19 +165,19 @@ export default function Sidebar() {
               }
             >
               {countryRoute && (
-                <ErrorBoundary name="SidebarCountryView" variant="card">
+                <ErrorBoundary name="SidebarCountryView">
                   <GlobalAndCountryView />
                 </ErrorBoundary>
               )}
               {(schoolRoute || entityRoute) && (
-                <ErrorBoundary name="SidebarEntityView" variant="card">
+                <ErrorBoundary name="SidebarEntityView">
                   <SchoolView />
                 </ErrorBoundary>
               )}
             </div>
           )}
           {!mapRoute && !countryRoute && detailEntityType && (
-            <ErrorBoundary name="SidebarGigaLayer" variant="card">
+            <ErrorBoundary name="SidebarGigaLayer">
               <CommonComponentGigaLayer entityType={detailEntityType} />
             </ErrorBoundary>
           )}
@@ -207,7 +207,7 @@ export default function Sidebar() {
         >
           {!isMobile && (
             <BroadcastButton className="broadcast-button">
-              <ErrorBoundary name="SidebarFilterButton" variant="minimal">
+              <ErrorBoundary name="SidebarFilterButton">
                 <FilterButton />
               </ErrorBoundary>
             </BroadcastButton>
@@ -224,7 +224,7 @@ export default function Sidebar() {
             </TakeTourWrapper>
           )}
         </div>
-        <ErrorBoundary name="SidebarDisclaimer" variant="minimal">
+        <ErrorBoundary name="SidebarDisclaimer">
           <CountryDisclaimerNotification />
         </ErrorBoundary>
       </div>

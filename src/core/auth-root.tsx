@@ -82,13 +82,13 @@ export default function AuthRoot() {
       <Suspense fallback={<Loading withOverlay={true} active={true} />}>
         <AuthVerification>
           {apiDocsRoute && (
-            <ErrorBoundary name="ApiDocs" variant="page">
+            <ErrorBoundary name="ApiDocs">
               <ApiDocsMain />
             </ErrorBoundary>
           )}
           {adminRoute && (
             <AuthRoute>
-              <ErrorBoundary name="AdminPanel" variant="page">
+              <ErrorBoundary name="AdminPanel">
                 <AdminPanelMain />
               </ErrorBoundary>
             </AuthRoute>

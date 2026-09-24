@@ -55,28 +55,28 @@ export const Root = () => {
         <TooltipProvider>
           {
             useRoute(map) && (
-              <ErrorBoundary name="MapPage" variant="page">
+              <ErrorBoundary name="MapPage">
                 <MapPage />
               </ErrorBoundary>
             )
           }
           {
             (apiDocsRoute || adminRoute) && (
-              <ErrorBoundary name="AuthRoot" variant="page">
+              <ErrorBoundary name="AuthRoot">
                 <AuthRoot />
               </ErrorBoundary>
             )
           }
           {
             useRoute(aboutus) && (
-              <ErrorBoundary name="AboutPage" variant="page">
+              <ErrorBoundary name="AboutPage">
                 <AboutPage />
               </ErrorBoundary>
             )
           }
           {
             useStore(router.noMatches) && (
-              <ErrorBoundary name="PageNotFound" variant="page">
+              <ErrorBoundary name="PageNotFound">
                 <PageNotFound />
               </ErrorBoundary>
             )

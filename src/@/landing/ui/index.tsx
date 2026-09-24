@@ -79,7 +79,7 @@ const LandingPage = () => {
       className="h-full! w-full! scheme-light overflow-x-hidden! overflow-y-auto! bg-landing-background! text-foreground! dark:scheme-dark"
       data-slot="landing-page"
     >
-      <ErrorBoundary name="LandingHeader" variant="banner">
+      <ErrorBoundary name="LandingHeader">
         <LandingHeader />
       </ErrorBoundary>
 
@@ -130,7 +130,6 @@ const LandingPage = () => {
               <ErrorBoundary
                 key={type}
                 name={`LandingLayerSection-${type}`}
-                variant="card"
               >
                 <LayerSection
                   data={data}
@@ -142,28 +141,28 @@ const LandingPage = () => {
             );
           })}
 
-          <ErrorBoundary name="LandingTestimonials" variant="card">
+          <ErrorBoundary name="LandingTestimonials">
             <TestimonialsSection />
           </ErrorBoundary>
-          <ErrorBoundary name="LandingSuccessStories" variant="card">
+          <ErrorBoundary name="LandingSuccessStories">
             <SuccessStoriesSection />
           </ErrorBoundary>
-          <ErrorBoundary name="LandingServices" variant="card">
+          <ErrorBoundary name="LandingServices">
             <ServicesSection />
           </ErrorBoundary>
-          <ErrorBoundary name="LandingFaq" variant="card">
+          <ErrorBoundary name="LandingFaq">
             <FaqSection />
           </ErrorBoundary>
-          <ErrorBoundary name="LandingPartners" variant="card">
+          <ErrorBoundary name="LandingPartners">
             <PartnersSection />
           </ErrorBoundary>
-          <ErrorBoundary name="LandingCta" variant="card">
+          <ErrorBoundary name="LandingCta">
             <CtaSection />
           </ErrorBoundary>
         </div>
       </main >
 
-      <ErrorBoundary name="LandingFooter" variant="banner">
+      <ErrorBoundary name="LandingFooter">
         <LandingFooter />
       </ErrorBoundary>
     </div >

@@ -42,7 +42,7 @@ describe('ErrorBoundary', () => {
 
   it('catches error, calls Sentry capture, and renders no error component', () => {
     const { container } = render(
-      <ErrorBoundary name="TestBrokenComponent" variant="card">
+      <ErrorBoundary name="TestBrokenComponent">
         <ProblemChild shouldThrow={true} />
       </ErrorBoundary>,
     );
@@ -52,7 +52,9 @@ describe('ErrorBoundary', () => {
     expect(sentryCore.captureComponentError).toHaveBeenCalledWith(
       expect.any(Error),
       'TestBrokenComponent',
-      expect.objectContaining({ variant: 'card' }),
+      expect.objectContaining({
+        componentStack: expect.any(String),
+      }),
     );
   });
 
@@ -72,7 +74,6 @@ describe('ErrorBoundary', () => {
   it('supports HOC withErrorBoundary without rendering error component on crash', () => {
     const SafeComponent = withErrorBoundary(ProblemChild, {
       name: 'HocComponent',
-      variant: 'inline',
     });
 
     const { container } = render(<SafeComponent shouldThrow={true} />);
@@ -81,7 +82,9 @@ describe('ErrorBoundary', () => {
     expect(sentryCore.captureComponentError).toHaveBeenCalledWith(
       expect.any(Error),
       'HocComponent',
-      expect.objectContaining({ variant: 'inline' }),
+      expect.objectContaining({
+        componentStack: expect.any(String),
+      }),
     );
   });
 });

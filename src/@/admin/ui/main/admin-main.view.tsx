@@ -111,12 +111,12 @@ const AdminPanelMainComponent = () => {
         <Box $padding="1">
           <UserAvatar userName={userName} />
         </Box>
-        <ErrorBoundary name="AdminPanelTabs" variant="card">
+        <ErrorBoundary name="AdminPanelTabs">
           <AdminPanelTabs />
         </ErrorBoundary>
       </AdminMainLeftPanel>
       <AdminMainRightPanel>
-        <ErrorBoundary name="AdminActiveView" variant="card">
+        <ErrorBoundary name="AdminActiveView">
           {useRoute(userList) && <UserListComponent />}
           {useRoute(userDetails) && <UserDetailsComponent />}
           {useRoute(userRoles) && <RolesList />}

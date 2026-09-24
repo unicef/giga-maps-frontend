@@ -44,42 +44,42 @@ const MapPage = () => {
   return (
     <Layout>
       <Underlay>
-        <ErrorBoundary name="MapCanvas" variant="card">
+        <ErrorBoundary name="MapCanvas">
           <Map />
         </ErrorBoundary>
       </Underlay>
       <Main>
-        <ErrorBoundary name="MapSidebar" variant="card">
+        <ErrorBoundary name="MapSidebar">
           <Sidebar />
         </ErrorBoundary>
         <PopupContainer>
-          <ErrorBoundary name="MapPopup" variant="minimal">
+          <ErrorBoundary name="MapPopup">
             <Popup />
           </ErrorBoundary>
         </PopupContainer>
       </Main>
       {!isMobile && !isTimeplayer && (
-        <ErrorBoundary name="EntityTypeSelector" variant="inline">
+        <ErrorBoundary name="EntityTypeSelector">
           <EntityTypeSelector />
         </ErrorBoundary>
       )}
-      <ErrorBoundary name="TopLoader" variant="minimal">
+      <ErrorBoundary name="TopLoader">
         <TopLoader />
       </ErrorBoundary>
-      <ErrorBoundary name="MapFooter" variant="minimal">
+      <ErrorBoundary name="MapFooter">
         <Footer />
       </ErrorBoundary>
-      <ErrorBoundary name="WelcomeToast" variant="minimal">
+      <ErrorBoundary name="WelcomeToast">
         <WelcomeToast />
       </ErrorBoundary>
       {/* <ZoomLevelDisplay /> */}
       {isProductTour && (
-        <ErrorBoundary name="ProductTour" variant="minimal">
+        <ErrorBoundary name="ProductTour">
           <ProductTour />
         </ErrorBoundary>
       )}
       {isTimeplayer && (
-        <ErrorBoundary name="Timeplayer" variant="inline">
+        <ErrorBoundary name="Timeplayer">
           <TimeplayerContainer />
         </ErrorBoundary>
       )}

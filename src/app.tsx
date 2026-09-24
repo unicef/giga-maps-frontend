@@ -2,7 +2,7 @@ import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { AppFrame, Root } from '~/core';
 
 const App = () => (
-  <ErrorBoundary name="AppRoot" variant="page">
+  <ErrorBoundary name="AppRoot">
     <AppFrame>
       <Root />
     </AppFrame>
