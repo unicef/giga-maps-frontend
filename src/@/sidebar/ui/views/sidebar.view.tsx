@@ -201,31 +201,31 @@ export default function Sidebar() {
               </button>
             )}
           </div>
-          <div
-            className={cn(
-              'relative z-10 transition-all duration-500',
-              isTimeplayer && 'hidden',
-            )}
-            data-flyout-no-drag
-          >
-            {!isMobile && (
-              <BroadcastButton className="broadcast-button">
-                <FilterButton />
-              </BroadcastButton>
-            )}
-            {/* Expanded on mobile leaves no map to control, and the stack would
-              be pushed off the top of the screen. */}
-            {!(isMobile && isFlyoutExpanded) && (
-              <TakeTourWrapper>
-                {!isMobile && <ZoomButtons />}
-                <TimeplayerButton />
-                <AccessibilityButton />
-                <ThemeButtons />
-                <LegendButton />
-              </TakeTourWrapper>
-            )}
-          </div>
           <CountryDisclaimerNotification />
+        </div>
+        <div
+          className={cn(
+            'relative z-10 transition-all duration-500',
+            isTimeplayer && 'hidden',
+          )}
+          data-flyout-no-drag
+        >
+          {!isMobile && (
+            <BroadcastButton className="broadcast-button">
+              <FilterButton />
+            </BroadcastButton>
+          )}
+          {/* Expanded on mobile leaves no map to control, and the stack would
+            be pushed off the top of the screen. */}
+          {!(isMobile && isFlyoutExpanded) && (
+            <TakeTourWrapper>
+              {!isMobile && <ZoomButtons />}
+              <TimeplayerButton />
+              <AccessibilityButton />
+              <ThemeButtons />
+              <LegendButton />
+            </TakeTourWrapper>
+          )}
         </div>
       </div>
       {/* Outside the panel: its translate would make this fixed header scroll
