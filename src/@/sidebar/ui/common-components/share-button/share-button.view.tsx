@@ -9,7 +9,14 @@ import { styled } from 'styled-components';
 const ShareIcon = styled(Share)`
   fill: ${props => props.theme.text} !important;
 `
-const ShareButtonWrapper = styled.div`
+const ShareButtonWrapper = styled.div<{ $centerIcon: boolean }>`
+ ${({ $centerIcon }) => $centerIcon && `
+  /* Carbon's sm padding is tuned for a 16px glyph and sinks a larger one. */
+  .cds--btn.cds--btn--icon-only {
+    padding-block: 0;
+    align-items: center;
+  }
+ `}
  .cds--tooltip-content {
   background: ${props => props.theme.text} !important;
   color: ${props => props.theme.main}!important;
@@ -19,10 +26,10 @@ const ShareButtonWrapper = styled.div`
   }
 `
 
-const ShareButton = ({ shareButtonRef, handleShareClicked }: { shareButtonRef: Ref<HTMLElement>, handleShareClicked: () => void }) => {
+const ShareButton = ({ shareButtonRef, handleShareClicked, iconSize = 16 }: { shareButtonRef?: Ref<HTMLElement>, handleShareClicked: () => void, iconSize?: 16 | 20 }) => {
   const { t } = useTranslation();
   return (
-    <ShareButtonWrapper>
+    <ShareButtonWrapper $centerIcon={iconSize !== 16}>
       <IconButton
         align={'bottom-right'}
         label={t('share-content')}
@@ -32,7 +39,7 @@ const ShareButton = ({ shareButtonRef, handleShareClicked }: { shareButtonRef: R
         size="sm"
         kind="ghost"
       >
-        <ShareIcon size="16" aria-label="share" />
+        <ShareIcon size={iconSize} aria-label="share" />
       </IconButton>
     </ShareButtonWrapper >
   );
