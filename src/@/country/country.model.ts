@@ -252,10 +252,16 @@ sample({
   target: createUpdateCountriesLayer
 });
 
+const $isEntityRoute = combine(mapEntity.visible, mapSchools.visible, (entity, schools) => entity || schools);
+
 // Zoom to country bounds
 sample({
   clock: merge([countryReceived, createUpdateCountriesLayer.doneData, $schoolFocusLatLng, onRecenterView, $countryAdminSchoolId]),
-  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId, keepCurrentView: $keepMapView }),
+  source: combine({ mapContext: $mapContext, params: mapCountry.params, schoolFocusLatLng: $schoolFocusLatLng, countryAdminSchoolId: $countryAdminSchoolId, keepCurrentView: $keepMapView, isEntityRoute: $isEntityRoute }),
+  // Opening an entity clears its focus until the entity loads; refitting the
+  // country in that gap zoomed out only to fly straight back in.
+  filter: ({ isEntityRoute, schoolFocusLatLng, countryAdminSchoolId }) =>
+    !isEntityRoute || Boolean(schoolFocusLatLng) || Boolean(countryAdminSchoolId),
   fn: ({ mapContext, params, schoolFocusLatLng, countryAdminSchoolId, keepCurrentView }) => {
     const { admin1: admin1Code } = getCountryAdminCode(params?.path);
     const levelsCode = [mapContext.countryCode, (admin1Code ?? countryAdminSchoolId)].filter(Boolean)
