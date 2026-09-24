@@ -96,7 +96,7 @@ describe('landing page entity copy', () => {
     expect(content?.metrics.every(({ tooltip }) => Boolean(tooltip))).toBe(true);
   });
 
-  it('uses health-specific copy without health tooltips or estimate', () => {
+  it('uses health-specific copy with tooltips and without estimate', () => {
     const card = buildEntityCard(buildArgs(EntityType.HEALTH));
     const content = buildEntityCardContent(buildArgs(EntityType.HEALTH));
 
@@ -107,9 +107,7 @@ describe('landing page entity copy', () => {
       'across-no-countries',
     ]);
     expect(content?.metrics[0]?.estimate).toBeUndefined();
-    expect(content?.metrics.every(({ tooltip }) => tooltip === undefined)).toBe(
-      true,
-    );
+    expect(content?.metrics.every(({ tooltip }) => Boolean(tooltip))).toBe(true);
   });
 
   it('defines the new copy in every supported language', () => {

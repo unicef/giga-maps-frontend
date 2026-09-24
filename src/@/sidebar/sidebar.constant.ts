@@ -106,14 +106,14 @@ export const FLYOUT_STATES = [
   'expanded',
 ] as const satisfies readonly SidebarFlyoutState[];
 
-// A percentage resolves against the same box the panel's `bottom: 0` uses; dvh
-// tracks the iOS toolbar instead and let the panel creep over the header.
-export const FLYOUT_MAX_HEIGHT =
-  'calc(100% - var(--flyout-top-offset, var(--search-panel-top-offset)))';
-
-export const FLYOUT_HEIGHT: Record<SidebarFlyoutState, string> = {
-  collapsed: '15vh',
-  default: '30vh',
-  expanded: FLYOUT_MAX_HEIGHT,
+// Matches devmap: a peek of 100px, the top edge at 60dvh, and full up to the header.
+export const FLYOUT_VISIBLE_HEIGHT: Record<SidebarFlyoutState, string> = {
+  collapsed: 'calc(100px + env(safe-area-inset-bottom, 0px))',
+  default: '40dvh',
+  expanded: '100%',
 };
 
+// The panel keeps its full height and slides, so the animation stays on the
+// compositor; a translate percentage is relative to the panel itself.
+export const getFlyoutOffset = (visibleHeight: string) =>
+  `max(0px, calc(100% - ${visibleHeight}))`;

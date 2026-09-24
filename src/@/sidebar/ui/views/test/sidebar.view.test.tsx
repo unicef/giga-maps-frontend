@@ -121,6 +121,10 @@ describe('Sidebar', () => {
     await fireEvent.click(sliderButton as Element);
     expect(sliderButton).toHaveAttribute('aria-expanded', 'false');
     expect(getAccessibleButton()).toBeInTheDocument();
+
+    // Taps only alternate default and expanded; collapsing takes a drag.
+    await fireEvent.click(sliderButton as Element);
+    expect(sliderButton).toHaveAttribute('aria-expanded', 'true');
   });
 
   test('Render global view', async () => {
