@@ -122,6 +122,7 @@
     "@carbon/react": "1.39.0",
     "@carbon/styles": "1.39.0",
     "@matt-block/react-recaptcha-v2": "^2.0.1",
+    "@sentry/react": "^10.71.0",
     "@withease/i18next": "^23.2.2",
     "airtable": "^0.12.2",
     "class-variance-authority": "^0.7.1",

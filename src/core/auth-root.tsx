@@ -2,15 +2,16 @@ import { MsalProvider } from '@azure/msal-react';
 import { ActionableNotification, Loading } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { lazy, PropsWithChildren, Suspense, useEffect } from 'react';
+import styled from 'styled-components';
 
 import Toast from '~/@/common/Toast/Toast.view';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { admin, apiDocs, docsExporeApi } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { $msalInstance } from './auth/azure-msal/model';
-import { $isAdmin, $isCheckingAuthentication, $isLoggedIn, } from './auth/models';
+import { $isAdmin, $isCheckingAuthentication, $isLoggedIn } from './auth/models';
 import { $isMobile } from './media-query';
-import styled from 'styled-components';
 
 const NotAvailableOnMobileSection = styled.div`
   width: 100%;
@@ -18,14 +19,16 @@ const NotAvailableOnMobileSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background: ${props => props.theme.main};
+  background: ${(props) => props.theme.main};
   padding-top: 10%;
   .cds--actionable-notification--info {
-    background: ${props => props.theme.main};
+    background: ${(props) => props.theme.main};
   }
-`
+`;
 
-const AdminPanelMain = lazy(async () => import('~/@/admin/ui/main/admin-main.view'));
+const AdminPanelMain = lazy(
+  async () => import('~/@/admin/ui/main/admin-main.view')
+);
 const ApiDocsMain = lazy(async () => import('~/@/api-docs/ui/page'));
 
 const AuthRoute = ({ children }: PropsWithChildren<{}>) => {
@@ -38,16 +41,15 @@ const AuthRoute = ({ children }: PropsWithChildren<{}>) => {
   }, [isLoggedIn]);
 
   if (!isLoggedIn) return null;
-  return children
-}
+  return <>{children}</>;
+};
 
 const AuthVerification = ({ children }: PropsWithChildren<{}>) => {
   const isChecking = useStore($isCheckingAuthentication);
 
   if (isChecking) return null;
-  return children
-}
-
+  return <>{children}</>;
+};
 
 export default function AuthRoot() {
   const msalInstance = useStore($msalInstance);
@@ -73,20 +75,28 @@ export default function AuthRoot() {
           title="Coming soon on mobile"
         />
       </NotAvailableOnMobileSection>
-    )
+    );
   }
   return (
     <MsalProvider instance={msalInstance}>
       <Suspense fallback={<Loading withOverlay={true} active={true} />}>
         <AuthVerification>
-          {apiDocsRoute && <ApiDocsMain />}
-          {adminRoute && <AuthRoute>
-            <AdminPanelMain />
-          </AuthRoute>}
+          {apiDocsRoute && (
+            <ErrorBoundary name="ApiDocs">
+              <ApiDocsMain />
+            </ErrorBoundary>
+          )}
+          {adminRoute && (
+            <AuthRoute>
+              <ErrorBoundary name="AdminPanel">
+                <AdminPanelMain />
+              </ErrorBoundary>
+            </AuthRoute>
+          )}
         </AuthVerification>
         <Toast />
         <Loading withOverlay={true} active={isChecking} />
-      </Suspense >
+      </Suspense>
     </MsalProvider>
   );
-};
+}

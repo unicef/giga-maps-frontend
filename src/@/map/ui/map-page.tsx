@@ -9,6 +9,7 @@ import EntityTypeSelector from '~/@/entities/ui/entity-selector';
 import WelcomeToast from '~/@/entities/ui/welcome-toast';
 import ProductTour from '~/@/product-tour/ui/product-tour.view';
 import { $isProductTour, $isTimeplayer } from '~/@/sidebar/sidebar.model';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { $isMobile } from '~/core/media-query';
 import { $mapRoutes, mapCountry } from '~/core/routes';
 import { Layout, Main } from '~/ui';
@@ -43,21 +44,45 @@ const MapPage = () => {
   return (
     <Layout>
       <Underlay>
-        <Map />
+        <ErrorBoundary name="MapCanvas">
+          <Map />
+        </ErrorBoundary>
       </Underlay>
       <Main>
-        <Sidebar />
+        <ErrorBoundary name="MapSidebar">
+          <Sidebar />
+        </ErrorBoundary>
         <PopupContainer>
-          <Popup />
+          <ErrorBoundary name="MapPopup">
+            <Popup />
+          </ErrorBoundary>
         </PopupContainer>
       </Main>
-      {!isMobile && !isTimeplayer && <EntityTypeSelector />}
-      <TopLoader />
-      <Footer />
-      <WelcomeToast />
+      {!isMobile && !isTimeplayer && (
+        <ErrorBoundary name="EntityTypeSelector">
+          <EntityTypeSelector />
+        </ErrorBoundary>
+      )}
+      <ErrorBoundary name="TopLoader">
+        <TopLoader />
+      </ErrorBoundary>
+      <ErrorBoundary name="MapFooter">
+        <Footer />
+      </ErrorBoundary>
+      <ErrorBoundary name="WelcomeToast">
+        <WelcomeToast />
+      </ErrorBoundary>
       {/* <ZoomLevelDisplay /> */}
-      {isProductTour && <ProductTour />}
-      {isTimeplayer && <TimeplayerContainer />}
+      {isProductTour && (
+        <ErrorBoundary name="ProductTour">
+          <ProductTour />
+        </ErrorBoundary>
+      )}
+      {isTimeplayer && (
+        <ErrorBoundary name="Timeplayer">
+          <TimeplayerContainer />
+        </ErrorBoundary>
+      )}
     </Layout>
   );
 };

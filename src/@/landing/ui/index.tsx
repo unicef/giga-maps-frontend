@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
-
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { LAYER_SECTIONS } from '../landing.constant';
 import { $hero, $landingSections, $layerSections } from '../landing.model';
 import { hasLayerContent, LayerSectionData } from '../landing.types';
@@ -79,7 +79,9 @@ const LandingPage = () => {
       className="h-full! w-full! scheme-light overflow-x-hidden! overflow-y-auto! bg-landing-background! text-foreground! dark:scheme-dark"
       data-slot="landing-page"
     >
-      <LandingHeader />
+      <ErrorBoundary name="LandingHeader">
+        <LandingHeader />
+      </ErrorBoundary>
 
       <main>
         {sections === null || hero ? (
@@ -116,7 +118,8 @@ const LandingPage = () => {
               </HeroSection>
             ) : null}
           </div>
-        ) : null}
+        ) : null
+        }
 
         <div className="relative! z-[1]!">
           {LAYER_SECTIONS.map(({ mediaSide, type }) => {
@@ -124,26 +127,45 @@ const LandingPage = () => {
             if (!hasLayerContent(data)) return null;
 
             return (
-              <LayerSection
-                data={data}
-                id={type}
+              <ErrorBoundary
                 key={type}
-                mediaSide={mediaSide}
-              />
+                name={`LandingLayerSection-${type}`}
+              >
+                <LayerSection
+                  data={data}
+                  id={type}
+                  key={type}
+                  mediaSide={mediaSide}
+                />
+              </ErrorBoundary>
             );
           })}
 
-          <TestimonialsSection />
-          <SuccessStoriesSection />
-          <ServicesSection />
-          <FaqSection />
-          <PartnersSection />
-          <CtaSection />
+          <ErrorBoundary name="LandingTestimonials">
+            <TestimonialsSection />
+          </ErrorBoundary>
+          <ErrorBoundary name="LandingSuccessStories">
+            <SuccessStoriesSection />
+          </ErrorBoundary>
+          <ErrorBoundary name="LandingServices">
+            <ServicesSection />
+          </ErrorBoundary>
+          <ErrorBoundary name="LandingFaq">
+            <FaqSection />
+          </ErrorBoundary>
+          <ErrorBoundary name="LandingPartners">
+            <PartnersSection />
+          </ErrorBoundary>
+          <ErrorBoundary name="LandingCta">
+            <CtaSection />
+          </ErrorBoundary>
         </div>
-      </main>
+      </main >
 
-      <LandingFooter />
-    </div>
+      <ErrorBoundary name="LandingFooter">
+        <LandingFooter />
+      </ErrorBoundary>
+    </div >
   );
 };
 

@@ -25,6 +25,7 @@ import {
   cycleSidebarFlyoutState,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
+import { ErrorBoundary } from '~/components/ui/error-boundary';
 import { $isMobile } from '~/core/media-query';
 import {
   entityView,
@@ -91,23 +92,23 @@ export default function Sidebar() {
         'motion-reduce:transition-none! data-[dragging]:transition-none!',
         isMobile
           ? cn(
-              'fixed inset-x-0 bottom-0 h-[var(--flyout-height)]',
-              isSidebarCollapsed && 'translate-y-full',
-            )
+            'fixed inset-x-0 bottom-0 h-[var(--flyout-height)]',
+            isSidebarCollapsed && 'translate-y-full',
+          )
           : cn(
-              'fixed top-2',
-              isSidebarCollapsed ? 'left-[-320px]!' : 'left-2!',
-              'bottom-[var(--map-footer-offset)] min-[1584px]:bottom-2',
-              'w-[320px] min-[1584px]:w-[320px]',
-            ),
+            'fixed top-2',
+            isSidebarCollapsed ? 'left-[-320px]!' : 'left-2!',
+            'bottom-[var(--map-footer-offset)] min-[1584px]:bottom-2',
+            'w-[320px] min-[1584px]:w-[320px]',
+          ),
       )}
       ref={panelRef}
       style={
         isMobile
           ? ({
-              '--flyout-height': FLYOUT_HEIGHT[flyoutState],
-              maxHeight: FLYOUT_MAX_HEIGHT,
-            } as CSSProperties)
+            '--flyout-height': FLYOUT_HEIGHT[flyoutState],
+            maxHeight: FLYOUT_MAX_HEIGHT,
+          } as CSSProperties)
           : undefined
       }
     >
@@ -131,11 +132,17 @@ export default function Sidebar() {
         >
           <div className={cn(isMobile && 'bg-background! pb-5!')}>
             <SideInfoPanelHeaderLogoAndMenuButton />
-            {isMenuOpen && <SidebarMenuList />}
+            {isMenuOpen && (
+              <ErrorBoundary name="SidebarMenuList">
+                <SidebarMenuList />
+              </ErrorBoundary>
+            )}
             {!isMenuOpen && (
               <div className="relative z-12">
-                <TopSearchBar />
-                <SearchResult />
+                <ErrorBoundary name="SidebarSearch">
+                  <TopSearchBar />
+                  <SearchResult />
+                </ErrorBoundary>
               </div>
             )}
           </div>
@@ -145,7 +152,9 @@ export default function Sidebar() {
         <div className="flex min-h-0 flex-1 flex-col">
           {isMobile ? <MobileFlyoutHeader /> : <BreadcrumbInfo />}
           {mapRoute ? (
-            <LandingPage />
+            <ErrorBoundary name="SidebarLandingView">
+              <LandingPage />
+            </ErrorBoundary>
           ) : (
             <div
               className="h-full! min-h-0! flex-1! overflow-hidden! bg-background! max-md:h-[calc(100%-var(--detail-height-offset))]!"
@@ -155,12 +164,22 @@ export default function Sidebar() {
                 } as CSSProperties
               }
             >
-              {countryRoute && <GlobalAndCountryView />}
-              {(schoolRoute || entityRoute) && <SchoolView />}
+              {countryRoute && (
+                <ErrorBoundary name="SidebarCountryView">
+                  <GlobalAndCountryView />
+                </ErrorBoundary>
+              )}
+              {(schoolRoute || entityRoute) && (
+                <ErrorBoundary name="SidebarEntityView">
+                  <SchoolView />
+                </ErrorBoundary>
+              )}
             </div>
           )}
           {!mapRoute && !countryRoute && detailEntityType && (
-            <CommonComponentGigaLayer entityType={detailEntityType} />
+            <ErrorBoundary name="SidebarGigaLayer">
+              <CommonComponentGigaLayer entityType={detailEntityType} />
+            </ErrorBoundary>
           )}
           {!isTimeplayer && (
             <button
@@ -188,7 +207,9 @@ export default function Sidebar() {
         >
           {!isMobile && (
             <BroadcastButton className="broadcast-button">
-              <FilterButton />
+              <ErrorBoundary name="SidebarFilterButton">
+                <FilterButton />
+              </ErrorBoundary>
             </BroadcastButton>
           )}
           {/* Expanded on mobile leaves no map to control, and the stack would
@@ -203,7 +224,9 @@ export default function Sidebar() {
             </TakeTourWrapper>
           )}
         </div>
-        <CountryDisclaimerNotification />
+        <ErrorBoundary name="SidebarDisclaimer">
+          <CountryDisclaimerNotification />
+        </ErrorBoundary>
       </div>
     </div>
   );

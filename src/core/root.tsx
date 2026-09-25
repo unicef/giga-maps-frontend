@@ -6,13 +6,14 @@ import { lazy, Suspense, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import WebFont from 'webfontloader';
 
+import { ErrorBoundary } from '~/components/ui/error-boundary';
+import { TooltipProvider } from '~/components/ui/tooltip';
 import { aboutus, admin, apiDocs, map, router } from '~/core/routes';
 import { useRoute } from '~/lib/router';
 
 import { appLoadEvent } from './init';
 import PageNotFound from './page-no-found';
 import { $theme, themeData } from './theme.model';
-import { TooltipProvider } from '~/components/ui/tooltip';
 
 const AboutPage = lazy(async () => import('@/landing/ui'));
 const MapPage = lazy(async () => import('@/map/ui'));
@@ -52,12 +53,36 @@ export const Root = () => {
     <Suspense fallback={<Loading withOverlay={true} />}>
       <ThemeProvider theme={themeData[theme]}>
         <TooltipProvider>
-          {useRoute(map) && <MapPage />}
-          {(apiDocsRoute || adminRoute) && <AuthRoot />}
-          {useRoute(aboutus) && <AboutPage />}
-          {useStore(router.noMatches) && <PageNotFound />}
-        </TooltipProvider>
-      </ThemeProvider>
-    </Suspense>
+          {
+            useRoute(map) && (
+              <ErrorBoundary name="MapPage">
+                <MapPage />
+              </ErrorBoundary>
+            )
+          }
+          {
+            (apiDocsRoute || adminRoute) && (
+              <ErrorBoundary name="AuthRoot">
+                <AuthRoot />
+              </ErrorBoundary>
+            )
+          }
+          {
+            useRoute(aboutus) && (
+              <ErrorBoundary name="AboutPage">
+                <AboutPage />
+              </ErrorBoundary>
+            )
+          }
+          {
+            useStore(router.noMatches) && (
+              <ErrorBoundary name="PageNotFound">
+                <PageNotFound />
+              </ErrorBoundary>
+            )
+          }
+        </TooltipProvider >
+      </ThemeProvider >
+    </Suspense >
   );
 };
