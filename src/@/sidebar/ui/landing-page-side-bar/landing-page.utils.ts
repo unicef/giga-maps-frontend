@@ -173,7 +173,6 @@ export const buildEntityCardContent = ({
     entityType === EntityType.SCHOOL
       ? 'across-no-countries-and-territories'
       : 'across-no-countries';
-  const showMetricTooltips = entityType !== EntityType.HEALTH;
 
   return {
     metrics: [
@@ -187,11 +186,9 @@ export const buildEntityCardContent = ({
         }),
         estimate: estimate ? `${estimate} ${t('estimated')}` : undefined,
         label: t('locations-mapped'),
-        tooltip: showMetricTooltips
-          ? t('locations-mapped-from-datasets-tooltip', {
-            entity: entityLabel,
-          })
-          : undefined,
+        tooltip: t('locations-mapped-from-datasets-tooltip', {
+          entity: entityLabel,
+        }),
         value: mappedValue,
       },
       {
@@ -200,11 +197,9 @@ export const buildEntityCardContent = ({
             entityGlobalStats?.countries_with_connectivity_status_mapped ?? 0,
         }),
         label: connectedEntityLabel,
-        tooltip: showMetricTooltips
-          ? t('with-mapped-connectivity-status-tooltip', {
-            entity: entityLabel,
-          })
-          : undefined,
+        tooltip: t('with-mapped-connectivity-status-tooltip', {
+          entity: entityLabel,
+        }),
         value: connectedValue,
       },
       {
@@ -237,11 +232,9 @@ export const buildEntityCardContent = ({
             : (connectivityStats?.countries_with_realtime_data ?? 0),
         }),
         label: t('reporting-internet-quality'),
-        tooltip: showMetricTooltips
-          ? t('reporting-internet-quality-tooltip', {
-            entity: entityLabel,
-          })
-          : undefined,
+        tooltip: t('reporting-internet-quality-tooltip', {
+          entity: entityLabel,
+        }),
         value: measureValue,
       },
     ],

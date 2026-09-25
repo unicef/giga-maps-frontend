@@ -19,6 +19,7 @@ import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
 import { CheckBoxContainer } from '../legend-button.style';
+import LegendHint from './legend-hint';
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -120,41 +121,41 @@ const SchoolStatusLegend = ({
           <div className="flex! min-w-0! items-center!">
             {shouldShowControls ? (
               <input
-                aria-label={""}
+                aria-label={''}
                 id={`school-status-${key}`}
                 checked={Boolean(schoolStatusCheckedStatus[key])}
                 onChange={() => handleSchoolStatusLayerChange(key)}
                 className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
-                type='checkbox'
+                type="checkbox"
               />
             ) : null}
-            <div
-              className="flex! min-w-0! items-center! gap-2!"
-              data-title={t(ConnectivityStatusNames[key])}
-            >
-              <EntityLegendIndicator
-                color={paintData[key]}
-                entityType={entityType}
-              />
-              {isLoading ? (
-                <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
-              ) : (
-                <span className="text-sm! font-normal! leading-5! text-foreground!">
-                  {t(ConnectivityStatusNames[key])}
-                </span>
-              )}
-            </div>
+            <LegendHint label={t(ConnectivityStatusNames[key])}>
+              <div className="flex! min-w-0! items-center! gap-2!">
+                <EntityLegendIndicator
+                  color={paintData[key]}
+                  entityType={entityType}
+                />
+                {isLoading ? (
+                  <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                ) : (
+                  <span className="text-sm! font-normal! leading-5! text-foreground!">
+                    {t(ConnectivityStatusNames[key])}
+                  </span>
+                )}
+              </div>
+            </LegendHint>
           </div>
           {shouldShowControls ? (
             isLoading ? (
               <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
             ) : (
-              <div
-                className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
-                data-title={t('int', { val: schoolStatusStats?.[key] ?? 0 })}
+              <LegendHint
+                label={t('int', { val: schoolStatusStats?.[key] ?? 0 })}
               >
-                {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
-              </div>
+                <div className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!">
+                  {formatNumber(schoolStatusStats?.[key] ?? 0, lng)}
+                </div>
+              </LegendHint>
             )
           ) : null}
         </div>

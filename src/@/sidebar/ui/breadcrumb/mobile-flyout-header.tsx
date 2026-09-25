@@ -1,5 +1,5 @@
+import { CloseLarge } from '@carbon/icons-react';
 import { useStore } from 'effector-react';
-import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -18,8 +18,6 @@ import {
 } from '../../sidebar.model';
 import RightShareBDB from './right-share-bdb.view';
 
-// The mobile flyout shows the current level as a title with its parents as a
-// subtitle, where the desktop sidebar shows a breadcrumb trail.
 export const getFlyoutHeading = ({
   admin1Name,
   countryName,
@@ -93,11 +91,11 @@ const MobileFlyoutHeader = () => {
           </p>
         ) : null}
       </div>
-      <div className="flex! shrink-0! items-center! gap-1!">
-        <RightShareBDB />
+      <div className="flex! shrink-0! items-center! gap-3!">
+        <RightShareBDB iconSize={20} />
         <Button
           aria-label={t('close')}
-          className="text-foreground!"
+          className="size-8! text-foreground!"
           onClick={() => {
             clearMapSelection();
             mapOverview.navigate({});
@@ -106,7 +104,7 @@ const MobileFlyoutHeader = () => {
           type="button"
           variant="icon"
         >
-          <X className="size-4" />
+          <CloseLarge className="size-6" size={24} />
         </Button>
       </div>
     </div>

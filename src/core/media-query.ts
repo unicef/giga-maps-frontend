@@ -8,7 +8,6 @@ export const $isMobile = createMediaMatcher(mobileMediaQuery);
 export const $isTablet = createMediaMatcher(tabletMediaQuery);
 export const $isDesktop = $isMobile.map(getInverted);
 
-// $isMobile starts inverted and is corrected in a setTimeout, so store defaults
-// evaluated at module init have to read matchMedia directly.
+// $isMobile starts inverted until a setTimeout, so init-time defaults read this.
 export const isMobileViewport = () =>
   window.matchMedia(mobileMediaQuery).matches;

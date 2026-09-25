@@ -33,7 +33,7 @@ import { cn } from '~/lib/cn';
 import { formatNumber } from '~/lib/utils';
 
 import LegendBenchmarkDropdown from './legend-benchmark-dropdown';
-
+import LegendHint from './legend-hint';
 
 const LiveLayerLegend = ({
   entityType,
@@ -155,11 +155,11 @@ const LiveLayerLegend = ({
             ?.toLowerCase()
             .includes('download')
             ? ({
-              good: t('high'),
-              moderate: t('moderate'),
-              bad: t('low'),
-              unknown: t('unknown'),
-            }[key] ?? label)
+                good: t('high'),
+                moderate: t('moderate'),
+                bad: t('low'),
+                unknown: t('unknown'),
+              }[key] ?? label)
             : label;
           const legendColor =
             legends.colors[key] ?? paintData[key] ?? paintData.unknown;
@@ -182,44 +182,44 @@ const LiveLayerLegend = ({
                     type="checkbox"
                   />
                 ) : null}
-                <div
-                  className="flex! min-w-0! items-center! gap-2!"
-                  data-title={tooltipLabel}
-                >
-                  <EntityLegendIndicator
-                    color={liveMetricFill}
-                    entityType={entityType}
-                    glowColor={legendColor}
-                  />
-                  {isLoading ? (
-                    <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
-                  ) : (
-                    <span className="text-sm! font-normal! leading-5! text-foreground!">
-                      {displayLabel}
-                    </span>
-                  )}
-                </div>
+                <LegendHint label={tooltipLabel}>
+                  <div className="flex! min-w-0! items-center! gap-2!">
+                    <EntityLegendIndicator
+                      color={liveMetricFill}
+                      entityType={entityType}
+                      glowColor={legendColor}
+                    />
+                    {isLoading ? (
+                      <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                    ) : (
+                      <span className="text-sm! font-normal! leading-5! text-foreground!">
+                        {displayLabel}
+                      </span>
+                    )}
+                  </div>
+                </LegendHint>
               </div>
               {shouldShowControls ? (
                 isLoading ? (
                   <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
                 ) : (
-                  <div
-                    className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!"
-                    data-title={t('int', {
+                  <LegendHint
+                    label={t('int', {
                       val:
                         key === 'bad'
                           ? (realtimeStats?.no_internet ?? 0)
                           : (realtimeStats?.[key] ?? 0),
                     })}
                   >
-                    {formatNumber(
-                      key === 'bad'
-                        ? (realtimeStats?.no_internet ?? 0)
-                        : (realtimeStats?.[key] ?? 0),
-                      lng,
-                    )}
-                  </div>
+                    <div className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!">
+                      {formatNumber(
+                        key === 'bad'
+                          ? (realtimeStats?.no_internet ?? 0)
+                          : (realtimeStats?.[key] ?? 0),
+                        lng,
+                      )}
+                    </div>
+                  </LegendHint>
                 )
               ) : null}
             </button>

@@ -587,10 +587,11 @@ export const mapMarkerSource = combine({
   multipleSchoolPopup: $multipleSchoolPopup,
   stylePaintData: $stylePaintData,
   layerUtils: $layerUtils,
+  isMobile: $isMobile,
 });
 
 sample({
-  clock: merge([$schoolStatsMap, $map]),
+  clock: merge([$schoolStatsMap, $map, $isMobile]),
   source: mapMarkerSource,
   target: addSchoolMarkers,
 });

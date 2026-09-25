@@ -65,7 +65,6 @@ import {
   ConnectivityBenchMarks,
   ConnectivityDistribution,
   ConnectivityStatusDistribution,
-  FLYOUT_STATES,
   getDefaultFormula,
   Layers,
   multiSchoolSelection,
@@ -1230,7 +1229,6 @@ export const $isStatusLegendLoading = combine(
 );
 
 export const onShowLegend = createEvent<boolean>();
-// On mobile the map is the point: the legend only opens when the user asks.
 export const $showLegend = restore(onShowLegend, !isMobileViewport());
 
 export const onShowThemeLayer = createEvent<boolean>();
@@ -1284,8 +1282,8 @@ export const $sidebarFlyoutState = restore<SidebarFlyoutState>(
   'default',
 ).on(
   cycleSidebarFlyoutState,
-  (state) =>
-    FLYOUT_STATES[(FLYOUT_STATES.indexOf(state) + 1) % FLYOUT_STATES.length]!,
+  // Tapping never collapses: closing the panel is a deliberate drag down.
+  (state) => (state === 'default' ? 'expanded' : 'default'),
 );
 export const $isFlyoutExpanded = $sidebarFlyoutState.map(
   (state) => state === 'expanded',

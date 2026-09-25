@@ -23,7 +23,8 @@ flex-direction:column;
 align-items:center;
 
  @media (max-width:768px){
-     bottom:calc(var(--flyout-height, 30vh) + 0.5rem);
+     /* Fixed inside the translated flyout, so 100% is the panel. */
+     bottom:calc(100% + 0.5rem);
  }
 `
 
