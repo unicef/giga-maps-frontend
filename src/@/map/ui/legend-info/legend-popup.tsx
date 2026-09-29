@@ -330,6 +330,8 @@ const LegendPopup = ({
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="left"
         sideOffset={12}
+        // Follows the anchor while the mobile flyout collapses under it.
+        updatePositionStrategy={isMobile ? 'always' : 'optimized'}
       >
         {legendContent}
       </PopoverContent>

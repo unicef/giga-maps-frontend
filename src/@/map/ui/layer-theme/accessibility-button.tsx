@@ -14,6 +14,7 @@ import {
   PopoverContent,
 } from '~/components/ui/popover';
 import { Toggle } from '~/components/ui/toggle';
+import { $isMobile } from '~/core/media-query';
 import { $theme, setTheme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 import { waitFor } from '~/lib/utils';
@@ -30,6 +31,7 @@ export const AccessibilityButton = () => {
   const { t } = useTranslation();
   const theme = useStore($theme);
   const isOpen = useStore($showAccessibility);
+  const isMobile = useStore($isMobile);
   const prevThemeRef = useRef<ThemeType | null>(
     theme === ThemeType.accessible ? ThemeType.dark : theme,
   );
@@ -84,6 +86,8 @@ export const AccessibilityButton = () => {
           onInteractOutside={(event) => event.preventDefault()}
           side="left"
           sideOffset={12}
+          // Follows the anchor while the mobile flyout collapses under it.
+          updatePositionStrategy={isMobile ? 'always' : 'optimized'}
         >
           <div className="flex! flex-col! gap-4!">
             <p className="m-0! text-sm! leading-5! text-foreground!">

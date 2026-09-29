@@ -1,7 +1,19 @@
+import '~/@/sidebar/init';
+
 import { createEvent } from 'effector';
 
 import { changeCountryCode } from '~/@/country/country.model';
 import { onLoadPage } from '~/@/map/map.model';
+import {
+  $showAccessibility,
+  $showLegend,
+  $showThemeLayer,
+  $sidebarFlyoutState,
+  onShowAccessibility,
+  onShowLegend,
+  onShowThemeLayer,
+  setSidebarFlyoutState,
+} from '~/@/sidebar/sidebar.model';
 import { fetchEntityGlobalStatsFx, fetchLayerListFx } from '~/api/project-connect';
 import { $isMobile } from '~/core/media-query';
 import { router } from '~/core/routes';
@@ -71,3 +83,71 @@ describe('Sidebar Init', () => {
 
 })
 
+const closePanels = () => {
+  onShowLegend(false);
+  onShowThemeLayer(false);
+  onShowAccessibility(false);
+};
+
+describe('Mobile flyout and map control panels', () => {
+  beforeEach(() => {
+    setMobileView(true);
+    closePanels();
+    setSidebarFlyoutState('default');
+  });
+
+  afterEach(() => {
+    closePanels();
+    setSidebarFlyoutState('default');
+    setMobileView(false);
+  });
+
+  test.each(['default', 'expanded'] as const)(
+    'closes the open panel when the flyout grows to %s',
+    (flyoutState) => {
+      setSidebarFlyoutState('collapsed');
+      onShowThemeLayer(true);
+
+      setSidebarFlyoutState(flyoutState);
+
+      expect($showThemeLayer.getState()).toBe(false);
+      expect($sidebarFlyoutState.getState()).toBe(flyoutState);
+    },
+  );
+
+  test.each([
+    ['legend', onShowLegend, $showLegend],
+    ['theme', onShowThemeLayer, $showThemeLayer],
+    ['accessibility', onShowAccessibility, $showAccessibility],
+  ] as const)(
+    'collapses the flyout when the %s panel opens',
+    (_, open, $isOpen) => {
+      open(true);
+
+      expect($sidebarFlyoutState.getState()).toBe('collapsed');
+      expect($isOpen.getState()).toBe(true);
+    },
+  );
+
+  test('collapses the flyout even when another panel closes in the same tick', () => {
+    // Legend open over the default flyout, as the desktop default leaves it.
+    setMobileView(false);
+    onShowLegend(true);
+    setMobileView(true);
+
+    onShowAccessibility(true);
+
+    expect($showLegend.getState()).toBe(false);
+    expect($sidebarFlyoutState.getState()).toBe('collapsed');
+  });
+
+  test('leaves the flyout and panels alone on desktop', () => {
+    setMobileView(false);
+
+    onShowThemeLayer(true);
+    expect($sidebarFlyoutState.getState()).toBe('default');
+
+    setSidebarFlyoutState('expanded');
+    expect($showThemeLayer.getState()).toBe(true);
+  });
+});
