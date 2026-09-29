@@ -1289,6 +1289,12 @@ export const $isFlyoutExpanded = $sidebarFlyoutState.map(
   (state) => state === 'expanded',
 );
 
+export const flyoutSettled = createEvent();
+// Map control popovers wait for it: their anchors ride on the moving flyout.
+export const $isFlyoutSettling = createStore(false)
+  .on($sidebarFlyoutState.updates, () => true)
+  .reset(flyoutSettled);
+
 export const toggleAccordionEntity = createEvent<EntityType>();
 
 export const $accordionScope = createStore<AccordionScope>('global');

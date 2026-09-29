@@ -1,7 +1,10 @@
 import { useStore } from 'effector-react';
-import { PropsWithChildren, useCallback, useEffect, useRef } from 'react';
+import { PropsWithChildren, useCallback } from 'react';
 
-import { $isFlyoutExpanded } from '~/@/sidebar/sidebar.model';
+import {
+  $isFlyoutExpanded,
+  $isFlyoutSettling,
+} from '~/@/sidebar/sidebar.model';
 import {
   Popover,
   PopoverAnchor,
@@ -11,8 +14,6 @@ import { $isMobile } from '~/core/media-query';
 import { cn } from '~/lib/cn';
 
 import ThemePopupContent from './theme-popup-content';
-
-const THEME_POPUP_SIDE_OFFSET = 12;
 
 const ThemePopup = ({
   open,
@@ -24,11 +25,10 @@ const ThemePopup = ({
 }>) => {
   const isMobile = useStore($isMobile);
   const isFlyoutExpanded = useStore($isFlyoutExpanded);
-  const repositionRef = useRef<(() => void) | null>(null);
+  const isFlyoutSettling = useStore($isFlyoutSettling);
 
   const popoverContentRef = useCallback(
     (node: HTMLDivElement | null) => {
-      repositionRef.current = null;
       if (!node) return;
 
       const wrapper = node.closest<HTMLElement>(
@@ -74,23 +74,10 @@ const ThemePopup = ({
         }
 
         const panelRect = wrapper.getBoundingClientRect();
-        const anchor = document.querySelector<HTMLElement>(
-          '.theme-wrapper-popup',
-        );
-        // On reposition the wrapper still holds the left pinned mid-animation.
-        const left =
-          isMobile && anchor
-            ? Math.max(
-                8,
-                anchor.getBoundingClientRect().left -
-                  THEME_POPUP_SIDE_OFFSET -
-                  panelRect.width,
-              )
-            : panelRect.left;
         const top = Math.max(8, legendBottom - panelHeight);
 
         wrapper.style.setProperty('position', 'fixed', 'important');
-        wrapper.style.setProperty('left', `${left}px`, 'important');
+        wrapper.style.setProperty('left', `${panelRect.left}px`, 'important');
         wrapper.style.setProperty('top', `${top}px`, 'important');
         wrapper.style.setProperty('right', 'auto', 'important');
         wrapper.style.setProperty('bottom', 'auto', 'important');
@@ -98,23 +85,12 @@ const ThemePopup = ({
         wrapper.classList.add('transform-none!');
       };
 
-      repositionRef.current = () => applyPosition();
       requestAnimationFrame(() => {
         requestAnimationFrame(() => applyPosition());
       });
     },
     [isMobile, isFlyoutExpanded],
   );
-
-  // Opening collapses the mobile flyout, which carries the anchor buttons.
-  useEffect(() => {
-    if (!open || !isMobile) return;
-    const onTransitionEnd = (event: TransitionEvent) => {
-      if (event.propertyName === 'translate') repositionRef.current?.();
-    };
-    document.addEventListener('transitionend', onTransitionEnd);
-    return () => document.removeEventListener('transitionend', onTransitionEnd);
-  }, [open, isMobile]);
 
   return (
     <Popover
@@ -124,7 +100,7 @@ const ThemePopup = ({
           setOpen(false);
         }
       }}
-      open={open}
+      open={open && !(isMobile && isFlyoutSettling)}
     >
       <PopoverAnchor asChild>
         <div className={cn('theme-layer-popover-link relative! inline-flex!')}>
@@ -144,7 +120,7 @@ const ThemePopup = ({
         onInteractOutside={(event) => event.preventDefault()}
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="left"
-        sideOffset={THEME_POPUP_SIDE_OFFSET}
+        sideOffset={12}
       >
         <ThemePopupContent setOpen={setOpen} />
       </PopoverContent>

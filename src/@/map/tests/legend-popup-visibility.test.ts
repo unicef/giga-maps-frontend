@@ -69,4 +69,25 @@ describe('legend popup visibility', () => {
       }),
     ).toBe(false);
   });
+
+  test('waits for the mobile flyout to settle', () => {
+    expect(
+      shouldOpenLegendPopup({
+        open: true,
+        isMobile: true,
+        isCountryListOpen: false,
+        isSearchListOpen: false,
+        isFlyoutSettling: true,
+      }),
+    ).toBe(false);
+    expect(
+      shouldOpenLegendPopup({
+        open: true,
+        isMobile: false,
+        isCountryListOpen: false,
+        isSearchListOpen: false,
+        isFlyoutSettling: true,
+      }),
+    ).toBe(true);
+  });
 });

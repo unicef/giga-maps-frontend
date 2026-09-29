@@ -5,10 +5,12 @@ import { createEvent } from 'effector';
 import { changeCountryCode } from '~/@/country/country.model';
 import { onLoadPage } from '~/@/map/map.model';
 import {
+  $isFlyoutSettling,
   $showAccessibility,
   $showLegend,
   $showThemeLayer,
   $sidebarFlyoutState,
+  flyoutSettled,
   onShowAccessibility,
   onShowLegend,
   onShowThemeLayer,
@@ -139,6 +141,17 @@ describe('Mobile flyout and map control panels', () => {
 
     expect($showLegend.getState()).toBe(false);
     expect($sidebarFlyoutState.getState()).toBe('collapsed');
+  });
+
+  test('keeps the flyout settling until its move ends', () => {
+    flyoutSettled();
+
+    onShowThemeLayer(true);
+    expect($isFlyoutSettling.getState()).toBe(true);
+
+    flyoutSettled();
+    expect($isFlyoutSettling.getState()).toBe(false);
+    expect($showThemeLayer.getState()).toBe(true);
   });
 
   test('leaves the flyout and panels alone on desktop', () => {

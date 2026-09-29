@@ -51,6 +51,7 @@ import LandingPage from '../landing-page-side-bar/landing-page';
 import SchoolView from '../school-view-component/school-view';
 import SearchResult from '../search-result';
 import { useFlyoutDrag } from './use-flyout-drag';
+import { useFlyoutSettled } from './use-flyout-settled';
 import { useFlyoutTopOffset } from './use-flyout-top-offset';
 
 const onToggleSidebar = toggleSidebar.prepend<MouseEvent<HTMLButtonElement>>(
@@ -71,6 +72,7 @@ export default function Sidebar() {
     state: flyoutState,
   });
   useFlyoutTopOffset({ enabled: isMobile, headerRef });
+  useFlyoutSettled(flyoutState);
   const countryRoute = useRoute(mapCountry);
   const schoolRoute = useRoute(mapSchools);
   const entityRoute = useRoute(entityView) || useRoute(mapEntity);

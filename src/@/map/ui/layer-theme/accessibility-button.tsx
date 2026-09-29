@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  $isFlyoutSettling,
   $showAccessibility,
   onShowAccessibility,
 } from '~/@/sidebar/sidebar.model';
@@ -32,6 +33,7 @@ export const AccessibilityButton = () => {
   const theme = useStore($theme);
   const isOpen = useStore($showAccessibility);
   const isMobile = useStore($isMobile);
+  const isFlyoutSettling = useStore($isFlyoutSettling);
   const prevThemeRef = useRef<ThemeType | null>(
     theme === ThemeType.accessible ? ThemeType.dark : theme,
   );
@@ -60,7 +62,11 @@ export const AccessibilityButton = () => {
 
   return (
     <>
-      <Popover modal={false} onOpenChange={onShowAccessibility} open={isOpen}>
+      <Popover
+        modal={false}
+        onOpenChange={onShowAccessibility}
+        open={isOpen && !(isMobile && isFlyoutSettling)}
+      >
         <PopoverAnchor asChild>
           <div
             className={cn(accessibilityPopoverClass, 'relative! inline-flex!')}
@@ -86,8 +92,6 @@ export const AccessibilityButton = () => {
           onInteractOutside={(event) => event.preventDefault()}
           side="left"
           sideOffset={12}
-          // Follows the anchor while the mobile flyout collapses under it.
-          updatePositionStrategy={isMobile ? 'always' : 'optimized'}
         >
           <div className="flex! flex-col! gap-4!">
             <p className="m-0! text-sm! leading-5! text-foreground!">
