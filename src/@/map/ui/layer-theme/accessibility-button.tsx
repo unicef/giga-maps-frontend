@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  $isFlyoutSettling,
   $showAccessibility,
   onShowAccessibility,
 } from '~/@/sidebar/sidebar.model';
@@ -14,6 +15,7 @@ import {
   PopoverContent,
 } from '~/components/ui/popover';
 import { Toggle } from '~/components/ui/toggle';
+import { $isMobile } from '~/core/media-query';
 import { $theme, setTheme, ThemeType } from '~/core/theme.model';
 import { cn } from '~/lib/cn';
 import { waitFor } from '~/lib/utils';
@@ -30,6 +32,8 @@ export const AccessibilityButton = () => {
   const { t } = useTranslation();
   const theme = useStore($theme);
   const isOpen = useStore($showAccessibility);
+  const isMobile = useStore($isMobile);
+  const isFlyoutSettling = useStore($isFlyoutSettling);
   const prevThemeRef = useRef<ThemeType | null>(
     theme === ThemeType.accessible ? ThemeType.dark : theme,
   );
@@ -58,7 +62,11 @@ export const AccessibilityButton = () => {
 
   return (
     <>
-      <Popover modal={false} onOpenChange={onShowAccessibility} open={isOpen}>
+      <Popover
+        modal={false}
+        onOpenChange={onShowAccessibility}
+        open={isOpen && !(isMobile && isFlyoutSettling)}
+      >
         <PopoverAnchor asChild>
           <div
             className={cn(accessibilityPopoverClass, 'relative! inline-flex!')}

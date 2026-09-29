@@ -1,7 +1,10 @@
 import { useStore } from 'effector-react';
 import { PropsWithChildren, useCallback } from 'react';
 
-import { $isFlyoutExpanded } from '~/@/sidebar/sidebar.model';
+import {
+  $isFlyoutExpanded,
+  $isFlyoutSettling,
+} from '~/@/sidebar/sidebar.model';
 import {
   Popover,
   PopoverAnchor,
@@ -22,6 +25,7 @@ const ThemePopup = ({
 }>) => {
   const isMobile = useStore($isMobile);
   const isFlyoutExpanded = useStore($isFlyoutExpanded);
+  const isFlyoutSettling = useStore($isFlyoutSettling);
 
   const popoverContentRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -77,7 +81,8 @@ const ThemePopup = ({
         wrapper.style.setProperty('top', `${top}px`, 'important');
         wrapper.style.setProperty('right', 'auto', 'important');
         wrapper.style.setProperty('bottom', 'auto', 'important');
-        wrapper.style.setProperty('transform', 'none', 'important');
+        // A class: Radix rewrites the inline transform while tracking the anchor.
+        wrapper.classList.add('transform-none!');
       };
 
       requestAnimationFrame(() => {
@@ -95,7 +100,7 @@ const ThemePopup = ({
           setOpen(false);
         }
       }}
-      open={open}
+      open={open && !(isMobile && isFlyoutSettling)}
     >
       <PopoverAnchor asChild>
         <div className={cn('theme-layer-popover-link relative! inline-flex!')}>

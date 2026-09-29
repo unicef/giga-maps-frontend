@@ -57,7 +57,9 @@ import {
   $selectedLayerIdByEntity,
   $showAccessibility,
   $showAdvancedFilter,
+  $showLegend,
   $showThemeLayer,
+  $sidebarFlyoutState,
   $statusLayerIdByEntity,
   changeEntityConnectivityBenchmark,
   checkEntityConnectivityBenchmark,
@@ -72,6 +74,7 @@ import {
   resetCoverageFilterSelection,
   resetFilterModal,
   setConnectivityBenchmarksByEntity,
+  setSidebarFlyoutState,
   toggleSidebar,
 } from '~/@/sidebar/sidebar.model';
 import {
@@ -1199,6 +1202,36 @@ sample({
   filter: (isTimeplayer) => Boolean(isTimeplayer),
   fn: () => false,
   target: onShowLegend,
+});
+
+// On mobile the map control panels only fit above the collapsed flyout.
+sample({
+  clock: $sidebarFlyoutState.updates,
+  source: { isMobile: $isMobile, isProductTour: $isProductTour },
+  filter: ({ isMobile, isProductTour }, flyoutState) =>
+    isMobile && !isProductTour && flyoutState !== 'collapsed',
+  fn: () => false,
+  target: [onShowLegend, onShowThemeLayer, onShowAccessibility],
+});
+
+// Filtered before sample: a panel closing in the same tick would win its batch.
+const mapControlPanelOpened = merge([
+  $showLegend.updates,
+  $showThemeLayer.updates,
+  $showAccessibility.updates,
+]).filter({ fn: Boolean });
+
+sample({
+  clock: mapControlPanelOpened,
+  source: {
+    isMobile: $isMobile,
+    isProductTour: $isProductTour,
+    flyoutState: $sidebarFlyoutState,
+  },
+  filter: ({ isMobile, isProductTour, flyoutState }) =>
+    isMobile && !isProductTour && flyoutState !== 'collapsed',
+  fn: () => 'collapsed' as const,
+  target: setSidebarFlyoutState,
 });
 
 sample({

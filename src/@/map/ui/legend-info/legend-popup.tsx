@@ -26,6 +26,7 @@ import {
   $isTimeplayer,
   $layerUtils,
   $isFlyoutExpanded,
+  $isFlyoutSettling,
 } from '~/@/sidebar/sidebar.model';
 import {
   $hasSearchInput,
@@ -60,6 +61,7 @@ export const shouldOpenLegendPopup = ({
   isSearchListOpen,
   isMenuOpen,
   isTimeplayer,
+  isFlyoutSettling,
 }: {
   open: boolean;
   isMobile: boolean;
@@ -67,11 +69,12 @@ export const shouldOpenLegendPopup = ({
   isSearchListOpen: boolean;
   isMenuOpen?: boolean;
   isTimeplayer?: boolean;
+  isFlyoutSettling?: boolean;
 }) =>
   open &&
   !isMenuOpen &&
   !isTimeplayer &&
-  !(isMobile && (isCountryListOpen || isSearchListOpen));
+  !(isMobile && (isCountryListOpen || isSearchListOpen || isFlyoutSettling));
 
 const LegendPopup = ({
   open,
@@ -96,6 +99,7 @@ const LegendPopup = ({
   const isCountryListOpen = useStore($showCountries);
   const isMenuOpen = useStore($isMenuOpen);
   const isFlyoutExpanded = useStore($isFlyoutExpanded);
+  const isFlyoutSettling = useStore($isFlyoutSettling);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
   const isGlobalView = mapLevel.map;
@@ -116,6 +120,7 @@ const LegendPopup = ({
     isSearchListOpen,
     isMenuOpen,
     isTimeplayer,
+    isFlyoutSettling,
   });
   const visibleLegendEntityTypes = useMemo(() => {
     return entityTypesFiltered.filter((type) =>
