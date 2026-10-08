@@ -14,6 +14,9 @@ export const MAP_SAMPLING = 300000;
 export const SCHOOL_LAYER_ID = 10001
 export const DEFAULT_SOURCE = 'map-data-source';
 export const CONNECTIVITY_STATUS_SOURCE = 'map-data-source-static';
+// country view school status layer; kept distinct from the global school layer id (getMapId(SCHOOL_LAYER_ID))
+// so the two sources never share a layer id
+export const SCHOOL_STATUS_STATIC_LAYER_ID = `${SCHOOL_LAYER_ID}_layer_static`;
 export const COVERAGE_URL = 'api/locations/schools/tiles';
 export const CONNECTIVITY_URL = 'api/locations/schools/tiles/connectivity';
 export const CONNECTIVITY_STATUS_URL = "api/locations/schools/tiles/connectivity_status"
