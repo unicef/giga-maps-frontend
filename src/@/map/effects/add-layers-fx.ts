@@ -26,7 +26,7 @@ import {
   DEFAULT_SOURCE,
   getEntitySelectedLayerId,
   getEntityRenderedLayerIds,
-  getEntityStatusLayerIdsAllSources,
+  getEntityStatusLayerId,
 } from '../map.constant';
 import {
   cancelAnimation,
@@ -305,14 +305,13 @@ export const updateConnectivityStatus = createEffect(
     if (!map) return;
     const entityTypes = activeEntityTypes ?? [];
     for (const entityType of entityTypes) {
+      const layerId = getEntityStatusLayerId(entityType);
       const filter = filterSchoolStatus(
         legendsSelectedByEntity?.[entityType] ?? [],
       );
-      getEntityStatusLayerIdsAllSources(entityType).forEach((layerId) => {
-        getEntityRenderedLayerIds(layerId).forEach((renderedLayerId) => {
-          if (map.getLayer(renderedLayerId))
-            map.setFilter(renderedLayerId, filter);
-        });
+      getEntityRenderedLayerIds(layerId).forEach((renderedLayerId) => {
+        if (map.getLayer(renderedLayerId))
+          map.setFilter(renderedLayerId, filter);
       });
     }
   },
