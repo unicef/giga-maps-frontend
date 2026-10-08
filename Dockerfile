@@ -32,7 +32,7 @@ RUN echo $RECAPTCHA_KEY \
 RUN yarn build
 
 # Stage 2
-FROM nginx:1.24 AS s2
+FROM nginx:1.28 AS s2
 
 # ssh
 ENV SSH_PASSWD "root:Docker!"
