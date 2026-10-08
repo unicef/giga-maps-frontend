@@ -260,9 +260,15 @@ const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string)
 }
 
 export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
-  if (map.getLayer(id)) {
-    showLayer(map, id);
-    return;
+  const existingLayer = map.getLayer(id);
+  if (existingLayer) {
+    if ((existingLayer as any).source === source) {
+      showLayer(map, id);
+      return;
+    }
+    // same id is shared by the global (DEFAULT_SOURCE) and country (CONNECTIVITY_STATUS_SOURCE) school layers;
+    // reusing a layer bound to the other source leaves it to be deleted with that source
+    map.removeLayer(id);
   }
 
   const connectivityStatusColors = paintData;
