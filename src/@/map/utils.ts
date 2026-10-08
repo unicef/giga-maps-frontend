@@ -6,8 +6,8 @@ import { GeoJSONFeatureCollection, GeoJSONPoint, PointCoordinates } from '~/core
 
 import { gigaThemeList, ThemeType } from "~/core/theme.model";
 import { $countryCode, setSchoolFocusLatLng } from "../country/country.model";
-import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers, SCHOOL_STATUS_LAYER } from "../sidebar/sidebar.constant";
-import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID } from "./map.constant";
+import { ConnectivityDistribution, ConnectivityStatusDistribution, Layers } from "../sidebar/sidebar.constant";
+import { animateCircleConfig, Colors, CONNECTIVITY_STATUS_SOURCE, CONNECTIVITY_STATUS_URL, CONNECTIVITY_URL, CountryPaintData, DEFAULT_SOURCE, defaultWorldView, LayerDataProps, mapPaintData, SCHOOL_LAYER_ID, SCHOOL_STATUS_STATIC_LAYER_ID } from "./map.constant";
 import { $schoolClickedId, resetDublicateSchoolClickData, setPopupOnClickDot } from "./map.model";
 import { ChangeLayerOptions, StylePaintData } from "./map.types";
 
@@ -50,7 +50,7 @@ export const onClickOnSchoolDots = (map: Map, id: string, source: string) => {
     const ids = new Set(features.map((feature) => {
       return feature.layer.id;
     }));
-    if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
+    if (ids.size === 2 && SCHOOL_STATUS_STATIC_LAYER_ID === id) {
       return;
     }
     const feature = features[0];
@@ -260,15 +260,9 @@ const createCircleLayer = (map: Map, options: CircleLayer, layerBefore?: string)
 }
 
 export const createSchoolLayer = (map: Map, { id, source = DEFAULT_SOURCE, paintData, options, mapRoute, isMobile }: { id: string; source?: string; paintData: StylePaintData, options: Record<string, any>; mapRoute: ChangeLayerOptions['mapRoute'], isMobile: boolean }): void => {
-  const existingLayer = map.getLayer(id);
-  if (existingLayer) {
-    if ((existingLayer as any).source === source) {
-      showLayer(map, id);
-      return;
-    }
-    // same id is shared by the global (DEFAULT_SOURCE) and country (CONNECTIVITY_STATUS_SOURCE) school layers;
-    // reusing a layer bound to the other source leaves it to be deleted with that source
-    map.removeLayer(id);
+  if (map.getLayer(id)) {
+    showLayer(map, id);
+    return;
   }
 
   const connectivityStatusColors = paintData;
@@ -363,7 +357,7 @@ export const createSelectedLayer = (map: Map, { id, isDynamicLayer, source = DEF
     minzoom: 0,
     paint,
     ...options
-  }, getMapId(SCHOOL_LAYER_ID));
+  }, map.getLayer(SCHOOL_STATUS_STATIC_LAYER_ID) ? SCHOOL_STATUS_STATIC_LAYER_ID : getMapId(SCHOOL_LAYER_ID));
   // create on click on dots;
   // clear click event before creating new layer;
 

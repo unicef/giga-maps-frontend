@@ -17,7 +17,7 @@ import {
 } from '@/map/utils';
 
 import { cancelAnimation, createAndUpdateConnectiivtyStatusLayer, createAndUpdateMapLayer, createSourceForMapAndCountry, getLayerIdsAndLastChange } from './add-layers-utils';
-import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from '../map.constant';
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID, SCHOOL_STATUS_STATIC_LAYER_ID } from '../map.constant';
 
 const createAndUpdateLayer = async (props: ChangeLayerOptions): Promise<void> => {
   if (!props.map) { return };
@@ -99,11 +99,12 @@ export const updateConnectivityFilter = createEffect(({ map, layerUtils, connect
 
 export const updateConnectivityStatus = createEffect(({ map, lengendsSelected }: UpdateConnectivityType & { lengendsSelected: string[] }) => {
   if (!map) return;
-  const layer = map.getLayer(getMapId(SCHOOL_LAYER_ID));
-  if (layer) {
-    const filter = filterSchoolStatus(lengendsSelected);
-    map.setFilter(getMapId(SCHOOL_LAYER_ID), filter);
-  }
+  const filter = filterSchoolStatus(lengendsSelected);
+  [getMapId(SCHOOL_LAYER_ID), SCHOOL_STATUS_STATIC_LAYER_ID].forEach((id) => {
+    if (map.getLayer(id)) {
+      map.setFilter(id, filter);
+    }
+  });
 })
 
 export const clearMapDataFx = createEffect(({ map }: { map: Map | null }) => {

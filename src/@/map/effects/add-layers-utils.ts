@@ -4,7 +4,7 @@ import { getSchoolsGeoJson } from "~/@/country/lib/get-schools-geojson";
 
 import { ChangeLayerOptions } from "../map.types";
 import { animateCircles, checkSourceAvailable, createSchoolLayer, createSchoolSource, createSelectedLayer, createSource, deleteSourceAndLayers, filterSchoolStatus, getMapId, generateLayerUrls, hideLayer, removePreviewsMapClickHandlers, filterConnectivityList, filterCoverageList, generateStaticLayerUrl } from "../utils";
-import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID } from "../map.constant";
+import { CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, SCHOOL_LAYER_ID, SCHOOL_STATUS_STATIC_LAYER_ID } from "../map.constant";
 
 let animateCircleHandler = { requestId: 0 }; // to clear animation;
 const ignoreCountriesForBounds = ['fj']
@@ -117,7 +117,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintDat
   if (isSourceAvailable && schoolLayerId) {
     createSchoolLayer(map, {
       source: CONNECTIVITY_STATUS_SOURCE,
-      id: getMapId(SCHOOL_LAYER_ID),
+      id: SCHOOL_STATUS_STATIC_LAYER_ID,
       paintData,
       isMobile,
       options: {
@@ -126,7 +126,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({ map, mapRoute, paintDat
       }, mapRoute
     });
   } else {
-    hideLayer(map, getMapId(SCHOOL_LAYER_ID));
+    hideLayer(map, SCHOOL_STATUS_STATIC_LAYER_ID);
   }
 }
 

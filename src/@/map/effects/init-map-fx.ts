@@ -43,17 +43,6 @@ export const initMapFx = createEffect(
       }, 10);
     });
 
-    // fallback: if a programmatic zoom gets interrupted (e.g. user touches the map mid-flight) and no
-    // programmatic zoomend arrives, zoom state would stay 'start' and layers never render.
-    // moveend fires at the end of every camera movement; 'end' -> 'end' is a no-op for the store.
-    map.on('moveend', () => {
-      if (map.isMoving()) return;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        onZoomStateChange('end');
-      }, 10);
-    });
-
     map.on('styledata', (e) => {
       onStyleLoaded();
     });
