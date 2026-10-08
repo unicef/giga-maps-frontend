@@ -846,6 +846,39 @@ const syncLayerZoomRange = (
   map.setLayerZoomRange(id, minzoom, maxzoom);
 };
 
+/**
+ * Reuse an existing layer only when it reads from the expected source.
+ * Global and country views create status layers with the same id on different
+ * sources; reusing the other view's layer would show it in place of the new one,
+ * and it then disappears together with its own source (no status dots while the
+ * layer is selected). Such a layer is removed, with its click handler, so the
+ * caller re-creates it on `source`.
+ * Returns true when the existing layer was reused.
+ */
+const reuseLayerOnSameSource = (
+  map: Map,
+  {
+    id,
+    source,
+    options,
+  }: { id: string; source: string; options: Record<string, unknown> },
+): boolean => {
+  const existingLayer = map.getLayer(id) as { source?: unknown } | undefined;
+  if (!existingLayer) return false;
+  if (!existingLayer.source || existingLayer.source === source) {
+    syncLayerZoomRange(map, id, options);
+    showLayer(map, id);
+    return true;
+  }
+  Object.values(mapDotsClickIdsAndHandler).forEach((handlers) => {
+    if (!handlers?.[id]) return;
+    map.off('click', id, handlers[id]);
+    delete handlers[id];
+  });
+  map.removeLayer(id);
+  return false;
+};
+
 export const createSchoolLayer = (
   map: Map,
   {
@@ -866,11 +899,7 @@ export const createSchoolLayer = (
     entityConfig?: EntityConfig;
   },
 ): void => {
-  if (map.getLayer(id)) {
-    syncLayerZoomRange(map, id, options);
-    showLayer(map, id);
-    return;
-  }
+  if (reuseLayerOnSameSource(map, { id, source, options })) return;
 
   const connectivityStatusColors = paintData;
   const circleColor = [
@@ -939,11 +968,7 @@ export const createEntitySymbolLayer = (
     entityConfig?: EntityConfig;
   },
 ): void => {
-  if (map.getLayer(id)) {
-    syncLayerZoomRange(map, id, options);
-    showLayer(map, id);
-    return;
-  }
+  if (reuseLayerOnSameSource(map, { id, source, options })) return;
 
   const connectivityStatusColors = paintData;
   // Build text-color expression matching the same connectivity_status logic as circle-color

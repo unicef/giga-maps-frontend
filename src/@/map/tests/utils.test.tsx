@@ -1,7 +1,11 @@
+import type { Map as MapboxMap } from 'mapbox-gl';
+
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   animateCircles,
+  createEntitySymbolLayer,
+  createSchoolLayer,
   createSchoolSource,
   createSelectedLayer,
   createSelectedSymbolLayer,
@@ -9,10 +13,12 @@ import {
   generateStaticLayerUrl,
   getCoveragePaint,
   getSymbolMinZoom,
+  mapDotsClickIdsAndHandler,
   onClickOnEntityDots,
 } from '../utils';
 import {
   CIRCLE_MAX_ZOOM_CONFIG,
+  CONNECTIVITY_STATUS_SOURCE,
   DEFAULT_SOURCE,
   LayerDataProps,
   mapPaintData,
@@ -89,6 +95,110 @@ const expectedPocRadiusExpression = [
   14,
   10,
 ];
+describe('status layer reuse is source aware', () => {
+  const layerId = 'entity-status-school';
+  // mock fns kept separately so assertions don't reference unbound map methods
+  const createMap = (existingSource?: string) => {
+    let existing = existingSource
+      ? { id: layerId, source: existingSource }
+      : undefined;
+    const mocks = {
+      getLayer: vi.fn((id: string) => (id === layerId ? existing : undefined)),
+      addLayer: vi.fn(),
+      removeLayer: vi.fn(() => {
+        existing = undefined;
+      }),
+      setLayoutProperty: vi.fn(),
+      setLayerZoomRange: vi.fn(),
+      off: vi.fn(),
+      on: vi.fn(),
+    };
+    return { map: mocks as unknown as MapboxMap, mocks };
+  };
+  const layerOptions = (source: string, map: boolean) => ({
+    id: layerId,
+    source,
+    paintData: stylePaintData.dark,
+    options: { 'source-layer': 'schools' },
+    mapRoute: {
+      map,
+      country: !map,
+      schools: false,
+      entity: false,
+      entityView: false,
+    },
+    isMobile: false,
+  });
+
+  afterEach(() => {
+    delete mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE][layerId];
+    delete mapDotsClickIdsAndHandler[DEFAULT_SOURCE][layerId];
+  });
+
+  it('reuses an existing layer on the same source', () => {
+    const { map, mocks } = createMap(DEFAULT_SOURCE);
+
+    createSchoolLayer(map, layerOptions(DEFAULT_SOURCE, true));
+
+    expect(mocks.removeLayer).not.toHaveBeenCalled();
+    expect(mocks.addLayer).not.toHaveBeenCalled();
+    expect(mocks.setLayoutProperty).toHaveBeenCalledWith(
+      layerId,
+      'visibility',
+      'visible',
+    );
+  });
+
+  it('re-creates a layer that exists on another source', () => {
+    const { map, mocks } = createMap(DEFAULT_SOURCE);
+
+    createSchoolLayer(map, layerOptions(CONNECTIVITY_STATUS_SOURCE, false));
+
+    expect(mocks.removeLayer).toHaveBeenCalledWith(layerId);
+    expect(mocks.addLayer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: layerId,
+        source: CONNECTIVITY_STATUS_SOURCE,
+      }),
+      expect.anything(),
+    );
+  });
+
+  it('removes the click handler of the replaced layer', () => {
+    const { map, mocks } = createMap(CONNECTIVITY_STATUS_SOURCE);
+    const handler = vi.fn();
+    mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE][layerId] = handler;
+
+    createSchoolLayer(map, layerOptions(DEFAULT_SOURCE, true));
+
+    expect(mocks.off).toHaveBeenCalledWith('click', layerId, handler);
+    expect(
+      mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE][layerId],
+    ).toBeUndefined();
+    expect(mocks.addLayer).toHaveBeenCalledWith(
+      expect.objectContaining({ id: layerId, source: DEFAULT_SOURCE }),
+      expect.anything(),
+    );
+  });
+
+  it('re-creates a symbol layer that exists on another source', () => {
+    const { map, mocks } = createMap(DEFAULT_SOURCE);
+
+    createEntitySymbolLayer(map, {
+      ...layerOptions(CONNECTIVITY_STATUS_SOURCE, false),
+      symbol: '\u25A0',
+    });
+
+    expect(mocks.removeLayer).toHaveBeenCalledWith(layerId);
+    expect(mocks.addLayer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: layerId,
+        source: CONNECTIVITY_STATUS_SOURCE,
+      }),
+    );
+  });
+});
+
 describe('createSelectedLayer', () => {
   it('should create the correct layer on the map', () => {
     const map = {
