@@ -43,9 +43,30 @@ export const SOURCE_LAYER_ENTITIES = 'entities';
 export const getSourceLayerName = (entityType: string): string =>
   entityType === 'school' ? SOURCE_LAYER_SCHOOLS : SOURCE_LAYER_ENTITIES;
 
-/** Generate a unique Mapbox layer ID for entity status dots */
-export const getEntityStatusLayerId = (entityType: string): string =>
-  `entity-status-${entityType}`;
+const ENTITY_STATIC_STATUS_LAYER_SUFFIX = '-static';
+
+/**
+ * Generate a unique Mapbox layer ID for entity status dots.
+ * The country view layer (CONNECTIVITY_STATUS_SOURCE) gets its own ID so it never
+ * collides with the global view layer (DEFAULT_SOURCE).
+ */
+export const getEntityStatusLayerId = (
+  entityType: string,
+  source: string = DEFAULT_SOURCE,
+): string =>
+  `entity-status-${entityType}${source === CONNECTIVITY_STATUS_SOURCE ? ENTITY_STATIC_STATUS_LAYER_SUFFIX : ''}`;
+
+/** Status layer IDs for both sources (global and country view). */
+export const getEntityStatusLayerIdsAllSources = (entityType: string): string[] => [
+  getEntityStatusLayerId(entityType, DEFAULT_SOURCE),
+  getEntityStatusLayerId(entityType, CONNECTIVITY_STATUS_SOURCE),
+];
+
+/** Entity type from a status layer ID, e.g. `entity-status-school-static` -> `school`. */
+export const getEntityTypeFromStatusLayerId = (layerId: string): string =>
+  layerId
+    .replace('entity-status-', '')
+    .replace(new RegExp(`${ENTITY_STATIC_STATUS_LAYER_SUFFIX}$`), '');
 
 /** Generate a unique Mapbox layer ID for entity selected/metric layer */
 export const getEntitySelectedLayerId = (

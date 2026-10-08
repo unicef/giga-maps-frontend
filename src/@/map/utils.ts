@@ -47,6 +47,7 @@ import {
   LayerDataProps,
   mapPaintData,
   getEntityLogicalLayerId,
+  getEntityTypeFromStatusLayerId,
   SCHOOL_LAYER_ID,
   CIRCLE_MAX_ZOOM_CONFIG,
   maxZoom,
@@ -213,7 +214,7 @@ const getEntityTypeFromMapLayerId = (layerId?: string): EntityType | null => {
   if (!layerId) return null;
   const logicalLayerId = getEntityLogicalLayerId(layerId);
   if (logicalLayerId.startsWith('entity-status-')) {
-    return logicalLayerId.replace('entity-status-', '') as EntityType;
+    return getEntityTypeFromStatusLayerId(logicalLayerId) as EntityType;
   }
 
   const selectedLayerMatch = logicalLayerId.match(

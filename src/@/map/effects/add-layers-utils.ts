@@ -10,6 +10,7 @@ import {
   getEntitySelectedLayerId,
   getEntityRenderedLayerIds,
   getEntityStatusLayerId,
+  getEntityStatusLayerIdsAllSources,
   getEntityZoomCircleLayerId,
   getSourceLayerName,
 } from '../map.constant';
@@ -73,9 +74,10 @@ const moveEntityStatusLayersToTop = (map: Map, entityTypes: EntityType[]) => {
   }
 
   entityTypes.forEach((entityType) => {
-    const statusLayerId = getEntityStatusLayerId(entityType);
-    getEntityRenderedLayerIds(statusLayerId).forEach((layerId) => {
-      if (map.getLayer(layerId)) map.moveLayer(layerId);
+    getEntityStatusLayerIdsAllSources(entityType).forEach((statusLayerId) => {
+      getEntityRenderedLayerIds(statusLayerId).forEach((layerId) => {
+        if (map.getLayer(layerId)) map.moveLayer(layerId);
+      });
     });
   });
 };
@@ -485,13 +487,19 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
     for (const entityType of entityTypes) {
       const entityStatusLayerId = schoolIdByEntity[entityType];
       if (!entityStatusLayerId) {
-        hideEntityLayerVariants(map, getEntityStatusLayerId(entityType));
+        hideEntityLayerVariants(
+          map,
+          getEntityStatusLayerId(entityType, CONNECTIVITY_STATUS_SOURCE),
+        );
         continue;
       }
       const config = entityRegistry?.[entityType] as EntityConfig | undefined;
       const markerType = config?.markerType ?? 'circle';
       const transitionZoom = markerType === 'symbol' ? circleMaxZoom : null;
-      const statusLayerId = getEntityStatusLayerId(entityType);
+      const statusLayerId = getEntityStatusLayerId(
+        entityType,
+        CONNECTIVITY_STATUS_SOURCE,
+      );
       const circleLayerId = getEntityZoomCircleLayerId(statusLayerId);
       const schoolCircleConfig = getSchoolCircleConfig(entityRegistry);
       const options = {
@@ -547,7 +555,10 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
     moveEntityStatusLayersToTop(map, entityTypes);
   } else {
     for (const entityType of entityTypes) {
-      hideEntityLayerVariants(map, getEntityStatusLayerId(entityType));
+      hideEntityLayerVariants(
+        map,
+        getEntityStatusLayerId(entityType, CONNECTIVITY_STATUS_SOURCE),
+      );
     }
   }
 };

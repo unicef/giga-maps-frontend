@@ -597,7 +597,7 @@ describe('add-layers-utils', () => {
         mockMap,
         expect.objectContaining({
           source: 'map-data-source-static',
-          id: 'entity-status-health-zoom-circle',
+          id: 'entity-status-health-static-zoom-circle',
           options: expect.objectContaining({ maxzoom: 6 }),
           entityConfig: schoolCircleConfig,
         }),
@@ -606,7 +606,7 @@ describe('add-layers-utils', () => {
         mockMap,
         expect.objectContaining({
           source: 'map-data-source-static',
-          id: 'entity-status-health',
+          id: 'entity-status-health-static',
           options: expect.objectContaining({ minzoom: 5.5 }),
         }),
       );
