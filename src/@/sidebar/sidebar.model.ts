@@ -1297,7 +1297,10 @@ export const $isFlyoutSettling = createStore(false)
 
 export const toggleAccordionEntity = createEvent<EntityType>();
 
-export const $accordionScope = createStore<AccordionScope>('global');
+// A direct load already has the route resolved, so $mapRoutes never updates.
+export const $accordionScope = createStore<AccordionScope>(
+  $mapRoutes.getState().country ? 'country' : 'global',
+);
 
 // Opening a facility detail leaves both routes hidden: the filter keeps the
 // last scope instead of falling back to global and losing the country state.
@@ -1375,6 +1378,52 @@ sample({
   }),
   target: $accordionExpandedSingleEntity,
 });
+
+const $isCountryAccordionDefaultPending = createStore(false)
+  .on($countryCode.updates, (_, countryCode) => Boolean(countryCode))
+  .reset(toggleAccordionEntity);
+
+sample({
+  clock: $countryCode.updates,
+  source: $accordionExpandedByScope,
+  filter: (_, countryCode) => Boolean(countryCode),
+  fn: (expandedByScope) => ({ ...expandedByScope, country: {} }),
+  target: $accordionExpandedByScope,
+});
+
+const $areCountryLayersResolvable = combine(
+  $layersList,
+  $countryIdToCode,
+  (layers, countryIdToCode) =>
+    layers.length > 0 && Object.keys(countryIdToCode ?? {}).length > 0,
+);
+
+// The country's layer is only settled once init.ts selects it, not when the
+// country code changes. Only a live layer has the expanded view's chart.
+const countryAccordionDefaultResolved = sample({
+  clock: onSelectEntityMainLayer,
+  source: {
+    expandedByScope: $accordionExpandedByScope,
+    isPending: $isCountryAccordionDefaultPending,
+    isResolvable: $areCountryLayersResolvable,
+    layerTypeUtilsByEntity: $currentLayerTypeUtilsByEntity,
+  },
+  filter: ({ isPending, isResolvable }) => isPending && isResolvable,
+  fn: ({ expandedByScope, layerTypeUtilsByEntity }) => ({
+    ...expandedByScope,
+    country: {
+      [EntityType.SCHOOL]: Boolean(
+        layerTypeUtilsByEntity[EntityType.SCHOOL]?.isLive,
+      ),
+    },
+  }),
+});
+
+$accordionExpandedByScope.on(
+  countryAccordionDefaultResolved,
+  (_, expandedByScope) => expandedByScope,
+);
+$isCountryAccordionDefaultPending.reset(countryAccordionDefaultResolved);
 
 export const $accordionExpandedEntities = combine(
   $accordionExpandedByScope,

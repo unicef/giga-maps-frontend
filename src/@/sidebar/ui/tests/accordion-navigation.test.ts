@@ -30,12 +30,11 @@ describe('Sidecard expansion across real navigation', () => {
     expect($accordionScope.getState()).toBe('country');
     expect($accordionExpandedEntities.getState()).toEqual({});
 
+    // Landing on another country starts again from its default state.
     toggleAccordionEntity(EntityType.HEALTH);
     mapCountry.navigate({ code: 'ke' });
     expect($accordionScope.getState()).toBe('country');
-    expect($accordionExpandedEntities.getState()).toEqual({
-      [EntityType.HEALTH]: true,
-    });
+    expect($accordionExpandedEntities.getState()).toEqual({});
 
     // Back to global view: its own state is untouched by the country one.
     mapOverview.navigate();
