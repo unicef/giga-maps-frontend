@@ -5,7 +5,8 @@ import { styled } from 'styled-components';
 
 import { $userPermissions } from "~/core/auth/models";
 
-import { deleteSchoolMasterFx, publishAllSchoolMasterFx, publishSchoolMasterFx, updateSchoolMasterFx } from "../../effects/data-source.fx";
+import { deleteSchoolMasterFx, getSchoolMasterListFx, publishAllSchoolMasterFx, publishSchoolMasterFx, updateSchoolMasterFx } from "../../effects/data-source.fx";
+import { $schoolMasterCount } from "../../models/data-source-model";
 import { DataSourceType } from '../../types/data-source.type';
 import { ActionButtonWrapper, StatusWrapperDataSource } from "../styles/admin-styles";
 import { Chip, Div, Text } from '~/@/common/style/styled-component-style';
@@ -81,6 +82,8 @@ const TableToolbarSearchCustom = styled(TableToolbarSearch)`
 
 export default function DataSourceActionBar({ selectedRowsData, searchValue, setSearchValue, statusFilter, setStatusFilter, reloadSchoolMaster, countryFilterValues, dataSource, setSelectedRows, isEditing, showPreview, setEditedData, setIsEditing, selectedRows, isPreview, editedData, showCountryFilter }: ActionBarType): JSX.Element {
   const permissions = useStore($userPermissions)
+  const schoolMasterCount = useStore($schoolMasterCount)
+  const isListLoading = useStore(getSchoolMasterListFx.pending)
   const isPublisher = permissions.CAN_PUBLISH_SCHOOL_MASTER_DATA;
   const isEditor = permissions.CAN_UPDATE_SCHOOL_MASTER_DATA && !isPublisher;
   const [searchType, setSearchType] = useState(searchValue);
@@ -128,7 +131,9 @@ export default function DataSourceActionBar({ selectedRowsData, searchValue, set
   const handlePublishAll = async () => {
     try {
       await publishAllSchoolMasterFx({
-        body: countryFilterValues.map(id => ({ country_id: id }))
+        body: countryFilterValues.map(id => ({ country_id: id })),
+        statusFilter,
+        search: searchValue,
       })
       afterUpdatedData();
     } catch (e) {
@@ -276,10 +281,11 @@ export default function DataSourceActionBar({ selectedRowsData, searchValue, set
         {isPublisher && countryFilterValues?.length > 0 && <AlertModalWithButton
           buttonProps={{
             title: 'Publish all',
-            disabled: dataSource.length === 0,
+            disabled: dataSource.length === 0 || isListLoading,
           }}
           modalProps={{
-            modalHeading: "Are you sure you want to publish all schools in selected countries?",
+            modalHeading: `Are you sure you want to publish ${schoolMasterCount} records in the selected countries?`,
+            note: statusFilter || searchValue ? 'Only records matching the current status and search filters will be published.' : '',
             modalLabel: "Publish schools",
             primaryButtonText: "Publish",
             secondaryButtonText: "Cancel",
