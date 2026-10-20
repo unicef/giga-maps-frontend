@@ -6,7 +6,7 @@ import {
   merge,
   sample,
 } from 'effector';
-import type { Map as MapboxMap } from 'mapbox-gl';
+import type { Expression, Map as MapboxMap } from 'mapbox-gl';
 
 import {
   $admin1Data,
@@ -83,7 +83,10 @@ import {
 import { $coverageFilterByEntity, $selectedLayers } from '@/sidebar/init';
 
 import { $isMobile } from '../admin/models/media-query';
-import { mapLabelLayerList } from '../country/country.constant';
+import {
+  countryLabelOverrides,
+  mapLabelLayerList,
+} from '../country/country.constant';
 import {
   countryTranslationFx,
   filterTranslationFx,
@@ -786,15 +789,26 @@ sample({
 });
 
 sample({
-  clock: merge([languageStore.$language, $map]),
+  clock: merge([languageStore.$language, $map, onReloadedMap]),
   source: combine({ map: $map, lng: languageStore.$language }),
   target: createEffect(({ map, lng }: { map: MapboxMap; lng: string }) => {
     if (!map || !lng) return;
+    const nameField: Expression = ['get', `name_${lng}`];
+    const countryNameField: Expression = [
+      'match',
+      ['get', 'iso_3166_1'],
+      ...Object.entries(countryLabelOverrides).flat(),
+      nameField,
+    ];
     for (const key in mapLabelLayerList) {
-      map.setLayoutProperty(mapLabelLayerList[key], 'text-field', [
-        'get',
-        `name_${lng}`,
-      ]);
+      const layerId = mapLabelLayerList[key];
+      map.setLayoutProperty(
+        layerId,
+        'text-field',
+        layerId === mapLabelLayerList.countryLabel
+          ? countryNameField
+          : nameField,
+      );
     }
   }),
 });

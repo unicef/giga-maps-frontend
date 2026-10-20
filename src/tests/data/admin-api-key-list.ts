@@ -681,7 +681,7 @@ export default {
         },
         {
           "id": 278,
-          "name": "Nauru"
+          "name": "Naoero"
         },
         {
           "id": 6,
@@ -977,7 +977,7 @@ export default {
         },
         {
           "id": 15,
-          "name": "Turkey"
+          "name": "Türkiye"
         },
         {
           "id": 181,

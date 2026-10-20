@@ -49,6 +49,11 @@ export const mapLabelLayerList = {
   majorLabel: 'settlement-major-label'
 } as Record<string, string>;
 
+// Mapbox tiles still carry names that our API has already renamed; keyed by ISO 3166-1 alpha-2.
+export const countryLabelOverrides: Record<string, string> = {
+  NR: 'Naoero',
+};
+
 export const mapAdminLayerList = {
   admin1Boundary: 'admin-1-boundary',
   admin2Boundary: 'admin-2-boundary',
