@@ -1,5 +1,5 @@
 import { Image, Search, ChevronDown, ChevronUp } from '@carbon/icons-react';
-import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, Tag, TextInput } from "@carbon/react";
+import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, Tag, TextArea, TextInput } from "@carbon/react";
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
@@ -441,6 +441,8 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('iso3_format', formElement.iso3_format?.value);
       formData.append('data_source', formElement.data_source?.value);
       formData.append('health_data_source', formElement.health_data_source?.value);
+      formData.append('data_source_description', formDataCountry.data_source_description ?? '');
+      formData.append('health_data_source_description', formDataCountry.health_data_source_description ?? '');
       formData.append('last_weekly_status_id', formElement.last_weekly_status_id?.value)
       formData.append('country_disclaimer', formElement.country_disclaimer?.value)
       formData.append('date_of_join', formElement.date_of_join?.value?.split('/').join('-'));
@@ -690,6 +692,33 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
               />
             </InputBoxWrapper>
           </InputContainer>
+        </RowContainer>
+        <RowContainer>
+          {([
+            ['data_source_description', 'schools'],
+            ['health_data_source_description', 'health'],
+          ] as const).map(([field, entity]) => (
+            <InputContainer key={field}>
+              <InputLabel>
+                Data source description ({entity})
+              </InputLabel>
+              <InputBoxWrapper>
+                <TextArea
+                  labelText=""
+                  id={`data-source-description-${entity}`}
+                  name={field}
+                  maxCount={1000}
+                  enableCounter
+                  rows={4}
+                  placeholder={`Enter ${entity} data source description. Links: [text](https://...) or [text](mailto:...)`}
+                  value={formDataCountry?.[field] ?? ''}
+                  onChange={(e) => {
+                    onUdpateCountryForm([field, e.target.value]);
+                  }}
+                />
+              </InputBoxWrapper>
+            </InputContainer>
+          ))}
         </RowContainer>
         <RowContainer>
           <InputContainer>

@@ -57,20 +57,29 @@ $countryMapping.on(fetchCountryFx.doneData, (_, payload) => {
   return Object.entries(extractDataWithMapping(payload, countryMapping)).filter(([_key, value]) => !!value);
 })
 
-const dataSourceFieldByEntity: Record<EntityType, 'data_source' | 'health_data_source'> = {
+type CountryTextField = {
+  [Field in keyof Country]-?: Country[Field] extends string ? Field : never;
+}[keyof Country];
+
+const mapCountryFieldByEntity = (fields: Record<EntityType, CountryTextField>) =>
+  $country.map(
+    (country) =>
+      Object.fromEntries(
+        Object.entries(fields).map(([entityType, field]) => [
+          entityType,
+          country?.[field] ?? '',
+        ]),
+      ) as Record<EntityType, string>,
+  );
+
+export const $dataSourceByEntity = mapCountryFieldByEntity({
   [EntityType.SCHOOL]: 'data_source',
   [EntityType.HEALTH]: 'health_data_source',
-};
-
-export const $dataSourceByEntity = $country.map(
-  (country) =>
-    Object.fromEntries(
-      Object.entries(dataSourceFieldByEntity).map(([entityType, field]) => [
-        entityType,
-        country?.[field] ?? '',
-      ]),
-    ) as Record<EntityType, string>,
-);
+});
+export const $dataSourceDescriptionByEntity = mapCountryFieldByEntity({
+  [EntityType.SCHOOL]: 'data_source_description',
+  [EntityType.HEALTH]: 'health_data_source_description',
+});
 export const $countryActiveFiltersList = $country.map((country) => country?.active_filters_list ?? null);
 export const $isLoadinCountry = fetchCountryFx.pending;
 export const $countryBenchmark = $country.map((country) => country?.benchmark_metadata?.live_layer ?? {});
