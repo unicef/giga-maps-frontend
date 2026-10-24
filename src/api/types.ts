@@ -258,7 +258,9 @@ export type Country = {
   map_preview: string;
   description: string;
   data_source: string;
+  data_source_description: string;
   health_data_source: string;
+  health_data_source_description: string;
   date_schools_mapped: string;
   statistics: CountryWeeklyStats;
   country_disclaimer: string;

@@ -1,8 +1,18 @@
 import { useStore } from 'effector-react';
-import { type PropsWithChildren, useMemo } from 'react';
+import { ExternalLink, Info } from 'lucide-react';
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { $dataSourceByEntity } from '~/@/country/country.model';
+import DisclaimerPopover from '~/@/common/disclaimer-popover';
+import {
+  $dataSourceByEntity,
+  $dataSourceDescriptionByEntity,
+} from '~/@/country/country.model';
 import { type EntityType } from '~/@/entities';
 import {
   $currentLayerCountryDataSource,
@@ -20,6 +30,7 @@ import { cn } from '~/lib/cn';
 import {
   ensureAbsoluteUrl,
   parseNameAndUrl,
+  parseTextLinks,
   replaceSourceName,
   splitOutsideParens,
 } from './data-source-utils';
@@ -51,13 +62,41 @@ const DataSourceContainer = ({ children }: PropsWithChildren) => (
   <div className={dataSourceContainerClassName}>{children}</div>
 );
 
+const ENTITY_DISCLAIMER_KEY = 'entity-disclaimer';
+
+const LinkedText = ({ text }: { text: string }) => (
+  <p className="m-0! whitespace-pre-line!">
+    {parseTextLinks(text).map(({ text: segment, href }, index) =>
+      href ? (
+        <a
+          className="text-primary! underline-offset-2! hover:underline!"
+          href={href}
+          key={index}
+          {...(!href.startsWith('mailto:') && {
+            rel: 'noopener noreferrer',
+            target: '_blank',
+          })}
+        >
+          {segment}
+        </a>
+      ) : (
+        segment
+      ),
+    )}
+  </p>
+);
+
 const FooterDataSourcePopUp = ({
   isFooter = true,
   showOldDataSource = false,
   entityType,
 }: FooterDataSourcePopUpProps) => {
   const dataSourceByEntity = useStore($dataSourceByEntity);
+  const dataSourceDescriptionByEntity = useStore(
+    $dataSourceDescriptionByEntity,
+  );
   const { t } = useTranslation();
+  const [activeSourceKey, setActiveSourceKey] = useState<string | null>(null);
   const currentEntityType = entityType;
   const currentLayerTypeUtilsByEntity = useStore(
     $currentLayerTypeUtilsByEntity,
@@ -72,6 +111,8 @@ const FooterDataSourcePopUp = ({
       currentEntityType
     ] as LayerDataSource | null) ?? null;
   const oldDataSource = dataSourceByEntity[currentEntityType] ?? '';
+  const entityDescription =
+    dataSourceDescriptionByEntity[currentEntityType]?.trim() ?? '';
   const dataSourceName = useMemo(() => {
     const data: string[] = currentDataSource?.name
       ? splitOutsideParens(currentDataSource.name)
@@ -92,22 +133,108 @@ const FooterDataSourcePopUp = ({
 
   if (showOldDataSource && !oldDataSource.trim()) return null;
 
-  if (showOldDataSource) {
-    if (!isFooter) {
-      return (
-        <TooltipProvider>
-          <div className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-row! justify-start! items-start! gap-2! flex-wrap! w-full!">
-            <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
-              <span className="leading-4!">{t('data-source')}</span>
-            </div>
-            <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
-              <span>{oldDataSource}</span>
-            </div>
-          </div>
-        </TooltipProvider>
-      );
+  if (!isFooter) {
+    if (!showOldDataSource && !dataSourceName.length) return null;
+
+    const sources = showOldDataSource
+      ? []
+      : dataSourceName.map((sourceName, index) => ({
+          key: sourceName,
+          ...parseNameAndUrl(sourceName),
+          description: dataSourceDescription[index]?.trim(),
+        }));
+    const activeSource = sources.find(({ key }) => key === activeSourceKey);
+    const isEntityDisclaimerOpen =
+      Boolean(entityDescription) && activeSourceKey === ENTITY_DISCLAIMER_KEY;
+    const toggleSource = (key: string) =>
+      setActiveSourceKey((current) => (current === key ? null : key));
+
+    let popup: { title: string; content: ReactNode } | null = null;
+    if (isEntityDisclaimerOpen) {
+      popup = {
+        title: oldDataSource.trim() || t('data-source'),
+        content: <LinkedText text={entityDescription} />,
+      };
+    } else if (activeSource) {
+      popup = {
+        title: replaceSourceName(activeSource.name),
+        content: (
+          <>
+            {activeSource.description && (
+              <LinkedText text={activeSource.description} />
+            )}
+            {activeSource.url && (
+              <a
+                className={cn(
+                  'inline-flex! items-center! gap-1! text-primary! underline-offset-2! hover:underline!',
+                  activeSource.description && 'mt-4!',
+                )}
+                href={ensureAbsoluteUrl(activeSource.url)}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {t('view-data-source')}
+                <ExternalLink className="size-4" />
+              </a>
+            )}
+          </>
+        ),
+      };
     }
 
+    return (
+      <DisclaimerPopover
+        className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-col! items-start! gap-1! w-full!"
+        content={popup?.content}
+        onOpenChange={(open) => !open && setActiveSourceKey(null)}
+        open={Boolean(popup)}
+        title={popup?.title}
+      >
+        <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
+          <span className="leading-4!">{t('data-source')}</span>
+          {entityDescription && (
+            <button
+              aria-expanded={isEntityDisclaimerOpen}
+              aria-label={t('about-this-data-source')}
+              className="inline-flex! cursor-pointer! border-0! bg-transparent! p-0! text-muted-foreground! hover:text-foreground!"
+              onClick={() => toggleSource(ENTITY_DISCLAIMER_KEY)}
+              type="button"
+            >
+              <Info className="size-3.5" />
+            </button>
+          )}
+        </div>
+        <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
+          {showOldDataSource ? (
+            <span>{oldDataSource}</span>
+          ) : (
+            sources.map(({ key, name, url, description }, index) => {
+              const isLast = index === sources.length - 1;
+              return (
+                <span key={key} className="inline!">
+                  {description || url ? (
+                    <button
+                      aria-expanded={key === activeSourceKey}
+                      className="cursor-pointer! bg-transparent! p-0! text-left! text-xs! font-normal! text-foreground! underline-offset-2! hover:underline! border-0! inline!"
+                      onClick={() => toggleSource(key)}
+                      type="button"
+                    >
+                      {replaceSourceName(name)}
+                    </button>
+                  ) : (
+                    replaceSourceName(name)
+                  )}
+                  {!isLast && `, `}
+                </span>
+              );
+            })
+          )}
+        </div>
+      </DisclaimerPopover>
+    );
+  }
+
+  if (showOldDataSource) {
     return (
       <TooltipProvider>
         <div className={footerContainerClassName}>
@@ -118,9 +245,7 @@ const FooterDataSourcePopUp = ({
           </DataSourceHeader>
           <DataSourceContainer>
             <div className="mr-0.5! text-xs!">
-              {isFooter && (
-                <span className="font-bold!">{t('data-source-1')};</span>
-              )}
+              <span className="font-bold!">{t('data-source-1')};</span>
               <div className="mt-2!">{oldDataSource}</div>
             </div>
           </DataSourceContainer>
@@ -130,59 +255,6 @@ const FooterDataSourcePopUp = ({
   }
 
   if (!dataSourceName?.length) return null;
-
-  if (!isFooter) {
-    return (
-      <TooltipProvider>
-        <div className="self-stretch! py-2! my-0! border-t! border-b! border-border! flex! flex-row! justify-start! items-start! gap-2! flex-wrap! w-full!">
-          <div className="inline-flex! justify-start! items-center! gap-1! shrink-0! text-xs! font-normal! text-foreground!">
-            <span className="leading-4!">{t('data-source')}</span>
-          </div>
-          <div className="inline-flex! justify-start! items-center! gap-1! flex-wrap! text-xs! text-muted-foreground!">
-            {dataSourceName?.map((sourceName: string, index: number) => {
-              const isLast = index === dataSourceName?.length - 1;
-              const { name, url } = parseNameAndUrl(sourceName);
-              const description = dataSourceDescription[index];
-              const sourceButton = (
-                <button
-                  className={cn(
-                    'cursor-pointer! bg-transparent! p-0! text-left! text-xs! font-normal! text-muted-foreground! hover:text-foreground! border-0! inline!',
-                    url && 'underline!',
-                  )}
-                  onClick={() =>
-                    url &&
-                    window.open(
-                      ensureAbsoluteUrl(url),
-                      '_blank',
-                      'noopener,noreferrer',
-                    )
-                  }
-                  type="button"
-                >
-                  {replaceSourceName(name)}
-                </button>
-              );
-              return (
-                <span key={sourceName} className="inline!">
-                  {description ? (
-                    <Tooltip>
-                      <TooltipTrigger asChild>{sourceButton}</TooltipTrigger>
-                      <TooltipContent align="end" side="top">
-                        {description}
-                      </TooltipContent>
-                    </Tooltip>
-                  ) : (
-                    sourceButton
-                  )}
-                  {!isLast && `, `}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      </TooltipProvider>
-    );
-  }
 
   return (
     <TooltipProvider>

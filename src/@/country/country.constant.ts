@@ -117,5 +117,7 @@ export const countryMapping = [
   'active_layers_list.*.legend_configs.{*}.tooltip',
   'benchmark_metadata.benchmark_name.{*}',
   'benchmark_metadata.layer_descriptions.{*}',
-  'country_disclaimer'
+  'country_disclaimer',
+  'data_source_description',
+  'health_data_source_description',
 ]

@@ -13,6 +13,7 @@ type DisclaimerNotificationProps = {
   icon?: ReactNode;
   onClose?: () => void;
   title: ReactNode;
+  titleClassName?: string;
 };
 
 /** Dismissible notification card. Callers own visibility and positioning. */
@@ -23,6 +24,7 @@ const DisclaimerNotification = ({
   icon,
   onClose,
   title,
+  titleClassName,
 }: DisclaimerNotificationProps) => (
   <Card
     // `!` throughout: Carbon's unlayered CSS outranks Tailwind utilities.
@@ -40,7 +42,12 @@ const DisclaimerNotification = ({
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col gap-1.5!">
-        <p className="text-card-foreground! text-base! leading-6! font-medium!">
+        <p
+          className={cn(
+            'text-card-foreground! text-base! leading-6! font-medium!',
+            titleClassName,
+          )}
+        >
           {title}
         </p>
         <div className="text-muted-foreground! text-sm! leading-5! break-words">

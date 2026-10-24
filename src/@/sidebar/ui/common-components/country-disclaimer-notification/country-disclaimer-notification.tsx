@@ -41,6 +41,7 @@ const CountryDisclaimerNotification = () => {
       closeLabel={t('close-notification')}
       onClose={() => onCloseDiscalimerNotification(false)}
       title={t('disclaimer')}
+      titleClassName="text-sm! leading-5!"
     >
       {disclaimerText}
     </DisclaimerNotification>
