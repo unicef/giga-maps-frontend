@@ -13,7 +13,7 @@ export const getCountryDataSourceFx = createEffect((query: string) => {
 })
 export const getSchoolMasterListFx = createEffect(({ page, pageSize = 10, countryIds, ordering, statusFilter, search }: { page: number; pageSize?: number, countryIds?: string, ordering?: string, statusFilter?: string, search?: string }) => {
   return createRequestAuthFx({
-    url: `sources/school_master/?expand=school,modified_by,country&page_size=${pageSize}&page=${page}${countryIds ? `&country_id__in=${countryIds}` : ''}${ordering ? `&ordering=${ordering}` : ''}${statusFilter ? `&status__in=${statusFilter}` : ''}${search ? `&search=${search}` : ''}`
+    url: `sources/school_master/?expand=school,modified_by,country&page_size=${pageSize}&page=${page}${countryIds ? `&country_id__in=${countryIds}` : ''}${ordering ? `&ordering=${ordering}` : ''}${statusFilter ? `&status__in=${statusFilter}` : ''}${search ? `&search=${encodeURIComponent(search)}` : ''}`
   }) as Promise<APIListType<DataSourceType>>
 })
 
@@ -33,10 +33,18 @@ export const publishSchoolMasterFx = createEffect(({ body }: { body: Partial<Dat
   }) as Promise<DataSourceType>
 })
 
-export const publishAllSchoolMasterFx = createEffect(({ body }: { body: Record<string, number>[] }) => {
+export const publishAllSchoolMasterFx = createEffect(({ body, statusFilter, search }: { body: Record<string, number>[], statusFilter?: string, search?: string }) => {
+  const query = new URLSearchParams()
+  if (statusFilter) {
+    query.set('status__in', statusFilter)
+  }
+  if (search) {
+    query.set('search', search)
+  }
+  const queryString = query.toString()
   return createRequestAuthFx({
     method: 'PUT',
-    url: `sources/school_master/country-publish/`,
+    url: `sources/school_master/country-publish/${queryString ? `?${queryString}` : ''}`,
     data: body
   }) as Promise<unknown>
 })
