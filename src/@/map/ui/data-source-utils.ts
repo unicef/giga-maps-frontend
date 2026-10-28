@@ -63,3 +63,30 @@ export const splitOutsideParens = (input: string): string[] => {
   flush(lastSeparator);
   return out;
 };
+
+export type TextSegment = { text: string; href?: string };
+
+// Tolerates "] (" because Azure translation may insert a space there.
+const MARKDOWN_LINK = /\[([^\]]+)\]\s*\(([^)\s]+)\)/g;
+
+const toSafeHref = (url: string): string | undefined => {
+  if (/^(https?|mailto):/i.test(url)) return url;
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) return undefined;
+  return ensureAbsoluteUrl(url);
+};
+
+export const parseTextLinks = (text: string): TextSegment[] => {
+  const segments: TextSegment[] = [];
+  let lastIndex = 0;
+  for (const match of text.matchAll(MARKDOWN_LINK)) {
+    const [raw, label, url] = match;
+    const start = match.index ?? 0;
+    if (start > lastIndex)
+      segments.push({ text: text.slice(lastIndex, start) });
+    const href = toSafeHref(url);
+    segments.push(href ? { text: label, href } : { text: raw });
+    lastIndex = start + raw.length;
+  }
+  if (lastIndex < text.length) segments.push({ text: text.slice(lastIndex) });
+  return segments;
+};
