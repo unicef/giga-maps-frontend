@@ -1,14 +1,8 @@
-import { Share2 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DisclaimerPopover from '~/@/common/disclaimer-popover';
-import { Button } from '~/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '~/components/ui/tooltip';
+import ShareButton from '~/@/sidebar/ui/common-components/share-button';
 
 type LandingPageHeaderProps = {
   onShareClicked: () => void;
@@ -27,23 +21,7 @@ const LandingPageHeader = ({
     <div className="flex! flex-col! gap-1!">
       <div className="flex! items-start! justify-between! gap-1!">
         <p className="m-0! text-xl! text-foreground!">{t(title)}</p>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              aria-label={t('share-content')}
-              onClick={onShareClicked}
-              type="button"
-              variant="icon"
-              size="icon"
-              className="text-foreground!"
-            >
-              <Share2 className="size-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={4}>
-            {t('share-content')}
-          </TooltipContent>
-        </Tooltip>
+        <ShareButton handleShareClicked={onShareClicked} />
       </div>
       <DisclaimerPopover
         content={t('about-our-data-description')}
