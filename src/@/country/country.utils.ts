@@ -3,8 +3,8 @@ import { Expression, LngLatBoundsLike, Map, MapLayerMouseEvent } from "mapbox-gl
 
 import { mapCountry } from "~/core/routes";
 
-import { Colors, CONNECTIVITY_STATUS_SOURCE, DEFAULT_SOURCE, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
-import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, hideLayer, isDefaultStyle, mapDotsClickIdsAndHandler, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
+import { Colors, getCountryLine, getCountryLineWidth, getDefaultCountryColor, getDefaultCountryOpacity } from "../map/map.constant";
+import { checkSourceAvailable, filterCountry, findLayer, getAllSourceLayers, getDotHitRadius, getEntityDotAt, hideLayer, isDefaultStyle, matchAdminFilter, notHasDispute, showLayer, wvFilter } from "../map/utils";
 import { AdminLayerFillPrefix, AdminLayerLinePrefix, AdminSourcePrefix, CountryAdminIdsName, CountryAdminLevel, mapAdminLayerList, mapLabelLayerList, zoomPaddingMobile } from "./country.constant";
 import { AddCountries } from "./country.types";
 import { $isNavigateByAdminLevel } from '../map/map.model';
@@ -163,10 +163,12 @@ export const setCountryBound = (map: Map, code: string, bbox?: number[]) => {
 export const addAdminCountryLayerEvents = ({ map, level, isMobile }: { map: Map, level: CountryAdminLevel, isMobile: boolean }) => {
   const layerName = getAdminCountryLayerFill(level);
   map.on('click', (event: MapLayerMouseEvent) => {
+    // A near miss on a dot must not navigate to the region: the dot handler owns this click.
+    if (getEntityDotAt(map, event.point, getDotHitRadius(event.originalEvent))) return;
     const features = map.queryRenderedFeatures(event.point, {
-      layers: [getAdminCountryLayerFill(level), ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]), ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE])],
+      layers: [layerName],
     });
-    if (!features.length || features.length && features[0].layer.id !== layerName && CountryAdminLevel.level0 !== level) return;
+    if (!features.length) return;
     const feature = findLayer(features, layerName);
     if (!feature) return;
     const admin0 = feature?.properties[CountryAdminIdsName[CountryAdminLevel.level0]].toLowerCase();

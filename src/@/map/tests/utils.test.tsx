@@ -12,8 +12,12 @@ import {
   generateLayerUrls,
   generateStaticLayerUrl,
   getCoveragePaint,
+  DOT_HIT_MOUSE,
+  DOT_HIT_TOUCH,
+  entityDotLayerIds,
+  getDotHitRadius,
+  getEntityDotAt,
   getSymbolMinZoom,
-  mapDotsClickIdsAndHandler,
   onClickOnEntityDots,
 } from '../utils';
 import {
@@ -131,8 +135,8 @@ describe('status layer reuse is source aware', () => {
   });
 
   afterEach(() => {
-    delete mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE][layerId];
-    delete mapDotsClickIdsAndHandler[DEFAULT_SOURCE][layerId];
+    entityDotLayerIds[CONNECTIVITY_STATUS_SOURCE].delete(layerId);
+    entityDotLayerIds[DEFAULT_SOURCE].delete(layerId);
   });
 
   it('reuses an existing layer on the same source', () => {
@@ -164,17 +168,15 @@ describe('status layer reuse is source aware', () => {
     );
   });
 
-  it('removes the click handler of the replaced layer', () => {
+  it('stops treating the replaced layer as clickable', () => {
     const { map, mocks } = createMap(CONNECTIVITY_STATUS_SOURCE);
-    const handler = vi.fn();
-    mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE][layerId] = handler;
+    entityDotLayerIds[CONNECTIVITY_STATUS_SOURCE].add(layerId);
 
     createSchoolLayer(map, layerOptions(DEFAULT_SOURCE, true));
 
-    expect(mocks.off).toHaveBeenCalledWith('click', layerId, handler);
-    expect(
-      mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE][layerId],
-    ).toBeUndefined();
+    expect(entityDotLayerIds[CONNECTIVITY_STATUS_SOURCE].has(layerId)).toBe(
+      false,
+    );
     expect(mocks.addLayer).toHaveBeenCalledWith(
       expect.objectContaining({ id: layerId, source: DEFAULT_SOURCE }),
       expect.anything(),
@@ -511,33 +513,47 @@ describe('animateCircles', () => {
 });
 
 describe('onClickOnEntityDots', () => {
+  const healthLayerId = 'entity-selected-health-72';
+  const schoolLayerId = 'entity-selected-school-1';
+
+  // Projects [lng, lat] straight to pixels so distances are easy to reason about.
+  const createDotsMap = (features: any[]) => {
+    const handlers: Record<string, (event: any) => void> = {};
+    const canvas = { style: { cursor: '' } };
+    const map = {
+      on: vi.fn((event: string, handler: (event: any) => void) => {
+        handlers[event] = handler;
+      }),
+      getLayer: vi.fn(() => ({})),
+      getCanvas: () => canvas,
+      project: ([x, y]: [number, number]) => ({ x, y }),
+      queryRenderedFeatures: vi.fn(() => features),
+    } as any;
+    return { map, handlers, canvas };
+  };
+  const dot = (layerId: string, id: number, coordinates: [number, number]) => ({
+    layer: { id: layerId },
+    properties: { id },
+    geometry: { type: 'Point', coordinates },
+  });
+
   afterEach(() => {
     closeEntityPopup();
+    Object.values(entityDotLayerIds).forEach((ids) => ids.clear());
   });
 
   it('uses the clicked entity layer type and id when overlapping map dots exist', () => {
-    const healthLayerId = 'entity-selected-health-72';
-    const handlerRef = { current: null as ((event: any) => void) | null };
-    const map = {
-      on: vi.fn((_event, _id, handler) => {
-        handlerRef.current = handler;
-      }),
-      queryRenderedFeatures: vi.fn(() => [
-        {
-          layer: { id: healthLayerId },
-          properties: { health_entity_id: 685448, id: 685448 },
-          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
-        },
-        {
-          layer: { id: 'entity-selected-school-1' },
-          properties: { id: 123, school_id: 123 },
-          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
-        },
-      ]),
-    } as any;
+    const { map, handlers } = createDotsMap([
+      {
+        ...dot(healthLayerId, 685448, [26.5, -30.2]),
+        properties: { health_entity_id: 685448, id: 685448 },
+      },
+      dot(schoolLayerId, 123, [26.5, -30.2]),
+    ]);
 
     onClickOnEntityDots(map, healthLayerId, DEFAULT_SOURCE);
-    handlerRef.current?.({ point: { x: 1, y: 1 } });
+    onClickOnEntityDots(map, schoolLayerId, DEFAULT_SOURCE);
+    handlers.click({ point: { x: 26.5, y: -30.2 } });
 
     expect($activeSchoolPopup.getState()).toMatchObject({
       id: 685448,
@@ -547,27 +563,152 @@ describe('onClickOnEntityDots', () => {
 
   it('resolves the low-zoom circle companion as the same entity layer', () => {
     const healthCircleLayerId = 'entity-selected-health-72-zoom-circle';
-    const handlerRef = { current: null as ((event: any) => void) | null };
-    const map = {
-      on: vi.fn((_event, _id, handler) => {
-        handlerRef.current = handler;
-      }),
-      queryRenderedFeatures: vi.fn(() => [
-        {
-          layer: { id: healthCircleLayerId },
-          properties: { health_entity_id: 685448 },
-          geometry: { type: 'Point', coordinates: [26.5, -30.2] },
-        },
-      ]),
-    } as any;
+    const { map, handlers } = createDotsMap([
+      {
+        ...dot(healthCircleLayerId, 685448, [1, 1]),
+        properties: { health_entity_id: 685448 },
+      },
+    ]);
 
     onClickOnEntityDots(map, healthCircleLayerId, DEFAULT_SOURCE);
-    handlerRef.current?.({ point: { x: 1, y: 1 } });
+    handlers.click({ point: { x: 1, y: 1 } });
 
     expect($activeSchoolPopup.getState()).toMatchObject({
       id: 685448,
       entityType: EntityType.HEALTH,
     });
+  });
+
+  it('listens once per map however many layers are registered', () => {
+    const { map } = createDotsMap([]);
+
+    onClickOnEntityDots(map, healthLayerId, DEFAULT_SOURCE);
+    onClickOnEntityDots(map, schoolLayerId, CONNECTIVITY_STATUS_SOURCE);
+
+    expect(
+      map.on.mock.calls.filter(([event]: [string]) => event === 'click'),
+    ).toHaveLength(1);
+  });
+
+  it('shows the pointer only while a dot is inside the mouse hit area', () => {
+    const { map, handlers, canvas } = createDotsMap([
+      dot(schoolLayerId, 123, [10, 10]),
+    ]);
+    onClickOnEntityDots(map, schoolLayerId, DEFAULT_SOURCE);
+
+    handlers.mousemove({ point: { x: 14, y: 10 } });
+    expect(canvas.style.cursor).toBe('pointer');
+
+    map.queryRenderedFeatures.mockReturnValue([]);
+    handlers.mousemove({ point: { x: 40, y: 10 } });
+    expect(canvas.style.cursor).toBe('');
+  });
+});
+
+describe('getEntityDotAt', () => {
+  const schoolLayerId = 'entity-selected-school-1';
+  const healthLayerId = 'entity-status-health';
+
+  const createMap = (features: any[]) =>
+    ({
+      getLayer: vi.fn((id: string) => (id === 'missing-layer' ? undefined : {})),
+      project: ([x, y]: [number, number]) => ({ x, y }),
+      queryRenderedFeatures: vi.fn(() => features),
+    }) as any;
+  const dot = (layerId: string, id: number, coordinates: [number, number]) => ({
+    layer: { id: layerId },
+    properties: { id },
+    geometry: { type: 'Point', coordinates },
+  });
+
+  beforeEach(() => {
+    entityDotLayerIds[DEFAULT_SOURCE].add(schoolLayerId);
+    entityDotLayerIds[CONNECTIVITY_STATUS_SOURCE].add(healthLayerId);
+  });
+
+  afterEach(() => {
+    Object.values(entityDotLayerIds).forEach((ids) => ids.clear());
+  });
+
+  it('queries a box of the given half side around the point', () => {
+    const map = createMap([]);
+
+    getEntityDotAt(map, { x: 100, y: 50 }, DOT_HIT_TOUCH);
+
+    expect(map.queryRenderedFeatures).toHaveBeenCalledWith(
+      [
+        [78, 28],
+        [122, 72],
+      ],
+      { layers: [healthLayerId, schoolLayerId] },
+    );
+  });
+
+  it('picks the dot closest to the point, not the first rendered one', () => {
+    const map = createMap([
+      dot(schoolLayerId, 1, [118, 50]),
+      dot(healthLayerId, 2, [95, 52]),
+      dot(schoolLayerId, 3, [100, 70]),
+    ]);
+
+    expect(
+      getEntityDotAt(map, { x: 100, y: 50 }, DOT_HIT_TOUCH),
+    ).toMatchObject({ entityId: 2, entityType: EntityType.HEALTH });
+  });
+
+  it('skips features whose layer does not map to an entity type', () => {
+    const map = createMap([
+      dot('connectivity_layer', 1, [100, 50]),
+      dot(schoolLayerId, 3, [104, 50]),
+    ]);
+
+    expect(getEntityDotAt(map, { x: 100, y: 50 })).toMatchObject({
+      entityId: 3,
+      entityType: EntityType.SCHOOL,
+    });
+  });
+
+  it('returns undefined when no dot is inside the area', () => {
+    expect(getEntityDotAt(createMap([]), { x: 1, y: 1 })).toBeUndefined();
+  });
+
+  it('does not query layers missing from the style', () => {
+    entityDotLayerIds[DEFAULT_SOURCE].add('missing-layer');
+    const map = createMap([]);
+
+    getEntityDotAt(map, { x: 0, y: 0 });
+
+    expect(map.queryRenderedFeatures).toHaveBeenCalledWith(expect.anything(), {
+      layers: [healthLayerId, schoolLayerId],
+    });
+  });
+
+  it('does not query at all when no dot layer is registered', () => {
+    Object.values(entityDotLayerIds).forEach((ids) => ids.clear());
+    const map = createMap([]);
+
+    expect(getEntityDotAt(map, { x: 0, y: 0 })).toBeUndefined();
+    expect(map.queryRenderedFeatures).not.toHaveBeenCalled();
+  });
+});
+
+describe('getDotHitRadius', () => {
+  it('uses the touch area for touch and pen pointers', () => {
+    expect(getDotHitRadius({ pointerType: 'touch' } as any)).toBe(DOT_HIT_TOUCH);
+    expect(getDotHitRadius({ pointerType: 'pen' } as any)).toBe(DOT_HIT_TOUCH);
+  });
+
+  it('uses the mouse area for a mouse on a fine pointer device', () => {
+    expect(getDotHitRadius({ pointerType: 'mouse' } as any)).toBe(DOT_HIT_MOUSE);
+  });
+
+  it('uses the touch area on coarse pointer devices', () => {
+    const matchMedia = vi
+      .spyOn(window, 'matchMedia')
+      .mockReturnValueOnce({ matches: true } as MediaQueryList);
+
+    expect(getDotHitRadius(new MouseEvent('click'))).toBe(DOT_HIT_TOUCH);
+    matchMedia.mockRestore();
   });
 });
 

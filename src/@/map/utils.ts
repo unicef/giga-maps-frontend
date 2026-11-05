@@ -31,7 +31,6 @@ import {
   ConnectivityDistribution,
   ConnectivityStatusDistribution,
   Layers,
-  SCHOOL_STATUS_LAYER,
 } from '../sidebar/sidebar.constant';
 import { registerDevMultipleSchoolSameLocationHighlight } from './dev/multiple-school-same-location-highlight';
 import { $isMapLoading } from './loading.model';
@@ -198,12 +197,27 @@ export const isDefaultStyle = (style: string) => {
   return gigaThemeList.includes(style as ThemeType);
 };
 
-export const mapDotsClickIdsAndHandler = {
-  [CONNECTIVITY_STATUS_SOURCE]: {},
-  [DEFAULT_SOURCE]: {},
-} as Record<string, Record<string, (event: MapLayerMouseEvent) => void>>;
+export const entityDotLayerIds: Record<string, Set<string>> = {
+  [CONNECTIVITY_STATUS_SOURCE]: new Set(),
+  [DEFAULT_SOURCE]: new Set(),
+};
 
-const handledMapDotClickEvents = new WeakSet<object>();
+export const unregisterEntityDotLayer = (id: string, source?: string) => {
+  const sources = source ? [source] : Object.keys(entityDotLayerIds);
+  sources.forEach((item) => entityDotLayerIds[item]?.delete(id));
+};
+
+// Half side of the hit box: 12x12 px for a mouse, 44x44 px for a finger (TECH-11730).
+export const DOT_HIT_MOUSE = 6;
+export const DOT_HIT_TOUCH = 22;
+
+export const getDotHitRadius = (event?: Event) =>
+  (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) ||
+  (event as PointerEvent | undefined)?.pointerType === 'touch' ||
+  (event as PointerEvent | undefined)?.pointerType === 'pen' ||
+  window.matchMedia('(pointer: coarse)').matches
+    ? DOT_HIT_TOUCH
+    : DOT_HIT_MOUSE;
 
 export const isConnectivity = (id: string) =>
   id === `${Layers.connectivity}_layer`;
@@ -245,69 +259,100 @@ const getEntityIdFromFeatureProperties = (
     : null;
 };
 
-export const removePreviewsMapClickHandlers = (map: Map, source: string) => {
-  const ids = Object.keys(mapDotsClickIdsAndHandler[source]);
-  if (!ids?.length) return;
-  ids?.forEach((id) => {
-    map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-    delete mapDotsClickIdsAndHandler?.[source]?.[id];
-    resetDublicateSchoolClickData();
-  });
+export const removePreviewsMapClickHandlers = (_map: Map, source: string) => {
+  if (!entityDotLayerIds[source]?.size) return;
+  entityDotLayerIds[source].clear();
+  resetDublicateSchoolClickData();
 };
 
-export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
-  if (!mapDotsClickIdsAndHandler[source]) {
-    mapDotsClickIdsAndHandler[source] = {};
-  }
-  mapDotsClickIdsAndHandler[source][id] = (e: MapLayerMouseEvent) => {
-    const clickEvent = e.originalEvent ?? e;
-    if (handledMapDotClickEvents.has(clickEvent)) return;
+type EntityDotHit = {
+  feature: MapboxGeoJSONFeature;
+  entityType: EntityType;
+  entityId: number;
+};
 
-    const features = map.queryRenderedFeatures(e.point, {
-      layers: [
-        ...Object.keys(mapDotsClickIdsAndHandler[DEFAULT_SOURCE]),
-        ...Object.keys(mapDotsClickIdsAndHandler[CONNECTIVITY_STATUS_SOURCE]),
-      ],
-    });
-    if (!features.length) return;
-    const ids = new Set(
-      features.map((feature) => {
-        return feature.layer.id;
-      }),
-    );
-    if (ids.size === 2 && getMapId(SCHOOL_STATUS_LAYER.id) === id) {
-      return;
-    }
-    const clickedLayerEntityType = getEntityTypeFromMapLayerId(id);
-    const feature =
-      features.find((item) => item.layer.id === id) ?? features[0];
-    const fallbackFeature = features.find((item) => item !== feature);
-    const entityType =
-      clickedLayerEntityType ??
-      getEntityTypeFromMapLayerId(feature?.layer?.id) ??
-      getEntityTypeFromMapLayerId(fallbackFeature?.layer?.id);
-    if (!entityType) return;
+export const getEntityDotAt = (
+  map: Map,
+  point: { x: number; y: number },
+  hitRadius = DOT_HIT_MOUSE,
+): EntityDotHit | undefined => {
+  const layers = Object.values(entityDotLayerIds)
+    .flatMap((ids) => [...ids])
+    .filter((id) => map.getLayer(id));
+  if (!layers.length) return undefined;
+
+  const features = map.queryRenderedFeatures(
+    [
+      [point.x - hitRadius, point.y - hitRadius],
+      [point.x + hitRadius, point.y + hitRadius],
+    ],
+    { layers },
+  );
+  const distanceTo = (feature: MapboxGeoJSONFeature) => {
+    const coordinates = (feature.geometry as GeoJSONPoint)?.coordinates;
+    if (!coordinates) return Infinity;
+    const projected = map.project(coordinates as PointCoordinates);
+    return Math.hypot(projected.x - point.x, projected.y - point.y);
+  };
+  // The sort is stable, so on ties the topmost rendered layer still wins.
+  const sorted = features
+    .map((feature) => ({ feature, distance: distanceTo(feature) }))
+    .toSorted((a, b) => a.distance - b.distance);
+
+  for (const { feature } of sorted) {
+    const entityType = getEntityTypeFromMapLayerId(feature.layer?.id);
     const entityId =
-      getEntityIdFromFeatureProperties(feature?.properties, entityType) ??
-      getEntityIdFromFeatureProperties(fallbackFeature?.properties, entityType);
-    if (!entityId) return;
-    handledMapDotClickEvents.add(clickEvent);
+      entityType &&
+      getEntityIdFromFeatureProperties(feature.properties, entityType);
+    if (entityType && entityId) return { feature, entityType, entityId };
+  }
+  return undefined;
+};
+
+const mapsWithEntityDotEvents = new WeakSet<Map>();
+
+const addEntityDotEvents = (map: Map) => {
+  if (mapsWithEntityDotEvents.has(map)) return;
+  mapsWithEntityDotEvents.add(map);
+
+  map.on('click', (e: MapLayerMouseEvent) => {
+    const hit = getEntityDotAt(map, e.point, getDotHitRadius(e.originalEvent));
+    if (!hit) return;
+    const { feature, entityType, entityId } = hit;
     const activePopup = $activeSchoolPopup.getState();
     if (activePopup?.id === entityId && activePopup.entityType === entityType) {
       closeEntityPopup();
       return;
     }
-    if (feature?.layer?.id) {
-      setSchoolFocusLatLng(feature?.geometry?.coordinates as PointCoordinates);
-      setPopupOnClickDot({
-        id: entityId,
-        entityType,
-        geopoint: feature.geometry as GeoJSONPoint,
-        allowDublicateSchoolIds: true,
-      });
+    setSchoolFocusLatLng(
+      (feature.geometry as GeoJSONPoint).coordinates as PointCoordinates,
+    );
+    setPopupOnClickDot({
+      id: entityId,
+      entityType,
+      geopoint: feature.geometry as GeoJSONPoint,
+      allowDublicateSchoolIds: true,
+    });
+  });
+
+  let isHoveringDot = false;
+  map.on('mousemove', (e: MapLayerMouseEvent) => {
+    const hasDot = !!getEntityDotAt(map, e.point, DOT_HIT_MOUSE);
+    if (hasDot) {
+      map.getCanvas().style.cursor = 'pointer';
+    } else if (isHoveringDot) {
+      map.getCanvas().style.cursor = '';
     }
-  };
-  map.on('click', id, mapDotsClickIdsAndHandler[source][id]);
+    isHoveringDot = hasDot;
+  });
+};
+
+export const onClickOnEntityDots = (map: Map, id: string, source: string) => {
+  if (!entityDotLayerIds[source]) {
+    entityDotLayerIds[source] = new Set();
+  }
+  entityDotLayerIds[source].add(id);
+  addEntityDotEvents(map);
 };
 
 export const onClickOnSchoolDots = onClickOnEntityDots;
@@ -870,11 +915,7 @@ const reuseLayerOnSameSource = (
     showLayer(map, id);
     return true;
   }
-  Object.values(mapDotsClickIdsAndHandler).forEach((handlers) => {
-    if (!handlers?.[id]) return;
-    map.off('click', id, handlers[id]);
-    delete handlers[id];
-  });
+  unregisterEntityDotLayer(id);
   map.removeLayer(id);
   return false;
 };
@@ -934,8 +975,7 @@ export const createSchoolLayer = (
     ...options,
   });
 
-  map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-  delete mapDotsClickIdsAndHandler[source][id];
+  unregisterEntityDotLayer(id, source);
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, CONNECTIVITY_STATUS_SOURCE);
   }
@@ -1012,10 +1052,7 @@ export const createEntitySymbolLayer = (
     ...restOptions,
   });
 
-  map.off('click', id, mapDotsClickIdsAndHandler[source]?.[id]);
-  if (mapDotsClickIdsAndHandler[source]) {
-    delete mapDotsClickIdsAndHandler[source][id];
-  }
+  unregisterEntityDotLayer(id, source);
   if (!mapRoute.map) {
     onClickOnSchoolDots(map, id, source);
   }
@@ -1159,10 +1196,7 @@ export const createSelectedLayer = (
   // create on click on dots;
   // clear click event before creating new layer;
 
-  if (mapDotsClickIdsAndHandler[source]) {
-    map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-    delete mapDotsClickIdsAndHandler[source][id];
-  }
+  unregisterEntityDotLayer(id, source);
   registerDevMultipleSchoolSameLocationHighlight({
     map,
     id,
@@ -1274,10 +1308,7 @@ export const createSelectedSymbolLayer = (
     layerBefore && map.getLayer(layerBefore) ? layerBefore : '',
   );
 
-  if (mapDotsClickIdsAndHandler[source]) {
-    map.off('click', id, mapDotsClickIdsAndHandler[source][id]);
-    delete mapDotsClickIdsAndHandler[source][id];
-  }
+  unregisterEntityDotLayer(id, source);
   registerDevMultipleSchoolSameLocationHighlight({
     map,
     id,

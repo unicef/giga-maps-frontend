@@ -1,6 +1,7 @@
 import { getCountryLevels, onChangeLabelLayer, getCountryAdminCode, addAdminCountryLayerEvents, createLineLayerForCountry, setCountryBound, getFillColorForLayer, createSourceForAdminCountry, getFilterForFillLayer, createFillLayerForCountry, onChangeAdminBoundariesLayer, getAdminCountrySource, getAdminCountryLayerFill } from './country.utils';
 import { CountryAdminLevel } from './country.constant';
 import { Colors, DEFAULT_SOURCE } from '../map/map.constant';
+import { entityDotLayerIds } from '../map/utils';
 
 describe('getCountryLevels', () => {
 
@@ -491,6 +492,33 @@ describe('addAdminCountryLayerEvents', () => {
       point: { x: 1, y: 1 }
     } as any);
     expect(window.location.pathname).toBe('/map/country/us/ADM01');
+  });
+
+  it('does not navigate to the region when a dot is inside the hit area', () => {
+    const level = 1;
+    const dotLayerId = 'entity-selected-school-1';
+    entityDotLayerIds[DEFAULT_SOURCE].add(dotLayerId);
+    const pathname = window.location.pathname;
+    addAdminCountryLayerEvents({
+      map: { ...map, getLayer: () => ({}), project: ([x, y]: number[]) => ({ x, y }) },
+      level,
+    } as any);
+
+    const handler = map.on.mock.calls[0][1];
+    map.queryRenderedFeatures.mockReturnValueOnce([{
+      layer: { id: dotLayerId },
+      properties: { id: 7 },
+      geometry: { type: 'Point', coordinates: [4, 1] },
+    }]).mockReturnValueOnce([{
+      layer: { id: getAdminCountryLayerFill(level) },
+      state: { bbox: [10, 12], giga_id_admin: 'ADM02' },
+      properties: { "iso_3166_1": 'us' },
+    }]);
+    handler({ point: { x: 1, y: 1 } } as any);
+
+    expect(map.queryRenderedFeatures).toHaveBeenCalledTimes(1);
+    expect(window.location.pathname).toBe(pathname);
+    entityDotLayerIds[DEFAULT_SOURCE].delete(dotLayerId);
   });
 
   it('should handle click event: case4 - admni1 empty ', () => {
