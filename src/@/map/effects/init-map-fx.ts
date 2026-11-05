@@ -15,10 +15,14 @@ export const initMapFx = createEffect(
       center: center ?? defaultCenter,
       zoom: zoom ?? defaultZoom,
       maxZoom,
+      maxPitch: 0,
+      dragRotate: false,
+      pitchWithRotate: false,
+      touchPitch: false,
       container,
     });
-    map.dragRotate.disable();
     map.touchZoomRotate.disableRotation();
+    map.keyboard.disableRotation();
     map.on('load', () => {
       changeMap(map);
     });
