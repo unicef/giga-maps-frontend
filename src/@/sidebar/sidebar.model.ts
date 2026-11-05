@@ -1279,7 +1279,7 @@ export const setSidebarFlyoutState = createEvent<SidebarFlyoutState>();
 export const cycleSidebarFlyoutState = createEvent();
 export const $sidebarFlyoutState = restore<SidebarFlyoutState>(
   setSidebarFlyoutState,
-  'default',
+  isMobileViewport() ? 'collapsed' : 'default',
 ).on(
   cycleSidebarFlyoutState,
   // Tapping never collapses: closing the panel is a deliberate drag down.
