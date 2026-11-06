@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { $entityRegistryFiltered, selectAllEntityTypes } from '~/@/entities/models/entity.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
+import { closeSelectionToOverview } from '~/@/sidebar/sidebar.model';
 import FooterTourContact from '~/@/sidebar/ui/common-components/footer-tour-contact.view';
 import { $selectedPlace } from '~/@/sidebar/ui/search-result/container/search-result.model';
 import { SearchCountryList } from '~/@/sidebar/ui/search-result/search-country-list';
@@ -72,6 +73,7 @@ const TopSearchBar = () => {
   }, [selectedPlace, t]);
 
   const displayValue = isSearchTextDirty ? searchText : selectedPlaceLabel;
+  const closesSelection = isMobile && !isSearchTextDirty && !!selectedPlace;
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState('');
@@ -255,7 +257,7 @@ const TopSearchBar = () => {
                   autoFocus={!isMobile}
                   autoCorrect="off"
                   spellCheck={false}
-                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-3.5! pr-10! text-[0.9375rem]! font-normal! leading-5! text-foreground! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
+                  className="h-12! min-w-0! flex-1! border-0! bg-transparent! pl-3.5! pr-12! text-ellipsis! text-[0.9375rem]! font-normal! leading-5! text-foreground! caret-[#0f62fe]! shadow-none! placeholder:text-[12px]! placeholder:font-normal! placeholder:leading-5! placeholder:text-muted-foreground! focus-visible:ring-0! focus-visible:ring-offset-0!"
                   id="main-search-bar"
                   inputMode="search"
                   onBlur={onBlurSearch}
@@ -298,7 +300,11 @@ const TopSearchBar = () => {
                 ) : null}
               </div>
               <Button
-                aria-label={t('clear-search-input')}
+                aria-label={t(
+                  closesSelection
+                    ? 'close-return-global-view'
+                    : 'clear-search-input'
+                )}
                 variant={'icon'}
                 className={cn(
                   'main-search-list absolute! right-0! top-0! z-1! h-12! w-12! shrink-0! items-center! justify-center! rounded-r-lg! border-0! bg-transparent! px-2! py-0! text-foreground!',
@@ -310,10 +316,12 @@ const TopSearchBar = () => {
                   changeIsSearchFocused(false);
                   setShowSuggestions(false);
                   setMentionQuery('');
-                  if (wasShowingSelection) mapOverview.navigate();
+                  if (!wasShowingSelection) return;
+                  if (isMobile) closeSelectionToOverview();
+                  else mapOverview.navigate();
                 }}
               >
-                <X size={16} className="text-foreground!" />
+                <X className={cn('text-foreground!', closesSelection ? 'size-5' : 'size-4')} />
               </Button>
 
               {/* @ mention entity type suggestions */}

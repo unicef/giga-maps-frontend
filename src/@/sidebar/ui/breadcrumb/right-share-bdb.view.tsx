@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import ShareButton from "../common-components/share-button";
 import ShareURLModal from "../common-components/share-url-modal";
 
-const RightShareBDB = ({ iconSize }: { iconSize?: 16 | 20 }) => {
+const RightShareBDB = () => {
   const [shareModalOpen, setShareModalOpen] = useState<boolean>(false);
 
   const handleShareClicked = useCallback(() => {
@@ -11,7 +11,7 @@ const RightShareBDB = ({ iconSize }: { iconSize?: 16 | 20 }) => {
   }, [shareModalOpen])
 
   return <>
-    <ShareButton handleShareClicked={handleShareClicked} iconSize={iconSize} />
+    <ShareButton handleShareClicked={handleShareClicked} />
     <ShareURLModal shareModalOpen={shareModalOpen} setshareModalOpen={setShareModalOpen}
       currentLink={window.location.href}
     />

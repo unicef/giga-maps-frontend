@@ -1,48 +1,37 @@
-import { Share } from '@carbon/icons-react';
-import { IconButton } from '@carbon/react';
-
-import { Ref } from 'react';
+import { Share2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { styled } from 'styled-components';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 
-const ShareIcon = styled(Share)`
-  fill: ${props => props.theme.text} !important;
-`
-const ShareButtonWrapper = styled.div<{ $centerIcon: boolean }>`
- ${({ $centerIcon }) => $centerIcon && `
-  /* Carbon's sm padding is tuned for a 16px glyph and sinks a larger one. */
-  .cds--btn.cds--btn--icon-only {
-    padding-block: 0;
-    align-items: center;
-  }
- `}
- .cds--tooltip-content {
-  background: ${props => props.theme.text} !important;
-  color: ${props => props.theme.main}!important;
-}
-  .cds--popover-caret{
-    background: ${props => props.theme.text};
-  }
-`
-
-const ShareButton = ({ shareButtonRef, handleShareClicked, iconSize = 16 }: { shareButtonRef?: Ref<HTMLElement>, handleShareClicked: () => void, iconSize?: 16 | 20 }) => {
+const ShareButton = ({
+  handleShareClicked,
+}: {
+  handleShareClicked: () => void;
+}) => {
   const { t } = useTranslation();
   return (
-    <ShareButtonWrapper $centerIcon={iconSize !== 16}>
-      <IconButton
-        align={'bottom-right'}
-        label={t('share-content')}
-        className="sidebar-worldview-shareIcon"
-        onClick={handleShareClicked}
-        ref={shareButtonRef}
-        size="sm"
-        kind="ghost"
-      >
-        <ShareIcon size={iconSize} aria-label="share" />
-      </IconButton>
-    </ShareButtonWrapper >
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          aria-label={t('share-content')}
+          // The ::after inset grows the 32px circle into a 44px touch target.
+          className="relative! flex! size-8! shrink-0! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-pill-bg! p-0! text-on-surface-muted! transition-colors! after:absolute! after:-inset-1.5! hover:text-foreground!"
+          data-slot="share-button"
+          onClick={handleShareClicked}
+          type="button"
+        >
+          <Share2 className="size-3.5" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom" sideOffset={4}>
+        {t('share-content')}
+      </TooltipContent>
+    </Tooltip>
   );
-}
+};
 
 export default ShareButton;

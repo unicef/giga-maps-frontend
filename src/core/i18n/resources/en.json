@@ -133,6 +133,7 @@
   "select-country-region-school-s": "Browse country, region or facilities",
   "country-list": "Country List",
   "clear-search-input": "Clear search input",
+  "close-return-global-view": "Close and return to the global view",
   "search-selected-place": "{{name}}, {{country}}",
   "search-entities-selected_one": "{{count}} facility selected",
   "search-entities-selected_other": "{{count}} facilities selected",
