@@ -1,4 +1,5 @@
 import { useStore } from 'effector-react';
+import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { $admin1Name, $country } from '~/@/country/country.model';
@@ -11,6 +12,7 @@ import {
   $isLoadingSchoolView,
   $schoolStats,
   $sidebarFlyoutState,
+  closeSelectionToOverview,
 } from '../../sidebar.model';
 import RightShareBDB from './right-share-bdb.view';
 
@@ -93,7 +95,18 @@ const MobileFlyoutHeader = () => {
           </p>
         ) : null}
       </div>
-      <RightShareBDB />
+      <div className="flex! shrink-0! items-center! gap-2!">
+        <RightShareBDB />
+        <button
+          aria-label={t('close-return-global-view')}
+          className="relative! flex! size-9! shrink-0! cursor-pointer! items-center! justify-center! rounded-full! border-0! bg-surface-elevated! p-0! text-foreground! transition-colors! after:absolute! after:-inset-1! hover:bg-surface-highlight!"
+          data-slot="flyout-close-button"
+          onClick={() => closeSelectionToOverview()}
+          type="button"
+        >
+          <X className="size-[18px]" />
+        </button>
+      </div>
     </div>
   );
 };
