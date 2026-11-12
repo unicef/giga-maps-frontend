@@ -10,6 +10,7 @@ import {
   $countryConnectivityNames,
   $countryIdToCode,
   $countrySearchString,
+  clearMapSelection,
 } from '~/@/country/country.model';
 import {
   EntityType,
@@ -1288,6 +1289,27 @@ export const $sidebarFlyoutState = restore<SidebarFlyoutState>(
 export const $isFlyoutExpanded = $sidebarFlyoutState.map(
   (state) => state === 'expanded',
 );
+
+// Mobile search X: deselect keeping the zoom, then collapse so the map shows.
+export const closeSelectionToOverview = createEvent();
+const $isClosingToOverview = createStore(false)
+  .on(closeSelectionToOverview, () => true)
+  .reset(setSidebarFlyoutState);
+
+sample({ clock: closeSelectionToOverview, target: clearMapSelection });
+sample({
+  clock: closeSelectionToOverview,
+  fn: () => ({}),
+  target: mapOverview.navigate,
+});
+// historyUpdated resets the flyout to default, so collapse on that same update.
+sample({
+  clock: router.historyUpdated,
+  source: $isClosingToOverview,
+  filter: Boolean,
+  fn: (): SidebarFlyoutState => 'collapsed',
+  target: setSidebarFlyoutState,
+});
 
 export const flyoutSettled = createEvent();
 // Map control popovers wait for it: their anchors ride on the moving flyout.
