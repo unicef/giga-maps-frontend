@@ -1,23 +1,28 @@
 import { useStore } from 'effector-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { $countryCode } from '~/@/country/country.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import {
   $historyIntervalByEntity,
   $historyIntervalUnitByEntity,
 } from '~/@/sidebar/history-graph.model';
-import { ConnectivityBenchMarks } from '~/@/sidebar/sidebar.constant';
-import { defaultInterval } from '~/@/sidebar/sidebar.constant';
+import {
+  ConnectivityBenchMarks,
+  defaultInterval,
+} from '~/@/sidebar/sidebar.constant';
 import {
   $getSchoolParams,
   $schoolStatsMap,
   schoolStatsMap,
 } from '~/@/sidebar/sidebar.model';
+import { roundStaticNumericValue } from '~/@/sidebar/ui/school-view-component/school-view.utils';
 import { fetchSchoolPopupDataFx } from '~/api/project-connect';
 import { $mapRoutes } from '~/core/routes';
-import { IntervalUnit } from '~/lib/date-fns-kit/types';
 import { formatDateInterval } from '~/lib/date-fns-kit/format-date-interval';
+import { IntervalUnit } from '~/lib/date-fns-kit/types';
+
 import { $schoolPopupData } from '../../map.init';
 import {
   $activeSchoolPopup,
@@ -72,8 +77,7 @@ const useSchoolPopupData = () => {
     stylePaintData,
     feature: schoolStats,
   } = useStore($schoolPopupData);
-  const currentEntityType =
-    activePopup?.entityType ?? routeEntityType;
+  const currentEntityType = activePopup?.entityType ?? routeEntityType;
   const {
     selectedLayerDataByEntity,
     currentLayerTypeUtilsByEntity,
@@ -152,7 +156,8 @@ const useSchoolPopupData = () => {
     const schoolCoords: number[] = Array.isArray(feature?.geopoint?.coordinates)
       ? (feature.geopoint.coordinates as number[])
       : [];
-    const isLiveNotUnknown = itemIsLive && feature?.connectivityType !== UNKNOWN;
+    const isLiveNotUnknown =
+      itemIsLive && feature?.connectivityType !== UNKNOWN;
     const connectivityValue = isLiveNotUnknown
       ? formatConnectivityValue(feature?.liveAvg ?? 0, unit)
       : t('unknown');
@@ -167,6 +172,8 @@ const useSchoolPopupData = () => {
       staticValue = staticValue === true ? 'yes' : 'no';
     } else if (staticValue === 'unknown' || !staticValue) {
       staticValue = t('unknown');
+    } else {
+      staticValue = String(roundStaticNumericValue(staticValue));
     }
 
     return {
@@ -196,7 +203,8 @@ const useSchoolPopupData = () => {
           ...item,
           isClicked: item.isClicked ?? false,
           feature: schoolStats,
-          entityType: activePopup?.entityType ?? routeEntityType ?? EntityType.SCHOOL,
+          entityType:
+            activePopup?.entityType ?? routeEntityType ?? EntityType.SCHOOL,
         })),
       );
     }
@@ -205,7 +213,9 @@ const useSchoolPopupData = () => {
         ...multipleSchoolDiv.map((item) => ({
           ...item,
           isClicked: item.isClicked ?? false,
-          feature: multipleSchoolStats?.find((school) => school.id === item.id) ?? null,
+          feature:
+            multipleSchoolStats?.find((school) => school.id === item.id) ??
+            null,
           entityType: routeEntityType ?? EntityType.SCHOOL,
         })),
       );

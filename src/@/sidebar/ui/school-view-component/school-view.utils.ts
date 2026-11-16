@@ -1,8 +1,8 @@
 import { SchoolStatsType } from '~/api/types';
 
 import {
-  StatisticConfig,
   groupOrder,
+  StatisticConfig,
 } from '../../config/school-information-config';
 
 export const getDisplayValue = (value: unknown) => {
@@ -18,8 +18,19 @@ export const toTitleCase = (value: string) =>
     .toLowerCase()
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
+const DECIMAL_STRING = /^-?\d+\.\d+$/;
+
+export const roundStaticNumericValue = <T>(value: T): T | number => {
+  const numeric =
+    typeof value === 'string' && DECIMAL_STRING.test(value.trim())
+      ? Number(value)
+      : value;
+  if (typeof numeric !== 'number' || !Number.isFinite(numeric)) return value;
+  return Number.isInteger(numeric) ? numeric : Number(numeric.toFixed(2));
+};
+
 export const formatStaticFieldValue = (value: unknown) => {
-  const displayValue = getDisplayValue(value);
+  const displayValue = getDisplayValue(roundStaticNumericValue(value));
   if (displayValue === 'N/A') return displayValue;
   if (displayValue.toLowerCase() === 'true') return 'Yes';
   if (displayValue.toLowerCase() === 'false') return 'No';
