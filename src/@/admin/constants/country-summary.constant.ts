@@ -44,6 +44,7 @@ export const defaultCountryForm = {
   "date_of_join": null,
   'iso3_format': '',
   "country_disclaimer": "",
+  "school_data_type": "not_mapped",
   benchmark_metadata: {
     live_layer: {},
     layer_descriptions: {},

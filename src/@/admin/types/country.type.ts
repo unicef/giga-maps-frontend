@@ -1,3 +1,5 @@
+import type { SchoolDataType } from '~/api/types';
+
 export interface CountryType {
   id: number;
   name: string;
@@ -9,6 +11,7 @@ export interface CountryType {
   health_data_source: string;
   date_schools_mapped?: any;
   integration_status: number;
+  school_data_type?: SchoolDataType;
   date_of_join?: any;
   schools_with_data_percentage?: any;
   schools_total: number;

@@ -13,6 +13,7 @@ import {
   $entityConfigMap,
   $entityTypesFiltered,
 } from '~/@/entities/models/entity.model';
+import { $nonGovLegendMode } from '~/@/country/country.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import {
@@ -102,6 +103,7 @@ const LegendPopup = ({
   const isFlyoutSettling = useStore($isFlyoutSettling);
   const { entityType: detailEntityType } = useStore($getSchoolParams);
   const mapLevel = useStore($mapRoutes);
+  const nonGovLegendMode = useStore($nonGovLegendMode);
   const isGlobalView = mapLevel.map;
   const isEntityDetailView =
     mapLevel.schools || mapLevel.entity || mapLevel.entityView;
@@ -177,10 +179,11 @@ const LegendPopup = ({
     (activeConnectivityStats as any)?.no_of_schools_measure ??
     0,
   );
-  const showLiveLegend = isGlobalView
-    ? reportingInternetQuality > 0
-    : isLive;
-  const showStaticLegend = !isGlobalView && isStatic;
+  const isNonGovCountry = nonGovLegendMode === 'only';
+  const showLiveLegend =
+    !isNonGovCountry &&
+    (isGlobalView ? reportingInternetQuality > 0 : isLive);
+  const showStaticLegend = !isNonGovCountry && !isGlobalView && isStatic;
   const metricLayerData = isGlobalView
     ? globalLayerDataByEntity[activeTab]
     : activeEntityLayerData;
@@ -189,7 +192,7 @@ const LegendPopup = ({
     : (metricLayerData?.name ?? t('average-download-speed'));
   const legendStatusTitle = t('connectivity-status');
 
-  const shouldShowGlobalSchoolStatus = isGlobalView;
+  const shouldShowGlobalSchoolStatus = isGlobalView || isNonGovCountry;
   const shouldShowStatusSummary =
     isSchoolStatus || shouldShowGlobalSchoolStatus;
   const visibleLegendSectionCount = [
