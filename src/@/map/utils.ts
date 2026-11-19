@@ -1,7 +1,9 @@
 import { format } from 'date-fns';
 import {
   CircleLayer,
+  CircleLayout,
   CirclePaint,
+  Expression,
   Map,
   MapboxGeoJSONFeature,
   MapLayerMouseEvent,
@@ -920,6 +922,17 @@ const reuseLayerOnSameSource = (
   return false;
 };
 
+// Higher key draws on top, so connected dots are not hidden under unknown ones.
+export const schoolStatusSortKey: Expression = [
+  'match',
+  ['get', LayerDataProps.connectivityStatus.key],
+  ConnectivityStatusDistribution.connected,
+  3,
+  ConnectivityStatusDistribution.notConnected,
+  2,
+  1,
+];
+
 export const createSchoolLayer = (
   map: Map,
   {
@@ -973,6 +986,10 @@ export const createSchoolLayer = (
     minzoom: 0,
     paint,
     ...options,
+    layout: {
+      ...(options.layout as CircleLayout | undefined),
+      'circle-sort-key': schoolStatusSortKey,
+    },
   });
 
   unregisterEntityDotLayer(id, source);
