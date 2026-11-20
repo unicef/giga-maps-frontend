@@ -610,6 +610,22 @@ sample({
   target: createLoadingPopupFx,
 });
 
+// The selected-entity marker popup ignores map clicks (closeOnClick: false),
+// so it has to be closed by hand when another dot opens its popup.
+sample({
+  clock: $schoolClickedId,
+  source: $schoolMarkers,
+  filter: (_, clickedId) => !!clickedId,
+  target: createEffect(
+    (schoolMarkers: ReturnType<typeof $schoolMarkers.getState>) => {
+      schoolMarkers.forEach(({ marker }) => {
+        const markerPopup = marker.getPopup();
+        if (markerPopup?.isOpen()) markerPopup.remove();
+      });
+    },
+  ),
+});
+
 sample({
   clock: $activeSchoolPopup,
   source: combine({

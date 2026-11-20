@@ -2,7 +2,7 @@ import { createEffect } from 'effector';
 import { Marker } from 'mapbox-gl';
 
 import { mapMarkerSource } from '../map.init';
-import { setMultipleSchoolPopup, updateSchoolMarker } from '../map.model';
+import { closeEntityPopup, setMultipleSchoolPopup, updateSchoolMarker } from '../map.model';
 import { createAndSetPopupTemplate, createPopup, getPopupElement } from '../popup/popup.util';
 
 
@@ -68,6 +68,7 @@ export const addSchoolMarkers = createEffect(({ map, schoolStats, multipleSchool
     }
     marker.getElement().addEventListener('click', function (e) {
       e.stopPropagation(); // Prevent event propagation
+      closeEntityPopup();
       marker.togglePopup();
     });
   }
