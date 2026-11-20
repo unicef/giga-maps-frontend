@@ -194,6 +194,8 @@
   "connected-schools-for-total-mapped-number_other": "Escolas conectadas para {{total}}",
   "schools-mapped": "escolas mapeadas",
   "connectivity-status": "Status de conectividade",
+  "non-gov-data": "Dados não governamentais",
+  "non-gov-data-tooltip": "Provisório: uma breve descrição do que são dados não governamentais e de onde vêm.",
   "cellular-coverage": "Cobertura celular",
   "map-navigation": "Navegação do mapa",
   "map-legend": "Legenda do mapa",

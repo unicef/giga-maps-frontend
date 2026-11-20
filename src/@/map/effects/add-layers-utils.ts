@@ -235,6 +235,7 @@ export const createAndUpdateMapLayer = ({
   activeEntityTypes,
   entityRegistry,
   country,
+  nonGovDots,
 }: ChangeLayerOptions & {
   selectedLayerId: number | null;
 }) => {
@@ -412,6 +413,7 @@ export const createAndUpdateMapLayer = ({
           },
           mapRoute,
           entityConfig: config,
+          nonGovDots,
         });
       } else if (transitionZoom != null) {
         createSchoolLayer(map, {
@@ -424,6 +426,7 @@ export const createAndUpdateMapLayer = ({
           },
           mapRoute,
           entityConfig: schoolCircleConfig,
+          nonGovDots,
         });
         createEntitySymbolLayer(map, {
           id: statusLayerId,
@@ -436,6 +439,7 @@ export const createAndUpdateMapLayer = ({
           },
           mapRoute,
           entityConfig: config,
+          nonGovDots,
         });
       } else {
         hideLayer(map, circleLayerId);
@@ -451,6 +455,7 @@ export const createAndUpdateMapLayer = ({
           },
           mapRoute,
           entityConfig: config,
+          nonGovDots,
         });
       }
     }
@@ -468,6 +473,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
   activeEntityTypes,
   entityRegistry,
   country,
+  nonGovDots,
 }: ChangeLayerOptions) => {
   if (!map || mapRoute.map) return;
   const { schoolIdByEntity = {} } = selectedLayerIds;
@@ -509,6 +515,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           options,
           mapRoute,
           entityConfig: config,
+          nonGovDots,
         });
       } else if (transitionZoom != null) {
         createSchoolLayer(map, {
@@ -519,6 +526,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           options: { ...options, maxzoom: transitionZoom },
           mapRoute,
           entityConfig: schoolCircleConfig,
+          nonGovDots,
         });
         createEntitySymbolLayer(map, {
           source: CONNECTIVITY_STATUS_SOURCE,
@@ -529,6 +537,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           options: { ...options, minzoom: symbolMinZoom },
           mapRoute,
           entityConfig: config,
+          nonGovDots,
         });
       } else {
         hideLayer(map, circleLayerId);
@@ -541,6 +550,7 @@ export const createAndUpdateConnectiivtyStatusLayer = ({
           options,
           mapRoute,
           entityConfig: config,
+          nonGovDots,
         });
       }
     }

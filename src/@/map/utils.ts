@@ -900,6 +900,34 @@ const syncLayerZoomRange = (
  * caller re-creates it on `source`.
  * Returns true when the existing layer was reused.
  */
+export type NonGovDotOptions = {
+  engagedCountryIds: number[] | null;
+  isCountryEngaged: boolean;
+};
+
+export const withNonGovColor = (
+  color: unknown[],
+  {
+    nonGovColor,
+    isGlobalView,
+    nonGovDots,
+  }: {
+    nonGovColor: string;
+    isGlobalView: boolean;
+    nonGovDots?: NonGovDotOptions;
+  },
+) => {
+  if (!nonGovDots) return color;
+  if (!isGlobalView) return nonGovDots.isCountryEngaged ? color : nonGovColor;
+  const { engagedCountryIds } = nonGovDots;
+  if (!engagedCountryIds) return color;
+  const colorByCountry = engagedCountryIds.length
+    ? ['match', ['get', 'country_id'], engagedCountryIds, color, nonGovColor]
+    : nonGovColor;
+  // Tiles cached before the backend added `country_id` keep their usual colours.
+  return ['case', ['has', 'country_id'], colorByCountry, color];
+};
+
 const reuseLayerOnSameSource = (
   map: Map,
   {
@@ -930,6 +958,7 @@ export const createSchoolLayer = (
     mapRoute,
     isMobile,
     entityConfig,
+    nonGovDots,
   }: {
     id: string;
     source?: string;
@@ -938,21 +967,28 @@ export const createSchoolLayer = (
     mapRoute: ChangeLayerOptions['mapRoute'];
     isMobile: boolean;
     entityConfig?: EntityConfig;
+    nonGovDots?: NonGovDotOptions;
   },
 ): void => {
-  if (reuseLayerOnSameSource(map, { id, source, options })) return;
-
   const connectivityStatusColors = paintData;
-  const circleColor = [
-    ...mapPaintData.connectivityStatus['circle-color'],
-    ConnectivityStatusDistribution.connected,
-    connectivityStatusColors.connected,
-    ConnectivityStatusDistribution.notConnected,
-    connectivityStatusColors.not_connected,
-    ConnectivityStatusDistribution.unknown,
-    connectivityStatusColors.unknown,
-    connectivityStatusColors.unknown,
-  ];
+  const circleColor = withNonGovColor(
+    [
+      ...mapPaintData.connectivityStatus['circle-color'],
+      ConnectivityStatusDistribution.connected,
+      connectivityStatusColors.connected,
+      ConnectivityStatusDistribution.notConnected,
+      connectivityStatusColors.not_connected,
+      ConnectivityStatusDistribution.unknown,
+      connectivityStatusColors.unknown,
+      connectivityStatusColors.unknown,
+    ],
+    { nonGovColor: paintData.nonGov, isGlobalView: mapRoute.map, nonGovDots },
+  );
+  if (reuseLayerOnSameSource(map, { id, source, options })) {
+    if (nonGovDots) map.setPaintProperty(id, 'circle-color', circleColor as any);
+    return;
+  }
+
   const countryCode = $countryCode.getState();
   const currentCountryPaintData =
     CountryPaintData[
@@ -997,6 +1033,7 @@ export const createEntitySymbolLayer = (
     mapRoute,
     isMobile,
     entityConfig,
+    nonGovDots,
   }: {
     id: string;
     symbol: string;
@@ -1006,22 +1043,31 @@ export const createEntitySymbolLayer = (
     mapRoute: ChangeLayerOptions['mapRoute'];
     isMobile: boolean;
     entityConfig?: EntityConfig;
+    nonGovDots?: NonGovDotOptions;
   },
 ): void => {
-  if (reuseLayerOnSameSource(map, { id, source, options })) return;
-
   const connectivityStatusColors = paintData;
   // Build text-color expression matching the same connectivity_status logic as circle-color
-  const textColor = [
-    ...mapPaintData.connectivityStatus['circle-color'],
-    ConnectivityStatusDistribution.connected,
-    connectivityStatusColors.connected,
-    ConnectivityStatusDistribution.notConnected,
-    connectivityStatusColors.not_connected,
-    ConnectivityStatusDistribution.unknown,
-    connectivityStatusColors.unknown,
-    connectivityStatusColors.unknown,
-  ];
+  const textColor = withNonGovColor(
+    [
+      ...mapPaintData.connectivityStatus['circle-color'],
+      ConnectivityStatusDistribution.connected,
+      connectivityStatusColors.connected,
+      ConnectivityStatusDistribution.notConnected,
+      connectivityStatusColors.not_connected,
+      ConnectivityStatusDistribution.unknown,
+      connectivityStatusColors.unknown,
+      connectivityStatusColors.unknown,
+    ],
+    { nonGovColor: paintData.nonGov, isGlobalView: mapRoute.map, nonGovDots },
+  );
+  if (reuseLayerOnSameSource(map, { id, source, options })) {
+    if (nonGovDots) {
+      map.setPaintProperty(id, 'text-color', textColor as any);
+      map.setPaintProperty(id, 'text-halo-color', textColor as any);
+    }
+    return;
+  }
 
   const {
     'source-layer': sourceLayer,

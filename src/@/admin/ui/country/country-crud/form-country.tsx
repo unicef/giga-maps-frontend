@@ -1,5 +1,5 @@
 import { Image, Search, ChevronDown, ChevronUp } from '@carbon/icons-react';
-import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, Tag, TextArea, TextInput } from "@carbon/react";
+import { Button, Checkbox, DatePicker, DatePickerInput, Form, Link, RadioButton, Select, SelectItem, Tag, TextArea, TextInput } from "@carbon/react";
 import { format } from 'date-fns';
 import { useStore } from 'effector-react';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
@@ -445,6 +445,7 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
       formData.append('health_data_source_description', formDataCountry.health_data_source_description ?? '');
       formData.append('last_weekly_status_id', formElement.last_weekly_status_id?.value)
       formData.append('country_disclaimer', formElement.country_disclaimer?.value)
+      formData.append('school_data_type', formElement.school_data_type?.value ?? 'not_mapped')
       formData.append('date_of_join', formElement.date_of_join?.value?.split('/').join('-'));
       formData.append('date_schools_mapped', formElement.date_schools_mapped?.value?.split('/').join('-'));
       formData.append('active_layers_list', JSON.stringify(selectedActiveLayers?.map((layer) => ({
@@ -690,6 +691,26 @@ const FormCountry = ({ isEdit, countryItemId }: { isEdit: boolean, countryItemId
                 value={formDataCountry?.health_data_source}
                 onChange={(e) => onUdpateCountryForm([e.target.name, e.target.value])}
               />
+            </InputBoxWrapper>
+          </InputContainer>
+        </RowContainer>
+        <RowContainer>
+          <InputContainer>
+            <InputLabel>
+              School data type
+            </InputLabel>
+            <InputBoxWrapper>
+              <Select
+                labelText=""
+                id="school-data-type"
+                name="school_data_type"
+                value={formDataCountry?.school_data_type ?? 'not_mapped'}
+                onChange={(e) => onUdpateCountryForm([e.target.name, e.target.value])}
+              >
+                <SelectItem value="government" text="Government" />
+                <SelectItem value="osm" text="OSM" />
+                <SelectItem value="not_mapped" text="Not mapped" />
+              </Select>
             </InputBoxWrapper>
           </InputContainer>
         </RowContainer>
