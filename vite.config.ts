@@ -82,7 +82,14 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === 'production' ? 'hidden' : true,
     cssMinify: 'esbuild',
     rollupOptions: {
-      output: {},
+      output: {
+        // The prod Front Door WAF blocks the exact path of the "card" chunk
+        // (assets/card-CPdzPItE.js); a prefix keeps it out of that rule.
+        chunkFileNames: (chunk) =>
+          chunk.name === 'card'
+            ? 'assets/ui-card-[hash].js'
+            : 'assets/[name]-[hash].js',
+      },
     },
   },
   define: {
