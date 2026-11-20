@@ -313,6 +313,45 @@ $layersListMapping.on(fetchLayerListFx.doneData, (_, payload) => {
   return list;
 });
 
+type LegendSourceLabelsById = Record<string, Record<string, string>>;
+
+const getLegendSourceLabels = (
+  legendConfigs?: Record<string, { labels?: string } | undefined> | null,
+) =>
+  Object.fromEntries(
+    Object.entries(legendConfigs ?? {}).map(([key, item]) => [
+      key,
+      item?.labels ?? '',
+    ]),
+  );
+
+// Stats endpoints key counts by the untranslated label, so keep it before translation overwrites legend_configs.
+export const $layerLegendSourceLabelsById =
+  createStore<LegendSourceLabelsById>({});
+$layerLegendSourceLabelsById.on(fetchLayerListFx.doneData, (_, payload) =>
+  Object.fromEntries(
+    (payload?.results ?? []).map((layer) => [
+      layer.id,
+      getLegendSourceLabels(layer.legend_configs),
+    ]),
+  ),
+);
+export const $countryLegendSourceLabelsById =
+  createStore<LegendSourceLabelsById>({});
+$countryLegendSourceLabelsById.on(fetchCountryFx.doneData, (_, payload) =>
+  Object.fromEntries(
+    (payload?.active_layers_list ?? []).map((layer) => [
+      layer.data_layer_id,
+      getLegendSourceLabels(layer.legend_configs),
+    ]),
+  ),
+);
+$countryLegendSourceLabelsById.reset(
+  $countryCode,
+  fetchCountryFx.fail,
+  mapOverview.visible,
+);
+
 export const $layerListTranslated = createStore<LayerType[]>([]);
 
 export const $connectivityLayers = $layersList.map(
@@ -564,15 +603,18 @@ export const $currentLayerTypeUtilsByEntity = combine(
   },
 );
 
-const buildCurrentLayerLegends = ({
+export const buildCurrentLayerLegends = ({
   connectivityBenchmark,
   countryActiveLayersDataById,
-  currentLayerTypeUtils,
+  countryLegendSourceLabelsById = {},
+  layerLegendSourceLabelsById = {},
   selectedLayerData,
   stylePaintData,
 }: {
   connectivityBenchmark: ConnectivityBenchMarks;
   countryActiveLayersDataById: Record<string, any>;
+  countryLegendSourceLabelsById?: LegendSourceLabelsById;
+  layerLegendSourceLabelsById?: LegendSourceLabelsById;
   currentLayerTypeUtils?: {
     isLive: boolean;
     isStatic: boolean;
@@ -583,10 +625,12 @@ const buildCurrentLayerLegends = ({
   ? T
   : never;
 }) => {
+  const layerId = selectedLayerData?.id ?? '';
   let apiLegends = selectedLayerData?.legend_configs;
+  let sourceLabels = layerLegendSourceLabelsById[layerId] ?? {};
   if (connectivityBenchmark === ConnectivityBenchMarks.national) {
-    apiLegends =
-      countryActiveLayersDataById[selectedLayerData?.id ?? '']?.legend_configs;
+    apiLegends = countryActiveLayersDataById[layerId]?.legend_configs;
+    sourceLabels = countryLegendSourceLabelsById[layerId] ?? {};
   }
   const legends = {
     colors: {
@@ -599,22 +643,30 @@ const buildCurrentLayerLegends = ({
     reverseMapping: {},
   } as {
     colors: Record<string, string>;
-    values: { key: string; label: string; tooltip?: string }[];
+    values: {
+      key: string;
+      label: string;
+      sourceLabel: string;
+      tooltip?: string;
+    }[];
     reverseMapping: Record<string, string>;
   };
   if (!Object.values(apiLegends || {}).length) {
     legends.values = LayerDistributionUnit.map((key) => ({
       key,
       label: i18next.t(ConnectivityDistributionNames[key]),
+      sourceLabel: key,
     }));
   } else {
     const reverseMapping = {} as Record<string, string>;
     legends.values = Object.entries(apiLegends ?? {}).map(
       ([key, item]: [string, any]) => {
-        reverseMapping[item.labels] = key;
+        const sourceLabel = sourceLabels[key] || item.labels;
+        reverseMapping[sourceLabel] = key;
         return {
           key,
           label: item.labels,
+          sourceLabel,
           tooltip: item.tooltip,
         };
       },
@@ -632,6 +684,8 @@ export const $currentLayerLegendsByEntity = combine(
     countryActiveLayersDataById: $countryActiveLayersDataById,
     connectivityBenchmarkByEntity: $connectivityBenchMarkByEntity,
     activeEntityTypes: $activeEntityTypes,
+    layerLegendSourceLabelsById: $layerLegendSourceLabelsById,
+    countryLegendSourceLabelsById: $countryLegendSourceLabelsById,
   },
   ({
     selectedLayerDataByEntity,
@@ -640,6 +694,8 @@ export const $currentLayerLegendsByEntity = combine(
     connectivityBenchmarkByEntity,
     countryActiveLayersDataById,
     activeEntityTypes,
+    layerLegendSourceLabelsById,
+    countryLegendSourceLabelsById,
   }) => {
     return activeEntityTypes.reduce(
       (acc, currentEntityType) => {
@@ -654,6 +710,8 @@ export const $currentLayerLegendsByEntity = combine(
             ConnectivityBenchMarks.global,
           ),
           countryActiveLayersDataById,
+          layerLegendSourceLabelsById,
+          countryLegendSourceLabelsById,
         });
         return acc;
       },

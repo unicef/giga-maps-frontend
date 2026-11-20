@@ -1,21 +1,21 @@
 import { Checkbox, ModalBody } from '@carbon/react';
 import { useStore } from 'effector-react';
 import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   $coverageStatsByEntity,
   $coverageStatusAllByEntity,
   $layerUtils,
   changeEntityCoverageStatus,
 } from '~/@/sidebar/sidebar.model';
-import { ConnectivityDistribution } from '~/@/sidebar/sidebar.constant';
 
-import { PopoverFilterContentCoverageConnectivityStatus } from './styles/layer-filter-modal.style';
 import {
   CoverageBenchmarkNames,
   CoverageColorNames,
 } from '../global-and-country-view-components/container/layer-view.constant';
-import { useTranslation } from 'react-i18next';
+import { PopoverFilterContentCoverageConnectivityStatus } from './styles/layer-filter-modal.style';
 
 const CoverageLayerSelectionFilterModalBody = forwardRef(
   function CoverageFilterBody(
@@ -66,8 +66,10 @@ const CoverageLayerSelectionFilterModalBody = forwardRef(
           </p>
           <fieldset className="cds--fieldset">
             {Object.entries(legends ?? {}).map(([key, value]) => {
-              const label = key;
               const keyName = entityLayerLegends.reverseMapping[key];
+              const label =
+                entityLayerLegends.values.find((item) => item.key === keyName)
+                  ?.label ?? key;
               return (
                 value > 0 && (
                   <Checkbox
