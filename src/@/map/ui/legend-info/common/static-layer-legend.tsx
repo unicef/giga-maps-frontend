@@ -110,9 +110,10 @@ const StaticLayerLegend = ({
         ) : null}
       </div>
 
-      {legends?.values?.map(({ key, label, tooltip }) => {
+      {legends?.values?.map(({ key, label, sourceLabel, tooltip }) => {
         const tooltipLabel =
           key === 'unknown' ? tooltip || `Doesn't match any criteria` : tooltip;
+        const count = coverageStats?.connected_schools?.[sourceLabel] ?? 0;
 
         return (
           <button
@@ -150,16 +151,9 @@ const StaticLayerLegend = ({
               isLoading ? (
                 <div className="ml-2! h-4! w-8! animate-pulse! rounded! bg-muted-foreground/20!" />
               ) : (
-                <LegendHint
-                  label={t('int', {
-                    val: coverageStats?.connected_schools?.[label] ?? 0,
-                  })}
-                >
+                <LegendHint label={t('int', { val: count })}>
                   <div className="ml-2! block! min-w-0! text-left! text-sm! leading-5! text-muted-foreground!">
-                    {formatNumber(
-                      coverageStats?.connected_schools?.[label] ?? 0,
-                      lng,
-                    )}
+                    {formatNumber(count, lng)}
                   </div>
                 </LegendHint>
               )
