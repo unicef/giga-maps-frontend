@@ -193,6 +193,8 @@
   "connected-schools-for-total-mapped-number_other": "Connected schools for {{total}}",
   "schools-mapped": "schools mapped",
   "connectivity-status": "Connectivity status",
+  "non-gov-data": "Non-gov data",
+  "non-gov-data-tooltip": "Placeholder: a short description of what non-gov data is and where it comes from.",
   "cellular-coverage": "Cellular coverage",
   "map-navigation": "Map navigation",
   "map-legend": "Map legend",

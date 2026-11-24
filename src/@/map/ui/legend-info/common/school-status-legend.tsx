@@ -4,6 +4,7 @@ import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { $nonGovLegendMode } from '~/@/country/country.model';
 import { EntityType } from '~/@/entities/types/base-entity.type';
 import EntityLegendIndicator from '~/@/entities/ui/entity-legend-indicator';
 import { $globalStatsByEntity, $stylePaintData } from '~/@/map/map.model';
@@ -20,6 +21,9 @@ import { formatNumber } from '~/lib/utils';
 
 import { CheckBoxContainer } from '../legend-button.style';
 import LegendHint from './legend-hint';
+
+const checkboxClassName =
+  "relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!";
 
 interface CheckedStatus {
   [key: string]: boolean;
@@ -58,6 +62,11 @@ const SchoolStatusLegend = ({
   const staticLegends = staticLegendsByEntity[currentEntityType] ?? [];
   const schoolStatusStats =
     globalStatsByEntity[currentEntityType]?.connected_entities;
+  const nonGovLegendMode = useStore($nonGovLegendMode);
+  const connectivityStatuses =
+    nonGovLegendMode === 'only'
+      ? []
+      : Object.values(ConnectivityStatusDistribution);
 
   const handleSchoolStatusLayerChange = (key: string) => {
     const newStatus = !schoolStatusCheckedStatus[key];
@@ -113,7 +122,7 @@ const SchoolStatusLegend = ({
         <div className="text-sm! font-normal! leading-5!">{statusTitle}</div>
         {/* <Info size={12} /> */}
       </div>
-      {Object.values(ConnectivityStatusDistribution).map((key) => (
+      {connectivityStatuses.map((key) => (
         <div
           className="mt-3! flex! w-full! items-center! justify-start! gap-3!"
           key={key}
@@ -125,7 +134,7 @@ const SchoolStatusLegend = ({
                 id={`school-status-${key}`}
                 checked={Boolean(schoolStatusCheckedStatus[key])}
                 onChange={() => handleSchoolStatusLayerChange(key)}
-                className="relative! mr-2! h-4! w-4! shrink-0! cursor-pointer! appearance-none! rounded-sm! border! border-gray-400! bg-white! after:absolute! after:left-[4px]! after:top-px! after:hidden! after:h-[9px]! after:w-[5px]! after:rotate-45! after:border-b-[1.5px]! after:border-r-[1.5px]! after:border-black! after:content-['']! checked:after:block!"
+                className={checkboxClassName}
                 type="checkbox"
               />
             ) : null}
@@ -160,6 +169,45 @@ const SchoolStatusLegend = ({
           ) : null}
         </div>
       ))}
+      {nonGovLegendMode !== 'none' ? (
+        <div className="mt-3! flex! w-full! items-center! justify-start! gap-3!">
+          <div className="flex! min-w-0! items-center!">
+            {shouldShowControls ? (
+              <input
+                aria-label={t('non-gov-data')}
+                checked
+                className={cn(
+                  checkboxClassName,
+                  'disabled:cursor-default! disabled:opacity-60!',
+                )}
+                disabled
+                id="school-status-non-gov"
+                readOnly
+                type="checkbox"
+              />
+            ) : null}
+            <LegendHint label={t('non-gov-data-tooltip')}>
+              <div
+                className="flex! min-w-0! items-center! gap-2! rounded-sm! outline-none! focus-visible:ring-2! focus-visible:ring-ring!"
+                data-testid="non-gov-legend-row"
+                tabIndex={0}
+              >
+                <EntityLegendIndicator
+                  color={paintData.nonGov}
+                  entityType={entityType}
+                />
+                {isLoading ? (
+                  <div className="h-4! w-24! animate-pulse! rounded! bg-muted-foreground/20!" />
+                ) : (
+                  <span className="text-sm! font-normal! leading-5! text-foreground!">
+                    {t('non-gov-data')}
+                  </span>
+                )}
+              </div>
+            </LegendHint>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

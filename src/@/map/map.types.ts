@@ -22,6 +22,7 @@ export type StylePaintData = {
   not_connected: string;
   bad: string;
   unknown: string;
+  nonGov: string;
 } & Record<string, string>;
 
 export type InitMapOptions = {

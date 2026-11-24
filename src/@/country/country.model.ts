@@ -6,7 +6,7 @@ import {
   CountryBasic
 } from '~/api/types';
 import { $isMobile } from '~/core/media-query';
-import { mapCountry, mapEntity, mapOverview, mapSchools } from '~/core/routes';
+import { $mapRoutes, mapCountry, mapEntity, mapOverview, mapSchools } from '~/core/routes';
 import { setPayload } from '~/lib/effector-kit';
 import { extractDataWithMapping, reconstructJson } from '~/lib/utils/json-mapper.util';
 
@@ -26,6 +26,7 @@ import { addCountriesFx, zoomToCountryFx } from './effects';
 import { createUpdateCountriesLayer } from './effects/create-update-countries-layer';
 import { getUserCurrentCountryISOFx } from './effects/detect-country-iso';
 import { updateLookupSourceForAdmin0, updateLookupSourceForAdmin1 } from './effects/update-lookup-source-map';
+import { getEngagedCountryIds, hasNonEngagedCountries, isEngagedCountry } from './school-data-type';
 
 export const onLoadPage = createEvent();
 export const changeCountryCode = createEvent<string>();
@@ -46,6 +47,24 @@ export const $countryIdToCode = $countries.map((countries) => countries?.reduce(
 export const $country = createStore<Country | null>(null);
 export const $countryId = $country.map(country => country?.id ?? null);
 $country.on(fetchCountryFx.doneData, setPayload);
+
+export const $engagedCountryIds = $countries.map(getEngagedCountryIds);
+export const $isCountryEngaged = $country.map(isEngagedCountry);
+export const $nonGovDotOptions = combine({
+  engagedCountryIds: $engagedCountryIds,
+  isCountryEngaged: $isCountryEngaged,
+});
+
+export type NonGovLegendMode = 'none' | 'extra' | 'only';
+export const $nonGovLegendMode = combine(
+  $mapRoutes,
+  $countries,
+  $isCountryEngaged,
+  (routes, countries, isCountryEngaged): NonGovLegendMode => {
+    if (routes.map) return hasNonEngagedCountries(countries) ? 'extra' : 'none';
+    return isCountryEngaged ? 'none' : 'only';
+  },
+);
 $country.on(countryTranslationFx.doneData, (state, payload) => {
   const { data } = payload as { data: Record<string, string> }
   const result = reconstructJson(data, state as Country) as Country;

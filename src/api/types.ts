@@ -186,6 +186,7 @@ export type SchoolStatsType = {
 
 
 export type IntegrationStatus = 0 | 1 | 2 | 3 | 4 | 5;
+export type SchoolDataType = 'government' | 'osm' | 'not_mapped';
 export type ConnectivityAvailability =
   | 'no_connectivity'
   | 'connectivity'
@@ -207,6 +208,7 @@ export type CountryBasic = {
   data_source: string;
   health_data_source: string;
   integration_status: IntegrationStatus;
+  school_data_type?: SchoolDataType;
   date_of_join: string;
   schools_with_data_percentage: number;
   schools_total: number;
@@ -262,6 +264,7 @@ export type Country = {
   health_data_source: string;
   health_data_source_description: string;
   date_schools_mapped: string;
+  school_data_type?: SchoolDataType;
   statistics: CountryWeeklyStats;
   country_disclaimer: string;
   entity_counts?: Partial<Record<EntityType | string, number>>;

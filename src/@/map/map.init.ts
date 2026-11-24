@@ -18,6 +18,8 @@ import {
   $countryId,
   $countryMapping,
   $countrySearchString,
+  $isCountryEngaged,
+  $nonGovDotOptions,
   $schoolFocusLatLng,
   countryReceived,
   setSchoolFocusLatLng,
@@ -53,6 +55,7 @@ import {
   onTimeoutTimePlayer,
   schoolStatsMap,
 } from '~/@/sidebar/sidebar.model';
+import { ConnectivityStatusDistribution } from '~/@/sidebar/sidebar.constant';
 import {
   fetchAdvanceFilterFx,
   fetchCountriesFx,
@@ -411,6 +414,24 @@ const $entityPageSelection = $getSchoolParams.map(
   }),
 );
 
+const allConnectivityStatuses = Object.values(ConnectivityStatusDistribution);
+// The legend of a non-engaged country has no status checkboxes, so a status unticked in
+// another country would hide its dots with no way to bring them back.
+const $mapSchoolLegendsByEntity = combine(
+  $staticLegendsSelectedByEntity,
+  $isCountryEngaged,
+  $mapRoutes,
+  (legendsByEntity, isCountryEngaged, mapRoute) =>
+    mapRoute.map || isCountryEngaged
+      ? legendsByEntity
+      : (Object.fromEntries(
+        Object.values(EntityType).map((entityType) => [
+          entityType,
+          allConnectivityStatuses,
+        ]),
+      ) as typeof legendsByEntity),
+);
+
 export const gigaLayerSource = combine({
   selectedLayerIds: $selectedLayers,
   map: $map,
@@ -419,7 +440,7 @@ export const gigaLayerSource = combine({
   intervalUnitByEntity: $historyIntervalUnitByEntity,
   connectivityBenchMarkByEntity: $connectivityBenchMarkByEntity,
   lastAvailableDatesByEntity: $lastAvailableDatesByEntity,
-  schoolLegendsByEntity: $staticLegendsSelectedByEntity,
+  schoolLegendsByEntity: $mapSchoolLegendsByEntity,
   coverageFilterByEntity: $coverageFilterByEntity,
   layerUtils: $layerUtils,
   connectivitySpeedFilterByEntity: $connectivitySpeedFilterByEntity,
@@ -437,6 +458,7 @@ export const gigaLayerSource = combine({
   entityPageSelection: $entityPageSelection,
   activeEntityTypes: $activeEntityTypes,
   entityRegistry: $entityRegistry,
+  nonGovDots: $nonGovDotOptions,
 });
 
 const combineGigaFn =
@@ -485,7 +507,8 @@ sample({
   clock: merge([
     $zoomState,
     $statusLayerIdByEntity,
-    $staticLegendsSelectedByEntity,
+    $mapSchoolLegendsByEntity,
+    $nonGovDotOptions,
     timePlayerActive,
   ]),
   source: gigaLayerSource,
@@ -569,12 +592,12 @@ sample({
 });
 
 sample({
-  clock: $staticLegendsSelectedByEntity,
+  clock: $mapSchoolLegendsByEntity,
   source: combine({
     map: $map,
     lastSelectedLayer: $selectedGigaLayers,
     activeEntityTypes: $activeEntityTypes,
-    schoolLegendsByEntity: $staticLegendsSelectedByEntity,
+    schoolLegendsByEntity: $mapSchoolLegendsByEntity,
   }),
   fn: (source, legendsSelectedByEntity) => ({
     legendsSelectedByEntity,

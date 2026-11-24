@@ -114,6 +114,8 @@ export const Colors = {
   ACCESSIBILITY_DOTS_YELLOW: '#D98A00',
   ACCESSIBILITY_DOTS_MAGENTA: '#E13DF0',
   ACCESSIBILITY_DOTS_GRAY: '#ABABAB',
+  NON_GOV_DOTS_DARK: '#183856',
+  NON_GOV_DOTS_LIGHT: '#c8c7c9',
 };
 
 const mapCountryOpacity = {
@@ -132,6 +134,7 @@ const commonThemeStyle = {
   bad: Colors.SOFT_RED,
   no_internet: Colors.SOFT_RED,
   unknown: Colors.BLUE,
+  nonGov: Colors.NON_GOV_DOTS_DARK,
 };
 
 export const LayerDataProps = {
@@ -161,6 +164,7 @@ export let stylePaintData: { [style in Style]: StylePaintData } = {
     countryColor: Colors.WHITE,
     notCountryColor: Colors.WHITE_GREY,
     countryOutline: Colors.LIGHT_GREY1,
+    nonGov: Colors.NON_GOV_DOTS_LIGHT,
   },
   satellite: {
     ...commonThemeStyle,
@@ -172,6 +176,7 @@ export let stylePaintData: { [style in Style]: StylePaintData } = {
     countryColor: Colors.WHITE,
     notCountryColor: Colors.WHITE_GREY,
     countryOutline: Colors.LIGHT_GREY1,
+    nonGov: Colors.NON_GOV_DOTS_LIGHT,
   },
   accessible: {
     ...commonThemeStyle,
@@ -188,7 +193,13 @@ const storeStyling = getLocalStorage('paint-style') as {
   [style in Style]: StylePaintData;
 };
 if (storeStyling) {
-  stylePaintData = storeStyling;
+  // Saved styling predates newer keys such as `nonGov`; fill them from the defaults.
+  stylePaintData = Object.fromEntries(
+    styles.map((style) => [
+      style,
+      { ...stylePaintData[style], ...storeStyling[style] },
+    ]),
+  ) as typeof stylePaintData;
 }
 export const getDefaultCountryOpacity = (
   paintData: StylePaintData,
