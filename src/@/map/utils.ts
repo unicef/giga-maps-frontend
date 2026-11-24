@@ -1,7 +1,9 @@
 import { format } from 'date-fns';
 import {
   CircleLayer,
+  CircleLayout,
   CirclePaint,
+  Expression,
   Map,
   MapboxGeoJSONFeature,
   MapLayerMouseEvent,
@@ -920,6 +922,44 @@ const reuseLayerOnSameSource = (
   return false;
 };
 
+// Higher key draws on top, so few known dots are not hidden under many unknown ones.
+const rankSortKey = (property: string, tiers: string[][]): Expression => [
+  'match',
+  ['get', property],
+  ...tiers.flatMap((values, index) => [values, tiers.length - index]),
+  0,
+];
+
+export const schoolStatusSortKey = rankSortKey(
+  LayerDataProps.connectivityStatus.key,
+  [
+    [ConnectivityStatusDistribution.connected],
+    [ConnectivityStatusDistribution.notConnected],
+  ],
+);
+
+export const distributionSortKey = (property: string): Expression =>
+  rankSortKey(property, [
+    [ConnectivityDistribution.good],
+    [ConnectivityDistribution.moderate],
+    [
+      ConnectivityDistribution.bad,
+      ConnectivityDistribution.no,
+      ConnectivityDistribution.noInternet,
+    ],
+  ]);
+
+const getDistributionProperty = ({
+  isLive,
+  isDynamicLayer,
+}: {
+  isLive?: boolean;
+  isDynamicLayer: boolean;
+}) => {
+  if (isDynamicLayer) return LayerDataProps.fieldStatus.key;
+  return isLive ? LayerDataProps.connectivity.key : LayerDataProps.coverage.key;
+};
+
 export const createSchoolLayer = (
   map: Map,
   {
@@ -973,6 +1013,10 @@ export const createSchoolLayer = (
     minzoom: 0,
     paint,
     ...options,
+    layout: {
+      ...(options.layout as CircleLayout | undefined),
+      'circle-sort-key': schoolStatusSortKey,
+    },
   });
 
   unregisterEntityDotLayer(id, source);
@@ -1190,6 +1234,12 @@ export const createSelectedLayer = (
       minzoom: 0,
       paint,
       ...options,
+      layout: {
+        ...(options?.layout as CircleLayout | undefined),
+        'circle-sort-key': distributionSortKey(
+          getDistributionProperty({ isLive, isDynamicLayer }),
+        ),
+      },
     },
     getMapId(SCHOOL_LAYER_ID),
   );

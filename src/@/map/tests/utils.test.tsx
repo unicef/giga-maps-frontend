@@ -7,6 +7,7 @@ import {
   createEntitySymbolLayer,
   createSchoolLayer,
   createSchoolSource,
+  schoolStatusSortKey,
   createSelectedLayer,
   createSelectedSymbolLayer,
   generateLayerUrls,
@@ -181,6 +182,39 @@ describe('status layer reuse is source aware', () => {
       expect.objectContaining({ id: layerId, source: DEFAULT_SOURCE }),
       expect.anything(),
     );
+  });
+
+  it('draws connected above not connected above unknown', () => {
+    const { map, mocks } = createMap();
+
+    createSchoolLayer(map, layerOptions(CONNECTIVITY_STATUS_SOURCE, false));
+
+    expect(mocks.addLayer.mock.calls[0][0].layout).toEqual({
+      'circle-sort-key': [
+        'match',
+        ['get', 'connectivity_status'],
+        ['connected'],
+        2,
+        ['not_connected'],
+        1,
+        0,
+      ],
+    });
+  });
+
+  it('keeps the sort key when options carry their own layout', () => {
+    const { map, mocks } = createMap();
+
+    createSchoolLayer(map, {
+      ...layerOptions(DEFAULT_SOURCE, true),
+      options: { 'source-layer': 'schools', layout: { visibility: 'none' } },
+    });
+
+    const { layout } = mocks.addLayer.mock.calls[0][0] as {
+      layout: Record<string, unknown>;
+    };
+    expect(layout.visibility).toBe('none');
+    expect(layout['circle-sort-key']).toEqual(schoolStatusSortKey);
   });
 
   it('re-creates a symbol layer that exists on another source', () => {
@@ -375,6 +409,60 @@ describe('createSelectedLayer', () => {
 
     devSettings.highlightMultipleSchoolOnSameLatLng = false;
   });
+
+  it.each([
+    { isLive: true, isDynamicLayer: false, property: 'connectivity' },
+    { isLive: false, isDynamicLayer: false, property: 'coverage_status' },
+    { isLive: true, isDynamicLayer: true, property: 'field_status' },
+    { isLive: false, isDynamicLayer: true, property: 'field_status' },
+  ])(
+    'draws good above moderate above bad above unknown on $property',
+    ({ isLive, isDynamicLayer, property }) => {
+      const addLayer = vi.fn();
+      const map = {
+        addLayer,
+        setLayoutProperty: vi.fn(),
+        off: vi.fn(),
+        getLayer: vi.fn(() => null),
+        on: vi.fn(),
+      } as unknown as MapboxMap;
+
+      createSelectedLayer(map, {
+        id: 'entity-selected-school-1',
+        isDynamicLayer,
+        isLive,
+        source: DEFAULT_SOURCE,
+        paintData: stylePaintData.dark,
+        mapRoute: {
+          map: false,
+          country: true,
+          schools: false,
+          entity: false,
+          entityView: false,
+        },
+        options: { layout: { visibility: 'visible' } },
+        isMobile: false,
+      });
+
+      const { layout } = addLayer.mock.calls[0][0] as {
+        layout: Record<string, unknown>;
+      };
+      expect(layout).toEqual({
+        visibility: 'visible',
+        'circle-sort-key': [
+          'match',
+          ['get', property],
+          ['good'],
+          3,
+          ['moderate'],
+          2,
+          ['bad', 'no', 'no_internet'],
+          1,
+          0,
+        ],
+      });
+    },
+  );
 
   it('does not add the dev multiple-school border on global view', () => {
     const devSettings = (globalThis as any).GIGA_MAP_DEV;
